@@ -1,93 +1,106 @@
 # opm_ai/builder/models.py
-"""Data contracts for the Description-to-Deck Builder."""
+"""
+Dataclasses for the Description-to-Deck builder.
+
+ReservoirDescription holds all parameters needed to render a valid OPM deck.
+PVT fields (water_fvf, water_visc, etc.) are populated automatically by
+build_pvt_props() in opm_ai.preprocess.pvt_builder when the builder runs.
+"""
+from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional
+from typing import List
 
 
 class FluidSystem(str, Enum):
-    OIL_WATER      = "oil_water"       # WATER + OIL phases
-    GAS_WATER      = "gas_water"       # GAS + WATER phases
-    BLACK_OIL      = "black_oil"       # OIL + GAS + WATER (full black-oil)
-    DRY_GAS        = "dry_gas"         # GAS only
+    OIL_WATER = "oil_water"
+    BLACK_OIL  = "black_oil"
+    GAS_WATER  = "gas_water"
+    DRY_GAS    = "dry_gas"
 
 
 class GridType(str, Enum):
-    CARTESIAN      = "cartesian"       # simple DX/DY/DZ box grid
-    RADIAL         = "radial"          # cylindrical (r-theta-z) — future
+    CARTESIAN = "cartesian"
+    CPGRID    = "cpgrid"
 
 
 @dataclass
 class WellSpec:
-    """Minimal description of one well."""
-    name        : str
-    type        : str           # "PRODUCER" | "INJECTOR"
-    i           : int           # I grid index (1-based)
-    j           : int           # J grid index (1-based)
-    k1          : int = 1       # top perforation layer
-    k2          : int = 1       # bottom perforation layer
-    group       : str = "FIELD"
-    # Production control
-    control     : str = "BHP"   # ORAT | GRAT | WRAT | BHP
-    rate        : float = 0.0   # surface rate (Sm3/day or Mscf/day)
-    bhp_limit   : float = 100.0 # bar
-    # Injection control (injectors only)
-    inj_fluid   : str = "WATER" # WATER | GAS
+    name        : str   = "PROD1"
+    type        : str   = "PRODUCER"   # PRODUCER | INJECTOR
+    i           : int   = 5
+    j           : int   = 5
+    k1          : int   = 1
+    k2          : int   = 3
+    group       : str   = "FIELD"
+    control     : str   = "BHP"
+    rate        : float = 0.0
+    bhp_limit   : float = 100.0
+    inj_fluid   : str   = "WATER"
     inj_rate    : float = 0.0
     inj_bhp_max : float = 400.0
 
 
 @dataclass
 class ReservoirDescription:
-    """
-    Everything the builder needs to generate a valid OPM deck.
-    All fields have sensible defaults so partial descriptions work.
-    """
-    # ─ Identity ───────────────────────────────────────────────────────
-    title       : str  = "opm-ai Generated Reservoir"
+    # ---- Metadata ----------------------------------------------------------
+    title           : str         = "opm-ai Generated Reservoir"
+    grid_type       : GridType    = GridType.CARTESIAN
 
-    # ─ Grid ───────────────────────────────────────────────────────────
-    grid_type   : GridType   = GridType.CARTESIAN
-    nx          : int        = 10
-    ny          : int        = 10
-    nz          : int        = 3
-    dx          : float      = 100.0    # metres
-    dy          : float      = 100.0
-    dz          : float      = 10.0
-    depth_top   : float      = 2000.0   # metres (TVD to top of reservoir)
+    # ---- Grid --------------------------------------------------------------
+    nx              : int         = 10
+    ny              : int         = 10
+    nz              : int         = 3
+    dx              : float       = 100.0   # m
+    dy              : float       = 100.0   # m
+    dz              : float       = 10.0    # m
+    depth_top       : float       = 2000.0  # m TVD
 
-    # ─ Rock ───────────────────────────────────────────────────────────
-    porosity    : float      = 0.20
-    permeability: float      = 100.0    # mD
-    perm_v_h_ratio: float    = 0.1      # Kv/Kh
+    # ---- Rock --------------------------------------------------------------
+    porosity        : float       = 0.20
+    permeability    : float       = 100.0   # mD
+    perm_v_h_ratio  : float       = 0.10
 
-    # ─ Fluid system ──────────────────────────────────────────────────
-    fluid_system: FluidSystem = FluidSystem.OIL_WATER
-    # Pressure / initial conditions
-    p_init      : float      = 350.0    # bar
-    swi         : float      = 0.20     # initial water saturation
-    # PVT (water) — used in all fluid systems
-    water_fvf   : float      = 1.0      # Bw (Rm3/Sm3)
-    water_comp  : float      = 4.0e-5   # 1/bar
-    water_visc  : float      = 0.5      # cP
-    # PVT (oil) — for OIL_WATER and BLACK_OIL
-    oil_fvf     : float      = 1.2      # Bo (Rm3/Sm3)
-    oil_visc    : float      = 2.0      # cP
-    # PVT (gas) — for BLACK_OIL and GAS_WATER
-    gas_fvf     : float      = 0.004    # Bg (Rm3/Sm3)
-    gas_visc    : float      = 0.02     # cP
+    # ---- Fluid system & reservoir conditions --------------------------------
+    fluid_system    : FluidSystem = FluidSystem.OIL_WATER
+    p_init          : float       = 350.0   # bar
+    t_res           : float       = 80.0    # °C   (NEW: reservoir temperature)
+    swi             : float       = 0.20
+    api             : float       = 35.0    # oil API gravity
+    sg_gas          : float       = 0.65    # gas specific gravity
+    salinity_ppm    : float       = 50_000.0
 
-    # ─ Schedule ────────────────────────────────────────────────────────
-    sim_years   : float      = 5.0
-    report_freq : str        = "monthly" # "monthly" | "quarterly" | "yearly"
-    wells       : list[WellSpec] = field(default_factory=list)
+    # ---- Simulation schedule -----------------------------------------------
+    sim_years       : float       = 5.0
+    report_freq     : str         = "monthly"
+
+    # ---- Wells -------------------------------------------------------------
+    wells           : List[WellSpec] = field(default_factory=list)
+
+    # ---- PVT props (computed by build_pvt_props, not set by user) ----------
+    # Water
+    water_fvf       : float       = 1.0
+    water_comp      : float       = 4.0e-5
+    water_visc      : float       = 0.5
+    # Oil (dead or saturated)
+    oil_fvf         : float       = 1.2
+    oil_visc        : float       = 2.0
+    # Gas
+    gas_fvf         : float       = 0.005
+    gas_visc        : float       = 0.020
+    # Surface densities (kg/m3, METRIC)
+    rho_oil         : float       = 820.0
+    rho_water       : float       = 1025.0
+    rho_gas         : float       = 1.0
+    # Full tables for PVTO and PVDG (populated for black_oil, gas_water)
+    pvto_rows       : list        = field(default_factory=list)
+    pvdg_rows       : list        = field(default_factory=list)
 
 
 @dataclass
 class BuildResult:
-    """Output from the builder."""
-    description : ReservoirDescription
-    deck_text   : str
-    lint_passed : bool
-    lint_summary: str
-    warnings    : list[str] = field(default_factory=list)
+    description  : ReservoirDescription
+    deck_text    : str
+    lint_passed  : bool
+    lint_summary : str
+    warnings     : List[str] = field(default_factory=list)

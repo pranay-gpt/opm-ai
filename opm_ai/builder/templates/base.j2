@@ -4,6 +4,7 @@
 -- Fluid system : {{ desc.fluid_system.value }}
 -- Grid         : {{ desc.nx }} x {{ desc.ny }} x {{ desc.nz }}
 -- Wells        : {{ desc.wells | length }}
+-- T reservoir  : {{ desc.t_res }} degC     P init : {{ desc.p_init }} bar
 -- =============================================================================
 
 RUNSPEC
@@ -70,35 +71,37 @@ PROPS
 -- =============================================================================
 
 PVTW
---  P_REF     BW       COMP         VISC   VISCOSIBILITY
-  {{ "%.1f" | format(desc.p_init) }}  {{ "%.4f" | format(desc.water_fvf) }}  {{ "%.2e" | format(desc.water_comp) }}  {{ "%.4f" | format(desc.water_visc) }}  0 /
+--  P_REF     BW        CW            VISC   VISCOSIBILITY
+  {{ "%.1f" | format(desc.p_init) }}  {{ "%.5f" | format(desc.water_fvf) }}  {{ "%.3e" | format(desc.water_comp) }}  {{ "%.4f" | format(desc.water_visc) }}  0 /
 
 {% if desc.fluid_system == FluidSystem.OIL_WATER %}
 PVCDO
 --  P_REF     BO         COMP      VISC    VISCOSIBILITY
-  {{ "%.1f" | format(desc.p_init) }}  {{ "%.4f" | format(desc.oil_fvf) }}  0.0  {{ "%.4f" | format(desc.oil_visc) }}  0 /
+  {{ "%.1f" | format(desc.p_init) }}  {{ "%.5f" | format(desc.oil_fvf) }}  0.0  {{ "%.4f" | format(desc.oil_visc) }}  0 /
 {% endif %}
 
 {% if desc.fluid_system == FluidSystem.BLACK_OIL %}
 PVTO
---   Rs    P       Bo       Visc
-   0   {{ "%.1f" | format(desc.p_init * 0.1) }}  {{ "%.4f" | format(desc.oil_fvf * 0.8) }}  {{ "%.4f" | format(desc.oil_visc * 1.5) }}
-        {{ "%.1f" | format(desc.p_init * 0.5) }}  {{ "%.4f" | format(desc.oil_fvf * 0.9) }}  {{ "%.4f" | format(desc.oil_visc * 1.2) }}
-        {{ "%.1f" | format(desc.p_init) }}       {{ "%.4f" | format(desc.oil_fvf) }}         {{ "%.4f" | format(desc.oil_visc) }}
+--  Rs [Sm3/Sm3]  P [bar]  Bo [Rm3/Sm3]  visc [cP]
+{% for rs, p_entries in desc.pvto_rows %}
+{{ "  %.4f" | format(rs) }}  {{ "%.2f" | format(p_entries[0][0]) }}  {{ "%.5f" | format(p_entries[0][1]) }}  {{ "%.4f" | format(p_entries[0][2]) }}
+{% endfor %}
 /
 /
+{% endif %}
 
+{% if desc.fluid_system in [FluidSystem.BLACK_OIL, FluidSystem.GAS_WATER, FluidSystem.DRY_GAS] %}
 PVDG
---   P        Bg       Visc
-  {{ "%.1f" | format(desc.p_init * 0.1) }}  {{ "%.5f" | format(desc.gas_fvf * 5) }}  {{ "%.4f" | format(desc.gas_visc * 3) }}
-  {{ "%.1f" | format(desc.p_init * 0.5) }}  {{ "%.5f" | format(desc.gas_fvf * 2) }}  {{ "%.4f" | format(desc.gas_visc * 1.5) }}
-  {{ "%.1f" | format(desc.p_init) }}       {{ "%.5f" | format(desc.gas_fvf) }}       {{ "%.4f" | format(desc.gas_visc) }}
+--  P [bar]   Bg [Rm3/Sm3]   visc [cP]
+{% for p_bar, bg, visc in desc.pvdg_rows %}
+  {{ "%.2f" | format(p_bar) }}  {{ "%.6f" | format(bg) }}  {{ "%.5f" | format(visc) }}
+{% endfor %}
 /
 {% endif %}
 
 DENSITY
---  OIL    WATER   GAS
-  800.0  1025.0  1.0 /
+--  OIL               WATER            GAS
+  {{ "%.2f" | format(desc.rho_oil) }}  {{ "%.2f" | format(desc.rho_water) }}  {{ "%.4f" | format(desc.rho_gas) }} /
 
 ROCK
 --  P_REF   COMPRESS

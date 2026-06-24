@@ -243,19 +243,24 @@ def visc_water_kestin(t_c: float, salinity_ppm: float) -> float:
     Returns viscosity in cP.
     Ref: Kestin, J. et al. (1978) J. Phys. Chem. Ref. Data 7(3).
 
-    Floor: 0.05 cP — physically the viscosity of water at ~300 °C.
-    The previous 0.2 cP floor masked the temperature trend at high T
-    and caused the monotonicity test to fail when both 25 °C and 120 °C
-    raw values fell below 0.2 cP on the ARM build.  Water at 120 °C is
-    physically ~0.23 cP (pure) so 0.05 keeps the floor safe without
-    flattening the curve in the normal operating range.
+    Vogel equation coefficient: 2.414e-2 cP (NOT 2.414e-5 Pa·s).
+    The original code used 2.414e-5 which gives values in Pa·s
+    (~1000× too small), causing both 25°C and 120°C to fall below
+    any reasonable floor and lose the temperature trend.
+
+    Verified values:
+      25°C, 50k ppm NaCl  → ~0.96 cP  (literature: ~0.95 cP)
+     120°C, 50k ppm NaCl  → ~0.25 cP  (literature: ~0.24 cP)
+
+    Floor: 0.05 cP — physically the viscosity of water near ~300°C;
+    safe lower bound for OPM PVTW input.
     """
-    # Pure water viscosity (Vogel equation)
-    mu_w = 2.414e-5 * 10 ** (247.8 / (t_c + 273.15 - 140))
-    # Salinity correction (simplified, valid for NaCl)
-    s_molal = salinity_ppm / 58_440  # mg/L to mol/L approx
+    # Pure water viscosity — Vogel equation, result directly in cP
+    # Ref: Viswanath & Natarajan (1989) "Data Book on the Viscosity of Liquids"
+    mu_w = 2.414e-2 * 10 ** (247.8 / (t_c + 273.15 - 140))
+    # Salinity correction (simplified, valid for NaCl up to ~200 000 ppm)
+    s_molal = salinity_ppm / 58_440  # mg/L NaCl → mol/kg approx
     mu_brine = mu_w * (1 + 0.0816 * s_molal + 0.0122 * s_molal**2)
-    # Floor at 0.05 cP — keeps OPM happy without masking the T-trend
     return max(mu_brine, 0.05)
 
 

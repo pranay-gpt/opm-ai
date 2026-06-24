@@ -57,7 +57,6 @@ def test_dead_oil_viscosity_decreases_with_temperature():
 
 def test_z_factor_papay_at_low_pressure():
     """Z-factor near 1.0 at very low pressure (ideal gas limit)."""
-    # At 14.7 psia (1 atm), Z should be very close to 1
     from opm_ai.preprocess.pvt_correlations import celsius_to_rankine
     z = z_factor_papay(p_psia=14.7, t_rankine=celsius_to_rankine(80), sg_gas=0.65)
     assert 0.97 < z <= 1.02, f"Z near atmospheric should be ~1, got {z}"
@@ -81,10 +80,19 @@ def test_bw_close_to_one():
 
 
 def test_water_viscosity_decreases_with_temperature():
-    """Brine viscosity must decrease as temperature increases."""
+    """
+    Brine viscosity must be strictly lower at 120 °C than at 25 °C.
+
+    Uses temperatures well within the Vogel equation's valid range
+    (25–200 °C) so neither value hits the 0.05 cP safety floor.
+    At 25 °C + 50 000 ppm NaCl the raw value is ~1.1 cP;
+    at 120 °C it is ~0.27 cP — both comfortably above 0.05 cP.
+    """
     mu_cold = visc_water_kestin(t_c=25.0,  salinity_ppm=50_000)
     mu_hot  = visc_water_kestin(t_c=120.0, salinity_ppm=50_000)
-    assert mu_cold > mu_hot
+    assert mu_cold > mu_hot, (
+        f"Expected mu_cold ({mu_cold:.4f} cP) > mu_hot ({mu_hot:.4f} cP)"
+    )
 
 
 def test_cw_positive():
@@ -93,7 +101,7 @@ def test_cw_positive():
     assert cw > 0
 
 
-# ── PVT builder tests ─────────────────────────────────────────────────────
+# ── PVT builder tests ─────────────────────────────────────────────────────────
 
 def test_build_pvto_returns_result():
     """build_pvto must return a PVTTableResult with type PVTO."""

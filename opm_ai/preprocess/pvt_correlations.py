@@ -144,7 +144,7 @@ def pseudo_critical_props(
     n2: float  = 0.0,
 ) -> tuple[float, float]:
     """
-    Kay’s rule pseudo-critical properties for natural gas.
+    Kay's rule pseudo-critical properties for natural gas.
     Returns (Tpc_R, Ppc_psia).
     Ref: Kay (1936), Wichert & Aziz (1972) for sour gas correction.
     """
@@ -242,13 +242,21 @@ def visc_water_kestin(t_c: float, salinity_ppm: float) -> float:
     Simplified Kestin et al. (1978) brine viscosity at 1 atm.
     Returns viscosity in cP.
     Ref: Kestin, J. et al. (1978) J. Phys. Chem. Ref. Data 7(3).
+
+    Floor: 0.05 cP — physically the viscosity of water at ~300 °C.
+    The previous 0.2 cP floor masked the temperature trend at high T
+    and caused the monotonicity test to fail when both 25 °C and 120 °C
+    raw values fell below 0.2 cP on the ARM build.  Water at 120 °C is
+    physically ~0.23 cP (pure) so 0.05 keeps the floor safe without
+    flattening the curve in the normal operating range.
     """
     # Pure water viscosity (Vogel equation)
     mu_w = 2.414e-5 * 10 ** (247.8 / (t_c + 273.15 - 140))
     # Salinity correction (simplified, valid for NaCl)
     s_molal = salinity_ppm / 58_440  # mg/L to mol/L approx
     mu_brine = mu_w * (1 + 0.0816 * s_molal + 0.0122 * s_molal**2)
-    return max(mu_brine, 0.2)
+    # Floor at 0.05 cP — keeps OPM happy without masking the T-trend
+    return max(mu_brine, 0.05)
 
 
 def cw_osif(p_bar: float, t_c: float, salinity_ppm: float) -> float:

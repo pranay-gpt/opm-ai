@@ -1,0 +1,20 @@
+# docker/docker-compose.yml
+version: "3.9"
+
+services:
+  opm-ai:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8501:8501"
+    volumes:
+      - ../decks:/app/decks          # user deck files
+      - ../results:/app/results      # simulation output
+      - ../knowledge_base:/app/knowledge_base
+    environment:
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}   # optional fallback
+      - OPM_FLOW_BINARY=/usr/bin/flow
+      - RESINSIGHT_EXECUTABLE=/usr/bin/ResInsight
+    restart: unless-stopped

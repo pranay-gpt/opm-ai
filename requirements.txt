@@ -1,33 +1,33 @@
-# ──────────────────────────────────────────────────────────────────────
+# ════════════════════════════════════════════════════════════════════════
 # OPM-AI Python dependencies
 #
-# NOTE: OPM Flow (the simulator binary) must be installed via system packages:
-#   Ubuntu/Debian:  sudo apt install opm-simulators
-#   OR snap:        sudo snap install opm
-#   OR build from source: https://opm-project.org
+# Python version: 3.12+ (Ubuntu 24.04 default)
 #
-# opm-python / opm-common are C++ extension modules shipped WITH the
-# opm-simulators apt package, NOT available on PyPI. After apt install,
-# the Python bindings are at /usr/lib/python3/dist-packages/opm/
-# ──────────────────────────────────────────────────────────────────────
+# NOTE: OPM Flow binary must be installed via system package manager:
+#   sudo apt install opm-simulators
+# The opm Python bindings ship WITH that apt package at:
+#   /usr/lib/python3/dist-packages/opm/
+# They are NOT on PyPI — do not add opm-python here.
+# ════════════════════════════════════════════════════════════════════════
 
-# Simulation result reading (pure Python, on PyPI)
-ecl2df>=0.17
-resdata>=0.3
+# ── Simulation result reading ────────────────────────────────────────────
+# resdata 5.x supports Python 3.12 and 3.13 (dropped <3.12 in 5.0.0)
+# ecl2df is NOT listed — it hard-requires resdata<4 which requires Python <3.12
+resdata>=5.0.0
 resfo>=4.4
 
-# LLM providers (OpenAI-compatible REST clients)
-openai>=1.40.0       # Used for NVIDIA NIM (integrate.api.nvidia.com) + fallback
-groq>=0.9.0          # Groq fast inference (console.groq.com)
+# ── LLM providers (OpenAI-compatible REST clients) ───────────────────────
+openai>=1.40.0        # NVIDIA NIM (integrate.api.nvidia.com) + fallback
+groq>=0.9.0           # Groq fast inference (console.groq.com)
 
-# UI
+# ── UI ───────────────────────────────────────────────────────────────────
 streamlit>=1.36.0
 
-# Data & plotting
+# ── Data & plotting ──────────────────────────────────────────────────────
 pandas>=2.0
 numpy>=1.26
 plotly>=5.22
 
-# Testing
+# ── Testing ──────────────────────────────────────────────────────────────
 pytest>=8.0
 pytest-cov>=5.0

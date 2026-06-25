@@ -8,9 +8,8 @@ import datetime
 from pathlib import Path
 import pytest
 
-# ── synthetic DataFrame helper ──────────────────────────────────────────────
+
 def make_synthetic_sf(n=50, has_foip=True, has_wwct=True):
-    """Build a SummaryFrame that mimics a 5-year waterflood case."""
     try:
         import pandas as pd
         import numpy as np
@@ -28,16 +27,16 @@ def make_synthetic_sf(n=50, has_foip=True, has_wwct=True):
         "FWPR": 500 * t,
         "FGPR": 200 * np.exp(-t),
         "FWIR": np.full(n, 800.0),
-        "FWIT": 800 * np.arange(n) * 30.5,    # cumulative approx
+        "FWIT": 800 * np.arange(n) * 30.5,
         "FOPT": 1000 * (1 - np.exp(-2 * t)) * 180,
         "FWPT": 500 * t * 180,
-        "FPR":  250 - 50 * t,
-        "NTS":  np.arange(n, dtype=float),
+        "FPR": 250 - 50 * t,
+        "NTS": np.arange(n, dtype=float),
     }
     if has_wwct:
         data["WWCT:PROD1"] = np.clip(t - 0.3, 0, 1)
     if has_foip:
-        data["FOIP"] = np.full(n, 500_000.0)  # constant proxy STOIIP
+        data["FOIP"] = np.full(n, 500_000.0)
 
     df = pd.DataFrame(data, index=pd.DatetimeIndex(dates))
     df.index.name = "DATE"
@@ -45,22 +44,29 @@ def make_synthetic_sf(n=50, has_foip=True, has_wwct=True):
     return SummaryFrame(df=df, dates=list(dates), vectors=list(df.columns), case_name="SYNTH01")
 
 
-# ── SummaryFrame / empty handling ───────────────────────────────────────────
+# ── SummaryFrame ────────────────────────────────────────────────────────────────
 
 def test_summary_frame_empty_classmethod():
     from opm_ai.postprocess.models import SummaryFrame
-    sf = SummaryFrame.empty()
+    sf = SummaryFrame.empty()           # classmethod — no longer clashes
     assert sf.df is None
     assert sf.vectors == []
+
+
+def test_summary_frame_is_empty_property():
+    from opm_ai.postprocess.models import SummaryFrame
+    sf = SummaryFrame.empty()
+    assert sf.is_empty is True
 
 
 def test_summary_frame_not_empty_with_data():
     sf = make_synthetic_sf()
     assert sf.df is not None
     assert len(sf.vectors) > 0
+    assert sf.is_empty is False
 
 
-# ── KPISet model ─────────────────────────────────────────────────────────────
+# ── KPISet ───────────────────────────────────────────────────────────────────
 
 def test_kpiset_empty():
     from opm_ai.postprocess.models import KPISet
@@ -81,11 +87,10 @@ def test_extract_kpis_from_synthetic():
     from opm_ai.postprocess.kpi_extractor import extract_kpis
     sf = make_synthetic_sf()
     kpis = extract_kpis(sf)
-
     assert kpis.fopt is not None and kpis.fopt > 0
     assert kpis.fwit is not None and kpis.fwit > 0
     assert kpis.initial_fpr is not None and kpis.final_fpr is not None
-    assert kpis.initial_fpr > kpis.final_fpr, "Pressure should drop over time"
+    assert kpis.initial_fpr > kpis.final_fpr
     assert kpis.pressure_drop is not None and kpis.pressure_drop > 0
 
 
@@ -94,7 +99,7 @@ def test_recovery_factor_computed():
     sf = make_synthetic_sf(has_foip=True)
     kpis = extract_kpis(sf)
     assert kpis.recovery_factor is not None
-    assert 0 < kpis.recovery_factor < 1, "RF must be between 0 and 1"
+    assert 0 < kpis.recovery_factor < 1
 
 
 def test_no_foip_means_no_recovery_factor():
@@ -108,21 +113,18 @@ def test_water_breakthrough_detected():
     from opm_ai.postprocess.kpi_extractor import extract_kpis
     sf = make_synthetic_sf(has_wwct=True)
     kpis = extract_kpis(sf)
-    # WWCT:PROD1 crosses 0.05 somewhere around t=0.35 (month ~17)
     assert kpis.wct_breakthrough_date is not None
     assert kpis.wct_breakthrough_years is not None and kpis.wct_breakthrough_years > 0
 
 
 def test_no_wwct_no_breakthrough():
     from opm_ai.postprocess.kpi_extractor import extract_kpis
-    # Build SF with no WWCT columns and no FWPR (no waterflood vectors)
     try:
         import pandas as pd
         import numpy as np
     except ImportError:
         pytest.skip()
     from opm_ai.postprocess.models import SummaryFrame
-    import datetime
     dates = pd.date_range(datetime.datetime(2020, 1, 1), periods=10, freq="ME")
     df = pd.DataFrame({"FOPT": np.linspace(0, 1000, 10)}, index=dates)
     sf = SummaryFrame(df=df, dates=list(dates), vectors=list(df.columns))
@@ -143,7 +145,7 @@ def test_kpis_narrative_bullets_populated():
     kpis = extract_kpis(sf)
     bullets = kpis.narrative_bullets()
     assert isinstance(bullets, list)
-    assert len(bullets) >= 2  # at minimum: FOPT + pressure
+    assert len(bullets) >= 2
     assert any("oil" in b.lower() or "FOPT" in b for b in bullets)
 
 
@@ -186,7 +188,7 @@ def test_recovery_efficiency_plot_needs_foip(tmp_path):
     assert "recovery_efficiency" not in names
 
 
-# ── PostProcessResult model ──────────────────────────────────────────────────
+# ── PostProcessResult ─────────────────────────────────────────────────────────
 
 def test_postprocess_result_succeeded_flag():
     from opm_ai.postprocess.models import PostProcessResult, KPISet, SummaryFrame
@@ -210,7 +212,7 @@ def test_postprocess_result_with_error():
     assert r.succeeded is False
 
 
-# ── ResInsight bridge (import-only, no ResInsight required) ──────────────────
+# ── ResInsight bridge ────────────────────────────────────────────────────────────
 
 def test_resinsight_bridge_importable():
     from opm_ai.postprocess import resinsight_bridge
@@ -218,20 +220,20 @@ def test_resinsight_bridge_importable():
 
 
 def test_resinsight_returns_false_without_rips():
-    """open_in_resinsight must return False gracefully when rips not installed."""
     import sys
-    # Temporarily hide rips from imports
     rips_mod = sys.modules.get("rips")
     sys.modules["rips"] = None  # type: ignore
     try:
-        from opm_ai.postprocess.resinsight_bridge import open_in_resinsight
-
+        # Re-import to pick up the mocked module
+        import importlib
+        import opm_ai.postprocess.resinsight_bridge as rb
+        importlib.reload(rb)
         class _FakeResult:
             succeeded = True
             summary_file = None
             job = type("J", (), {"deck_path": Path("/tmp/fake.DATA"),
                                   "output_dir": None})()
-        assert open_in_resinsight(_FakeResult()) is False
+        assert rb.open_in_resinsight(_FakeResult()) is False
     finally:
         if rips_mod is not None:
             sys.modules["rips"] = rips_mod

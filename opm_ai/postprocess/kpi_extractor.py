@@ -2,10 +2,9 @@
 
 Strategy
 --------
-1. Try ecl2df (Equinor's Eclipse DataFrame library) — works with both
+1. Try ecl2df (Equinor’s Eclipse DataFrame library) — works with both
    UNSMRY and ESMRY; returns a tidy DataFrame with DATE as index.
 2. Fallback: minimal struct-based UNSMRY reader using only stdlib + numpy.
-   This ensures the module works even without ecl2df installed.
 
 All public functions return SummaryFrame or KPISet — never raw DataFrames.
 """
@@ -17,46 +16,18 @@ import datetime
 from .models import SummaryFrame, KPISet
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Summary loading
-# ─────────────────────────────────────────────────────────────────────────────
-
 def load_summary_ecl2df(smspec_path: Path) -> SummaryFrame:
-    """Load SUMMARY vectors using ecl2df.summary.df().
-
-    ecl2df accepts the .SMSPEC path (or the base name without extension).
-    It discovers .UNSMRY automatically.
-    """
     import ecl2df  # type: ignore
-    import pandas as pd
-
-    # ecl2df expects the case basename (no extension)
     case = str(smspec_path.with_suffix(""))
-    df = ecl2df.summary.df(case)          # returns DataFrame, DATE as column
-
+    df = ecl2df.summary.df(case)
     if "DATE" in df.columns:
         df = df.set_index("DATE")
-    elif df.index.name != "DATE":
-        pass  # best-effort: keep whatever index ecl2df returns
-
-    vectors = [c for c in df.columns]
+    vectors = list(df.columns)
     dates = list(df.index) if hasattr(df.index, "__iter__") else []
-
-    return SummaryFrame(
-        df=df,
-        dates=dates,
-        vectors=vectors,
-        case_name=smspec_path.stem,
-    )
+    return SummaryFrame(df=df, dates=dates, vectors=vectors, case_name=smspec_path.stem)
 
 
 def load_summary_fallback(smspec_path: Path) -> SummaryFrame:
-    """Minimal UNSMRY reader — no external dependencies beyond numpy.
-
-    Reads the .SMSPEC (keyword WGNAMES, KEYWORDS, UNITS) and .UNSMRY
-    (PARAMS keyword) to reconstruct a DataFrame.
-    Falls back gracefully for unknown record types.
-    """
     import struct
     import numpy as np
     try:
@@ -71,35 +42,27 @@ def load_summary_fallback(smspec_path: Path) -> SummaryFrame:
 
     keywords, wgnames, units = _read_smspec(smspec)
     time_series = _read_unsmry(unsmry, len(keywords))
-
     if not time_series:
         return SummaryFrame.empty()
 
-    # Build column names: "KEYWORD" or "KEYWORD:WGNAME"
     cols = []
     for kw, wg in zip(keywords, wgnames):
         wg = wg.strip()
         cols.append(f"{kw.strip()}:{wg}" if wg and wg not in ("", ":", " ") else kw.strip())
 
-    data = np.array(time_series)  # shape (n_steps, n_vectors)
+    import numpy as np
+    data = np.array(time_series)
     df = pd.DataFrame(data, columns=cols)
 
-    # TIME column → real dates (days since start)
     dates = []
     if "TIME" in df.columns:
         days = df["TIME"].values
-        # Use a synthetic start date; real decks embed start date in STARTDAT in SMSPEC
         start = _read_startdat(smspec) or datetime.datetime(2000, 1, 1)
         dates = [start + datetime.timedelta(days=float(d)) for d in days]
         df.index = pd.DatetimeIndex(dates)
         df.index.name = "DATE"
 
-    return SummaryFrame(
-        df=df,
-        dates=dates,
-        vectors=list(df.columns),
-        case_name=smspec_path.stem,
-    )
+    return SummaryFrame(df=df, dates=dates, vectors=list(df.columns), case_name=smspec_path.stem)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -108,43 +71,35 @@ def load_summary_fallback(smspec_path: Path) -> SummaryFrame:
 
 def extract_kpis(sf: SummaryFrame) -> KPISet:
     """Compute reservoir engineering KPIs from a loaded SummaryFrame."""
-    if sf.empty or sf.df is None:
+    if sf.is_empty or sf.df is None:
         return KPISet.empty()
 
     df = sf.df
     kpis = KPISet(available_vectors=sf.vectors)
 
-    # ── Cumulative totals (last row = cumulative at end of run) ─────────────
     kpis.fopt = _last(df, "FOPT")
     kpis.fwpt = _last(df, "FWPT")
     kpis.fgpt = _last(df, "FGPT")
     kpis.fwit = _last(df, "FWIT")
     kpis.fgit = _last(df, "FGIT")
 
-    # ── Peak oil rate ────────────────────────────────────────────────────────
     if "FOPR" in df.columns:
         idx = df["FOPR"].idxmax()
         kpis.peak_fopr = float(df["FOPR"].max())
         kpis.peak_fopr_date = idx if hasattr(idx, "year") else None
 
-    # ── Peak water injection rate ────────────────────────────────────────────
     kpis.peak_fwir = _max(df, "FWIR")
 
-    # ── Field average pressure ───────────────────────────────────────────────
     if "FPR" in df.columns:
         kpis.initial_fpr = float(df["FPR"].iloc[0])
         kpis.final_fpr = float(df["FPR"].iloc[-1])
         kpis.pressure_drop = kpis.initial_fpr - kpis.final_fpr
 
-    # ── Water cut and breakthrough ───────────────────────────────────────────
-    # Field WCT = FWPR / (FWPR + FOPR) — computed from rates, not a direct vector
     if "FWPR" in df.columns and "FOPR" in df.columns:
         total_liq = df["FWPR"] + df["FOPR"]
         fwct_series = df["FWPR"] / total_liq.where(total_liq > 0)
         kpis.final_field_wct = float(fwct_series.iloc[-1]) if not fwct_series.empty else None
 
-        # Breakthrough: first timestep with WWCT > 0.05 across any well
-        # Try per-well WWCT columns first; fall back to field-level WCT
         wwct_cols = [c for c in df.columns if c.startswith("WWCT")]
         bt_date = _find_breakthrough(df, wwct_cols, threshold=0.05)
         if bt_date is None:
@@ -156,15 +111,12 @@ def extract_kpis(sf: SummaryFrame) -> KPISet:
                 delta = (bt_date - start).days / 365.25
                 kpis.wct_breakthrough_years = round(delta, 2)
 
-    # ── Recovery factor ──────────────────────────────────────────────────────
-    # Use FOIP at t=0 as proxy for STOIIP
     if "FOIP" in df.columns:
         foip0 = float(df["FOIP"].iloc[0])
         if foip0 > 0 and kpis.fopt is not None:
             kpis.foip_initial = foip0
             kpis.recovery_factor = round(kpis.fopt / foip0, 4)
 
-    # ── Simulation performance ───────────────────────────────────────────────
     if "NEWTON" in df.columns:
         kpis.avg_newton_iters = float(df["NEWTON"].mean())
     if "NTS" in df.columns:
@@ -174,10 +126,6 @@ def extract_kpis(sf: SummaryFrame) -> KPISet:
 
     return kpis
 
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Helpers
-# ─────────────────────────────────────────────────────────────────────────────
 
 def _last(df, col: str) -> Optional[float]:
     if col in df.columns and not df[col].empty:
@@ -192,7 +140,6 @@ def _max(df, col: str) -> Optional[float]:
 
 
 def _find_breakthrough(df, wwct_cols: list, threshold: float) -> Optional[datetime.datetime]:
-    """Return earliest date any well WCT exceeds threshold."""
     earliest = None
     for col in wwct_cols:
         above = df.index[df[col] > threshold]
@@ -209,9 +156,7 @@ def _find_breakthrough_series(series, threshold: float) -> Optional[datetime.dat
 
 
 def _read_smspec(path: Path):
-    """Extract KEYWORDS, WGNAMES from .SMSPEC binary (Fortran unformatted)."""
     import struct
-
     keywords, wgnames, units = [], [], []
     with open(path, "rb") as f:
         while True:
@@ -224,15 +169,11 @@ def _read_smspec(path: Path):
                 dtype = hdr[12:16].decode("ascii").strip()
             except Exception:
                 break
-
-            record_size = count * _ecltype_size(dtype)
-            # Read leading Fortran record length
             fl = f.read(4)
             if len(fl) < 4:
                 break
             data = f.read(struct.unpack(">i", fl)[0])
-            f.read(4)  # trailing record length
-
+            f.read(4)
             if name == "KEYWORDS":
                 keywords = [data[i*8:(i+1)*8].decode("ascii", errors="replace").strip()
                             for i in range(count)]
@@ -246,7 +187,6 @@ def _read_smspec(path: Path):
 
 
 def _read_unsmry(path: Path, n_vectors: int) -> list:
-    """Read PARAMS records from .UNSMRY; each PARAMS = one timestep."""
     import struct
     rows = []
     with open(path, "rb") as f:
@@ -281,7 +221,6 @@ def _ecltype_size(dtype: str) -> int:
 
 
 def _read_startdat(smspec: Path) -> Optional[datetime.datetime]:
-    """Try to extract STARTDAT record from SMSPEC."""
     import struct
     try:
         with open(smspec, "rb") as f:

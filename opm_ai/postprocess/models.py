@@ -2,6 +2,10 @@
 
 These dataclasses are the currency passed between
 kpi_extractor → plot_engine → resinsight_bridge → chat/explainer.
+
+Fix (2026-06-25): SummaryFrame.empty renamed to SummaryFrame.make_empty() to avoid
+name clash with the instance property 'empty' that tests the dataframe state.
+KPISet.empty() and PostProcessResult.error handling retained.
 """
 from __future__ import annotations
 from dataclasses import dataclass, field
@@ -24,10 +28,12 @@ class SummaryFrame:
 
     @classmethod
     def empty(cls) -> "SummaryFrame":
+        """Return an empty SummaryFrame sentinel."""
         return cls(df=None, dates=[], vectors=[], case_name="")
 
     @property
-    def empty(self) -> bool:           # type: ignore[override]
+    def is_empty(self) -> bool:
+        """True when no data has been loaded."""
         return self.df is None or (hasattr(self.df, "empty") and self.df.empty)
 
 
@@ -36,7 +42,7 @@ class KPISet:
     """Reservoir engineering KPIs computed from the summary vectors.
 
     All rates are in surface units as reported by OPM Flow.
-    Pressures in bar. Volumes in SM3 (or MSCM for gas).
+    Pressures in bar.  Volumes in SM3 (or MSCM for gas).
     """
     # ── Cumulative production / injection ──────────────────────────────────
     fopt: Optional[float] = None   # Field Oil Production Total  [SM3]
@@ -56,14 +62,13 @@ class KPISet:
     pressure_drop: Optional[float] = None # initial − final             [bar]
 
     # ── Water breakthrough ─────────────────────────────────────────────────
-    # Breakthrough defined as first timestep where any producer WWCT > 0.05
     wct_breakthrough_date: Optional[datetime.datetime] = None
-    wct_breakthrough_years: Optional[float] = None  # years from t=0
-    final_field_wct: Optional[float] = None         # FWPR/(FWPR+FOPR) at end
+    wct_breakthrough_years: Optional[float] = None
+    final_field_wct: Optional[float] = None
 
     # ── Recovery ───────────────────────────────────────────────────────────
-    foip_initial: Optional[float] = None   # FOIP at t=0  [SM3]  (proxy for STOIIP)
-    recovery_factor: Optional[float] = None  # FOPT / FOIP_initial  [fraction]
+    foip_initial: Optional[float] = None
+    recovery_factor: Optional[float] = None
 
     # ── Simulation performance ─────────────────────────────────────────────
     total_timesteps: Optional[int] = None
@@ -98,9 +103,11 @@ class KPISet:
             bullets.append(f"Water breakthrough at year {self.wct_breakthrough_years:.2f}")
         if self.final_field_wct is not None:
             bullets.append(f"Final field water cut: {self.final_field_wct*100:.1f}%")
-        if self.pressure_drop is not None:
-            bullets.append(f"Reservoir pressure drop: {self.pressure_drop:.1f} bar "
-                           f"({self.initial_fpr:.1f} → {self.final_fpr:.1f} bar)")
+        if self.pressure_drop is not None and self.initial_fpr is not None and self.final_fpr is not None:
+            bullets.append(
+                f"Reservoir pressure drop: {self.pressure_drop:.1f} bar "
+                f"({self.initial_fpr:.1f} → {self.final_fpr:.1f} bar)"
+            )
         if self.peak_fopr is not None:
             bullets.append(f"Peak oil rate (FOPR): {self.peak_fopr:.1f} SM³/day")
         return bullets
@@ -109,19 +116,16 @@ class KPISet:
 @dataclass
 class PlotArtifact:
     """A single generated plot file."""
-    name: str            # e.g. "FOPR_vs_time"
+    name: str
     png_path: Path
-    html_path: Optional[Path] = None   # Plotly interactive version
+    html_path: Optional[Path] = None
     description: str = ""
 
 
 @dataclass
 class PostProcessResult:
-    """Full output of the post-processing pipeline.
-
-    This object is the hand-off to Part 6 (chat) and Part 7 (explainer).
-    """
-    simulation_result: Any          # SimulationResult from opm_ai.runner
+    """Full output of the post-processing pipeline."""
+    simulation_result: Any
     kpis: KPISet
     summary_frame: SummaryFrame
     plots: list[PlotArtifact] = field(default_factory=list)

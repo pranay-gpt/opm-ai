@@ -17,22 +17,12 @@ from .resinsight_bridge import open_in_resinsight
 
 
 def analyze_result(
-    result,                   # SimulationResult from opm_ai.runner
-    output_dir=None,          # where to write PNGs; defaults to result.job.output_dir
+    result,
+    output_dir=None,
     generate_static_plots: bool = True,
     launch_resinsight: bool = False,
 ) -> "PostProcessResult":
-    """Full post-processing pipeline for a completed SimulationResult.
-
-    Steps
-    -----
-    1. Extract KPIs from .SMSPEC/.UNSMRY via ecl2df (or fallback parser).
-    2. Generate standard diagnostic plots as PNGs + Plotly HTML.
-    3. Optionally launch ResInsight for 3-D visualisation.
-
-    Returns a PostProcessResult that feeds directly into Part 6 (chat) and
-    Part 7 (explainer).
-    """
+    """Full post-processing pipeline for a completed SimulationResult."""
     from pathlib import Path
 
     if not result.succeeded:
@@ -51,8 +41,8 @@ def analyze_result(
     summary_frame = _load_summary(result)
     kpis = extract_kpis(summary_frame)
 
-    plots: list[PlotArtifact] = []
-    if generate_static_plots and not summary_frame.empty:
+    plots = []
+    if generate_static_plots and not summary_frame.is_empty:
         plots = generate_plots(summary_frame, kpis, out)
 
     resinsight_ok = False
@@ -69,7 +59,6 @@ def analyze_result(
 
 
 def _load_summary(result) -> "SummaryFrame":
-    """Try ecl2df first, fall back to our own minimal UNSMRY reader."""
     from .kpi_extractor import load_summary_ecl2df, load_summary_fallback
     if result.summary_file is None:
         return SummaryFrame.empty()

@@ -13,8 +13,8 @@ Run:
     streamlit run opm_ai/chat/app.py
 
 Environment variables:
-    GROQ_API_KEY    — Groq free tier
-    NVIDIA_API_KEY  — NVIDIA NIM free tier (Nemotron-Ultra-253B)
+    GROQ_API_KEY    — Groq free tier (console.groq.com)
+    NVIDIA_API_KEY  — NVIDIA NIM free tier (build.nvidia.com)
 """
 
 import os
@@ -73,12 +73,12 @@ SYSTEM_PROMPT = load_system_prompt()
 
 # ── Nav items ─────────────────────────────────────────────────────────────────
 NAV_ITEMS = [
-    {"id": "chat",       "icon": "💬", "label": "Chat",         "desc": "Talk to the AI"},
-    {"id": "results",    "icon": "📊", "label": "Results",      "desc": "KPIs & plots"},
-    {"id": "deck",       "icon": "📝", "label": "Deck Builder",  "desc": "Build .DATA files"},
-    {"id": "run",        "icon": "▶️", "label": "Run Simulation","desc": "OPM Flow runner"},
-    {"id": "explain",    "icon": "🎓", "label": "Explain",       "desc": "Concept explainer"},
-    {"id": "settings",   "icon": "⚙️", "label": "Settings",      "desc": "API keys & config"},
+    {"id": "chat",       "icon": "💬", "label": "Chat",          "desc": "Talk to the AI"},
+    {"id": "results",    "icon": "📊", "label": "Results",       "desc": "KPIs & plots"},
+    {"id": "deck",       "icon": "📝", "label": "Deck Builder",   "desc": "Build .DATA files"},
+    {"id": "run",        "icon": "▶️", "label": "Run Simulation", "desc": "OPM Flow runner"},
+    {"id": "explain",    "icon": "🎓", "label": "Explain",        "desc": "Concept explainer"},
+    {"id": "settings",   "icon": "⚙️", "label": "Settings",       "desc": "API keys & config"},
 ]
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -105,7 +105,6 @@ with st.sidebar:
     # Nav buttons
     for item in NAV_ITEMS:
         is_active = st.session_state.active_view == item["id"]
-        active_cls = "active" if is_active else ""
         if st.button(
             f"{item['icon']}  {item['label']}",
             key=f"nav_{item['id']}",
@@ -188,10 +187,9 @@ with st.sidebar:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# HELPER: get LLM router (cached per session to avoid re-init)
+# HELPER: get LLM router
 # ─────────────────────────────────────────────────────────────────────────────
 def get_router():
-    """Build the LLM router. Returns None with an error message if API key missing."""
     try:
         from opm_ai.chat.llm_router import LLMRouter
         return LLMRouter(
@@ -213,7 +211,6 @@ def view_chat():
         unsafe_allow_html=True,
     )
 
-    # Provider badge
     p = PROVIDERS[st.session_state.llm_provider]
     st.markdown(
         f"<div class='provider-badge'>{p.badge} {p.label} &nbsp;·&nbsp; {st.session_state.selected_model}</div>",
@@ -222,26 +219,24 @@ def view_chat():
     st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
 
     # Chat history
-    chat_container = st.container()
-    with chat_container:
-        for msg in st.session_state.messages:
-            role = msg["role"]
-            content = msg["content"]
-            if role == "user":
-                st.markdown(
-                    f"<div class='msg-user'><div class='bubble'>{content}</div></div>",
-                    unsafe_allow_html=True,
-                )
-            elif role == "assistant" and content:
-                st.markdown(
-                    f"<div class='msg-ai'><div class='avatar'>🛢️</div><div class='bubble'>{content}</div></div>",
-                    unsafe_allow_html=True,
-                )
-            elif role == "tool_call_indicator":
-                st.markdown(
-                    f"<div class='tool-call-badge'>⚙️ called: {content}</div>",
-                    unsafe_allow_html=True,
-                )
+    for msg in st.session_state.messages:
+        role = msg["role"]
+        content = msg["content"]
+        if role == "user":
+            st.markdown(
+                f"<div class='msg-user'><div class='bubble'>{content}</div></div>",
+                unsafe_allow_html=True,
+            )
+        elif role == "assistant" and content:
+            st.markdown(
+                f"<div class='msg-ai'><div class='avatar'>🛢️</div><div class='bubble'>{content}</div></div>",
+                unsafe_allow_html=True,
+            )
+        elif role == "tool_call_indicator":
+            st.markdown(
+                f"<div class='tool-call-badge'>⚙️ called: {content}</div>",
+                unsafe_allow_html=True,
+            )
 
     # Input row
     col_input, col_send = st.columns([6, 1])
@@ -262,7 +257,6 @@ def view_chat():
             st.rerun()
 
     if send and user_input.strip():
-        # Append user message
         st.session_state.messages.append({"role": "user", "content": user_input.strip()})
 
         router, err = get_router()
@@ -274,13 +268,11 @@ def view_chat():
             st.rerun()
             return
 
-        # Build message list for LLM
         llm_msgs = [{"role": "system", "content": SYSTEM_PROMPT}]
         for m in st.session_state.messages:
             if m["role"] in ("user", "assistant") and m.get("content"):
                 llm_msgs.append({"role": m["role"], "content": m["content"]})
 
-        # Stream response
         with st.spinner("Thinking…"):
             full_response = ""
             placeholder = st.empty()
@@ -294,7 +286,6 @@ def view_chat():
         placeholder.empty()
         st.session_state.messages.append({"role": "assistant", "content": full_response})
 
-        # Add tool call badge if tool was invoked
         if st.session_state.last_tool_called:
             st.session_state.messages.append({
                 "role": "tool_call_indicator",
@@ -314,15 +305,12 @@ def view_results():
         unsafe_allow_html=True,
     )
 
-    # Drive mechanism identification card
     if not st.session_state.drive_confirmed:
         st.markdown(
-            """
-            <div class='card'>
-                <div style='font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px;'>🔍 Drive Mechanism Identification</div>
-                <div style='font-size:13px;color:var(--muted);'>Before plotting, OPM-AI needs to confirm the reservoir drive mechanism.</div>
-            </div>
-            """,
+            "<div class='card'>"
+            "<div style='font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px;'>🔍 Drive Mechanism Identification</div>"
+            "<div style='font-size:13px;color:var(--muted);'>Before plotting, OPM-AI needs to confirm the reservoir drive mechanism.</div>"
+            "</div>",
             unsafe_allow_html=True,
         )
         drive_options = [
@@ -352,7 +340,6 @@ def view_results():
         unsafe_allow_html=True,
     )
 
-    # KPI grid
     if st.session_state.last_kpis:
         st.markdown(
             "<div style='font-size:13px;font-weight:600;color:var(--muted);margin:16px 0 8px;text-transform:uppercase;letter-spacing:0.05em;'>Key Performance Indicators</div>",
@@ -366,7 +353,6 @@ def view_results():
                 with cols[i % len(cols)]:
                     st.metric(k.replace("_", " ").title(), f"{v:.3g}" if isinstance(v, float) else v)
 
-    # Plot viewer
     if st.session_state.last_plots:
         st.markdown(
             "<div style='font-size:13px;font-weight:600;color:var(--muted);margin:16px 0 8px;text-transform:uppercase;letter-spacing:0.05em;'>Interactive Plots</div>",
@@ -381,16 +367,13 @@ def view_results():
                     st.components.v1.html(plot_data["html"], height=450, scrolling=False)
     else:
         st.markdown(
-            """
-            <div class='card' style='text-align:center;padding:40px;'>
-                <div style='font-size:36px;'>📈</div>
-                <div style='font-size:14px;color:var(--muted);margin-top:8px;'>No results yet. Run a simulation or load a case.</div>
-            </div>
-            """,
+            "<div class='card' style='text-align:center;padding:40px;'>"
+            "<div style='font-size:36px;'>📈</div>"
+            "<div style='font-size:14px;color:var(--muted);margin-top:8px;'>No results yet. Run a simulation or load a case.</div>"
+            "</div>",
             unsafe_allow_html=True,
         )
 
-    # Load result directory
     st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
     result_path = st.text_input(
         "Load result directory",
@@ -404,7 +387,7 @@ def view_results():
             st.session_state.drive_confirmed = False
             st.rerun()
     with col_well:
-        well_level = st.checkbox("Include well plots", key="well_level")
+        st.checkbox("Include well plots", key="well_level")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -417,21 +400,18 @@ def view_deck():
     )
 
     st.markdown(
-        """
-        <div class='card'>
-            <div style='font-size:13px;color:var(--muted);line-height:1.6;'>
-                Describe your reservoir in plain English. OPM-AI will build a deck starting with
-                <code>RUNSPEC</code> and ask for any missing parameters.
-                Deck order: <code>RUNSPEC → GRID → PROPS → REGIONS → SOLUTION → SUMMARY → SCHEDULE</code>
-            </div>
-        </div>
-        """,
+        "<div class='card'>"
+        "<div style='font-size:13px;color:var(--muted);line-height:1.6;'>"
+        "Describe your reservoir in plain English. OPM-AI will build a deck starting with "
+        "<code>RUNSPEC</code> and ask for any missing parameters. "
+        "Deck order: <code>RUNSPEC &rarr; GRID &rarr; PROPS &rarr; REGIONS &rarr; SOLUTION &rarr; SUMMARY &rarr; SCHEDULE</code>"
+        "</div></div>",
         unsafe_allow_html=True,
     )
 
     description = st.text_area(
         "Reservoir description",
-        placeholder="E.g. Black oil model, 10×10×3 grid, solution gas drive, 3 production wells, 1 injector…",
+        placeholder="E.g. Black oil model, 10x10x3 grid, solution gas drive, 3 production wells, 1 injector…",
         height=100,
         key="deck_description",
     )
@@ -449,7 +429,7 @@ def view_deck():
             with st.spinner("Building deck…"):
                 build_msg = [
                     {"role": "system", "content": SYSTEM_PROMPT},
-                    {"role": "user", "content": f"Build a simulation deck: {description}. Template: {template}.\nUse the build_deck tool."},
+                    {"role": "user", "content": f"Build a simulation deck: {description}. Template: {template}. Use the build_deck tool."},
                 ]
                 full_response = ""
                 for chunk in router.chat(build_msg, st.session_state):
@@ -459,7 +439,6 @@ def view_deck():
                 else:
                     st.session_state.deck_editor_content = full_response
 
-    # Deck editor
     deck_content = st.session_state.get("deck_editor_content", "")
     edited_deck = st.text_area(
         "Deck editor",
@@ -488,7 +467,12 @@ def view_deck():
                     st.markdown(f"<div class='card'>{result}</div>", unsafe_allow_html=True)
 
     with col_save:
-        save_path = st.text_input("Save path", placeholder="/cases/my_case/MY_CASE.DATA", label_visibility="collapsed", key="deck_save_path")
+        save_path = st.text_input(
+            "Save path",
+            placeholder="/cases/my_case/MY_CASE.DATA",
+            label_visibility="collapsed",
+            key="deck_save_path",
+        )
         if st.button("💾 Save Deck", key="save_btn") and save_path and edited_deck:
             try:
                 p = Path(save_path)
@@ -500,7 +484,7 @@ def view_deck():
                 st.error(str(e))
 
     with col_run:
-        if st.button("▶️ Run Simulation", key="deck_run_btn") and (edited_deck or st.session_state.active_deck_path):
+        if st.button("▶️ Run Simulation", key="deck_run_btn"):
             st.session_state.active_view = "run"
             st.rerun()
 
@@ -552,13 +536,15 @@ def view_run():
                 rc = proc.returncode
             if rc == 0:
                 st.success("✅ Simulation completed successfully!")
-                result_dir = str(Path(deck_path).parent)
-                st.session_state.active_result_path = result_dir
+                st.session_state.active_result_path = str(Path(deck_path).parent)
                 st.session_state.drive_confirmed = False
             else:
                 st.error(f"❌ Simulation failed with exit code {rc}")
         except FileNotFoundError:
-            st.error(f"OPM Flow binary '{opm_bin}' not found. Install OPM Flow or set OPM_FLOW_BIN env var.")
+            st.error(
+                f"OPM Flow binary '{opm_bin}' not found. "
+                "Install via: sudo apt install opm-simulators"
+            )
         except Exception as e:  # noqa: BLE001
             st.error(str(e))
 
@@ -623,7 +609,8 @@ def view_settings():
         unsafe_allow_html=True,
     )
 
-    st.markdown("<div class='section-header'>API Keys</div>", unsafe_allow_html=True)
+    # ── API Keys ──
+    st.markdown('<div class="section-header">API Keys</div>', unsafe_allow_html=True)
 
     for pname, pcfg in PROVIDERS.items():
         current_key = os.getenv(pcfg.api_key_env, "")
@@ -639,8 +626,10 @@ def view_settings():
             os.environ[pcfg.api_key_env] = new_key
             st.success(f"{pcfg.api_key_env} updated for this session.")
 
-    st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
-    st.markdown("<div class='section-header'>OPM Flow</div>", unsafe_allow_html=True)
+    # ── OPM Flow ──
+    st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">OPM Flow</div>', unsafe_allow_html=True)
+    st.caption('Install via: sudo apt install opm-simulators')
     opm_path = st.text_input(
         "OPM Flow binary path",
         value=os.getenv("OPM_FLOW_BIN", "flow"),
@@ -650,8 +639,9 @@ def view_settings():
         os.environ["OPM_FLOW_BIN"] = opm_path
         st.success("Saved.")
 
-    st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
-    st.markdown("<div class='section-header">ResInsight (Local)</div>", unsafe_allow_html=True)
+    # ── ResInsight ──
+    st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">ResInsight (Local)</div>', unsafe_allow_html=True)
     resinsight_path = st.text_input(
         "ResInsight binary path",
         value=os.getenv("RESINSIGHT_BIN", "ResInsight"),
@@ -661,8 +651,9 @@ def view_settings():
         os.environ["RESINSIGHT_BIN"] = resinsight_path
         st.success("Saved.")
 
-    st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
-    st.markdown("<div class='section-header">Session</div>", unsafe_allow_html=True)
+    # ── Session ──
+    st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">Session</div>', unsafe_allow_html=True)
     if st.button("🗑️ Reset session state", key="reset_session"):
         for k in list(st.session_state.keys()):
             del st.session_state[k]

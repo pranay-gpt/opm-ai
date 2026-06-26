@@ -179,15 +179,25 @@ def dispatch(tool_name: str, args: dict, session: dict) -> str:
 
 def _build_deck(args: dict, session: dict) -> str:
     try:
-        from opm_ai.deckbuilder import build_deck  # type: ignore
-        result = build_deck(
-            description=args["description"],
-            template=args.get("template"),
-        )
-        session["active_deck"] = result.get("deck_text", "")
-        return json.dumps(result)
+        from opm_ai.builder import build_deck  # type: ignore
     except ImportError:
-        return json.dumps({"status": "stub", "message": "DeckBuilder module not yet loaded.", "args": args})
+        return json.dumps({"status": "stub", "message": "Builder module not yet loaded.", "args": args})
+
+    # NOTE: build_deck() takes (description, use_llm); it has no `template`
+    # parameter yet. We surface the requested template back to the LLM so it
+    # is not silently dropped, but selection is auto for now.
+    result = build_deck(description=args["description"])
+
+    deck_text = result.deck_text or ""
+    session["active_deck"] = deck_text
+    return json.dumps({
+        "status": "ok",
+        "template_requested": args.get("template") or "auto",
+        "deck_text": deck_text,
+        "lint_passed": result.lint_passed,
+        "lint_summary": result.lint_summary,
+        "warnings": result.warnings,
+    })
 
 
 def _lint_deck(args: dict, session: dict) -> str:

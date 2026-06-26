@@ -1,6 +1,6 @@
 """
 LLM provider configurations for OPM-AI.
-Supports Groq (free) and NVIDIA NIM (free, Nemotron-Ultra-253B).
+Supports Groq (free) and NVIDIA NIM (free, Nemotron-3 Super 120B).
 Both use the OpenAI-compatible API surface.
 """
 
@@ -28,8 +28,10 @@ PROVIDERS: dict[str, ProviderConfig] = {
         models=[
             "llama-3.3-70b-versatile",
             "llama-3.1-8b-instant",
-            "mixtral-8x7b-32768",
-            "gemma2-9b-it",
+            "meta-llama/llama-4-scout-17b-16e-instruct",
+            "openai/gpt-oss-120b",
+            "openai/gpt-oss-20b",
+            "qwen/qwen3-32b",
         ],
         label="Groq",
         badge="⚡",
@@ -37,13 +39,13 @@ PROVIDERS: dict[str, ProviderConfig] = {
     "nvidia": ProviderConfig(
         name="nvidia",
         base_url="https://integrate.api.nvidia.com/v1",
-        api_key_env="NVIDIA_API_KEY",
-        default_model="nvidia/llama-3.1-nemotron-ultra-253b-v1",
+        api_key_env="NVIDIA_NIM_API",
+        default_model="nvidia/nemotron-3-super-120b-a12b",
         models=[
-            "nvidia/llama-3.1-nemotron-ultra-253b-v1",
-            "nvidia/nemotron-4-340b-instruct",
-            "meta/llama-3.1-70b-instruct",
-            "mistralai/mistral-large-2-instruct",
+            "nvidia/nemotron-3-super-120b-a12b",
+            "nvidia/nemotron-3-ultra-550b-a55b",
+            "nvidia/nemotron-3-nano-30b-a3b",
+            "nvidia/llama-3.3-nemotron-super-49b-v1.5",
         ],
         label="NVIDIA NIM",
         badge="🔥",

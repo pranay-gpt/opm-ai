@@ -54,13 +54,29 @@ opm-ai (this repo)
 ## Roadmap
 
 - [x] Part 8 — Repo skeleton + Docker *(done)*
-- [ ] Part 1 — OPM Runner Python wrapper
-- [ ] Part 2 — AI Deck Linter
-- [ ] Part 3 — Description-to-Deck Builder
-- [ ] Part 4 — Pre-Processing Pipeline
-- [ ] Part 5 — ResInsight Post-Processing Bridge
-- [ ] Part 6 — Conversational Chat UI
-- [ ] Part 7 — Educational Explainer (RAG)
+- [x] Part 1 — OPM Runner Python wrapper *(done)*
+- [x] Part 2 — AI Deck Linter — rule engine + LLM explainer *(done)*
+- [x] Part 3 — Description-to-Deck Builder — Jinja2 templates + LLM extraction *(done)*
+- [x] Part 4 — Pre-Processing Pipeline — PVT correlations (Standing / Beggs-Robinson / Lee-Kesler) *(done)*
+- [x] Part 5 — Post-Processing — KPI extractor + Plotly engine + ResInsight bridge *(done)*
+- [x] Part 6 — Conversational Chat UI — Streamlit + LLM router (Groq + NVIDIA NIM) + tool calling *(done)*
+- [ ] Part 7 — Educational Explainer (RAG) *(in progress — module scaffolded)*
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for module-by-module design notes and data flow.
+
+## Status
+
+Parts 1-6 are implemented and covered by the test suite under `tests/`. The
+chat UI, deck builder, linter, PVT pre-processing, OPM Flow runner, and
+post-processing (KPIs + plots) are wired end to end. The RAG-based educational
+explainer (Part 7) is scaffolded and under active development.
+
+### Running the tests
+
+```bash
+pip install -e ".[dev]"
+pytest
+```
 
 ## Contributing
 

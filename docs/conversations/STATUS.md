@@ -119,4 +119,9 @@ you paste the output.
   design system to `UI_DESIGN_SPEC.md` (dark blue/cyan palette, Monaco editor, section tree,
   3D ResInsight grid, Plotly charts). Updated `06-chat-and-api.md` with visual reference
   section. Created tasks #5-9 for Stage 0.5 (config reconciliation + test tightening + git
-  init). Ready to proceed with implementation.
+  init). **STAGE 0.5 COMPLETE** - All 5 tasks done: pyproject.toml fixed (streamlit removed,
+  click/fastapi/uvicorn added), pytest markers registered in pyproject.toml, env vars
+  reconciled (OPM_FLOW_BINARY canonical), negative tests added (7 xfail documenting defects,
+  8 xpass showing partial linter coverage), git initialized with first commit (dfa6d82).
+  Tests: 33 passed, 7 xfailed, 8 xpassed. Console script `opm-ai` installed and verified.
+  Next: Stage 1 (Runner rewrite).

@@ -94,6 +94,13 @@ table in `STATUS.md`.
 - `cli.py`: click group `main` with `lint`, `build`, `run` (help contains "OPM-AI").
 - **Done when:** `pytest tests/unit/test_llm.py tests/unit/test_cli.py
   tests/integration/test_builder.py -v` passes.
+- **STATUS: COMPLETE (2026-07-18).** Roundtrip + dataset validation added:
+  `tests/integration/test_builder_roundtrip.py` (flow dry-run + full run) and
+  `tests/integration/test_dataset_validation.py` (9 scenarios lint+dry-run
+  clean; 9 known-good fixtures not rejected by linter). Deck validation
+  command is `flow --enable-dry-run=true --output-dir=DIR DECK` (bare
+  `flow --check` is invalid in Flow 2026.04). LLM extraction path
+  (`use_llm=True`) remains a Phase 2 stub by design.
 
 ## Stage 4 - Postprocess (Phase 2)
 

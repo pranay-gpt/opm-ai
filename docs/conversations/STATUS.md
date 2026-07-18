@@ -1,7 +1,7 @@
 # OPM-AI Build Status and Resume Point
 
 Living document. Read this FIRST after any context clear, before touching code.
-Last verified: 2026-07-11.
+Last verified: 2026-07-18 (Stage 3 complete).
 
 ## TL;DR for a fresh session
 
@@ -125,3 +125,24 @@ you paste the output.
   8 xpass showing partial linter coverage), git initialized with first commit (dfa6d82).
   Tests: 33 passed, 7 xfailed, 8 xpassed. Console script `opm-ai` installed and verified.
   Next: Stage 1 (Runner rewrite).
+- 2026-07-18 (later): **STAGE 3 COMPLETE** (Builder+LLM roundtrip). Fixed base.j2
+  (docstring defect #1 gone; TITLE keyword; per-layer DZ/PERM arrays; PVTO table
+  closing `/`; SUMMARY terminators; single TSTEP record) and extract.py (dz/perm
+  arrays re-expanded to nz when grid dims parsed from description). Discovered
+  bare `flow --check` is invalid in Flow 2026.04 (Check requires a value):
+  validation command is `flow --enable-dry-run=true --output-dir=DIR DECK`;
+  roundtrip tests updated accordingly, xfail markers removed. Fixed linter
+  extraction regex bug (`$` vs `\Z` under MULTILINE truncated keyword content to
+  the first row - L007 falsely flagged multi-well WELSPECS); made
+  _extract_well_names record-aware; fixed L012 crash + multipliers. Implemented
+  the previously-dead LLM lint-summary path (LLMClient.summarize_issues +
+  gate on client.available; settings.LLM_AVAILABLE never existed). Calibrated
+  linter strictness against Flow ground truth (19/19 known-good fixture decks
+  now pass lint; was 2/19 - L001 mid-line `/`, TITLE free-text, SUMMARY
+  exemption; L005 phase-pair + family II saturation functions; L003b skips
+  INCLUDE/corner-point grids). Added tests/integration/test_dataset_validation.py
+  (9 builder scenarios must lint+dry-run clean; 9 known-good fixtures must not
+  be rejected). Added builder/context.md, updated linter/context.md.
+  Tests: 66 passed, 0 failed. All 8 scenario types validated through flow
+  dry-run; depletion/waterflood/WAG/injection validated through full runs
+  (SMSPEC+UNRST produced). Next: Stage 4 (Postprocess to spec 05).

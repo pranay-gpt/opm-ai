@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="AQUFET"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="AQUFET"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>AQUFET</title>
+</head>
+<body>
+
+
+<div class="nested0" id="AQUFET"><a name="AQUFET"><!-- --></a>
+<h1 class="keyword">AQUFET</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="aqufet.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="aqufet.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d122e45">      x </th>
+
+<th valign="top" id="d122e48">      ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d122e54"> </th>
+
+<th valign="top" id="d122e57">      ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d122e45 d122e54 "> </td>
+
+<td valign="top" headers="d122e48 d122e57 ">      RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d122e45 d122e54 "> </td>
+
+<td valign="top" headers="d122e48 d122e57 ">      GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d122e45 d122e54 "> </td>
+
+<td valign="top" headers="d122e48 d122e57 ">      EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d122e45 d122e54 "> </td>
+
+<td valign="top" headers="d122e48 d122e57 ">      PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d122e45 d122e54 "> </td>
+
+<td valign="top" headers="d122e48 d122e57 ">      REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d122e45 d122e54 ">      x </td>
+
+<td valign="top" headers="d122e48 d122e57 ">      SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d122e45 d122e54 "> </td>
+
+<td valign="top" headers="d122e48 d122e57 ">      SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d122e45 d122e54 "> </td>
+
+<td valign="top" headers="d122e48 d122e57 ">      SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword can be used to supply both the aquifer properties
+and the cell connections to Fetkovich aquifers.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">This keyword can only be used in ECLIPSE 100.</span></div>
+
+<p>The connection to the reservoir is set up by an arbitrary box defined
+by lower and upper I, J and K indices (refer to items 7-12 below).
+It allows only one reservoir face to be connected to any single aquifer.
+If an aquifer is required to connect to two or more faces, use the
+keywords <a href="AQUFETP.html#AQUFETP">  AQUFETP</a> and <a href="AQUANCON.html#AQUANCON"> AQUANCON</a> or <a href="AQANCONL.html#AQANCONL"> AQANCONL</a>,
+instead of <span class="keyword">AQUFET</span>.</p>
+
+<p>The number of analytic aquifers is specified using the <a href="AQUDIMS.html#AQUDIMS"> AQUDIMS</a> keyword.</p>
+
+<p>Each record refers to a separate Fetkovich aquifer (ranging from
+1 to the number of analytic aquifers), and contains the following
+items of data:</p>
+
+<ol>
+<li>Datum depth<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>)</p>
+                </li>
+
+<li>Initial aquifer pressure at the datum depth<p>If this quantity
+is defaulted or given a negative value, the initial pressure is calculated
+to place the aquifer as nearly as possible in equilibrium with the
+reservoir.</p>
+<p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>)</p>
+</li>
+
+<li>Initial volume of water in the aquifer<p>UNITS: sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), stb (<samp class="codeph">FIELD</samp>), scc (<samp class="codeph">LAB</samp>)</p>
+                </li>
+
+<li>Total (rock + water) compressibility of the aquifer<p>UNITS: 1/bars
+(<samp class="codeph">METRIC</samp>), 1/psi (<samp class="codeph">FIELD</samp>), 1/atm (<samp class="codeph">LAB</samp>)</p>
+                </li>
+
+<li>Aquifer productivity index <p>(total influx rate per unit pressure
+difference)</p>
+ <p>UNITS: sm<sup>3</sup>/day/bars (<samp class="codeph">METRIC</samp>), stb/day/psi (<samp class="codeph">FIELD</samp>), scc/hr/atm (<samp class="codeph">LAB</samp>)</p>
+                </li>
+
+<li>Table number for water pressure properties<p>(See keyword <a href="PVTW.html#PVTW"> PVTW</a>)</p>
+             
+  </li>
+
+<li>Lower I-location of connecting grid blocks                </li>
+
+<li>Upper I-location of connecting grid blocks                </li>
+
+<li>Lower J-location of connecting grid blocks                </li>
+
+<li>Upper J-location of connecting grid blocks                </li>
+
+<li>Lower K-location of connecting grid blocks                </li>
+
+<li>Upper K-location of connecting grid blocks                </li>
+
+<li>Index defining the face of the reservoir to which the aquifer
+connects (where <span class="keyword">NDIVIX</span>, <span class="keyword">NDIVIY</span> and <span class="keyword">NDIVIZ</span> are specified in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS">  DIMENS</a>)
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">'I-'</td>
+
+<td valign="top"> I = 1 face</td>
+
+</tr>
+
+<tr>
+<td valign="top">'I+'</td>
+
+<td valign="top">I = <span class="keyword">NDIVIX</span> face</td>
+
+</tr>
+
+<tr>
+<td valign="top">'J-' </td>
+
+<td valign="top"> J = 1 face</td>
+
+</tr>
+
+<tr>
+<td valign="top">'J+'</td>
+
+<td valign="top"> J = <span class="keyword">NDIVIY</span> face</td>
+
+</tr>
+
+<tr>
+<td valign="top">'K-'</td>
+
+<td valign="top">K = 1 face (top)</td>
+
+</tr>
+
+<tr>
+<td valign="top">'K+'</td>
+
+<td valign="top"> K = <span class="keyword">NDIVIZ</span> face (bottom)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</li>
+
+<li>Initial salt concentration in the aquifer<p>This item is ignored
+unless either the brine option, or the salt-sensitivity option in
+the polymer flood model, has been activated (see the <a href="BRINE.html#BRINE">  BRINE</a> keyword in the <span class="keyword">RUNSPEC</span> section).</p>
+<p>UNITS: kg/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), lb/stb (<samp class="codeph">FIELD</samp>), gm/scc (<samp class="codeph">LAB</samp>)</p>
+<p>DEFAULT: 0.0</p>
+  </li>
+
+</ol>
+
+<p>Each record should be terminated with a slash (/).</p>
+
+<p>The aquifer connects with all the grid blocks that lie within the
+specified bounds and have no active neighboring block on the side
+facing the aquifer. The total number of connecting grid blocks must
+not exceed the value entered using item 6 in keyword <a href="AQUDIMS.html#AQUDIMS"> AQUDIMS</a> in the <span class="keyword">RUNSPEC</span> section.</p>
+
+<p>The aquifer productivity index is apportioned between the connecting
+grid blocks in proportion to the area of their connecting faces.</p>
+
+<p>This keyword <span class="keyword">AQUFET</span> cannot be used together
+with the keywords <a href="AQUFETP.html#AQUFETP">  AQUFETP</a>, <a href="AQUCT.html#AQUCT"> AQUCT</a>, <a href="AQUANCON.html#AQUANCON"> AQUANCON</a> or <a href="AQANCONL.html#AQANCONL">  AQANCONL</a>         
+         </p>
+
+<p>This keyword must not be used in restarted runs, as the aquifer
+specification data cannot be changed.</p>
+
+<p>See also <a href="../ecl_td/aquifer_Aquifer_Modeling_Facilities.html#aquifer_aquifer_modeling_facilities">"Aquifer modeling
+facilities"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.</p>
+
+<div class="section" id="aqufet_example"><a name="aqufet_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>One aquifer,
+on the bottom of a 10 x 10 x 5 grid:</p>
+<pre><code>AQUFET
+ 7000 4000 2.0E9 1.0E-5 500.0 1 1 10 1 10 5 5 'K+' /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="THPRESFT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="THPRESFT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>THPRESFT</title>
+</head>
+<body>
+
+
+<div class="nested0" id="THPRESFT"><a name="THPRESFT"><!-- --></a>
+<h1 class="keyword">THPRESFT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="thpresft.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="thpresft.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2588e45"> x </th>
+
+<th valign="top" id="d2588e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2588e54"> x </th>
+
+<th valign="top" id="d2588e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2588e45 d2588e54 ">  </td>
+
+<td valign="top" headers="d2588e48 d2588e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2588e45 d2588e54 "> x </td>
+
+<td valign="top" headers="d2588e48 d2588e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2588e45 d2588e54 ">  </td>
+
+<td valign="top" headers="d2588e48 d2588e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2588e45 d2588e54 ">  </td>
+
+<td valign="top" headers="d2588e48 d2588e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2588e45 d2588e54 ">  </td>
+
+<td valign="top" headers="d2588e48 d2588e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2588e45 d2588e54 ">  </td>
+
+<td valign="top" headers="d2588e48 d2588e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2588e45 d2588e54 ">  </td>
+
+<td valign="top" headers="d2588e48 d2588e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2588e45 d2588e54 ">  </td>
+
+<td valign="top" headers="d2588e48 d2588e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">THPRESFT</span> keyword can be used to set up a
+threshold pressure for a fault previously defined using the <a href="FAULTS.html#FAULTS">  FAULTS</a> keyword. The threshold
+pressure switch <samp class="codeph">THPRES</samp> must be set in keyword <a href="EQLOPTS.html#EQLOPTS"> EQLOPTS</a> in the <span class="keyword">RUNSPEC</span> section. The facility prevents flow occurring between
+adjacent grid blocks either side of the fault until the potential
+difference exceeds the specified threshold value. Thereafter the potential
+difference for flow across the fault is reduced by the appropriate
+threshold value.</p>
+
+<p>The keyword is followed by any number of data records, terminated
+with a blank record containing just a slash (/). Each record contains
+the following two items of data, and is terminated with a slash (/).</p>
+
+<ol>
+<li> Fault name (as specified in the <span class="keyword">FAULTS</span> keyword),
+or a fault name root. <p>A fault name root, ending with an asterisk
+(*), can be used to refer to several faults in one record.</p>
+ </li>
+
+<li> Threshold pressure. <p>UNITS: barsa (<samp class="codeph">METRIC</samp>),
+psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 0.0</p>
+ </li>
+
+</ol>
+
+<p>The set of records must end with a blank record containing only
+a slash (/).</p>
+
+<p>See also the keywords <span class="keyword">FAULTS</span> and <a href="THPRES.html#THPRES"> THPRES</a>.</p>
+
+<div class="section" id="thpresft_notes"><a name="thpresft_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li> If a fault is referred to twice in one or more <span class="keyword">THPRESFT</span> keywords, the threshold pressure is taken from the last entry. </li>
+
+<li> The fault threshold pressure can be used in combination with
+the equilibration region based threshold pressure option (keyword <span class="keyword">THPRES</span>). If two threshold pressures are applied to the
+flow between the same two grid blocks, the acting threshold pressure
+is taken as the maximum of the two threshold pressures. </li>
+
+<li> Threshold pressures cannot be set for a fault which crosses a
+local grid or coarsened region. </li>
+
+</ul>
+</div>
+
+<div class="section" id="thpresft_example"><a name="thpresft_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>See the <a href="FAULTS.html#FAULTS"> FAULTS</a> keyword example.</p>
+<pre><code>THPRESFT
+--            Threshold pressure
+ 'zigzag'       10.0        /
+ 'block'         1.2        /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

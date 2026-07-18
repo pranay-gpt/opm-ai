@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Single flux region"/>
+<meta name="DC.subject" content="Running the simulator, Flux boundary conditions, FLUX file reduced runs, Using, Flux region, Single"/>
+<meta name="keywords" content="Running the simulator, Flux boundary conditions, FLUX file reduced runs, Using, Flux region, Single"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="fluxintro_single_flux_region"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Single flux region</title>
+</head>
+<body>
+
+
+<div class="nested0" id="fluxintro_single_flux_region"><a name="fluxintro_single_flux_region"><!-- --></a>
+<h1 class="topictitle1">Single flux region</h1>
+
+
+ <div>
+<p>To produce the <samp class="codeph">FLUX</samp> file:</p>
+
+<p>ECLIPSE 100</p>
+
+<ol>
+<li>Set <samp class="codeph">NTFREG</samp>, the number of
+flux regions, to 1 in item 4 of keyword <a href="../ecl_rm/REGDIMS.html#REGDIMS">REGDIMS</a> in the <span class="keyword">RUNSPEC</span> section. <pre><code>REGDIMS
+-- NTFIP NMFIPR NRFREG NTFREG MHISTM NMHSTR
+    1*     1*     1*     1      1*     1*
+/</code></pre></li>
+
+<li>Enter the keyword <a href="../ecl_rm/DUMPFLUX.html#DUMPFLUX">DUMPFLUX</a> in the <span class="keyword">GRID</span> section, to indicate that
+this is the full field run and a flux file should be written.    
+        </li>
+
+<li>Use the <a href="../ecl_rm/FLUXNUM.html#FLUXNUM">FLUXNUM</a> keyword in the <span class="keyword">GRID</span> section to establish
+the cells of the reduced run. For example, to establish flux boundary
+conditions for a reduced 2*2*2 run from a 4*4*3 full field run use: <pre><code>DUMPFLUX 
+
+FLUXNUM
+ 1 1 0 0
+ 1 1 0 0
+ 0 0 0 0
+ 0 0 0 0
+ 1 1 0 0
+ 1 1 0 0
+ 0 0 0 0
+ 0 0 0 0
+ 0 0 0 0
+ 0 0 0 0
+ 0 0 0 0
+ 0 0 0 0
+/</code></pre>             </li>
+
+<li>The flux file is called <samp class="codeph">ROOT.FLUX</samp> (unformatted)
+or <samp class="codeph">ROOT.FFLUX</samp> (formatted), where ‘ <samp class="codeph">ROOT</samp> ’ is the root name of the run. The file will be formatted if
+keyword <a href="../ecl_rm/FMTOUT.html#FMTOUT">FMTOUT</a> is specified in the <span class="keyword">RUNSPEC</span> section. 
+           </li>
+
+</ol>
+
+<div class="section" id="fluxintro_using_the_flux_file_in_reduced_runs"><a name="fluxintro_using_the_flux_file_in_reduced_runs"><!-- --></a><h4 class="sectiontitle">Using the FLUX file in reduced runs</h4><p>The reduced run is
+based on the original data set used for the full field (<span class="keyword">DUMPFLUX</span>) run.</p>
+<p>The reduced run should use the same grid dimensions
+as the full field run and employ the same flux region definition.</p>
+<p>You nominate which flux regions are active in the reduced run.
+ECLIPSE then only simulates the reduced run within this active flux
+region. The support to this reduced flux region from the full field
+model is provided by a set of flows between flux regions which are
+supplied from the <samp class="codeph">FLUX</samp> file dumped by the full field
+run.</p>
+<p>To use the <samp class="codeph">FLUX</samp> file in a reduced run:</p>
+<p>ECLIPSE 100</p>
+<ol>
+<li>Set <samp class="codeph">NTFREG</samp> to 1 in item 4 of keyword <a href="../ecl_rm/REGDIMS.html#REGDIMS">REGDIMS</a> in the <span class="keyword">RUNSPEC</span> section.</li>
+
+<li>Use the <a href="../ecl_rm/USEFLUX.html#USEFLUX">USEFLUX</a> and <a href="../ecl_rm/FLUXNUM.html#FLUXNUM">FLUXNUM</a> keywords in the <span class="keyword">GRID</span> section, for example: <pre><code>USEFLUX
+ 'ROOT' /
+
+FLUXNUM
+ 1 1 0 0
+ 1 1 0 0
+ 0 0 0 0
+ 0 0 0 0
+ 1 1 0 0
+ 1 1 0 0
+ 0 0 0 0
+ 0 0 0 0
+ 0 0 0 0
+ 0 0 0 0
+ 0 0 0 0
+ 0 0 0 0
+/</code></pre></li>
+
+<li>If the <samp class="codeph">FLUX</samp> file is formatted specify keyword <a href="../ecl_rm/FMTIN.html#FMTIN">FMTIN</a> in the <span class="keyword">RUNSPEC</span> section.</li>
+
+<li><p>ECLIPSE 100</p>
+<p>If user-specified non-neighbor
+connections are specified in the <span class="keyword">GRID</span> section,
+the <a href="../ecl_rm/NNC.html#NNC">NNC</a> keyword must be placed
+after the <span class="keyword">USEFLUX</span> and <span class="keyword">FLUXNUM</span> keywords.</p>
+             </li>
+
+<li>The <span class="keyword">FLUXNUM</span> array can be output to the <samp class="codeph">PRINT</samp> file using the <span class="keyword">FLUXNUM</span> mnemonic
+in the <a href="../ecl_rm/RPTGRID.html#RPTGRID">RPTGRID</a> keyword.                            </li>
+
+</ol>
+<p>In both the full field and reduced runs, the <span class="keyword">FLUXNUM</span> keyword should be entered after the <a href="../ecl_rm/DUMPFLUX.html#DUMPFLUX">DUMPFLUX</a> or <span class="keyword">USEFLUX</span> keyword.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

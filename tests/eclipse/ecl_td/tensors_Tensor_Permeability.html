@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Tensor permeability (ECLIPSE 300)"/>
+<meta name="DC.subject" content="Tensor permeability (ECLIPSE 300)"/>
+<meta name="keywords" content="Tensor permeability (ECLIPSE 300)"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="tensors_tensor_permeability"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Tensor permeability (ECLIPSE 300)</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="tensors_tensor_permeability"><a name="tensors_tensor_permeability"><!-- --></a>
+<h1 class="keyword">Tensor permeability (ECLIPSE 300)</h1>
+
+
+ <div>
+<p>Full tensor permeabilities are often required to describe complex
+reservoirs. Given a detailed heterogeneous reservoir description at
+the geological scale, upscaling is normally carried out to reduce
+the model size to one suitable for reservoir simulation. These upscaling
+procedures will generally create full tensor permeabilities, even
+if the permeabilities in the fine geological grid are not represented
+as tensors. Full tensor permeabilities also arise in complex crossbedded
+systems where the dip directions will not in general coincide with
+a local coordinate direction. A further case for full tensor permeabilities
+is in the modeling of fractured systems.</p>
+
+<p>Conventionally, reservoir simulators ignore the full tensor nature
+of the absolute permeability and assume the permeability can be represented
+by a diagonal tensor whose principal axes coincide with the local
+coordinate axes. This allows the construction of the usual 5 point
+discretization in 2D or 7 point in 3D which can be solved efficiently
+in the simulator. Introduction of a full tensor permeability extends
+the stencil of the discretization scheme to 9 points in 2D and either
+19 or 27 points in 3D.</p>
+
+<p>ECLIPSE 300 allows a full tensor description of the absolute permeability.
+The permeability tensor may either be supplied by a pre-processor
+by upscaling the properties on the geological model, or else it may
+be entered by keywords <a href="../ecl_rm/permxy_PERMXY-ZZ.html#permxy_permxy-zz">PERMXX</a>, <a href="../ecl_rm/permxy_PERMXY-ZZ.html#permxy_permxy-zz">PERMYY</a>, <a href="../ecl_rm/permxy_PERMXY-ZZ.html#permxy_permxy-zz">PERMZZ</a> (which describe the diagonal components) and <a href="../ecl_rm/permxy_PERMXY-ZZ.html#permxy_permxy-zz">PERMXY</a>, <a href="../ecl_rm/permxy_PERMXY-ZZ.html#permxy_permxy-zz">PERMYZ</a>, <a href="../ecl_rm/permxy_PERMXY-ZZ.html#permxy_permxy-zz">PERMZX</a> to describe the off-diagonal components.</p>
+
+<p>Only positive definite symmetric tensors are allowed in the simulator.
+The principal directions of the tensor must also be supplied. At present,
+the options are</p>
+
+<ul>
+<li>the directions for the components of the tensor are aligned with
+the Cartesian axes;</li>
+
+<li>aligned with the axes joining the midpoints of each pair of opposite
+faces in corner point cells; and</li>
+
+<li>aligned with the two axes formed by joining the midpoints of pairs
+of opposite faces in the I and J directions and with the third axis
+normal to the bedding plane.</li>
+
+</ul>
+
+<p>The frame representing these directions is specified either by
+the <a href="../ecl_rm/TBASIS.html#TBASIS">TBASIS</a> keyword or by the <a href="../ecl_rm/MPFA.html#MPFA">MPFA</a> keyword.</p>
+
+<p>The permeability tensor can be expressed as</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="tensors.equ.0031"/>
+ <math><mrow><munder><mrow>
+<mi>K</mi></mrow><mo>̲</mo></munder><mo>=</mo><mrow>
+<mo>[</mo><mtable><mtr><mtd><msub><mrow><mi>k</mi>
+</mrow><mrow><mi>x</mi><mi>x</mi></mrow></msub></mtd>
+<mtd><msub><mrow><mi>k</mi></mrow><mrow><mi>x</mi>
+<mi>y</mi></mrow></msub></mtd><mtd><msub><mrow><mi>k</mi></mrow><mrow><mi>x</mi><mi>z</mi></mrow></msub>
+</mtd></mtr><mtr><mtd><msub><mrow><mi>k</mi></mrow>
+<mrow><mi>y</mi><mi>x</mi></mrow></msub></mtd><mtd>
+<msub><mrow><mi>k</mi></mrow><mrow><mi>y</mi><mi>y</mi></mrow></msub></mtd><mtd><msub><mrow><mi>k</mi>
+</mrow><mrow><mi>y</mi><mi>z</mi></mrow></msub></mtd>
+</mtr><mtr><mtd><msub><mrow><mi>k</mi></mrow><mrow>
+<mi>z</mi><mi>x</mi></mrow></msub></mtd><mtd><msub>
+<mrow><mi>k</mi></mrow><mrow><mi>z</mi><mi>y</mi>
+</mrow></msub></mtd><mtd><msub><mrow><mi>k</mi></mrow>
+<mrow><mi>z</mi><mi>z</mi></mrow></msub></mtd></mtr>
+</mtable><mo>]</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 23.1]
+              </td></tr></tbody></table>
+<p>where by symmetry</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="tensors.equ.0035"/>
+ <math><mrow><mtable>
+<mtr><mtd><msub><mrow><mi>k</mi></mrow><mrow><mi>y</mi><mi>x</mi></mrow></msub><mo>=</mo><msub><mrow>
+<mi>k</mi></mrow><mrow><mi>x</mi><mi>y</mi><mo>⁢</mo>
+<mtext> </mtext></mrow></msub><mo>⁢</mo><mo>,</mo>
+</mtd><mtd><msub><mrow><mi>k</mi></mrow><mrow><mi>z</mi><mi>y</mi></mrow></msub><mo>=</mo><msub><mrow>
+<mi>k</mi></mrow><mrow><mi>y</mi><mi>z</mi></mrow>
+</msub><mo>⁢</mo><mtext> </mtext><mo>,</mo></mtd><mtd>
+<msub><mrow><mi>k</mi></mrow><mrow><mi>z</mi><mi>x</mi></mrow></msub><mo>=</mo><msub><mrow><mi>k</mi>
+</mrow><mrow><mi>x</mi><mi>z</mi></mrow></msub></mtd>
+</mtr></mtable><mo>⁢</mo><mtext> </mtext><mn>.</mn>
+</mrow></math> 
+</td><td align="right">[Eq. 23.2]
+              </td></tr></tbody></table>
+<p>In ECLIPSE, the coefficients are entered as</p>
+
+<p> <math><msub><mi>k</mi>
+<mrow><mi>x</mi><mi>x</mi></mrow></msub></math> = <a href="../ecl_rm/permx.html#permx">PERMXX</a>,  <math><msub><mi>k</mi>
+<mrow><mi>y</mi><mi>y</mi></mrow></msub></math> = <a href="../ecl_rm/permy.html#permy">PERMYY</a>,  <math><msub><mi>k</mi>
+<mrow><mi>z</mi><mi>z</mi></mrow></msub></math> = <a href="../ecl_rm/permz.html#permz">PERMZZ</a>,  <math><msub><mi>k</mi>
+<mrow><mi>x</mi><mi>y</mi></mrow></msub></math> = <a href="../ecl_rm/permxy_PERMXY-ZZ.html#permxy_permxy-zz">PERMXY</a>,  <math><msub><mi>k</mi>
+<mrow><mi>y</mi><mi>z</mi></mrow></msub></math>  = <a href="../ecl_rm/permxy_PERMXY-ZZ.html#permxy_permxy-zz">PERMYZ</a> and  <math><msub><mi>k</mi>
+<mrow><mi>z</mi><mi>x</mi></mrow></msub></math> = <a href="../ecl_rm/permxy_PERMXY-ZZ.html#permxy_permxy-zz">PERMZX</a>.</p>
+
+<p>The flow equations arising from the permeability tensor description
+are constructed using a Multipoint Flux Approximation (MPFA). The
+transmissibilities are calculated by the control volume discretization
+due to <cite><span> <a href="biblio_Bibliography.html#biblio_54414">Aavatsmark et al (1998)</a> </span></cite>. The MPFA can only be
+used in corner point geometry, not block centered geometry.</p>
+
+<p>The discretization scheme is selected by the <a href="../ecl_rm/MPFA.html#MPFA">MPFA</a> keyword. The MPFA is a
+rigorous treatment of both cell non-orthogonality and tensor permeability.
+Even for a diagonal isotropic tensor, the MPFA will generally lead
+to a 9 point discretization in 2D in order to remove the bias of grid
+non-orthogonality and grid orientation effects.</p>
+
+<p>The MPFA discretization is applied by default across the entire
+grid. However, it can be applied in selected regions by using the <a href="../ecl_rm/MPFANUM.html#MPFANUM">MPFANUM</a> keyword. The MPFA is
+only applied where the <span class="keyword">MPFANUM</span> array equals 1.
+Further control may be achieved by applying the discretization only
+within nominated local grids using the <span class="keyword">MPFA</span> keyword
+within a <a href="../ecl_rm/CARFIN.html#CARFIN">CARFIN</a> and <a href="../ecl_rm/ENDFIN.html#ENDFIN">ENDFIN</a> pair.</p>
+
+<p>The MPFA can also be used on unstructured grids generated by FloGrid.
+The multipoint flux non-neighbor connections are exported to ECLIPSE
+through the <a href="../ecl_rm/MPFNNC.html#MPFNNC">MPFNNC</a> keyword. Further details can be found in <cite><span> <a href="biblio_Bibliography.html#biblio_90969">Gunasekera et al (1998)</a> </span></cite>.</p>
+
+<p>The use of the <span class="keyword">MPFA</span> option is not allowed with
+the <span class="keyword">WARP</span> solver. Please use the pre-2002A solver
+(<span class="keyword">ECLSOL</span>) instead by setting <a href="../ecl_rm/OPTIONS3.html#options3.66">item 66</a> of the <span class="keyword">OPTIONS3</span> keyword
+to a non-zero value.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

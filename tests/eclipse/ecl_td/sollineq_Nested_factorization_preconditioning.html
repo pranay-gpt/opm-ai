@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Nested factorization preconditioning"/>
+<meta name="DC.subject" content="Solution of the linear equations nested factorization preconditioning, Solution of the linear equations, Nested factorization"/>
+<meta name="keywords" content="Solution of the linear equations nested factorization preconditioning, Solution of the linear equations, Nested factorization"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sollineq_nested_factorization_preconditioning"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Nested factorization preconditioning</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="sollineq_nested_factorization_preconditioning"><a name="sollineq_nested_factorization_preconditioning"><!-- --></a>
+<h1 class="topictitle1">Nested factorization preconditioning</h1>
+
+
+ <div>
+<p>A typical matrix for a simple three-dimensional system is shown
+in equation <a href="sollineq_Nested_factorization_preconditioning.html#sollineq.Xsollineq.XID-0000005a">674.1</a>  which
+shows the structure of the Jacobian matrix for a simple 3*2*3 problem.</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.Xsollineq.XID-0000005a"/>
+ <math><mrow><mrow>
+<mi>A</mi><mo>=</mo><mrow><mo>[</mo><mrow><mtable>
+<mtr><mtd><mtext>D</mtext></mtd><mtd><mtext>U1</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>U2</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>U3</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd></mtr><mtr><mtd><mtext>L1</mtext></mtd><mtd>
+<mtext>D</mtext></mtd><mtd><mtext>U1</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>U2</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>U3</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd></mtr><mtr><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>L1</mtext></mtd><mtd><mtext>D</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>U2</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>U3</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd></mtr><mtr><mtd>
+<mtext>L2</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>D</mtext></mtd><mtd>
+<mtext>U1</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>U3</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd></mtr>
+<mtr><mtd><mtext>.</mtext></mtd><mtd><mtext>L2</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>L1</mtext>
+</mtd><mtd><mtext>D</mtext></mtd><mtd><mtext>U1</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>U3</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd></mtr><mtr><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>L2</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>L1</mtext></mtd><mtd>
+<mtext>D</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>U3</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd></mtr><mtr><mtd><mtext>L3</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>D</mtext>
+</mtd><mtd><mtext>U1</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>U2</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>U3</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd></mtr><mtr><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>L3</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>L1</mtext></mtd><mtd><mtext>D</mtext></mtd><mtd>
+<mtext>U1</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>U2</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>U3</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd></mtr>
+<mtr><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>L3</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>L1</mtext>
+</mtd><mtd><mtext>D</mtext></mtd><mtd><mtext>U1</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>U2</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>U3</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd></mtr><mtr><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>L3</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>L2</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>L1</mtext></mtd><mtd>
+<mtext>D</mtext></mtd><mtd><mtext>U1</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>U3</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd></mtr><mtr><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>L3</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>L2</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>L1</mtext></mtd><mtd><mtext>D</mtext>
+</mtd><mtd><mtext>U1</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>U3</mtext>
+</mtd><mtd><mtext>.</mtext></mtd></mtr><mtr><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>L3</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>L2</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>L1</mtext></mtd><mtd><mtext>D</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>U3</mtext></mtd></mtr>
+<mtr><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>L3</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd><mtd><mtext>D</mtext></mtd><mtd><mtext>U1</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>U2</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext>
+</mtd></mtr><mtr><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>L3</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd>
+<mtext>.</mtext></mtd><mtd><mtext>L1</mtext>
+</mtd><mtd><mtext>D</mtext></mtd><mtd><mtext>U1</mtext>
+</mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>U2</mtext></mtd><mtd><mtext>.</mtext></mtd></mtr><mtr>
+<mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd>
+<mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd>
+<mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd>
+<mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd>
+<mtd><mtext>L3</mtext></mtd><mtd><mtext>.</mtext></mtd>
+<mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd>
+<mtd><mtext>.</mtext></mtd><mtd><mtext>L1</mtext></mtd>
+<mtd><mtext>D</mtext></mtd><mtd><mtext>.</mtext></mtd>
+<mtd><mtext>.</mtext></mtd><mtd><mtext>U2</mtext></mtd>
+</mtr><mtr><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>L3</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>L2</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>D</mtext></mtd><mtd><mtext>U1</mtext></mtd><mtd><mtext>.</mtext></mtd></mtr><mtr><mtd><mtext>.</mtext></mtd>
+<mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd>
+<mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd>
+<mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd>
+<mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd>
+<mtd><mtext>.</mtext></mtd><mtd><mtext>L3</mtext></mtd>
+<mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd>
+<mtd><mtext>L2</mtext></mtd><mtd><mtext>.</mtext></mtd>
+<mtd><mtext>L1</mtext></mtd><mtd><mtext>D</mtext></mtd>
+<mtd><mtext>U1</mtext></mtd></mtr><mtr><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>L3</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>L2</mtext></mtd><mtd><mtext>.</mtext></mtd><mtd><mtext>L1</mtext></mtd><mtd><mtext>D</mtext></mtd></mtr>
+</mtable></mrow><mo>]</mo></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 674.1]
+              </td></tr></tbody></table>
+<p>ECLIPSE chooses direction 1 automatically to correspond to the
+direction of highest transmissibility (usually the Z direction). Thus
+L1 and U1 usually correspond to derivatives of flows between cells
+in the Z direction. The inner solver direction may be overridden using
+the <a href="../ecl_rm/SOLVDIRS.html#SOLVDIRS">SOLVDIRS</a> keyword. This may be useful, for example, if it is known
+in advance that the principal flow is in the X direction.</p>
+
+<p>Three-dimensional finite difference systems give rise to sparse
+linear equations with banded matrices equation (<a href="sollineq_Nested_factorization_preconditioning.html#sollineq.Xsollineq.XID-0000005a">674.1</a>) such as</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.0062"/>
+ <math><mi>A</mi>
+<mo>=</mo><mi>D</mi><mo>+</mo><mtext>L1</mtext><mo>+</mo><mtext>U1</mtext><mo>+</mo><mtext>L2</mtext><mo>+</mo><mtext>U2</mtext><mo>+</mo><mtext>L3</mtext><mo>+</mo><mtext>U3</mtext></math> 
+</td><td align="right">[Eq. 674.2]
+              </td></tr></tbody></table>
+<p>where</p>
+
+<p>D   is a diagonal matrix</p>
+
+<p>L1, L2 and L3   are lower bands</p>
+
+<p>U1, U2 and U3   are upper bands</p>
+
+<p>The elements of D, L1, L2, L3, U1, U2, U3 are  <math><mn>2</mn><mo>×</mo>
+<mn>2</mn></math>  matrices for implicit two-phase systems (for
+example oil/water, oil/gas, gas/water) and  <math><mn>3</mn><mo>×</mo>
+<mn>3</mn></math>  matrices for implicit three-phase systems.
+In the <a href="../ecl_rm/IMPES.html#IMPES">IMPES</a> case these elements are scalars.</p>
+
+<p>L2 and U2 connect cells in direction 2; L3 and U3 connect cells
+in direction 3. In Nested Factorization, an approximation, B, is constructed
+by the following nested sequence of factorizations</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.006e"/>
+ <math><mrow><mtable><mtr><mtd><mi>B</mi><mo>=</mo><mrow>
+<mrow><mo>(</mo><mi>P</mi><mo>+</mo><mtext>L3</mtext>
+<mo>)</mo></mrow><msup><mrow><mi>P</mi></mrow><mrow>
+<mo>-</mo><mn>1</mn></mrow></msup><mrow><mo>(</mo>
+<mi>P</mi><mo>+</mo><mtext>U3</mtext><mo>)</mo></mrow>
+</mrow><mo>=</mo><mi>P</mi><mo>+</mo><mtext>L3</mtext>
+<mo>+</mo><mtext>U3</mtext><mo>+</mo><mtext>L3</mtext>
+<mo>⋅</mo><msup><mrow><mi>P</mi></mrow><mrow><mo>-</mo><mn>1</mn></mrow></msup><mo>⋅</mo><mtext>U3</mtext>
+</mtd></mtr><mtr><mtd><mi>P</mi><mo>=</mo><mrow>
+<mrow><mo>(</mo><mi>T</mi><mo>+</mo><mtext>L2</mtext>
+<mo>)</mo></mrow><msup><mrow><mi>T</mi></mrow><mrow>
+<mo>-</mo><mn>1</mn></mrow></msup><mrow><mo>(</mo>
+<mi>T</mi><mo>+</mo><mtext>U2</mtext><mo>)</mo></mrow>
+</mrow><mo>=</mo><mi>T</mi><mo>+</mo><mtext>L2</mtext>
+<mo>+</mo><mtext>U2</mtext><mo>+</mo><mtext>L2</mtext>
+<mo>⋅</mo><msup><mrow><mi>T</mi></mrow><mrow><mo>-</mo><mn>1</mn></mrow></msup><mo>⋅</mo><mtext>U2</mtext>
+</mtd></mtr><mtr><mtd><mi>T</mi><mo>=</mo><mrow><mo>(</mo><mi>G</mi><mo>+</mo><mtext>L1</mtext><mo>)</mo>
+<msup><mrow><mi>G</mi></mrow><mrow><mo>-</mo><mn>1</mn></mrow></msup><mo>(</mo><mi>G</mi><mo>+</mo>
+<mtext>U1</mtext><mo>)</mo></mrow><mo>=</mo><mi>G</mi>
+<mo>+</mo><mtext>L1</mtext><mo>+</mo><mtext>U1</mtext>
+<mo>+</mo><mtext>L1</mtext><mo>⋅</mo><msup><mrow><mi>G</mi></mrow><mrow><mo>-</mo><mn>1</mn></mrow></msup>
+<mo>⋅</mo><mtext>U1</mtext></mtd></mtr></mtable></mrow>
+</math> 
+</td><td align="right">[Eq. 674.3]
+              </td></tr></tbody></table>
+<p>where</p>
+
+<p> <math><mi>G</mi>
+</math>  is a diagonal matrix and</p>
+
+<p> <math><msup><mi>P</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup></math>,  <math><msup><mi>T</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup></math>  and  <math><msup>
+<mi>G</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup>
+</math>  are the inverse of  <math><mi>P</mi></math> <math><mi>T</mi>
+</math>  and  <math>
+<mi>G</mi></math>  respectively.</p>
+
+<p>It follows that</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.007e"/>
+ <math><mrow><mtable><mtr><mtd><mi>B</mi><mo>=</mo><mi>G</mi><mo>+</mo><mtext>L1</mtext><mo>+</mo><mtext>U1</mtext><mo>+</mo><mtext>L2</mtext><mo>+</mo><mtext>U2</mtext><mo>+</mo><mtext>L3</mtext><mo>+</mo><mtext>U3</mtext><mo>+</mo><mrow><mtext>L1</mtext><msup><mrow>
+<mi>G</mi></mrow><mrow><mo>-</mo><mn>1</mn></mrow>
+</msup><mtext>U1</mtext></mrow><mo>+</mo><mrow><mtext>L2</mtext><msup><mrow><mi>T</mi></mrow><mrow><mo>-</mo><mn>1</mn></mrow></msup><mtext>U2</mtext></mrow>
+<mo>+</mo><mtext>L3</mtext><msup><mrow><mi>P</mi>
+</mrow><mrow><mo>-</mo><mn>1</mn></mrow></msup><mtext>U3</mtext></mtd></mtr><mtr><mtd><mo>=</mo><mi>A</mi>
+<mo>+</mo><mi>G</mi><mrow><mo>-</mo><mi>D</mi>
+</mrow><mo>+</mo><mrow><mtext>L1</mtext><msup><mrow>
+<mi>G</mi></mrow><mrow><mo>-</mo><mn>1</mn></mrow>
+</msup><mtext>U1</mtext></mrow><mo>+</mo><mrow><mtext>L2</mtext><msup><mrow><mi>T</mi></mrow><mrow><mo>-</mo><mn>1</mn></mrow></msup><mtext>U2</mtext></mrow>
+<mo>+</mo><mrow><mtext>L3</mtext><msup><mrow><mi>P</mi>
+</mrow><mrow><mo>-</mo><mn>1</mn></mrow></msup><mtext>U3</mtext></mrow></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 674.4]
+              </td></tr></tbody></table>
+<p>The diagonal matrix  <math><mi>G</mi></math>  is computed using</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.0083"/>
+ <math><mn>0</mn>
+<mo>=</mo><mi>G</mi><mrow><mo>-</mo><mi>D</mi>
+</mrow><mo>+</mo><mrow><mtext>L1</mtext><msup><mi>G</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup><mtext>U1</mtext></mrow><mo>+</mo><mrow><mtext>Colsum</mtext>
+<mo>(</mo><mrow><mtext>L2</mtext><msup><mi>T</mi>
+<mrow><mo>-</mo><mn>1</mn></mrow></msup><mtext>U2</mtext>
+</mrow><mo>+</mo><mrow><mtext>L3</mtext><msup><mi>P</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup><mtext>U3</mtext></mrow><mo>)</mo></mrow></math> 
+</td><td align="right">[Eq. 674.5]
+              </td></tr></tbody></table>
+<p>This choice of  <math>
+<mi>G</mi></math>  ensures that <strong>colsum</strong> (B) = <strong>colsum</strong> (A) which, in turn, ensures that there are no material balance errors
+in the solution of the linear equations.</p>
+
+<p>Alternatively, the preconditioner may be constructed such that <strong>rowsum</strong> (B) = <strong>rowsum</strong> (A), thus summing the pressure terms
+in A by rows to ensure accurate solution of the pressure equation
+in <a href="../ecl_rm/IMPES.html#IMPES">IMPES</a> or <a href="../ecl_rm/AIM.html#AIM">AIM</a> cases. This technique is described
+in <cite><span> <a href="biblio_Bibliography.html#biblio_19321">Wallis
+(1983)</a> </span></cite>.</p>
+
+<p>Off band elements, corresponding to non-neighbor connections, arising
+in the treatment of, for example, faults, local grid refinement and
+completing the circle in 3D radial studies, destroy the simple structure
+of the bands L1, U1..., but are easily incorporated in the Nested
+Factorization procedure by simply generalizing the definition of the
+bands.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

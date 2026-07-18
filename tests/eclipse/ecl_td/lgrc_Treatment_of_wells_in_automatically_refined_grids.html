@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Treatment of wells in automatically refined grids"/>
+<meta name="DC.subject" content="Local grid refinement treatment of wells during automatic refinement, Automatic refinement, Local grid refinement, Automatic"/>
+<meta name="keywords" content="Local grid refinement treatment of wells during automatic refinement, Automatic refinement, Local grid refinement, Automatic"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrc_treatment_of_wells_in_automatically_refined_grids"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Treatment of wells in automatically refined grids</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="lgrc_treatment_of_wells_in_automatically_refined_grids"><a name="lgrc_treatment_of_wells_in_automatically_refined_grids"><!-- --></a>
+<h1 class="topictitle1">Treatment of wells in automatically refined grids</h1>
+
+
+ <div>
+<p>A vertical well connection in an automatically refined base cell
+is moved to the central column of refined cells within the base cell.
+Thus consider a single connection in the base grid for a well penetrating
+in the Z direction. Within the automatically refined grid there are
+NRZ connections, corresponding to each layer of the automatically
+refined grid within the base connected cell. The connections are located
+in the central column of refined cells, with location (<math><mo>(</mo><mtext>NRX</mtext><mo>+</mo><mn>1</mn><mo>)</mo><mo>/</mo>
+<mn>2</mn></math>,  <math><mo>(</mo><mtext>NRY</mtext><mo>+</mo><mn>1</mn><mo>)</mo><mo>/</mo>
+<mn>2</mn></math>). ECLIPSE treats these as independent connections
+(for example, they will be closed one by one in automatic workovers).
+If you wish these connections to be lumped together for simultaneous
+closure in workovers, you should use the <a href="../ecl_rm/COMPLUMP.html#COMPLUMP">COMPLUMP</a> keyword, specifying
+the base cell coordinates in the lumped connection range. Note that
+all the well and connection data input in the <span class="keyword">SCHEDULE</span> section should refer to the cell coordinates in the base grid (thus
+requiring no change to the data), but the results reported in the
+output files will refer to the refined grid cell coordinates.</p>
+
+<p>This is illustrated in the following week in the case NRX = NRY
+= 3:</p>
+
+<div class="fignone" id="lgrc.XID-00000691"><a name="lgrc.XID-00000691"><!-- --></a>
+
+ <br/><img src="../img/lgr9.png" width="442px"/><br/> 
+<br/><span class="figcap">
+           Figure 62.1  Well positioning in automatically refined grids</span></div>
+
+<p>Similarly, a horizontal connection (<a href="../ecl_rm/COMPDAT.html#COMPDAT">COMPDAT</a> item 13 = ‘X’ or ‘Y’)
+in the base grid is replaced by <samp class="codeph">NRX</samp> or <samp class="codeph">NRY</samp> connections in the central X or Y direction row of the base cell.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The above rule is inappropriate for a well located at a corner
+or an edge of a base grid cell; ECLIPSE still places it in the central
+column or row of refined cells.             </span></div>
+
+<p>If the connection factor and Kh are not explicitly defined using
+keyword <span class="keyword">COMPDAT</span> in the base data set, then ECLIPSE
+calculates the connection factors within the auto-refined grid in
+the usual way.</p>
+
+<p>If Kh is defined in keyword <span class="keyword">COMPDAT</span> then its
+value in the auto-refined grid is set equal to the specified Kh divided
+by the number of divisions in the direction of penetration of the
+well. If the connection factor  <math><msub>
+<mi>T</mi><mrow><mi>w</mi><mi>j</mi></mrow></msub>
+</math>  is defined in <span class="keyword">COMPDAT</span> then an additional
+skin factor  <math><mrow><mi>Δ</mi>
+<mi>S</mi></mrow></math>  is computed such that  <math><msub><mi>T</mi>
+<mrow><mi>w</mi><mi>j</mi></mrow></msub></math>  equals
+the value calculated by the default formula on the base grid when
+the skin factor is incremented by  <math><mrow>
+<mi>Δ</mi><mi>S</mi></mrow></math>. The connection factor
+on the auto-refined grid is then computed from the default formula
+on the auto-refined grid again with the increment  <math><mrow><mi>Δ</mi>
+<mi>S</mi></mrow></math>  added to the skin factor.</p>
+
+<p>If the well’s drainage radius is defaulted in item 7 of keyword <a href="../ecl_rm/WELSPECS.html#WELSPECS">WELSPECS</a>, it takes the value
+of the pressure equivalent radius of the refined cell, rather than
+that of the base cell. This results in an increase in the reported
+productivity index.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using the ECLIPSE miscible flood option"/>
+<meta name="DC.subject" content="Miscible flood modeling, Using"/>
+<meta name="keywords" content="Miscible flood modeling, Using"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="miscfloo_using_the_eclipse_miscible_flood_option"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using the ECLIPSE miscible flood option</title>
+</head>
+<body>
+
+
+<div class="nested0" id="miscfloo_using_the_eclipse_miscible_flood_option"><a name="miscfloo_using_the_eclipse_miscible_flood_option"><!-- --></a>
+<h1 class="topictitle1">Using the ECLIPSE miscible flood option</h1>
+
+
+ <div>
+<p>The ECLIPSE Miscible Flood option can only be used in oil-gas and
+oil-gas-water combinations (that is gas and oil are treated as the
+miscible components). The keyword <a href="../ecl_rm/MISCIBLE.html#MISCIBLE">MISCIBLE</a> in the <span class="keyword">RUNSPEC</span> section activates the model. The two-point upstreaming
+calculation of component relative permeabilities is achieved by setting
+item 3 in the <span class="keyword">MISCIBLE</span> keyword to <span class="keyword">TWOPOINT</span>, to allow comparison of runs with and without numerical diffusion
+control.</p>
+
+<p>The keyword <a href="../ecl_rm/MISCNUM.html#MISCNUM">MISCNUM</a> should be used in the <span class="keyword">REGIONS</span> section
+to define the miscibility region to which each grid cell belongs.
+This keyword is not obligatory, and a default region number of 1 is
+assumed. The maximum region number that can be defined (<span class="keyword">NTMISC</span>) must be entered in item 1 of the keyword <span class="keyword">MISCIBLE</span> in the <span class="keyword">RUNSPEC</span> section. Echo of the <span class="keyword">MISCNUM</span> region data can be obtained using the mnemonic <span class="keyword">MISCNUM</span> in the <a href="../ecl_rm/RPTREGS.html#RPTREGS">RPTREGS</a> keyword.</p>
+
+<p>It is possible to override the miscible flow calculation of the
+gas and oil properties in certain cells in the grid. If a cell is
+allocated a <span class="keyword">MISCNUM</span> region number of zero, then
+the gas and oil will be assumed to be immiscible under all conditions
+in the cell.</p>
+
+<p>The mixing parameter, ω, should be input in the <span class="keyword">PROPS</span> section under the keyword <a href="../ecl_rm/TLMIXPAR.html#TLMIXPAR">TLMIXPAR</a>. A single real number
+in the range 0 to 1 must be supplied for each miscible region. If
+a different mixing parameter is required for the effective densities,
+a second mixing parameter can be supplied for each miscible region.
+If the grid contains any cells whose <span class="keyword">MISCNUM</span> region
+is zero, the mixing parameter is automatically set to zero in those
+cells.</p>
+
+<p>For gas-oil runs, the keywords <a href="../ecl_rm/SGFN.html#SGFN">SGFN</a> and <a href="../ecl_rm/SOF2.html#SOF2">SOF2</a> should only be entered if there is at least one cell which
+has a <span class="keyword">MISCNUM</span> region number of zero. For those
+cells that are allocated a positive <span class="keyword">MISCNUM</span> region
+number, ECLIPSE assumes that the gas-oil capillary pressure is zero
+and the relative permeabilities are equal to their respective saturations.</p>
+
+<p>In oil-water-gas runs the keywords <span class="keyword">SOF2</span> and <a href="../ecl_rm/SWFN.html#SWFN">SWFN</a> are obligatory. In the
+miscible regions, the <span class="keyword">SWFN</span> data defines the water
+relative permeability and water-hydrocarbon capillary pressure in
+the usual way. The <span class="keyword">SOF2</span> keyword represents the
+relative permeability of the hydrocarbon phase with respect to hydrocarbon
+phase saturation (the function k<sub>rn</sub>(S<sub>n</sub>) in equations <a href="miscfloo_Relative_permeability_model.html#miscfloo.Xmiscfloo.Xmiscfloo.Xmiscfloo.equ.0041">394.2</a>  and <a href="miscfloo_Relative_permeability_model.html#miscfloo.Xmiscfloo.Xmiscfloo.Xmiscfloo.equ.003e">394.1</a>). If there are any immiscible regions in the grid, the <a href="../ecl_rm/SOF3.html#SOF3">SOF3</a> and <span class="keyword">SGFN</span> keywords must be used to enter the immiscible gas-oil relative permeabilities.</p>
+
+<p>The hysteresis model is available in both the miscible and the
+immiscible zones. In the miscible zones, a two phase treatment (water/hydrocarbon)
+of the hysteresis effect is invoked on the water-hydrocarbon capillary
+pressures and relative permeabilities.</p>
+
+<p>The Saturation Table Rescaling option is also available in both
+the miscible and immiscible zones of the grid. In the miscible regions,
+the saturation table endpoints for the hydrocarbon phase should be
+entered as oil-in-water data using the appropriate scaling keywords.
+Data entered for gas end-points will be ignored in the miscible zones.</p>
+
+<p>The miscible residual oil saturation and critical gas saturation
+versus water saturation tables can be defined in the <span class="keyword">PROPS</span> section using the keywords <a href="../ecl_rm/SORWMIS.html#SORWMIS">SORWMIS</a> and <a href="../ecl_rm/SGCWMIS.html#SGCWMIS">SGCWMIS</a>. A maximum of <span class="keyword">NTMISC</span> tables, each with
+a maximum of <span class="keyword">NSMISC</span> rows of data, are allowed.
+The <span class="keyword">SORWMIS</span>/ <span class="keyword">SGCWMIS</span> keywords
+are not obligatory and an effective residual oil saturation of 0.0
+and critical gas value of 0.0 will be assumed if the appropriate keyword
+is omitted. The miscible gas-oil relative permeability curves can
+modified using the <a href="../ecl_rm/MSFN.html#MSFN">MSFN</a> keyword. If the <span class="keyword">MSFN</span> keyword is omitted,
+straight line relative permeability curves are used.</p>
+
+<p>The calculation of the initial reservoir state in the miscible
+zones is performed using capillary pressures defined in equations
+ <a href="miscfloo_Model_formulation.html#miscfloo.Xmiscfloo.equ.0031">393.1</a>  and  <a href="miscfloo_Model_formulation.html#miscfloo.Xmiscfloo.equ.0034">393.2</a>  with end points implied from equations  <a href="miscfloo_Relative_permeability_model.html#miscfloo.Xmiscfloo.Xmiscfloo.Xmiscfloo.equ.003e">394.1</a>  and  <a href="miscfloo_Relative_permeability_model.html#miscfloo.Xmiscfloo.Xmiscfloo.Xmiscfloo.equ.0041">394.2</a>  or  <a href="miscfloo_Relative_permeability_model.html#miscfloo.XID-00000046">394.3</a>  and  <a href="miscfloo_Relative_permeability_model.html#miscfloo.XID-00000049">394.4</a>.</p>
+
+<p>The surface densities of the stock-tank oil, water and solution
+gas components should be defined using the existing <a href="../ecl_rm/DENSITY.html#DENSITY">DENSITY</a> or <a href="../ecl_rm/GRAVITY.html#GRAVITY">GRAVITY</a> keyword. The surface
+density of the injection gas must be entered using the <a href="../ecl_rm/SDENSITY.html#SDENSITY">SDENSITY</a> keyword in the <span class="keyword">PROPS</span> section. In the immiscible zones, the injection gas
+surface density is taken from the <span class="keyword">DENSITY</span> or <span class="keyword">GRAVITY</span> keyword to equal that of the solution gas. An echo
+of the surface density of each component can be obtained using the
+mnemonic <span class="keyword">DENSITY</span> in the <a href="../ecl_rm/RPTPROPS.html#RPTPROPS">RPTPROPS</a> keyword.</p>
+
+<p>Specification of pressure function data for the pure components
+is unaltered from the usual data requirements of ECLIPSE. If the oil
+is defined as dead (no <a href="../ecl_rm/DISGAS.html#DISGAS">DISGAS</a> keyword in <span class="keyword">RUNSPEC</span>) then the initial
+solution gas is omitted from the GOR reports in the results file and
+the GOR refers to the solvent gas-oil ratio. It is possible to include
+the initial solution gas in the GOR reports by defining the oil component
+to be live (keyword <span class="keyword">DISGAS</span> in <span class="keyword">RUNSPEC</span>). In either case, the reported saturation values for oil and solvent
+gas refer to the relative volume occupied by each component as if
+they were not mixed.</p>
+
+<p>The pressure dependence of miscibility can be controlled by using
+the <a href="../ecl_rm/PMISC.html#PMISC">PMISC</a> keyword. This keyword is optional; if it is not present
+then miscibility is assumed at all pressures.</p>
+
+<p>If <span class="keyword">DISGAS</span> has been specified in the <span class="keyword">RUNSPEC</span> section, the value of <a href="../ecl_rm/DRSDT.html#DRSDT">DRSDT</a> refers to any immiscible
+zones in the grid. Its default value in these regions will be infinity.
+In the miscible zones, the value of <span class="keyword">DRSDT</span> is always
+zero.</p>
+
+<p>No new keywords have been added in the <span class="keyword">SUMMARY</span> file section. The existing graphics facilities allow line graphs
+to be obtained of total gas injection / production rates for connections,
+wells, groups and the field; also for example, for cumulative totals,
+inter-region gas flows and gas-in-place. If the injected gas needs
+to be distinguished from the initial solution gas, then the existing
+tracer option allows separate line graphs of the above quantities
+to be produced to distinguish the two types of gas.</p>
+
+<p>The two-point upstreaming technique is intended for use in dispersed
+flow models and is not compatible with the calculation of relative
+permeability in the Vertical Equilibrium option. The Todd-Longstaff
+model is based on a dispersed fluid distribution throughout each grid
+cell. It is therefore suggested that the Vertical Equilibrium model
+should not be used with the Miscible Flood option.</p>
+
+<p>The two-point upstreaming algorithm produces substantial reductions
+in the level of numerical diffusion associated with component relative
+permeabilities. However, the algorithm inevitably involves an increase
+in the property evaluation and matrix element computation time as
+well as an increase in the work performed by the linear solver. Experience
+on small problems has indicated an approximate increase of around
+50% in run times due to the use of two-point upstreaming.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PCG32D"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PCG32D"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PCG32D</title>
+</head>
+<body>
+
+
+<div class="nested0" id="PCG32D"><a name="PCG32D"><!-- --></a>
+<h1 class="keyword">PCG32D</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="pcg32d.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="pcg32d.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1730e45"> x </th>
+
+<th valign="top" id="d1730e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1730e54">  </th>
+
+<th valign="top" id="d1730e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1730e45 d1730e54 ">  </td>
+
+<td valign="top" headers="d1730e48 d1730e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1730e45 d1730e54 ">  </td>
+
+<td valign="top" headers="d1730e48 d1730e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1730e45 d1730e54 ">  </td>
+
+<td valign="top" headers="d1730e48 d1730e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1730e45 d1730e54 "> x </td>
+
+<td valign="top" headers="d1730e48 d1730e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1730e45 d1730e54 ">  </td>
+
+<td valign="top" headers="d1730e48 d1730e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1730e45 d1730e54 ">  </td>
+
+<td valign="top" headers="d1730e48 d1730e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1730e45 d1730e54 ">  </td>
+
+<td valign="top" headers="d1730e48 d1730e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1730e45 d1730e54 ">  </td>
+
+<td valign="top" headers="d1730e48 d1730e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword together with keyword <a href="SGF32D.html#SGF32D"> SGF32D</a> is an alternative to keyword <a href="SGFN.html#SGFN"> SGFN</a>. It allows the three-phase
+gas/oil capillary pressure to be input directly as a function of oil
+and water saturations in a two-dimensional table. The gas relative
+permeability must be provided using keyword <span class="keyword">SGF32D</span>.</p>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a> 
+(set in the <span class="keyword">TABDIMS</span> keyword) tables of gas/oil capillary pressure,
+tabulated against both oil and water saturations, each terminated
+by a slash (/).</p>
+
+<p>Each table consists of a number of records:</p>
+
+<ol>
+<li>The oil saturation values<p>Values should be between 0 and 1 and
+should increase monotonically. The number of oil saturation values
+should not exceed <a href="TABDIMS.html#TABDIMS.NSSFUN"> NSSFUN</a> (set in the <span class="keyword">TABDIMS</span> keyword).</p>
+</li>
+
+</ol>
+
+<div class="p">Subsequent records (a maximum of <samp class="codeph">NSSFUN</samp> records):<ul>
+<li>The water saturation.</li>
+
+<li>Followed by the gas/oil capillary pressure values for this water
+saturation at all the corresponding oil saturations entered in Record
+1.<p>The gas/oil capillary pressures should be monotonically decreasing.
+The number of gas/oil capillary pressure values should not exceed
+the number of oil saturation values entered in Record 1.</p>
+</li>
+
+</ul>
+</div>
+
+<p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+
+<p>The columns of data must also comply with the following constraints:</p>
+
+<ul>
+<li> The water saturation (the first item in the second and subsequent
+records) should increase monotonically down the column. The gas/oil
+capillary pressure for each oil saturation should decrease monotonically
+down the column. </li>
+
+<li> Default values may not be placed within the table.</li>
+
+</ul>
+
+<p>The entire table may be defaulted provided that the table is not
+the first. Defaulted tables are replaced with a copy of the previous
+table.</p>
+
+<p>The keyword cannot be used with the end-point scaling, hysteresis
+or miscible options.</p>
+
+<div class="section" id="pcg32d_example"><a name="pcg32d_example"><!-- --></a><h4 class="sectiontitle">Example</h4>   <p>With <samp class="codeph">NTSFUN</samp> = 1 and <samp class="codeph">NSSFUN</samp> = 11.</p>
+ <pre><code>PCG32D
+-----------------------------------SOIL-----------------------------------
+        0.01  0.27  0.32  0.37  0.42  0.47  0.52  0.57  0.72  0.77  0.78 /  
+--SWAT
+ 0.22   4.000 3.800 3.500 3.000 2.500 2.000 1.500 1.000 0.500 0.200 0.000/ 
+ 0.25   0.700 0.600 0.500 0.400 0.300 0.200 0.100 0.050 0.030 0.000 /
+ 0.30   0.600 0.500 0.400 0.300 0.200 0.100 0.090 0.030 0.000 /
+ 0.35   0.500 0.400 0.300 0.200 0.100 0.050 0.030 0.001 0.000 /
+ 0.40   0.400 0.300 0.200 0.100 0.060 0.030 0.001 0.000 /
+ 0.50   0.300 0.200 0.100 0.002 0.000 0.000 /
+ 0.65   0.200 0.100 0.000 0.00 /
+ 0.80   0.100 0.000 /
+ 1.00   0.000 /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

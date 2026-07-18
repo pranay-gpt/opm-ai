@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SCVD"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SCVD"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SCVD</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SCVD"><a name="SCVD"><!-- --></a>
+<h1 class="keyword">SCVD</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="scvd.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="scvd.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2228e45"> x </th>
+
+<th valign="top" id="d2228e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2228e54">  </th>
+
+<th valign="top" id="d2228e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2228e45 d2228e54 ">  </td>
+
+<td valign="top" headers="d2228e48 d2228e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2228e45 d2228e54 ">  </td>
+
+<td valign="top" headers="d2228e48 d2228e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2228e45 d2228e54 ">  </td>
+
+<td valign="top" headers="d2228e48 d2228e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2228e45 d2228e54 ">  </td>
+
+<td valign="top" headers="d2228e48 d2228e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2228e45 d2228e54 ">  </td>
+
+<td valign="top" headers="d2228e48 d2228e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2228e45 d2228e54 "> x </td>
+
+<td valign="top" headers="d2228e48 d2228e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2228e45 d2228e54 ">  </td>
+
+<td valign="top" headers="d2228e48 d2228e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2228e45 d2228e54 ">  </td>
+
+<td valign="top" headers="d2228e48 d2228e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data comprises <samp class="codeph">NTEQUL</samp> (see keyword <a href="EQLDIMS.html#EQLDIMS"> EQLDIMS</a> in the <span class="keyword">RUNSPEC</span> section) tables of initial solvent concentration
+versus depth, one for each equilibration region. The keyword should
+only be used when the Coal Bed Methane option is active (keyword <a href="COAL.html#COAL"> COAL</a> in <span class="keyword">RUNSPEC</span> section). Each table consists of 2 columns of data, and must be
+terminated by a slash (/).</p>
+
+<ol>
+<li>Depth values. <p>The values should increase monotonically down
+the column.</p>
+ <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>)</p>
+</li>
+
+<li>The corresponding values of solvent concentration in the coal. <p>UNITS: sm<sup>3</sup>/m<sup>3</sup> (<samp class="codeph">METRIC</samp>), Mscf/ft<sup>3</sup> (<samp class="codeph">FIELD</samp>), scc/cc (<samp class="codeph">LAB</samp>)</p>
+</li>
+
+</ol>
+
+<p>There must be the same number of entries in each column of a given
+table. This number should not be less than 2 or greater than <samp class="codeph">NDRXVD</samp> (see keyword <span class="keyword">EQLDIMS</span> in the <span class="keyword">RUNSPEC</span> section).</p>
+
+<p>Both <a href="SOLVCONC.html#SOLVCONC"> SOLVCONC</a> and <span class="keyword">SCVD</span> are entirely optional. If neither of
+these keywords is present, the coal solvent concentration will be
+taken as the equilibrium concentration for the corresponding fracture
+pressure.</p>
+
+<p>The initial coal solvent concentration should not be set above
+the initial equilibrium value; ECLIPSE issues a warning if it is.
+If the coal solvent concentration is below the equilibrium value,
+the non-reversible diffusion model is recommended (set item 2 in keyword <a href="DIFFCOAL.html#DIFFCOAL"> DIFFCOAL</a> to 0.0).</p>
+
+<p>See also the <span class="keyword">SOLVCONC</span> and <a href="GCVD.html#GCVD"> GCVD</a> keywords.</p>
+
+<div class="section" id="scvd_example"><a name="scvd_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTEQUL=1</samp> and <samp class="codeph">NDRXVD</samp> ≥2</p>
+ <pre><code>SCVD
+  7000 94.0
+ 10000 94.0  /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

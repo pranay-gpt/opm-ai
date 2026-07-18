@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Sales gas production control"/>
+<meta name="DC.subject" content="Well modeling sales gas control, Sales gas"/>
+<meta name="keywords" content="Well modeling sales gas control, Sales gas"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wellmode_sales_gas_production_control"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Sales gas production control</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wellmode_sales_gas_production_control"><a name="wellmode_sales_gas_production_control"><!-- --></a>
+<h1 class="topictitle1">Sales gas production control</h1>
+
+
+ <div>
+<p>ECLIPSE 100                    </p>
+
+<p>The associated gas from an oil field, which
+may at the same time have controls on the oil production rate. The
+option is selected by using the keyword <a href="../ecl_rm/GCONSALE.html#GCONSALE">GCONSALE</a>. The sales gas production
+rate of a group or the field is defined as its total gas production
+rate, minus its total gas injection rate, minus the gas consumption
+rate of the group and any subordinate groups, plus the gas import
+rate of the group and any subordinate groups. (The group gas consumption
+and import rates are set with the keyword <a href="../ecl_rm/GCONSUMP.html#GCONSUMP">    GCONSUMP</a>.)</p>
+
+<p>The sales gas production rate is controlled by reinjecting the
+surplus gas not required for sale. Sales gas control can be applied
+independently of any other production controls on the group or field,
+provided that there is enough injection capacity to inject the surplus
+gas. There must be one or more gas injectors subordinate to each group
+with a sales gas target. The group or field is automatically placed
+under gas reinjection control, and its target reinjection fraction
+is determined dynamically at each timestep to inject the surplus gas.
+Other limits on gas injection for the group or field (for example
+maximum surface rate) can be simultaneously applied using the keyword <a href="../ecl_rm/GCONINJE.html#GCONINJE">GCONINJE</a>. The distribution
+of the injected gas between any subordinate groups can also be controlled
+by giving these groups upper rate limits and guide rates for gas injection,
+with the keyword <span class="keyword">GCONINJE</span>.</p>
+
+<p>If the group or field is producing more surplus gas than the injectors
+can handle, the drilling queue will be scanned for a new gas injector
+to open. Failing this, a choice of actions can be performed at the
+end of the timestep to reduce the gas production in the next timestep.
+These include closing or working over the worst-offending well, or
+controlling the group or field gas production rate. There are two
+options for controlling the group/field production rate.</p>
+
+<ul>
+<li>The <samp class="codeph">RATE</samp> option calculates the gas production
+rate necessary to meet the sales gas target after allowing for any
+consumption and the current rate of reinjection, then places the group/field
+on gas production rate control. The production rate target will remain
+at this value unless another limit is violated. Note that if the injection
+capacity were subsequently to increase, the production rate would
+not increase to take advantage of the increased injectivity.     
+       </li>
+
+<li>The alternative <samp class="codeph">MAXR</samp> option also places the group/field
+under gas production rate control with a similarly calculated production
+target. But it also removes the reinjection fraction limit (by setting
+the reinjection fraction limit to 1) and continues to recalculate
+the gas production rate target according to what the injection rate
+was in the previous iteration. This option therefore maximizes the
+production rate when the system is constrained by its injection capacity,
+because if the injection capacity were subsequently to increase then
+it would allow the production rate to increase accordingly while still
+meeting the sales target.   <p>There is a flaw in this algorithm if
+the net sales, import and consumption is zero: stagnation of the injection
+and production amounts results even if increased injection capacity
+is available. In this special case, the reinjection fraction limit
+is set to a larger value (100 by default) so that any increased injection
+capacity can be used. The value of this increased reinjection fraction
+limit can be controlled using <a href="../ecl_rm/OPTIONS.html#options.103"> item 103</a> of the <span class="keyword">OPTIONS</span> keyword.</p>
+<p>The sales target may not be met exactly, however, because the
+production rate calculation uses the injection rate from the previous
+iteration, and also the well rates will not be updated after the first <a href="../ecl_rm/NUPCOL.html#NUPCOL">  NUPCOL</a> iterations of each
+timestep. The <samp class="codeph">MAXR</samp> option will overwrite the group’s
+gas production rate limit with a value equal to the sales gas target
+plus the injection rate plus any gas consumption minus any import
+rate, while the group is operating on gas production rate control.
+Any user-defined limit on this quantity will be erased.</p>
+</li>
+
+</ul>
+
+<p>The <samp class="codeph">RATE </samp> and <samp class="codeph">MAXR</samp> options require
+guide rate group control, and are not allowed if prioritization (keyword <a href="../ecl_rm/GCONPRI.html#GCONPRI">GCONPRI</a>) is used to control
+the group/field’s production.</p>
+
+<p>If on the other hand the group or field is not producing enough
+gas to fulfil its sales requirement, corrective action will be taken
+at the end of the timestep to increase its gas production rate.</p>
+
+<ul>
+<li>If it is already under gas production rate control, the target
+rate will be increased by the amount required to meet the sales target.</li>
+
+<li>If there is a special gas producer (declared with keyword <a href="../ecl_rm/WGASPROD.html#WGASPROD">WGASPROD</a>) open and able to
+increase its production rate, its gas rate target will be increased
+by a specified increment.</li>
+
+<li>Otherwise the drilling queue will be scanned for a suitable production
+well to open, preferentially opening any special gas producers in
+the queue.</li>
+
+</ul>
+
+<p>ECLIPSE 300  </p>
+
+<p>A more limited means of controlling sales
+gas production is available in ECLIPSE 300. The rate of produced
+gas required for sale is specified with keyword <a href="../ecl_rm/GRUPSALE.html#GRUPSALE">GRUPSALE</a>. A fuel usage rate
+may also be set with keyword <a href="../ecl_rm/GRUPFUEL.html#GRUPFUEL">GRUPFUEL</a>. The group can then be given a reinjection fraction target
+of 1.0, and it will reinject its produced gas minus its fuel and sales
+requirements. However, there is no feedback on the production controls
+if there is an excess or shortfall of gas. If there is insufficient
+injection capacity to reinject all the surplus gas, the surplus gas
+that cannot be injected will show up as an “excess” in
+the gas accounting tables. Similarly, no remedial action will be taken
+if there is insufficient produced gas to meet the sales target.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

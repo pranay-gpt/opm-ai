@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GWRTWCV"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GWRTWCV"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GWRTWCV</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GWRTWCV"><a name="GWRTWCV"><!-- --></a>
+<h1 class="keyword">GWRTWCV</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gwrtwcv.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gwrtwcv.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d968e45"> x </th>
+
+<th valign="top" id="d968e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d968e54"> x </th>
+
+<th valign="top" id="d968e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d968e45 d968e54 ">  </td>
+
+<td valign="top" headers="d968e48 d968e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d968e45 d968e54 ">  </td>
+
+<td valign="top" headers="d968e48 d968e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d968e45 d968e54 ">  </td>
+
+<td valign="top" headers="d968e48 d968e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d968e45 d968e54 ">  </td>
+
+<td valign="top" headers="d968e48 d968e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d968e45 d968e54 ">  </td>
+
+<td valign="top" headers="d968e48 d968e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d968e45 d968e54 ">  </td>
+
+<td valign="top" headers="d968e48 d968e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d968e45 d968e54 ">  </td>
+
+<td valign="top" headers="d968e48 d968e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d968e45 d968e54 "> x </td>
+
+<td valign="top" headers="d968e48 d968e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword specifies collections of wells corresponding to instantaneous
+gradient parameters, see the <a href="../ecl_td/tech_desc_Instantaneous_gradients.html#tech_desc_instantaneous_gradients">"Instantaneous gradients"</a> section in the <cite>ECLIPSE Technical Description</cite>. ECLIPSE
+will proceed to compute the instantaneous gradients of particular
+well properties with respect to the well control variables in the
+associated parameters. The gradient data is available using the summary
+keywords <span class="keyword">WOFWCn</span>, <span class="keyword">WWFWCn</span>, <span class="keyword">WGFWCn</span> and <span class="keyword">WBHWCn</span>, where <span class="keyword">n</span> is the parameter number requested.</p>
+
+<p>Note that the gradient data is instantaneous in the sense that
+the derivatives approximate the change in well properties at the current
+simulation time with respect to a variation in the well control variable
+at the current simulation time. In contrast, the history matching
+approach generates gradient data at the current simulation time with
+respect to variations at the initial time. The gradients calculated
+are due to the response of the reservoir rather than the well group
+hierarchy and therefore the wells considered must be under either
+oil, water, gas rate or bottom hole pressure control.</p>
+
+<p>The maximum number of gradient parameters is specified by the <a href="GDIMS.html#GDIMS">  GDIMS</a> keyword in the <a href="RUNSPEC.html#RUNSPEC">  RUNSPEC</a> section. The
+instantaneous gradient option can be activated and deactivated during
+the course of a simulation using the <a href="GUPFREQ.html#GUPFREQ">  GUPFREQ</a> keyword.</p>
+
+<p>The <span class="keyword">GWRTWCV</span> keyword should be followed by a
+data record for each gradient parameter. Each data record consists
+of one or more well names, and is terminated with a slash. The set
+of records terminates with a blank record containing just a slash
+(/).</p>
+
+<p>Subsequent use of the <span class="keyword">GWRTWCV</span> resets all the
+previous parameters.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> The current implementation of <span class="keyword">GWRTWCV</span> is
+restricted to the standard well model and unrefined grids. </span></div>
+
+<div class="section" id="gwrtwcv.example"><a name="gwrtwcv.example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>The following
+example will set the first gradient parameter to be the control variable
+for the well PROD1, generating the gradient in the phase flow rates
+and well bottom hole pressure for all wells with respect to variations
+in the control variable of PROD1. This gradient data is available
+via the mnemonics <samp class="codeph">WOFWC1</samp>,  <samp class="codeph">WWFWC1</samp>, <samp class="codeph">WGFWC1</samp> and <samp class="codeph">WBHWC1</samp>.  The second
+parameter will result in gradient data calculated with respect to
+simultaneously varying the control variables of both well PROD1 and
+well PROD2.</p>
+ <pre><code>GWRTWCV
+   PROD1 / -- parameter 1, output available via W**WC1 mnemonics
+   PROD1 PROD2 / -- parameter 2
+   INJ1 / -- parameter 3
+/
+
+-- later in deck redefine parameter 1 and reset parameters 2 &amp; 3
+
+GWRTWCV
+   PROD3 /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

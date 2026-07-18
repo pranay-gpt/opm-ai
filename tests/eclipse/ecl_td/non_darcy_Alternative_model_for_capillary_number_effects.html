@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Alternative model for capillary number effects"/>
+<meta name="DC.subject" content="Non-Darcy flow velocity dependent relative permeabilities, Capillary number, Alternative model"/>
+<meta name="keywords" content="Non-Darcy flow velocity dependent relative permeabilities, Capillary number, Alternative model"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="non_darcy_alternative_model_for_capillary_number_effects"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Alternative model for capillary number effects</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="non_darcy_alternative_model_for_capillary_number_effects"><a name="non_darcy_alternative_model_for_capillary_number_effects"><!-- --></a>
+<h1 class="topictitle1">Alternative model for capillary number effects</h1>
+
+
+ <div>
+<p>An alternative model for CN effects, based on the work of <cite><span> <a href="biblio_Bibliography.html#biblio_39468">Whitson et
+al (1999)</a> </span></cite>, is also available. This model is designed
+for near wellbore flows exhibiting condensate ‘blockage’ type behavior
+in a gas condensate reservoir. It may be activated via item 5 of the <a href="../ecl_rm/VELDEP.html#VELDEP">VELDEP</a> keyword in the <span class="keyword">RUNSPEC</span> section.</p>
+
+<p>This model is more straightforward than the above in that:</p>
+
+<ul>
+<li>There is no effect on residual saturations</li>
+
+<li>There is no lower threshold or base capillary number value. (Below
+which the CN has no effect on the gas relative permeabilities.)</li>
+
+<li>It depends on only two parameters, both of which have default
+values. </li>
+
+</ul>
+
+<p>In the implementation in ECLIPSE 300, the CN-modified gas relative
+permeability,  <em> k<sub>rg</sub></em>, is an admixture of a straight-line
+miscible relative permeability, <em> k<sub>rg</sub> M,</em>, and the
+user-input immiscible, rock relative permeability,  <em> k<sub>rg</sub> I</em>; this admixture is controlled by a CN dependent transition
+function,  <math><msub>
+<mi>f</mi><mi>I</mi></msub></math>:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="non_darcy.equ.01fc"/>
+ <math><mrow><msub>
+<mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>g</mi>
+</mrow></msub><mo>=</mo><mrow><msub><mrow><mi>f</mi>
+</mrow><mrow><mi>I</mi></mrow></msub><msub><mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>g</mi><mi>I</mi>
+</mrow></msub></mrow><mo>+</mo><mrow><mrow><mo>(</mo>
+<mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>f</mi>
+</mrow><mrow><mi>I</mi></mrow></msub></mrow><mo>)</mo>
+</mrow><msub><mrow><mi>k</mi></mrow><mrow><mi>r</mi>
+<mi>g</mi><mi>M</mi></mrow></msub></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 732.1]
+              </td></tr></tbody></table>
+<p>The calculation of the miscible relative permeability is discussed
+later. The transition function depends on the gas capillary number,
+N<sub>cg</sub>, and is given by:                </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="non_darcy.XID-00000201"/>
+ <math><mrow><msub>
+<mrow><mi>f</mi></mrow><mrow><mi>I</mi></mrow></msub>
+<mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow><msup>
+<mrow><mo>(</mo><mi>α</mi><mo>⋅</mo><msub><mrow><mi>N</mi></mrow><mrow><mi>c</mi><mi>g</mi></mrow></msub>
+<mo>)</mo></mrow><mrow><mi>n</mi></mrow></msup><mo>+</mo><mn>1</mn></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 732.2]
+              </td></tr></tbody></table>
+<p>where</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="non_darcy.equ.0205"/>
+ <math><mrow><mtable>
+<mtr><mtd><mi>α</mi></mtd><mtd><mo>=</mo><msup>
+<mrow><mi>α</mi></mrow><mrow><mn>0</mn></mrow></msup>
+<mo>/</mo><mover><mrow><msub><mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>g</mi></mrow></msub>
+</mrow><mrow><mo> ¯</mo></mrow></mover>
+<mo>⁢</mo><mtext> </mtext><mtext> </mtext><mtext> </mtext>
+<mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext>
+<mstyle><mi>w</mi><mi>i</mi><mi>t</mi>
+<mi>h</mi></mstyle></mtd><mtd><mover><mrow>
+<msub><mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>g</mi></mrow></msub></mrow><mrow><mo> ¯</mo></mrow></mover><mo>=</mo><mfrac><mrow>
+<msub><mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>g</mi><mi>M</mi></mrow></msub><mo>+</mo><msub><mrow>
+<mi>k</mi></mrow><mrow><mi>r</mi><mi>g</mi><mi>I</mi>
+</mrow></msub></mrow><mrow><mn>2</mn></mrow></mfrac>
+</mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 732.3]
+              </td></tr></tbody></table>
+<p>and <math><msup>
+<mi>α</mi><mn>0</mn></msup></math>  is a constant depending
+only on rock properties:                </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="non_darcy.XID-0000020b"/>
+ <math><mrow><msup>
+<mrow><mi>α</mi></mrow><mrow><mn>0</mn></mrow></msup>
+<mo>=</mo><mfrac><mrow><msup><mrow><msub><mrow><mi>α</mi></mrow><mrow><mi>c</mi></mrow></msub></mrow>
+<mrow><mn>0</mn></mrow></msup></mrow><mrow><msqrt>
+<mrow><mi>K</mi><mo>⋅</mo><mi>φ</mi></mrow></msqrt>
+</mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 732.4]
+              </td></tr></tbody></table>
+<p>where  <math><mi>K</mi></math>  is the rock permeability and  <math><mi>φ</mi></math>  is the porosity. </p>
+
+<p>The gas capillary number is calculated from model 1, equation <a href="non_darcy_Capillary_number_model.html#non_darcy.XID-00000184">731.1</a>, using a pore gas velocity:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="non_darcy.equ.0213"/>
+ <math><mrow><msub>
+<mrow><mi>v</mi></mrow><mrow><mi>p</mi><mi>g</mi>
+</mrow></msub><mo>=</mo><mfrac><mrow><msub><mrow><mi>v</mi></mrow><mrow><mi>g</mi></mrow></msub></mrow>
+<mrow><mi>φ</mi><mo>⋅</mo><mo>(</mo><mn>1</mn><mrow>
+<mo>-</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub></mrow><mo>)</mo></mrow></mfrac>
+</mrow></math> 
+</td><td align="right">[Eq. 732.5]
+              </td></tr></tbody></table>
+<p>This model depends on two parameters: the exponent <em>n</em> in
+equation <a href="non_darcy_Alternative_model_for_capillary_number_effects.html#non_darcy.XID-00000201">732.2</a>  and the coefficient
+                     <math>
+<msup><msub><mi>α</mi><mi>c</mi></msub><mn>0</mn>
+</msup></math>  in equation <a href="non_darcy_Alternative_model_for_capillary_number_effects.html#non_darcy.XID-0000020b">732.4</a>. These parameters are defaulted to 0.65 and 1.0E4 respectively,
+with the keyword <a href="../ecl_rm/VDKRGC.html#VDKRGC">VDKRGC</a> permitting you to override these values.             </p>
+
+<div class="section" id="non_darcy_calculation_of_the_miscible_gas_relative_permeability"><a name="non_darcy_calculation_of_the_miscible_gas_relative_permeability"><!-- --></a><h4 class="sectiontitle">Calculation of the miscible gas relative permeability</h4><p>In the well inflow generalized pseudo-pressure option, at each
+pseudo-pressure below the saturation pressure, the model iterates
+to find a gas saturation such that the ratio of the <strong>immiscible</strong> mobilities (that is, using immiscible relative permeability) of
+oil and gas is equal to the ratio of the total liquid moles (<em>L</em>) to total vapor moles (<em>V</em>). Hence:         </p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="non_darcy.XID-00000221"/>
+ <math><mrow><mfrac>
+<mrow><mrow><msub><mi>k</mi><mrow><mi>r</mi><mi>o</mi><mi>I</mi></mrow></msub><msub><mi>b</mi><mi>o</mi></msub></mrow></mrow><mrow><msub><mi>μ</mi><mi>o</mi></msub></mrow></mfrac><mfrac><mrow><msub><mi>μ</mi><mi>g</mi></msub></mrow><mrow><mrow><msub><mi>k</mi><mrow><mi>r</mi><mi>g</mi><mi>I</mi></mrow>
+</msub><msub><mi>b</mi><mi>g</mi></msub></mrow></mrow>
+</mfrac></mrow><mo>=</mo><mfrac><mrow><mi>L</mi>
+</mrow><mrow><mi>V</mi></mrow></mfrac></math> 
+</td><td align="right">[Eq. 732.6]
+              </td></tr></tbody></table><p>The ratio of the immiscible relative permeabilities
+is calculated at this gas saturation,</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="non_darcy.XID-00000225"/>
+ <math><mi>R</mi>
+<mo>=</mo><msub><mi>k</mi><mrow><mi>r</mi><mi>g</mi>
+<mi>I</mi></mrow></msub><mo>/</mo><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>o</mi><mi>I</mi></mrow></msub>
+</math> 
+</td><td align="right">[Eq. 732.7]
+              </td></tr></tbody></table><p>Note that, in block-to-block flow calculations, the
+gas saturation is available so        <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>g</mi><mi>I</mi></mrow></msub>
+</math>  and  <math>
+<msub><mi>k</mi><mrow><mi>r</mi><mi>o</mi><mi>I</mi>
+</mrow></msub></math>  are calculated directly at that saturation
+in order to calculate the ratio <math><mi>R</mi></math>.          </p>
+<p>The miscible gas relative permeability is calculated
+from</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="non_darcy.XID-0000022d"/>
+ <math><msub><mi>k</mi><mrow><mi>r</mi><mi>g</mi><mi>M</mi></mrow>
+</msub><mo>=</mo><mrow><msubsup><mi>k</mi><mrow><mi>r</mi><mi>g</mi></mrow><mn>0</mn></msubsup><mo>{</mo>
+<mfrac><mrow><mn>1</mn></mrow><mrow><mn>1</mn><mo>+</mo><mo>(</mo><mn>1</mn><mo>/</mo><mi>R</mi><mo>)</mo></mrow></mfrac><mo>}</mo></mrow></math> 
+</td><td align="right">[Eq. 732.8]
+              </td></tr></tbody></table><p>where <math>
+<msubsup><mi>k</mi><mrow><mi>r</mi><mi>g</mi></mrow>
+<mn>0</mn></msubsup></math>  is the gas relative permeability
+at  <math><msub><mi>S</mi><mi>g</mi></msub><mo>=</mo><mn>1</mn><mrow>
+<mo>-</mo><msub><mi>S</mi><mrow><mi>w</mi><mi>c</mi>
+<mi>o</mi></mrow></msub></mrow></math>  (and  <math><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow></msub>
+</math>  is the connate water saturation). </p>
+<dl>
+
+<dt class="dlterm">Pre-2007.1 behavior</dt>
+
+<dd>Pre-2007.1, the miscible gas relative permeability was calculated
+using a straight line curve of the form, equation <a href="non_darcy_Capillary_number_model.html#non_darcy.XID-000001c6">731.7</a>  but with no change in the residual saturation (that is, 
+           <math><msub>
+<mi>X</mi><mi>g</mi></msub></math>  has a value of unity).
+This behavior can be restored (instead of using equation <a href="non_darcy_Alternative_model_for_capillary_number_effects.html#non_darcy.XID-0000022d">732.8</a>) by setting <a href="../ecl_rm/OPTIONS3.html#options3.99">item 99</a> of <span class="keyword">OPTIONS3</span> to a non-zero
+value.</dd>
+
+</dl>
+</div>
+
+<div class="section" id="non_darcy_calculation_of_the_oil_relative_permeability"><a name="non_darcy_calculation_of_the_oil_relative_permeability"><!-- --></a><h4 class="sectiontitle">Calculation of the oil relative permeability</h4><p>The
+calculation of the oil relative permeability depends on the value
+of item 5 in the <a href="../ecl_rm/VELDEP.html#VELDEP">VELDEP</a> keyword.</p>
+<ul>
+<li>If <span class="keyword">VELDEP</span>   item 5 has a value of 1, then  <p> <math><mrow><msub><mrow>
+<mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi></mrow>
+</msub><mo>=</mo><mrow><msub><mrow><mi>f</mi></mrow>
+<mrow><mi>o</mi><mi>I</mi></mrow></msub><msub><mrow>
+<mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>I</mi>
+</mrow></msub></mrow><mo>+</mo><mrow><mrow><mo>(</mo>
+<mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>f</mi>
+</mrow><mrow><mi>o</mi><mi>I</mi></mrow></msub></mrow>
+<mo>)</mo></mrow><msub><mrow><mi>k</mi></mrow><mrow>
+<mi>r</mi><mi>o</mi><mi>M</mi></mrow></msub></mrow>
+</mrow></math> </p>
+                <p>where the miscible oil relative
+permeability is of the form given by equation <a href="non_darcy_Capillary_number_model.html#non_darcy.XID-000001c6">731.7</a>  but with no change in the residual saturation (that is, 
+                      <math><msub><mi>X</mi>
+<mi>o</mi></msub></math>  has a value of unity), and the immiscible-miscible
+transition function,  <math><msub><mi>f</mi>
+<mrow><mi>o</mi><mi>I</mi></mrow></msub></math>, is
+the same as that used in the original model for capillary number effects
+in oil flows (see equation <a href="non_darcy_Capillary_number_model.html#non_darcy.XID-000001d2">731.9</a>) so                </p>
+<p> <math><msub>
+<mi>f</mi><mrow><mi>o</mi><mi>I</mi></mrow></msub>
+<mo>=</mo><msubsup><mi>N</mi><mrow><mi>c</mi><mi>n</mi><mi>p</mi></mrow><mrow><mn>1</mn><mo>/</mo>
+<msub><mi>n</mi><mi>p</mi></msub></mrow></msubsup>
+</math> </p>
+<p>The calculation of                        <math><msub><mi>f</mi>
+<mrow><mi>o</mi><mi>I</mi></mrow></msub></math>  requires
+ <math><msub><mi>n</mi>
+<mrow><mn>1</mn><mi>o</mi></mrow></msub></math>,  <math><msub><mi>n</mi>
+<mrow><mn>2</mn><mi>o</mi></mrow></msub></math>  and
+ <math><msub><mi>N</mi>
+<mrow><mi>c</mi><mi>b</mi><mi>o</mi></mrow></msub>
+</math>  (and the selection of the capillary number model using <span class="keyword">VELDEP</span> item 1). Hence it increases the number of parameters
+required by the alternative model from 2 to 5.                </p>
+             </li>
+
+<li>If <span class="keyword">VELDEP</span> item 5 has a value of 2, then   
+            <p> <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>o</mi></mrow></msub><mo>=</mo>
+<msub><mi>k</mi><mrow><mi>r</mi><mi>g</mi></mrow>
+</msub><mo>/</mo><mi>R</mi></math> </p>
+                <p>with <em>R</em> calculated using equation <a href="non_darcy_Alternative_model_for_capillary_number_effects.html#non_darcy.XID-00000225">732.7</a>. This is the preferred method
+for achieving the desirable property that the alternative model only
+depends on two parameters.</p>
+             </li>
+
+</ul>
+</div>
+
+<div class="section" id="non_darcy_pre-2007.1_behavior_of_the_alternative_model"><a name="non_darcy_pre-2007.1_behavior_of_the_alternative_model"><!-- --></a><h4 class="sectiontitle">Pre-2007.1 behavior of the alternative model</h4><p>Pre-2007.1,
+the alternative model did not use equation <a href="non_darcy_Alternative_model_for_capillary_number_effects.html#non_darcy.XID-00000221">732.6</a>, but instead found a gas saturation
+such that the ratio of the <strong>modified</strong> mobilities of oil and gas
+is equal to the ratio of the total liquid moles (<math><mi>L</mi></math>) to total vapor moles (<math><mi>V</mi></math>). That is </p>
+<p> <math><mrow><mfrac><mrow>
+<mrow><msub><mi>k</mi><mrow><mi>r</mi><mi>o</mi>
+</mrow></msub><msub><mi>b</mi><mi>o</mi></msub></mrow>
+</mrow><mrow><msub><mi>μ</mi><mi>o</mi></msub></mrow>
+</mfrac><mfrac><mrow><msub><mi>μ</mi><mi>g</mi></msub>
+</mrow><mrow><mrow><msub><mi>k</mi><mrow><mi>r</mi>
+<mi>g</mi></mrow></msub><msub><mi>b</mi><mi>g</mi>
+</msub></mrow></mrow></mfrac></mrow><mo>=</mo><mfrac>
+<mrow><mi>L</mi></mrow><mrow><mi>V</mi></mrow></mfrac>
+</math> </p>
+<p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>b</mi>
+<mi>p</mi></msub></math> </td>
+
+<td valign="top">is the phase molar density and </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>μ</mi>
+<mi>p</mi></msub></math> </td>
+
+<td valign="top"> is the phase viscosity. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>This pre-2007.1 behavior can be recovered by setting <a href="../ecl_rm/OPTIONS3.html#options3.99"> item 99</a> of <span class="keyword">OPTIONS3</span> to a non-zero
+value.</p>
+</div>
+
+<div class="section" id="non_darcy_notes"><a name="non_darcy_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li> This alternative model for CN effects in gas flows cannot be
+used at the same time as the original CN model for <strong>gas</strong> flows.
+If <a href="../ecl_rm/VELDEP.html#VELDEP">VELDEP</a> keyword item 5 is set to 1, then the alternative model can
+be used in conjunction with the original model for CN effects in <strong>oil</strong> flows. If <span class="keyword">VELDEP</span> keyword item 5 is set
+to 2, then it cannot be used with the original model. The selection
+of models is controlled by the <span class="keyword">VELDEP</span> keyword. </li>
+
+<li> Both CN and Forchheimer effects may be included in the generalized
+pseudo pressure option that calculates a blocking factor due to near
+well condensate dropout (see <a href="wellinfl_Special_inflow_equations.html#wellinfl_special_inflow_equations"> "Special inflow equations"</a>). This is controlled by the <a href="../ecl_rm/PICOND.html#PICOND">PICOND</a> keyword. </li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="FOAMFCN"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="FOAMFCN"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>FOAMFCN</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="FOAMFCN"><a name="FOAMFCN"><!-- --></a>
+<h1 class="keyword">FOAMFCN</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="foamfcn.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="foamfcn.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d724e45"> x </th>
+
+<th valign="top" id="d724e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d724e54"> x </th>
+
+<th valign="top" id="d724e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d724e45 d724e54 ">  </td>
+
+<td valign="top" headers="d724e48 d724e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d724e45 d724e54 ">  </td>
+
+<td valign="top" headers="d724e48 d724e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d724e45 d724e54 ">  </td>
+
+<td valign="top" headers="d724e48 d724e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d724e45 d724e54 "> x </td>
+
+<td valign="top" headers="d724e48 d724e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d724e45 d724e54 ">  </td>
+
+<td valign="top" headers="d724e48 d724e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d724e45 d724e54 ">  </td>
+
+<td valign="top" headers="d724e48 d724e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d724e45 d724e54 ">  </td>
+
+<td valign="top" headers="d724e48 d724e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d724e45 d724e54 ">  </td>
+
+<td valign="top" headers="d724e48 d724e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a>  (set in the <span class="keyword">TABDIMS</span> keyword)
+tables defining the parameters which control the gas mobility reduction
+due to foam as a function of capillary number. Each table consists
+of one row of data containing two items which should be terminated
+with a slash (/):</p>
+
+<ol>
+<li> The reference capillary number. </li>
+
+<li> An exponent controlling the steepness in the change of mobility
+according to the ratio of reference to calculated capillary numbers. <p>DEFAULT: 1.0</p>
+ </li>
+
+</ol>
+
+<p>The first item in the first table must be specified.
+The second item may be defaulted. If the first item in the second
+or subsequent tables is defaulted, the associated parameters will
+be copied from the previous table.</p>
+
+<p>This keyword is only relevant if the foam model is used with the
+functional gas mobility reduction model.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>In ECLIPSE 100 this requires the <a href="FOAM.html#FOAM"> FOAM</a> option to be specified
+in the <span class="keyword">RUNSPEC</span> section and <samp class="codeph">FUNC</samp> to be set for item 2 of the <a href="FOAMOPTS.html#FOAMOPTS"> FOAMOPTS</a> keyword.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>In ECLIPSE 300 the foam model is activated
+by using an additional water component <a href="COMPW.html#COMPW"> COMPW</a> to represent the foam surfactant <a href="CWTYPE.html#CWTYPE"> CWTYPE</a>. ECLIPSE 300 supports
+the functional form of the gas mobility model, so this need not be
+specified.</p>
+
+<p>In both simulators, the <a href="FOAMFSC.html#FOAMFSC"> FOAMFSC</a> keyword must be specified with the functional gas mobility
+reduction model. See <a href="../ecl_td/foam_Foam_Model.html#foam_foam_model">"Foam model"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.</p>
+
+<p>For the functional model of gas mobility reduction, the mobility
+reduction factor <math><msub><mi>M</mi>
+<mrow><mi>r</mi><mi>f</mi></mrow></msub></math>  is
+expressed in the form: </p>
+
+<p> <math><mrow><msub><mrow>
+<mi>M</mi></mrow><mrow><mi>r</mi><mi>f</mi></mrow>
+</msub><mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow>
+<mn>1</mn><mo>+</mo><mo>(</mo><msub><mrow><mi>M</mi>
+</mrow><mrow><mi>r</mi></mrow></msub><mo>⋅</mo><msub>
+<mrow><mi>F</mi></mrow><mrow><mi>s</mi></mrow></msub>
+<mo>⋅</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi>F</mi>
+</mrow><mrow><mi>o</mi></mrow></msub><mo>⋅</mo><msub>
+<mrow><mi>F</mi></mrow><mrow><mi>c</mi></mrow></msub>
+<mo>)</mo></mrow></mfrac></mrow></math> </p>
+
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>M</mi>
+<mi>r</mi></msub></math> </td>
+
+<td valign="top">is the reference mobility reduction factor (<a href="FOAMFRM.html#FOAMFRM"> FOAMFRM</a> keyword). </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mi>s</mi></msub></math> </td>
+
+<td valign="top">is the mobility reduction factor dependence upon surfactant
+concentration (<span class="keyword">FOAMFSC</span> keyword). </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mi>w</mi></msub></math> </td>
+
+<td valign="top"> is the mobility reduction factor dependence upon water saturation
+(<a href="FOAMFSW.html#FOAMFSW"> FOAMFSW</a> keyword). </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mi>o</mi></msub></math> </td>
+
+<td valign="top">   is the mobility reduction factor dependence upon oil saturation
+(<a href="FOAMFSO.html#FOAMFSO"> FOAMFSO</a> keyword). </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mi>c</mi></msub></math> </td>
+
+<td valign="top"> is the mobility reduction factor which is dependent upon capillary
+number (this keyword). </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The mobility reduction factor <math><msub>
+<mi>F</mi><mi>c</mi></msub></math> represents the functional
+dependence upon capillary number and is expressed in the form: </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="foamfcn.equ.0070"/>
+ <math><msub><mi>F</mi>
+<mi>c</mi></msub><mo>=</mo><msup><mrow><mo>(</mo>
+<mfrac><mrow><msup><mrow><msub><mi>N</mi><mi>c</mi>
+</msub></mrow><mrow><mi>r</mi></mrow></msup></mrow>
+<mrow><msub><mi>N</mi><mi>c</mi></msub></mrow></mfrac>
+<mo>)</mo></mrow><msub><mi>e</mi><mi>c</mi></msub>
+</msup></math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>N</mi>
+<mi>c</mi></msub></math> </td>
+
+<td valign="top">   is the capillary number. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msup><mrow><msub>
+<mi>N</mi><mi>c</mi></msub></mrow><mrow><mi>r</mi>
+</mrow></msup></math> </td>
+
+<td valign="top">   is the reference capillary number. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>e</mi>
+<mi>c</mi></msub></math> </td>
+
+<td valign="top">   is an exponent which controls the steepness of the transition
+about the point where  <math><msub><mi>N</mi>
+<mi>c</mi></msub><mo>=</mo><msup><mrow><msub><mi>N</mi><mi>c</mi></msub></mrow><mrow><mi>r</mi></mrow>
+</msup></math>. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The capillary number is a dimensionless parameter which provides
+a measure of the ratio of viscous forces to capillary forces. The
+calculation of the capillary number is described in <a href="../ecl_td/velocity_Capillary_Number.html#velocity_capillary_number">"Capillary number"</a> in the <cite>ECLIPSE Technical Description</cite>. The viscous forces
+are proportional to the velocity, which is calculated from the flows
+into and out of the cell, while the capillary forces are proportional
+to the gas-water surface tension defined by the <a href="FOAMFST.html#FOAMFST"> FOAMFST</a> keyword.</p>
+
+<p>Several simplifications are made when calculating the velocity
+term:</p>
+
+<ul>
+<li><p>ECLIPSE 100</p>
+<p>In ECLIPSE 100 non-neighbor flows are not included</p>
+<p>ECLIPSE 300</p>
+</li>
+
+<li> In ECLIPSE 300 non-neighbor flows are included,
+except <ul>
+<li> user-defined non-neighbor flows (<a href="NNC.html#NNC"> NNC</a> keyword) </li>
+
+<li> non-neighbor flows stored in flux boundary files </li>
+
+<li> non-neighbor flows arising from grid coarsening </li>
+
+</ul>
+ </li>
+
+<li> Well flows are not included. </li>
+
+</ul>
+
+<p>The gas-water interfacial tension is tabulated as function of the
+foam concentration using the <span class="keyword">FOAMFST</span> keyword. The
+contribution of the capillary number mobility reduction component
+to the overall gas mobility reduction is determined by the ratio of
+reference to calculated grid block capillary number and the value
+of the exponent which controls the steepness of the change about the
+transition point <math><msub><mi>N</mi>
+<mi>c</mi></msub><mo>=</mo><msup><mrow><msub><mi>N</mi><mi>c</mi></msub></mrow><mrow><mi>r</mi></mrow>
+</msup></math>. This keyword is optional; however, if this keyword
+is specified the <span class="keyword">FOAMFST</span> keyword must also be specified.
+If this keyword is not specified the component of the overall mobility
+reduction factor which models the functional dependence upon capillary
+number will default to 1.0. See also the <a href="FOAMFRM.html#FOAMFRM"> FOAMFRM</a>, <a href="FOAMFSC.html#FOAMFSC"> FOAMFSC</a> and <a href="FOAMFSW.html#FOAMFSW"> FOAMFSW</a> keywords. </p>
+
+<p>The capillary number functional mobility reduction term is only
+applied in grid blocks which contain foam with a concentration which
+is greater than or equal to the minimum concentration specified by
+item 3 of the <span class="keyword">FOAMFSC</span> keyword.</p>
+
+<div class="section" id="foamfcn_example"><a name="foamfcn_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NTSFUN</samp> = 5</p>
+<pre><code>FOAMFCN
+1.0E-07 / 
+2.0E-07 1.5 /
+/
+1.0E-07 3.0/
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

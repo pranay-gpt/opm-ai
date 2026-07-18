@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="LANGMPL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="LANGMPL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>LANGMPL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="LANGMPL"><a name="LANGMPL"><!-- --></a>
+<h1 class="keyword">LANGMPL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="langmpl.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="langmpl.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1224e45">                         x                   
+  </th>
+
+<th valign="top" id="d1224e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1224e54">                         x                   
+  </th>
+
+<th valign="top" id="d1224e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1224e45 d1224e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1224e48 d1224e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1224e45 d1224e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1224e48 d1224e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1224e45 d1224e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1224e48 d1224e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1224e45 d1224e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d1224e48 d1224e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1224e45 d1224e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1224e48 d1224e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1224e45 d1224e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1224e48 d1224e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1224e45 d1224e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1224e48 d1224e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1224e45 d1224e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1224e48 d1224e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword may be used with the coal bed methane model (see  <a href="../ecl_td/coalbed_Introduction.html#coalbed_introduction">"Coal bed methane
+model"</a> in the <cite>ECLIPSE Technical Description</cite>).</p>
+
+<p>The keyword scales the pressure used when calculating the adsorption
+capacity on a cell by cell basis.</p>
+
+<p>The keyword should be followed by one real number for every grid
+block, specifying a multiplier. The data field should be terminated
+by a slash (/).</p>
+
+<p>Grid blocks are ordered with the X axis index cycling fastest (from
+1 to <samp class="codeph">NDIVIX</samp>), followed by the Y axis index (from
+1 to <samp class="codeph">NDIVIY</samp>), and finally the Z axis index (from
+1 to <samp class="codeph">NDIVIZ</samp>). <samp class="codeph">NDIVIX</samp>, <samp class="codeph">NDIVIY</samp> and <samp class="codeph">NDIVIZ</samp> are specified in <span class="keyword">RUNSPEC</span> keyword  <a href="DIMENS.html#DIMENS"> DIMENS</a>. Repeat counts may be used for repeated values (for example 115*0.9).
+Note that spaces must not be inserted on either side of the asterisk
+(*).</p>
+
+<p>Only the values given for the coal cells are used.  See the <a href="COALNUM.html#COALNUM"> COALNUM</a> keyword.  So
+for a dual porosity run with only the matrix cells being coal cells,
+it is sufficient to supply <samp class="codeph">NDIVIX</samp> * <samp class="codeph">NDIVIY</samp> * <samp class="codeph">NDIVIZ</samp> /2 values. In the case of the ECLIPSE 300
+instant sorption model values must be applied for all cells with coal.</p>
+
+<p>The keyword is entirely optional and if not specified, or defaulted,
+a value of unity will be used.</p>
+
+<div class="section" id="langmpl_example100"><a name="langmpl_example100"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NDIVIX</samp> = 10, <samp class="codeph">NDIVIY</samp> = 1 and <samp class="codeph">NDIVIZ</samp> = 2 specified in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS"> DIMENS</a>:</p>
+ <pre><code>LANGMPL
+10*0.8 /</code></pre> <p>The pressures of the first 10 grid cells (that
+is the coal matrix cells) are multiplied with 0.8 when computing the
+adsorption capacity. </p>
+ </div>
+
+<div class="section" id="langmpl_example300"><a name="langmpl_example300"><!-- --></a><h4 class="sectiontitle">Example
+- ECLIPSE 300 instant sorption</h4>  <p>With <samp class="codeph">NDIVIX=10</samp>, <samp class="codeph">NDIVIY=1</samp> and <samp class="codeph">NDIVIZ=2</samp> specified
+in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS"> DIMENS</a>:</p>
+ <pre><code>LANGMPL
+20*0.8 /</code></pre> <p>The pressures of the first 20 grid cells are
+multiplied with 0.8 when computing the adsorption capacity. </p>
+ </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

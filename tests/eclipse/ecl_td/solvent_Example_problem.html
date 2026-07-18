@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Example"/>
+<meta name="DC.subject" content="Solvent model example, Solvent, Example"/>
+<meta name="keywords" content="Solvent model example, Solvent, Example"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="solvent_example_problem"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Example </title>
+</head>
+<body>
+
+
+<div class="nested0" id="solvent_example_problem"><a name="solvent_example_problem"><!-- --></a>
+<h1 class="topictitle1">Example </h1>
+
+
+ <div>
+<div class="section" id="solvent_runspec"><a name="solvent_runspec"><!-- --></a><h4 class="sectiontitle">RUNSPEC</h4><pre><code>RUNSPEC                                                             
+TITLE
+SPE Fifth Comparison Test Problem - Scenario 2 - 4 Phase
+
+DIMENS
+ 7    7    3  /
+
+NONNC
+OIL
+WATER
+GAS
+DISGAS
+SOLVENT
+FIELD
+
+MISCIBLE
+ 1   20    'NONE'   /
+
+EQLDIMS
+ 1  100   10    1    1 /
+
+WELLDIMS
+ 3    1    1    3 /
+
+START
+ 1 'JAN' 1986  /
+
+NSTACK
+ 24 /
+
+FMTIN
+UNIFOUT
+UNIFIN</code></pre></div>
+
+<div class="section" id="solvent_grid"><a name="solvent_grid"><!-- --></a><h4 class="sectiontitle">GRID</h4><pre><code>GRID  ==============================================================
+EQUALS
+      'DX'    500       /
+      'DY'    500       /
+      'PORO'  0.3       /
+      'DZ'    20        1  7  1  7  1  1  /
+      'PERMX' 500       /
+      'PERMZ' 50        /
+      'TOPS'  8325      /
+      'DZ'    30        1  7  1  7  2  2  /
+      'PERMX' 50        /
+      'PERMZ' 50        /
+      'DZ'    50        1  7  1  7  3  3  /
+      'PERMX' 200       /
+      'PERMZ' 25        /
+/                                             
+
+COPY
+      'PERMX'    'PERMY'   1  7  1  7  1  3  /
+/
+
+RPTGRID
+ 'DX'  'DY'  'DZ'  'PERMX'  'PERMY'  'PERMZ'  'MULTZ'
+ 'PORO'  'TOPS'  'PORV'  'TRANX'  'TRANY'  'TRANZ'  /</code></pre></div>
+
+<div class="section" id="solvent_props"><a name="solvent_props"><!-- --></a><h4 class="sectiontitle">PROPS</h4><pre><code>PROPS  =============================================================
+SWFN
+    0.20    0.0      45.00
+    0.2899  0.0022   19.03
+    0.3778  0.0180   10.07 
+    0.4667  0.0607    4.90  
+    0.5556  0.1438    1.80 
+    0.6444  0.2809    0.50  
+    0.7000  0.4089    0.05   
+    0.7333  0.4855    0.01          
+    0.8222  0.7709    0.00   
+    0.9111  1.0000    0.00 
+    1.0000  1.0000    0.00  /
+
+SGFN
+    0.0000  0.0       0.0 
+    0.0500  0.0       0.0 
+    0.0889  0.001     0.0  
+    0.1778  0.01      0.0   
+    0.2667  0.03      0.001
+    0.3556  0.05      0.001 
+    0.4444  0.1       0.03 
+    0.5333  0.2       0.8    
+    0.6222  0.35      3.0           
+    0.6500  0.39      4.0    
+    0.7111  0.56      8.0  
+    0.8000  1.0      30.0   /
+
+SOF2
+    0.0      0.0       
+    0.0889   0.0       
+    0.1778   0.0            
+    0.2667   0.0           
+    0.3000   0.0            
+    0.3556   0.0123        
+    0.4444   0.0835       
+    0.5333   0.2178      
+    0.6222   0.4153       
+    0.7101   0.6769       
+    0.8000   1.0000  / 
+
+SOF3
+--           KROW       KROG
+    0.0      0.0        0.0
+    0.0889   0.0        0.0
+    0.15     1*         0.0
+    0.1778   0.0        0.0110
+    0.2667   0.0        0.0370
+    0.3000   0.0        1*
+    0.3556   0.0123     0.0878
+    0.4444   0.0835     0.1715
+    0.5333   0.2178     0.2963
+    0.6222   0.4153     0.4705
+    0.7101   0.6769     0.7023
+    0.75     1*         0.8800
+    0.8000   1.0000     1.0000    /
+
+SSFN
+--          KRG*     KRS*
+  0         0.0     0.0
+  1.0       1.0     1.0
+ /
+
+MISC
+  0.0 0.0
+  0.1 1.0
+  1.0 1.0 /
+
+PVTW
+       4000.0     1.000        3.3D-6           0.70            0 /
+
+ROCK
+        4000.0        5.0D-6          /
+
+DENSITY
+         38.53  62.40   0.06867  /
+
+SDENSITY
+                        0.06243  /
+
+TLMIXPAR
+ 0.7 /
+
+PVDG
+     14.7 211.4160   0.0107
+    500.0   5.9242   0.0127
+   1000.0   2.8506   0.0134
+   1200.0   2.3441   0.0138
+   1500.0   1.8457   0.0145
+   1800.0   1.5202   0.0153
+   2000.0   1.3602   0.0159
+   2302.3   1.1751   0.0170
+   2500.0   1.1025   0.0177    
+   3000.0   0.9852   0.0195   
+   3500.0   0.9116   0.0214   
+   4000.0   0.8621   0.0232  
+   4500.0   0.8224   0.0250  
+   4800.0   0.8032   0.0261     /
+
+PVDS
+     14.7 223.2140   0.011
+    500.0   5.6022   0.012 
+   1000.0   2.5310   0.013
+   1200.0   2.0354   0.014 
+   1500.0   1.5593   0.016 
+   1800.0   1.2657   0.018 
+   2000.0   1.1296   0.019 
+   2302.3   0.9803   0.022 
+   2500.0   0.9085   0.023     
+   3000.0   0.7807   0.027    
+   3500.0   0.6994   0.031    
+   4000.0   0.6430   0.034   
+   4500.0   0.6017   0.037   
+   4800.0   0.5817   0.038      /
+
+PVTO
+    0.0000    14.7  1.0348  0.310   /
+    0.1176   500.0  1.1017  0.295   /
+    0.2226  1000.0  1.1478  0.274   /
+    0.2677  1200.0  1.1677  0.264   /
+    0.3414  1500.0  1.1997  0.249   /
+    0.4215  1800.0  1.2350  0.234   /
+    0.4790  2000.0  1.2600  0.224   /
+    0.5728  2302.3  1.3010  0.208
+            3302.3  1.2988  0.235
+            4302.3  1.2966  0.260   /
+    0.6341  2500.0  1.3278  0.200   /
+    0.7893  3000.0  1.3956  0.187   /
+    0.9444  3500.0  1.4634  0.175   / 
+    1.0995  4000.0  1.5312  0.167   /     
+    1.2547  4500.0  1.5991  0.159   /         
+    1.3478  4800.0  1.6398  0.155     
+            5500.0  1.6305  0.168   /
+/
+
+RPTPROPS
+ 'SOF2'   'SWFN'   'SGFN'   'PVTW' 
+ 'PVTG'   'DENSITY'  'ROCK'  /</code></pre></div>
+
+<div class="section" id="solvent_solution"><a name="solvent_solution"><!-- --></a><h4 class="sectiontitle">SOLUTION</h4><pre><code>SOLUTION ============================================================
+EQUIL
+       8400   4000   9900    0     1000    0      1      0       0  /
+
+RSVD
+       8200  0.5728
+       8500  0.5728 /
+
+RPTSOL 
+ 'PRES'  'SOIL'  'SWAT'  'SGAS'  'FIP'  /</code></pre></div>
+
+<div class="section" id="solvent_summary"><a name="solvent_summary"><!-- --></a><h4 class="sectiontitle">SUMMARY</h4><pre><code>SUMMARY ============================================================
+FOPR
+FNPR
+FGPR
+
+BOSAT
+ 4 4 1 /
+/
+
+BNSAT 
+ 4 4 1 /
+/</code></pre></div>
+
+<div class="section" id="solvent_schedule"><a name="solvent_schedule"><!-- --></a><h4 class="sectiontitle">SCHEDULE</h4><pre><code>SCHEDULE ============================================================
+RPTSCHED                                                                
+ 'PRES'  'SOIL'  'SWAT'  'SGAS'  'SUMMARY=2'
+ 'CPU=2'  /
+
+WELSPECS
+    'PRODUCER' 'G'    7  7    8400 'OIL'  /
+    'INJ-G   ' 'G'    1  1    8335 'GAS'  /
+    'INJ-W   ' 'G'    1  1    8335 'WAT'  /
+/
+
+COMPDAT
+    'PRODUCER'   7 7 3  3 'OPEN' 0   -1   0.5  10000.0  /
+    'INJ-G   '   1 1 1  1 'OPEN' 0   -1   0.5  10000.0  /
+    'INJ-W   '   1 1 1  1 'OPEN' 0   -1   0.5  10000.0  /
+  /
+
+WCONPROD
+     'PRODUCER' 'OPEN' 'ORAT' 12000  4*  3000 /
+  /
+
+WECON
+   'PRODUCER'  1*  1*  5.0  10.0  1*  'WELL'  'YES'  /
+   /
+
+WCONINJE
+  'INJ-W' 'WAT' 'OPEN' 'RATE'  45000   1*   4500  /
+  'INJ-G' 'GAS' 'OPEN' 'RATE'  20000   1*   4500  /
+  /
+
+WSOLVENT
+  'INJ-G'  1.0 /
+  /
+
+-- YEAR 1 ------------------------------------------------------
+INCLUDE
+ 'CASE2.ONEYEAR' /
+
+-- YEAR 2 ------------------------------------------------------
+INCLUDE
+ 'CASE2.ONEYEAR' /
+
+END</code></pre></div>
+
+<div class="section" id="solvent_included_file"><a name="solvent_included_file"><!-- --></a><h4 class="sectiontitle">Included file</h4><pre><code>-- INCLUDED FILE:  CASE2.ONEYEAR
+-- FIRST 3 MONTHS  ------------------------------------------------
+--*WATER*--
+
+TUNING
+2.0 /
+/                               
+/
+
+WELOPEN
+  'INJ-G' 'SHUT' /
+  'INJ-W' 'OPEN'/
+/
+
+TSTEP
+   91.25
+/
+
+-- SECOND 3 MONTHS -------------------------------------------------
+--*GAS*--
+
+TUNING
+2.0 /
+/                               
+/
+
+WELOPEN
+  'INJ-W' 'SHUT' /
+  'INJ-G' 'OPEN' /
+/
+
+TSTEP
+   91.25 
+/ 
+
+--THIRD 3 MONTHS --------------------------------------------------
+--*WATER*--
+
+TUNING
+2.0  /
+/  
+/
+
+WELOPEN
+ 'INJ-G' 'SHUT' /
+ 'INJ-W' 'OPEN' /
+/ 
+
+TSTEP
+   91.25
+/
+
+-- FOURTH 3 MONTHS ----------------------------------------------
+--*GAS*--
+
+TUNING
+2.0 /
+/
+/
+
+WELOPEN
+ 'INJ-W' 'SHUT' /
+ 'INJ-G' 'OPEN' /
+ /
+
+TSTEP
+   91.25
+/-----------------------------------------------------------------</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

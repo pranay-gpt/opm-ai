@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Examples"/>
+<meta name="DC.subject" content="GRUPINJE"/>
+<meta name="keywords" content="GRUPINJE"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="grupinje_examples"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Examples</title>
+</head>
+<body>
+
+
+<div class="nested0" id="grupinje_examples"><a name="grupinje_examples"><!-- --></a>
+<h1 class="topictitle1">Examples</h1>
+
+
+ <div>
+<div class="section" id="grupinje_example_1"><a name="grupinje_example_1"><!-- --></a><h4 class="sectiontitle">Example 1</h4><p>Replace
+the voidage produced by the group GRP1 with injected water. The defaulted
+voidage replacement fraction will automatically be set to 1.0 in this
+case.</p>
+<pre><code>GRUPINJE
+ GRP1 WATER ' ' RE 10* R /
+/</code></pre></div>
+
+<div class="section" id="grupinje_example_2"><a name="grupinje_example_2"><!-- --></a><h4 class="sectiontitle">Example 2</h4><p>Water
+is to be injected by the group at a rate of 1000 stb/day.</p>
+<pre><code>GRUPINJE
+ G1 Water ' ' Water 1* 1000.0 /
+/</code></pre></div>
+
+<div class="section" id="grupinje_example_3"><a name="grupinje_example_3"><!-- --></a><h4 class="sectiontitle">Example 3</h4><p>The hydrocarbon
+defined by wellstream <samp class="codeph">MixB</samp> is to be injected so as
+to replace the voidage produced by group PGC.</p>
+<pre><code>GRUPINJE
+ PLATA Stream MixB Reij 5* 1.0 Group PGC 2* R /
+/</code></pre></div>
+
+<div class="section" id="grupinje_example_4"><a name="grupinje_example_4"><!-- --></a><h4 class="sectiontitle">Example 4</h4><p>Gas is
+reinjected from field production at a rate of half the surface production
+rate. Water tops up the gas to achieve 100% voidage replacement.</p>
+<pre><code>GRUPINJE
+--group fluid  name  ctrl  rates reinj  reinj  reinj  misc Reservoir/
+--                   mode        frac   type   contr       Surface
+FIELD   STREAM SOLV  RE    5*    0.5     G      1*     2*    S /
+FIELD   WAT     1*   RE    5*    1.0     G      1*     2*    R /
+/</code></pre></div>
+
+<div class="section" id="grupinje_example_5"><a name="grupinje_example_5"><!-- --></a><h4 class="sectiontitle">Example 5</h4><p>Gas is
+reinjected from field production at a fixed rate.</p>
+<p>Water tops
+up the gas to achieve a fixed reservoir voidage target.</p>
+<p>The <a href="WELLINJE.html#WELLINJE"> WELLINJE</a> keyword defines
+water and gas injectors, with group controlled rates.</p>
+<pre><code>GRUPINJE
+-- Group  Phase  Name  Mode  Rates     
+   FIELD  GV     Field  GA   2* 1000 /
+   FIELD  Water  ' '    RV   3* 1000 /
+/
+WELLINJE
+ IG1 2* GR /
+ IG2 2* GR /
+ IW1 WA 1* GR /
+ IW2 WA 1* GR /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

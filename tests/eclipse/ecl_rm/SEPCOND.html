@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SEPCOND"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SEPCOND"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SEPCOND</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="SEPCOND"><a name="SEPCOND"><!-- --></a>
+<h1 class="keyword">SEPCOND</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="sepcond.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="sepcond.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2252e45">  </th>
+
+<th valign="top" id="d2252e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2252e54"> x </th>
+
+<th valign="top" id="d2252e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2252e45 d2252e54 ">  </td>
+
+<td valign="top" headers="d2252e48 d2252e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2252e45 d2252e54 ">  </td>
+
+<td valign="top" headers="d2252e48 d2252e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2252e45 d2252e54 ">  </td>
+
+<td valign="top" headers="d2252e48 d2252e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2252e45 d2252e54 ">  </td>
+
+<td valign="top" headers="d2252e48 d2252e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2252e45 d2252e54 ">  </td>
+
+<td valign="top" headers="d2252e48 d2252e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2252e45 d2252e54 ">  </td>
+
+<td valign="top" headers="d2252e48 d2252e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2252e45 d2252e54 ">  </td>
+
+<td valign="top" headers="d2252e48 d2252e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2252e45 d2252e54 "> x </td>
+
+<td valign="top" headers="d2252e48 d2252e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword introduces or modifies a specified separator condition.
+These separator conditions may then be associated with a well, using
+keyword <a href="WSEPCOND.html#WSEPCOND"> WSEPCOND</a>. The separator conditions are used to define oil, gas and liquid
+rates for a well, by flashing the produced hydrocarbons through the
+specified separation process.</p>
+
+<p>Each line of <span class="keyword">SEPCOND</span> data introduces a new stage,
+specifies the name of the separator condition, and sets the temperature
+and pressure. Several lines may be used to build up a multi-stage
+separator condition.</p>
+
+<p><span class="keyword">SEPCOND</span> must be used to define a separator condition
+before it is used by a well, or is given a target.</p>
+
+<p>A separator stage may be re-specified, or the whole separator condition
+re-specified. The separator stages must, however, be introduced in
+increasing order, in order to prevent missing stages when the simulation
+starts.</p>
+
+<p>The default limit on the number of stages per separator is 5. This
+may be increased using item 5 in the <a href="WELLDIMS.html#WELLDIMS"> WELLDIMS</a> keyword. The default limit on the number
+of separators (including the <a href="FIELDSEP.html#FIELDSEP"> FIELDSEP</a> separator) is 4. This may be increased using item 8 in the <span class="keyword">WELLDIMS</span> keyword.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the items of data described below, and each terminated with a slash
+(/).</p>
+
+<p>The records can be terminated early with a slash (/), the remaining
+items taking default values. Defaults can also be specified by a null
+repeat count of the form <samp class="codeph">n*</samp>, where n is the number
+of consecutive items to be defaulted.</p>
+
+<p>The set of records is ended by a blank record, containing only
+a slash.</p>
+
+<ol>
+<li> The separator name <p>(up to 8 characters).</p>
+ </li>
+
+<li> The name of the group for which this separator acts as a default. <p>DEFAULT: FIELD</p>
+<p>This separator is automatically assigned as
+the default separator to all wells that can trace their parentage
+to this group. If a well belonging to this group has a separator explicitly
+assigned to it using either <span class="keyword">WSEPCOND</span> or <a href="WELLSPEC.html#WELLSPEC"> WELLSPEC</a>, it takes precedence
+over a default separator defined here. If this group contains subgroups,
+which also have default separators set, then wells belonging to the
+subgroups take their separator from their parent subgroup and not
+from this group.</p>
+ <p>For a multistage separator, the group name
+may be entered at any stage; it applies to the whole separator and
+not just that stage. To avoid confusion, it is best to enter the group
+name for the first stage only, or for all stages.</p>
+<p>A group name
+root, enclosed in quotes and ending with an asterisk (*), can be used
+to assign this separator as the default separator to several groups
+in one record.</p>
+<p>If this item is set to a blank (' '), the separator
+is not assigned as a default separator to any group.</p>
+ </li>
+
+<li> The stage index. <p>DEFAULT: 1</p>
+ </li>
+
+<li> The separator stage temperature. <p>UNITS: °C (<samp class="codeph">METRIC</samp>), °F (<samp class="codeph">FIELD</samp>), °C (<samp class="codeph">LAB</samp>), °C (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 15.56 °C (<samp class="codeph">METRIC</samp>, <samp class="codeph">LAB</samp> and <samp class="codeph">PVT-M</samp>), 60 °F (<samp class="codeph">FIELD</samp>)</p>
+ </li>
+
+<li> The separator stage pressure. <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma
+(<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 1.01325 barsa (<samp class="codeph">METRIC</samp>), 14.6959 psia (<samp class="codeph">FIELD</samp>), 1 atma (<samp class="codeph">LAB</samp> and <samp class="codeph"><span class="keyword">PVT-M</span></samp>)</p>
+ </li>
+
+<li> This defines the destination of the liquid output from the separator.
+For all but the last stage in a separator, this is to a later stage,
+usually the next stage. 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top" width="13%"> <samp class="codeph">—1</samp> </td>
+
+<td valign="top" width="87%">For a stage before the last, this volume is added to the stock
+tank oil. Care must be taken, as this may result in the accumulation
+of oil volumes at different pressures or temperatures.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="13%"> <samp class="codeph">0</samp> </td>
+
+<td valign="top" width="87%">Codes for the next stage for all except the last stage, and
+the stock tank for the last stage. This is the default value.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="13%"> <samp class="codeph">&gt;0</samp> </td>
+
+<td valign="top" width="87%">Positive values code for a stage index.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: 0</p>
+  </li>
+
+<li> This defines the destination of the vapor output from the field
+separator. 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top" width="13%"> <samp class="codeph">0</samp> </td>
+
+<td valign="top" width="87%">Codes for the stock tank or field separator vapor. This is
+the default value.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="13%"> <samp class="codeph">&gt;0</samp> </td>
+
+<td valign="top" width="87%">Positive values code for a stage index.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+This is usually accumulated with the stock tank or field separator
+vapor, the volume rate being taken by conversion to a volume at standard
+conditions. This is done when the destination stage is set to 0. <p>In the unusual case in which the vapor output from the field separator
+is fed to a subsequent stage, a non-default value of the destination
+stage may be entered. Note that, in this case, if intermediate stage
+separator gas is used as a source of reinjection gas, ECLIPSE 300
+will calculate and report export oil rates. This export rate will
+be less than the produced oil rate which is the ‘formation’ oil rate
+prior to any reinjection work. The difference then between the formation
+oil and export oil is the oil vapor that is contained in the reinjected
+gas, that would otherwise have been separated in the subsequent separator
+stage. See also the discussion under <a href="../ecl_td/wellmode_Group_injection_control_options.html#wellmode_export_tables">"Export tables"</a> in the <cite>ECLIPSE Technical Description</cite>. </p>
+ <p>DEFAULT:
+0</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The 0 value for item 7 does not mean the same as the 0
+value of item 6.</span></div>
+</li>
+
+<li> The K-value table number. <p>This is required if a K-value table
+rather than an equation of state is being used for the separator.
+The default value is 0, indicating no K-value table, and implying
+an equation of state calculation.</p>
+ </li>
+
+<li> The gas plant table number. <p>This is required if a gas plant
+table rather than an equation of state is being used for the separator.
+The default value is 0, indicating no gas plant table, and implying
+an equation of state calculation.</p>
+ </li>
+
+<li> The surface equation of state number. <p>This should only be
+specified if multiple equations of state are used. When this option
+is employed, it may still be defaulted, in which case the fluid from
+a well is flashed using the equation of state for the cells in which
+the well is completed. If an equation of state index is specified,
+this forces the use of a given surface equation of state. The value
+must lie between 1 and the maximum number of equations of state for
+surface conditions specified by <a href="TABDIMS.html#TABDIMS.NMEOSS"> NMEOSS</a> in keyword <span class="keyword">TABDIMS</span>. See also the discussion under <a href="../ecl_td/eos_regions_Equations_of_State_Regions.html#eos_regions_equations_of_state_regions">"Equations of state
+regions"</a> in the <cite>ECLIPSE Technical Description</cite>. </p>
+ </li>
+
+<li> Temperature for NGL density evaluation. <p>UNITS: °C (<samp class="codeph">METRIC</samp>), °F (<samp class="codeph">FIELD</samp>), °C (<samp class="codeph">LAB</samp>), °C (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+<li> Pressure for NGL density evaluation. <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+</ol>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If both items 11 and 12 are specified, an equation of state
+NGL density calculation is performed, rather than using Amagat's law.</span></div>
+
+<p>For the usual case, in which a separator chain is connected such
+that the liquid output from each stage feeds the next, the default
+values of the destination stages may be used.</p>
+
+<div class="section" id="sepcond_related_keywords"><a name="sepcond_related_keywords"><!-- --></a><h4 class="sectiontitle">Related keywords</h4><p>For well production, surface volumes are calculated using a well
+separator, defined by the <a href="WSEPCOND.html#WSEPCOND"> WSEPCOND</a> keyword. If a well separator is not defined, the group separator
+defined by this keyword <span class="keyword">SEPCOND</span> is used. If the
+group separator is not defined, the field separator defined by the <a href="FIELDSEP.html#FIELDSEP">  FIELDSEP</a> keyword is
+used. If the field separator is not defined, a single flash to standard
+conditions given by <a href="STCOND.html#STCOND"> STCOND</a> is used.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The stock tank volume of oil reported is
+the volume of oil at the last separator stage, i.e. the last stage
+defines stock tank conditions for the hydrocarbon liquid. It is therefore
+usual for the last stage for liquid to be the same as the defined
+standard conditions.     <p>The stock tank volume of gas is obtained
+from the total gas molar rate by assuming that the gas is a perfect
+gas, using <math><mtext>V</mtext><mi> </mi><mo>=</mo><mi> </mi><mi>n</mi><mtext>R</mtext>
+<mi> </mi><mo>(</mo><msup><mrow><mtext>T</mtext>
+</mrow><mrow><mi>S</mi><mi>C</mi></mrow></msup><mi> </mi><mo>/</mo><mi> </mi><msup><mrow><mtext>P</mtext>
+</mrow><mrow><mi>S</mi><mi>C</mi></mrow></msup><mo>)</mo></math> for <math><mi>n</mi></math> moles. The gas volume is therefore always reported at standard
+conditions.</p>
+</span></div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

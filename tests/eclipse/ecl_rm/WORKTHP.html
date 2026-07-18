@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WORKTHP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WORKTHP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WORKTHP</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WORKTHP"><a name="WORKTHP"><!-- --></a>
+<h1 class="keyword">WORKTHP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="workthp.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="workthp.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d3008e45">                         x                   
+  </th>
+
+<th valign="top" id="d3008e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d3008e54">                         x                   
+  </th>
+
+<th valign="top" id="d3008e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d3008e45 d3008e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3008e48 d3008e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3008e45 d3008e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3008e48 d3008e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3008e45 d3008e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3008e48 d3008e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3008e45 d3008e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3008e48 d3008e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3008e45 d3008e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3008e48 d3008e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3008e45 d3008e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3008e48 d3008e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3008e45 d3008e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3008e48 d3008e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3008e45 d3008e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d3008e48 d3008e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword may be used to instruct ECLIPSE to perform a workover
+if a well is unable to produce at its THP limit, to reduce its water
+cut. The workover closes the connection that had the highest water
+cut, and optionally any connections below it, or plugs back the bottom
+of the perforations. The workover is performed at the end of the timestep
+in which the well dies, and the well is revived at the beginning of
+the next timestep to see if it can produce at the reduced water cut.
+If the well still cannot produce, workovers are performed at the end
+of each timestep until all the connections are closed.</p>
+
+<p>If the economic limit tolerance fraction has been set less than
+1.0 in keyword <a href="WLIMTOL.html#WLIMTOL">  WLIMTOL</a>, the timestep will be repeated after the workover has been
+performed. If connections are lumped together into completions (see
+keyword <a href="COMPLUMP.html#COMPLUMP"> COMPLUMP</a>), the workover closes all connections in the worst-offending completion
+(and optionally all below). If, in ECLIPSE 100, the well has any connections
+in its automatic opening queue (see item 6 of keyword <a href="COMPDAT.html#COMPDAT"> COMPDAT</a>) and which meet
+the minimum oil saturation requirement (if imposed with keyword <a href="WELSOMIN.html#WELSOMIN"> WELSOMIN</a>), one of these
+is opened if any connection is closed during a workover. See also
+keywords <a href="WORKLIM.html#WORKLIM"> WORKLIM</a> and <a href="GRUPRIG.html#GRUPRIG"> GRUPRIG</a> for
+limiting the rate at which workovers can be performed.</p>
+
+<p>The <span class="keyword">WORKTHP</span> keyword is followed by any number
+of records, each containing the following two items of data, and each
+terminated with a slash (/). The set of records must end with a blank
+record, containing only a slash (/).</p>
+
+<ol>
+<li>Well name, well name template, well list or well list template
+     <p>A template enclosed in quotes can be used to refer to multiple
+wells or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST">  WLIST</a>.</p>
+             </li>
+
+<li>Workover procedure if the well is unable to produce at its THP
+limit  
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">   
+<tbody>
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">NONE</samp> </td>
+
+<td valign="top" width="33.33333333333333%">No workover, let the well die</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">CON</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Shut connection with highest water cut</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">+CON</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Shut connection with highest water cut, and all below it (see
+keyword <a href="COMPORD.html#COMPORD"> COMPORD</a>)</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">PLUG</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Plug back the well (see keyword <a href="WPLUG.html#WPLUG"> WPLUG</a>)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+   <p>DEFAULT: <samp class="codeph">NONE</samp>     </p>
+</li>
+
+</ol>
+
+<p>End data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="section" id="workthp_example"><a name="workthp_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WORKTHP
+ 'P*'    CON  /
+ PROD2   NONE /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WAVAILIM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WAVAILIM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WAVAILIM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WAVAILIM"><a name="WAVAILIM"><!-- --></a>
+<h1 class="keyword">WAVAILIM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wavailim.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wavailim.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2820e45">  </th>
+
+<th valign="top" id="d2820e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2820e54"> x </th>
+
+<th valign="top" id="d2820e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2820e45 d2820e54 ">  </td>
+
+<td valign="top" headers="d2820e48 d2820e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2820e45 d2820e54 ">  </td>
+
+<td valign="top" headers="d2820e48 d2820e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2820e45 d2820e54 ">  </td>
+
+<td valign="top" headers="d2820e48 d2820e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2820e45 d2820e54 ">  </td>
+
+<td valign="top" headers="d2820e48 d2820e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2820e45 d2820e54 ">  </td>
+
+<td valign="top" headers="d2820e48 d2820e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2820e45 d2820e54 ">  </td>
+
+<td valign="top" headers="d2820e48 d2820e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2820e45 d2820e54 ">  </td>
+
+<td valign="top" headers="d2820e48 d2820e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2820e45 d2820e54 "> x </td>
+
+<td valign="top" headers="d2820e48 d2820e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword requests that the availability of injection fluids
+is to be taken into account when calculating injection rates. If the
+required injection target is greater than the amount of injection
+fluid available from the production system the injector goes onto
+availability control.</p>
+
+<p>If the injection stream originates from a particular source group
+or well (named in item 3 of <a href="GINJGAS.html#GINJGAS"> GINJGAS</a>, <a href="WINJGAS.html#WINJGAS"> WINJGAS</a>, <a href="GRUPINJE.html#GRUPINJE"> GRUPINJE</a> or <a href="WELLINJE.html#WELLINJE"> WELLINJE</a> when item 2
+is <span class="keyword">GV</span> or <span class="keyword">WV</span>), and the injection
+target exceeds the available gas from this source, the extra gas required
+is taken from the make-up gas stream if this is specified for the
+group or well with the injection target. If no make-up gas is specified,
+the behavior of the injection controls will depend on whether the
+keyword <span class="keyword">WAVAILIM</span> is entered. Without this keyword,
+the injection target is honored by injecting more gas than is available,
+resulting in a negative excess rate in the gas accounting table. If
+the <span class="keyword">WAVAILIM</span> keyword is entered, the injection
+rate is limited by the amount of gas available for injection from
+the source group or well. When the injection stream originates from
+a source group, the gas available for injection is its produced gas,
+minus its fuel and sales gas (unless specified otherwise in <a href="WTAKEGAS.html#WTAKEGAS"> WTAKEGAS</a>), plus its
+advance gas rate specified in <a href="GADVANCE.html#GADVANCE"> GADVANCE</a> (unless the 99A release default mixing tank treatment has
+been enabled by setting <a href="OPTIONS3.html#options3.30">item
+30</a> in <span class="keyword">OPTIONS3</span> to 2). When the injection
+stream originates from a source well, the gas available for injection
+is its produced gas, plus its advance gas specified in <a href="WADVANCE.html#WADVANCE"> WADVANCE</a> (unless the
+99A release default mixing tank treatment has been enabled by setting <a href="OPTIONS3.html#options3.30">item 30</a> in <span class="keyword">OPTIONS3</span> to 2).</p>
+
+<p>If a limited source of gas is shared between two or more injection
+groups, the injection calculation may have to be iterated a number
+of times to match the groups’ share of the available gas with their
+injection capability (see keyword <a href="GCONTOL.html#GCONTOL"> GCONTOL</a>).</p>
+
+<p>The <span class="keyword">WAVAILIM</span> keyword contain no items.</p>
+
+<p>See also <a href="../ecl_td/wellmode_Group_injection_control_options.html#wellmode_group_injection_control_options">"Group injection
+control options"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

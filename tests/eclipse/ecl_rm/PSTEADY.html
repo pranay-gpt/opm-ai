@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PSTEADY"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PSTEADY"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PSTEADY</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="PSTEADY"><a name="PSTEADY"><!-- --></a>
+<h1 class="keyword">PSTEADY</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="psteady.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="psteady.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1908e45">                         x </th>
+
+<th valign="top" id="d1908e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1908e54"> </th>
+
+<th valign="top" id="d1908e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1908e45 d1908e54 ">                         x </td>
+
+<td valign="top" headers="d1908e48 d1908e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1908e45 d1908e54 "> </td>
+
+<td valign="top" headers="d1908e48 d1908e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1908e45 d1908e54 "> </td>
+
+<td valign="top" headers="d1908e48 d1908e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1908e45 d1908e54 "> </td>
+
+<td valign="top" headers="d1908e48 d1908e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1908e45 d1908e54 "> </td>
+
+<td valign="top" headers="d1908e48 d1908e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1908e45 d1908e54 "> </td>
+
+<td valign="top" headers="d1908e48 d1908e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1908e45 d1908e54 "> </td>
+
+<td valign="top" headers="d1908e48 d1908e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1908e45 d1908e54 "> </td>
+
+<td valign="top" headers="d1908e48 d1908e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword advances the simulator to a steady state. Read the
+notes at the end of the keyword. The keyword is followed by the following
+items of data, denoting the day, month and year of the date required
+for the <strong> end</strong> of the simulation. This is the date that is given
+to the restart file, from which further predictive runs take place;
+and it is only used for output to the restart file. Further data specifies
+the criteria for the determination of whether steady-state has been
+reached. The keyword is terminated with a slash (/).</p>
+
+<ol>
+<li>Day   <p>Day of the month (an integer between 1 and 31).</p>
+ 
+           </li>
+
+<li>Month<p>Name of the month (<samp class="codeph">JAN</samp>, <samp class="codeph">FEB</samp>, <samp class="codeph">MAR</samp>, <samp class="codeph">APR</samp>, <samp class="codeph">MAY</samp>, <samp class="codeph">JUN</samp>, <samp class="codeph">JUL</samp>, <samp class="codeph">AUG</samp>, <samp class="codeph">SEP</samp>, <samp class="codeph">OCT</samp>, <samp class="codeph">NOV</samp>, <samp class="codeph">DEC</samp>).</p>
+                <p>For July, the abbreviation
+JLY is a valid alternative.</p>
+             </li>
+
+<li>Year <p>The year (a four-figure integer).</p>
+                <p>DEFAULT: Is the date given in the <a href="START.html#START"> START</a> keyword if that has been given previously?
+There is no default if the <span class="keyword">START</span> keyword is not
+present before this keyword; this item cannot be defaulted in this
+situation.</p>
+</li>
+
+<li>  Measure of ‘closeness’ to steady-state where i refers to grid
+blocks, PV is the pore volume and Q represents all of pressure and
+the three saturations (if appropriate) and the scaling factor S is
+1 for the saturations and brine and is the field average pressure
+for the pressure.      
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">MAXABS</samp> </td>
+
+<td valign="top"> <math><mrow>
+<mfrac><mrow><mi>M</mi><mi>a</mi><mi>x</mi></mrow>
+<mrow><mi>i</mi></mrow></mfrac><mfrac><mrow><mrow><mo>|</mo><msubsup><mrow><mi>Q</mi></mrow><mrow><mi>i</mi>
+</mrow><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow>
+</msubsup><mo>⁢</mo><mo>−</mo><mtext> </mtext><msubsup>
+<mrow><mi>Q</mi></mrow><mrow><mi>i</mi></mrow><mrow>
+<mi>n</mi></mrow></msubsup><mo>|</mo></mrow></mrow>
+<mrow><mi>S</mi><mo>⋅</mo><mi>Δ</mi>
+<mi>t</mi></mrow></mfrac></mrow></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">L2</samp> </td>
+
+<td valign="top"> <math><mrow><mfrac><mrow>
+<msqrt><mrow><munder><mrow><mi>Σ</mi>
+</mrow><mrow><mi>i</mi></mrow></munder><msup><mrow>
+<mo>(</mo><mrow><mi>P</mi><mi>V</mi><mrow><mo>(</mo>
+<msubsup><mrow><mi>Q</mi></mrow><mrow><mi>i</mi>
+</mrow><mrow><mi>n</mi><mtext>+1</mtext></mrow>
+</msubsup><mrow><mo>-</mo><msubsup><mrow><mi>Q</mi>
+</mrow><mrow><mi>i</mi></mrow><mrow><mi>n</mi></mrow>
+</msubsup></mrow><mo>)</mo></mrow></mrow><mo>)</mo>
+</mrow><mrow><mn>2</mn></mrow></msup></mrow></msqrt>
+</mrow><mrow><mi>Δ</mi><mi>t</mi><mrow><munder><mrow>
+<mtext> </mtext><mtext> </mtext><mtext> </mtext><mi>Σ</mi></mrow><mrow><mi>i</mi></mrow>
+</munder><mrow><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mi>P</mi><mi>V</mi><msubsup>
+<mrow><mi>Q</mi></mrow><mrow><mi>i</mi></mrow><mrow>
+<mi>n</mi><mtext>+1</mtext></mrow></msubsup></mrow>
+</mrow></mrow></mfrac></mrow></math> </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">MAXABS</samp>  </p>
+             </li>
+
+<li>Tolerance for determining if pressure has reached steady-state.
+            </li>
+
+<li>Tolerance for determining if the oil saturation has reached steady-state.
+            </li>
+
+<li>Tolerance for determining if the water saturation has reached
+steady-state.             </li>
+
+<li>Tolerance for determining if the gas saturation has reached steady-state.
+            </li>
+
+<li>Tolerance for determining if the brine concentration has reached
+steady-state.                <p>DEFAULT: If the chosen norm is <samp class="codeph">MAXABS</samp> the defaults are  1.0 e<sup>–3</sup> for the saturations
+and brine concentration and  1.0 e<sup>–2 </sup>for pressure. If the
+norm is L2 then the defaults are all 1.0 e<sup>–6</sup>. </p>
+   
+    </li>
+
+<li>Upper limit for timestepping to ensure that the calculation doesn’t
+run for ever if the steady state not found. The run will end when
+the simulation reaches this time.                <p>DEFAULT: 365000</p>
+                <p>UNITS: day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+             </li>
+
+<li>Lower limit for timestepping to ensure that the calculation doesn’t
+end too soon. The run will not end before the simulation reaches this
+time.                <p>DEFAULT: 0</p>
+                <p>UNITS: day
+(<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+             </li>
+
+<li>Option to improve the initial equilibration of the model when
+analytic aquifers, such as <a href="AQUCHWAT.html#AQUCHWAT"> AQUCHWAT</a>, <a href="AQUCHGAS.html#AQUCHGAS">  AQUCHGAS</a>, <a href="AQUFETP.html#AQUFETP"> AQUFETP</a> and <a href="AQUCT.html#AQUCT"> AQUCT</a>, are used in the
+solution section. This option should help to obtain a better estimate
+of the steady-state and therefore reduce the simulation time needed
+to reach a steady-state. <p>Either YES or NO</p>
+                <p>DEFAULT: NO</p>
+</li>
+
+</ol>
+
+<div class="section" id="psteady_notes"><a name="psteady_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><p>When this keyword
+is used ECLIPSE reads the data set up to the first timestepping keyword.
+The simulator is run up to a maximum amount of time specified in item
+10 or it automatically stops when it believes, based on items 4-9,
+that a steady-state has been reached. <span class="keyword">SUMMARY</span> section
+keywords <span class="keyword">PSSPR</span>, <span class="keyword">PSSS</span>(<span class="keyword">PSSSO</span>, <span class="keyword">PSSSW</span>, <span class="keyword">PSSSG</span>) output the logarithm of the error and switch 77 of the <a href="DEBUG.html#DEBUG"> DEBUG</a> keyword outputs the
+actual errors. At the end of a successful run a restart file is produced
+(usually number 1 but check the print file to be sure) and this restart
+file is dated with the date given in items 1-3 regardless of what
+time the simulator is reporting as being current.</p>
+<p>While timestepping
+keywords are ignored the <span class="keyword">SCHEDULE</span> section is read,
+and honored, up to the first timestepping keyword. This means that
+steady-states can be generated with wells producing. <strong>However, steady-states
+may not exist in all cases. </strong> If wells are changing controls a steady-state
+will not be achieved. If it is desired to have a steady state with
+a well that is open, but the well can only flow near the steady-state
+solution then there is a problem as the well cannot be opened later
+in the <span class="keyword">SCHEDULE</span> section as no more timestep keywords
+will be read. There are two options. The keyword option means ensuring
+that the well is tested for opening by using the <a href="WTEST.html#WTEST"> WTEST</a> keyword, or the <a href="ACTIONX.html#ACTIONX"> ACTIONX</a> keyword can be
+used to open the well at a date sufficiently later that it can operate.
+item 11 can be helpful to ensure the code doesn’t end before the <span class="keyword">ACTION</span> is triggered.</p>
+<p>A restart file will be produced
+in all cases so it is necessary to check in the print file that steady-state
+was successfully accomplished.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"><span class="keyword">PSTEADY</span> cannot be used in a restart run or a parallel run.</span></div>
+</div>
+
+<div class="section" id="psteady_example"><a name="psteady_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>PSTEADY
+1 JAN 1980 MAXABS 5* 5000.0 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

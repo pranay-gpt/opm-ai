@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Low salinity option"/>
+<meta name="DC.subject" content="Fluid model, Brine model, Brine model low salinity"/>
+<meta name="keywords" content="Fluid model, Brine model, Brine model low salinity"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="brinetra_low_salinity_option"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Low salinity option</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="brinetra_low_salinity_option"><a name="brinetra_low_salinity_option"><!-- --></a>
+<h1 class="topictitle1">Low salinity option</h1>
+
+
+ <div>
+<p>ECLIPSE 100</p>
+
+<p>This option provides a mechanism for modeling the salinity dependence
+of the oil and water relative permeabilities and the water-oil capillary
+pressure as functions of the salt concentration. The gas relative
+permeability and the gas-oil capillary pressure are assumed to be
+independent of salinity. This option is selected by specifying the <a href="../ecl_rm/LOWSALT.html#LOWSALT">LOWSALT</a> keyword in the <span class="keyword">RUNSPEC</span> section. The <a href="../ecl_rm/SATNUM.html#SATNUM">SATNUM</a> and <a href="../ecl_rm/LWSLTNUM.html#LWSLTNUM">LWSLTNUM</a> keywords are used to define the high and low salinity saturation
+regions respectively. (The <a href="../ecl_rm/LSNUM.html#LSNUM">LSNUM</a> keyword may be used as an abbreviated alias for the <span class="keyword">LWSLTNUM</span> keyword.)</p>
+
+<p>The salinity dependence is modeled as a two stage process. Firstly,
+the oil and water saturation (horizontal) end-points are interpolated
+between the high and low table values. Secondly, this set of interpolated
+saturation end-points is used to look up the high and low salinity
+saturation functions in the high and low salinity saturation tables
+using the associated high and low relative permeability and capillary
+pressure (vertical) end-points. The resultant looked-up values of
+high and low salinity saturation functions are then combined using
+a further interpolation. Therefore, the saturation function table
+lookups are performed using scaled saturation end-points; that is,
+two-point, horizontal end-point scaling is applied even when end-point
+scaling has not been specified via the <a href="../ecl_rm/ENDSCALE.html#ENDSCALE">ENDSCALE</a> keyword.</p>
+
+<p>Given two sets of saturation functions, one for high salinity and
+one for low salinity, the oil and water table saturation end points
+are interpolated firstly according to:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.lowsalinity.eq3"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>o</mi>
+</mrow><mrow><mi>i</mi></mrow></msubsup><mo>=</mo>
+<mrow><msub><mrow><mi>F</mi></mrow><mrow><mn>1</mn>
+</mrow></msub><msubsup><mrow><mo>⁢</mo><mi>S</mi>
+</mrow><mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow>
+<mrow><mi>l</mi></mrow></msubsup></mrow><mo>+</mo>
+<mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mrow><mi>F</mi></mrow><mrow><mn>1</mn></mrow>
+</msub></mrow><mo>)</mo></mrow><msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi>
+<mi>o</mi></mrow><mrow><mi>h</mi></mrow></msubsup>
+</mrow></mrow></mtd></mtr><mtr><mtd><mrow><msubsup>
+<mrow><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi>
+<mi>r</mi></mrow><mrow><mi>i</mi></mrow></msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi></mrow><mrow><mn>1</mn></mrow></msub><msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>r</mi>
+</mrow><mrow><mi>l</mi></mrow></msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>1</mn>
+</mrow></msub></mrow><mo>)</mo></mrow><msubsup><mrow>
+<mo>⁢</mo><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi>
+<mi>r</mi></mrow><mrow><mi>h</mi></mrow></msubsup>
+</mrow></mrow></mtd></mtr><mtr><mtd><mrow><msubsup>
+<mrow><mi>S</mi></mrow><mrow><mi>w</mi><mi>m</mi>
+<mi>a</mi><mi>x</mi></mrow><mrow><mi>i</mi></mrow>
+</msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi>
+</mrow><mrow><mn>1</mn></mrow></msub><mo>⁢</mo>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow><mrow><mi>l</mi>
+</mrow></msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>1</mn></mrow></msub></mrow>
+<mo>)</mo></mrow><msubsup><mrow><mo>⁢</mo><mi>S</mi>
+</mrow><mrow><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow><mrow><mi>h</mi></mrow></msubsup></mrow></mrow>
+</mtd></mtr><mtr><mtd><mrow><msubsup><mrow><mi>S</mi>
+</mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi><mi>r</mi>
+</mrow><mrow><mi>i</mi></mrow></msubsup><mo>=</mo>
+<mrow><msub><mrow><mi>F</mi></mrow><mrow><mn>1</mn>
+</mrow></msub><mo>⁢</mo><msubsup><mrow><mi>S</mi>
+</mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi><mi>r</mi>
+</mrow><mrow><mi>l</mi></mrow></msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>1</mn>
+</mrow></msub></mrow><mo>)</mo></mrow><msubsup><mrow>
+<mo>⁢</mo><mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi>
+<mi>c</mi><mi>r</mi></mrow><mrow><mi>h</mi></mrow>
+</msubsup></mrow></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi><mi>c</mi><mi>r</mi></mrow><mrow><mi>i</mi>
+</mrow></msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi>
+</mrow><mrow><mn>1</mn></mrow></msub><msubsup><mrow>
+<mo>⁢</mo><mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi>
+<mi>c</mi><mi>r</mi></mrow><mrow><mi>l</mi></mrow>
+</msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow>
+<mrow><mn>1</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi><mi>c</mi><mi>r</mi></mrow><mrow>
+<mi>h</mi></mrow></msubsup></mrow></mrow></mtd></mtr>
+</mtable></mrow></math> 
+</td><td align="right">[Eq. 206.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mn>1</mn></msub></math> </td>
+
+<td valign="top">is a weighting function which is tabulated as a function of
+the salt concentration and is defined in the second column of the <a href="../ecl_rm/LSALTFNC.html#LSALTFNC"> LSALTFNC</a> keyword.    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow></msub>
+</math> </td>
+
+<td valign="top">is the saturation table derived connate water saturation. 
+ </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>c</mi><mi>r</mi></mrow></msub>
+</math> </td>
+
+<td valign="top">is the saturation table derived critical water saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow></msub></math> </td>
+
+<td valign="top">is the saturation table derived maximum water saturation. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi>
+<mi>r</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the saturation table derived critical oil saturation in
+water.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi><mi>c</mi>
+<mi>r</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the saturation table derived critical oil saturation in
+gas.</td>
+
+</tr>
+
+<tr>
+<td valign="top">superscripts <math>
+<mrow><mi>h</mi></mrow></math>, <math><mrow><mi>l</mi>
+</mrow></math>, <math>
+<mrow><mi>i</mi></mrow></math> </td>
+
+<td valign="top">denote the high, low and interpolated table saturation end-points
+respectively.        </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Lower case subscripts and superscripts are used here to signify
+the saturation table derived end-points. Upper case versions are used
+subsequently to signify scaled end-points.</p>
+
+<p>The high and low water-oil capillary pressures and water and oil
+relative permeabilities are looked up in the high and low salinity
+saturation tables by applying two-point saturation (horizontal) end-point
+scaling:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.2pointsat"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi>
+</mrow><mrow><mi>h</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>w</mi></mrow></msub><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow><mrow><mi>i</mi>
+</mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>S</mi></mrow><mrow><mi>w</mi><mi>m</mi><mi>a</mi>
+<mi>x</mi><mo>⁡</mo></mrow><mrow><mi>i</mi></mrow>
+</msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi>
+<mi>m</mi><mi>a</mi><mi>x</mi></mrow><mrow><mi>h</mi>
+</mrow></msubsup><mo>)</mo></mrow></mtd>
+</mtr><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi>
+</mrow><mrow><mi>l</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>w</mi></mrow></msub><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow><mrow><mi>i</mi>
+</mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>S</mi></mrow><mrow><mi>w</mi><mi>m</mi><mi>a</mi>
+<mi>x</mi><mo>⁡</mo></mrow><mrow><mi>i</mi></mrow>
+</msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi>
+<mi>m</mi><mi>a</mi><mi>x</mi></mrow><mrow><mi>l</mi>
+</mrow></msubsup><mo>)</mo></mrow></mtd>
+</mtr><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext>
+<mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi></mrow>
+<mrow><mi>h</mi></mrow></msubsup><mo>=</mo><mi>f</mi>
+<mo>(</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>w</mi></mrow></msub><msubsup><mrow><mo>,</mo>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>r</mi></mrow><mrow><mi>i</mi></mrow>
+</msubsup><mo>,</mo><mtext> </mtext><msubsup><mrow><mi>S</mi></mrow><mrow><mi>w</mi><mi>m</mi><mi>a</mi>
+<mi>x</mi><mo>⁡</mo></mrow><mrow><mi>i</mi></mrow>
+</msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi><mi>m</mi>
+<mi>a</mi><mi>x</mi></mrow><mrow><mi>h</mi></mrow>
+</msubsup><mo>)</mo></mrow></mtd></mtr>
+<mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi></mrow><mrow>
+<mi>l</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>w</mi></mrow></msub><msubsup><mrow><mo>,</mo>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>r</mi></mrow><mrow><mi>i</mi></mrow>
+</msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>S</mi></mrow><mrow><mi>w</mi><mi>m</mi><mi>a</mi>
+<mi>x</mi><mo>⁡</mo></mrow><mrow><mi>i</mi></mrow>
+</msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi><mi>m</mi>
+<mi>a</mi><mi>x</mi></mrow><mrow><mi>l</mi></mrow>
+</msubsup><mo>)</mo></mrow></mtd></mtr>
+<mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>g</mi>
+</mrow><mrow><mi>h</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>o</mi><mi>g</mi></mrow></msub>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>o</mi><mi>g</mi><mi>c</mi><mi>r</mi>
+</mrow><mrow><mi>i</mi></mrow></msubsup><mo>,</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>m</mi><mi>a</mi><mi>x</mi><mo>⁡</mo></mrow></msub>
+<mo>,</mo><msubsup><mrow><mtext> </mtext><mi>k</mi>
+</mrow><mrow><mi>r</mi><mi>o</mi><mi>m</mi><mi>a</mi>
+<mi>x</mi></mrow><mrow><mi>h</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow>
+<mi>r</mi><mi>o</mi><mi>g</mi></mrow><mrow><mi>l</mi>
+</mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi>
+<mi>g</mi></mrow></msub><msubsup><mrow><mo>,</mo><mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi><mi>c</mi>
+<mi>r</mi></mrow><mrow><mi>i</mi></mrow></msubsup><mo>,</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi>
+<mi>m</mi><mi>a</mi><mi>x</mi><mo>⁡</mo></mrow>
+</msub><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>m</mi>
+<mi>a</mi><mi>x</mi></mrow><mrow><mi>l</mi></mrow>
+</msubsup><mo>)</mo></mrow></mtd></mtr>
+<mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>w</mi>
+</mrow><mrow><mi>h</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>o</mi><mi>w</mi></mrow></msub>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi><mi>r</mi>
+</mrow><mrow><mi>i</mi></mrow></msubsup><mo>,</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>m</mi><mi>a</mi><mi>x</mi><mo>⁡</mo></mrow></msub>
+<mo>,</mo><msubsup><mrow><mtext> </mtext><mi>k</mi>
+</mrow><mrow><mi>r</mi><mi>o</mi><mi>m</mi><mi>a</mi>
+<mi>x</mi></mrow><mrow><mi>h</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow>
+<mi>r</mi><mi>o</mi><mi>w</mi></mrow><mrow><mi>l</mi>
+</mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi>
+<mi>w</mi></mrow></msub><msubsup><mrow><mo>,</mo><mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi>
+<mi>r</mi></mrow><mrow><mi>i</mi></mrow></msubsup><mo>,</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi>
+<mi>m</mi><mi>a</mi><mi>x</mi><mo>⁡</mo></mrow>
+</msub><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>m</mi>
+<mi>a</mi><mi>x</mi></mrow><mrow><mi>l</mi></mrow>
+</msubsup><mo>)</mo></mrow></mtd></mtr>
+</mtable></mrow></math> 
+</td><td align="right">[Eq. 206.2]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><mi>f</mi>
+</mrow></math> </td>
+
+<td valign="top">signifies the end-point scaling operation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">is the grid block water saturation. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the oil saturation for oil relative permeability to water.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the oil saturation for oil relative permeability to gas. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi><mi>m</mi><mi>a</mi>
+<mi>x</mi><mo>⁡</mo></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the maximum oil saturation,  <math><mrow>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>=</mo>
+<mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<mtext> </mtext><msubsup><mrow><mi>S</mi></mrow><mrow>
+<mi>w</mi><mi>c</mi><mi>o</mi></mrow><mrow><mi>i</mi>
+</mrow></msubsup></mrow><mrow><mo>-</mo><mtext> </mtext>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>g</mi><mi>c</mi><mi>o</mi></mrow><mrow><mi>h</mi></mrow>
+</msubsup></mrow><mo>)</mo></mrow></math>.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>g</mi><mi>c</mi><mi>o</mi>
+</mrow></msub></mrow></math> </td>
+
+<td valign="top">is the saturation table derived connate gas saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi><mi>m</mi>
+<mi>a</mi><mi>x</mi><mo>⁡</mo></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">is the saturation table derived maximum water relative permeability. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>m</mi>
+<mi>a</mi><mi>x</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the saturation table derived maximum oil relative permeability.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi>
+<mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">is the saturation table derived maximum oil-water capillary
+pressure.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>For the default three-phase oil relative permeability model, the
+oil saturations used to look up the oil relative permeabilities are:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.oilsats.eq1"/>
+ <math><mrow><mtable><mtr><mtd><mrow><mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi></mrow></msub>
+</mrow><mo>=</mo><mtext> </mtext><mrow><mo>(</mo><mn>1</mn><mo>⁢</mo><mtext> </mtext><mrow><mo>-</mo>
+<mtext> </mtext><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>w</mi></mrow></msub><mo>-</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub></mrow>
+<mo>)</mo></mrow></mrow></mtd></mtr><mtr><mtd><mrow>
+<mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi>
+<mi>g</mi></mrow></msub></mrow><mo>=</mo><mtext> </mtext>
+<mrow><mo>(</mo><mn>1</mn><mo>⁢</mo><mtext> </mtext>
+<mrow><mo>-</mo><mtext> </mtext><msub><mrow><mtext> </mtext><mi>S</mi></mrow><mrow><mi>w</mi></mrow>
+</msub><mo>-</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>g</mi></mrow></msub></mrow><mo>)</mo></mrow>
+</mrow></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 206.3]
+              </td></tr></tbody></table>
+<p>For the Stone 1 and Stone 2 three-phase oil relative permeability
+models, the oil saturations used to look up the oil relative permeabilities
+are:<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.oilrelperms"/>
+ <math><mrow><mtable><mtr><mtd><mrow><mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi></mrow></msub>
+</mrow><mo>=</mo><mtext> </mtext><mrow><mo>(</mo><mn>1</mn><mo>⁢</mo><mtext> </mtext><mrow><mo>-</mo>
+<mtext> </mtext><msub><mrow><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>w</mi></mrow></msub></mrow><mo>)</mo>
+</mrow></mrow></mtd></mtr><mtr><mtd><mrow><mrow><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi>
+</mrow></msub></mrow><mo>=</mo><mtext> </mtext><mrow>
+<mo>(</mo><mn>1</mn><mo>⁢</mo><mtext> </mtext><mrow>
+<mo>-</mo><mtext> </mtext><msub><mrow><mtext> </mtext>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>g</mi>
+</mrow></msub><mo>-</mo><mtext> </mtext><msubsup><mrow>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow><mrow><mi>i</mi></mrow>
+</msubsup></mrow><mo>)</mo></mrow></mrow></mtd></mtr>
+</mtable></mrow></math> 
+</td><td align="right">[Eq. 206.4]
+              </td></tr></tbody></table></p>
+
+<p>Finally, the relative permeabilities and capillary pressure are
+interpolated according to:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.relperms.cappressure"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi>
+</mrow><mrow><mi>i</mi></mrow></msubsup><mo>=</mo>
+<mrow><msub><mrow><mi>F</mi></mrow><mrow><mn>1</mn>
+</mrow></msub><msubsup><mrow><mtext> </mtext><mi>k</mi>
+</mrow><mrow><mi>r</mi><mi>w</mi></mrow><mrow><mi>l</mi></mrow></msubsup></mrow><mo>+</mo><mrow><mrow>
+<mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>1</mn></mrow></msub></mrow>
+<mo>)</mo></mrow><msubsup><mrow><mi>k</mi></mrow>
+<mrow><mi>r</mi><mi>w</mi></mrow><mrow><mi>h</mi>
+</mrow></msubsup></mrow></mrow></mtd></mtr><mtr><mtd>
+<mrow><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow>
+<mrow><mi>r</mi><mi>o</mi><mi>w</mi></mrow><mrow>
+<mi>i</mi></mrow></msubsup><mo>=</mo><mrow><msub>
+<mrow><mi>F</mi></mrow><mrow><mn>1</mn></mrow></msub>
+<mo>⁢</mo><msubsup><mrow><mtext> </mtext><mi>k</mi>
+</mrow><mrow><mi>r</mi><mi>o</mi><mi>w</mi></mrow>
+<mrow><mi>l</mi></mrow></msubsup></mrow><mo>+</mo>
+<mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mrow><mi>F</mi></mrow><mrow><mn>1</mn></mrow>
+</msub></mrow><mo>)</mo></mrow><msubsup><mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>w</mi>
+</mrow><mrow><mi>h</mi></mrow></msubsup></mrow></mrow>
+</mtd></mtr><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi>
+<mi>g</mi></mrow><mrow><mi>i</mi></mrow></msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi></mrow><mrow><mn>1</mn></mrow></msub><mo>⁢</mo><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi>
+<mi>g</mi></mrow><mrow><mi>l</mi></mrow></msubsup>
+</mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn>
+<mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow>
+<mn>1</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>g</mi></mrow><mrow><mi>h</mi></mrow>
+</msubsup></mrow></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi></mrow><mrow><mi>i</mi></mrow>
+</msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi>
+</mrow><mrow><mn>2</mn></mrow></msub><msubsup><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi>
+</mrow><mrow><mi>l</mi></mrow></msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>2</mn>
+</mrow></msub></mrow><mo>)</mo></mrow><msubsup><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi>
+</mrow><mrow><mi>h</mi></mrow></msubsup></mrow></mrow>
+</mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 206.5]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">is the grid block gas saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mn>2</mn></msub></math> </td>
+
+<td valign="top">is a weighting function which is tabulated as a function of
+the salt concentration and is defined in the third column of the <span class="keyword">LSALTFNC</span> keyword. (Note that this defaults to the second
+column if the third column is defaulted.)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The gas relative permeability and gas-oil capillary pressure are
+assumed to be independent of salinity and are looked up directly in
+the high salinity gas saturation table. If the current grid block
+gas saturation exceeds the maximum gas saturation defined in the high
+salinity table, the values of gas relative permeability and gas-oil
+capillary pressure are assumed to remain constant at their corresponding
+maximum values.  </p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

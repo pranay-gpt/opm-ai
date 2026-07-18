@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="LSWL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lswl"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>LSWL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="lswl"><a name="lswl"><!-- --></a>
+<h1 class="keyword">LSWL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="lswl.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="lswl.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1296e45"> x </th>
+
+<th valign="top" id="d1296e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1296e54"> </th>
+
+<th valign="top" id="d1296e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1296e45 d1296e54 ">  </td>
+
+<td valign="top" headers="d1296e48 d1296e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1296e45 d1296e54 ">  </td>
+
+<td valign="top" headers="d1296e48 d1296e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1296e45 d1296e54 ">  </td>
+
+<td valign="top" headers="d1296e48 d1296e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1296e45 d1296e54 "> x </td>
+
+<td valign="top" headers="d1296e48 d1296e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1296e45 d1296e54 ">  </td>
+
+<td valign="top" headers="d1296e48 d1296e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1296e45 d1296e54 ">  </td>
+
+<td valign="top" headers="d1296e48 d1296e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1296e45 d1296e54 ">  </td>
+
+<td valign="top" headers="d1296e48 d1296e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1296e45 d1296e54 ">  </td>
+
+<td valign="top" headers="d1296e48 d1296e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">LSWL</span> keyword specifies the connate water
+saturation (that is, the smallest water saturation in a water saturation
+function table) within each grid block for scaling the low salinity
+(oil-wet) oil-water capillary pressure and oil relative permeability
+to water tables.</p>
+
+<p>The tabulated oil-water capillary pressure functions are scaled
+linearly between the connate water saturation defined using the <span class="keyword">LSWL</span> keyword and the maximum water saturation defined using
+the <a href="LSWU.html#lswu"> LSWU</a> keyword.</p>
+
+<p>The <span class="keyword">LSWL</span> keyword is also used for scaling the
+oil relative permeability curves.</p>
+
+<p>If the connate water saturation has additionally been specified
+using the <a href="LSWLPC.html#LSWLPC"> LSWLPC</a> keyword, this saturation end-point will be used instead for scaling
+the oil-water capillary pressure curves. The connate water saturation
+entered using <span class="keyword">LSWL</span> will then only be used to scale
+the oil relative permeability curves. </p>
+
+<p>The <span class="keyword">LSWL</span> keyword should only be used if water
+is present in the model and if both the end-point scaling and low
+salinity options have been selected via the <span class="keyword">RUNSPEC</span> keywords <a href="ENDSCALE.html#ENDSCALE"> ENDSCALE</a> and <a href="LOWSALT.html#LOWSALT"> LOWSALT</a> respectively.</p>
+
+<p>The <span class="keyword">LSWL</span> keyword should be followed by one real
+number for each grid block in the current input box specifying the
+connate water saturation. The saturation should be in the range 0.0
+to 1.0 inclusive. The data must be terminated by a slash (/).</p>
+
+<p>Grid blocks are ordered with the X-axis index cycling fastest followed
+by the Y and Z indices. Repeat counts may be used for repeated values
+(for example 10*0.21). Note that spaces must not be inserted on either
+side of the asterisk.</p>
+
+<p>If the keyword <span class="keyword">LSWL</span> is omitted for some or all
+of the grid blocks in a model where it could be specified, the connate
+water saturations for low salinity (oil-wet) oil relative permeability
+and capillary pressure calculations will default to the values defined
+in the appropriate relative permeability tables.</p>
+
+<p>See <a href="../ecl_td/sattabsc_Saturation_Table_Scaling.html#sattabsc_saturation_table_scaling">"Saturation table
+scaling"</a> in the <cite>ECLIPSE Technical Description</cite> for
+details of the end-point scaling procedure.</p>
+
+<div class="section" id="lswl_example"><a name="lswl_example"><!-- --></a><h4 class="sectiontitle">Example</h4>                
+ <pre><code>----RUNSPEC section
+DIMENS
+ 1 7 3 /
+ENDSCALE
+ /
+----PROPS section
+-------- IX1-IX2 JY1-JY2 KZ1-KZ2
+BOX
+           1   1   2   7   1   3
+LSWL
+ 5*0.22   10*0.17   3*0.19   /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

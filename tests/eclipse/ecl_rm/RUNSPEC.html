@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="RUNSPEC section"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="RUNSPEC"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>RUNSPEC section</title>
+</head>
+<body>
+
+
+<div class="nested0" id="RUNSPEC"><a name="RUNSPEC"><!-- --></a>
+<h1 class="topictitle1">RUNSPEC section</h1>
+
+
+ <div>
+<p>The <span class="keyword">RUNSPEC</span> section is the first section of
+an ECLIPSE data input file. It contains the run title, start date,
+units, various problem dimensions (numbers of blocks, wells, tables
+and so forth), flags for phases or components present and option switches.
+It may be preceded only by comments, global keywords (see <a href="datafile_Global_keywords.html#datafile_global_keywords"> "Global
+keywords"</a>) and <a href="LOAD.html#LOAD"> LOAD</a>. The <span class="keyword">RUNSPEC</span> section must always be present,
+unless the <span class="keyword">LOAD</span> keyword is used to restart a run
+from a <a href="SAVE.html#SAVE">  SAVE</a> file
+that contains the <span class="keyword">RUNSPEC</span> data.</p>
+
+<p>The <span class="keyword">RUNSPEC</span> section consists of a series of
+keywords, which turn on the various modeling options, or contain data
+(for example problem dimensions). For keywords that have associated
+data, the data record must be terminated by a slash (/). If a data
+record is terminated early with a slash, the remaining data items
+are set to their default values. Similarly, if a keyword is omitted
+all its associated data items are set to their default values. For
+most runs, the majority of the data items can be defaulted.</p>
+
+<p>The minimum set of <span class="keyword">RUNSPEC</span> keywords required
+by ECLIPSE 100 are:</p>
+
+
+<div class="tablenoborder"><a name="runspec.tab.0010"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="runspec.tab.0010" frame="border" border="1" rules="all"><caption>
+           Table 11.1  Minimum RUNSPEC keywords for ECLIPSE 100</caption>  
+<thead align="left">
+<tr>
+<th valign="top" id="d2146e82"> Keyword </th>
+
+<th valign="top" id="d2146e85"> Description </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2146e82 "> <a href="TITLE.html#TITLE">  TITLE</a> </td>
+
+<td valign="top" headers="d2146e85 "> Title </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2146e82 "> <a href="DIMENS.html#DIMENS">  DIMENS</a> </td>
+
+<td valign="top" headers="d2146e85 "> Number of blocks in X,Y,Z directions </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2146e82 "> <a href="OIL.html#OIL">  OIL</a>, <a href="WATER.html#WATER">  WATER</a>, <a href="GAS.html#GAS">  GAS</a>, <a href="VAPOIL.html#VAPOIL">  VAPOIL</a>, <a href="DISGAS.html#DISGAS">  DISGAS</a> </td>
+
+<td valign="top" headers="d2146e85 "> The active phases present, that is which of the
+saturations (R<sub>s</sub> or R<sub>v</sub>) vary </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2146e82 "> <a href="FIELD.html#FIELD">  FIELD</a> / <a href="METRIC.html#METRIC">  METRIC</a> / <a href="LAB.html#LAB">  LAB</a> </td>
+
+<td valign="top" headers="d2146e85 "> Unit convention </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2146e82 "> <a href="START.html#START">  START</a> </td>
+
+<td valign="top" headers="d2146e85 "> Start date of the simulation. In ECLIPSE 300
+the <span class="keyword">START</span> keyword is only mandatory if the <a href="DATES.html#DATES">  DATES</a> keyword is used. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2146e82 "> <a href="WELLDIMS.html#WELLDIMS">  WELLDIMS</a> </td>
+
+<td valign="top" headers="d2146e85 "> Well and group dimensions </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword <a href="NOSIM.html#NOSIM">  NOSIM</a> sets data checking only, with no simulation.</p>
+
+<p>All else can be defaulted to give:</p>
+
+<ul>
+<li> A Cartesian geometry, dispersed flow model. </li>
+
+<li> One set of PVT, Saturation, and Equilibration tables. </li>
+
+<li> One reporting region.</li>
+
+<li> Unformatted non-unified restart and graphics files. </li>
+
+</ul>
+
+<p>The minimum set of keywords required by ECLIPSE 300 is similar,
+except that it is advisable to enter either <a href="COMPS.html#COMPS">  COMPS</a> or <a href="BLACKOIL.html#BLACKOIL">  BLACKOIL</a> according to whether the run is compositional
+or black oil. <strong>If neither is present the black-oil case will be
+assumed</strong>. Oil and gas are included automatically, but the <samp class="codeph"> <span class="keyword">WATER</span></samp> keyword should be entered if there
+is a water phase. The <a href="GASWAT.html#GASWAT">  GASWAT</a> keyword requests water and gas phases only, using an equation
+of state to define the equilibrium between these phases. For thermal
+simulations the <a href="THERMAL.html#THERMAL">  THERMAL</a> keyword should be used with the <span class="keyword">COMPS</span> keyword. An additional unit convention, <a href="PVT-M.html#PVT-M">  PVT-M</a>, is available.</p>
+
+<p>It is important to distinguish between the number of tables/cells,
+for example, which means that the exact number of items must be provided
+in the data file, and the maximum number of wells/groups, for example,
+which merely gives an upper limit to the number of items that may
+be specified.</p>
+
+<p>ECLIPSE 300</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> <span class="keyword">INCLUDE</span> files should
+only be used in the <span class="keyword">RUNSPEC</span> section for data sets
+output using the SimOpt program. </span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> <span class="keyword">INCLUDE</span> files should not be used with the <a href="PARALLEL.html#PARALLEL">  PARALLEL</a> keyword. </span></div>
+
+<p>ECLIPSE 100</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">To maintain compatibility with older data
+sets, the fixed record structure used by ECLIPSE 100 before 95A is
+still recognized. However, this allows a limited selection of facilities
+and it is recommended that you convert the <span class="keyword">RUNSPEC</span> data to the current format. To help interpret older data sets, the
+original form of the <span class="keyword">RUNSPEC</span> section is documented
+in <a href="../ecl_td/runspold_RUNSPEC_section__pre-95A_fixed_record_structure.html#runspold_runspec_section__pre-95a_fixed_record_structure">"RUNSPEC section:
+pre-95A fixed record structure"</a> in the <cite>ECLIPSE Technical
+Description</cite>. Please note that the <a href="OPTIONS.html#OPTIONS">  OPTIONS</a> keyword cannot be used with the
+fixed record structure. </span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

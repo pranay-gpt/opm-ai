@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Pressure drops from VFP tables"/>
+<meta name="DC.subject" content="Multisegment wells VFP tables, Multisegment wells VFP tables and pressure drop scaling, Multisegment wells VFP tables and pressure drop components, Multisegment wells VFP tables and reverse flow, Multisegment wells VFP tables and chokes, Multisegment wells VFP tables and injection wells, Multisegment wells, VFP tables"/>
+<meta name="keywords" content="Multisegment wells VFP tables, Multisegment wells VFP tables and pressure drop scaling, Multisegment wells VFP tables and pressure drop components, Multisegment wells VFP tables and reverse flow, Multisegment wells VFP tables and chokes, Multisegment wells VFP tables and injection wells, Multisegment wells, VFP tables"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="vfptabls_pressure_drops_from_vfp_tables"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Pressure drops from VFP tables</title>
+</head>
+<body>
+
+
+<div class="nested0" id="vfptabls_pressure_drops_from_vfp_tables"><a name="vfptabls_pressure_drops_from_vfp_tables"><!-- --></a>
+<h1 class="topictitle1">Pressure drops from VFP tables</h1>
+
+
+ <div>
+<p>VFP tables offer the most flexible, and potentially the most accurate,
+means of determining the pressure drop across each segment. Interpolating
+the pressure drop from a table is also considerably faster than calculating
+it from a multiphase flow correlation. It is not necessary to supply
+a separate table for each segment. Segments of similar diameter, inclination
+and roughness can share the same table; ECLIPSE scales the pressure
+drop according to the length or depth span of each segment.</p>
+
+<p>VFP tables should be constructed (by, for example, the program
+VFP <em>i</em>) for a representative length of tubing at the appropriate
+angle of inclination, using a suitable multi-phase flow correlation.
+The tables should be in the form of production well VFP tables, and
+are entered in the <span class="keyword">SCHEDULE</span> section with the keyword <a href="../ecl_rm/VFPPROD.html#VFPPROD">VFPPROD</a>. Standard VFP tables
+give the BHP as a function of the flow rate, the THP, the water and
+gas fractions, and optionally the ALQ. When applied to a well segment,
+the BHP should be interpreted as the segment’s nodal pressure
+(which is its inlet pressure), and the THP should be interpreted as
+the pressure at the node of its neighboring segment towards the wellhead
+(that is the segment’s outlet pressure). This is similar to
+the interpretation used for VFP tables constructed to model branch
+pressure drops in the Network option.</p>
+
+<div class="section" id="vfptabls_pressure_drop_scaling"><a name="vfptabls_pressure_drop_scaling"><!-- --></a><h4 class="sectiontitle">Pressure drop
+scaling</h4><p>The second item in the first record of a VFP table
+(see keyword <a href="../ecl_rm/VFPPROD.html#VFPPROD">VFPPROD</a>) normally contains the bottom hole datum depth of the table.
+However, when the table is used to supply segment pressure drops,
+it should contain either the length or the depth span (bottom depth
+- top depth) of the representative length of tubing for which the
+table was calculated. When ECLIPSE interpolates a segment’s
+pressure drop from the table, it will scale the pressure drop in proportion
+to the segment’s length or depth span.</p>
+<p>Instructions to
+scale the pressure drop according to the segment’s length or
+depth span are entered in the seventh item of keyword <a href="../ecl_rm/WSEGTABL.html#WSEGTABL"> WSEGTABL</a>. The choice should
+be consistent with the quantity supplied in the second item of the
+first record of the VFP table. The choice of scaling quantity will
+only make a difference if the same table is to be used for segments
+having a range of inclinations. The friction pressure drop is proportional
+to the length, while the hydrostatic pressure drop is proportional
+to the depth span; the choice should be based on whichever is the
+dominant component of the overall pressure drop. Obviously, horizontal
+segments should be scaled according to length.</p>
+<p>There is also
+the option not to scale the interpolated pressure drop at all, irrespective
+of the length or depth span of the segment. This choice would be appropriate
+when the segment represents a choke, since the pressure drop across
+a choke does not vary in proportion to the overall length of the device.</p>
+<p>As well as the automatic scaling according to the segment’s
+length or depth span, a user-defined scaling factor can be applied
+to the interpolated pressure drop. This is defined in keyword <a href="../ecl_rm/WSEGMULT.html#WSEGMULT">WSEGMULT</a>. A typical use of
+this would be to inhibit manually the flow through a segment representing
+a flow control device by increasing the pressure drop across it. Optionally,
+the scaling factor can be defined to vary with the water-oil ratio
+and gas-oil ratio of the mixture flowing through the segment, for
+example to model the operation of an adjustable flow control device
+whose purpose is to choke back production from high WOR or GOR regions.
+Alternatively the variation with WOR and GOR could be built directly
+into the VFP table.</p>
+</div>
+
+<div class="section" id="vfptabls_pressure_drop_components"><a name="vfptabls_pressure_drop_components"><!-- --></a><h4 class="sectiontitle">Pressure drop
+components</h4><p>VFP tables normally describe the combined effect
+of friction and hydrostatic pressure losses along the representative
+length of tubing. The tables do not supply the information necessary
+to resolve the combined pressure drop into these separate components.
+Accordingly, the combined pressure drop obtained from a VFP table
+is reported as the friction pressure drop; the hydrostatic pressure
+loss is reported as zero.</p>
+<p>The tables also usually include an
+acceleration pressure loss due to expansion of the gas phase in its
+passage down the pressure gradient. However, they cannot take into
+account any acceleration pressure loss caused by additional fluid
+entering the segment (for example through the perforations). ECLIPSE
+calculates the total acceleration pressure loss and add it to the
+overall pressure loss interpolated from the table if this is requested
+in item 6 in Record 1 of keyword <a href="../ecl_rm/WELSEGS.html#WELSEGS">WELSEGS</a>. Ideally, in this
+case, the VFP tables ought to be constructed without including any
+acceleration pressure loss, or the component due to gas expansion
+is accounted for twice. The VFP <em>i</em> program has a switch in the
+Calculation Control panel to turn off the acceleration pressure loss
+calculation. The acceleration component, however, is generally small
+in comparison with the overall pressure drop, and in the majority
+of cases can be neglected.</p>
+<p>There is an option to supply VFP
+tables containing the friction pressure drop only, and have ECLIPSE
+calculate the hydrostatic pressure drop across the segment and add
+it to the interpolated pressure drop. Friction-only pressure drop
+tables can be constructed, of course, by defining the representative
+length of tubing used for calculating the table to be horizontal.
+This option is useful to apply to gently undulating sections of tubing,
+to overcome the need for separate tables for each inclination angle.
+The hydrostatic pressure drop calculated by ECLIPSE is based on a
+homogeneous flow model, so slip effects are neglected.</p>
+</div>
+
+<div class="section" id="vfptabls_reverse_flow"><a name="vfptabls_reverse_flow"><!-- --></a><h4 class="sectiontitle">Reverse flow</h4><p>A complication arises when fluid is flowing through the segment in
+the opposite direction expected for a production well, that is, away
+from the well head. The sign of the flow is then negative. In production
+wells this situation may arise only when crossflow occurs, and the
+flow velocities are not likely to be large. If reverse flow is likely
+to occur, it is possible to extend the VFP table into the negative
+flow region. VFP <em>i</em> can produce tables whose first few flow values
+are negative, if requested. The table must not, however, have a point
+at zero flow, since the water and gas fraction values are singular
+there.</p>
+<p>There are three options for handling cases where the
+flow is less than (or more negative than) the first flow value in
+the VFP table. The option for each segment is set in the sixth item
+in keyword <a href="../ecl_rm/WSEGTABL.html#WSEGTABL">WSEGTABL</a>.</p>
+<ul>
+<li>Reverse the flow, look up the VFP table, then reverse the pressure
+drop.   <p>This option is recommended for use in horizontal segments
+or segments representing chokes, or with ‘friction only’
+VFP tables (see <a href="vfptabls_Pressure_drops_from_VFP_tables.html#vfptabls_pressure_drop_components"> "Pressure drop components"</a>), in which the table’s pressure
+drop has no hydrostatic component. In these cases the pressure drop
+can simply be reversed when the flow reverses. The first flow value
+in the VFP table should be positive. For negative flows, the ‘mirror
+image’ of the table is used. For flows in between + and - the
+first value, the pressure loss is linearly interpolated between these
+two points.</p>
+             </li>
+
+<li>Fix the lookup value of the flow rate at the first flow point
+in the table.                <p>This option is recommended for use
+in vertical or inclined segments in which the friction pressure loss
+in reverse flow is expected to be small compared with the hydrostatic
+pressure loss. The ‘reverse flow’ option above is not
+suitable in these cases as the hydrostatic pressure loss does not
+reverse when the flow reverses. If the first flow value in the VFP
+table is positive, it should be low enough to give a negligible friction
+pressure drop, so that the calculated friction pressure drop will
+remain negligible during reverse flow.</p>
+             </li>
+
+<li>Extrapolate the pressure drop linearly with the flow.   <p>This
+should be used with caution, as substantial extrapolation (especially
+into the negative flow region) may result in stability problems.</p>
+             </li>
+
+</ul>
+</div>
+
+<div class="section" id="vfptabls_chokes"><a name="vfptabls_chokes"><!-- --></a><h4 class="sectiontitle">Chokes</h4><p>VFP tables can
+also be constructed to model the pressure loss across flow control
+devices such as chokes. For example, VFP <em>i</em> can produce a table
+based on the Sachdeva choke model, incorporating both critical and
+sub-critical flow regimes. The effects of varying the choke diameter
+can also be incorporated into the table, by using the ALQ variable.
+VFP <em>i</em> can create a table of pressure losses across several different
+choke diameters, with the diameters represented by the ALQ variable
+in the appropriate units. The selected ALQ definition for this purpose
+should be '<samp class="codeph">BEAN</samp>'. It is then possible to model the
+effects of varying the choke diameter at any time in the simulation
+by changing the look-up ALQ value of the VFP table (item 8 in keyword <a href="../ecl_rm/WSEGTABL.html#WSEGTABL">WSEGTABL</a>).</p>
+<p>Segments representing
+chokes should <strong>not</strong> have their pressure losses scaled according
+to length or depth span (<span class="keyword">WSEGTABL</span> item 7), and
+the most appropriate option for dealing with reverse flow is to reverse
+the pressure loss (<span class="keyword">WSEGTABL</span> item 6).</p>
+</div>
+
+<div class="section" id="vfptabls_injection_wells"><a name="vfptabls_injection_wells"><!-- --></a><h4 class="sectiontitle">Injection wells</h4><p>Injection wells would normally have single-phase water or gas
+flowing through their segments, so there should be less need to use
+VFP tables to model the pressure losses. However, multiphase flow
+can occur if there is crossflow with reservoir fluid entering at one
+or more perforated intervals. If you wish to use VFP tables to model
+the pressure loss across segments in an injection well, the possibility
+of multiphase flow requires the VFP tables to be of the <strong>production</strong> type (keyword <a href="../ecl_rm/VFPPROD.html#VFPPROD">VFPPROD</a>). They should therefore be prepared as for a production
+well, but with negative flow values since the predominant direction
+of flow is away from the well head.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

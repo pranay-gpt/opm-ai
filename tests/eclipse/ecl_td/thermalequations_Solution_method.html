@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Solution method"/>
+<meta name="DC.subject" content="Thermal equations solution method"/>
+<meta name="keywords" content="Thermal equations solution method"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="thermalequations_solution_method"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Solution method</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="thermalequations_solution_method"><a name="thermalequations_solution_method"><!-- --></a>
+<h1 class="topictitle1">Solution method</h1>
+
+
+ <div>
+<p>For each cell there are  <em>N + 3</em>    variables (pressure,  <em>N</em>  hydrocarbon components, one water component, and energy) and
+ <em>N + 3</em>     equations (<em>N + 1</em>     component conservation
+equations, including water, equation <a href="thermalequations_Conservation_equations.html#tthermalequations.XID-00000018">310.1</a>, energy conservation, equation <a href="thermalequations_Conservation_equations.html#hermalequations.XID-00000024">310.2</a>  and volume balance, equation <a href="thermalequations_Conservation_equations.html#thermalequations.XID-00000034">310.3</a>). The equations can be solved using a fully implicit method
+(<a href="../ecl_rm/FULLIMP.html#FULLIMP">FULLIMP</a> / default), an implicit pressure, explicit properties method
+(<a href="../ecl_rm/IMPES.html#IMPES">IMPES</a>) or a combination of
+both, (<a href="../ecl_rm/AIM.html#AIM">AIM</a>).          </p>
+
+<p>The component conservation equations are written as</p>
+
+<p> <math><mrow><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>f</mi><mi>l</mi></mrow>
+</msub><mo>=</mo><mfrac><mrow><msub><mrow><mi>V</mi>
+</mrow><mrow><mi>p</mi></mrow></msub><msub><mrow><mo>(</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>t</mi>
+<mo>+</mo><mrow><mi>Δ</mi><mi>t</mi></mrow>
+</mrow></msub><mo>)</mo><mo>⋅</mo><mi>m</mi></mrow>
+<mrow><mi>f</mi><mi>l</mi></mrow></msub><mrow><mo>(</mo><mi>t</mi><mo>+</mo><mrow><mi>Δ</mi><mi>t</mi></mrow><mo>)</mo></mrow><mo>-</mo><mrow><mi>V</mi><mrow><mo>(</mo><msub><mrow><mi>P</mi></mrow>
+<mrow><mi>t</mi></mrow></msub><mo>)</mo></mrow><mo>⋅</mo><mrow><msub><mrow><mi>m</mi></mrow><mrow><mi>f</mi><mi>l</mi></mrow></msub><mrow><mo>(</mo><mi>t</mi><mo>)</mo></mrow></mrow></mrow></mrow><mrow>
+<mi>Δ</mi><mi>t</mi></mrow></mfrac><mo>+</mo>
+<msub><mrow><mi>F</mi></mrow><mrow><mi>f</mi><mi>l</mi></mrow></msub><mo>+</mo><msub><mrow><mi>Q</mi>
+</mrow><mrow><mi>f</mi><mi>l</mi></mrow></msub><mo>=</mo><mn>0</mn></mrow></math>                      </p>
+
+<p>where, in an implicit cell the flow terms and well terms are evaluated
+at the new time:</p>
+
+<p> <math><mrow><msub><mrow>
+<mi>F</mi></mrow><mrow><mi>f</mi><mi>l</mi></mrow>
+</msub><mo>=</mo><mrow><msub><mrow><mi>F</mi></mrow>
+<mrow><mi>f</mi><mi>l</mi></mrow></msub><mrow><mo>(</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>t</mi>
+<mo>+</mo><mrow><mi>Δ</mi><mi>t</mi></mrow>
+</mrow></msub><mo>,</mo><msub><mrow><mi>T</mi></mrow>
+<mrow><mi>t</mi><mo>+</mo><mrow><mi>Δ</mi><mi>t</mi></mrow></mrow></msub><mo>,</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>t</mi><mo>+</mo><mrow><mi>Δ</mi><mi>t</mi></mrow></mrow></msub><mo>)</mo>
+</mrow></mrow></mrow></math>                      </p>
+
+<p> <math><mrow><msub><mrow>
+<mi>Q</mi></mrow><mrow><mi>f</mi><mi>l</mi></mrow>
+</msub><mo>=</mo><mrow><msub><mrow><mi>Q</mi></mrow>
+<mrow><mi>f</mi><mi>l</mi></mrow></msub><mrow><mo>(</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>t</mi>
+<mo>+</mo><mrow><mi>Δ</mi><mi>t</mi></mrow>
+</mrow></msub><mo>,</mo><msub><mrow><mi>T</mi></mrow>
+<mrow><mi>t</mi><mo>+</mo><mrow><mi>Δ</mi><mi>t</mi></mrow></mrow></msub><mo>,</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>t</mi><mo>+</mo><mrow><mi>Δ</mi><mi>t</mi></mrow></mrow></msub><mo>)</mo>
+</mrow></mrow></mrow></math>                      </p>
+
+<p>and in the IMPES method the flow terms and well terms are evaluated
+using the new pressure but with properties at the previous timestep:</p>
+
+<p> <math><msub><mi>F</mi>
+<mrow><mi>f</mi><mi>l</mi></mrow></msub><mo>=</mo>
+<mrow><msub><mi>F</mi><mrow><mi>f</mi><mi>l</mi>
+</mrow></msub><mo>(</mo><msub><mi>P</mi><mrow><mi>t</mi><mo>+</mo><mrow><mi>Δ</mi><mi>t</mi>
+</mrow></mrow></msub><mo>,</mo><msub><mi>T</mi><mi>t</mi></msub><mo>,</mo><msub><mi>S</mi><mi>t</mi>
+</msub><mo>)</mo></mrow></math>                       </p>
+
+<p> <math><msub><mi>Q</mi>
+<mrow><mi>f</mi><mi>l</mi></mrow></msub><mo>=</mo>
+<mrow><msub><mi>Q</mi><mrow><mi>f</mi><mi>l</mi>
+</mrow></msub><mo>(</mo><msub><mi>P</mi><mrow><mi>t</mi><mo>+</mo><mrow><mi>Δ</mi><mi>t</mi>
+</mrow></mrow></msub><mo>,</mo><msub><mi>T</mi><mi>t</mi></msub><mo>,</mo><msub><mi>S</mi><mi>t</mi>
+</msub><mo>)</mo></mrow></math>                       </p>
+
+<p>The energy conservation equation is dealt with in a similar manner,
+but the volume balance equation is always evaluated at the new timestep.</p>
+
+<p>The non-linear residual equations</p>
+
+<p> <math><mrow><mrow><mi>R</mi><mo>⁡</mo><mrow><mo>(</mo><mi>X</mi><mo>)</mo>
+</mrow></mrow><mo>=</mo><mn>0</mn></mrow></math> 
+                    </p>
+
+<p>are solved iteratively,</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="thermalequations.equ.0199"/>
+ <math><msub><mi>X</mi>
+<mi>n</mi></msub><mo>=</mo><msub><mi>X</mi><mrow>
+<mi>n</mi><mrow><mo>-</mo><mn>1</mn></mrow></mrow>
+</msub><mo>+</mo><mrow><mi>Δ</mi><msub><mi>X</mi>
+<mrow><mi>n</mi><mrow><mo>-</mo><mn>1</mn></mrow>
+</mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 319.1]
+              </td></tr></tbody></table>
+<p>The solution increment Δ <em>X</em> <sub>n-1</sub> is found by
+solving the linear matrix equation</p>
+
+<p> <math><mrow><mn>0</mn>
+<mo>=</mo><mrow><mi>R</mi><mo>(</mo><msub><mrow><mi>X</mi></mrow><mrow><mi>n</mi><mrow><mo>-</mo><mn>1</mn></mrow></mrow></msub><mo>)</mo></mrow><mo>+</mo>
+<mi>J</mi><mo>⋅</mo><mrow><mi>Δ</mi><msub><mrow>
+<mi>X</mi></mrow><mrow><mi>n</mi><mrow><mo>-</mo>
+<mn>1</mn></mrow></mrow></msub></mrow></mrow></math>         </p>
+
+<p>where <math><mi>J</mi></math>  is the Jacobian matrix:</p>
+
+<p> <math><mi>J</mi><mo>=</mo>
+<mrow><mo>(</mo><mfrac><mrow><mrow><mo>∂</mo><mi>R</mi></mrow></mrow><mrow><mrow><mo>∂</mo><mi>X</mi></mrow></mrow></mfrac><mo>)</mo></mrow><msub>
+<mo>|</mo><mrow><mi>X</mi><mo>=</mo><msub><mi>X</mi>
+<mrow><mi>n</mi><mrow><mo>-</mo><mn>1</mn></mrow>
+</mrow></msub></mrow></msub></math>                    
+ </p>
+
+<p>The diagonal Jacobian element corresponding to an IMPES cell has
+a simple form which can be solved relatively easily:</p>
+
+<p> <math><mrow><mi>J</mi>
+<mo>=</mo><mrow><mtable><mtr><mtd><mtext> </mtext>
+</mtd></mtr><mtr><mtd><mrow><mtable><mtr><mtd><mtext>Comp1</mtext></mtd></mtr><mtr><mtd><mtext>Comp2</mtext>
+</mtd></mtr><mtr><mtd><mi>…</mi></mtd></mtr><mtr>
+<mtd><mtext>Energy</mtext></mtd></mtr><mtr><mtd><mtext>Volume bal</mtext></mtd></mtr></mtable></mrow></mtd>
+</mtr></mtable><mtable><mtr><mtd><mrow><mo>(</mo>
+<mtable><mtr><mtd><mi>P</mi></mtd><mtd><msub><mrow>
+<mi>m</mi></mrow><mrow><mn>1</mn></mrow></msub></mtd>
+<mtd><msub><mrow><mi>m</mi></mrow><mrow><mn>2</mn>
+</mrow></msub></mtd><mtd><mi>…</mi></mtd><mtd>
+<mi>e</mi></mtd></mtr></mtable><mo>)</mo></mrow></mtd>
+</mtr><mtr><mtd><mrow><mo>[</mo><mtable><mtr><mtd>
+<mrow><mtable><mtr><mtd><mi>x</mi>
+</mtd><mtd><mi>x</mi></mtd><mtd><mn>0</mn></mtd>
+<mtd><mi>…</mi></mtd><mtd><mn>0</mn></mtd></mtr>
+<mtr><mtd><mi>x</mi></mtd><mtd><mn>0</mn></mtd><mtd>
+<mi>x</mi></mtd><mtd><mi>…</mi></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mi>…</mi></mtd>
+<mtd><mi>…</mi></mtd><mtd><mi>…</mi></mtd>
+<mtd><mi>…</mi></mtd><mtd><mi>…</mi></mtd>
+</mtr><mtr><mtd><mi>x</mi></mtd><mtd><mn>0</mn>
+</mtd><mtd><mn>0</mn></mtd><mtd><mi>…</mi></mtd>
+<mtd><mi>x</mi></mtd></mtr><mtr><mtd><mi>x</mi>
+</mtd><mtd><mi>x</mi></mtd><mtd><mi>x</mi></mtd>
+<mtd><mi>…</mi></mtd><mtd><mi>x</mi></mtd></mtr>
+</mtable></mrow></mtd></mtr></mtable><mo>]</mo></mrow>
+</mtd></mtr></mtable></mrow></mrow></math>           
+          </p>
+
+<div class="section" id="thermalequations_linear_solvers"><a name="thermalequations_linear_solvers"><!-- --></a><h4 class="sectiontitle">Linear solvers</h4><p>To compute the solution increment Δ <em>X</em> the linear system
+involving the Jacobian matrix must be inverted. Whilst the default
+WARP linear solver may be adequate for relatively simple simulations
+better performance is usually achieved with the JALS solver, which
+is used by default for thermal simulations. The JALS linear solver
+employs the constrained pressure residual (CPR) technique in which
+an approximate pressure system is solved for each outer iteration.
+The solution of the pressure system is referred to as the inner iteration.
+The GMRES algorithm is used for both the outer and inner iteration.
+The GMRES algorithm is similar to the ORTHOMIN algorithm and requires
+storing a set of search directions. The JALS solver options can be
+controlled with the <a href="../ecl_rm/JALS.html#JALS">JALS</a> keyword, which can be inserted in the <span class="keyword">RUNSPEC</span> section.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

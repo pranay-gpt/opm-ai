@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="VAPPARS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="VAPPARS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>VAPPARS</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="VAPPARS"><a name="VAPPARS"><!-- --></a>
+<h1 class="keyword">VAPPARS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="vappars.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="vappars.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2724e45"> x </th>
+
+<th valign="top" id="d2724e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2724e54">  </th>
+
+<th valign="top" id="d2724e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2724e45 d2724e54 ">  </td>
+
+<td valign="top" headers="d2724e48 d2724e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2724e45 d2724e54 ">  </td>
+
+<td valign="top" headers="d2724e48 d2724e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2724e45 d2724e54 ">  </td>
+
+<td valign="top" headers="d2724e48 d2724e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2724e45 d2724e54 ">  </td>
+
+<td valign="top" headers="d2724e48 d2724e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2724e45 d2724e54 ">  </td>
+
+<td valign="top" headers="d2724e48 d2724e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2724e45 d2724e54 "> x </td>
+
+<td valign="top" headers="d2724e48 d2724e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2724e45 d2724e54 ">  </td>
+
+<td valign="top" headers="d2724e48 d2724e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2724e45 d2724e54 "> x </td>
+
+<td valign="top" headers="d2724e48 d2724e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword should be used only if the model allows both gas solution
+in the oil phase and oil vaporization in the gas phase (both keywords <a href="DISGAS.html#DISGAS">  DISGAS</a> and <a href="VAPOIL.html#VAPOIL">  VAPOIL</a> present in the <span class="keyword">RUNSPEC</span> section).</p>
+
+<p>The data field should contain two real numbers and should be terminated
+by a slash (/). Both numbers are dimensionless, and are intended to
+be used as parameters for history matching and sensitivity studies.</p>
+
+<p>The first parameter determines the propensity of oil to vaporize
+in the presence of undersaturated gas. If this parameter is set to
+zero, the standard black oil model behavior is selected (all oil vaporizes
+as long as there is any undersaturated gas in the block). Larger values
+inhibit vaporization especially in blocks where a lot of oil has already
+vaporized. This parameter typically takes a value between 0 and 5.</p>
+
+<p>The second parameter determines the propensity of remaining oil
+to get heavier (that is of R<sub>s</sub> to decrease) as lighter fractions
+vaporize. If this parameter is set to zero, the standard black oil
+model behavior is selected (the R<sub>s</sub> of remaining oil does
+not change as oil vaporizes). Larger values increase the differentiation
+between light and heavy fractions. This parameter should normally
+be set to a small value (less than 1).</p>
+
+<p>If this keyword is not present in runs containing both live oil
+and wet gas, both parameters are defaulted to zero, giving standard
+black oil model behavior.</p>
+
+<p>Note that in any system containing both dissolved gas and vaporized
+oil, the maximum rates of increase of R<sub>s</sub> and R<sub>v</sub> (set using <a href="DRSDT.html#DRSDT"> DRSDT</a> and <a href="DRVDT.html#DRVDT"> DRVDT</a>) are
+initially set to large values by ECLIPSE. The constraints imposed
+by the <span class="keyword">VAPPARS</span> parameters will be disabled by the
+subsequent specification of either the <span class="keyword">DRSDT</span> or <span class="keyword">DRVDT</span> keywords. Similarly, the limits imposed by the <span class="keyword">DRSDT</span> or <span class="keyword">DRVDT</span> keywords will be disabled
+by the subsequent specification of the <span class="keyword">VAPPARS</span> keyword.</p>
+
+<p>The <span class="keyword">VAPPARS</span> parameters (<samp class="codeph">vap1</samp> and <samp class="codeph">vap2</samp>) act to reduce the maximum allowed values
+of R<sub>s</sub> and R<sub>v</sub> in a grid block by the relations</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="vappars.equ.005d"/>
+ <math><msub><mi>R</mi>
+<mi>v</mi></msub><mo>=</mo><mrow><msub><mi>R</mi>
+<mrow><mi>v</mi><mtext> sat</mtext></mrow></msub>
+<msup><mrow><mo>(</mo><mfrac><mrow><msub><mi>S</mi>
+<mi>o</mi></msub></mrow><mrow><msub><mi>S</mi><mrow>
+<mi>o</mi><mtext> max</mtext></mrow></msub></mrow>
+</mfrac><mo>)</mo></mrow><mtext>vap1</mtext></msup>
+</mrow></math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="vappars.equ.0060"/>
+ <math><msub><mi>R</mi>
+<mi>s</mi></msub><mo>=</mo><mrow><msub><mi>R</mi>
+<mrow><mi>s</mi><mtext> sat</mtext></mrow></msub>
+<msup><mrow><mo>(</mo><mfrac><mrow><msub><mi>S</mi>
+<mi>o</mi></msub></mrow><mrow><msub><mi>S</mi><mrow>
+<mi>o</mi><mtext> max</mtext></mrow></msub></mrow>
+</mfrac><mo>)</mo></mrow><mtext>vap2</mtext></msup>
+</mrow></math> 
+</td><td align="right">[Eq. 247.2]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>S</mi>
+<mrow><mi>o</mi><mtext> max</mtext></mrow></msub>
+</math> </td>
+
+<td valign="top">is the largest oil saturation reached in the grid block so
+far. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>As S<sub>o</sub> decreases due to vaporization, further vaporization
+becomes more inhibited. Large values of <samp class="codeph">vap1</samp> and <samp class="codeph">vap2</samp> may cause convergence difficulties.</p>
+
+<div class="section" id="vappars_example"><a name="vappars_example"><!-- --></a><h4 class="sectiontitle">Example</h4>             
+   <pre><code>VAPPARS
+2  0.1  /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

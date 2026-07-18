@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="COMPSEGL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="COMPSEGL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>COMPSEGL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="COMPSEGL"><a name="COMPSEGL"><!-- --></a>
+<h1 class="keyword">COMPSEGL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="compsegl.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="compsegl.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d310e45"> x </th>
+
+<th valign="top" id="d310e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d310e54"> x </th>
+
+<th valign="top" id="d310e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d310e45 d310e54 "> </td>
+
+<td valign="top" headers="d310e48 d310e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d310e45 d310e54 "> </td>
+
+<td valign="top" headers="d310e48 d310e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d310e45 d310e54 "> </td>
+
+<td valign="top" headers="d310e48 d310e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d310e45 d310e54 "> </td>
+
+<td valign="top" headers="d310e48 d310e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d310e45 d310e54 "> </td>
+
+<td valign="top" headers="d310e48 d310e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d310e45 d310e54 "> </td>
+
+<td valign="top" headers="d310e48 d310e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d310e45 d310e54 "> </td>
+
+<td valign="top" headers="d310e48 d310e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d310e45 d310e54 "> x </td>
+
+<td valign="top" headers="d310e48 d310e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword defines the location of the completions in a multisegment
+well (see <a href="../ecl_td/multisegintro_Multi-segment_Wells.html#multisegintro_multi-segment_wells">"Multisegment wells"</a> in the <cite>ECLIPSE Technical Description</cite>), when the well
+is situated in a local grid, and instructs ECLIPSE to allocate each
+completion to a well segment. The well’s segment structure must previously
+have been defined with the <a href="WELSEGS.html#WELSEGS">  WELSEGS</a> keyword. Note that there is no equivalent <span class="keyword">WELSEGL</span> keyword, as the segment structure is defined independently of the
+grid. </p>
+
+<p>The location of the well connection to each completed grid block
+is defined within the well by the branch number and the length down
+the tubing to the start and end of the connection. This information
+must be supplied for <strong>all</strong> the well’s connections that have been
+specified with the <a href="COMPDATL.html#COMPDATL">  COMPDATL</a> keyword. ECLIPSE allocates each grid block connection to
+the segment whose nodal point lies nearest to the center of the connection
+(unless explicitly overridden by a user-specified segment). A segment
+(or to be more precise, its node) can accept flow from any number
+of grid-block connections. However, it is not possible to allocate
+a single grid-block connection to more than one segment. If a grid-block
+connection is allocated to more than one user-specified segment, all
+except the last one will be ignored. </p>
+
+<p>ECLIPSE 100 </p>
+
+<p>The keyword must be used instead of <a href="COMPSEGS.html#COMPSEGS">  COMPSEGS</a> if the well
+is completed in one or more local grids that have been amalgamated.
+Either keyword may be used for wells completed in a single unamalgamated
+local grid. </p>
+
+<p>The keyword can only be used on one well at a time, thus it must
+be specified more than once if there is more than one multisegment
+well. </p>
+
+<p>The keyword is followed by a number of data records to define the
+location of all the grid block connections in the well. Each record
+is terminated with a slash (/), and the set of records must end with
+an additional blank record containing just a slash. </p>
+
+<div class="section" id="compsegl_record_1"><a name="compsegl_record_1"><!-- --></a><h4 class="sectiontitle">Record 1</h4><p>The data
+for record 1 is identical to that of the <span class="keyword">COMPSEGS</span> keyword. 		</p>
+</div>
+
+<div class="section" id="compsegl_each_subsequent_record"><a name="compsegl_each_subsequent_record"><!-- --></a><h4 class="sectiontitle">Each subsequent
+record</h4><p>The data for the subsequent records is the same as <span class="keyword">COMPSEGS</span> except that there is an additional item at the
+start of each record: </p>
+<ol>
+<li> Name of local grid containing the connections or range specified
+in this record <p>This item may be defaulted or set to a blank string
+(provided that the local grid containing the well is not amalgamated
+in ECLIPSE 100). The local grid name then defaults to the well’s local
+grid named in keyword <a href="WELSPECL.html#WELSPECL">  WELSPECL</a>. </p>
+ <p>The connection locations in items 2, 3, 4 and 9
+refer to their coordinates within this local grid. </p>
+ </li>
+
+</ol>
+<p>The remaining items of these records (2 to 12) are the same
+as items 1 to 11 in <span class="keyword">COMPSEGS</span>. </p>
+</div>
+
+<div class="section" id="compsegl_example"><a name="compsegl_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>A multilateral
+well with connections in two horizontal lateral branches in individual
+amalgamated local grids. 		</p>
+<pre><code>COMPSEGL
+-- Name 
+    PROD   /
+--  Local   I   J   K   Brn   Start    End      Dirn    End     Connection
+--  Grid                No    Length   Length   Penet   Range   Depth
+-- Top Branch
+    UPPER   2   3   3   2     30       1*        X      10   /
+-- Bottom Branch
+    LOWER   2   3   3   3     230      1*        X      6    /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

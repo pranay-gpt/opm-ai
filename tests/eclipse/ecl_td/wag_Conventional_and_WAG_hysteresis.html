@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Conventional and WAG hysteresis"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wag_conventional_and_wag_hysteresis"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Conventional and WAG hysteresis</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wag_conventional_and_wag_hysteresis"><a name="wag_conventional_and_wag_hysteresis"><!-- --></a>
+<h1 class="topictitle1">Conventional and WAG hysteresis</h1>
+
+
+ <div>
+<p>There are some important differences between the specification
+of the relative permeability saturation functions for conventional
+and WAG hysteresis. For conventional hysteresis, the drainage and
+imbibition data are used to describe the two-phase hysteretic behavior
+of oil-water and gas-oil capillary pressure, water relative permeability,
+gas relative permeability and oil relative permeability to water and
+gas. For WAG plus conventional hysteresis, the bulk of this two-phase
+drainage and imbibition data is used in a similar way but with the
+following differences:</p>
+
+<ul>
+<li>The gas relative permeability data referred to by the drainage
+saturation table indices (<span class="keyword">SATNUM</span>) are assumed to
+be representative of the two-phase drainage (increasing gas saturation)
+gas relative permeability to oil in the presence of connate water
+only and are used as a basis for constructing all the associated scanning
+curves. With the exception of the critical gas saturation, the gas
+relative permeability data referred to by the imbibition saturation
+table indices (<span class="keyword">IMBNUM</span>) are not used for modeling
+WAG hysteresis. However, they may still be required for conventional
+hysteresis according to the hysteresis model selected.           
+ </li>
+
+<li>The water relative permeability data referred to by the drainage
+saturation table indices (<span class="keyword">SATNUM</span>) represent the
+two-phase water relative permeability to oil in the absence of gas.
+For conventional hysteresis, this column of data defines the two-phase
+drainage water relative permeability. If WAG hysteresis is applied
+to the water phase, this curve will be used for both drainage and
+imbibition processes in the absence of gas.             </li>
+
+<li>The water relative permeability data referred to by the imbibition
+table indices (<span class="keyword">IMBNUM</span>) represent the three-phase
+water relative permeability, that is, the water relative permeability
+to oil in the presence of gas, measured or modeled at the maximum
+gas saturation encountered during the gas injection cycle of the WAG
+process. For conventional hysteresis, this column of data defines
+the two-phase water imbibition relative permeability. </li>
+
+</ul>
+
+<p>In general, the more significant difference between conventional
+and WAG hysteresis is the impact of successive water and gas injection
+cycles upon the trapped gas and hence upon the gas phase rather than
+the water phase relative permeability. When modeling WAG hysteresis
+in the water phase, careful consideration should be given to the suitability
+of the conventional two-phase drainage and imbibition relative permeability
+data for reuse with WAG hysteresis. This is complicated by the different
+characteristics of these saturation functions for these different
+types of hysteresis. For conventional hysteresis and a water-wet model,
+the imbibition water relative permeability curve typically exhibits
+a higher relative permeability value than the drainage curve at a
+given water saturation. However, for WAG hysteresis, the three-phase
+water relative permeability curve typically exhibits a lower relative
+permeability than the two-phase curve at a given water saturation.</p>
+
+<p>Given that the selection of the WAG hysteresis option for the water
+phase implies presumably that the three-phase effects associated with
+the WAG injection process are more significant than the effects associated
+with conventional hysteresis, the two-phase drainage and imbibition
+water relative permeability data need to be adapted for use with WAG
+hysteresis. For conversion from conventional drainage to WAG hysteresis
+two-phase water relative permeability data, the possible approaches
+include:</p>
+
+<ul>
+<li>Using the existing drainage data unchanged. If the drainage and
+imbibition water relative permeability data do not exhibit significant
+hysteresis, this may be a convenient approach.</li>
+
+<li>Using some form of averaged drainage and imbibition data. If the
+drainage and imbibition water relative permeability data exhibit significant
+hysteresis, this be a suitable approach given that this data will
+be used for both the drainage and imbibition processes in the absence
+of the gas phase.</li>
+
+</ul>
+
+<p>For conversion from conventional imbibition to WAG hysteresis three-phase
+water relative permeability data, there is no simple approach based
+upon substitution or adaptation of existing data. The underlying premise
+of WAG hysteresis in the water phase is that the water relative permeability
+is lower following a gas flood than when initially only water and
+oil is present. Hence the three-phase WAG hysteresis data should ideally
+be obtained from measurements or modeling of water relative permeability
+in the presence of the gas phase.</p>
+
+<p>One seemingly possible solution to the difference between conventional
+and WAG hysteresis for water relative permeability would appear to
+be provided by interchanging the water relative permeability columns
+of data in the pairs of tables associated with the drainage and imbibition
+saturation table indices. However, this is a difficult process to
+accomplish because only single columns of data in pairs of otherwise
+unchanged tables are involved and the table saturation nodes may be
+different. Moreover, the suitability of such an approach is questionable
+given that if the drainage and imbibition two-phase data columns are
+interchanged neither will be necessarily representative of the WAG
+hysteresis two-phase or three-phase water relative permeability preceding
+or following a gas injection cycle respectively.</p>
+
+<p>It should be noted that if WAG hysteresis is applied only to the
+gas phase, the existing conventional hysteresis relative permeability
+saturation functions can be used unmodified.</p>
+
+<p>When selecting WAG hysteresis, consideration should also be given
+to the form of conventional hysteresis being applied to the phases
+not subject to WAG hysteresis. For example, in a water-wet system,
+if the Killough hysteresis model is applied to both the wetting and
+non-wetting phases and if oil is wetting to gas, the hysteresis scanning
+curves for the relative permeability of oil to gas (wetting phase)
+will be driven by the properties of the two-phase drainage and imbibition
+gas relative permeability (non-wetting phase). Hence it will still
+be necessary to specify both suitable drainage and imbibition gas
+relative permeability data.</p>
+
+<p>For the modeling of capillary pressure hysteresis in WAG injection
+processes, there is limited information in the published literature
+pertaining to how the characteristics differ if at all from those
+of conventional hysteresis. In ECLIPSE capillary pressure hysteresis,
+if selected, is modeled using the Killough hysteresis model irrespective
+of whether conventional or WAG hysteresis is selected.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

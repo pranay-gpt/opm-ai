@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="DIFFMZ"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="DIFFMZ"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>DIFFMZ</title>
+</head>
+<body>
+
+
+<div class="nested0" id="DIFFMZ"><a name="DIFFMZ"><!-- --></a>
+<h1 class="keyword">DIFFMZ</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="diffmz.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="diffmz.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d452e45">                         x                   
+  </th>
+
+<th valign="top" id="d452e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d452e54">                         x                   
+  </th>
+
+<th valign="top" id="d452e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d452e45 d452e54 ">                                             
+ </td>
+
+<td valign="top" headers="d452e48 d452e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d452e45 d452e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d452e48 d452e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d452e45 d452e54 ">                                             
+ </td>
+
+<td valign="top" headers="d452e48 d452e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d452e45 d452e54 ">                                             
+ </td>
+
+<td valign="top" headers="d452e48 d452e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d452e45 d452e54 ">                                             
+ </td>
+
+<td valign="top" headers="d452e48 d452e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d452e45 d452e54 ">                                             
+ </td>
+
+<td valign="top" headers="d452e48 d452e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d452e45 d452e54 ">                                             
+ </td>
+
+<td valign="top" headers="d452e48 d452e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d452e45 d452e54 ">                                             
+ </td>
+
+<td valign="top" headers="d452e48 d452e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword can only be used when the Molecular Diffusion option
+is activated (using the <a href="DIFFUSE.html#DIFFUSE"> DIFFUSE</a> keyword in the <span class="keyword">RUNSPEC</span> section) in a Cartesian
+grid.</p>
+
+<p>The keyword should be followed by one non-negative real number
+for every grid block in the current input box. The data must be terminated
+by a slash (/).</p>
+
+<p>The values specified act as multipliers on the diffusivities calculated
+by the program for the +Z face of each grid block.</p>
+
+<p>Thus, a value of <span class="keyword">DIFFMZ</span> specified for block
+(I, J, K) multiplies the diffusivity between blocks (I, J, K)
+and (I, J, K+1).</p>
+
+<p>Any <span class="keyword">DIFFMZ</span> values which are not specified when
+the end of the <span class="keyword">GRID</span> section is reached, default
+to 1.0.</p>
+
+<p>If <span class="keyword">DIFFMZ</span> values are entered in the <span class="keyword">GRID</span> section, they apply only to the diffusivities calculated
+by the program from information supplied in the <span class="keyword">GRID</span> section, and <strong>not</strong> to any diffusivities entered directly in
+the <span class="keyword">EDIT</span> section using the <a href="DIFFZ.html#DIFFZ">  DIFFZ</a> keyword.</p>
+
+<p>Grid blocks are ordered with the X axis index cycling fastest,
+followed by the Y and Z axis indices. Repeat counts may be used for
+repeated values (for example  115*0). Note that spaces must not
+be inserted on either side of the asterisk.</p>
+
+<p>Diffusivity multipliers are analogous to transmissibility multipliers
+for diffusive flow, and are described in <a href="../ecl_td/Diffusion.html#Diffusion">"Diffusion"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>See also keyword <a href="DIFFMZ-.html#DIFFMZ-"> DIFFMZ-</a>.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Any non-neighbor connections generated due to pinchouts will
+have diffusivities which reflect the <span class="keyword">DIFFMZ</span> values.
+Their behavior is analogous to the treatment of the transmissibility
+multipliers <a href="MULTZ.html#MULTZ"> MULTZ</a>.          </span></div>
+
+<div class="section" id="diffmz_example"><a name="diffmz_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>-------- IX1-IX2 JY1-JY2 KZ1-KZ2
+BOX
+           3   5  1   10   2   4   /
+DIFFMZ
+ 90*2.0 /
+ENDBOX</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

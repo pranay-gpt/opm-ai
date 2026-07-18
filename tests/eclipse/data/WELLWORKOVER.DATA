@@ -1,0 +1,563 @@
+--Wells and group operations
+RUNSPEC
+TITLE
+         NEW WELL FEATURES IN ECLIPSE FOR 881
+
+DIMENS
+    9    9    3  /
+
+OIL
+
+WATER
+
+GAS
+
+DISGAS
+
+FIELD
+
+TABDIMS
+    1    1   16   15    3   15 /
+
+REGDIMS
+    3    1    0    0  /
+
+WELLDIMS
+   30    3   10   10 /
+
+START
+   1 'JAN' 1983  /
+
+UNIFOUT
+
+UNIFIN
+
+RPTRUNSP
+
+GRID    ================================================================
+--      THIS SECTION SPECIFIES THE GEOMETRY OF THE 9 X 9 X 3 GRID, AND
+--      SETS THE ROCK POROSITIES AND PERMEABILITIES.
+--      ----------------------------------------------------------------
+
+-- THE CELL DIMENSIONS ( DX, DY, DZ ), PERMEABILITIES AND POROSITIES
+-- ARE THE SAME FOR EACH CELL.  THE CELL TOP DEPTHS ARE SET FOR THE TOP
+-- LAYER ONLY. THE FIELD SLOPES DOWN IN THE Y-DIRECTION.  USING MULTX
+-- WE SET UP TWO VERTICAL IMPERMEABLE BARRIERS, DIVIDING THE FIELD INTO
+-- THREE ISOLATED SEGMENTS.
+
+--    ARRAY   VALUE     ------ BOX ------
+
+EQUALS
+     'DX'     1000    /
+     'DY'     1000    /
+     'DZ'     20      /
+     'PERMX'  300     /
+     'PERMY'  300     /
+     'PERMZ'  30      /
+     'PORO'   0.3     /
+     'TOPS'   7000      1  9  1  1  1  1   /
+     'TOPS'   7020      1  9  2  2  1  1   /
+     'TOPS'   7040      1  9  3  3  1  1   /
+     'TOPS'   7060      1  9  4  4  1  1   /
+     'TOPS'   7080      1  9  5  5  1  1   /
+     'TOPS'   7100      1  9  6  6  1  1   /
+     'TOPS'   7120      1  9  7  7  1  1   /
+     'TOPS'   7140      1  9  8  8  1  1   /
+     'TOPS'   7160      1  9  9  9  1  1   /
+     'MULTX'  0         3  3  1  9  1  3   /
+     'MULTX'  0         6  6  1  9  1  3   /
+/
+
+RPTGRID
+    /
+
+PROPS    ===============================================================
+--       THE PVT PROPERTIES AND ROCK-FLUID DATA ARE THE SAME AS IN THE
+--       CHAPPELEAR PROBLEM.  PLEASE REFER TO SAMPLE DATA SET 2 FOR
+--       COMMENTS.
+--       ---------------------------------------------------------------
+
+SWFN
+
+  0.22  0     7
+  0.3   0.07  4
+  0.4   0.15  3
+  0.5   0.24  2.5
+  0.6   0.33  2
+  0.8   0.65  1
+  0.9   0.83  0.5
+  1     1     0      /
+
+SGFN
+
+  0     0       0
+  0.04  0       0.2
+  0.1   0.022   0.5
+  0.2   0.1     1
+  0.3   0.24    1.5
+  0.4   0.34    2
+  0.5   0.42    2.5
+  0.6   0.5     3
+  0.7   0.8125  3.5
+  0.78  1       3.9    /
+
+SOF3
+
+0        0         0
+0.2      0         0
+0.38     0.00432   0
+0.4      0.0048    0.004
+0.48     0.05288   0.02
+0.5      0.0649    0.036
+0.58     0.11298   0.1
+0.6      0.125     0.146
+0.68     0.345     0.33
+0.7      0.4       0.42
+0.74     0.7       0.6
+0.78     1         1          /
+
+PVTW
+3000  1.00341  3.0D-6  0.96  0  /
+
+ROCK
+3600    4.0D-6   /
+
+DENSITY
+45   63.02   0.0702  /
+
+PVDG
+ 400  5.9   0.013
+ 800  2.95  0.0135
+1200  1.96  0.014
+1600  1.47  0.0145
+2000  1.18  0.015
+2400  0.98  0.0155
+2800  0.84  0.016
+3200  0.74  0.0165
+3600  0.65  0.017
+4000  0.59  0.0175
+4400  0.54  0.018
+4800  0.49  0.0185
+5200  0.45  0.019
+5600  0.42  0.0195 /
+
+PVTO
+   0.165      400   1.012    1.17  /
+   0.335      800   1.0255   1.14  /
+   0.500     1200   1.038    1.11  /
+   0.665     1600   1.051    1.08  /
+   0.828     2000   1.063    1.06  /
+   0.985     2400   1.075    1.03  /
+   1.130     2800   1.087    1.00  /
+   1.270     3200   1.0985   0.98  /
+   1.390     3600   1.11     0.95  /
+   1.500     4000   1.12     0.94  /
+   1.600     4400   1.13     0.92  /
+   1.676     4800   1.14     0.91  /
+   1.750     5200   1.148    0.9   /
+   1.810     5600   1.155    0.89
+             6000   1.1504   0.89
+             6400   1.1458   0.89
+             6800   1.1412   0.89
+             7200   1.1367   0.89  /
+/
+
+RPTPROPS
+   -- PROPS Reporting Options
+-- 
+'PVTO' 'PVDO' 'PVTW' 'PVTG' 'PVDG' 'DENSITY' 'GRAVITY' 'SDENSITY' 'ROCK' 
+'ROCKTAB' 
+/
+
+REGIONS    ===========================================================
+--         THERE ARE THREE FLUIDS-IN-PLACE REGIONS, SEPARATED BY THE
+--         TWO VERTICAL IMPERMEABLE BARRIERS.
+--         -----------------------------------------------------------
+
+--    ARRAY    VALUE     ------ BOX ------
+
+EQUALS
+     'FIPNUM'    1      1  3  1  9  1  3   /
+     'FIPNUM'    2      4  6  1  9  1  3   /
+     'FIPNUM'    3      7  9  1  9  1  3   /
+/
+
+-- PRINT FIPNUM ARRAY
+
+RPTREGS
+  -- Controls on output from regions section
+-- 
+'FIPNUM' 
+/
+
+SOLUTION    ============================================================
+--          THIS SECTION DEFINES THE INITIAL CONDITIONS IN THE FIELD.
+--          ------------------------------------------------------------
+
+-- SET THE EQUILIBRATION DATA
+--
+--   DATUM  DATUM   OWC    OWC    GOC    GOC   RSVD   RVVD   SOLN
+--   DEPTH  PRESS  DEPTH   PCOW  DEPTH   PCOG  TABLE  TABLE  METH
+
+EQUIL
+     7010   4000   9000    0.0   7010    0.0    0      0       5  /
+
+-- SWITCH ON OUTPUT OF INITIAL CONDITIONS
+
+RPTSOL
+  -- Initialisation Print Output
+-- 
+'PRES' 'SWAT' 'SGAS' 'RS' 'FIP=2' 'EQUIL' 'RSVD'  /
+
+SUMMARY   =============================================================
+--        THIS SECTION SPECIFIES DATA TO BE WRITTEN TO THE SUMMARY
+--        FILES, WHICH MAY LATER BE USED WITH THE GRAPHICS PACKAGE.
+--        -------------------------------------------------------------
+
+-- OIL PRODUCTION RATE FROM FIELD AND EACH PLATFORM AND SUB-PLATFORM
+
+FOPR
+
+GOPR
+ 'PLAT-A'
+ 'PLAT-B'
+ 'SP-B'
+ 'SP-C'
+/
+GMWPT
+ 'PLAT-A'
+ 'PLAT-B'
+ 'SP-B'
+ 'SP-C'
+/
+
+GMWWO
+ 'PLAT-A'
+ 'PLAT-B'
+ 'SP-B'
+ 'SP-C'
+/
+
+GMWWT
+ 'PLAT-A'
+ 'PLAT-B'
+ 'SP-B'
+ 'SP-C'
+/
+-- GAS PRODUCTION RATE FROM EACH PLATFORM AND SUB-PLATFORM
+
+GGPR
+ 'PLAT-A'
+ 'PLAT-B'
+ 'SP-B'
+ 'SP-C'
+/
+
+-- OIL PRODUCTION RATES FROM SELECTED WELLS
+WOPR
+ 'PA1'
+ 'PA2'
+ 'PA3'
+ 'PB1'
+ 'PB2'
+ 'PB3'
+ 'PC1'
+ 'PC2'
+ 'PC3'
+ /
+
+-- HAVE THESE QUANTITIES TABULATED IN THE PRINT FILE
+
+RUNSUM
+
+RORFW
+/
+RORME
+/
+RORMG
+/
+RORMR
+/
+RORMW
+/
+ROSAT
+/
+RPRP
+/
+
+RORFE
+/
+RORFG
+/
+RORFR
+/
+RORFW
+/
+
+-- SWITCH ON REPORT OF SUMMARY FILE CONTENTS
+
+RPTSMRY
+ 1  /
+
+ALL
+
+MSUMLINS
+
+MSUMNEWT
+
+SEPARATE
+
+SCHEDULE  =============================================================
+--        THIS SECTION DEFINES THE OPERATIONS TO BE SIMULATED.
+--        -------------------------------------------------------------
+
+-- SET CONTROLS ON OUTPUT AT EACH REPORT TIME
+
+RPTSCHED
+'SOIL' 'RESTART=1' 'FIP=1' 'WELLS=2' 'SUMMARY=2' 'CPU=2' 'WELSPECS'  /
+
+-- SET SPECIFICATION DATA FOR THE WELLS.
+--
+--   WELL    GROUP     LOCATION    BHP   PREF   DRAIN
+--   NAME    NAME        I  J     DEPTH  PHAS    RAD
+
+WELSPECS
+    'PA1'   'GR-A1'      3  2      1*    'OIL'  -1.0  /
+    'PA2'   'GR-A1'      1  3      1*    'OIL'  -1.0  /
+    'PA3'   'GR-A1'      2  4      1*    'OIL'  -1.0  /
+    'PA4'   'GR-A2'      2  7      1*    'OIL'  -1.0  /
+    'PA5'   'GR-A2'      1  6      1*    'OIL'  -1.0  /
+    'PA6'   'GR-A2'      3  5      1*    'OIL'  -1.0  /
+    'PB1'   'GR-B1'      6  2      1*    'OIL'  -1.0  /
+    'PB2'   'GR-B1'      4  3      1*    'OIL'  -1.0  /
+    'PB3'   'GR-B1'      5  4      1*    'OIL'  -1.0  /
+    'PB4'   'GR-B2'      5  7      1*    'OIL'  -1.0  /
+    'PB5'   'GR-B2'      4  6      1*    'OIL'  -1.0  /
+    'PB6'   'GR-B2'      6  5      1*    'OIL'  -1.0  /
+    'PC1'   'GR-C1'      9  2      1*    'OIL'  -1.0  /
+    'PC2'   'GR-C1'      7  3      1*    'OIL'  -1.0  /
+    'PC3'   'GR-C1'      8  4      1*    'OIL'  -1.0  /
+    'PC4'   'GR-C2'      8  7      1*    'OIL'  -1.0  /
+    'PC5'   'GR-C2'      7  6      1*    'OIL'  -1.0  /
+    'PC6'   'GR-C2'      9  5      1*    'OIL'  -1.0  /
+/
+
+-- SET UP THE GROUP TREE STRUCTURE.  PLAT-A AND PLAT-B ARE TWO
+-- PLATFORMS.  SP-B AND SP-C ARE SUB-PLATFORMS SUBORDINATE TO
+-- PLAT-B.  WELL-GROUPS GR-A1 AND GR-A2 ARE SUBORDINATE TO PLAT-A,
+-- GR-B1 AND GR-B2 TO SP-B, AND GR-C1 AND GR-C2 TO SP-C.
+
+GRUPTREE
+ 'GR-A1'  'PLAT-A'  /
+ 'GR-A2'  'PLAT-A'  /
+ 'SP-B'   'PLAT-B'  /
+ 'SP-C'   'PLAT-B'  /
+ 'GR-B1'  'SP-B'    /
+ 'GR-B2'  'SP-B'    /
+ 'GR-C1'  'SP-C'    /
+ 'GR-C2'  'SP-C'    /
+ /
+
+-- SET THE WELL COMPLETION DATA, TO SPECIFY ALL THE WELL CONNECTIONS.
+-- THE PRODUCERS IN GROUPS A1 AND A2 ARE COMPLETED IN LAYER 1 AND
+-- BLOCKS IN LAYERS 2-3 ARE PLACED IN THE QUEUE TO BE OPENED LATER.
+-- THE PRODUCERS IN GROUPS B1 AND B2 ARE COMPLETED IN LAYER 2 ONLY
+-- AND BLOCKS IN LAYERS 1 AND 3 ARE PLACED IN THE QUEUE TO BE OPENED LATER.
+-- AND THE PRODUCERS IN GROUPS C1 AND C2 ARE COMPLETED IN LAYERS 2-3
+-- AND BLOCKS IN LAYER 1 ARE PLACED IN THE QUEUE TO BE OPENED LATER.
+-- EACH WELL IS COMPLETED IN ONE VERTICAL COLUMN OF GRID BLOCKS, SO THE
+-- CONNECTIONS HAVE THE I- AND J- LOCATIONS THAT WERE SET IN WELSPECS.
+-- THE CONNECTION TRANSMISSIBILITY FACTORS ARE CALCULATED INTERNALLY.
+-- WELL NAME ROOTS ARE USED TO REDUCE THE VOLUME OF DATA.
+--
+--  WELL    -LOCATION-  OPEN/  SAT  CONN  BORE
+--  NAME    I  J K1-K2  SHUT   TAB  FACT  DIAM
+
+COMPDAT
+   'PA*'    0  0  1  1  'OPEN'  0    0.0  0.333  /
+   'PB*'    0  0  2  2  'OPEN'  0    0.0  0.333  /
+   'PC*'    0  0  2  3  'OPEN'  0    0.0  0.333  /
+   'PA*'    0  0  2  3  'AUTO'  0    0.0  0.333  /
+   'PB*'    0  0  1  1  'AUTO'  0    0.0  0.333  /
+   'PB*'    0  0  3  3  'AUTO'  0    0.0  0.333  /
+   'PC*'    0  0  1  1  'AUTO'  0    0.0  0.333  /
+   /
+
+-- SET THE CONTROL DATA FOR ALL THE PRODUCERS.
+--
+--  WELL    OPEN/  CNTL   OIL   WATER  GAS   LIQU  VOID  BHP
+--  NAME    SHUT   MODE   RATE  RATE   RATE  RATE  RATE
+
+WCONPROD
+   'PA*'   'OPEN'  'ORAT'  5000   1*    30000  2*        1000 /
+   'PB*'   'OPEN'  'ORAT'  3000   1*    20000  2*        1500 /
+   'PC*'   'OPEN'  'LRAT'      3*              3500  1*  1000 /
+/
+
+-- SET AN ECONOMIC LIMIT OF 1000 STB/DAY OF OIL FOR THE PRODUCERS.  THEY
+-- WILL BE SHUT IF THEIR PRODUCTION RATE FALLS BELOW THIS LIMIT.
+-- THE WELLS WILL BE WORKED OVER IF THEIR WATER CUT EXCEEDS 0.9 OR IF
+-- THEIR GOR EXCEEDS 20.0 .
+--
+--   WELL   MIN   MIN   MAX   MAX   MAX   WORK   END
+--   NAME   OIL   GAS   WCT   GOR   WGR   OVER   RUN
+
+WECON
+     'P*'   1000   1*   0.9   20.0   1*   'CON'  'NO'  /
+/
+
+--  FOR THE FIRST 100 DAYS RUN WITHOUT ANY GROUP CONTROLS
+--  AND WORKOVER LIMITS ETC...
+--
+
+TSTEP
+  100  /
+
+-- SET UP GROUP CONTROLS, WORKOVER LIMITS ETC..
+-- SET THE GROUP PRODUCTION CONTROL DATA.  THE FIELD HAS A TARGET OIL
+-- RATE OF 50,000 STB/DAY.  PLAT-A HAS A MAXIMUM GAS RATE OF 100,000
+-- MSCF/DAY, SP-B AND SP-C EACH HAVE A MAXIMUM GAS RATE OF 75,000 MSCF/DAY,
+-- WITH THEIR WORST-OFFENDING WELLS BEING WORKED OVER IF THIS IS EXCEEDED.
+--
+--  GROUP      CNTL   OIL   WATER  GAS   LIQU   LIMIT    AVAIL
+--  NAME       MODE   RATE  RATE   RATE  RATE   ACTION   FLD
+
+GCONPROD
+   'FIELD'    'ORAT'  50000   /
+   'PLAT-A'   'NONE'  2*         100000   1*     'CON' /
+   'SP-B'     'NONE'  2*          75000   1*     'CON' /
+   'SP-C'     'NONE'  2*          75000   1*     'CON' /
+/
+
+WORKLIM
+  50   /
+
+-- MINIMUM OIL SATURATION IS KEPT VERY HIGH FOR NEXT 200 DAYS.
+-- THIS SHOULD PREVENT OPENING OF ANY NEW CONNECTIONS.
+
+WELSOMIN
+  0.80  /
+
+-- THERE ARE TWO WORKOVER RIGS - ONE FOR PLAT-A AND
+-- THE OTHER FOR SP-B + SP-C
+
+GRUPRIG
+ 'FIELD'  11 /
+ 'PLAT-A' 22 /
+ /
+
+--  CUM. TIME = 200 DAYS
+--
+TSTEP
+ 100 /
+
+--  REMOVE ALL RIGS FROM THE FIELD
+--  RIGS NOW AVAILABLE FOR PLATFORM B ONLY (SP-B + SP-C)
+--
+GRUPRIG
+ 'FIELD'  -2 /
+ 'PLAT-A' -2 /
+ 'PLAT-B' -2 /
+ 'PLAT-B' 33 /
+ /
+
+WORKLIM
+  55.0 /
+
+--  CUM. TIME = 300 DAYS
+--
+TSTEP
+ 100  /
+
+-- NOW THERE ARE THREE WORKOVER RIGS PRESENT
+
+GRUPRIG
+ 'PLAT-A' -2 /
+ 'PLAT-B' -2 /
+ 'SP-B'   -2 /
+ 'SP-C'   -2 /
+ 'PLAT-A' 44 /
+ 'SP-B'   55 /
+ 'SP-C'   66 /
+ /
+
+-- EACH WORKOVER TAKES 50 DAYS
+
+WORKLIM
+  50.0 /
+
+-- REDUCE MINIMUM OIL SATURATION FOR OPENING OF NEW CONNECTIONS
+-- NEW CONNECTIONS SHOULD BE OPENED NOW.
+
+WELSOMIN
+  0.30  /
+
+-- SET PRIORITY FOR EACH WELL IN PROPORTION TO IT'S OIL POTENTIAL
+-- PRIORITY IS CALCULATED EVERY 100 DAYS ( FIRST ITEM)
+
+PRIORITY
+ 100    0.0  1.0   0.0  0.0  1.0  0.0  0.0  0.0  /
+
+-- FIX PRIORITY VALUES FOR TWO WELLS
+
+WELPRI
+  'PA1'   50000  /
+  'PB1'   45000  /
+  /
+-- GROUP CONTROL IS BY PRIORITISATION
+-- FIELD HAS A MAXIMUM OIL RATE OF 10,000 STB/DAY, MAXIMUM GAS RATE
+-- OF 150,000 MSCF/DAY AND MAXIMUM LIQUID RDATE OF 12,000 STB/DAY.
+-- IN ADDITION PLAT-A HAS A MAXIMUM RESERVOIR VOIDAGE RATE OF 30,000 RB/DAY,
+-- SP-B HAS A MAXIMUM GAS RATE OF 50,000 MSCF/DAY AND SP-C HAS A MAXIMUM
+-- LIQUID RATE OF 5,000 STB/DAY. THE WELLS WITH LOWER PRIORITY WITHIN
+-- EACH GROUP OR FIELD ARE CLOSED IF ANY OF THESE LIMITS ARE VIOLATED.
+
+GCONPRI
+ 'FIELD'  10000  'PRI'  2*  150000  'PRI'  12000  'PRI'  /
+ 'PLAT-A'  8*                30000   /
+ 'SP-B'    4*   50000   'PRI'   /
+ 'SP-C'    6*    5000   'PRI'  /
+/
+
+--  CUM. TIME = 500 DAYS
+--  THE FIELD OIL RATE (10,000 STB/DAY) WILL CONTROL PRODUCTION.
+--  WELLS PA1 AND PB1 WILL REMAIN OPEN AS THEIR USER SPECIFIED
+--  PRIORITIES WILL OVERRIDE THE INTERNALLY CALCULATED VALUES.
+
+TSTEP
+ 100 100  /
+
+--  PUT WELLS IN GROUP B & C ON DRAWDOWN CONTROL
+--  SOME WELLS WILL IMMEDIATELY GO ON DRAWDOWN CONTROL AND WILL
+--  HAVE A MAXIMUM DRAWDOWN AS SPECIFIED BELOW.
+
+WELDRAW
+  'PB*'  300  /
+  'PC*'  400  /
+  /
+
+--  CUM. TIME = 800 DAYS
+--  THE FIELD OIL RATE (10,000 STB/DAY) WILL CONTROL PRODUCTION.
+--  NEW CONNECTIONS (IF AVAILABLE) WILL BE OPENED, IF THE WELL
+--  OIL RATE FALLS BELOW THE MINIMUM SPECIFED ABOVE ( KEYWORD WECON).
+--  WORKOVERS WILL TAKE PLACE SIMULTANEOUSLY ON PLATFORMS PLAT-A,
+--  SP-B AND SP-C ( AS THREE WORKOVER RIGS ARE AVAILABLE).
+
+TSTEP
+  100   100  100 /
+
+-- PUT ALL WELLS ON DRAWDOWN CONTROL = 250 PSI
+
+WELDRAW
+  'P*'  250  /
+  /
+
+--  CUM. TIME = 1000 DAYS
+--  AT 900 DAYS THERE IS NO FIELD CONTROL, BUT PLAT-A WILL GO
+--  ON RESERVOIR VOIDAGE CONTROL WITH A MAXIMUM OF 30,000 RB/DAY
+--  SPECIFIED ABOVE IN KEYWORD GCONPRI.
+
+TSTEP
+  100  100 /
+
+END

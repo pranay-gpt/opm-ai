@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Well potentials"/>
+<meta name="DC.subject" content="Potential calculations, Potentials, Well, Potential"/>
+<meta name="keywords" content="Potential calculations, Potentials, Well, Potential"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="potential_well_potentials"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Well potentials</title>
+</head>
+<body>
+
+
+<div class="nested0" id="potential_well_potentials"><a name="potential_well_potentials"><!-- --></a>
+<h1 class="topictitle1">Well potentials</h1>
+
+
+ <div>
+<p>Well potentials are flow rates rather than pressures. They represent
+the production or injection rate that a well would achieve in the
+absence of any rate constraints, at the current grid block conditions.
+The acting constraint for a well’s potential is thus either its BHP
+limit or its THP limit, whichever is the more restrictive. If a well
+has a drawdown limit, that constraint may optionally be included in
+its potential calculation by setting the flag in item 4 of keyword <a href="../ecl_rm/WELDRAW.html#WELDRAW">WELDRAW</a>.</p>
+
+<p>ECLIPSE 100  </p>
+
+<p>There is an option to ignore THP limits when
+calculating the potential, which may be useful if the potentials are
+not used for anything important and the potential flows would extrapolate
+the VFP tables (see <span class="keyword">OPTIONS</span> keyword <a href="../ecl_rm/OPTIONS.html#options.40">item 40</a>).</p>
+
+<p>Note that if a well has no VFP table and its BHP limit is defaulted,
+its potential will not be particularly meaningful.</p>
+
+<p>The calculated well potential may be somewhat optimistic. This
+is because the grid block conditions at which the potential is calculated
+are not changed to take account of the well’s higher flow rate. In
+reality, increasing a well’s production from its actual rate to its
+potential would cause the pressure in its connecting grid blocks to
+decrease, thus decreasing its potential. The effect may be insignificant
+for wells completed in large grid blocks, but it could be appreciable
+for wells completed in small grid blocks, especially when using local
+grid refinement. The smaller the connecting grid blocks are, the more
+optimistic will be the potential.</p>
+
+<p>On a similar note, the potential of a well belonging to a network
+(see <a href="networkintro_Network_Option.html#networkintro_network_option"> "Network Option"</a>) may also be optimistic for another reason.
+The THP limit at which the well’s potential is calculated is the same
+as for its normal flowing rate. In reality, increasing a well’s production
+from its actual rate to its potential would cause its THP limit to
+increase due to the greater pressure losses in the network, thus decreasing
+its potential.</p>
+
+<p>ECLIPSE uses well potentials in the following calculations and
+facilities:</p>
+
+<ul>
+<li>To set guide rates for group control, for wells that have not
+been given specific guide rates in keyword <a href="../ecl_rm/WGRUPCON.html#WGRUPCON">WGRUPCON</a>. In ECLIPSE 100, the
+well and group guide rates can be set according to a function of their
+potentials (see keyword <a href="../ecl_rm/GUIDERAT.html#GUIDERAT">GUIDERAT</a>).             </li>
+
+<li>When using prioritization group control, well priorities can be
+set according to a function of their potentials (see keyword <a href="../ecl_rm/PRIORITY.html#PRIORITY">PRIORITY</a>). <p>ECLIPSE 100  </p>
+                           </li>
+
+<li>Wells can be closed automatically when their
+potential production or injection rates fall below an economic limit
+(see keywords <a href="../ecl_rm/WECON.html#WECON"> WECON</a> and <a href="../ecl_rm/WECONINJ.html#WECONINJ">WECONINJ</a>).<p>ECLIPSE 100 </p>
+</li>
+
+<li>                A well may be opened from
+the drilling queue when required to maintain a group’s production
+or injection potential above a specified value (see keyword <a href="../ecl_rm/GDRILPOT.html#GDRILPOT">GDRILPOT</a>).</li>
+
+<li>In a Prioritized Drilling Queue, well drilling priorities can
+be set according to a function of their potentials (see keyword <a href="../ecl_rm/DRILPRI.html#DRILPRI">DRILPRI</a>).<p>ECLIPSE 100</p>
+                            </li>
+
+<li>                Well potentials may be written
+to the <samp class="codeph">PRINT</samp> file, in place of their PI, by setting
+a negative value for the drainage radius in item 7 of keyword <a href="../ecl_rm/WELSPECS.html#WELSPECS"> WELSPECS</a>. Well, connection
+and group potentials can also be written to the <samp class="codeph">SUMMARY</samp> file, using the keywords:
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">  
+   
+<thead align="left">
+<tr>
+<th valign="top" id="d1166e159">Field</th>
+
+<th valign="top" id="d1166e162">Group</th>
+
+<th valign="top" id="d1166e165">Well</th>
+
+<th valign="top" id="d1166e168">Connection</th>
+
+<th valign="top" id="d1166e171">Description</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1166e159 "><span class="keyword">FOPP</span></td>
+
+<td valign="top" headers="d1166e162 "><span class="keyword">GOPP</span></td>
+
+<td valign="top" headers="d1166e165 "><span class="keyword">WOPP</span></td>
+
+<td valign="top" headers="d1166e168 "><span class="keyword">COPP</span></td>
+
+<td valign="top" headers="d1166e171 ">Oil Potential Production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1166e159 "><span class="keyword">FOPI</span></td>
+
+<td valign="top" headers="d1166e162 "><span class="keyword">GOPI</span></td>
+
+<td valign="top" headers="d1166e165 "><span class="keyword">WOPI</span></td>
+
+<td valign="top" headers="d1166e168 "><span class="keyword">COPI</span></td>
+
+<td valign="top" headers="d1166e171 "> Oil Potential Injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1166e159 "><span class="keyword">FWPP</span></td>
+
+<td valign="top" headers="d1166e162 "><span class="keyword">GWPP</span></td>
+
+<td valign="top" headers="d1166e165 "><span class="keyword">WWPP</span></td>
+
+<td valign="top" headers="d1166e168 "><span class="keyword">CWPP</span></td>
+
+<td valign="top" headers="d1166e171 ">Water Potential Production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1166e159 "><span class="keyword">FWPI</span></td>
+
+<td valign="top" headers="d1166e162 "><span class="keyword">GWPI</span></td>
+
+<td valign="top" headers="d1166e165 "><span class="keyword">WWPI</span></td>
+
+<td valign="top" headers="d1166e168 "><span class="keyword">CWPI</span></td>
+
+<td valign="top" headers="d1166e171 "> Water Potential Injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1166e159 "><span class="keyword">FGPP</span></td>
+
+<td valign="top" headers="d1166e162 "><span class="keyword">GGPP</span></td>
+
+<td valign="top" headers="d1166e165 "><span class="keyword">WGPP</span></td>
+
+<td valign="top" headers="d1166e168 "><span class="keyword">CGPP</span></td>
+
+<td valign="top" headers="d1166e171 ">Gas Potential Production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1166e159 "><span class="keyword">FGPI</span></td>
+
+<td valign="top" headers="d1166e162 "><span class="keyword">GGPI</span></td>
+
+<td valign="top" headers="d1166e165 "><span class="keyword">WGPI</span></td>
+
+<td valign="top" headers="d1166e168 "><span class="keyword">CGPI</span></td>
+
+<td valign="top" headers="d1166e171 ">Gas Potential Injection rate</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</li>
+
+</ul>
+
+<p>In ECLIPSE 300  well potentials can be written to the <samp class="codeph">SUMMARY</samp> file, using the keywords:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1166e331">Well</th>
+
+<th valign="top" id="d1166e334">Description</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1166e331 "><span class="keyword">WOPP</span></td>
+
+<td valign="top" headers="d1166e334 ">Oil Potential Production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1166e331 "><span class="keyword">WWPP</span></td>
+
+<td valign="top" headers="d1166e334 ">Water Potential Production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1166e331 "><span class="keyword">WWIP</span></td>
+
+<td valign="top" headers="d1166e334 "> Water Potential Injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1166e331 "><span class="keyword">WGPP</span></td>
+
+<td valign="top" headers="d1166e334 ">Gas Potential Production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1166e331 "><span class="keyword">WGIP</span></td>
+
+<td valign="top" headers="d1166e334 ">Gas Potential Injection rate</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The field and group potentials are the sum of their subordinate
+wells’ potentials. The connection potentials are the individual connection
+flow rates when the well is operating at its potential.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

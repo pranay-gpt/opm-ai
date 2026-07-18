@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Output of cells with convergence problems"/>
+<meta name="DC.subject" content="Reporting and diagnostics, Convergence reports ECLIPSE 100"/>
+<meta name="keywords" content="Reporting and diagnostics, Convergence reports ECLIPSE 100"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="converge_output_of_cells_with_convergence_problems"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Output of cells with convergence problems</title>
+</head>
+<body>
+
+
+<div class="nested0" id="converge_output_of_cells_with_convergence_problems"><a name="converge_output_of_cells_with_convergence_problems"><!-- --></a>
+<h1 class="topictitle1">Output of cells with convergence problems</h1>
+
+
+ <div>
+<p>It is possible to output information to the <samp class="codeph">RESTART</samp> 
+file providing details of cells that are causing convergence problems.
+At every non-linear iteration the worst cells have their counter increased
+by one. ECLIPSE 100 outputs two sets of mnemonics to the <samp class="codeph">RESTART</samp> file. The first set provides the worst convergence cells as measured
+by the magnitude of the residual of every equation, whereas the second
+set provides the worst cells based on the magnitude of the Newton
+increments for every variable.</p>
+
+<p>This option is activated by specifying the argument '<samp class="codeph">CONV=intege</samp>' in keyword <a href="../ecl_rm/RPTRST.html#RPTRST">RPTRST</a>. By default, this 'integer'
+value is set to 1, so that the single worst cell in the run is focused
+on. Modifying this ‘integer’ value alters the number of worst cells.</p>
+
+<p>Depending on the phases present in the model and the options
+used, different arguments are output to the <samp class="codeph">RESTART</samp> file. Specifying '<samp class="codeph">CONV=integer</samp>' in keyword <span class="keyword">RPTRST</span> outputs all relevant arguments for the particular
+model. The possible arguments are:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d242e79">Argument</th>
+
+<th valign="top" id="d242e82">Description</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d242e79 "> <samp class="codeph">CNV_OIL</samp> </td>
+
+<td valign="top" headers="d242e82 "> Residual of oil equation  </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d242e79 "> <samp class="codeph">CNV_WAT </samp> </td>
+
+<td valign="top" headers="d242e82 ">Residual of water equation  </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d242e79 "> <samp class="codeph">CNV_GAS</samp> </td>
+
+<td valign="top" headers="d242e82 ">Residual of gas equation     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d242e79 "> <samp class="codeph">CNV_PLY </samp> </td>
+
+<td valign="top" headers="d242e82 ">Residual of polymer equation (<a href="../ecl_rm/POLYMER.html#POLYMER">POLYMER</a> option) </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d242e79 "> <samp class="codeph">CNV_SAL</samp> </td>
+
+<td valign="top" headers="d242e82 ">Residual of brine equation (<a href="../ecl_rm/BRINE.html#BRINE">BRINE</a> option
+when used with polymer) </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d242e79 "> <samp class="codeph">CNV_SOL</samp> </td>
+
+<td valign="top" headers="d242e82 ">Residual of solvent equation (<a href="../ecl_rm/SOLVENT.html#SOLVENT">SOLVENT</a> option)   </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d242e79 "> <samp class="codeph">CNV_GGI</samp> </td>
+
+<td valign="top" headers="d242e82 ">Residual of Gi Pseudo-compositional Model (<a href="../ecl_rm/GIMODEL.html#GIMODEL">GIMODEL</a> option) </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d242e79 "> <samp class="codeph">CNV_DPRE</samp> </td>
+
+<td valign="top" headers="d242e82 ">Pressure increment </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d242e79 "> <samp class="codeph">CNV_DWAT</samp> </td>
+
+<td valign="top" headers="d242e82 ">Water saturation increment  </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d242e79 "> <samp class="codeph">CNV_DGAS</samp> </td>
+
+<td valign="top" headers="d242e82 ">Gas saturation increment / R<sub>v</sub> increment / R<sub>s</sub> increment </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d242e79 "> <samp class="codeph">CNV_DPLY</samp> </td>
+
+<td valign="top" headers="d242e82 ">Polymer concentration increment</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d242e79 "> <samp class="codeph">CNV_DSAL</samp> </td>
+
+<td valign="top" headers="d242e82 ">Brine concentration increment</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d242e79 "> <samp class="codeph">CNV_DSOL</samp> </td>
+
+<td valign="top" headers="d242e82 ">Solvent concentration increment</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d242e79 "> <samp class="codeph">CNV_DGGI</samp> </td>
+
+<td valign="top" headers="d242e82 ">Dry injection gas parameter (Gi) increment      </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The active variables for each grid block depend on the solution
+state (see table <a href="converge_ECLIPSE_100.html#converge.Xconverge.tab.006d">785.1</a>). <samp class="codeph">CNV_DGAS</samp> therefore denotes a composite
+argument reporting the cells with the largest changes in gas saturation,
+oil-gas ratio in the gas phase, or gas-oil ratio in the liquid phase. </span></div>
+
+<p>For models with local grid refinements, the worst converging cells
+are evaluated separately in the global grid and in each local grid.
+This is because ECLIPSE 100 by default solves local grids separately
+using local timestepping. For each grid (global and local) the worst
+converging cells have their counter increased by 1 after each iteration.
+The number entered in the <samp class="codeph">CONV</samp> argument in <a href="../ecl_rm/RPTRST.html#RPTRST">RPTRST</a> is weighted by the ratio of the number of
+active cells in the local grid to the total number of active cells
+including global host cells to determine how many local grid cells
+are output.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

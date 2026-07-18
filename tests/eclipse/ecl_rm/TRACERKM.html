@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="TRACERKM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="TRACERKM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>TRACERKM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="TRACERKM"><a name="TRACERKM"><!-- --></a>
+<h1 class="keyword">TRACERKM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="tracerkm.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="tracerkm.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2622e45"> x </th>
+
+<th valign="top" id="d2622e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2622e54">  </th>
+
+<th valign="top" id="d2622e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2622e45 d2622e54 ">  </td>
+
+<td valign="top" headers="d2622e48 d2622e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2622e45 d2622e54 ">  </td>
+
+<td valign="top" headers="d2622e48 d2622e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2622e45 d2622e54 ">  </td>
+
+<td valign="top" headers="d2622e48 d2622e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2622e45 d2622e54 "> x </td>
+
+<td valign="top" headers="d2622e48 d2622e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2622e45 d2622e54 ">  </td>
+
+<td valign="top" headers="d2622e48 d2622e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2622e45 d2622e54 ">  </td>
+
+<td valign="top" headers="d2622e48 d2622e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2622e45 d2622e54 ">  </td>
+
+<td valign="top" headers="d2622e48 d2622e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2622e45 d2622e54 ">  </td>
+
+<td valign="top" headers="d2622e48 d2622e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword should only be used when either the environmental
+tracer option or the surfactant option is active and the <a href="PARTTRAC.html#PARTTRAC"> PARTTRAC</a> keyword has
+been entered in the <span class="keyword">RUNSPEC</span> section. The keyword
+can only be used in conjunction with multi-partitioned tracers, that
+is, tracers with <samp class="codeph">MULT</samp> specified in the 4th item of
+the <a href="TRACER.html#TRACER"> TRACER</a> keyword.</p>
+
+<p>The data comprises <samp class="codeph">NKPTMX+2</samp> records (see item
+2 of keyword <span class="keyword">PARTTRAC</span>) of data each terminated
+by a slash (/).</p>
+
+<div class="section" id="tracerkm_first_record"><a name="tracerkm_first_record"><!-- --></a><h4 class="sectiontitle">First record</h4><div class="p">The first record consists of two items of data:<ol>
+<li>Three-character name of partitioned tracer as defined in the <a href="TRACER.html#TRACER"> TRACER</a> keyword.</li>
+
+<li>Type of partition function specification. This item must currently
+be set to <samp class="codeph">STANDARD</samp> indicating that tables of partition
+coefficients are entered as a function of pressure.</li>
+
+</ol>
+</div>
+</div>
+
+<div class="section" id="tracerkm_second_record"><a name="tracerkm_second_record"><!-- --></a><h4 class="sectiontitle">Second record</h4><p>The second record contains a list of the phases that the tracer partitions
+into. The options are:</p>
+<p> <samp class="codeph">O</samp> (oleic), <samp class="codeph">A</samp> (aqueous) and <samp class="codeph">G</samp> (gaseous).</p>
+<p>The first phase
+specified in the list is taken as the reference phase and must correspond
+to the phase specified in the item 2 of the <a href="TRACER.html#TRACER"> TRACER</a> keyword.</p>
+</div>
+
+<div class="section" id="tracerkm_remaining_records"><a name="tracerkm_remaining_records"><!-- --></a><h4 class="sectiontitle">Remaining records</h4><p>The following <samp class="codeph">NKPTMX</samp> records hold tables of partition
+coefficients for each region. Each table, having at most <samp class="codeph">NPKPMX</samp> (item 3 of keyword <a href="PARTTRAC.html#PARTTRAC"> PARTTRAC</a>) rows of data, applies to its corresponding partitioning
+region, defined by keyword <a href="TRKPF.html#TRKPF"> TRKPF</a> in the <span class="keyword">REGIONS</span> section.</p>
+<div class="p">Each table
+consists of two or more columns, and is terminated by a slash (/).
+The number of columns must equal the number of phases specified in
+the second record. Column<ol>
+<li>Pressure<p>Values must be monotonically increasing.</p>
+<p>UNITS:
+barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma
+(<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li>Value of partitioning functions K(P).</li>
+
+</ol>
+</div>
+<p>Each column defines the partitioning functions between
+a phase and the reference phase in the order that the phases are defined
+in the second record. For example, if a tracer partitions between
+three phases there will be two columns of partitioning functions.</p>
+</div>
+
+<div class="section" id="tracerkm_example"><a name="tracerkm_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NKPTMX=3</samp> for partitioned tracer <samp class="codeph">PT1</samp> partitioning
+into three phases:</p>
+<pre><code>TRACERKM
+ PT1 STANDARD  /
+  A  O  G      /
+-- PRES   K1(O/A)    K2(G/A)
+    10      1.1       5.7
+    50      1.5       6.8
+    90      1.7       9.1
+/
+-- PRES   K1(O/A)    K2(G/A)
+    10      1.2       5.0
+    50      1.7       5.9
+    90      1.9       6.4
+/
+/ -- Default third table to second table</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

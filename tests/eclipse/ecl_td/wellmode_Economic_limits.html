@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Economic limits"/>
+<meta name="DC.subject" content="Well modeling economic limits, Well, Economic limit, Workover, Connection, Completion, Crossflow"/>
+<meta name="keywords" content="Well modeling economic limits, Well, Economic limit, Workover, Connection, Completion, Crossflow"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wellmode_economic_limits"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Economic limits</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wellmode_economic_limits"><a name="wellmode_economic_limits"><!-- --></a>
+<h1 class="topictitle1">Economic limits</h1>
+
+
+
+ <div>
+<p>There is an additional class of limits that can be applied to production
+wells. The engineer can specify values of the oil or gas production
+rate, the water cut, the gas-oil ratio and the water-gas ratio which
+represent the limits of economic operation of the well. The violation
+of one of these limits will result in the well, or one or more of
+its connections, being automatically closed. The economic limit options
+are:</p>
+
+<ul>
+<li>Lower limits for the oil, gas, liquid and reservoir fluid volume
+production rates for each well. The well is closed if any of these
+limits are broken.<p>ECLIPSE 100</p>
+       
+        <p>Alternatively, if the well still has one or more connections
+placed on automatic opening (see <a href="wellmode_automatic_opening_of_wells_and_well_connections.html#wellmode_automatic_opening_of_wells_and_well_connections"> "Automatic opening of wells and well connections"</a>), one of
+these connections will be opened.</p>
+</li>
+
+<li>Upper limits for the water cut, the gas-oil ratio, the gas-liquid
+ratio and the water-gas ratio of each well. There is a choice of actions
+to be taken if a well violates one of these limits:<ul>
+<li>The worst-offending connection (that is the connection with the
+highest water cut, gas-oil ratio or water-gas ratio) in the well is
+closed. </li>
+
+<li>The worst-offending connection and all connections below it in
+the well are closed. Here, “below” is interpreted as “further
+from the wellhead according to the connection ordering”. The
+connection ordering may be specified in the <a href="../ecl_rm/COMPORD.html#COMPORD">COMPORD</a> keyword.  </li>
+
+<li>The well itself is closed. <p>ECLIPSE 100</p>
+</li>
+
+<li>The well is plugged back, that is the length
+of perforations in either the top or bottom open connection or the
+worst-offending connection is reduced by an amount specified in keyword <a href="../ecl_rm/WPLUG.html#WPLUG">WPLUG</a>.   </li>
+
+</ul>
+</li>
+
+</ul>
+
+<p>Keyword <a href="../ecl_rm/WECON.html#WECON">WECON</a> is used to set the limiting values and define the choice
+of workover action.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If a well which is closed still has two or more connections
+open to the reservoir, it may be possible for crossflow to occur between
+the completed layers through the well bore. To distinguish a well
+that can still make its presence felt in this way after being closed,
+we refer to it as <strong>stopped</strong>. A well that is not allowed to crossflow
+after being closed is referred to as <strong>shut</strong>. Thus a <strong>stopped</strong> well can still affect the reservoir, whereas a <strong>shut</strong> well
+is effectively ignored by the simulator. Wells can be opened, stopped
+or shut manually. The engineer can also stipulate whether a well is
+to be shut or stopped after it violates an economic limit, using item
+9 in the <a href="../ecl_rm/WELSPECS.html#WELSPECS">WELSPECS</a> keyword. </span></div>
+
+<p>Economic limits can also be set for individual connections in production
+wells. A connection will be closed if it exceeds its limit on water
+cut, gas-oil ratio or water-gas ratio, or if its oil or gas production
+rate falls below a specified value. Connection economic limits are
+set using the keyword <a href="../ecl_rm/CECON.html#CECON">CECON</a>.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>A minimum economic rate can also be applied
+to injection wells, using keyword <a href="../ecl_rm/WECONINJ.html#WECONINJ">WECONINJ</a>. This allows injection
+wells to be automatically closed if they are not injecting at a high
+enough rate.</p>
+
+<p>Workovers are normally performed on individual well connections,
+but it is possible to lump sets of connections together into ‘completions’
+for simultaneous closure, using the keyword <a href="../ecl_rm/COMPLUMP.html#COMPLUMP">COMPLUMP</a>. When a well with
+lumped connections is worked over (for example, after exceeding a
+water cut limit set in <span class="keyword">WECON</span>), the worst-offending
+completion is identified (by summing the flow rates of its connections)
+and all the connections belonging to that completion will be shut
+together.</p>
+
+<p>The economic limits are checked at the end of each timestep, and
+the appropriate action is taken if any are violated. The action is
+taken at the end of the timestep during which the limit was violated.
+Thus a well may produce ‘uneconomically’ for one timestep
+before remedial action is taken. However, the engineer can specify
+a <strong>tolerance fraction</strong> for these limits. If a limit is broken
+by proportionately more than this tolerance, the timestep will be
+repeated after the remedial action has been taken. Thus the action
+will take effect from the beginning of the timestep in which the limit
+would otherwise have been violated. For example, consider a well which
+has a maximum economic gas-oil ratio of 10 Mscf/stb, and assume a
+tolerance fraction of 0.2 has been specified. If the well’s
+gas-oil ratio increases to 11 Mscf/stb, then remedial action is taken
+at the end of that timestep, and will be effective for the following
+timestep. If however the gas-oil ratio reaches above 12 Mscf/stb,
+the timestep will be repeated after the remedial action has been taken.
+The tolerance fraction is set with the keyword <a href="../ecl_rm/WLIMTOL.html#WLIMTOL">WLIMTOL</a>. Note that each timestep
+will be repeated only once. Thus if a well still violates an economic
+limit at the end of the repeated timestep, that timestep is ‘accepted’.
+Further remedial action will applied to the well before starting the
+next timestep.</p>
+
+<p>Wells or connections that are closed after violating an economic
+limit can be tested periodically to see if they can flow economically
+again. If they can flow without violating a limit, they will be reopened.
+This facility can, for example, allow a watered out well to produce
+again after its cone has subsided sufficiently while it was closed.
+Instructions for periodic testing of closed wells are entered using
+the keyword <a href="../ecl_rm/WTEST.html#WTEST">WTEST</a>.</p>
+
+<p>There is an option to make the simulation end automatically if
+all the production wells in the field, or in a particular group, have
+been shut or stopped. This saves the simulator from using computer
+time needlessly when nothing further of interest is going to happen.
+The option can be switched on using the <a href="../ecl_rm/GECON.html#GECON">GECON</a> keyword. In addition,
+selected wells can be flagged to make the simulation stop if any of
+them are closed during the run for any reason, using a switch in the <span class="keyword">WECON</span> keyword. If for example a flagged well is shut because
+it has exceeded its economic water cut limit, the run will stop and
+an appropriate message will be printed. The engineer can then examine
+the state of the reservoir at that time, make any necessary changes
+to the well completions, and restart the run. This ‘semi-interactive’
+mode of working allows the engineer to carry out workover procedures
+that are more complex than the built-in automatic workover options.</p>
+
+<p>An additional option allows the engineer to nominate a well to
+be opened when another well is closed automatically for any reason
+(for example on violating an economic limit). This facility can be
+used, for example, to open an injector when a producer closes after
+becoming uneconomic. If the injector has the same completions as the
+producer, the effect will be equivalent to converting the producer
+into an injector, although in this case they are treated as two separate
+wells. The option is activated with item 9 in keyword <a href="../ecl_rm/WECON.html#WECON">WECON</a>.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Group production control options"/>
+<meta name="DC.subject" content="Well modeling group and field control, Well, Potentital, Drilling, Workover, Potentials, Drilling wells, Drilling queue"/>
+<meta name="keywords" content="Well modeling group and field control, Well, Potentital, Drilling, Workover, Potentials, Drilling wells, Drilling queue"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wellmode_group_production_control_options"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Group production control options</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wellmode_group_production_control_options"><a name="wellmode_group_production_control_options"><!-- --></a>
+<h1 class="topictitle1">Group production control options</h1>
+
+
+ <div>
+<div class="section" id="wellmode_group_production_rate_targets_-_guide_rate_control"><a name="wellmode_group_production_rate_targets_-_guide_rate_control"><!-- --></a><h4 class="sectiontitle">Group production rate targets - guide rate control</h4><p>Selected groups at any level in the hierarchy (including the field)
+can be made to produce at a target value of any one of the following
+quantities:</p>
+<ul>
+<li>Oil production rate             </li>
+
+<li>Water production rate             </li>
+
+<li>Gas production rate             </li>
+
+<li>Liquid (oil + water) production rate             </li>
+
+<li>Linearly combined production rate (user-specified linear combination
+of oil, water and gas)             </li>
+
+<li>Reservoir fluid volume rate   <p>ECLIPSE
+300</p>
+                         </li>
+
+<li>Wet gas rate (which is the volume that the
+hydrocarbon mixture would occupy at standard conditions if it were
+an ideal gas)</li>
+
+<li>Reservoir volume production balancing fraction (which limits the
+group’s reservoir fluid volume production rate to the specified
+fraction of its reservoir fluid volume injection rate).  <p>ECLIPSE 300</p>
+ </li>
+
+<li>Surface gas volume production balancing fraction
+(which limits the group’s surface gas volume available rate
+to the specified fraction of its surface gas volume injection rate).<p>ECLIPSE 300</p>
+</li>
+
+<li>Surface water volume production balancing
+fraction (which limits the group’s surface water volume production
+rate to the specified fraction of its surface water volume injection
+rate).<p>ECLIPSE 300</p>
+</li>
+
+<li>Calorific value rate.</li>
+
+</ul>
+<p>The control target is set using keyword <a href="../ecl_rm/GCONPROD.html#GCONPROD">    GCONPROD</a>. The group’s
+target rate is apportioned between the individual wells in proportion
+to each well’s specified <strong>guide rate</strong>. A guide rate can
+optionally be defined for any phase; oil, water, gas, liquid or reservoir
+fluid, using keyword <a href="../ecl_rm/WGRUPCON.html#WGRUPCON">WGRUPCON</a>. If the phase differs from the phase under group control,
+the guide rate is translated into a guide rate for the controlled
+phase using the well’s production ratio for the previous timestep.
+Thus, for example, the target oil production rate of a group can be
+apportioned among its subordinate wells such that each well produces
+similar amounts of liquid. This can be done by giving each well the
+same guide rate for the liquid phase.</p>
+<p>If a well’s guide
+rate has not been specified, it is set at the beginning of each timestep
+to a value that depends on the well’s <strong>production potential</strong>. The production potential is defined as the instantaneous production
+rate that the well would initially have in the absence of any constraints
+on flow rate, at the current grid block conditions (see <a href="potential_Well_potentials.html#potential_well_potentials">  "Well
+potentials"</a>). By default, the well’s guide rate is set
+equal to its production potential of the phase under group control.
+This enables, for example, a group’s target oil production rate
+to be apportioned among the individual wells such that the wells produce
+in proportion to their potentials. Alternatively, the keyword <a href="../ecl_rm/GUIDERAT.html#GUIDERAT">GUIDERAT</a> can be used to specify
+the coefficients of a general formula for well guide rates as a function
+of their oil, water and gas production potentials. This can enable,
+for example, wells with high water cut to be given a progressively
+smaller guide rate as they water out.</p>
+<p>The individual wells can
+be subject to their own flow and pressure constraints. For example,
+if a well would violate its bottom hole pressure limit when producing
+its full share of the group’s production target, the well will
+operate at its bottom hole pressure limit. The production rates of
+the other wells will increase in proportion to their guide rates (or
+potentials) to meet the group’s target, as long as they do not
+violate any of their own flow or pressure limits. A well that is producing
+its full share of the group’s production target is said to be
+under <strong>group control</strong>, while a well constrained by its own flow
+or pressure limits is said to be under <strong>individual control</strong>.
+If required, certain wells can be prevented from coming under group
+control. These wells will continue to operate according to their individual
+flow or pressure constraints, regardless of any group flow target.</p>
+</div>
+
+<div class="section" id="wellmode_drilling_queue"><a name="wellmode_drilling_queue"><!-- --></a><h4 class="sectiontitle">Drilling queue</h4><p>At some stage in the simulation, it may happen that all the group-controlled
+wells in the group have hit one of their constraints, and have either
+dropped out of group control or have been closed. The group can then
+no longer meet its flow target, and its production rate will decline.
+This situation can be postponed by placing additional wells in the <strong>drilling queue</strong>, using either keyword <a href="../ecl_rm/QDRILL.html#QDRILL"> QDRILL</a> or keyword <a href="../ecl_rm/WDRILPRI.html#WDRILPRI">WDRILPRI</a>. When a group can
+no longer meet its production target, the simulator will scan the
+drilling queue and open a suitable well. The well must be subordinate
+to the group that is unable to meet its target, but not subordinate
+to any lower level group that is operating at its own production target
+or limit for the same phase. The drilling queue may either be a <strong>sequential</strong> queue, from which wells are opened in the sequence
+in which they were placed in the queue, or a <strong>prioritized</strong> queue
+from which wells are opened in decreasing order of their <strong>drilling
+priority</strong>. Well drilling priorities may be set manually in keyword <a href="../ecl_rm/WDRILPRI.html#WDRILPRI">WDRILPRI</a> or calculated from
+their current potentials according to a function defined with keyword <a href="../ecl_rm/DRILPRI.html#DRILPRI">DRILPRI</a>.</p>
+<p>The rate of
+opening new wells from the drilling queue can be limited by specifying
+the time taken to drill each well with keyword <a href="../ecl_rm/WDRILTIM.html#WDRILTIM">WDRILTIM</a> and allocating drilling
+rigs to groups with keyword <a href="../ecl_rm/GRUPRIG.html#GRUPRIG">GRUPRIG</a>.</p>
+<p>ECLIPSE 100</p>
+<p>Additionally,
+ECLIPSE 100 can also place an upper limit on the number of open wells
+in each group, with keyword <a href="../ecl_rm/GECON.html#GECON">GECON</a>. A well from the drilling queue is not opened if it would
+cause the limit to be exceeded. The restrictions set with the keywords <a href="../ecl_rm/WELSOMIN.html#WELSOMIN">WELSOMIN</a> and <a href="../ecl_rm/WDRILRES.html#WDRILRES">WDRILRES</a> described in <a href="wellmode_automatic_opening_of_wells_and_well_connections.html#wellmode_automatic_opening_of_wells_and_well_connections"> "Automatic opening of wells and well connections"</a> also apply
+to wells opened from the drilling queue. In addition to drilling new
+wells, ECLIPSE 100 can take other actions to postpone a decline in
+production rate. These include opening new connections in existing
+wells, decreasing the wells’ THP limits, retubing the wells
+and applying artificial lift. The actions are specified with the keyword <a href="../ecl_rm/PRORDER.html#PRORDER">PRORDER</a>. These are described
+more comprehensively in <a href="groupprd_Group_Production_Rules.html#groupprd_group_production_rules"> "Group production rules"</a>.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The drilling queue should
+not be confused with the facility described in <a href="wellmode_automatic_opening_of_wells_and_well_connections.html#wellmode_automatic_opening_of_wells_and_well_connections"> "Automatic opening of wells and well connections"</a>. They are
+both subject to the same constraints on drilling rate, rig availability
+and maximum number of wells per group. But wells on <samp class="codeph">AUTO</samp> are opened as soon as these constraints allow, whereas wells in
+the drilling queue are opened only when a group or the field cannot
+meet its rate target.</span></div>
+</div>
+
+<div class="section" id="wellmode_group_production_rate_limits"><a name="wellmode_group_production_rate_limits"><!-- --></a><h4 class="sectiontitle">Group production
+rate limits</h4><p>The engineer can impose <strong>upper limits</strong> on
+any of the quantities listed on <a href="wellmode_Group_production_control_options.html#wellmode_group_production_rate_targets_-_guide_rate_control"> "Group production rate targets - guide rate control"</a>, for
+selected groups and/or the field, using keyword <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a>. These limits can
+be imposed whether or not the group or field has a production target
+to maintain. If a group’s production rate exceeds one of these
+limits, there is a choice of actions to follow:</p>
+<ol>
+<li>   The worst-offending connections in the worst-offending wells
+will be closed successively until the rate limit is honored. The ‘worst-offending’
+well or connection here is the one that has the highest ratio of the
+production rate of the phase violating the limit to the production
+rate of the well’s preferred phase.   </li>
+
+<li>As 1 above, except that all connections below the worst-offending
+one in the well will also be closed.             </li>
+
+<li>The worst-offending wells will be closed successively until the
+rate limit is honored.   <p>ECLIPSE 100</p>
+ 
+                         </li>
+
+<li>The worst-offending well will be plugged back, that is, a length
+of perforations in the top or bottom open connection is reduced by
+an amount specified in keyword.</li>
+
+<li> The group will be made to produce the offending phase at its
+maximum allowed rate, according to the group control facilities described
+in <a href="wellmode_Group_production_control_options.html#wellmode_group_production_rate_targets_-_guide_rate_control"> "Group production rate targets - guide rate control"</a>. If the
+group was previously meeting a target rate for another phase, that
+target will no longer be met but will act as an upper limit for the
+production rate of that phase. The violated limit in effect becomes
+the new target.              </li>
+
+</ol>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">When a group which was operating under a rate target for
+one phase, switches to rate control by another phase in this way,
+the guide rates for any children of this group are not allowed to
+be zero.             <p>This is to prevent the following situation.
+Consider, for example, a group under gas production rate control which
+also has a limit on the group water production rate to control water
+breakthrough. When water breakthrough occurs in some of the group’s
+wells and the water rate limit is violated, the group switches to
+water rate production control. Any wells that do not see any water
+breakthrough would not have any water production potential, and normally
+this would mean zero guide rates so these pure gas production wells
+would shut - which is obviously not what is required for a group which
+is primarily intended for gas production.</p>
+<p>Instead, a small positive
+guide rate is imposed on such wells force them to stay open and operate
+at their potential. <strong>Unfortunately, sometimes this means that the
+original group gas rate target is exceeded.</strong> Because of this, it
+is strongly recommended that <span class="keyword">RATE</span> is not used to
+control breakthrough in this way. Two possible alternatives are (i)
+use an alternative procedure such as <span class="keyword">WELL</span> or <span class="keyword">CON</span> under <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a> in items 11 onwards, or (ii) use a <a href="../ecl_rm/GUIDERAT.html#GUIDERAT">GUIDERAT</a> formula that penalizes
+wells that see breakthrough.</p>
+</span></div>
+<p>If a reservoir fluid volume
+rate limit or a production balancing fraction limit is exceeded, only
+action 5 is performed.</p>
+<p>As an example consider a group of oil
+wells experiencing water breakthrough, such that the liquid rate is
+approaching its maximum limit. If action 1, 2, 3 or 4 is selected,
+the wells or connections with the highest liquid-oil ratio (that is
+the highest water cut) will be successively closed or plugged back.
+If the group is operating at a target oil rate, this target will continue
+to be met until there are no wells remaining under group control.
+If however action 5 is selected, the group control facility will be
+applied to make the group produce liquid at the maximum liquid rate.
+The oil rate will decline steadily as the group’s water cut
+increases.</p>
+</div>
+
+<div class="section" id="wellmode_guide_rate_control_for_node-groups"><a name="wellmode_guide_rate_control_for_node-groups"><!-- --></a><h4 class="sectiontitle">Guide
+rate control for node-groups</h4><p>When a node-group (or the field
+itself) has a rate target, its target rate will be apportioned among
+its subordinate wells as described in <a href="wellmode_Group_production_control_options.html#wellmode_group_production_rate_targets_-_guide_rate_control"> "Group production rate targets - guide rate control"</a>, unless
+a subordinate group either</p>
+<ul>
+<li>has a target rate of its own,</li>
+
+<li>has been declared unavailable for control at a higher level,</li>
+
+<li>has been given a production guide rate.</li>
+
+</ul>
+<p>If a subordinate group has a target rate of its own, its production
+rates will have already been calculated. (The groups under rate control
+are processed level by level, from the bottom level up to the field.)
+For example, in figure <a href="wellmode_Group_and_field_control_facilities.html#wellmode.Xwellmode.XID-000000f2">535.1</a>  let PLAT-B have a target rate of 50,000 stb/day for oil and
+SAT-B have a target rate of 30,000 stb/day for liquid. SAT-B’s
+target rate may be a limit that has become a target after it had been
+violated. SAT-B’s oil rate is subtracted from PLAT-B’s
+target, and the remainder is shared between the wells in GR-B1 and
+GR-B2.</p>
+<p>If SAT-B is required to produce 30,000 stb/day of liquid
+regardless of PLAT-B’s target, it should be declared (in keyword <span class="keyword">GCONPROD</span>) unavailable for control at a higher level. Otherwise
+its wells could come back under control from PLAT-B if ever SAT-B’s
+share of PLAT-B’s oil target fell below its current oil rate
+when producing 30,000 stb/day of liquid. SAT-B’s wells would
+then produce their own share of PLAT-B’s oil target, with a
+combined liquid rate of less than 30,000 stb/day. Declaring a group
+unavailable to respond to a higher level control will ensure that
+it continues to operate at its rate target or maximum production capacity
+independently of any higher level rate control.</p>
+<p>A group can
+be given a production guide rate (in keyword <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a>) if it is required
+to produce a specific proportion of a higher level rate target. For
+example, if the field has an oil rate target of 100,000 stb/day and
+platforms PLAT-A and PLAT-B are required to produce equal quantities
+of liquid, then PLAT-A and PLAT-B should be given equal guide rates
+for the liquid phase. The liquid guide rates are translated into oil
+guide rates by multiplying them by each platform’s oil-liquid
+ratio from the previous timestep. Both platforms are then given oil
+rate targets in proportion to their oil guide rates, and placed under
+control from the higher (field) level. If PLAT-A is unable to provide
+its share of the field’s oil target, it will produce what it
+can according to its own limits or capacity, and the remainder of
+the field’s target will be allocated to PLAT-B.</p>
+</div>
+
+<div class="section" id="wellmode_prioritization_-_an_alternative_to_guide_rate_control"><a name="wellmode_prioritization_-_an_alternative_to_guide_rate_control"><!-- --></a><h4 class="sectiontitle">Prioritization - an alternative to guide rate control</h4><p>The prioritization option is an alternative means of applying
+production rate limits to groups. It can be used instead of the guide
+rate method described so far. In the prioritization option, wells
+are turned on in decreasing order of priority, the well with the highest
+priority flowing first, until a group’s production rate limit
+is exceeded. The flowing wells operate at their individual targets
+or limits (<a href="../ecl_rm/WCONPROD.html#WCONPROD">WCONPROD</a>). However, the well that exceeds the group’s rate limit
+is cut back to meet the limit, and the wells with priority lower than
+this subordinate to that group do not flow. The low priority wells
+not selected for flow are “priority-closed” until they
+are eventually selected.</p>
+<p>The priority number for each well is
+calculated from its potentials at regular intervals, according to
+a general formula with user-defined coefficients. The keyword <a href="../ecl_rm/PRIORITY.html#PRIORITY">PRIORITY</a> is used to select
+the prioritization option and to set the coefficients of the priority
+equation. The equation allows the priority to be set equal to, for
+example, the potential oil rate, or the reciprocal of the potential
+gas rate, or the reciprocal of the water cut.  You can set individual
+well  priorities independently using  the keyword <a href="../ecl_rm/WELPRI.html#WELPRI">WELPRI</a>, overriding the general
+equation.</p>
+<p>With the prioritization option, upper limits can be
+set for the oil, water, gas, liquid and reservoir fluid volume rates
+of each group. The choice of actions on exceeding a limit is the same
+as described in <a href="wellmode_Group_production_control_options.html#wellmode_group_production_rate_limits"> "Group production rate limits"</a>, except that action 5 causes
+the rate to be reduced by closing the low priority wells instead of
+cutting all the wells back to flow in proportion to their guide rates.
+The group production rate limits and actions must be set using the
+keyword <a href="../ecl_rm/GCONPRI.html#GCONPRI">GCONPRI</a>, and not <span class="keyword">GCONPROD</span> as in the guide rate
+method.</p>
+<p>ECLIPSE 100</p>
+<p>Optionally,
+a second priority equation can be defined, which may be used instead
+of the first equation when prioritizing wells to cut back production
+to obey specific rate limits. For example, if a group gas rate limit
+is exceeded you may wish to close wells with a high GOR, while if
+a water rate limit is exceeded you may wish to close wells with a
+high watercut. When two priority equations are defined, the calculation
+procedure differs slightly from the single priority equation case.
+All the available wells are opened initially, then if a group rate
+limit is violated the wells with the lowest priority according to
+the formula chosen for that particular limit are closed in turn until
+the rate limit is no longer exceeded. The last well to be closed is
+then reopened and made to produce at a rate calculated to meet the
+limit. If two or more group rate limits are exceeded which use different
+priority formulae, the lowest priority well is selected according
+to the formula appropriate to the limit that is exceeded by the greatest
+fraction. The ‘active’ formula may of course change as
+each well is closed.</p>
+<p>It is possible to mix the two group control
+strategies - prioritization and guide rates - in a single run. Groups
+to be controlled by prioritization should have their rate limits set
+with keyword <a href="../ecl_rm/GCONPRI.html#GCONPRI">GCONPRI</a>, while groups using the guide rate method have their rate
+limits set with keyword <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a>. A group can be changed from one method to the other simply
+by re-specifying its rate limits with the appropriate keyword. The
+mixing of the two methods, however, is subject to the following restriction:
+the guide rate method cannot be used by a group subordinate to a group
+using the prioritization method. Thus, for example, no groups can
+use the guide rate method if the field has a prioritization rate limit.</p>
+<p>When the two group control strategies are mixed, the well rates
+are allocated according to the following method. First, the production
+wells subordinate to prioritization groups are solved, selecting the
+wells for flowing in decreasing order of their priorities. Next, the
+producers in the remaining parts of the grouping tree are solved,
+employing the standard guide rate method to apportion the flow rates
+between them to meet any <span class="keyword">GCONPROD</span> group targets.
+If a prioritization group is subordinate to one with a <span class="keyword">GCONPROD</span> rate target, the wells in the prioritization group will already
+have had their flow rates set, and the remaining wells will have their
+rates set to make up the rest of the <span class="keyword">GCONPROD</span> group’s
+target. Wells from the drilling queue (keyword <a href="../ecl_rm/QDRILL.html#QDRILL">QDRILL</a> or <a href="../ecl_rm/WDRILPRI.html#WDRILPRI">WDRILPRI</a>) that are not subordinate
+to a prioritization group will be opened when necessary to meet the <span class="keyword">GCONPROD</span> group’s rate target. The drilling queue
+is <strong>not</strong> used for opening wells subordinate to prioritization
+groups, as the prioritization algorithm itself handles the opening
+and closing of these wells.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

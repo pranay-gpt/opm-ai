@@ -1,0 +1,739 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ACTIONW"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ACTIONW"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ACTIONW</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ACTIONW"><a name="ACTIONW"><!-- --></a>
+<h1 class="keyword">ACTIONW</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="actionw.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="actionw.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d20e45">x</th>
+
+<th valign="top" id="d20e48">ECLIPSE 100</th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d20e54">x</th>
+
+<th valign="top" id="d20e57">ECLIPSE 300</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d20e45 d20e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d20e48 d20e57 ">RUNSPEC</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d20e45 d20e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d20e48 d20e57 ">GRID</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d20e45 d20e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d20e48 d20e57 ">EDIT</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d20e45 d20e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d20e48 d20e57 ">PROPS</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d20e45 d20e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d20e48 d20e57 ">REGIONS</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d20e45 d20e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d20e48 d20e57 ">SOLUTION</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d20e45 d20e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d20e48 d20e57 ">SUMMARY</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d20e45 d20e54 ">x</td>
+
+<td valign="top" headers="d20e48 d20e57 ">SCHEDULE</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The           <span class="keyword">ACTIONW</span>keyword is one of a group
+of keywords that trigger actions in the simulation when certain conditions
+are met. While the           <span class="keyword">ACTIONW</span> keyword will
+work as documented in simulation data sets, it is recommended that
+you use the           <a href="ACTIONX.html#ACTIONX">              ACTIONX</a> keyword for new or updated data
+sets as it offers the greatest functionality and flexibility.</p>
+
+<p>The           <span class="keyword">ACTIONW</span> keyword marks the start
+of a set of           <span class="keyword">SCHEDULE</span> section keywords
+that are to be stored for later processing when a nominated      
+    <strong>well</strong> satisfies a specified condition. The set of keywords
+may be indented with one or more blank spaces for clarity and must
+be terminated with the           <a href="ENDACTIO.html#ENDACTIO">       
+      ENDACTIO</a> keyword. The keywords
+between the           <span class="keyword">ACTIONW</span> and           <span class="keyword">ENDACTIO</span> keywords will be processed at the end of the timestep
+when the condition defined in the           <span class="keyword">ACTIONW</span> keyword is satisfied by a well named in item 2. You can choose whether
+the action is to be performed only once, or repeatedly each timestep
+while the triggering condition is satisfied.</p>
+
+<p>If a well keyword (for example           <a href="WELTARG.html#WELTARG">              WELTARG</a>) is placed
+between           <span class="keyword">ACTIONW</span> and           <span class="keyword">ENDACTIO</span>, instead of entering the name of a specific well
+in the keyword you may enter a question mark. ECLIPSE then applies
+the keyword data to whichever well (or wells) triggered the action.
+For example, an action can be placed on a set of wells ('        
+  <span class="keyword">PROD*</span>' in item 2 of           <span class="keyword">ACTIONW</span>) to change a well's rate limit when its water cut exceeds a certain
+value. The keyword           <span class="keyword">WELTARG</span> would be entered
+between           <span class="keyword">ACTIONW</span> and           <span class="keyword">ENDACTIO</span>, specifying the new rate limit and applying it
+to the well named '?' in item 1.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Some keywords cannot have the well name entered as a question
+mark to be inherited from an           <span class="keyword">ACTIONW</span>keyword.
+These exceptions are those keywords where name roots are not allowed
+for the well name. These keywords may still be used within an action
+if the well name is explicitly defined. However, well names      
+    <strong>can</strong> be inherited in the           <a href="WELSPECS.html#WELSPECS">              WELSPECS</a> /     
+     <a href="WELSPECL.html#WELSPECL">              WELSPECL</a> keyword for ECLIPSE 100.</span></div>
+
+<p>ECLIPSE 100</p>
+
+<p>Practically any           <span class="keyword">SCHEDULE</span> section keyword may be placed between           <span class="keyword">ACTIONW</span> and           <span class="keyword">ENDACTIO</span>, with the exception of
+timestepping keywords (for example           <a href="TIME.html#TIME">              TIME</a>,         
+ <a href="TSTEP.html#TSTEP">              TSTEP    
+</a>,           <a href="DATES.html#DATES">              DATES</a> and           <a href="GASYEAR.html#GASYEAR">              GASYEAR</a>), the global
+keywords and the           <a href="INCLUDE.html#INCLUDE">              INCLUDE</a> keyword. The           <a href="RPTRST.html#RPTRST">              RPTRST         
+</a> keyword can be used but any changes to the frequency of output
+will not the implemented until the report step following the satisfaction
+of the triggering condition.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>Any keyword specifying data for wells, groups
+or separators may be placed between           <span class="keyword">ACTIONW</span> and           <span class="keyword">ENDACTIO</span>. The           <span class="keyword">RPTRST</span> keyword can also be used but any changes to the
+frequency of output will not the implemented until the report step
+following the satisfaction of the triggering condition.</p>
+
+<p>The amount of storage space reserved for these keywords is controlled
+by the           <span class="keyword">RUNSPEC</span> section keyword      
+    <a href="ACTDIMS.html#ACTDIMS">              ACTDIMS</a>. The number of lines between an           <span class="keyword">ACTIONW</span> keyword and its corresponding           <span class="keyword">ENDACTIO</span> keyword (including the           <span class="keyword">ENDACTIO</span> keyword itself) is limited to           <samp class="codeph">MNLPAC</samp> in
+          <span class="keyword">ACTDIMS</span> item 2. The length of each line
+is limited to           <samp class="codeph">NCPLIN</samp> in           <span class="keyword">ACTDIMS</span> item 3.</p>
+
+<p>Any number of action keyword sets may be declared, each with its
+own triggering condition; the maximum number being limited to    
+      <span class="keyword">MAXACT</span> in           <span class="keyword">ACTDIMS</span> item 1. Each action keyword set must be bracketed by a pair of 
+         <a href="ACTION.html#ACTION">              ACTION</a> (           <a href="ACTIONG.html#ACTIONG">          
+   ACTIONG</a>,           <a href="ACTIONR.html#ACTIONR">              ACTIONR       
+</a>,           <a href="ACTIONS.html#ACTIONS">              ACTIONS</a>,           <span class="keyword">ACTIONW</span>) and           <span class="keyword">ENDACTIO</span> keywords, and is distinguished
+by its action name defined in item 1. This name must be unique across
+all the action keyword family, including <a href="DELAYACT.html#DELAYACT"> DELAYACT</a>. If any <span class="keyword">ACTION</span> family keyword is reentered with the same action name as a previously
+declared action, the previously declared action is deleted and replaced
+with the new action.</p>
+
+<p>The           <span class="keyword">ACTIONW</span> keyword contains the following
+items of data, terminated with a slash (/):</p>
+
+<ol>
+<li>The action name.             <p>A name of up to 8 characters,
+to distinguish this action from any others.</p>
+             <p>If
+an action with this name has already been declared in any of the action
+keyword family               <span class="keyword">ACTION</span>(          
+    <span class="keyword">ACTIONG</span>,               <span class="keyword">ACTIONR</span>,               <span class="keyword">ACTIONW</span>,               <span class="keyword">ACTIONS</span>), it is overwritten with the action data specified
+below.</p>
+           </li>
+
+<li>Well name (or name root) of the well(s) that triggers this action.
+            <p>A well name root, enclosed in quotes and ending with
+an asterisk (*), can be used to make this action's triggering condition
+apply to more than one well. The action is then performed if one or
+more wells having this name root satisfy the triggering condition.
+Note that the action will be performed at most once per timestep,
+even if more than one well satisfies the triggering condition at the
+end of the timestep.</p>
+           </li>
+
+<li>The quantity to which the triggering condition applies.      
+      <p>This must be one of:</p>
+             
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+ 
+<tbody>
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WOPR</samp>              
+      </td>
+
+<td valign="top">Well oil production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WOPT</samp>              
+      </td>
+
+<td valign="top">Well oil production cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WOIR</samp>              
+      </td>
+
+<td valign="top">Well oil injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WOIT</samp>              
+      </td>
+
+<td valign="top">Well oil injection cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WWPR</samp>              
+      </td>
+
+<td valign="top">Well water production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WWPT</samp>              
+      </td>
+
+<td valign="top">Well water production cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WWIR</samp>              
+      </td>
+
+<td valign="top">Well water injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WWIT</samp>              
+      </td>
+
+<td valign="top">Well water injection cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WGPR</samp>              
+      </td>
+
+<td valign="top">Well gas production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WGPT</samp>              
+      </td>
+
+<td valign="top">Well gas production cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WGIR</samp>              
+      </td>
+
+<td valign="top">Well gas injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WGIT</samp>              
+      </td>
+
+<td valign="top">Well gas injection cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WLPR</samp>              
+      </td>
+
+<td valign="top">Well liquid production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WLPT</samp>              
+      </td>
+
+<td valign="top">Well liquid production cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WVPR</samp>              
+      </td>
+
+<td valign="top">Well voidage production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WVPT</samp>              
+      </td>
+
+<td valign="top">Well voidage production cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WVIR</samp>              
+      </td>
+
+<td valign="top">Well voidage injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WVIT</samp>              
+      </td>
+
+<td valign="top">Well voidage injection cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top">                       <p>ECLIPSE 300</p>
+                     </td>
+
+<td valign="top">                       <samp class="codeph">WWGPR</samp>             
+       </td>
+
+<td valign="top">Well wet gas production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top">                       <p>ECLIPSE 300</p>
+                     </td>
+
+<td valign="top">                       <samp class="codeph">WWGPT</samp>             
+       </td>
+
+<td valign="top">Well wet gas production cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top">                       <p>ECLIPSE 300</p>
+                     </td>
+
+<td valign="top">                       <samp class="codeph">WWGIR</samp>             
+       </td>
+
+<td valign="top">Well wet gas injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top">                       <p>ECLIPSE 300</p>
+                     </td>
+
+<td valign="top">                       <samp class="codeph">WWGIT</samp>             
+       </td>
+
+<td valign="top">Well wet gas injection cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WGOR</samp>              
+      </td>
+
+<td valign="top">Well gas oil ratio</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WWCT</samp>              
+      </td>
+
+<td valign="top">Well water cut</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WWGR</samp>              
+      </td>
+
+<td valign="top">Well water gas ratio</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WGLR</samp>              
+      </td>
+
+<td valign="top">Well gas liquid ratio</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WBHP</samp>              
+      </td>
+
+<td valign="top">Well bottom hole pressure</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WTHP</samp>              
+      </td>
+
+<td valign="top">Well tubing head pressure</td>
+
+</tr>
+
+<tr>
+<td valign="top">                       <p>ECLIPSE 100</p>
+                     </td>
+
+<td valign="top">                       <samp class="codeph">WBGLR</samp>             
+       </td>
+
+<td valign="top">Well gas liquid ratio at bottom hole conditions</td>
+
+</tr>
+
+<tr>
+<td valign="top">                       <p>ECLIPSE 300</p>
+                     </td>
+
+<td valign="top">                       <samp class="codeph">WXMF_nn</samp>           
+         </td>
+
+<td valign="top">Well liquid mole fraction in component nn</td>
+
+</tr>
+
+<tr>
+<td valign="top">                       <p>ECLIPSE 300</p>
+                     </td>
+
+<td valign="top">                       <samp class="codeph">WYMF_nn</samp>           
+         </td>
+
+<td valign="top">Well vapor mole fraction in component nn</td>
+
+</tr>
+
+<tr>
+<td valign="top">                       <p>ECLIPSE 300</p>
+                     </td>
+
+<td valign="top">                       <samp class="codeph">WZMF_nn</samp>           
+         </td>
+
+<td valign="top">Well total mole fraction in component nn</td>
+
+</tr>
+
+<tr>
+<td valign="top">                       <p>ECLIPSE 100</p>
+                     </td>
+
+<td valign="top">                       <samp class="codeph">WCPR</samp>              
+      </td>
+
+<td valign="top">Well polymer production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top">                       <p>ECLIPSE 100</p>
+                     </td>
+
+<td valign="top">                       <samp class="codeph">WCPC</samp>              
+      </td>
+
+<td valign="top">Well polymer production concentration</td>
+
+</tr>
+
+<tr>
+<td valign="top">                       <p>ECLIPSE 100</p>
+                     </td>
+
+<td valign="top">                       <samp class="codeph">WSPR</samp>              
+      </td>
+
+<td valign="top">Well salt production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top">                       <p>ECLIPSE 100</p>
+                     </td>
+
+<td valign="top">                       <samp class="codeph">WSPC</samp>              
+      </td>
+
+<td valign="top">Well salt production concentration</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WTPR</samp>              
+      </td>
+
+<td valign="top">Well tracer production rate (tracer name needs to be added)</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WTPC</samp>              
+      </td>
+
+<td valign="top">Well tracer production concentration (tracer name needs to
+be added)</td>
+
+</tr>
+
+<tr>
+<td valign="top">                       <p>ECLIPSE 300</p>
+                     </td>
+
+<td valign="top">                       <samp class="codeph">WNLPR</samp>             
+       </td>
+
+<td valign="top">Well component molar rates in NGL phase</td>
+
+</tr>
+
+<tr>
+<td valign="top">                       <p>ECLIPSE 300</p>
+                     </td>
+
+<td valign="top">                       <samp class="codeph">WCNMR</samp>             
+       </td>
+
+<td valign="top">Well NGL Production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">                       <samp class="codeph">WUxxxxxx</samp>          
+          </td>
+
+<td valign="top">User-defined well quantity</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+           </li>
+
+<li>The operator for the triggering condition.             <p>This
+must be one of:</p>
+             
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">‘&gt;’</td>
+
+<td valign="top">Greater than</td>
+
+</tr>
+
+<tr>
+<td valign="top">‘&lt;’</td>
+
+<td valign="top">Less than</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+           </li>
+
+<li>The value of the triggering condition.             <p>The units
+depend upon the quantity selected in item 3.</p>
+           </li>
+
+<li>Number of times this action can be triggered.             <p>The
+action will be performed once at the end of each timestep while any
+well named in item 2 satisfies the triggering condition, until it
+has been performed the specified number of times. A number of 10,000
+or greater is interpreted as 'infinity'.</p>
+             <p>DEFAULT:
+1</p>
+           </li>
+
+<li>Increment to the triggering condition.             <p>After each
+time the action is performed, the specified increment is added to
+the triggering condition value (initialized in item 5). The increment
+may be negative, if desired.</p>
+             <p>DEFAULT: 0.0</p>
+ 
+         </li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> It is possible to nest actions by including the
+definition of the inner action within the keyword set of the outer
+action (that is before its           <a href="ENDACTIO.html#ENDACTIO">   
+          ENDACTIO</a> keyword). This
+offers great flexibility, but care should be exercised and the consequences
+of the nested actions should be thought through. For example: suppose
+that in the           <a href="ACTDIMS.html#ACTDIMS">              ACTDIMS</a> keyword have set           <samp class="codeph">MAXACT=1</samp> and have then defined an action           <samp class="codeph">ACT1</samp>. Suppose also that as part of this action have defined
+another action,           <samp class="codeph">ACT2</samp>. ECLIPSE only issues
+an error when           <samp class="codeph">ACT1</samp> is actually implemented
+which may, of course, be well into the run. Alternatively may call
+the inner action by the same name as the outer action,           <samp class="codeph">ACT1</samp>. This is perfectly allowable, but it must be remembered
+that each time an action of a given name is defined it overwrites
+the properties that the action may previously have had. Suppose that
+have an outer action that can be repeated a number of times. Within
+this action is an inner one that can also be repeated and that also
+increments its triggering condition each time. No matter how many
+times the inner action has been called when the outer action is invoked
+again the inner action is redefined to its original specification.</div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Full checking of the keywords entered with an action keyword
+cannot be performed until the action is actually implemented, since
+it is possible to use wild cards in many of the keywords. However,
+before a simulation run is attempted the data can be run in      
+    <a href="NOSIM.html#NOSIM">              NOSIM 
+</a> mode. This then does whatever checks it can on the
+keywords within any action keyword blocks that have been defined.
+All the most common types of 'grammatical' and typographical errors
+will be found, but errors resulting from wild cards feeding inappropriate
+well/group names to keywords are not found.</span></div>
+
+<div class="section" id="actionw_example"><a name="actionw_example"><!-- --></a><h4 class="sectiontitle">Example</h4>             
+        <p>This shows two action keyword sets. The first action (named
+            <samp class="codeph">ACT5</samp>) applies to all wells whose names
+begin with PR, and reduces their liquid rate target by 20% whenever
+their BHP falls below the value of 3500. The second action (named
+            <samp class="codeph">ACT6</samp>) opens well PR-A5 when the oil production
+rate of any of the wells whose names begin with PR-A first falls below
+1,000.</p>
+           <pre><code>ACTIONW  ACT5 'PR*' WBHP &lt; 3500 10000 / WTMULT  '?' LRAT 0.8 /  / ENDACTIO ACTIONW  ACT6 'PR-A*' WOPR &lt; 1000.0 / WELOPEN  PR-A5 OPEN /  / ENDACTIO</code></pre>         </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

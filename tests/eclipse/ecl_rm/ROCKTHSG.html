@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ROCKTHSG"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ROCKTHSG"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ROCKTHSG</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="ROCKTHSG"><a name="ROCKTHSG"><!-- --></a>
+<h1 class="keyword">ROCKTHSG</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="rockthsg.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="rockthsg.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2062e45">                         x                   
+  </th>
+
+<th valign="top" id="d2062e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2062e54">                         x                   
+  </th>
+
+<th valign="top" id="d2062e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2062e45 d2062e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2062e48 d2062e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2062e45 d2062e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2062e48 d2062e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2062e45 d2062e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2062e48 d2062e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2062e45 d2062e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d2062e48 d2062e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2062e45 d2062e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2062e48 d2062e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2062e45 d2062e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2062e48 d2062e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2062e45 d2062e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2062e48 d2062e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2062e45 d2062e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2062e48 d2062e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>In addition to the <a href="ROCKTABH.html#ROCKTABH"> ROCKTABH</a> tables, dual porosity models can also contain pressure tables
+of the sigma multiplier modifying the matrix-fracture coupling as
+a result of rock compaction.</p>
+
+<p>The data comprises <samp class="codeph">NTROCC</samp> (see item 2 of keyword
+ <a href="ROCKCOMP.html#ROCKCOMP"> ROCKCOMP</a> in the <span class="keyword">RUNSPEC</span> section) tables of rock compaction data. A single
+table consists of at least 2 and up to <a href="TABDIMS.html#TABDIMS.NPPVT"> NPPVT</a> (set
+in the <span class="keyword">TABDIMS</span> keyword)  records, each terminated
+by a slash (/).</p>
+
+<p>Each set of records gives curves of sigma multipliers against pressure
+that define the elastic expansion and contraction of the dual porosity
+rock. The elastic behavior is bounded at low pressure by the deflation
+curve, which is made up of the first points on each elastic curve.
+If the '<samp class="codeph">HYSTER</samp>' option is used (see below), the elastic
+curves are extrapolated to infinite pressure. If, however, the '<samp class="codeph">BOBERG</samp>' option is used, the elastic behavior is bounded
+at high pressure by the dilation curve, which is made up of the last
+points on each elastic curve. Each table is terminated by a null record
+(that is a record with no data before the terminating slash).</p>
+
+<div class="fignone" id="ROCKTHSG_hysterisis_options"><a name="ROCKTHSG_hysterisis_options"><!-- --></a>
+
+ <br/><img src="../img/hystr_options.png" width="435px"/><br/> <br/><span class="figcap">
+           Figure 247.1  Hysteresis options</span></div>
+
+<p>Each record consists of 2 columns of data and a terminating slash.</p>
+
+<ol>
+<li>The pressure. <p>Values should increase monotonically down the
+column, unless the '<samp class="codeph">STRESS</samp>' option has been used
+in the  <a href="ROCKOPTS.html#ROCKOPTS"> ROCKOPTS</a> keyword, in which case the values should decrease monotonically
+down the column.</p>
+ <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia
+(<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li>The corresponding sigma multiplier. <p>Values should be level
+or increasing down the column.</p>
+</li>
+
+</ol>
+
+<p>Each record must contain at least two, and no more than <a href="TABDIMS.html#TABDIMS.NPPVT"> NPPVT</a> (set
+in the <span class="keyword">TABDIMS</span> keyword) rows. Each row must be
+complete,  containing an entry in every column of the record. The <samp class="codeph">NTROCC</samp> records correspond to the rock compaction table region
+numbers, which are set using  <a href="ROCKNUM.html#ROCKNUM"> ROCKNUM</a>. Regarding these keywords, note:</p>
+
+<ul>
+<li><p>ECLIPSE 300</p>
+<p> <a href="TABDIMS.html#TABDIMS.NTROCC"> NTROCC</a>  can be set using the <span class="keyword">TABDIMS</span> keyword; if the
+value is set in both places (<span class="keyword">TABDIMS</span> and <span class="keyword">ROCKCOMP</span>) the maximum is taken. </p>
+</li>
+
+<li>Although <span class="keyword">ROCKNUM</span> regions always cover the entire
+grid (even when defaulted), only the <span class="keyword">ROCKNUM</span> numbers
+of the <strong>matrix</strong> cells are used to obtain the <span class="keyword">ROCKTHSG</span> tables for the matrix-fracture coupling modification. <span class="keyword">ROCKNUM</span> for fracture cells is ignored.  </li>
+
+</ul>
+
+<p>The <span class="keyword">ROCKTHSG</span> keyword may be used only if the
+Hysteretic Rock Compaction option is selected ('<samp class="codeph">HYSTER</samp>' or  '<samp class="codeph">BOBERG</samp>' specified in keyword <a href="ROCKCOMP.html#ROCKCOMP"> ROCKCOMP</a> in the <span class="keyword">RUNSPEC</span> section). The grid-block matrix-fracture coupling
+transmissibilities are adjusted dynamically by multiplying the reference
+values (derived from the input data) by the corresponding factors
+in the table, interpolated at the instantaneous grid block pressures.
+If the <a href="OVERBURD.html#OVERBURD"> OVERBURD</a> keyword is present, the cell overburden pressure is subtracted from
+the grid block pressure prior to interpolating the sigma multipliers.</p>
+
+<p>If the overburden pressure supplied in the <span class="keyword">OVERBURD</span> keyword is greater than the fluid pressure (which it often will
+be), the effective fluid pressure  <math><mo>(</mo><msub><mi>P</mi><mrow><mi>e</mi><mi>f</mi>
+<mi>f</mi><mtext> </mtext><mi>f</mi><mi>l</mi></mrow>
+</msub><mo>=</mo><msub><mi>P</mi><mrow><mi>f</mi>
+<mi>l</mi><mi>u</mi><mi>i</mi><mi>d</mi></mrow>
+</msub><mrow><mo>-</mo><mtext>Overburden</mtext></mrow>
+<mo>)</mo></math>  is negative. In this case the <span class="keyword">ROCKTHSG</span> table has to be supplied with negative pressures in column 1. The <span class="keyword">ROCKTHSG</span> table can be input in a more intuitive manner
+by using the  '<samp class="codeph">STRESS</samp>' option in the <a href="ROCKOPTS.html#ROCKOPTS"> ROCKOPTS</a> keyword before
+the <span class="keyword">ROCKTHSG</span> keyword. In this case the sigma multipliers
+will be tabulated against the effective overburden pressure,  <math><mo>(</mo><msub>
+<mi>P</mi><mrow><mi>e</mi><mi>f</mi><mi>f</mi>
+<mtext> </mtext><mi>o</mi><mi>v</mi></mrow></msub><mo>=</mo><mtext>Overburden</mtext><mrow><mo>-</mo><msub>
+<mi>P</mi><mrow><mi>f</mi><mi>l</mi><mi>u</mi><mi>i</mi><mi>d</mi></mrow></msub></mrow><mo>)</mo>
+</math>, which is then positive.</p>
+
+<p>ECLIPSE 100</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The implicit value of the grid block pressure
+is used for the calculations, as it is for ECLIPSE 300. This is different
+from the treatment of the transmissibility multipliers in the  <a href="ROCKTABH.html#ROCKTABH"> ROCKTABH</a> keyword in
+ECLIPSE 100, where the pressure is explicit.  </span></div>
+
+<p>Either <a href="DUALPORO.html#DUALPORO"> DUALPORO</a> or    <a href="DUALPERM.html#DUALPERM"> DUALPERM</a> keyword must be specified in the <span class="keyword">RUNSPEC</span> section,
+and valid <span class="keyword">ROCKTABH</span> data must be supplied, in order
+to enable <span class="keyword">ROCKTHSG</span> input. The deflation pressures,
+as well as the dilation pressures in the <samp class="codeph">BOBERG</samp> case,
+must be identical between the corresponding tables of <span class="keyword">ROCKTABH</span> and <span class="keyword">ROCKTHSG</span>. This is to ensure the same hysteretic
+behavior in both sets of tables. Note that the elastic curves may
+differ between the two sets.</p>
+
+<p>See also keywords <a href="ROCKTSIG.html#ROCKTSIG"> ROCKTSIG</a>,  	 <a href="RKPVMNMX.html#RKPVMNMX"> RKPVMNMX</a>, <span class="keyword">OVERBURD</span> and <span class="keyword">ROCKOPTS</span>, and
+ <a href="../ecl_td/rockcomp_Rock_Compaction.html#rockcomp_rock_compaction">"Rock compaction"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<div class="section" id="rockthsg_example"><a name="rockthsg_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTROCC=2</samp> specified keyword  <a href="ROCKCOMP.html#ROCKCOMP"> ROCKCOMP</a> and <samp class="codeph">NPPVT≥4</samp> specified in keyword  <a href="TABDIMS.html#TABDIMS"> TABDIMS</a>:</p>
+ <pre><code>ROCKTHSG
+-- Table 1
+1000   .98
+2000   .985
+3000   .99 
+4000   .995   /
+2000   .99
+3000   .995 
+4500   .998   /
+3000   1.0
+5000   1.01   /
+4000   1.01
+5500   1.02   /
+/
+-- Table 2
+1000   .97
+2700   .97    /
+2000   .99
+3500   .99    /
+3000   1.0
+4300   1.0    /
+4000   1.01
+5000   1.01   /
+/</code></pre> <p>In this example the deflation curve for Table 1 is:</p>
+ <pre><code>1000   0.98
+2000   0.99
+3000   1.00
+4000   1.01</code></pre> <p>and the dilation curve (if used) is:</p>
+ <pre><code>4000   0.995
+4500   0.998
+5000   1.01
+5500   1.02</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

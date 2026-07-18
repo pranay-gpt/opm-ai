@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Define separators (ECLIPSE 300)"/>
+<meta name="DC.subject" content="SCHEDULE section, Stock tank oil, Stock tank gas, Well production"/>
+<meta name="keywords" content="SCHEDULE section, Stock tank oil, Stock tank gas, Well production"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="schedule_define_separators"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Define separators (ECLIPSE 300)</title>
+</head>
+<body>
+
+
+<div class="nested0" id="schedule_define_separators"><a name="schedule_define_separators"><!-- --></a>
+<h1 class="topictitle1">Define separators (ECLIPSE 300)</h1>
+
+
+ <div>
+<ul>
+<li> <a href="SEPCOND.html#SEPCOND">  SEPCOND</a> Defines
+the conditions of a named separator, and assigns this as the default
+separator for all wells subordinate to a particular group. </li>
+
+<li> <a href="WSEPCOND.html#WSEPCOND">  WSEPCOND</a> Assigns named separators to wells, in place of their group’s default
+separator specified in <span class="keyword">SEPCOND</span></li>
+
+</ul>
+
+<p>The separator conditions associated with a well define the splitting
+of the well production in to stock tank oil and gas. </p>
+
+<div class="p"><div class="fignone" id="separator_schedule"><a name="separator_schedule"><!-- --></a>
+
+ <br/><img src="../img/separator_schedule.png" width="472px"/><br/> <br/><span class="figcap">
+           Figure 209.1  Splitting well production into stock tank oil and gas</span></div>
+</div>
+
+<p>Separator conditions are defined using the <span class="keyword">SEPCOND</span> keyword. This sets the pressure and temperature for each separator
+stage, the method to be used to flash the stage, and the coupling
+to other stages. The last stage is always used to describe the stock
+tank. For a separator train consisting of two stages and a stock tank,
+the <span class="keyword">SEPCOND</span> keyword required would be: </p>
+
+<pre><code>SEPCOND
+SEP1 Field 1  65 815 /
+SEP1 Field 2  65  65 /
+SEP1 Field 3  45 14.7 /
+/
+
+</code></pre>
+<p>Note that a final stock tank step is <strong>not</strong> supplied automatically.
+In this case the separator conditions are SEP1. The first stage has
+a temperature of 65 ° F and a pressure of 815 psi, the second a temperature
+of 65 ° F and a pressure of 65 psi, and the stock tank is at 45 ° F
+and 14.7 psi. The coupling is the default: the liquid from stage 1
+feeding stage 2, and the liquid from stage 2 feeding the stock tank.
+Note that all separators in a given group should have the same final
+stage (stock tank) conditions, in order that oil volumes are added
+consistently. A separator stage may be re-specified, or the whole
+separator condition re-specified. The separator stages must, however,
+be introduced in increasing order, in order to prevent missing stages
+when the simulation starts. </p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

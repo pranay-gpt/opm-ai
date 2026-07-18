@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Scaling of relative permeability functions"/>
+<meta name="DC.subject" content="End-point scaling, Saturation table scaling, Relative permeability"/>
+<meta name="keywords" content="End-point scaling, Saturation table scaling, Relative permeability"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sattabsc_scaling_of_relative_permeability_functions"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Scaling of relative permeability functions</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="sattabsc_scaling_of_relative_permeability_functions"><a name="sattabsc_scaling_of_relative_permeability_functions"><!-- --></a>
+<h1 class="topictitle1">Scaling of relative permeability functions</h1>
+
+
+ <div>
+<p>There are two options available for the scaling of relative permeabilities.
+In the default case, the scaling process preserves relative permeabilities
+at two saturation nodes. The following end points are assumed for
+each phase relative permeability:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">K<sub>rw</sub></td>
+
+<td valign="top">SWCR and SWU</td>
+
+</tr>
+
+<tr>
+<td valign="top">K<sub>rg</sub></td>
+
+<td valign="top">SGCR and SGU</td>
+
+</tr>
+
+<tr>
+<td valign="top">K<sub>row</sub></td>
+
+<td valign="top">SOWCR and (1.0-SWL-SGL)</td>
+
+</tr>
+
+<tr>
+<td valign="top">K<sub>rog</sub></td>
+
+<td valign="top">SOGCR and (1.0-SWL-SGL)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>An alternative scaling of relative permeabilities can be invoked
+by using the <a href="../ecl_rm/SCALECRS.html#SCALECRS">SCALECRS</a> keyword in the <span class="keyword">PROPS</span> section. The second
+form of scaling preserves the relative permeabilities at three saturation
+nodes. In three-phase, oil-water or oil-gas runs, or runs which use
+the miscible flood option, the following end points are used:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">K<sub>rw</sub></td>
+
+<td valign="top">SWCR, (1.0-SOWCR-SGL) and SWU</td>
+
+</tr>
+
+<tr>
+<td valign="top">K<sub>rg</sub></td>
+
+<td valign="top">SGCR, (1.0-SOGCR-SWL) and SGU</td>
+
+</tr>
+
+<tr>
+<td valign="top">K<sub>row</sub></td>
+
+<td valign="top">SOWCR, (1.0-SWCR -SGL) and (1.0-SWL-SGL)</td>
+
+</tr>
+
+<tr>
+<td valign="top">K<sub>rog</sub></td>
+
+<td valign="top">SOGCR, (1.0-SGCR -SWL) and (1.0-SWL-SGL)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>In gas-water runs, the following end points are used if the second
+form of relative permeability scaling is selected:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">K<sub>rw</sub></td>
+
+<td valign="top">SWCR, (1.0-SGCR) and SWU</td>
+
+</tr>
+
+<tr>
+<td valign="top">K<sub>rg</sub></td>
+
+<td valign="top">SGCR, (1.0-SWCR) and SGU</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The second method for relative permeability scaling can be interpreted
+in two phase runs as preserving the values of relative permeabilities
+at both ends of the two-phase mobile region. Convergence problems
+can arise in certain cases when using this form of scaling if the
+intermediate end point begins to approach the maximum saturation for
+one of the phases. For example, in an oil-water problem in which the
+residual oil saturation to water tends to zero at a certain depth,
+the saturation (1.0-<span class="keyword">SOWCR</span>) begins to approach <span class="keyword">SWU</span> and this can in turn lead to a discontinuity in the
+water relative permeability as  <math><msub>
+<mi>S</mi><mi>w</mi></msub><mo>→</mo><msub><mi>S</mi><mrow><mi>w</mi><mtext> max</mtext></mrow>
+</msub></math>.</p>
+
+<p>ECLIPSE 100                  </p>
+
+<p>You may limit this sharpness by using the <a href="../ecl_rm/SCALELIM.html#SCALELIM">SCALELIM</a> keyword which sets
+an upper limit on the value of (1.0 - <span class="keyword">SOWCR</span>) to
+be used in scaling the water relative permeability function. The <span class="keyword">SCALELIM</span> keyword is optional and at present can only be
+applied to water relative permeabilities.</p>
+
+<p>For example, we consider the scaling of the water relative permeability
+function  <math><mrow><msub><mi>K</mi><mrow><mi>r</mi><mi>w</mi></mrow></msub><mo>(</mo><mrow><mi>S</mi><mi>W</mi></mrow><mo>)</mo>
+</mrow></math>  at a water saturation  <math><mrow>
+<mi>S</mi><mi>W</mi></mrow></math>  where the scaled and
+unscaled critical water saturations are  <math><mrow>
+<mi>S</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow>
+</math>  and  <math><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>c</mi><mi>r</mi></mrow></msub>
+</math>, scaled and unscaled oil-in-water critical saturations are
+ <math><mrow><mi>S</mi>
+<mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow>
+</math>, and  <math><msub><mi>S</mi>
+<mrow><mi>o</mi><mi>w</mi><mi>c</mi><mi>r</mi>
+</mrow></msub></math>, scaled and unscaled connate gas saturations
+are  <math><mrow><mi>S</mi>
+<mi>G</mi><mi>L</mi></mrow></math>  and  <math><msub><mi>S</mi>
+<mrow><mi>g</mi><mi>c</mi><mi>o</mi></mrow></msub>
+</math>, and scaled and unscaled maximum water saturations are  <math><mrow><mi>S</mi>
+<mi>W</mi><mi>U</mi></mrow></math>  and  <math><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow></msub></math>.</p>
+
+<p>With the two point scaling method, the water relative permeability
+ <math><mrow><msub><mi>K</mi><mrow><mi>r</mi><mi>w</mi></mrow></msub><mo>(</mo><mrow><mi>S</mi><mi>W</mi></mrow><mo>)</mo>
+</mrow></math>  is then evaluated in the input saturation table
+at the new saturation  <math><mrow><msub><mi>S</mi><mi>w</mi></msub><mi>′</mi></mrow></math>, where</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sattabsc.equ.00f4"/>
+ <math><msub><mi>S</mi>
+<mi>w</mi></msub><mi>'</mi><mo>=</mo><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>c</mi><mi>r</mi></mrow></msub>
+<mo>+</mo><mfrac><mrow><mrow><mo>(</mo><mrow><mi>S</mi><mi>W</mi><mo>-</mo><mrow><mi>S</mi><mi>W</mi>
+<mi>C</mi><mi>R</mi></mrow></mrow><mo>)</mo><mo>(</mo><msub><mi>S</mi><mrow><mi>w</mi><mi>m</mi>
+<mi>a</mi><mi>x</mi></mrow></msub><mrow><mo>-</mo>
+<msub><mi>S</mi><mrow><mi>w</mi><mi>c</mi><mi>r</mi>
+</mrow></msub></mrow><mo>)</mo></mrow></mrow><mrow>
+<mrow><mi>S</mi><mi>W</mi><mi>U</mi><mo>-</mo><mrow>
+<mi>S</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow>
+</mrow></mrow></mfrac></math> 
+</td><td align="right">[Eq. 161.1]
+              </td></tr></tbody></table>
+<p>so that  <math><msub><mi>K</mi>
+<mrow><mi>r</mi><mi>w</mi></mrow></msub></math>  is
+evaluated by lookup in the input table using</p>
+
+<p>              <math><mrow><msub><mi>K</mi><mrow><mi>r</mi><mi>w</mi></mrow></msub><mo>(</mo><mrow><mi>S</mi><mi>W</mi></mrow><mo>)</mo>
+</mrow><mo>=</mo><mrow><msub><mi>K</mi><mrow><mi>r</mi><mi>w</mi></mrow></msub><mo>(</mo><msub><mi>S</mi><mi>w</mi></msub><mi>'</mi><mo>)</mo><mo>(</mo><mrow><mi>t</mi><mi>a</mi><mi>b</mi><mi>l</mi>
+<mi>e</mi></mrow><mo>)</mo></mrow></math>  for  <math><mrow><mi>S</mi>
+<mi>W</mi><mi>C</mi><mi>R</mi></mrow><mo>≤</mo>
+<mrow><mi>S</mi><mi>W</mi></mrow><mo>≤</mo><mrow>
+<mi>S</mi><mi>W</mi><mi>U</mi></mrow></math>. For
+ <math><mrow><mi>S</mi>
+<mi>W</mi></mrow><mo>≤</mo><mrow><mi>S</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow></math>  then  <math><mrow><msub><mi>K</mi><mrow><mi>r</mi><mi>w</mi></mrow></msub><mo>(</mo><mrow><mi>S</mi><mi>W</mi></mrow><mo>)</mo>
+</mrow><mo>=</mo><mn>0</mn></math>  and for  <math><mrow><mi>S</mi>
+<mi>W</mi></mrow><mo>≥</mo><mrow><mi>S</mi><mi>W</mi><mi>U</mi></mrow></math>  then  <math><mrow><msub><mi>K</mi><mrow><mi>r</mi><mi>w</mi></mrow></msub><mo>(</mo><mrow><mi>S</mi><mi>W</mi></mrow><mo>)</mo>
+</mrow><mo>=</mo><mrow><msub><mi>K</mi><mrow><mi>r</mi><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow></msub><mo>(</mo><mrow><mi>t</mi><mi>a</mi>
+<mi>b</mi><mi>l</mi><mi>e</mi></mrow><mo>)</mo>
+</mrow></math>.</p>
+
+<p>With the three point scaling method, if  <math><mrow>
+<mi>S</mi><mi>R</mi></mrow></math>  is the displacing
+critical saturation of the associated phase saturation (SR),</p>
+
+<p>              <math><mtext>SR</mtext><mo>=</mo><mn>1</mn><mrow><mo>-</mo><mtext>SOWCR-SGL</mtext>
+</mrow></math>  in water/oil or gas/oil/water runs</p>
+
+<p>              <math><mtext>SR</mtext><mo>=</mo><mn>1</mn><mrow><mo>-</mo><mtext>SGCR</mtext>
+</mrow></math>  in gas/water runs,</p>
+
+<p>and  <math><msub><mi>S</mi>
+<mi>r</mi></msub></math>  is the value of the displacing critical
+saturation in the table</p>
+
+<p>              <math><msub><mi>S</mi>
+<mi>r</mi></msub><mo>=</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mi>S</mi><mrow><mi>o</mi><mi>w</mi><mi>c</mi>
+<mi>r</mi></mrow></msub><mo>-</mo><msub><mi>S</mi>
+<mrow><mi>g</mi><mi>c</mi><mi>o</mi></mrow></msub>
+</mrow></math>  in water/oil or gas/oil/water runs</p>
+
+<p>              <math><msub><mi>S</mi>
+<mi>r</mi></msub><mo>=</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mi>S</mi><mrow><mi>g</mi><mi>c</mi><mi>r</mi>
+</mrow></msub></mrow></math>  in gas/water runs.</p>
+
+<p>The two cases are:</p>
+
+<p>              <math><mrow><mi>S</mi>
+<mi>W</mi><mi>C</mi><mi>R</mi></mrow><mo>≤</mo>
+<mrow><mi>S</mi><mi>W</mi></mrow><mo>≤</mo><mrow>
+<mi>S</mi><mi>R</mi></mrow></math>          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sattabsc.equ.010f"/>
+ <math><msub><mi>S</mi>
+<mi>w</mi></msub><mi>'</mi><mo>=</mo><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>c</mi><mi>r</mi></mrow></msub>
+<mo>+</mo><mfrac><mrow><mrow><mo>(</mo><mrow><mi>S</mi><mi>W</mi><mo>-</mo><mrow><mi>S</mi><mi>W</mi>
+<mi>C</mi><mi>R</mi></mrow></mrow><mo>)</mo><mo>(</mo><msub><mi>S</mi><mi>r</mi></msub><mrow><mo>-</mo><msub><mi>S</mi><mrow><mi>w</mi><mi>c</mi>
+<mi>r</mi></mrow></msub></mrow><mo>)</mo></mrow>
+</mrow><mrow><mrow><mi>S</mi><mi>R</mi><mo>-</mo>
+<mrow><mi>S</mi><mi>W</mi><mi>C</mi><mi>R</mi>
+</mrow></mrow></mrow></mfrac></math> 
+</td><td align="right">[Eq. 161.2]
+              </td></tr></tbody></table>
+<p>              <math><mrow><mi>S</mi>
+<mi>R</mi></mrow><mo>≤</mo><mrow><mi>S</mi><mi>W</mi></mrow><mo>≤</mo><mrow><mi>S</mi><mi>W</mi>
+<mi>U</mi></mrow></math>          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sattabsc.equ.0114"/>
+ <math><msub><mi>S</mi>
+<mi>w</mi></msub><mi>'</mi><mo>=</mo><msub><mi>S</mi>
+<mi>r</mi></msub><mo>+</mo><mfrac><mrow><mrow><mo>(</mo><mrow><mi>S</mi><mi>W</mi><mo>-</mo><mrow>
+<mi>S</mi><mi>R</mi></mrow></mrow><mo>)</mo><mo>(</mo><msub><mi>S</mi><mrow><mi>w</mi><mi>m</mi>
+<mi>a</mi><mi>x</mi></mrow></msub><mrow><mo>-</mo>
+<msub><mi>S</mi><mi>r</mi></msub></mrow><mo>)</mo>
+</mrow></mrow><mrow><mrow><mi>S</mi><mi>W</mi><mi>U</mi><mo>-</mo><mrow><mi>S</mi><mi>R</mi></mrow>
+</mrow></mrow></mfrac></math> 
+</td><td align="right">[Eq. 161.3]
+              </td></tr></tbody></table>
+<p>and also for  </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sattabsc.equ.0117"/>
+ <math><mrow><mi>S</mi>
+<mi>W</mi></mrow><mo>≤</mo><mrow><mi>S</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow></math> 
+</td><td align="right">[Eq. 161.4]
+              </td></tr></tbody></table>
+<p>  then </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sattabsc.equ.0117a"/>
+ <math><mrow><msub><mi>K</mi><mrow><mi>r</mi><mi>w</mi></mrow></msub><mo>(</mo><mrow><mi>S</mi><mi>W</mi></mrow><mo>)</mo>
+</mrow><mo>=</mo><mn>0</mn></math> 
+</td><td align="right">[Eq. 161.5]
+              </td></tr></tbody></table>
+<p>, and for</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sattabsc.equ.0117b"/>
+ <math><mrow><mi>S</mi>
+<mi>W</mi></mrow><mo>≥</mo><mrow><mi>S</mi><mi>W</mi><mi>U</mi></mrow></math> 
+</td><td align="right">[Eq. 161.6]
+              </td></tr></tbody></table>
+<p>  then  </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sattabsc.equ.0117c"/>
+ <math><mrow><msub><mi>K</mi><mrow><mi>r</mi><mi>w</mi></mrow></msub><mo>(</mo><mrow><mi>S</mi><mi>W</mi></mrow><mo>)</mo>
+</mrow><mo>=</mo><mrow><msub><mi>K</mi><mrow><mi>r</mi><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow></msub><mo>(</mo><mrow><mi>t</mi><mi>a</mi>
+<mi>b</mi><mi>l</mi><mi>e</mi></mrow><mo>)</mo>
+</mrow></math> 
+</td><td align="right">[Eq. 161.7]
+              </td></tr></tbody></table>
+<p>The two-point and three-point scaling equations are similar for
+ <math><msub><mi>K</mi>
+<mrow><mi>r</mi><mi>g</mi></mrow></msub></math>,  <math><msub><mi>K</mi>
+<mrow><mi>r</mi><mi>o</mi><mi>w</mi></mrow></msub>
+</math>  and  <math><msub><mi>K</mi>
+<mrow><mi>r</mi><mi>o</mi><mi>g</mi></mrow></msub>
+</math>  with alternate definitions of the critical and displacing
+critical saturations.</p>
+
+<div class="section" id="sattabsc_scaling_of_the_relative_permeability_values__vertical__scaling_"><a name="sattabsc_scaling_of_the_relative_permeability_values__vertical__scaling_"><!-- --></a><h4 class="sectiontitle">Scaling of the relative permeability values (vertical scaling)</h4><p>It is possible to scale the relative permeability at the maximum
+phase saturation and at the critical/residual saturation of the associated
+phase.</p>
+<p>The scaled relative permeabilities can be specified on
+a block by block basis, or alternatively the depth variation can be
+specified using the <a href="../ecl_rm/ENKRVD.html#ENKRVD">  ENKRVD</a> and <a href="../ecl_rm/ENDNUM.html#ENDNUM">ENDNUM</a> keywords. 
+The <a href="../ecl_rm/krwx_KRW-IKRWR.html#krwx_krw-ikrwr">KRW</a>, 
+ <a href="../ecl_rm/krgx_KRG-IKRGR.html#krgx_krg-ikrgr">KRG</a>, 
+ <a href="../ecl_rm/kroxx_KRO-ORG.html#kroxx_kro-org">KRO</a> 
+ keywords and their derivatives are used to set the relative
+permeabilities at the maximum phase saturation, while the 
+ <a href="../ecl_rm/krwx_KRW-IKRWR.html#krwx_krw-ikrwr">KRWR</a>, 
+ <a href="../ecl_rm/krgx_KRG-IKRGR.html#krgx_krg-ikrgr">KRGR</a>, 
+ <a href="../ecl_rm/kroxx_KRO-ORG.html#kroxx_kro-org">KRORW</a>, 
+ <a href="../ecl_rm/kroxx_KRO-ORG.html#kroxx_kro-org">KRORG</a> 
+keywords and their
+derivatives are used to set the relative permeabilities at the critical/residual
+saturation of the associated phase.</p>
+<p>The resultant scaling of
+the <strong>water</strong> relative permeability is shown below. <strong>Gas</strong> and <strong>oil</strong> relative permeabilities are scaled in an <strong>equivalent</strong> manner.</p>
+<p>If the <span class="keyword">KRWR</span> keyword has not been
+used, the <span class="keyword">KRW</span> keyword has the effect of scaling
+the relative permeability value calculated from the appropriate saturation
+table after the scaled saturation end points have been accounted for.
+Hence:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sattabsc.equ.0135"/>
+ <math><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>r</mi><mi>w</mi></mrow>
+</msub><mo>=</mo><mrow><mrow><msub><mrow><mi>K</mi>
+</mrow><mrow><mi>r</mi><mi>w</mi></mrow></msub><mo>⁡</mo><mrow><mo>(</mo><mtext>table</mtext><mo>)</mo>
+</mrow></mrow><mo>(</mo><mfrac><mrow><mtext>KRW</mtext>
+<mo>⁡</mo><mrow><mo>(</mo><mtext>grid block</mtext>
+<mo>)</mo></mrow></mrow><mrow><msub><mrow><mi>K</mi>
+</mrow><mrow><mi>r</mi><mi>w</mi><mtext> max</mtext>
+</mrow></msub><mo>⁡</mo><mrow><mo>(</mo><mtext>table</mtext>
+<mo>)</mo></mrow></mrow></mfrac><mo>)</mo></mrow>
+</mrow></math> 
+</td><td align="right">[Eq. 161.8]
+              </td></tr></tbody></table><p>The  <math><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>r</mi><mi>w</mi><mtext> max</mtext></mrow></msub><mo>⁡</mo><mrow><mo>(</mo><mtext>table</mtext><mo>)</mo></mrow></mrow>
+</math> is taken to be the value at either the maximum saturation
+of the saturation table or at <a href="../ecl_rm/swu_SWU_ISWU.html#swu_swu_iswu">SWU</a> if this has been specified.</p>
+<p>If the <span class="keyword">KRWR</span>
+ keyword has been used,
+then the scaling will honor the  <math><msub>
+<mi>K</mi><mi>r</mi></msub></math>  at the critical saturation
+(SR) of the associated phase.</p>
+<p>              <math><mtext>SR</mtext><mo>=</mo><mn>1</mn><mrow><mo>-</mo><mtext>SOWCR-SGL</mtext>
+</mrow></math>  in water/oil or gas/oil/water runs</p>
+<p>    
+         <math><mtext>SR</mtext><mo>=</mo><mn>1</mn><mrow><mo>-</mo><mtext>SGCR</mtext>
+</mrow></math>  in gas/water runs</p>
+<p>Hence the two cases are:</p>
+<p>              <math><mrow><mi>S</mi>
+<mi>W</mi><mi>C</mi><mi>R</mi></mrow><mo>≤</mo>
+<mrow><mi>S</mi><mi>W</mi></mrow><mo>≤</mo><mrow>
+<mi>S</mi><mi>R</mi></mrow></math>          </p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sattabsc.equ.0145"/>
+ <math><mrow><mrow><msub>
+<mrow><mi>K</mi></mrow><mrow><mi>r</mi><mi>w</mi>
+</mrow></msub><mrow><mo>(</mo><mi>S</mi><mo>)</mo>
+</mrow></mrow><mo>=</mo><mrow><msub><mrow><mi>K</mi>
+</mrow><mrow><mi>r</mi><mi>w</mi></mrow></msub><mo>⁡</mo><mrow><mo>(</mo><mi>S</mi><mi>′</mi><mo>)</mo></mrow></mrow><mfrac><mrow><mtext>KRWR</mtext>
+<mo>⁡</mo><mrow><mo>(</mo><mrow><mtext>grid block</mtext>
+</mrow><mo>)</mo></mrow></mrow><mrow><mrow><msub>
+<mrow><mi>K</mi></mrow><mrow><mi>r</mi><mi>w</mi>
+</mrow></msub><mo>⁡</mo><mrow><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>r</mi></mrow></msub><mo>)</mo></mrow></mrow><mo>⁡</mo><mrow><mo>(</mo><mrow>
+<mtext>table</mtext></mrow><mo>)</mo></mrow></mrow>
+</mfrac></mrow></math> 
+</td><td align="right">[Eq. 161.9]
+              </td></tr></tbody></table><p>              <math><mrow><mi>S</mi>
+<mi>R</mi></mrow><mo>≤</mo><mrow><mi>S</mi><mi>W</mi></mrow><mo>≤</mo><mrow><mi>S</mi><mi>W</mi>
+<mi>U</mi></mrow></math>          </p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sattabsc.equ.014a"/>
+ <math><mrow><mrow><msub>
+<mrow><mi>K</mi></mrow><mrow><mi>r</mi><mi>w</mi>
+</mrow></msub><mrow><mo>(</mo><mi>S</mi><mo>)</mo>
+</mrow></mrow><mo>=</mo><mtext>KRWR</mtext><mo>+</mo>
+<mrow><mfrac><mrow><mo>(</mo><mrow><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>r</mi><mi>w</mi></mrow>
+</msub><mo>⁡</mo><mrow><mo>(</mo><mi>S</mi><mi>′</mi>
+<mo>)</mo></mrow></mrow><mrow><mo>(</mo><mi>t</mi>
+<mi>a</mi><mi>b</mi><mi>l</mi><mi>e</mi><mo>)</mo>
+</mrow><mrow><mo>-</mo><mrow><mrow><msub><mrow><mi>K</mi></mrow><mrow><mi>r</mi><mi>w</mi></mrow></msub>
+<mo>⁡</mo><mrow><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>r</mi></mrow></msub><mo>)</mo></mrow>
+</mrow><mo>(</mo><mrow><mi>t</mi><mi>a</mi><mi>b</mi>
+<mi>l</mi><mi>e</mi><mo>)</mo></mrow><mo>)</mo>
+</mrow></mrow></mrow><mo>)</mo></mrow><mrow><mo>(</mo>
+<mrow><msub><mrow><mi>K</mi></mrow><mrow><mi>r</mi>
+<mi>w</mi><mtext>max</mtext></mrow></msub><mrow><mo>(</mo><mi>t</mi><mi>a</mi><mi>b</mi><mi>l</mi><mi>e</mi><mo>)</mo></mrow><mo>-</mo><mrow><mrow><msub>
+<mrow><mi>K</mi></mrow><mrow><mi>r</mi><mi>w</mi>
+</mrow></msub><mo>⁡</mo><mrow><mo>(</mo><mrow><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>r</mi></mrow></msub>
+</mrow><mo>)</mo></mrow></mrow><mo>(</mo><mrow><mi>t</mi><mi>a</mi><mi>b</mi><mi>l</mi><mi>e</mi>
+</mrow><mo>)</mo></mrow></mrow><mo>)</mo></mrow>
+</mfrac><mrow><mo>(</mo><mi>K</mi><mi>R</mi><mi>W</mi><mo>-</mo><mrow><mi>K</mi><mi>R</mi><mi>W</mi>
+<mi>R</mi></mrow><mo>)</mo></mrow></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 161.10]
+              </td></tr></tbody></table><p>If the value of  <math><msub>
+<mi>K</mi><mrow><mi>r</mi><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>=</mo><mrow><msub>
+<mi>K</mi><mrow><mi>r</mi><mi>w</mi></mrow></msub>
+<mo>(</mo><mrow><mi>S</mi><mi>R</mi></mrow><mo>)</mo>
+</mrow></math>, a linear function is assumed between <span class="keyword">KRWR</span> and <a href="../ecl_rm/krwx.html#krwx">KRW</a>.</p>
+<p>The two-point scaling method is illustrated in the
+following figure:</p>
+<div class="fignone" id="sattabsc.XID-00000153"><a name="sattabsc.XID-00000153"><!-- --></a>
+
+ <br/><img src="../img/satta1.png" width="408px"/><br/> 
+<br/><span class="figcap">
+           Figure 161.1  Two-point scaling</span></div>
+<p>and the three-point scaling method is illustrated in the
+following figure:</p>
+<div class="fignone" id="sattabsc.XID-00000159"><a name="sattabsc.XID-00000159"><!-- --></a>
+
+ <br/><img src="../img/satta2.png" width="522px"/><br/> 
+<br/><span class="figcap">
+           Figure 161.2  Three-point scaling</span></div>
+<p>The 
+ <a href="../ecl_rm/krwx_KRW-IKRWR.html#krwx_krw-ikrwr">KRWR</a>, 
+ <a href="../ecl_rm/krgx_KRG-IKRGR.html#krgx_krg-ikrgr">KRGR</a>, 
+ <a href="../ecl_rm/kroxx_KRO-ORG.html#kroxx_kro-org">KRORW</a>, 
+ <a href="../ecl_rm/kroxx_KRO-ORG.html#kroxx_kro-org">KRORG</a> 
+ keywords and their directional and hysteretic specializations
+can be used to set the relative permeabilities at the critical/residual
+saturation for both two-point scaling (<a href="../ecl_rm/SCALECRS.html#SCALECRS"> SCALECRS</a> keyword item 1 set
+to NO, which is the default if this keyword is not specified) and
+for the alternative three-point scaling (<span class="keyword">SCALECRS</span> keyword item 1 set to YES). However, the impact of these keywords
+upon the resultant scaling will typically be different for the two-point
+and three-point scaling methods.</p>
+<p>For the two-point scaling of
+water relative permeability, the value specified by <span class="keyword">KRWR</span> will be preserved at the table saturation  <math><msub>
+<mi>S</mi><mi>w</mi></msub><mo>=</mo><mn>1</mn>
+<mrow><mo>-</mo><msub><mi>S</mi><mrow><mi>s</mi><mi>o</mi><mi>w</mi><mi>c</mi><mi>r</mi></mrow></msub>
+<mo>-</mo><msub><mi>S</mi><mrow><mi>g</mi><mi>c</mi>
+<mi>o</mi></mrow></msub></mrow></math>  but noting that
+this value will be modified by the two-point horizontal scaling applied
+to  <math><msub><mi>S</mi>
+<mi>w</mi></msub></math>  if  <math><msub>
+<mi>S</mi><mrow><mi>w</mi><mi>c</mi><mi>r</mi>
+</mrow></msub><mo>≠</mo><mrow><mi>S</mi><mi>W</mi>
+<mi>C</mi><mi>R</mi></mrow></math>  and/or if  <math><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow></msub><mo>≠</mo><mrow><mi>S</mi><mi>W</mi>
+<mi>U</mi></mrow></math>  because of the resultant two-point
+transformation in saturation space.</p>
+<p>In contrast for the three-point
+scaling, the value specified by <span class="keyword">KRWR</span> will be preserved
+at the transformed saturation  <math><mrow>
+<mi>S</mi><mi>W</mi></mrow><mo>=</mo><mn>1</mn>
+<mrow><mo>-</mo><mrow><mi>S</mi><mi>O</mi><mi>W</mi>
+<mi>C</mi><mi>R</mi></mrow><mo>-</mo><mrow><mi>S</mi>
+<mi>G</mi><mi>L</mi></mrow></mrow></math>. Corresponding
+scaling differences between two and three-point scaling apply also
+to <span class="keyword">KRGR</span>, <span class="keyword">KRORW</span> and <span class="keyword">KRORG</span>.</p>
+<p>Considerable care should be exercised when
+using the critical/residual vertical scaling end-points. For example,
+for two-point scaling, if  <math><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow></msub><mo>=</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mi>S</mi><mrow><mi>s</mi><mi>o</mi><mi>w</mi>
+<mi>c</mi><mi>r</mi></mrow></msub><mo>-</mo><msub>
+<mi>S</mi><mrow><mi>g</mi><mi>c</mi><mi>o</mi>
+</mrow></msub></mrow></math>, it will not be possible to preserve
+both the values specified by <span class="keyword">KRWR</span> and <span class="keyword">KRW</span> at the same point in saturation space. Similarly, for
+three-point scaling, if  <math><mrow><mi>S</mi>
+<mi>W</mi><mi>U</mi></mrow><mo>=</mo><mn>1</mn>
+<mrow><mo>-</mo><mrow><mi>S</mi><mi>O</mi><mi>W</mi>
+<mi>C</mi><mi>R</mi></mrow><mo>-</mo><mrow><mi>S</mi>
+<mi>G</mi><mi>U</mi></mrow></mrow></math>  it will not
+be possible to preserve both values specified by <span class="keyword">KRWR</span> and <span class="keyword">KRW</span> at the same point in saturation space.</p>
+<p>In such cases, in general, the value specified by <span class="keyword">KRW</span> will be selected; however, due to small differences in notionally
+equal floating point values, the value specified by <span class="keyword">KRWR</span> may be selected instead. It is recommended that the <a href="../ecl_rm/EPSDEBUG.html#EPSDEBUG">EPSDEBUG</a> or <a href="../ecl_rm/EPSDBGS.html#EPSDBGS">EPSDBGS</a> keyword should be used
+to view the tables following the application of end-point scaling.</p>
+<p>ECLIPSE 100                     </p>
+<p>For the two-point scaling method (<a href="../ecl_rm/SCALECRS.html#SCALECRS">SCALECRS</a> keyword item 1 set
+to NO, which is the default if this keyword is not specified), if
+the unscaled critical/residual and maximum relative permeabilities
+are equal, the scaled critical/residual relative permeability will
+be set equal to the scaled maximum relative permeability irrespective
+of whether this value has been specified. For example, if in the input
+unscaled water saturation functions,  <math><msub>
+<mi>k</mi><mrow><mi>r</mi><mi>w</mi><mi>r</mi>
+</mrow></msub><mo>=</mo><msub><mi>k</mi><mrow><mi>r</mi><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow></msub></math>, where  <math><msub>
+<mi>k</mi><mrow><mi>r</mi><mi>w</mi><mi>r</mi>
+</mrow></msub></math>  is the value of  <math><mrow>
+<msub><mi>k</mi><mrow><mi>r</mi><mi>w</mi></mrow>
+</msub><mo>(</mo><msub><mi>S</mi><mi>w</mi></msub>
+<mo>)</mo></mrow></math>  at  <math><msub>
+<mi>S</mi><mi>w</mi></msub><mo>=</mo><mn>1</mn>
+<mrow><mo>-</mo><msub><mi>S</mi><mrow><mi>s</mi><mi>o</mi><mi>w</mi><mi>c</mi><mi>r</mi></mrow></msub>
+<mo>-</mo><msub><mi>S</mi><mrow><mi>g</mi><mi>c</mi>
+<mi>o</mi></mrow></msub></mrow></math>  and  <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub></math>  is the value of  <math><mrow><msub><mi>k</mi><mrow><mi>r</mi><mi>w</mi></mrow></msub><mo>(</mo><msub><mi>S</mi><mi>w</mi></msub><mo>)</mo>
+</mrow></math>  at  <math><msub><mi>S</mi>
+<mi>w</mi></msub><mo>=</mo><msub><mi>S</mi><mrow>
+<mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow>
+</msub></math>, the value of <span class="keyword">KRWR</span> will be assumed
+to be equal to that of <span class="keyword">KRW</span>.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

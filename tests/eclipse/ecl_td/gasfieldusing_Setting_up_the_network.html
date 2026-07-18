@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Setting up the network"/>
+<meta name="DC.subject" content="Gas field operations, Network"/>
+<meta name="keywords" content="Gas field operations, Network"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gasfieldusing_setting_up_the_network"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Setting up the network</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gasfieldusing_setting_up_the_network"><a name="gasfieldusing_setting_up_the_network"><!-- --></a>
+<h1 class="topictitle1">Setting up the network</h1>
+
+
+ <div>
+<p>If the standard network model is to be used, set up the network
+with <a href="../ecl_rm/GRUPNET.html#GRUPNET"> GRUPNET</a>. If using the extended network model, set up the network
+with keywords <a href="../ecl_rm/BRANPROP.html#BRANPROP"> BRANPROP</a> and <a href="../ecl_rm/NODEPROP.html#NODEPROP"> NODEPROP</a> instead. In this example:</p>
+
+<pre><code>GRUPNET
+-- GROUP    FIXED VFP ALQ S-SEA LIFT
+-- NAME     PRESS TAB     MAN   GAS
+   FIELD    500                         /
+   PLAT-A   1*    1                     /
+   PLAT-B   1*    2                     /
+   G-B1     1*    3                     /
+   G-B2     1*    4                     /
+/</code></pre>
+<p> <a href="../ecl_rm/NETBALAN.html#NETBALAN"> NETBALAN</a> may be used to alter the convergence tolerances and iteration
+limits, and set restrictions on the allowed balancing error at the
+end of each timestep. But the balancing interval set here is ignored
+because when the gas field operation model is in use, the network
+is balanced at the beginning of every timestep.</p>
+
+<p> ECLIPSE 100 </p>
+
+<p>Declare any automatic compressors with <a href="../ecl_rm/GASFCOMP.html#GASFCOMP"> GASFCOMP</a> (or <a href="../ecl_rm/NETCOMPA.html#NETCOMPA"> NETCOMPA</a> if using the Extended
+Network model). Do not use <a href="../ecl_rm/GNETPUMP.html#GNETPUMP"> GNETPUMP</a>. For example, to place a single-level compressor in the
+pipeline from PLAT-A in the Standard Network model:</p>
+
+<pre><code>GASFCOMP
+-- GROUP     NEW VFP     NEW         GAS        COMP      SEQUENCE
+-- NAME      TAB NO      ALQ       CONSUMP      LEVEL      NUMBER
+   'PLAT-A'     1*        50         1000   /
+/</code></pre>
+<p> ECLIPSE 100 </p>
+
+<p>Alternatively, to declare a pair of two-level
+compressors in the pipelines from PLAT-A and PLAT-B in the Standard
+Network model, and have them turned on in sequence:</p>
+
+<pre><code>GASFCOMP
+-- GROUP     NEW VFP     NEW         GAS        COMP      SEQUENCE
+-- NAME      TAB NO      ALQ       CONSUMP      LEVEL      NUMBER
+  'PLAT-A'     1*         50        1000          1           1    /
+  'PLAT-A'     1*        100        1500          2           2    /
+  'PLAT-B'     1*         50        1000          1           3    /
+  'PLAT-B'     1*        100        1500          2           4    /
+/</code></pre>
+<p>This uses the extended compressor option, so remember to enter
+'<samp class="codeph">YES</samp>' in item 1 of keyword <a href="../ecl_rm/GASFIELD.html#GASFIELD"> GASFIELD</a> in the <span class="keyword">RUNSPEC</span> section.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

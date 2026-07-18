@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Consistency requirements"/>
+<meta name="DC.subject" content="Saturation table scaling consistency requirements, End-point scaling, Saturation table scaling, Consistency requirements"/>
+<meta name="keywords" content="Saturation table scaling consistency requirements, End-point scaling, Saturation table scaling, Consistency requirements"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sattabsc_consistency_requirements"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Consistency requirements</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="sattabsc_consistency_requirements"><a name="sattabsc_consistency_requirements"><!-- --></a>
+<h1 class="topictitle1">Consistency requirements</h1>
+
+
+ <div>
+<p>The oil, water and gas saturation tables, for each particular saturation
+table number region, must obey certain consistency requirements. Essentially
+these are described for unscaled tables in <a href="satfunct_Consistency_requirements.html#satfunct_consistency_requirements">  "Consistency requirements"</a>. The same requirements apply to
+the scaled endpoints.</p>
+
+<ul>
+<li><span class="keyword">SGU</span>    must not exceed 1.0 - <span class="keyword">SWL</span>. <p>If this condition is violated, the gas saturation in the gas
+cap is reset to 1.0 -<span class="keyword">SWL</span>, to prevent a negative
+oil saturation. Normally, if there is no oil in the gas cap, <span class="keyword">SGU</span> = 1.0 - <span class="keyword">SWL</span>.</p>
+             </li>
+
+<li> <span class="keyword">SGL</span> must not exceed 1.0 - <span class="keyword">SWU</span> <p>If this condition is violated, the gas saturation in the water
+zone is reset to 1.0-<span class="keyword">SWU</span>, to prevent a negative
+oil saturation. Normally, there is no initial free gas below the gas
+cap and the water zone is fully saturated with water, thus <span class="keyword">SGL</span> = 0.0 and 1.0 - <span class="keyword">SGL</span> = 1.0</p>
+</li>
+
+</ul>
+
+<p>Otherwise, phases can be mobile even at zero saturation and there
+is nothing to stop saturations going negative.</p>
+
+<p>The <math><mrow>
+<msub><mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi><mo>⁢</mo><mi>max</mi><mo>⁡</mo></mrow></msub>
+<mrow><mo>(</mo><mstyle><mrow><mtext>table</mtext>
+</mrow></mstyle><mo>)</mo></mrow></mrow></math>  is
+taken to be the value at either the maximum saturation of the saturation
+table or at <a href="../ecl_rm/swu_SWU_ISWU.html#swu_swu_iswu"> SWU</a> if this has been specified.</p>
+
+<p>If the <a href="../ecl_rm/krwx_KRW-IKRWR.html#krwx_krw-ikrwr">KRWR</a> keyword has been used, then the scaling honors the  <math><msub><mi>K</mi>
+<mi>r</mi></msub></math>  at the critical saturation (SR)
+of the associated (that is, displacing) phase. When the alternative
+three-point end point scaling method is invoked using keyword <a href="../ecl_rm/SCALECRS.html#SCALECRS">SCALECRS</a>, the scaling uses
+the three nodes <a href="../ecl_rm/SWCR.html#SWCR">SWCR</a>, SR and <span class="keyword">SWU</span> where</p>
+
+<p>                    <math><mtext>SR</mtext><mo>=</mo><mn>1</mn><mrow><mo>-</mo><mtext>SOWCR(grid block)</mtext>
+<mo>-</mo><mrow><mi>S</mi><mi>G</mi><mi>L</mi><mo>(</mo><mrow><mi>g</mi><mi>r</mi><mi>i</mi><mi>d</mi>
+<mtext> </mtext><mi>b</mi><mi>l</mi><mi>o</mi>
+<mi>c</mi><mi>k</mi></mrow><mo>)</mo></mrow></mrow>
+</math>  in water/oil or gas/oil/water runs</p>
+
+<p>                    <math><mtext>SR</mtext><mo>=</mo><mn>1</mn><mrow><mo>-</mo><mtext>SGCR(grid block)</mtext>
+</mrow></math>  in gas/water runs</p>
+
+<p>ECLIPSE 100                             
+  </p>
+
+<p>In order to ensure that at least one fluid
+remains mobile in the three-phase ternary diagram, ECLIPSE also checks
+for the following:</p>
+
+<ul>
+<li> <span class="keyword">SOWCR</span> + <span class="keyword">SWCR</span> &lt; 1.0 
+                        </li>
+
+<li><span class="keyword">SOGCR</span> + <span class="keyword">SGCR</span> + <span class="keyword">SWL</span> &lt; 1.0   </li>
+
+</ul>
+
+<p>ECLIPSE issues a warning if these conditions are not satisfied.
+When <span class="keyword">SCALECRS</span> is used, this would lead to an error
+because in an oil-water run, for example, <math><msub>
+<mi>K</mi><mrow><mi>r</mi><mi>w</mi></mrow></msub>
+</math> would be scaled between <span class="keyword">SWCR</span> and 1.0
+- <span class="keyword">SOWCR</span>, which is a null range if the first condition
+is not satisfied.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">In some cases when consistency warning messages involving <span class="keyword">SOWCR</span> and <span class="keyword">SOGCR</span> are reported by ECLIPSE,
+these are referred to using the alternative names <span class="keyword">SOCRW</span> and <span class="keyword">SOCRG</span> respectively. (It should be noted that
+these are not accepted as alternative keyword names.)   </span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

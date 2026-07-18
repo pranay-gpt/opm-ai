@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GSEPREPT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GSEPREPT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GSEPREPT</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GSEPREPT"><a name="GSEPREPT"><!-- --></a>
+<h1 class="keyword">GSEPREPT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gseprept.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gseprept.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d950e45">  </th>
+
+<th valign="top" id="d950e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d950e54"> x </th>
+
+<th valign="top" id="d950e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d950e45 d950e54 ">  </td>
+
+<td valign="top" headers="d950e48 d950e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d950e45 d950e54 ">  </td>
+
+<td valign="top" headers="d950e48 d950e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d950e45 d950e54 ">  </td>
+
+<td valign="top" headers="d950e48 d950e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d950e45 d950e54 ">  </td>
+
+<td valign="top" headers="d950e48 d950e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d950e45 d950e54 ">  </td>
+
+<td valign="top" headers="d950e48 d950e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d950e45 d950e54 ">  </td>
+
+<td valign="top" headers="d950e48 d950e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d950e45 d950e54 ">  </td>
+
+<td valign="top" headers="d950e48 d950e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d950e45 d950e54 "> x </td>
+
+<td valign="top" headers="d950e48 d950e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword sets the separator, EoS and PVT region numbers for
+the flash calculation used for group level flash summary keywords.
+These keywords are listed in table <a href="summary_Well_and_group_misc_quantities.html#summary.tab.17a0">162.1</a> and end in <span class="keyword">G</span>.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> If any of the summary section keywords ending in <span class="keyword">G</span> are used then warnings will be issued for any groups with ambiguous
+equation of state or PVT region numbers. To eliminate these warning
+messages add a new <span class="keyword">GSEPREPT</span> entry for the group
+which incurred the warning. </span></div>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The records may be terminated at any item after item 1. The remaining
+items assume their default values. Default values can be specified
+before the slash by a null repeat count of the form n*, where n is
+the number of consecutive items to be defaulted.</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li> Group name or group name root <p>or <samp class="codeph">FIELD</samp> (for
+field level flash calculation)</p>
+ <p>A group name root, enclosed
+in quotes and ending with an asterisk (*), can be used to refer to
+several groups in one record.</p>
+ </li>
+
+<li> Separator name. This must either be ‘ <samp class="codeph">FIELDSEP</samp> ’ or be defined by <a href="SEPCOND.html#SEPCOND">  SEPCOND</a>. <p>DEFAULT: The first separator assigned to a parent group
+by <span class="keyword">SEPCOND</span> will be used.</p>
+ </li>
+
+<li> The surface equation of state number. <p>This should only be
+specified if multiple equations of state are used. When this option
+is employed it may still be defaulted, in which case the fluid from
+a group is flashed using the equation of state used for the first
+well assigned to this group. If this group has no wells then the equation
+of state used by the first well assigned to the first group assigned
+to this group is used, followed by the first well assigned to the
+second group assigned to this group and so on through the group tree
+until such a well exists.</p>
+ <div class="note"><span class="notetitle">Note:</span> <span class="notebody"> A warning is given if wells contributing
+to this group use more than one equation of state. If such a warning
+is given it is not meaningful to compare the group level flash to
+the sum of the well level flashes. </span></div>
+<p>If an equation of state
+index is specified, this forces the use of a given surface equation
+of state. The value must lie between 1 and the maximum number of equations
+of state for surface conditions specified by <a href="TABDIMS.html#TABDIMS.NMEOSS">
+ NMEOSS</a> in keyword <span class="keyword">TABDIMS</span>. See also the discussion under <a href="../ecl_td/eos_regions_Equations_of_State_Regions.html#eos_regions_equations_of_state_regions">"Equations of state
+regions"</a> in the <cite>ECLIPSE Technical Description</cite> </p>
+ <p>Thermal only</p>
+</li>
+
+<li> The PVT table number.<p>This should be specified if multiple
+PVT regions are specified. When this option is employed it may still
+be defaulted, in which case the fluid from a group is flashed using
+the PVT table number used for the first well assigned to this group.
+If this group has no wells then the PVT table number assigned to the
+first well assigned to the first group assigned to this group is used,
+followed by the first well assigned to the second group assigned to
+this group and so forth through the group tree until such a well exists.</p>
+ </li>
+
+</ol>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> A warning is given if wells contributing to this group use
+more than one PVT table number. If such a warning is given it is not
+meaningful to compare the group level flash to the sum of the well
+level flashes. </span></div>
+
+<div class="section" id="gseprept.example"><a name="gseprept.example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <pre><code>GSEPREPT
+    PLAT-A      FIELDSEP         1       1  /
+    PLAT-B      SEP1             2       1  /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

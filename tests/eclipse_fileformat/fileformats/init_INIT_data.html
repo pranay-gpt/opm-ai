@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="INIT data"/>
+<meta name="DC.subject" content="INIT files"/>
+<meta name="keywords" content="INIT files"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="init_init_data"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>INIT data</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="H1" id="init_init_data"><a name="init_init_data"><!-- --></a>
+<h1 class="topictitle1">INIT data</h1>
+
+
+ <div>
+<p>The initial file is similar in structure to the restart files.
+It contains grid block properties such as <samp class="codeph">PERMX</samp> and
+also tabular data such as PVT tables, which are defined in the input
+data for a simulation run, along with some calculated values such
+as pore volumes. The <samp class="codeph">INIT</samp> file contents are arranged
+as follows:</p>
+
+<ol>
+<li>Global header data (<samp class="codeph">INTEHEAD</samp>, <samp class="codeph">LOGIHEAD</samp>, <samp class="codeph">DOUBHEAD</samp> arrays)</li>
+
+<li>Global property arrays (for example <samp class="codeph">PORV</samp>, <samp class="codeph">DX</samp>, <samp class="codeph">PERMX</samp>.)</li>
+
+<li>For each local grid:                <ol type="a">
+<li>LGR codeph, defining grid name</li>
+
+<li>LGR header data (<samp class="codeph">LGRHEADI</samp>, <samp class="codeph">LGRHEADQ</samp>, <samp class="codeph">LGRHEADD</samp>).</li>
+
+<li>LGR header arrays (<samp class="codeph">INTEHEAD</samp>, <samp class="codeph">LOGIHEAD</samp>, <samp class="codeph">DOUBHEAD</samp>)</li>
+
+<li>Local property arrays for this LGR</li>
+
+</ol>
+             </li>
+
+<li> <samp class="codeph">LGRSGONE</samp> codeph to indicate end of LGR data section</li>
+
+<li>Tabular data (<samp class="codeph">TABDIMS</samp>, <samp class="codeph">TAB</samp>, <samp class="codeph">CON</samp> arrays)</li>
+
+<li>Global region arrays (for example <samp class="codeph">PVTNUM</samp> and <samp class="codeph">SATNUM</samp>)</li>
+
+<li>For each local grid:            <ol type="a">
+<li> <samp class="codeph">LGR</samp> codeph, defining grid name</li>
+
+<li>LGR header data (<samp class="codeph">LGRHEADI</samp>, <samp class="codeph">LGRHEADQ</samp>, <samp class="codeph">LGRHEADD</samp>).</li>
+
+<li>Local region arrays for this LGR</li>
+
+</ol>
+</li>
+
+<li> <samp class="codeph">LGRSGONE</samp> codeph to indicate end of LGR data section</li>
+
+<li>Global saturation and relative permeability endpoints</li>
+
+<li>For each local grid: <ol type="a">
+<li> <samp class="codeph">LGR</samp> codeph, defining grid name</li>
+
+<li>LGR header data (<samp class="codeph">LGRHEADI</samp>, <samp class="codeph">LGRHEADQ</samp>, <samp class="codeph">LGRHEADD</samp>).</li>
+
+<li>Local saturation arrays for this LGR</li>
+
+</ol>
+    </li>
+
+<li> <samp class="codeph">LGRSGONE</samp> codeph to indicate end of LGR data section</li>
+
+<li>For each local grid:                <ol type="a">
+<li> <samp class="codeph">LGR</samp> codeph, defining grid name</li>
+
+<li>Local NNC arrays for this LGR</li>
+
+<li>Extract writes <samp class="codeph">BOXORIG</samp> for each corner point
+grid (global and LGRs). <samp class="codeph">LGR</samp> codeph, defining grid
+nameLGR header data (<samp class="codeph">LGRHEADI</samp>, <samp class="codeph">LGRHEADQ</samp>, <samp class="codeph">LGRHEADD</samp>).</li>
+
+</ol>
+             </li>
+
+<li> <samp class="codeph">LGRSGONE</samp> codeph to indicate end of LGR data section</li>
+
+</ol>
+
+<p>Extract writes <samp class="codeph">BOXORIG</samp> for each corner point grid
+(global and LGRs). <samp class="codeph">LGR</samp> codeph, defining grid nameLGR
+header data (<samp class="codeph">LGRHEADI</samp>, <samp class="codeph">LGRHEADQ</samp>, <samp class="codeph">LGRHEADD</samp>). Note that the <samp class="codeph">INIT</samp> file does
+not contain well data or the initial set of solution data obtained
+from equilibration. Equilibration results are written to restart file
+0, and well data are written to subsequent restart files as they are
+defined in the <span class="keyword">SCHEDULE</span> section of an ECLIPSE run.</p>
+
+
+<div class="tablenoborder"><a name="init.XID-00000062"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="init.XID-00000062" frame="border" border="1" rules="all"><caption>
+           Table 38.1  INIT file keywords</caption>    
+<thead align="left">
+<tr>
+<th valign="top" id="d40e279">Keyword</th>
+
+<th valign="top" id="d40e282">No. of Items</th>
+
+<th valign="top" id="d40e285">Data Type</th>
+
+<th valign="top" id="d40e288">Contents</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">SEQNUM</samp> </td>
+
+<td valign="top" headers="d40e282 ">1</td>
+
+<td valign="top" headers="d40e285 ">INTE</td>
+
+<td valign="top" headers="d40e288 ">Sequence number present in INIT files created by runs
+using the unified output option, but not used for post-processing</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">INTEHEAD</samp> </td>
+
+<td valign="top" headers="d40e282 ">Specified in header</td>
+
+<td valign="top" headers="d40e285 ">INTE</td>
+
+<td valign="top" headers="d40e288 ">Integer header array                         
+     <p>The following items are significant in post-processing software:</p>
+<p>Item 3 - units type: 1 - METRIC, 2 - FIELD, 3 - LAB, 4 - PVT-M</p>
+<p>Items 9, 10, 11 - grid dimensions NX, NY and NZ</p>
+<p>Item 12
+- NACTIV = number of active cells</p>
+<p>Item 14 - grid type. 0 - Corner
+point, 1 - Unstructured, 2 - Hybrid, 3 - Block center</p>
+<p>Item 15
+- IPHS = phase indicator:1 - oil, 2 - water, 3 - oil/water, 4 - gas,
+5 - oil/gas, 6 - gas/water, 7 - oil/water/gas (ECLIPSE output only)</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 ">   </td>
+
+<td valign="top" headers="d40e282 ">   </td>
+
+<td valign="top" headers="d40e285 ">   </td>
+
+<td valign="top" headers="d40e288 ">Item 65 - IDAY = calendar day at start of run
+(1-31) <p>Item 66 - IMON = calendar month at start of run (1-12)</p>
+<p>Item 67 - IYEAR = calendar year at start of run (as four digits,
+for example 1952)</p>
+<p>Item 95 - IPROG = simulation program identifier:</p>
+<p>  100 - ECLIPSE 100</p>
+<p>  300 - ECLIPSE 300</p>
+<p>  500 - ECLIPSE
+300 (thermal option)</p>
+<p>  700 - INTERSECT</p>
+<p>  800 - FrontSim</p>
+<p>  negative - Other simulator</p>
+<p>Item 207- IHOURZ = current
+simulation time HH:MM:SS - number of hours (HH) (0-23).</p>
+<p>Item
+208- IMINTS = current simulation time HH:MM:SS - number of minutes
+(MM) (0-59).</p>
+<p>Item 411- ISECND = current simulation time HH:MM:SS
+- number of seconds (SS), reported in microseconds (0-59,999,999).</p>
+<p>Undefined items in this array may be set to zero.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">LOGIHEAD</samp> </td>
+
+<td valign="top" headers="d40e282 ">Specified in header</td>
+
+<td valign="top" headers="d40e285 ">LOGI </td>
+
+<td valign="top" headers="d40e288 ">Logical header array                         
+     <p>The following items are significant in post-processing software:</p>
+<p>Item 1 - Dissolved gas flag</p>
+<p>Item 2 - Vaporized oil flag</p>
+<p>Item 3 - Flag for directional relative permeabilities</p>
+<p>Item
+4 - Flag for reversible relative permeabilities (ECLIPSE 100)</p>
+<p>Item 4 - Radial model flag (ECLIPSE 300 and other simulators)</p>
+<p>Item 5 - Radial model flag (ECLIPSE 100)</p>
+<p>Item 5 - Flag for
+reversible relative permeabilities (ECLIPSE 300 and other simulators)</p>
+<p>Item 7 - Flag for hysteresis</p>
+<p>Item 15 - Flag for dual porosity
+model</p>
+<p>Item 17 - Flag for end point scaling</p>
+<p>Item 18 - Flag
+for directional end point scaling</p>
+<p>Item 19 - Flag for reversible
+end point scaling</p>
+<p>Item 20 - Flag for alternative end point scaling
+method</p>
+<p>Item 36 - Flag for miscible displacement</p>
+<p>Item 56
+- Flag to scale water capillary pressure at maximum water saturation
+(that is minimum pressure)</p>
+<p>Item 57 - Flag to scale gas capillary
+pressure at minimum gas saturation (that is minimum pressure)</p>
+<p>Item 128 - Flag for coalbed methane (ECLIPSE 300)</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">DOUBHEAD</samp> </td>
+
+<td valign="top" headers="d40e282 ">Specified in header</td>
+
+<td valign="top" headers="d40e285 "> DOUB</td>
+
+<td valign="top" headers="d40e288 ">Double precision header array</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">PORV</samp> </td>
+
+<td valign="top" headers="d40e282 "> <samp class="codeph">NX*NY*NZ</samp> </td>
+
+<td valign="top" headers="d40e285 ">REAL</td>
+
+<td valign="top" headers="d40e288 ">Pore volume array, stored in uncompressed natural
+order with zero values for inactive cells. This array can be used
+to identify active cells. It should be consistent with the active
+cell numbering in the GRID file (see <a href="grid_GRID_Files.html#grid_grid_files"> GRID Files</a>).</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 ">Property name</td>
+
+<td valign="top" headers="d40e282 "> <samp class="codeph">NACTIV</samp>                  
+            <p>(or <samp class="codeph">NX*NY*NZ)</samp> </p>
+</td>
+
+<td valign="top" headers="d40e285 ">REAL</td>
+
+<td valign="top" headers="d40e288 "> Grid block property data in compressed natural
+order (that is natural order with inactive cells removed, so there
+are <samp class="codeph">NACTIV</samp> values) <p>(for example <samp class="codeph">PORO</samp>, <samp class="codeph">PERMX</samp>, <samp class="codeph">PERMY</samp> and <samp class="codeph">PERMZ</samp>) for active cells. For a dual-porosity model, the first half of
+the array corresponds to the matrix blocks and the second half to
+the fracture cells.</p>
+<p>Any missing or non-applicable values are
+set to a dummy “undefined” value of -1.0E20.</p>
+<p>For a multi-porosity
+model, the first half of the array corresponds to the matrix blocks
+and the second half to the fracture cells. Values for the additional
+porosities are not currently available.</p>
+<p>Both ECLIPSE 100 and
+ECLIPSE 300 can also output properties in the uncompressed natural
+order, with existing values for inactive cells (<samp class="codeph">NX*NY*NZ</samp> values). This is either done for all properties in the INIT file
+or none (except <samp class="codeph">PORV</samp> which is always uncompressed).</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">LGR</samp> </td>
+
+<td valign="top" headers="d40e282 ">1</td>
+
+<td valign="top" headers="d40e285 ">CHAR</td>
+
+<td valign="top" headers="d40e288 ">Name of local grid for which following data are
+defined.</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">LGRHEADI</samp> </td>
+
+<td valign="top" headers="d40e282 ">45</td>
+
+<td valign="top" headers="d40e285 ">INTE</td>
+
+<td valign="top" headers="d40e288 ">Integer data for LGR</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">LGRHEADQ</samp> </td>
+
+<td valign="top" headers="d40e282 ">5</td>
+
+<td valign="top" headers="d40e285 ">LOGI</td>
+
+<td valign="top" headers="d40e288 ">Logical data for LGR</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">LGRHEADD</samp> </td>
+
+<td valign="top" headers="d40e282 ">5</td>
+
+<td valign="top" headers="d40e285 "> DOUB </td>
+
+<td valign="top" headers="d40e288 ">Double precision data for LGR</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">LGRSGONE</samp> </td>
+
+<td valign="top" headers="d40e282 ">0</td>
+
+<td valign="top" headers="d40e285 ">MESS</td>
+
+<td valign="top" headers="d40e288 ">Indicates that last LGR array has been read:
+following data are for global grid</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">TABDIMS</samp> </td>
+
+<td valign="top" headers="d40e282 ">Max 100</td>
+
+<td valign="top" headers="d40e285 ">INTE</td>
+
+<td valign="top" headers="d40e288 ">Table dimensions data where item 1 = NTABD
+(total size of table array)</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">TAB</samp> </td>
+
+<td valign="top" headers="d40e282 "> <samp class="codeph">NTABD</samp> </td>
+
+<td valign="top" headers="d40e285 ">DOUB</td>
+
+<td valign="top" headers="d40e288 ">Array of tabular data for PVT and saturation properties
+(see <a href="init_Tabular_data_in_INIT_files.html#init_tabular_data_in_init_files"> "Tabular data
+in INIT files"</a>)          </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">CON</samp> </td>
+
+<td valign="top" headers="d40e282 ">3</td>
+
+<td valign="top" headers="d40e285 ">DOUB</td>
+
+<td valign="top" headers="d40e288 ">Constant PVT data (RS dead oil, RV dead oil, bubble
+or dew point)</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 ">Region data name</td>
+
+<td valign="top" headers="d40e282 "> <samp class="codeph">NACTIV</samp> </td>
+
+<td valign="top" headers="d40e285 ">INTE</td>
+
+<td valign="top" headers="d40e288 ">Integer data defining regions in compressed natural
+order (for example <samp class="codeph">FIPNUM</samp> and <samp class="codeph">SATNUM</samp>) </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 ">Grid region name</td>
+
+<td valign="top" headers="d40e282 "> <samp class="codeph">NACTIV</samp> </td>
+
+<td valign="top" headers="d40e285 ">INTE</td>
+
+<td valign="top" headers="d40e288 ">Integer data defining grid regions (for example <samp class="codeph">TNUM</samp>, <samp class="codeph">FLUXNUM</samp>, <samp class="codeph">MULTNUM</samp>, <samp class="codeph">OPERNUM</samp> and <samp class="codeph">CORSNUM</samp>)</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">CELLID</samp> </td>
+
+<td valign="top" headers="d40e282 "> <samp class="codeph">NACTIV</samp> </td>
+
+<td valign="top" headers="d40e285 ">INTE</td>
+
+<td valign="top" headers="d40e288 ">Global cell indices in compressed natural order
+(INTERSECT only)</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 ">Aquifer connections                          
+    <p> <samp class="codeph">AQUIFERA</samp> </p>
+<p> <samp class="codeph">AQUIFERG</samp> </p>
+<p> <samp class="codeph">AQUIFERN</samp> </p>
+</td>
+
+<td valign="top" headers="d40e282 "> <samp class="codeph">NACTIV</samp> </td>
+
+<td valign="top" headers="d40e285 ">INTE</td>
+
+<td valign="top" headers="d40e288 ">An array with the header names specified is written
+to illustrate which cells are connected to each aquifer. If a cell
+is connected to aquifer N then the number
+ <math><msup><mn>2</mn>
+<mrow><mo>(</mo><mi>N</mi><mrow><mo>-</mo><mn>1</mn>
+</mrow><mo>)</mo></mrow></msup></math> 
+appears in the array</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 ">Rock connections                             
+ <p> <samp class="codeph">ROCKCONA</samp> </p>
+ </td>
+
+<td valign="top" headers="d40e282 "> <samp class="codeph">NACTIV</samp> </td>
+
+<td valign="top" headers="d40e285 ">INTE</td>
+
+<td valign="top" headers="d40e288 ">An array with the header name specified is written
+to illustrate which cells are connected to each rock. If a cell is
+connected to rock N then the number
+ <math><msup><mn>2</mn>
+<mrow><mo>(</mo><mi>N</mi><mrow><mo>-</mo><mn>1</mn>
+</mrow><mo>)</mo></mrow></msup></math> 
+appears in the array</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 ">Saturation data name</td>
+
+<td valign="top" headers="d40e282 "> <samp class="codeph">NACTIV</samp> </td>
+
+<td valign="top" headers="d40e285 ">REAL</td>
+
+<td valign="top" headers="d40e288 ">Grid block saturation endpoint data in compressed
+natural order (for example <samp class="codeph">SWCR</samp> and <samp class="codeph">SWL</samp>)</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">TRANNNC</samp> </td>
+
+<td valign="top" headers="d40e282 "> <samp class="codeph">NUMNNC</samp> </td>
+
+<td valign="top" headers="d40e285 ">REAL</td>
+
+<td valign="top" headers="d40e288 ">NNC transmissibilities</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">DIFFNNC</samp> </td>
+
+<td valign="top" headers="d40e282 "> <samp class="codeph">NUMNNC</samp> </td>
+
+<td valign="top" headers="d40e285 ">REAL</td>
+
+<td valign="top" headers="d40e288 ">NNC diffusivities</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">HEATNNC</samp> </td>
+
+<td valign="top" headers="d40e282 "> <samp class="codeph">NUMNNC</samp> </td>
+
+<td valign="top" headers="d40e285 ">REAL</td>
+
+<td valign="top" headers="d40e288 ">NNC thermal transmissibilities</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">TRANGL</samp> </td>
+
+<td valign="top" headers="d40e282 "> <samp class="codeph">NCONGL</samp> </td>
+
+<td valign="top" headers="d40e285 ">REAL</td>
+
+<td valign="top" headers="d40e288 ">For current LGR: Global-local transmissibilities
+(in LGR data section).</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">LGRJOIN</samp> </td>
+
+<td valign="top" headers="d40e282 ">2</td>
+
+<td valign="top" headers="d40e285 ">CHAR</td>
+
+<td valign="top" headers="d40e288 "> Header listing LGR names for connected LGRs:
+<p>Item 1 - ZLOC1 = name of first LGR</p>
+<p>Item 2 - ZLOC2 = name of second LGR</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d40e279 "> <samp class="codeph">TRANLL</samp> </td>
+
+<td valign="top" headers="d40e282 "> <samp class="codeph">NUMNCA</samp> </td>
+
+<td valign="top" headers="d40e285 ">REAL</td>
+
+<td valign="top" headers="d40e288 ">Transmissibilities for local-local connections
+between LGRs ZLOC1 and ZLOC2</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

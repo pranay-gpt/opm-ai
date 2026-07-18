@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="RESVNUM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="RESVNUM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>RESVNUM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="RESVNUM"><a name="RESVNUM"><!-- --></a>
+<h1 class="keyword">RESVNUM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="resvnum.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="resvnum.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2004e45"> x </th>
+
+<th valign="top" id="d2004e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2004e54"> x </th>
+
+<th valign="top" id="d2004e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2004e45 d2004e54 ">  </td>
+
+<td valign="top" headers="d2004e48 d2004e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2004e45 d2004e54 "> x </td>
+
+<td valign="top" headers="d2004e48 d2004e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2004e45 d2004e54 ">  </td>
+
+<td valign="top" headers="d2004e48 d2004e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2004e45 d2004e54 ">  </td>
+
+<td valign="top" headers="d2004e48 d2004e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2004e45 d2004e54 ">  </td>
+
+<td valign="top" headers="d2004e48 d2004e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2004e45 d2004e54 ">  </td>
+
+<td valign="top" headers="d2004e48 d2004e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2004e45 d2004e54 ">  </td>
+
+<td valign="top" headers="d2004e48 d2004e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2004e45 d2004e54 ">  </td>
+
+<td valign="top" headers="d2004e48 d2004e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is optional, and is used to allow <a href="COORD.html#COORD">  COORD</a> data to be read in
+on a reservoir-by-reservoir basis. This is useful when two or more
+reservoir models are being combined into a single larger grid.</p>
+
+<p>The keyword is followed by a single integer to specify the number
+of the next reservoir to be input using the <span class="keyword">COORD</span>  keyword. The reservoir number should be between 1 and <samp class="codeph">NUMRES</samp>.   <samp class="codeph">NUMRES</samp> should be set &gt; 1 by the keyword <a href="NUMRES.html#NUMRES">  NUMRES</a> in
+the <span class="keyword">RUNSPEC</span> section.</p>
+
+<p>See also the <span class="keyword">COORD</span> and <a href="COORDSYS.html#COORDSYS">  COORDSYS</a> keywords and <a href="../ecl_td/independ_Independent_Reservoir_Regions.html#independ_independent_reservoir_regions">"Independent reservoir
+regions"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<div class="section" id="resvnum_example"><a name="resvnum_example"><!-- --></a><h4 class="sectiontitle">Example</h4>       <p>Where <samp class="codeph">NDIVIX=3</samp>,  <samp class="codeph">NDIVIY=2</samp> and <samp class="codeph">NDIVIZ=4</samp> are specified in  <span class="keyword">RUNSPEC</span> keyword  		 <a href="DIMENS.html#DIMENS"> DIMENS</a> and  <a href="NUMRES.html#NUMRES"> NUMRES</a> =2:</p>
+<pre><code>RESVNUM
+ 1 /
+COORD
+    0    0 0    0    0 1000
+ 1000    0 0 1000    0 1000
+ 2000    0 0 2000    0 1000
+ 3000    0 0 3000    0 1000
+    0 2000 0    0 2000 1000
+ 1000 2000 0 1000 2000 1000
+ 2000 2000 0 2000 2000 1000
+ 3000 2000 0 3000 2000 1000
+    0 4000 0    0 4000 1000
+ 1000 4000 0 1000 4000 1000
+ 2000 4000 0 2000 4000 1000
+ 3000 4000 0 3000 4000 1000 /
+RESVNUM
+ 2 /
+BOX
+ 1 3 1 1 1 4 /
+COORD
+ 6000    0 0 6000    0 1000
+ 7000    0 0 7000    0 1000
+ 8000    0 0 8000    0 1000
+ 9000    0 0 9000    0 1000
+ 6000 2000 0 6000 2000 1000
+ 7000 2000 0 7000 2000 1000
+ 8000 2000 0 8000 2000 1000
+ 9000 2000 0 9000 2000 1000 /
+BOX
+ 1 3 2 2 1 4 /
+COORD
+ 6000 2000 0 6000 2000 1000
+ 7000 2000 0 7000 2000 1000
+ 8000 2000 0 8000 2000 1000
+ 9000 2000 0 9000 2000 1000
+ 6000 4000 0 6000 4000 1000
+ 7000 4000 0 7000 4000 1000
+ 8000 4000 0 8000 4000 1000
+ 9000 4000 0 9000 4000 1000 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

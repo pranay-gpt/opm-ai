@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Triple porosity"/>
+<meta name="DC.subject" content="Multi porosity triple porosity"/>
+<meta name="keywords" content="Multi porosity triple porosity"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="multiporo_triple_porosity"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Triple porosity</title>
+</head>
+<body>
+
+
+<div class="nested0" id="multiporo_triple_porosity"><a name="multiporo_triple_porosity"><!-- --></a>
+<h1 class="topictitle1">Triple porosity</h1>
+
+
+ <div>
+<p>When the <a href="../ecl_rm/TRPLPORO.html#TRPLPORO">TRPLPORO</a> keyword is used, only 3 or 4 porosities are allowed. The
+matrix and fracture porosities are specified as porosities 1 and 2
+as usual. Porosity 3 is used to represent vugs (larger voids in the
+rock which are not part of the fracture system) which are connected
+to the matrix in the same way as the fracture is connected to the
+matrix, and additionally to the fracture through micro fracture connections.
+If used, porosity 4 represents additional vugs with connection to
+the matrix only (isolated vugs).</p>
+
+<p>Unlike the standard multi porosity connections, a porosity in triple
+porosity may be connected to more than 2 other porosities, as the
+matrix can be connected to the fracture and two different vug porosities
+(isolated and connected). There is also a cyclic path in the porosity
+system, formed by the matrix, fracture and connected vug porosities.
+These relationships are illustrated in the figure below. Note that
+the logical order, with the fracture as the outer porosity, is shown,
+but in the grid description the fracture is still the second porosity.</p>
+
+<p>As for the multi porosity model, the <a href="../ecl_rm/DUALPORO.html#DUALPORO">DUALPORO</a> and, where needed,
+the <a href="../ecl_rm/DUALPERM.html#DUALPERM">DUALPERM</a>, keywords are required. The input allows for the possibility
+of a triple permeability model, where the vug porosities form a connected
+continuum. However, in most if not all cases, only a dual permeability
+model will be required for triple porosity. To make the vug cells
+connected only to the local matrix and, for connected vugs, to the
+local fracture, you should zero the permeability or add permeability
+multipliers of size zero to the appropriate permeability for the other
+vug-matrix, vug-fracture or vug-vug connection. The convention for
+assigning cell permeabilities to triple porosity connections is noted
+in the Transmissibilities section below.</p>
+
+<div class="fignone" id="multiporo.XID-000000db"><a name="multiporo.XID-000000db"><!-- --></a>
+
+ <br/><img src="../img/multi3.png" width="393px"/><br/> 
+<br/><span class="figcap">
+           Figure 109.1  Triple porosity connectivity</span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> <a href="../ecl_rm/NMATRIX.html#NMATRIX">NMATRIX</a> and <a href="../ecl_rm/NMATOPTS.html#NMATOPTS">NMATOPTS</a> should not be used with <span class="keyword">TRPLPORO</span></span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

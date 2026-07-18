@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="CVCRIT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="CVCRIT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>CVCRIT</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="CVCRIT"><a name="CVCRIT"><!-- --></a>
+<h1 class="keyword">CVCRIT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="cvcrit.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="cvcrit.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d358e45">  </th>
+
+<th valign="top" id="d358e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d358e54"> x </th>
+
+<th valign="top" id="d358e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d358e45 d358e54 ">  </td>
+
+<td valign="top" headers="d358e48 d358e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d358e45 d358e54 ">  </td>
+
+<td valign="top" headers="d358e48 d358e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d358e45 d358e54 ">  </td>
+
+<td valign="top" headers="d358e48 d358e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d358e45 d358e54 ">  </td>
+
+<td valign="top" headers="d358e48 d358e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d358e45 d358e54 ">  </td>
+
+<td valign="top" headers="d358e48 d358e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d358e45 d358e54 ">  </td>
+
+<td valign="top" headers="d358e48 d358e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d358e45 d358e54 ">  </td>
+
+<td valign="top" headers="d358e48 d358e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d358e45 d358e54 "> x </td>
+
+<td valign="top" headers="d358e48 d358e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This is an optional keyword which modifies the convergence criteria
+used to control the simulator in the <span class="keyword">SCHEDULE</span> section.
+This keyword may be used more than once, for example to tighten up
+the criteria during a difficult part of the study.</p>
+
+<p>The keyword may be followed by some or all of the following data
+items, terminated by a slash (/).</p>
+
+<ol>
+<li> Maximum pressure change over an iteration. <p>If the largest
+pressure change (for any cell) for a non-linear iteration is less
+than this value the solution is accepted. The solution obtained is
+usually at least as accurate as this value.</p>
+ <p>This item is also
+used as the maximum pressure change over an iteration in the Multisegment
+Well Model.</p>
+<p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.1 atm</p>
+ </li>
+
+<li> Maximum number of non-linear iterations. <p>The timestep will
+be reduced if this number is exceeded before the non-linear equations
+are converged.</p>
+ <p>DEFAULT: 20 (Fully implicit)</p>
+<p>15 (Fully
+implicit Thermal)</p>
+<p>6 (IMPES)</p>
+<p>12 (AIM or IMPSAT)</p>
+ </li>
+
+<li> Required improvement in linear solver residual squared. <strong>This
+is the required reduction in RMS</strong> <sup>2</sup> and the RMS equations
+are given in <a href="../ecl_td/sollineq_Convergence_criteria.html#sollineq_eclipse_300">ECLIPSE 300 convergence
+criteria</a> in the <cite>“ECLIPSE Technical Description”</cite>. <p>DEFAULT: 1.0E-10</p>
+ </li>
+
+<li> Maximum number of linear iterations <p>DEFAULT: 40, or <a href="NSTACK.html#NSTACK">  NSTACK</a> if <span class="keyword">NSTACK</span> is greater than 40</p>
+<p>20, or <span class="keyword">NSTACK</span> if <span class="keyword">NSTACK</span> is greater than 20 if using the <a href="JALS.html#JALS">  JALS</a> solver or <a href="CPR.html#CPR"> CPR</a> solver</p>
+ </li>
+
+<li> Maximum fugacity (phase equilibrium) error convergence criterion. <p>(This option is not valid with the Thermal option.)</p>
+ <p>DEFAULT:
+0.001</p>
+ </li>
+
+<li> Minimum number of linear iterations <p>DEFAULT: 1 (Non-Thermal) 2
+(Thermal)</p>
+ </li>
+
+<li> Maximum component specific volume change over an iteration. <p>If the largest change (for any cell and any component) for a non-linear
+iteration is less than this value the solution is accepted. This is
+effectively the contribution to the saturation change due to any component.</p>
+<p>DEFAULT: 0.01 (Non-Thermal) 0.2 (Thermal)</p>
+ <p>Thermal only</p>
+</li>
+
+<li> Maximum temperature change over an iteration.<p>If the largest
+change for a non-linear iteration is less than this value the solution
+is accepted.</p>
+<p>UNITS: K (<samp class="codeph">METRIC</samp>), °R (<samp class="codeph">FIELD</samp>), K (<samp class="codeph">LAB</samp>), K (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 10.0</p>
+ </li>
+
+<li> Minimum number of non-linear iterations. <p>DEFAULT: 1</p>
+ <p>Thermal </p>
+<p>DEFAULT: 2</p>
+ </li>
+
+<li> Minimum rms linear solver residual for convergence of linear
+equations. <p>DEFAULT: 1.0E+20</p>
+ </li>
+
+<li> <p>The tolerance for the maximum-norm of the non-linear residual,
+regardless of the solution change criteria. The solution is flagged
+as converged if the maximum-norm of the non-linear residual is less
+than this value, regardless of the solution change criteria. Please
+also refer to item <a href="CVCRIT.html#cvcrit.XID-0000012b">41</a>.</p>
+ <p>DEFAULT: 1.0E-4</p>
+ </li>
+
+<li> The tolerance for the sum of the non-linear residual, regardless
+of the solution change criteria. The solution is flagged as converged
+if the sum of the non-linear residual is below this value, regardless
+of the solution change criteria. Please also refer to item <a href="CVCRIT.html#cvcrit.XID-0000012e">42</a>. <p>DEFAULT: 1.0E-20</p>
+ </li>
+
+<li id="cvcrit_64864"><a name="cvcrit_64864"><!-- --></a> Maximum allowed change in molar densities per
+non-linear iteration <p>DEFAULT: 2 x target value given by item 10
+of <a href="TSCRIT.html#TSCRIT">  TSCRIT</a> </p>
+<p>Thermal option only</p>
+ </li>
+
+<li id="cvcrit_42476"><a name="cvcrit_42476"><!-- --></a> Maximum allowed change in temperature per non-linear
+iteration<p>UNITS: K (<samp class="codeph">METRIC</samp>), °R (<samp class="codeph">FIELD</samp>), K (<samp class="codeph">LAB</samp>), K (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT:
+target value given by item 17 of <span class="keyword">TSCRIT</span> </p>
+ </li>
+
+<li> Maximum allowed change in pressure per non-linear iteration. <p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: Minimum of 100 atmospheres and 20% of the average pressure.
+Minimum of 100 atmospheres and the average pressure (Thermal)</p>
+ </li>
+
+<li> Reserved for future use. </li>
+
+<li> Reserved for future use. </li>
+
+<li> Reserved for future use. </li>
+
+<li> Reserved for future use. </li>
+
+<li> Not used at present. </li>
+
+<li> Not used at present. </li>
+
+<li> Maximum L<sub>2</sub><sup>2</sup> solver residual norm. <p>DEFAULT:
+1.0E-11</p>
+ </li>
+
+<li> Maximum number of iterations for converging the Multisegment
+Well Model. <p>DEFAULT: 40</p>
+ </li>
+
+<li> Convergence tolerance for Multisegment Well Model molar densities. <p>UNITS: kg-M/rm<sup>3</sup> (<samp class="codeph">METRIC</samp>), lb-M/rb (<samp class="codeph">FIELD</samp>), gm-M/rcc (<samp class="codeph">LAB</samp>), kg-M/rm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 0.015 kg-M/rm<sup>3</sup></p>
+ </li>
+
+<li> Convergence tolerance for Multisegment Well Model molar flow
+rate (homogeneous flow segments). <p>UNITS: kg-M/day (<samp class="codeph">METRIC</samp>), lb-M/day (<samp class="codeph">FIELD</samp>), gm-M/hr (<samp class="codeph">LAB</samp>), kg-M/day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 50 kg-M/day</p>
+ </li>
+
+<li> Convergence tolerance for Multisegment Well Model energy density. <p>UNITS: kJ/rm<sup>3</sup> (<samp class="codeph">METRIC</samp>), Btu/rb (<samp class="codeph">FIELD</samp>), J/rcc (<samp class="codeph">LAB</samp>), kJ/rm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 50 kJ/rm<sup>3</sup></p>
+ </li>
+
+<li> Convergence tolerance for Multisegment Well Model velocity (drift
+flux segments). <p>UNITS: m/s (<samp class="codeph">METRIC</samp>), ft/s (<samp class="codeph">FIELD</samp>), cm/s (<samp class="codeph">LAB</samp>), m/s (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 10 m/s</p>
+ </li>
+
+<li> Unused </li>
+
+<li> Unused </li>
+
+<li> Unused</li>
+
+<li> Convergence tolerance for Multisegment Well Model maximum molar
+residual <p>UNITS: kg-M/day (<samp class="codeph">METRIC</samp>), lb-M/day (<samp class="codeph">FIELD</samp>), gm-M/hr (<samp class="codeph">LAB</samp>), kg-M/day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 1000 kg-M/day</p>
+ </li>
+
+<li> Convergence tolerance for Multisegment Well Model maximum energy
+residual <p>UNITS: kJ/day (<samp class="codeph">METRIC</samp>), Btu/day (<samp class="codeph">FIELD</samp>), J/hr (<samp class="codeph">LAB</samp>), kJ/day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 1E20 kJ/day</p>
+ </li>
+
+<li> The <span class="keyword">SAMG</span> item <samp class="codeph">CHKTOL</samp>. <p>Defines the amount of checking performed on the sparse matrix input
+to the SAMG solver. Negative values imply no checking, zero gives
+standard checking and positive values give enhanced checking. See
+also <a href="SAMG.html#SAMG">  SAMG</a>.</p>
+ <p>DEFAULT: - 1.0.</p>
+ </li>
+
+<li> The <span class="keyword">SAMG</span> item <samp class="codeph">IFIRST</samp>. <p>Defines the initial approximation used in the SAMG linear solver
+(1 for a constant zero vector, 2 for a constant vector of one, and
+3 for a random vector). See also <span class="keyword">SAMG</span>.</p>
+ <p>DEFAULT:
+1</p>
+ </li>
+
+<li>Unused </li>
+
+<li>Unused </li>
+
+<li> Maximum pressure change in Multisegment Well Model above which
+the solution vector will be dampened <p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm
+(<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 250 atm</p>
+ </li>
+
+<li> Maximum specific volume change in Multisegment Well Model above
+which the solution vector will be dampened. <p>DEFAULT: 100</p>
+ </li>
+
+<li> Maximum temperature change in Multisegment Well Model above which
+the solution vector will be dampened. <p>UNITS: K (<samp class="codeph">METRIC</samp>), °R (<samp class="codeph">FIELD</samp>), K (<samp class="codeph">LAB</samp>), K (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 200 K</p>
+ </li>
+
+<li> Maximum fraction of Appleyard chop iterations per timestep. <p>The Appleyard chop is used to stabilize the non-linear convergence.
+It modifies the Newton update in a cell, depending on phase appearance,
+phase disappearance and critical values of saturations. However, sometimes
+the Appleyard chop may actually prevent convergence. Therefore the
+Appleyard chop is switched off in a cell, during an iteration, if
+it has been performed more than <math><mrow><mi>f</mi>
+<mo>×</mo><mrow><mi>M</mi><mi>A</mi><mi>X</mi>
+<mi>I</mi><mi>T</mi><mi>S</mi></mrow></mrow></math> times during a timestep, where  <math><mrow><mi>M</mi>
+<mi>A</mi><mi>X</mi><mi>I</mi><mi>T</mi><mi>S</mi>
+</mrow></math> is defined by item 2 of this keyword and  <math><mi>f</mi></math>  is defined by this item. If  <math><mi>f</mi></math>  is set greater than 1, then the Appleyard chop
+will not be switched off, giving the pre-2011.1 behavior. </p>
+ <p>DEFAULT: 0.5</p>
+ </li>
+
+<li id="cvcrit.XID-0000012b"><a name="cvcrit.XID-0000012b"><!-- --></a> Additional tolerance for the maximum-norm
+of the non-linear residual. The solution is only flagged as converged
+if it satisfies all other convergence criteria, including solution
+change, and the maximum-norm of the non-linear residual is less than
+this value.<p>DEFAULT: 1.0E+20 (Not used)</p>
+ </li>
+
+<li id="cvcrit.XID-0000012e"><a name="cvcrit.XID-0000012e"><!-- --></a> Additional tolerance for the maximum
+sum of the non-linear residuals. The solution is only flagged as converged
+if it satisfies all other convergence criteria, including solution
+change, and the sum of the non-linear residual is less than this value. <p>DEFAULT: 1.0E+20 (Not used)</p>
+ </li>
+
+</ol>
+
+<div class="section" id="cvcrit_example"><a name="cvcrit_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>CVCRIT
+0.5 6 0.000001 20 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

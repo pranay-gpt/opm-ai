@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ECLIPSE 300"/>
+<meta name="DC.subject" content="TUNING"/>
+<meta name="keywords" content="TUNING"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="tuning_eclipse_300"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ECLIPSE 300</title>
+</head>
+<body>
+
+
+<div class="nested0" id="tuning_eclipse_300"><a name="tuning_eclipse_300"><!-- --></a>
+<h1 class="topictitle1">ECLIPSE 300</h1>
+
+
+ <div>
+<p>This keyword should be used with great care. In general, the only
+parameters that may need to be altered from their default values are
+the first three, which control the initial timestep and the minimum
+and maximum timestep.</p>
+
+<p>This keyword duplicates some of the functionality of the <a href="TSCRIT.html#TSCRIT"> TSCRIT</a> and the <a href="CVCRIT.html#CVCRIT">  CVCRIT</a> keywords.</p>
+
+<p>The <span class="keyword">TUNING</span> keyword is copied from ECLIPSE 100
+and therefore has a number of parameters that are not used in ECLIPSE 300.</p>
+
+<p>These unused parameters are read in as normal and then ignored
+by ECLIPSE 300. The default values may differ from those in ECLIPSE 100.</p>
+
+<p>The data comprises 3 sections each of which must be terminated
+by a slash (/). If a slash is encountered before the end of a section,
+the remaining items in the section are not altered.</p>
+
+<div class="section" id="tuning_record_1_timestepping_controls"><a name="tuning_record_1_timestepping_controls"><!-- --></a><h4 class="sectiontitle">Record
+1:Timestepping controls</h4><ol>
+<li>Maximum length of next timestep. <p>UNITS: day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 1.0 Fully Implicit (first step),
+0.5 IMPES (first step), No Action Subsequent timesteps (all unit sets)</p>
+ </li>
+
+<li>Maximum length of all timesteps <p>UNITS: day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 50 (all unit sets)</p>
+ </li>
+
+<li>Minimum length of all timesteps <p>UNITS: day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 0.02, 0.0002 (Thermal option) (all
+unit sets)</p>
+ </li>
+
+<li>Not used. </li>
+
+<li>Maximum timestep increase factor <p>DEFAULT: 2.0</p>
+ </li>
+
+<li> Minimum timestep cutback factor <p>DEFAULT: 0.3</p>
+ </li>
+
+<li> Not used. </li>
+
+<li> Not used. </li>
+
+<li> Maximum throughput ratio <p>DEFAULT: Not used Fully Implicit</p>
+ <p>DEFAULT: 1.0 IMPES, AIM or IMPSAT</p>
+ </li>
+
+<li> Length of the next timestep following a well modification (same
+at item 11 of <a href="TSCRIT.html#TSCRIT">  TSCRIT</a>) and is active due to well control modifications or a well opening/closing. <p>UNITS: day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 40 Fully implicit, AIM or IMPSAT; 10 IMPES; 5 for Thermal
+simulations</p>
+<p>If <a href="OPTIONS3.html#options3.69">item 69</a> in <span class="keyword">OPTIONS3</span> is set to a non-zero value, then
+the above default values for <span class="keyword">FULLIMP</span>, <span class="keyword">AIM</span>,  <span class="keyword">IMPSAT</span> and <span class="keyword">IMPES</span> will be halved.</p>
+ </li>
+
+</ol>
+</div>
+
+<div class="section" id="tuning_record_2_time_truncation_and_convergence_controls"><a name="tuning_record_2_time_truncation_and_convergence_controls"><!-- --></a><h4 class="sectiontitle">Record 2: Time truncation and convergence controls</h4><ol>
+<li> Target TTE (time truncation error). <p>DEFAULT: 0.2  Fully Implicit,
+AIM or IMPSAT; 0.05  IMPES; 1.0E+20 for Thermal simulations</p>
+ </li>
+
+<li> Maximum non-linear convergence error. <p>DEFAULT: 0.001</p>
+ </li>
+
+<li> Maximum material balance error. <p>DEFAULT: 0.000001</p>
+ </li>
+
+<li> Target reduction in the square of the relative residual norm
+in the linear solver. <p>DEFAULT: Improvement by factor of 1.0E-10
+in the <strong>square</strong> of the residual.</p>
+ <p> <strong>This is the required
+reduction in RMS<sup>2</sup></strong>.</p>
+ </li>
+
+<li> Maximum TTE (Time Truncation Error) <p>DEFAULT: 10 or 100 (if <span class="keyword">OPTIONS3</span> item <a href="OPTIONS3.html#options3.14">14</a> &gt; 0)  Fully Implicit or IMPSAT; 0.5   IMPES; 2.0   AIM; 1.0E+20
+for Thermal simulations</p>
+ </li>
+
+<li> Not used. </li>
+
+<li> Not used. </li>
+
+<li> Not used. </li>
+
+<li> Not used. </li>
+
+<li>Not used. </li>
+
+<li>Tolerance on the square of the absolute residual norm in the linear
+solver. </li>
+
+<li>Target normalized solution change. <p>DEFAULT: 0.2 Fully Implicit,
+0.05 IMPES or AIM</p>
+ </li>
+
+<li>Maximum normalized solution change. <p>DEFAULT: 10 Fully Implicit,
+0.5 IMPES or AIM</p>
+ </li>
+
+<li>Maximum fugacity (phase equilibrium) error convergence criterion. <p>DEFAULT: 0.001</p>
+ </li>
+
+</ol>
+</div>
+
+<div class="section" id="tuning_record_3_control_of_newton_and_linear_iterations"><a name="tuning_record_3_control_of_newton_and_linear_iterations"><!-- --></a><h4 class="sectiontitle">Record 3: Control of Newton and linear iterations</h4><ol>
+<li> Maximum number of non-linear iterations in a timestep. <p>DEFAULT:
+20  Fully Implicit, 15   Fully Implicit and Thermal, 6    IMPES, 12   AIM</p>
+ </li>
+
+<li> Minimum number of non-linear iterations in a timestep. <p>DEFAULT:
+1, 2 (Thermal option)</p>
+ </li>
+
+<li> Maximum number of linear iterations (LITMAX) <p>DEFAULT: 40,
+20 if using the <a href="JALS.html#JALS">  JALS</a> solver or <a href="CPR.html#CPR"> CPR</a> solver</p>
+ </li>
+
+<li> Minimum number of linear iterations in a Newton iteration <p>DEFAULT: 1</p>
+ </li>
+
+<li> Maximum number of iterations within well flow calculation <p>DEFAULT: 40</p>
+ </li>
+
+<li> Not used. </li>
+
+<li> Maximum pressure change at last Newton iteration <p>UNITS: bars
+(<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: no-limit</p>
+ </li>
+
+<li> Maximum saturation change at last Newton iteration. <p>DEFAULT:
+no-limit</p>
+ </li>
+
+<li> Target maximum pressure change in a timestep. <p>UNITS: bars
+(<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 100 atm</p>
+ </li>
+
+<li> Not used. </li>
+
+</ol>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

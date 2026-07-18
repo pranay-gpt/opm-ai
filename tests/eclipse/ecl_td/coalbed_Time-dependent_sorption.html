@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Equilibration"/>
+<meta name="DC.subject" content="Unconventionals, Coal bed methane ECLIPSE 300, Time-dependent sorption, Instant sorption, Coal bed methane, ECLIPSE 300 Equilibration"/>
+<meta name="keywords" content="Unconventionals, Coal bed methane ECLIPSE 300, Time-dependent sorption, Instant sorption, Coal bed methane, ECLIPSE 300 Equilibration"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="coalbed.ecl100.equilibration"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Equilibration</title>
+</head>
+<body>
+
+
+<div class="nested0" id="coalbed.ecl100.equilibration"><a name="coalbed.ecl100.equilibration"><!-- --></a>
+<h1 class="topictitle1">Equilibration</h1>
+
+
+ <div>
+<div class="section" id="coalbed_time-dependent_sorption"><a name="coalbed_time-dependent_sorption"><!-- --></a><h4 class="sectiontitle">Time-dependent sorption</h4>
+
+<p>The matrix coal gas is always initialized according to the input
+matrix properties. This means that the input mole fractions and pressure
+are used to set the gas contents according to the Langmuir adsorption
+capacity.</p>
+
+<p>An equilibrium is obtained if the initial specified composition
+of the fractures equals the input matrix composition and the system
+has free gas. In addition the pressure of the fracture must be level
+or higher than the input matrix pressure. If the fractures are fully
+water filled, an equilibrium mole fraction and sorption pressure is
+calculated internally.</p>
+
+<p>Please note that the resulting adsorbed mole fractions generally
+are not equal to the input mole fractions.</p>
+
+<p>When equilibration is done by <a href="../ecl_rm/EQUIL.html#EQUIL">EQUIL</a> the fractures are equilibrated in the usual way. The initial
+coal gas molar densities are calculated from the prevailing matrix
+pressure and composition as specified by <a href="../ecl_rm/COMPVD.html#COMPVD">COMPVD</a> or <a href="../ecl_rm/ZMFVD.html#ZMFVD">ZMFVD</a>.</p>
+
+<p>A different sorption pressure can be specified by the keyword <a href="../ecl_rm/SORBPRES.html#SORBPRES">SORBPRES</a>. Entering pressure
+values which are lower than the computed matrix pressure will give
+a lower gas content. It is also possible to model undersaturated coal
+by scaling the calculated coal gas by a factor (see the keyword <a href="../ecl_rm/SORBFRAC.html#SORBFRAC">SORBFRAC</a>).</p>
+
+<p>It is also possible to input the initial coal gas concentration
+by using the keywords <a href="../ecl_rm/GASADCO.html#GASADCO">GASADCO</a> and or <a href="../ecl_rm/GASADEC.html#GASADEC">GASADEC</a>. The first specifies the concentration of the gas for each
+grid cell and each component. The second will scale the input Langmuir
+adsorption capacity so that the input concentration is matched at
+the given pressure and composition. It should be noted that the components
+need to be present, otherwise it is not possible to match the input
+concentrations. It is however possible to first input a composition
+used for scaling and thereafter use <span class="keyword">GASADCO</span> to
+set the final concentration. It is also possible to select one component
+to use to obtain one scaling value by using the keyword <a href="../ecl_rm/GASSATC.html#GASSATC">GASSATC</a>. In this case, all
+of the components use the scaling value obtained for this specific
+component.</p>
+
+<p>Note that <span class="keyword">GASSATC</span>, <span class="keyword">GASADEC</span>, <span class="keyword">LANGMULT</span> or <span class="keyword">LANGMULC</span> cannot
+be used together.</p>
+
+<p>An enumerated start is possible in the usual way. The input needed
+is:</p>
+
+<ul>
+<li>Mole fraction values for the gas phase (<a href="../ecl_rm/YMF.html#YMF">YMF</a>) and oil phase (<a href="../ecl_rm/XMF.html#XMF">XMF</a>). If no oil phase is present then values
+of zero (0) should be entered for <span class="keyword">XMF</span>.        
+    </li>
+
+<li>Pressure.</li>
+
+<li>Gas and water saturations. </li>
+
+</ul>
+
+<p>The matrix gas mole fractions and the pressure are then used to
+initialize the matrix coal gas.</p>
+
+<p>Several equilibrium regions can be used in order to specify different
+conditions for the matrix and the fractures.</p>
+
+</div>
+
+<div class="section"><h4 class="sectiontitle">Instant sorption</h4><p>For the instant sorption
+model the adsorbed gas content is calculated from the free gas phase
+composition and pressure for each simulation cell. If water is present
+the pressure in the pore space and the composition given by <a href="../ecl_rm/COMPVD.html#COMPVD">COMPVD</a> or <a href="../ecl_rm/ZMFVD.html#ZMFVD">ZMFVD</a> is used to determine
+the amount of adsorbed gas. <a href="../ecl_rm/SORBPRES.html#SORBPRES">SORBPRES</a> and <a href="../ecl_rm/SORBFRAC.html#SORBFRAC">SORBFRAC</a> can currently not be used with the instant sorption model.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

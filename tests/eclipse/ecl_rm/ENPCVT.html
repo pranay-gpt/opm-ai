@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ENPCVT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ENPCVT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ENPCVT</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ENPCVT"><a name="ENPCVT"><!-- --></a>
+<h1 class="keyword">ENPCVT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="enpcvt.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="enpcvt.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d606e45">  </th>
+
+<th valign="top" id="d606e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d606e54"> x </th>
+
+<th valign="top" id="d606e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d606e45 d606e54 ">  </td>
+
+<td valign="top" headers="d606e48 d606e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d606e45 d606e54 ">  </td>
+
+<td valign="top" headers="d606e48 d606e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d606e45 d606e54 ">  </td>
+
+<td valign="top" headers="d606e48 d606e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d606e45 d606e54 "> x </td>
+
+<td valign="top" headers="d606e48 d606e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d606e45 d606e54 ">  </td>
+
+<td valign="top" headers="d606e48 d606e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d606e45 d606e54 ">  </td>
+
+<td valign="top" headers="d606e48 d606e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d606e45 d606e54 ">  </td>
+
+<td valign="top" headers="d606e48 d606e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d606e45 d606e54 ">  </td>
+
+<td valign="top" headers="d606e48 d606e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword can only be used with the <a href="THERMAL.html#THERMAL">  THERMAL</a> option.</p>
+
+<p>The data consists of <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a> (set in the <span class="keyword">TABDIMS</span> keyword)
+tables of capillary pressures vs. temperature, one for each saturation
+table region. Each table consists of the following columns of data,
+and must be terminated by a slash (/).</p>
+
+<p>Column:</p>
+
+<ol>
+<li>Temperature values. <p>Should increase monotonically down column.</p>
+ <p>UNITS: °C (<samp class="codeph">METRIC</samp>), °F (<samp class="codeph">FIELD</samp>), °C (<samp class="codeph">LAB</samp>), °C (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li>Maximum oil-gas capillary pressure <p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm
+(<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li> Maximum water-oil capillary pressure<p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm
+(<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+</ol>
+
+<p>There must be the same number of entries in each column of a given
+table. This number should not be greater than the maximum number of
+entries in a quantity versus temperature table (<a href="EQLDIMS.html#EQLDIMS">  EQLDIMS</a> item 3). Each capillary pressure
+entry should be non-negative. Default values may be entered in columns
+2 and 3 as required.</p>
+
+<p>When temperature-dependent end-point scaling is used independently
+of grid-block end-point scaling, if an end point is defaulted for
+all temperature values, in a model where a value could correctly be
+defined, the end point for each cell in the same scaling region will
+be the value in the appropriate saturation function table. However,
+when used in combination with <a href="ENDSCALE.html#ENDSCALE">  ENDSCALE</a> item 5 set to 1 or 2, the end point will
+default to the temperature-independent grid-block scaling value.</p>
+
+<p>If one or more end points in a given table column are not defaulted
+such that the end point has been defined for at least one temperature,
+the end point versus temperature table will be filled in by linear
+interpolation within the table and constant extrapolation at the ends
+of the table. End-point values entered for absent phases are ignored.</p>
+
+<div class="section" id="enpcvt_example"><a name="enpcvt_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>ENPCVT
+100.0 10.2 0.3
+200.0 14.3 5.0 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

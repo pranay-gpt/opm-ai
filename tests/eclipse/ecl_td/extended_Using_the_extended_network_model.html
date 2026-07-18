@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using the extended network model"/>
+<meta name="DC.subject" content="Network, Using, Compressors, Chokes, Automatic compressors, Automatic chokes, Automatic"/>
+<meta name="keywords" content="Network, Using, Compressors, Chokes, Automatic compressors, Automatic chokes, Automatic"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="extended_using_the_extended_network_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using the extended network model</title>
+</head>
+<body>
+
+
+<div class="nested0" id="extended_using_the_extended_network_model"><a name="extended_using_the_extended_network_model"><!-- --></a>
+<h1 class="topictitle1">Using the extended network model</h1>
+
+
+ <div>
+<p>Using the Extended Network model requires different keywords and
+settings compared to the Standard model (keywords not mentioned here
+for example <a href="../ecl_rm/NETBALAN.html#NETBALAN">NETBALAN</a>) are common to both models).</p>
+
+<div class="section" id="extended_runspec_section"><a name="extended_runspec_section"><!-- --></a><h4 class="sectiontitle">RUNSPEC section</h4><p>To enable the extended version of the network model, the keyword <a href="../ecl_rm/NETWORK.html#NETWORK">NETWORK</a> must be entered in
+the <span class="keyword">RUNSPEC</span> section. It has two items of data:
+the maximum number of nodes in the network and the maximum number
+of branches in the network. So, for the example network in figure <a href="extended_The_extended_network_model.html#extended.XID-00000019">634.1</a>:</p>
+<pre><code>NETWORK
+ 9 8 /</code></pre></div>
+
+<div class="section" id="extended_summary_section"><a name="extended_summary_section"><!-- --></a><h4 class="sectiontitle">SUMMARY section</h4><p>The same keywords apply to both the standard and extended network
+models. When used with the Extended version, names supplied to these
+keywords must correspond to network nodes instead of <a href="../ecl_rm/GRUPTREE.html#GRUPTREE">GRUPTREE</a> groups.</p>
+</div>
+
+<div class="section" id="extended_construct_the_network_with_branprop_and_nodeprop_instead_of_grupnet"><a name="extended_construct_the_network_with_branprop_and_nodeprop_instead_of_grupnet"><!-- --></a><h4 class="sectiontitle">Construct the network with BRANPROP and NODEPROP instead of
+GRUPNET</h4><p>The network structure is defined in the <span class="keyword">SCHEDULE</span> section by its branches. Each branch is identified
+by its inlet node and outlet node. The branches must first be defined
+with the keyword <a href="../ecl_rm/BRANPROP.html#BRANPROP"> BRANPROP</a>. This also sets the branch properties, that is the VFP table
+number and ALQ value. An example of how the production network in
+Figure <a href="extended_The_extended_network_model.html#extended.XID-00000019">634.1</a>  may be constructed is:</p>
+<pre><code>BRANPROP
+-- Inlet   Outlet     VFP     ALQ    ALQ=
+-- node     node     table   value   dens?
+  'GB2'   'N4'          3 /
+  'GA2'   'N3'          2 /
+  'GB1'   'N2'          1 /
+  'GA1'   'N1'       9999 /
+  'N4'    'N3'          4 /
+  'N3'    'N2'          4 /
+  'N2'    'N1'          5 /
+  'N1'    'FIELD'       6 /
+/</code></pre><p>After the network structure has been defined with <span class="keyword">BRANPROP</span>, the properties of the network nodes must be defined
+with keyword <a href="../ecl_rm/NODEPROP.html#NODEPROP"> NODEPROP</a>. Only the fixed pressure node(s), and other nodes with non-default
+properties need to be specified here. In the example in figure <a href="extended_The_extended_network_model.html#extended.XID-00000019">634.1</a>, the fixed-pressure node corresponds to the FIELD group and
+is thus named '<samp class="codeph">FIELD</samp>'. Another assumption is that
+the source node GA1 corresponds to an automatic choke inlet (or manifold
+group in ECLIPSE 100) and there is no gas lift. The <span class="keyword">NODEPROP</span> keyword is then:</p>
+<pre><code>NODEPROP
+-- Node      Fixed    Choke inlet or      Add      Choke control
+-- name     pressure  manifold group?   lift gas?       group
+  'FIELD'    200.0              /
+  'GA1'        1*         'Y'   /
+/</code></pre></div>
+
+<div class="section" id="extended_define_any_gas_consumption_or_import_with_either_gconsump_or_nconsump"><a name="extended_define_any_gas_consumption_or_import_with_either_gconsump_or_nconsump"><!-- --></a><h4 class="sectiontitle">Define any gas consumption or import with either GCONSUMP
+or NCONSUMP</h4><p>ECLIPSE 100       </p>
+<p>Any gas consumption or import should be declared in both the network
+and the group hierarchy. This can be done with either keyword <a href="../ecl_rm/GCONSUMP.html#GCONSUMP">GCONSUMP</a> or <a href="../ecl_rm/NCONSUMP.html#NCONSUMP">NCONSUMP</a>. <span class="keyword">GCONSUMP</span> declares consumption/import at a group and allows you to specify
+the network node where this should be applied as well. <span class="keyword">NCONSUMP</span> declares consumption at a network node and allows you to specify
+the group where this should be applied as well. For a constant consumption
+rate, the two keywords are equivalent and it does not matter which
+you use. However, there are some differences between the two keywords:</p>
+<ul>
+<li>  <span class="keyword">NCONSUMP</span> allows only a constant consumption
+rate, while <span class="keyword">GCONSUMP</span> also allows a consumption
+rate that is a fraction of the group’s production, and also a gas
+import rate.             </li>
+
+<li> The two keywords have different defaults for assigning consumption
+to the other structure. If consumption is declared at a source group
+in <span class="keyword">GCONSUMP</span>, by default it will also be assigned
+to the corresponding source node of the network. However, if consumption
+is declared at a source node in <span class="keyword">NCONSUMP</span>, by default
+it will <strong>not</strong> be assigned to the corresponding group.       
+     </li>
+
+<li><span class="keyword">NCONSUMP</span>  may only be used with the Extended
+Network model. <span class="keyword">GCONSUMP</span> may be used with either
+the Extended or Standard models.                      </li>
+
+</ul>
+</div>
+
+<div class="section" id="extended_remove_any_fuel_gas_from_the_network_with_ngasrem"><a name="extended_remove_any_fuel_gas_from_the_network_with_ngasrem"><!-- --></a><h4 class="sectiontitle">Remove any fuel gas from the network with NGASREM</h4><p>ECLIPSE 300 </p>
+<p>Any
+fuel gas consumed at a group (see keyword <a href="../ecl_rm/GRUPFUEL.html#GRUPFUEL"> GRUPFUEL</a>) by default still
+remains present in the network flow and contributes to the downstream
+branch pressure drops. But it is possible to remove a corresponding
+amount of gas from the network at a particular node by using the <a href="../ecl_rm/NGASREM.html#NGASREM">NGASREM</a> keyword. The gas removal
+maybe defined as a specified rate or a fraction of the gas flow through
+the node.</p>
+</div>
+
+<div class="section" id="extended_define_any_automatic_compressors_with_netcompa"><a name="extended_define_any_automatic_compressors_with_netcompa"><!-- --></a><h4 class="sectiontitle">Define any automatic compressors with NETCOMPA</h4><p>ECLIPSE 100                </p>
+<p>Compressors or pumps can be modeled ‘manually’
+by re-entering the <a href="../ecl_rm/BRANPROP.html#BRANPROP"> BRANPROP</a> keyword with a different ALQ value or VFP table number.
+However, more versatile automatic compressors can be defined using
+the <a href="../ecl_rm/NETCOMPA.html#NETCOMPA"> NETCOMPA</a> keyword. (Do not use <a href="../ecl_rm/GNETPUMP.html#GNETPUMP"> GNETPUMP</a> for these compressors.)
+They will be turned on automatically when a nominated group fails
+to meet its gas or oil production target set in <a href="../ecl_rm/GCONPROD.html#GCONPROD"> GCONPROD</a> or <a href="../ecl_rm/GCONPRI.html#GCONPRI"> GCONPRI</a>. If other actions
+to increase the group’s production rate may also be performed (for
+example, opening a new well from the drilling queue), the order in
+which the possible actions are performed can be defined with the <a href="../ecl_rm/PRORDER.html#PRORDER"> PRORDER</a> keyword.</p>
+<p>The
+following example defines two compressors responding to the gas production
+rate of groups PL-A and PL-B respectively. The second one has three
+compression levels, and consumes gas from the network and from group
+G-B3 in the <a href="../ecl_rm/GRUPTREE.html#GRUPTREE"> GRUPTREE</a> hierarchy.</p>
+<pre><code>NETCOMPA
+-- Inlet Outlet Target  Phase   VFP  ALQ  Cons  Cons   Type  Num   ALQ   Seq
+-- node   node  group           tab       rate  group        lev  lev 1  num
+   'N4'   'N3'  'PL-A'  'GAS'   1*   50.0   1*   1*   'TEMP'   /
+   'N6'   'N5'  'PL-B'  'GAS'   1*  100.0 1000 'G-B3' 'MULT'  3   40.0   /
+/</code></pre><p>Automatic compressors can be turned off manually at
+any time by using the <a href="../ecl_rm/COMPOFF.html#COMPOFF"> COMPOFF</a> keyword (except for those defined in <span class="keyword">NETCOMPA</span> to stay on permanently). They are turned on automatically again
+as soon as they are needed.</p>
+</div>
+
+<div class="section" id="extended_defining_a_choke"><a name="extended_defining_a_choke"><!-- --></a><h4 class="sectiontitle">Defining a choke</h4><p>In the example network in figure <a href="extended_The_extended_network_model.html#extended.XID-00000019">634.1</a>  there is the requirement to control the flow of the FIELD
+group using a choke. To do this, insert a new node, NCHOKE, to represent
+the choke inlet, between the nodes FIELD and N1. The single entry
+in <a href="../ecl_rm/BRANPROP.html#BRANPROP">BRANPROP</a> for the branch N1 - FIELD is now replaced with two records.
+The choke itself is represented by the branch NCHOKE - FIELD, and
+this must have a VFP table of 9999 so that its only pressure loss
+is that across the choke. The branch N1 - NCHOKE accounts for the
+pressure loss along the rest of the pipe:</p>
+<pre><code>BRANPROP
+-- Inlet   Outlet     VFP     ALQ
+-- node     node     table   value
+  .  .
+  .  .
+  'N1'     'NCHOKE'  6 /
+  'NCHOKE' 'FIELD'   9999/
+/</code></pre><p>The node NCHOKE is declared to be a choke inlet in
+the <a href="../ecl_rm/NODEPROP.html#NODEPROP">NODEPROP</a> keyword, and the choke is told to respond to the rate target
+of the group FIELD.</p>
+<pre><code>NODEPROP
+-- Node      Fixed    Choke inlet or      Add      Choke control
+-- name     pressure  manifold group?   lift gas?      group
+  'NCHOKE'     1*         'YES'           'NO'        'FIELD'   /
+/</code></pre><p>The FIELD’s rate target is set in the usual way as
+for guide rate group control.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="FIPNUM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="FIPNUM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>FIPNUM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="FIPNUM"><a name="FIPNUM"><!-- --></a>
+<h1 class="keyword">FIPNUM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="fipnum.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="fipnum.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d692e45"> x </th>
+
+<th valign="top" id="d692e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d692e54"> x </th>
+
+<th valign="top" id="d692e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d692e45 d692e54 ">  </td>
+
+<td valign="top" headers="d692e48 d692e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d692e45 d692e54 ">  </td>
+
+<td valign="top" headers="d692e48 d692e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d692e45 d692e54 ">  </td>
+
+<td valign="top" headers="d692e48 d692e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d692e45 d692e54 ">  </td>
+
+<td valign="top" headers="d692e48 d692e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d692e45 d692e54 "> x </td>
+
+<td valign="top" headers="d692e48 d692e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d692e45 d692e54 ">  </td>
+
+<td valign="top" headers="d692e48 d692e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d692e45 d692e54 ">  </td>
+
+<td valign="top" headers="d692e48 d692e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d692e45 d692e54 ">  </td>
+
+<td valign="top" headers="d692e48 d692e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword should be followed by one integer for every grid block
+in the current input box, specifying the fluid-in-place region to
+which it belongs.</p>
+
+<p>A balance sheet showing fluid in place and cumulative flows to
+and from wells and other regions is produced for each fluid-in-place
+region at every report time, if the <samp class="codeph">FIP</samp> mnemonic
+in the <a href="RPTSCHED.html#RPTSCHED"> RPTSCHED</a> keyword is set &gt;1.</p>
+
+<p>Grid blocks are ordered with the X axis index cycling fastest,
+followed by the Y and Z axis indices. Repeat counts may be used for
+repeated values (for example 115*2). Note that spaces must not be
+inserted on either side of the asterisk.</p>
+
+<p>Any grid blocks not assigned a value of <span class="keyword">FIPNUM</span> when the end of the <span class="keyword">REGIONS</span> section is reached
+will be assigned to region 1.</p>
+
+<p>The region numbers should not be less than 1 or greater than <samp class="codeph">NTFIP</samp> (see keyword <a href="REGDIMS.html#REGDIMS"> REGDIMS</a> or <a href="TABDIMS.html#TABDIMS"> TABDIMS</a>). The data must be terminated by a slash (/).</p>
+
+<p>This keyword defines the standard set of fluid-in-place regions.
+Additional sets of fluid-in-place regions can be defined, if required,
+with the <a href="FIP.html#FIP"> FIP</a> keyword.
+Each set of fluid-in-place regions produces its own set of balance
+sheets, independently of the other sets of fluid-in-place regions.
+The number of sets of fluid-in-place regions must not exceed <samp class="codeph">NMFIPR</samp> (keyword <span class="keyword">REGDIMS</span>).</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> The pore volume reported in the balance sheet will include
+the pore volume of any aquifers associated with the region. Aquifer
+cells with no explicit region number are assigned to region 1. </span></div>
+
+<p>ECLIPSE 100</p>
+
+<p>See also the keyword <a href="FIPOWG.html#FIPOWG"> FIPOWG</a>.</p>
+
+<div class="section" id="fipnum_example"><a name="fipnum_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NDIVIX=8</samp>, <samp class="codeph">NDIVIY=6</samp> and <samp class="codeph">NDIVIZ=5</samp> specified in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS"> DIMENS</a>, and no input <span class="keyword">BOX</span> set:</p>
+<pre><code>FIPNUM
+ 40*2 8*1
+ 40*3 8*1
+ 40*4 8*1
+ 40*5 8*1
+ 40*6 8*1 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

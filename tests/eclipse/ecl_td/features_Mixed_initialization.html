@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Mixed initialization"/>
+<meta name="DC.subject" content="Thermal mixed initialization features"/>
+<meta name="keywords" content="Thermal mixed initialization features"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="features_mixed_initialization"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Mixed initialization</title>
+</head>
+<body>
+
+
+<div class="nested0" id="features_mixed_initialization"><a name="features_mixed_initialization"><!-- --></a>
+<h1 class="topictitle1">Mixed initialization</h1>
+
+
+ <div>
+<p>It is possible to engineer a mixed initialization where the pressures
+are calculated from a reference pressure at a given depth and the
+other properties are set explicitly. To do this an initial equilibration
+run is performed using the <span class="keyword">EQUIL</span> keyword. The pressures
+from this run are output to a restart file:</p>
+
+<pre><code>SOLUTION
+EQUIL
+...      /     set pressure at reference depth
+RPTRST
+PRESSURE /     output pressure
+...
+SCHEDULE
+END</code></pre>
+<p>The equilibration run can be stopped at the start of the <span class="keyword">SCHEDULE</span> section. In the main run, explicit initialization
+is used, but the pressures are read from the equilibration run:</p>
+
+<pre><code>SOLUTION
+GETSOL
+PRESSURE EQUILRUN 0 /   get pressure from previous run
+/
+SOIL
+...                 /   set saturations
+...</code></pre>
+<p>Although the equilibration run does not give the correct saturations,
+the pressures are reasonably accurate, since the oil and water densities
+are similar. These pressures are combined with the desired saturations
+in the main run.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

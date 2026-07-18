@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Example problem"/>
+<meta name="DC.subject" content="Environmental tracers, Example"/>
+<meta name="keywords" content="Environmental tracers, Example"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="enviro_example_problem"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Example problem</title>
+</head>
+<body>
+
+
+<div class="nested0" id="enviro_example_problem"><a name="enviro_example_problem"><!-- --></a>
+<h1 class="topictitle1">Example problem</h1>
+
+
+ <div>
+<p>The tracer names are:</p>
+
+<p>BBB is the water tracer with no decay or adsorption</p>
+
+<p>XXX is the water tracer that adsorbs and decays</p>
+
+<p>YYY is the water tracer that only decays</p>
+
+<p>ZZZ is the water tracer that diffuses</p>
+
+<div class="section" id="enviro_runspec"><a name="enviro_runspec"><!-- --></a><h4 class="sectiontitle">RUNSPEC</h4><pre><code>RUNSPEC    ================================
+
+TITLE
+ ENVIRONMENTAL TRACER OPTION TEST
+
+DIMENS
+ 100    3    1  /
+
+NONNC
+
+OIL
+
+WATER
+
+METRIC
+
+TRACERS
+ 0    4    0    2 'NODIFF' /
+
+TABDIMS
+ 2    1   20   20    6   20 /
+
+REGDIMS
+ 6    1    0    0    0    1 /
+
+WELLDIMS
+ 2    3    1    2 /
+
+START
+ 1 'MAY' 1990  /</code></pre></div>
+
+<div class="section" id="enviro_grid"><a name="enviro_grid"><!-- --></a><h4 class="sectiontitle">GRID</h4><p><span class="keyword">GRID</span> section</p>
+<pre><code>GRID    ==============================================================
+EQUALS
+ 'DX'    10    /
+ 'DY'    100   /
+ 'DZ'    10    /
+ 'PERMX' 1000  /
+ 'PERMY' 1000  /
+ 'PORO'  0.25  /
+ 'TOPS'  2000   1 10  /
+ 'TOPS'  2005  11 20  /
+ 'TOPS'  2010  21 30  /
+ 'TOPS'  2015  31 40  /
+ 'TOPS'  2020  41 50  /
+ 'TOPS'  2025  51 60  /
+ 'TOPS'  2030  61 70  /
+ 'TOPS'  2035  71 80  /
+ 'TOPS'  2040  81 90  /
+ 'TOPS'  2055  91 100 /
+
+--
+-- Zero permeability for tracer ZZZ
+--
+ 'PERMX' 0.0  41 50  2 2  1 1 /
+ 'PERMY' 0.0  41 50  2 2  1 1 /
+/</code></pre></div>
+
+<div class="section" id="enviro_props"><a name="enviro_props"><!-- --></a><h4 class="sectiontitle">PROPS</h4><pre><code>PROPS     ============================================================
+SWFN
+    .145 .0000 .75
+    .220 .0001 .05
+    .270 .0004 1*
+    .320 .009  1*
+    .365 .018  1*
+    .438 .043  1*
+    .510 .082  1*
+    .558 .118  1*
+    .631 .187  -.05
+    .703 .270  -.25
+    .752 .310  -.50
+    .795 .370  -1.50
+/
+    0.0    0.0   0.0
+    1.0    1.0   0.0
+/
+
+SOF2
+    .205 .000
+    .250 .00006
+    .300 .0009
+    .370 .008
+    .440 .027
+    .490 .052
+    .560 .120
+    .635 .228
+    .683 .334
+    .730 .470
+    .780 .644
+    .855 1.00
+/
+    0.0    0.0
+    1.0    1.0
+/
+
+PVTW
+  270 1.030 4.6E-5 0.34 0.0  /
+
+PVDO
+  200    1.0     0.47
+  280    0.999   0.47
+  300    0.998   0.47
+/
+
+ROCK
+ 270 .3E-5 /
+
+DENSITY
+ 850. 1000. 10. /
+
+--
+--  Define the tracers
+--
+TRACER
+ 'BBB' 'WAT' /
+ 'XXX' 'WAT' /
+ 'YYY' 'WAT' /
+ 'ZZZ' 'WAT' /
+/
+
+--
+-- Tracer adsorption data for tracer XXX
+--
+TRADSXXX
+  0.0     0.0000
+  1.0     0.0005
+ 30.0     0.0005  /
+  0.0     0.0000
+  1.0     0.0005
+ 30.0     0.0005  /
+
+--
+-- Tracer decay data for tracer XXX
+--
+TRDCYXXX
+ 10.0 /
+
+--
+-- Tracer decay data for tracer YYY
+--
+TRDCYYYY
+ 15.0 /
+
+--
+-- Tracer diffusion data for tracer ZZZ
+--
+TRDIFZZZ
+ 0.3  /
+
+--
+-- Rock data required for tracer adsorption
+--
+TRROCK
+ 1  2650 /
+ 2  2650 /
+
+--
+-- Output of Environmental tracer data
+---
+RPTPROPS
+ 'TRROCK'  /</code></pre></div>
+
+<div class="section" id="enviro_regions"><a name="enviro_regions"><!-- --></a><h4 class="sectiontitle">REGIONS</h4><pre><code>REGIONS  ===========================================================
+FIPNUM
+ 3*1 2 3 4 94*5
+ 3*1 2 3 4 34*5 10*6 50*5
+ 3*1 2 3 4 94*5 /
+
+EQUALS
+ 'SATNUM' 1 /
+/
+
+RPTREGS
+ /</code></pre></div>
+
+<div class="section" id="enviro_solution"><a name="enviro_solution"><!-- --></a><h4 class="sectiontitle">SOLUTION</h4><pre><code>SOLUTION  ==========================================================
+EQUIL
+ 2600 270 2025 /
+
+TBLKFBBB
+ 300*0.0 /
+
+TBLKFXXX
+ 300*0.0 /
+
+TBLKFYYY
+300*0.0 /
+
+TBLKFZZZ
+ 100*0.0
+  40*0.0  10*1.0  50*0.0
+ 100*0.0   /
+
+RPTSOL
+ 'PRES'  'SOIL'  'SWAT'  'RESTART=2'  'FIP=2'
+ 'OILAPI'  'FIPTR=2'  'TBLK'  'FIPPLY=2'
+ 'SURFBLK'  'FIPSURF=2'  'TRADS'  /</code></pre></div>
+
+<div class="section" id="enviro_summary"><a name="enviro_summary"><!-- --></a><h4 class="sectiontitle">SUMMARY</h4><pre><code>SUMMARY  ===========================================================
+WBHP
+/
+
+FWIR
+FOPR
+FOPT
+
+FTPRBBB
+FTPTBBB
+FTIRBBB
+FTITBBB
+FTICBBB
+
+BTCNFBBB
+ 1 1 1 /
+/
+
+FTPRXXX
+FTPTXXX
+FTIRXXX
+FTITXXX
+FTIPTXXX
+
+BTCNFXXX
+ 1 1 1 /
+/
+
+FTADSXXX
+
+RTADSXXX
+ 2 /
+
+BTADSXXX
+ 2 1 1 /
+/
+
+FTPRYYY
+FTPTYYY
+FTIRYYY
+FTITYYY
+
+--
+-- Plot log(FTIPTYYY) :vs: time to see the pure decay.
+--
+FTIPTYYY
+
+BTCNFYYY
+ 1 1 1 /
+/
+
+FTADSYYY
+FTDCYYYY
+
+RTADSYYY
+ 2 /
+
+BTADSYYY
+ 2 1 1 /
+/
+
+BTDCYYYY
+ 2 1 1 /
+/
+
+BOSAT
+ 1 1 1 /
+/
+
+WTPRBBB
+'OP' /
+
+WTPRXXX
+'OP' /
+
+WTPRYYY
+'OP' /
+
+WTPRZZZ
+ 'OP' /
+
+RUNSUM</code></pre></div>
+
+<div class="section" id="enviro_schedule"><a name="enviro_schedule"><!-- --></a><h4 class="sectiontitle">SCHEDULE</h4><pre><code>SCHEDULE  ==========================================================
+RPTSCHED 
+ 'PRES'  'SOIL'  'SWAT'  'RESTART=2'  'FIP=2'
+ 'WELLS=2'  'SUMMARY=2'  'CPU=2'  'NEWTON=2'
+ 'OILAPI'  'FIPTR=2'  'TBLK'  'FIPSALT=2'
+ 'TUNING'  'SURFBLK'  'SURFADS'  'FIPSURF=2'
+ 'TRADS'  /
+
+WELSPECS
+ 'OP'  'G'   100 2   2600  'OIL'  /
+ 'INJ' 'G'   1   2   2600  'WAT'  /
+/
+
+COMPDAT
+ 'OP      '   2*   1   1 'OPEN'   0  .0   157E-3 /
+ 'INJ     '   2*   1   1 'OPEN'   0  .0   157E-3 /
+/
+
+WCONPROD
+'OP' 'OPEN' 'RESV' 4* 250 0.0 4* /
+/
+
+WCONINJE
+'INJ' 'WAT' 'OPEN' 'RESV' 1* 250 /
+/
+
+--
+-- Inject tracer for 40 days.
+--
+WTRACER
+ 'INJ' 'BBB'  30.0 /
+ /
+
+WTRACER
+ 'INJ' 'XXX'  30.0 /
+ /
+
+WTRACER
+ 'INJ' 'YYY'  30.0 /
+ /
+
+TSTEP
+ 1 9 30
+
+--
+-- End tracer injection
+--
+WTRACER
+ 'INJ' 'BBB'  0.0 /
+ /
+
+WTRACER
+ 'INJ' 'XXX'  0.0 /
+ /
+
+WTRACER
+ 'INJ' 'YYY'  0.0 /
+ /
+
+TSTEP
+ 1 9 90 9*100   /
+
+END</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Foamy oil"/>
+<meta name="DC.subject" content="Thermal properties for foamy oil, Foamy oil"/>
+<meta name="keywords" content="Thermal properties for foamy oil, Foamy oil"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="props_foamy_oil"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Foamy oil</title>
+</head>
+<body>
+
+
+<div class="nested0" id="props_foamy_oil"><a name="props_foamy_oil"><!-- --></a>
+<h1 class="topictitle1">Foamy oil</h1>
+
+
+ <div>
+<p>‘Foamy oil’ occurs in some heavy oil reservoirs during
+cold primary production. It is believed that the highly viscous heavy
+oil traps small gas bubbles as they form, hindering the development
+of the gas phase. The result is lower than expected gas production,
+a prolonged solution gas drive and higher than expected oil production.</p>
+
+<p>A number of methods of modeling foamy oil have been proposed, using
+one, two or three components to represent the gas:</p>
+
+<ul>
+<li>In the simplest method, a single component is used to represent
+the gas and the foamy oil effect is modeled by increasing the critical
+gas saturation. This method has been successfully used to simulate
+laboratory studies. However, it does not simulate the dynamic processes
+of formation and dispersion of the trapped gas, which are important
+in reservoir studies.</li>
+
+<li>In the two gas component model, one component is used to represent
+the gas in the oil phase and the (gaseous) foam phase, and a second
+component is used to represent the free gas. Formation of trapped
+gas is modeled by the usual flash equations. The dispersion of the
+trapped gas into free gas is modeled by a chemical reaction, see <a href="reactionsintro_Chemical_Reactions.html#reactionsintro_chemical_reactions"> "Chemical reactions"</a>. The reduced mobility of the trapped
+gas can be modeled by increasing the gas phase viscosity of the first
+gas component. However, since the gas mobility is a weighted average
+of all the gas component mobilities, this will result in the trapped
+gas moving too fast, and the free gas moving too slowly.</li>
+
+<li>In the three gas component model, different components are used
+to represent the gas in the oil phase, foamy oil phase and gas phase.
+In the foamy oil phase, the trapped gas is modeled as an oil-phase
+component, or even a solid component. This ensures that the trapped
+gas moves with the oil phase (or is immobile if it is modeled as a
+solid). A chemical reaction is needed to represent the formation of
+trapped gas from dissolved gas, replacing the flash. This has the
+added advantage of allowing non-equilibrium effects to be modeled.<p>In this model the reported oil saturation (or solid saturation) includes
+a contribution from the trapped gas. This contribution can be stored
+as a property <span class="keyword">SFOIL</span> (or <span class="keyword">SFSOL</span> for ‘foamy solid’) which can be output using keywords <a href="../ecl_rm/RPTRST.html#RPTRST">  RPTRST</a>, <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a> and <a href="../ecl_rm/RPTSOL.html#RPTSOL">RPTSOL</a> or with the <span class="keyword">SUMMARY</span> keywords <span class="keyword">BSFOIL</span> (or <span class="keyword">BSFSOL)</span>.</p>
+</li>
+
+</ul>
+
+<div class="section" id="props_example2"><a name="props_example2"><!-- --></a><h4 class="sectiontitle">Example</h4><p>In the following
+example four components are used, one to represent the heavy oil and
+three to represent the gas in the oil, foam and gas phases. Keyword <a href="../ecl_rm/CVTYPE.html#CVTYPE">CVTYPE</a> is used to set the
+volatility types of the three gas components. Keyword <span class="keyword">CCTYPE</span> is used to set the compressibility of the trapped gas component.</p>
+<p>Two reactions are used to represent the liberation of gas:</p>
+<ol>
+<li> dissolved gas to trapped gas</li>
+
+<li> trapped gas to free gas.</li>
+
+</ol>
+<p>Reaction 1 uses equilibrium deviation reaction rates, defined
+by the <a href="../ecl_rm/EQLDREAC.html#EQLDREAC">EQLDREAC</a> keyword.</p>
+<p>To get the correct quantities of oil and gas
+at the surface, the keywords <a href="../ecl_rm/CVTYPES.html#CVTYPES">CVTYPES</a>, <a href="../ecl_rm/TCRITS.html#TCRITS">TCRITS</a> and <a href="../ecl_rm/KVCRS.html#KVCRS">KVCRS</a> are used to reset values for the surface flash, and keyword <span class="keyword">CCTYPES</span> is used to reset the oil phase density.</p>
+<p>The <span class="keyword">RUNSPEC</span> section will contain the following keywords:</p>
+<pre><code>COMPS
+  4 / 1 heavy component and 3 components representing gas
+
+REACTIONS
+  2  1  1 / 2 reactions, 1 equilibrium deviation reaction,
+--                       1 equilibrium k-value</code></pre><p>The <span class="keyword">PROPS</span> section will contain the following
+keywords:</p>
+<pre><code>CNAMES
+        HEAVY    DISS_GAS TRAP_GAS FREE_GAS /
+
+-- Volatility
+
+CVTYPE
+        DEAD     DEAD     DEAD     GAS      / gas trapped in oil, or
+--      DEAD     DEAD     SOLID    GAS      / trapped gas is immobile
+
+KVCR
+        0        1*       1*       1*
+        1.214E6  1*       1*       1*
+        0        1*       1*       1*
+        9966     1*       1*       1*       /
+
+-- Compressibility
+
+CCTYPE
+        1*       1*       GAS      1*       /
+
+-- Reactions
+--   1: DISS_GAS &lt;-&gt; TRAP_GAS
+--   2: TRAP_GAS -&gt; FREE_GAS
+
+STOREAC
+        0        1        0        0        0 / reaction 1
+        0        0        1        0        0 / reaction 2
+STOPROD
+        0        0        1        0        0 / reaction 1
+        0        0        0        1        0 / reaction 2
+REACCORD
+        0        0        0        0        0 / reaction 1
+        0        0        1        0        0 / reaction 2
+
+REACRATE
+     0.1   0.5   / reactions 1 - 2
+
+EQLDREAC
+--   #  TYPE   XC   YC   KV
+     1     1    2    0    1 / reaction 1 proportional to X2-1/K1
+
+EQLDKVCR
+0 1.704E5 0 3062 / K1 (K-value for ethane in field units)
+
+-- For surface conditions use ‘normal’ component values
+
+CVTYPES
+        1*       1*       1*      1*       /
+CCTYPES
+        1*       1*       1*      1*       /
+KVCRS
+        0        0        0       0
+        1.214E6  1.704E5  1.704E5 1.704E5
+        0        0        0       0
+        9966     3062     3062    3062     /
+TCRITS
+        1409.7   549.7    549.7   549.7    /</code></pre><p>The <a href="../ecl_rm/REACENTH.html#REACENTH">REACENTH</a> keyword could be used here to define a latent heat, for example
+a negative value could be used for reaction 1.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Basic test ECLIPSE 100"/>
+<meta name="DC.subject" content="Unconventionals, Coal bed methane, Coal bed methane ECLIPSE 100 examples, ECLIPSE 100 Basic test"/>
+<meta name="keywords" content="Unconventionals, Coal bed methane, Coal bed methane ECLIPSE 100 examples, ECLIPSE 100 Basic test"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="coalbed_basic_test_eclipse_100"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Basic test ECLIPSE 100</title>
+</head>
+<body>
+
+
+<div class="nested0" id="coalbed_basic_test_eclipse_100"><a name="coalbed_basic_test_eclipse_100"><!-- --></a>
+<h1 class="topictitle1">Basic test ECLIPSE 100</h1>
+
+
+ <div>
+<div class="section" id="coalbed_runspec"><a name="coalbed_runspec"><!-- --></a><h4 class="sectiontitle">RUNSPEC</h4><p>Example of
+a basic ECLIPSE 100 test in the <span class="keyword">RUNSPEC</span> section:</p>
+<pre><code>RUNSPEC    ======================================
+TITLE
+                  Coal Bed Methane Basic Test
+DIMENS
+ 8    8    2  /
+DUALPORO
+WATER
+GAS
+FIELD
+COAL
+EQLDIMS
+ 1  100    2    1   20 /
+TABDIMS
+ 1    1   20   20    3    5 /
+
+ 3    1    0    0    0    1 /
+WELLDIMS
+ 2   13    1    2 /
+NUPCOL
+ 4 /
+START
+ 26 'JAN' 1983  /
+NSTACK
+ 20 /
+FMTOUT
+FMTIN</code></pre></div>
+
+<div class="section" id="coalbed_grid"><a name="coalbed_grid"><!-- --></a><h4 class="sectiontitle">GRID</h4><p>Example of a basic
+ECLIPSE 100 test in the <span class="keyword">GRID</span> section:</p>
+<pre><code>GRID    ============================================================
+EQUALS
+ 'DX'       75    /    PROPERTIES COMMON TO MATRIX AND FRACTURES
+ 'DY'       75    /
+ 'DZ'       30    /
+ 'TOPS'   4000    /
+ 'PERMZ'     0    /
+ 'DIFFMMF'  1.0   /
+ 'PORO'   0.01         4*  2  2  /  FRACTURE PROPERTIES (LAYER TWO)
+ 'PERMX' 500000    /                MATRIX POROSITY DEFAULTS TO
+ 'PERMY' 500000    /                1 - PORO(FRACTURE)
+-- INACTIVE MATRIX CELLS ARE OK
+ 'NTG'  0.0  3 3 3 3  1 1 /
+ 'NTG'  1.0  3 3 3 3  2 2 /
+/
+RPTGRID
+ 'DX'  'DY'  'DZ'  'PERMX'  'PERMY'  'PERMZ'  'MULTX'
+ 'MULTY'  'MULTZ'  'PORO'  'NTG'  'TOPS'  'PORV'
+ 'DEPTH'  'TRANX'  'TRANY'  'TRANZ'  'KOVERD'  /
+--SIGMA FOR 10 BY 10 BY 30 FT BLOCKS
+SIGMA
+ 0.08   /</code></pre></div>
+
+<div class="section" id="coalbed_props"><a name="coalbed_props"><!-- --></a><h4 class="sectiontitle">PROPS</h4><p>Example of a basic
+ECLIPSE 100 test in the <span class="keyword">PROPS</span> section:</p>
+<pre><code>PROPS   ============================================================
+--COAL GAS DIFFUSION COEFFICIENT
+DIFFCOAL
+ 0.2  /
+
+LANGMUIR
+ 0.0       0.0
+ 1000.0    0.05
+ 2000.0    0.065
+ 3000.0    0.083
+ 4000.0    0.10
+ 6000.0    0.11
+/
+
+SWFN
+  0.0    0.0   0.0
+  0.2    0.0   0.0
+  1.0    1.0   0.0
+/
+
+SGFN
+  0.0    0.0   0.0
+  0.1    0.0   0.0
+  1.0    1.0   0.0
+/
+
+PVTW       
+  .0000000   1.00000    3.03E-06    .50000    0.00E-01 /
+
+--   PGAS   BGAS   VISGAS
+PVDG
+      400    5.9   0.013
+      800    2.95  0.0135
+     1200    1.96  0.014
+     1600    1.47  0.0145
+     2000    1.18  0.015
+     2400    0.98  0.0155
+     2800    0.84  0.016
+     3200    0.74  0.0165
+     3600    0.65  0.017
+     4000    0.59  0.0175
+     4400    0.54  0.018
+     4800    0.49  0.0185
+     5200    0.45  0.019
+     5600    0.42  0.0195 /
+ROCK
+ 4000.00        .30E-05 /
+
+DENSITY
+ 52.0000  64.0000   .04400 /
+
+RPTPROPS
+ 'SOF2'   'SWFN'   'SGFN'   'PVTO'
+ 'PVTW'   'PVTG'   'DENSITY'  'ROCK'  'DIFFC'
+ 'LANGMUIR'  /</code></pre></div>
+
+<div class="section" id="coalbed_regions"><a name="coalbed_regions"><!-- --></a><h4 class="sectiontitle">REGIONS</h4><p>Example of
+a basic ECLIPSE 100 test in the <span class="keyword">REGIONS</span> section</p>
+<pre><code>REGIONS   ===========================================================
+EQUALS
+ 'FIPNUM' 1  1 8 1 8 1 1 /
+ 'FIPNUM' 2  1 8 1 8 2 2 /  
+ 'FIPNUM' 3  2 2 2 2 2 2 /  
+/</code></pre></div>
+
+<div class="section" id="coalbed_solution"><a name="coalbed_solution"><!-- --></a><h4 class="sectiontitle">SOLUTION</h4><p>Example of
+a basic ECLIPSE 100 test in the <span class="keyword">SOLUTION</span> section:</p>
+<pre><code>SOLUTION  ==========================================================
+EQUIL
+4000  3959  4000  0   0   0   0   0   0  /
+RPTSOL
+ 'PRES'  'SWAT'  'SGAS'  'FIP=2'  'EQUIL'  'GASCONC'  /</code></pre></div>
+
+<div class="section" id="coalbed_summary"><a name="coalbed_summary"><!-- --></a><h4 class="sectiontitle">SUMMARY</h4><p>Example of
+a basic ECLIPSE 100 test in the <span class="keyword">SUMMARY</span> section:</p>
+<pre><code>SUMMARY    ==========================================================
+FPR
+FGPR
+FWPR
+FCGC
+RCGC
+ 1 2 3 /
+BCGC
+ 2 2 1 /
+/
+RUNSUM
+SEPARATE</code></pre></div>
+
+<div class="section" id="coalbed_schedule"><a name="coalbed_schedule"><!-- --></a><h4 class="sectiontitle">SCHEDULE</h4><p>Example of
+a basic ECLIPSE 100 test in the <span class="keyword">SCHEDULE</span> section:</p>
+<pre><code>SCHEDULE   =========================================================
+RPTSCHED                                        
+ 'PRES'  'SWAT'  'SGAS'  'RESTART=2'  'FIP=2'
+ 'WELLS=2'  'CPU=2'  'NEWTON=2'  /
+WELSPECS
+'P'  'G'   8  8  4000  'GAS'  /
+/
+COMPDAT                                         
+'P'  8  8  2  2 'OPEN'  0  .000000  .5000  .00000   .0000  0.000E-01/
+/
+WCONPROD                                        
+'P'  'OPEN'  'WRAT'     1*         100.0      100000.00000
+     1*          1*      200.000  0.000000   1*  0.00000000/
+/
+TSTEP
+ 1.0 9.0 90.0 9*100 6*1000
+/
+END</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

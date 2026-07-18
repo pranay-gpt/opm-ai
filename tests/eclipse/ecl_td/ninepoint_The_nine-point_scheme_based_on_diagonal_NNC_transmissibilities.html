@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The nine-point scheme based on diagonal NNC transmissibilities"/>
+<meta name="DC.subject" content="Grid orientation effect, Diagonal transmissibilities"/>
+<meta name="keywords" content="Grid orientation effect, Diagonal transmissibilities"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ninepoint_the_nine-point_scheme_based_on_diagonal_nnc_transmissibilities"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The nine-point scheme based on diagonal NNC transmissibilities</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="ninepoint_the_nine-point_scheme_based_on_diagonal_nnc_transmissibilities"><a name="ninepoint_the_nine-point_scheme_based_on_diagonal_nnc_transmissibilities"><!-- --></a>
+<h1 class="topictitle1">The nine-point scheme based on diagonal NNC transmissibilities</h1>
+
+
+ <div>
+<p>The <a href="../ecl_rm/NINEPOIN.html#NINEPOIN">NINEPOIN</a> keyword in the <span class="keyword">RUNSPEC</span> section activates
+a nine-point scheme based on adding diagonal transmissibilities in
+the areal (XY) direction in order to reduce grid orientation effects
+when the flow is not aligned with the grid. Additional non-neighbor
+connections are added between diagonal neighbors. The flows between
+each cell and its eight neighboring cells (in the areal dimension)
+are each computed using a two-point approximation to the pressure
+gradient. The scheme is a modified version of that given in <cite><span> <a href="biblio_Bibliography.html#biblio_37360">Yanosik and
+McCracken (1979)</a> </span></cite>. The standard five-point transmissibilities
+are first obtained from data entered in the <span class="keyword">GRID</span> and <span class="keyword">EDIT</span> sections, and these are then modified
+to obtain the nine-point transmissibilities.</p>
+
+<p>Deriving the nine-point scheme starts by splitting each transmissibility
+in the usual five-point scheme into two half-transmissibilities:</p>
+
+<div class="fignone" id="ninepoint.splitting"><a name="ninepoint.splitting"><!-- --></a>
+
+ <br/><img src="../img/ninepoint1.png" width="291px"/><br/> <br/><span class="figcap">
+           Figure 22.1  Splitting each five-point transmissibility into two half-transmissibilities</span></div>
+
+<p>Considering just the transmissibility values (<math><mrow><mi>T</mi>
+<mn>12</mn></mrow></math> <math><mrow>
+<mi>T</mi><mn>24</mn></mrow></math> <math><mrow><mi>T</mi>
+<mn>13</mn></mrow></math> <math><mrow>
+<mi>T</mi><mn>34</mn></mrow></math>), replace these by
+the equivalent system (<math><mrow><mi>t</mi>
+<mn>12</mn></mrow></math> <math><mrow>
+<mi>t</mi><mn>13</mn></mrow></math> <math><mrow><mi>t</mi>
+<mn>23</mn></mrow></math> <math><mrow>
+<mi>t</mi><mn>24</mn></mrow></math> <math><mrow><mi>t</mi>
+<mn>34</mn></mrow></math> <math><mrow>
+<mi>t</mi><mn>14</mn></mrow></math>). This introduces
+a diagonal coupling between cells 1 and 4 and cells 2 and 3.</p>
+
+<div class="fignone" id="ninepoint.diagonal.coupling"><a name="ninepoint.diagonal.coupling"><!-- --></a>
+
+ <br/><img src="../img/ninepoint2.png" width="454px"/><br/> 
+<br/><span class="figcap">
+           Figure 22.2  Deriving the nine-point transmissibilities using diagonal coupling
+between cells</span></div>
+
+<p>The values of (<math><mrow><mi>t</mi>
+<mn>12</mn></mrow></math> <math><mrow>
+<mi>t</mi><mn>13</mn></mrow></math> <math><mrow><mi>t</mi>
+<mn>23</mn></mrow></math> <math><mrow>
+<mi>t</mi><mn>24</mn></mrow></math> <math><mrow><mi>t</mi>
+<mn>34</mn></mrow></math> <math><mrow>
+<mi>t</mi><mn>14</mn></mrow></math>) must preserve the
+total x and y transmissibilities for the pattern, so that</p>
+
+<p> <math><mrow><mi>T</mi>
+<mn>13</mn></mrow><mo>+</mo><mrow><mi>T</mi><mn>24</mn></mrow><mo>=</mo><mrow><mi>t</mi><mn>13</mn>
+</mrow><mo>+</mo><mrow><mi>t</mi><mn>24</mn></mrow>
+<mo>+</mo><mrow><mi>t</mi><mn>23</mn></mrow><mo>+</mo><mrow><mi>t</mi><mn>14</mn></mrow></math> </p>
+
+<p> <math><mrow><mi>T</mi>
+<mn>12</mn></mrow><mo>+</mo><mrow><mi>T</mi><mn>34</mn></mrow><mo>=</mo><mrow><mi>t</mi><mn>12</mn>
+</mrow><mo>+</mo><mrow><mi>t</mi><mn>34</mn></mrow>
+<mo>+</mo><mrow><mi>t</mi><mn>23</mn></mrow><mo>+</mo><mrow><mi>t</mi><mn>14</mn></mrow></math> </p>
+
+<p>Tensor effects must be avoided, so that a pressure gradient in
+the x-direction does not produce a flow in the y-direction. This implies</p>
+
+<p> <math><mrow><mi>t</mi>
+<mn>14</mn></mrow><mo>=</mo><mrow><mi>t</mi><mn>23</mn></mrow></math> </p>
+
+<p>A choice for  <math><mrow><mi>t</mi>
+<mn>14</mn></mrow></math>  may now be made. This should not
+be so large that one of the other transmissibility values is forced
+to be negative. Following <cite><span> <a href="biblio_Bibliography.html#biblio_27243">Shiralkar and Stephenson
+(1991)</a> </span></cite>, use</p>
+
+<p> <math><mrow><mrow><mi>t</mi><mn>14</mn></mrow><mo>=</mo><mrow><mi>t</mi>
+<mn>23</mn></mrow><mo>=</mo><mrow><mfrac><mrow><mn>1</mn></mrow><mrow><mn>3</mn></mrow></mfrac><mo>[</mo>
+<mfrac><mrow><mo>(</mo><mrow><mi>T</mi><mn>13</mn>
+</mrow><mo>+</mo><mrow><mi>T</mi><mn>24</mn></mrow>
+<mo>)</mo><mo>(</mo><mrow><mi>T</mi><mn>12</mn>
+</mrow><mo>+</mo><mrow><mi>T</mi><mn>34</mn></mrow>
+<mo>)</mo></mrow><mrow><mo>(</mo><mrow><mi>T</mi>
+<mn>13</mn></mrow><mo>+</mo><mrow><mi>T</mi><mn>24</mn></mrow><mo>+</mo><mrow><mi>T</mi><mn>12</mn>
+</mrow><mo>+</mo><mrow><mi>T</mi><mn>34</mn></mrow>
+<mo>)</mo></mrow></mfrac><mo>]</mo></mrow></mrow>
+</math> </p>
+
+<p>The total x and y transmissibility conditions above then define
+the values of the combinations  <math><mrow>
+<mi>s</mi><mi>x</mi></mrow><mo>=</mo><mrow><mi>t</mi>
+<mn>13</mn></mrow><mo>+</mo><mrow><mi>t</mi><mn>24</mn></mrow></math>  and  <math><mrow>
+<mi>s</mi><mi>y</mi></mrow><mo>=</mo><mrow><mi>t</mi>
+<mn>12</mn></mrow><mo>+</mo><mrow><mi>t</mi><mn>34</mn></mrow></math>, for example</p>
+
+<p> <math><mrow><mi>s</mi>
+<mi>x</mi></mrow><mo>=</mo><mrow><mi>t</mi><mn>13</mn>
+</mrow><mo>+</mo><mrow><mi>t</mi><mn>24</mn></mrow>
+<mo>=</mo><mrow><mi>T</mi><mn>13</mn></mrow><mo>+</mo><mrow><mi>T</mi><mn>24</mn><mo>-</mo><mrow>
+<mfrac><mrow><mn>2</mn></mrow><mrow><mn>3</mn></mrow>
+</mfrac><mo>[</mo><mfrac><mrow><mrow><mo>(</mo><mrow>
+<mi>T</mi><mn>13</mn></mrow><mo>+</mo><mrow><mi>T</mi><mn>24</mn></mrow><mo>)</mo><mo>(</mo><mrow>
+<mi>T</mi><mn>12</mn></mrow><mo>+</mo><mrow><mi>T</mi><mn>34</mn></mrow><mo>)</mo></mrow></mrow>
+<mrow><mo>(</mo><mrow><mi>T</mi><mn>13</mn></mrow>
+<mo>+</mo><mrow><mi>T</mi><mn>24</mn></mrow><mo>+</mo><mrow><mi>T</mi><mn>12</mn></mrow><mo>+</mo>
+<mrow><mi>T</mi><mn>34</mn></mrow><mo>)</mo></mrow>
+</mfrac><mo>]</mo></mrow></mrow></math> </p>
+
+<p>Finally, the ratio of  <math><mrow><mi>t</mi>
+<mn>13</mn></mrow></math>  and  <math><mrow>
+<mi>t</mi><mn>24</mn></mrow></math>  is chosen to be the
+same as the ratio of the original values  <math><mrow>
+<mi>T</mi><mn>13</mn></mrow></math>  and  <math><mrow><mi>T</mi>
+<mn>24</mn></mrow></math>,</p>
+
+<p> <math><mrow><mi>t</mi>
+<mn>13</mn></mrow><mo>=</mo><mfrac><mrow><mrow><mi>s</mi><mi>x</mi><mi>T</mi><mn>13</mn></mrow></mrow>
+<mrow><mo>(</mo><mrow><mi>T</mi><mn>13</mn></mrow>
+<mo>+</mo><mrow><mi>T</mi><mn>24</mn></mrow><mo>)</mo></mrow></mfrac></math> </p>
+
+<p> <math><mrow><mi>t</mi>
+<mn>24</mn></mrow><mo>=</mo><mfrac><mrow><mrow><mi>s</mi><mi>x</mi><mi>T</mi><mn>24</mn></mrow></mrow>
+<mrow><mo>(</mo><mrow><mi>T</mi><mn>13</mn></mrow>
+<mo>+</mo><mrow><mi>T</mi><mn>24</mn></mrow><mo>)</mo></mrow></mfrac></math> </p>
+
+<p>A similar relation defines  <math><mrow>
+<mi>t</mi><mn>12</mn></mrow></math>  and  <math><mrow><mi>t</mi>
+<mn>34</mn></mrow></math>. This then defines all the new transmissibilities.
+This is repeated for each quadrant of active cells. The result is
+a set of nine-point transmissibilities that preserves the original
+total x- and y-direction flows but allows diagonal coupling between
+cells.</p>
+
+<p>Within the code, the transmissibilities that fall outside the normal
+pattern are stored as non-neighbor connections. There is an extra
+cost associated with these terms, and the nine-point option is best
+used only for injection of highly adverse mobility fluids where the
+grid orientation effect can be a problem.</p>
+
+<p>The option is invoked by using the <a href="../ecl_rm/NINEPOIN.html#NINEPOIN">NINEPOIN</a> keyword in the <span class="keyword">RUNSPEC</span> section. The nine-point transmissibilities will
+then by default be calculated across the entire grid. In ECLIPSE 100,
+by using the <a href="../ecl_rm/NINENUM.html#NINENUM">NINENUM</a> keyword in the <span class="keyword">GRID</span> section, you can choose
+to apply the scheme only in nominated regions of the reservoir. Note
+that the <span class="keyword">NINENUM</span> keyword is not compatible with
+the Local Grid Refinement option.</p>
+
+<p>It should be noted that the <span class="keyword">NINEPOIN</span> option
+is specifically designed to account for grid orientation effects only
+and is not designed to deal with discretization errors arising from
+grid non-orthogonality.</p>
+
+<p>This nine-point scheme based on diagonal NNC transmissibilities
+is invoked in the <span class="keyword">RUNSPEC</span> section, as follows:</p>
+
+<pre><code>RUNSPEC
+..
+NINEPOIN</code></pre>
+<p>The run time will be increased due to the large number of additional
+NNCs created between diagonal neighbors.</p>
+
+<p>The nine-point transmissibilities can be obtained from the '<span class="keyword">TRANX</span>', '<span class="keyword">TRANY</span>', '<span class="keyword">TRANZ</span>' and '<span class="keyword">ALLNNC</span>' switches in the <a href="../ecl_rm/RPTGRID.html#RPTGRID">RPTGRID</a> keyword.</p>
+
+<p>It is possible to apply the <span class="keyword">NINEPOIN</span> scheme
+only in the XZ or YZ planes with the <a href="../ecl_rm/NINEXZ.html#NINEXZ">NINEXZ</a> and <a href="../ecl_rm/NINEYZ.html#NINEYZ">NINEYZ</a> keywords.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

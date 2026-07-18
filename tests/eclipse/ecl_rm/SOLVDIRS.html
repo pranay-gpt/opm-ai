@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SOLVDIRS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SOLVDIRS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SOLVDIRS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SOLVDIRS"><a name="SOLVDIRS"><!-- --></a>
+<h1 class="keyword">SOLVDIRS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="solvdirs.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="solvdirs.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2360e45"> x </th>
+
+<th valign="top" id="d2360e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2360e54"> x </th>
+
+<th valign="top" id="d2360e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2360e45 d2360e54 ">  </td>
+
+<td valign="top" headers="d2360e48 d2360e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2360e45 d2360e54 "> x </td>
+
+<td valign="top" headers="d2360e48 d2360e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2360e45 d2360e54 ">  </td>
+
+<td valign="top" headers="d2360e48 d2360e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2360e45 d2360e54 ">  </td>
+
+<td valign="top" headers="d2360e48 d2360e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2360e45 d2360e54 ">  </td>
+
+<td valign="top" headers="d2360e48 d2360e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2360e45 d2360e54 ">  </td>
+
+<td valign="top" headers="d2360e48 d2360e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2360e45 d2360e54 ">  </td>
+
+<td valign="top" headers="d2360e48 d2360e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2360e45 d2360e54 ">  </td>
+
+<td valign="top" headers="d2360e48 d2360e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword overrides the default directions for the linear solver.
+By default ECLIPSE chooses the principal direction to correspond to
+the direction of highest transmissibility. However, if there are persistent
+linear convergence problems it may be useful to try alternative principal
+directions.</p>
+
+<p>The data consists of a two-character string, enclosed in quotes,
+terminated with a slash (/).</p>
+
+<p>The options are:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">XY </td>
+
+<td valign="top">X principal Y second and Z outer</td>
+
+</tr>
+
+<tr>
+<td valign="top">XZ</td>
+
+<td valign="top">X principal Z second and Y outer</td>
+
+</tr>
+
+<tr>
+<td valign="top">YX</td>
+
+<td valign="top">Y principal X second and Z outer</td>
+
+</tr>
+
+<tr>
+<td valign="top">YZ </td>
+
+<td valign="top">Y principal Z second and X outer</td>
+
+</tr>
+
+<tr>
+<td valign="top">ZX</td>
+
+<td valign="top">Z principal X second and Y outer</td>
+
+</tr>
+
+<tr>
+<td valign="top">ZY</td>
+
+<td valign="top">Z principal Y second and X outer</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>ECLIPSE 100</p>
+
+<p>To fix only the outer dimension (for matrix
+disking or the ECLIPSE 100 Parallel Option) set '-X' for the X direction,
+'-Y' for the Y direction or '-Z' for the Z direction. '-Z' is not
+permitted in parallel. To check the direction sequence set by the
+simulator, set <a href="DEBUG.html#DEBUG"> DEBUG</a> keyword item 4 to 1.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>The <span class="keyword">SOLVDIRS</span> keyword replaces <a href="OPTIONS.html#options.3">item 3</a> of <span class="keyword">OPTIONS</span> keyword that was used in pre-97A releases. But for back-compatibility
+with old data sets the <span class="keyword">OPTIONS</span> switch still functions
+(in local grid refinement runs it overrides the solver directions
+for the global and all local grids).</p>
+
+<p>When the local grid refinement option is used, the solver directions
+can be set independently for each local grid by including the <span class="keyword">SOLVDIRS</span> keyword between the <a href="CARFIN.html#CARFIN">  CARFIN</a> / <a href="RADFIN.html#RADFIN">  RADFIN</a> / <a href="RADFIN4.html#RADFIN4">  RADFIN4</a> / <a href="REFINE.html#REFINE">  REFINE</a> and <a href="ENDFIN.html#ENDFIN">  ENDFIN</a> pair. By default,
+the solver directions will be determined by ECLIPSE for each local
+grid unless set explicitly.</p>
+
+<p>See <a href="../ecl_td/sollineq_Solution_of_the_Linear_Equations.html#sollineq_solution_of_the_linear_equations">"Solution of the
+linear equations"</a> in the <cite>ECLIPSE Technical Description</cite> for further details.</p>
+
+<div class="section" id="solvdirs_example"><a name="solvdirs_example"><!-- --></a><h4 class="sectiontitle">Example</h4>            
+     <pre><code>SOLVDIRS
+'XZ' /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

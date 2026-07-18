@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Integrated capillary pressure option"/>
+<meta name="DC.subject" content="Grid and reservoir modeling, Dual porosity, Integrated capillary pressure"/>
+<meta name="keywords" content="Grid and reservoir modeling, Dual porosity, Integrated capillary pressure"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="dualporo_integrated_capillary_pressure_option1"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Integrated capillary pressure option</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="dualporo_integrated_capillary_pressure_option1"><a name="dualporo_integrated_capillary_pressure_option1"><!-- --></a>
+<h1 class="topictitle1">Integrated capillary pressure option</h1>
+
+
+ <div>
+<p>When a gravity drainage option is in use, the final recovery from
+the matrix is determined by the balance between the capillary pressure
+and gravity forces. The final saturation distribution in the matrix
+block can be thought of as a transition zone where at each height
+the capillary pressure is  <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi></mrow></msub><mo>=</mo><mo>Δ</mo><mi>ρ</mi><mo>⋅</mo><mi>g</mi><mo>⋅</mo><mi>h</mi></mrow></math>.</p>
+
+<p>Within the dual porosity matrix representation, it is desirable
+that the final recovery should be equal to the final recovery from
+the continuous matrix medium. This can be achieved by modifying the
+capillary pressure curves in the matrix to take account of the fact
+that the rock P<sub>c</sub> curves need to be integrated over the
+matrix block height to calculate the average saturation.</p>
+
+<p>The integrated P<sub>c</sub> option is activated by using the <a href="../ecl_rm/INTPC.html#INTPC">INTPC</a> keyword in the <span class="keyword">PROPS</span> section. The appropriate modified capillary pressure
+curves are written to the <samp class="codeph">PRINT</samp> file for inspection
+if either the <samp class="codeph">SWFN</samp> or <samp class="codeph">SGFN</samp> mnemonics
+are used in the <a href="../ecl_rm/RPTPROPS.html#RPTPROPS">RPTPROPS</a> keyword.</p>
+
+<p>The integration procedure for the gas-oil capillary pressure is
+as follows, starting with a piecewise linear table:</p>
+
+<p> <math><mrow><msub>
+<mrow><mi>p</mi></mrow><mrow><mi>c</mi></mrow></msub>
+<mo>=</mo><mrow><msub><mrow><mi>P</mi></mrow><mrow>
+<mi>c</mi></mrow></msub><mrow><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow></mrow></mrow></math> and  <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub><mo>=</mo><mrow><msubsup><mrow><mi>P</mi></mrow><mrow>
+<mi>c</mi></mrow><mrow><mo>-</mo><mn>1</mn></mrow>
+</msubsup><mrow><mo>(</mo><msub><mrow><mi>p</mi>
+</mrow><mrow><mi>c</mi></mrow></msub><mo>)</mo></mrow>
+</mrow></mrow></math>     </p>
+
+<p>where  <math>
+<msubsup><mi>P</mi><mi>c</mi><mrow><mo>-</mo><mn>1</mn></mrow></msubsup></math>  is the inverse capillary
+pressure function.</p>
+
+<p>Now consider a matrix block of height h with a contact  <math><mo>(</mo><msub>
+<mi>p</mi><mi>c</mi></msub><mo>=</mo><mn>0</mn><mo>)</mo></math>  at the bottom of the block and a capillary pressure
+ <math><mi>P</mi>
+</math>  at the top.</p>
+
+<div class="fignone" id="dualporo.integrated.capillary.pressure"><a name="dualporo.integrated.capillary.pressure"><!-- --></a>
+
+ <br/><img src="../img/dualporosity11.png" width="441px"/><br/> 
+<br/><span class="figcap">
+           Figure 93.1  Integrated capillary pressure</span></div>
+
+<p>The average gas saturation  <math><mrow><mover><mrow><msub><mi>S</mi><mi>g</mi></msub>
+</mrow><mo>_</mo></mover></mrow></math>  in the matrix
+block up to the height h equivalent to  <math><msub><mi>p</mi>
+<mi>c</mi></msub><mo>=</mo><mi>P</mi></math>  is given
+by</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.XID-00000514"/>
+ <math><mrow><mrow>
+<mover><mrow><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>g</mi></mrow></msub></mrow><mrow><mo>_</mo>
+</mrow></mover></mrow><mo>=</mo><mfrac><mrow><mn>1</mn>
+</mrow><mrow><mi>P</mi></mrow></mfrac><mo>⋅</mo><mrow>
+<msubsup><mrow><mo>∫</mo>
+</mrow><mrow><mn>0</mn></mrow><mrow><mi>P</mi></mrow>
+</msubsup><mrow><msubsup><mrow><mi>P</mi></mrow><mrow>
+<mi>c</mi></mrow><mrow><mo>-</mo><mn>1</mn></mrow>
+</msubsup><mrow><mo>(</mo><mi>p</mi><mo>)</mo></mrow>
+</mrow><mo>⁢</mo><mi>d</mi><mi>p</mi></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 93.1]
+              </td></tr></tbody></table>
+<p>This can be used to set up a modified capillary pressure function
+such that the capillary pressure at a saturation  <math><mrow><mover><mrow><msub><mi>S</mi><mi>g</mi></msub>
+</mrow><mo>_</mo></mover></mrow></math> is equal to the
+gravity drainage head for a block of height h and saturation  <math><mrow><mover><mrow><msub><mi>S</mi><mi>g</mi></msub>
+</mrow><mo>_</mo></mover></mrow></math>.</p>
+
+<p>The gravity drainage model accounts for the gravity head within
+a grid block, by assuming vertical equilibrium. (Note that if the
+gravity drainage option is not used the gravity head within a grid
+block is ignored.)</p>
+
+<p>For the gravity drainage model selected by <a href="../ecl_rm/GRAVDR.html#GRAVDR">  GRAVDR</a>, the gravity head
+ <math><msub><mi>P</mi><mrow><mi>g</mi><mi>d</mi><mi>r</mi></mrow>
+</msub></math>  is proportional to the mobile oil saturation,
+assuming the fracture is filled with gas:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.051e"/>
+ <math><mrow><msub>
+<mrow><mi>P</mi></mrow><mrow><mi>g</mi><mi>d</mi>
+<mi>r</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>t</mi></mrow></msub>
+<mrow><mo>-</mo><mrow><mover><mrow><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub>
+</mrow><mrow><mo>_</mo></mrow></mover></mrow></mrow>
+</mrow><mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>t</mi></mrow></msub></mrow></mfrac><mo>⋅</mo><mi>Δ</mi><mi>ρ</mi><mo>⋅</mo><mi>g</mi>
+<mo>⋅</mo><mi>h</mi></mrow></math> 
+</td><td align="right">[Eq. 93.2]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub>
+<mi>S</mi><mi>t</mi></msub></math> </td>
+
+<td valign="top">  is <math><mn>1</mn><mrow><mo>-</mo><mtext>SWCO</mtext><mrow><mo>-</mo><mtext>SOGCR</mtext></mrow></mrow></math>     
+    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mtext>SWCO</mtext></math> </td>
+
+<td valign="top">  is the connate water saturation</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mtext>SOGCR</mtext></math> </td>
+
+<td valign="top">  is the critical oil-in-gas saturation</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>Δ</mi><mi>ρ</mi></mrow></math> </td>
+
+<td valign="top"> is the difference between the gas and oil densities</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>g</mi></math> </td>
+
+<td valign="top">  is the acceleration due to gravity</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>h</mi></math> </td>
+
+<td valign="top">  is the block height.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Now the pressure at the top of the matrix block  <math><mi>P</mi></math>  is given by</p>
+
+<p> <math><mrow><mi>P</mi><mo>=</mo><mi>Δ</mi><mi>ρ</mi>
+<mo>⋅</mo><mi>g</mi><mo>⋅</mo><mi>h</mi></mrow>
+</math>         </p>
+
+<p>From this a new capillary pressure function can be constructed,
+such that at a saturation  <math><mrow><mover><mrow><msub><mi>S</mi><mi>g</mi></msub>
+</mrow><mo>_</mo></mover></mrow></math>  the capillary
+pressure is exactly equal to  <math><msub><mi>P</mi>
+<mrow><mi>g</mi><mi>d</mi><mi>r</mi></mrow></msub>
+</math>  and hence the equilibrium saturation will be at (and only
+at)  <math><msub><mi>S</mi><mi>g</mi></msub><mo>=</mo><mrow><mover><mrow><msub><mi>S</mi><mi>g</mi></msub>
+</mrow><mo>_</mo></mover></mrow></math>.</p>
+
+<p>The constructed capillary pressure function  <math><mrow><msubsup><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi></mrow><mrow><mo>′</mo></mrow></msubsup></mrow></math> should have  <math><mrow><mrow><msubsup>
+<mrow><mi>P</mi></mrow><mrow><mi>c</mi></mrow><mrow>
+<mo>′</mo></mrow></msubsup><mrow><mo>(</mo><msub>
+<mrow><mover><mrow><mi>S</mi></mrow><mrow><mo> ¯</mo>
+</mrow></mover></mrow><mrow><mi>g</mi></mrow></msub>
+<mo>)</mo></mrow></mrow><mo>=</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>g</mi><mi>d</mi><mi>r</mi>
+</mrow></msub></mrow></math>, and thus</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.053a"/>
+ <math><mrow><mrow>
+<msubsup><mrow><mi>P</mi></mrow><mrow><mi>c</mi>
+</mrow><mrow><mo>′</mo></mrow></msubsup><mrow><mo>(</mo><mover><mrow><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>g</mi></mrow></msub></mrow><mrow><mo>_</mo></mrow></mover><mo>)</mo></mrow></mrow><mo>=</mo><mfrac><mrow><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>t</mi></mrow></msub><mrow><mtext> </mtext>
+<mo>-</mo><mtext> </mtext><mrow><mover>
+<mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi>
+</mrow></msub></mrow><mrow><mo>_</mo></mrow></mover>
+</mrow></mrow></mrow><mrow><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>t</mi></mrow></msub></mrow></mfrac>
+<mo>⋅</mo><mi>P</mi></mrow></math> 
+</td><td align="right">[Eq. 93.3]
+              </td></tr></tbody></table>
+<p>where  <math><mi>P</mi></math>  is the true capillary pressure at the top of the
+block when the equilibrium saturation is  <math><mrow><mover><mrow><msub><mi>S</mi><mi>g</mi></msub>
+</mrow><mo>_</mo></mover></mrow></math>. This can be calculated
+by looking up the table of  <math><mrow><mover><mrow><msub><mi>S</mi><mi>g</mi></msub>
+</mrow><mo>_</mo></mover></mrow></math>  versus  <math><mi>P</mi></math>  given by Equation <a href="dualporo_Integrated_capillary_pressure_option1.html#dualporo.XID-00000514">93.1</a>,
+which is stored in ECLIPSE as a table.</p>
+
+<p>For the alternative gravity drainage model selected by <a href="../ecl_rm/GRAVDRM.html#GRAVDRM">GRAVDRM</a>, the gravity head  <math><msub><mi>P</mi>
+<mrow><mi>g</mi><mi>d</mi><mi>r</mi></mrow></msub>
+</math>  is proportional to <em>P/2</em>, assuming the fracture is
+filled with gas. This condition requires that oil is not re-infiltrating
+into the matrix, and this possibility should be excluded using the <span class="keyword">GRAVDRM</span> keyword.</p>
+
+<div class="section" id="dualporo_notes"><a name="dualporo_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li>By construction, for any block height h the ‘correct’ final saturation
+is achieved by running the simulator to a stable state when:<p> <math><mrow><msub><mrow>
+<msup><mrow><mi>P</mi></mrow><mrow><mi>′</mi></mrow>
+</msup></mrow><mrow><mi>c</mi></mrow></msub><mrow><mo>(</mo><mi>S</mi><mo>)</mo></mrow></mrow></math> =
+gravity drainage head,</p>
+<p> <math><mrow><mi>S</mi>
+<mo>=</mo><mtext> </mtext><mover><mrow><mi>S</mi>
+</mrow><mrow><mo>−</mo></mrow></mover></mrow></math> for that block height.</p>
+</li>
+
+<li>At other saturations (<math><mrow><mi>S</mi>
+<mo>≠</mo><mtext> </mtext><mover><mrow><mi>S</mi>
+</mrow><mrow><mo>−</mo></mrow></mover></mrow></math>) a potential difference generates the usual flow to and from the
+block.</li>
+
+<li>During equilibration the modified capillary pressure is accounted
+for. Note however that the equilibrium saturation is not the same
+as in the equivalent drained block, as the fluids above the contact
+are assumed to be only connate water + gas, where a drained block
+includes the residual oil</li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

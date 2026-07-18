@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Gradient option"/>
+<meta name="DC.subject" content="Gradient option"/>
+<meta name="keywords" content="Gradient option"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gradientintro_gradient_option"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Gradient option</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gradientintro_gradient_option"><a name="gradientintro_gradient_option"><!-- --></a>
+<h1 class="keyword">Gradient option</h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gradientintro.tab.0009"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gradientintro.tab.0009" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">                         x                   
+  </td>
+
+<td valign="top">                         ECLIPSE 100         
+            </td>
+
+</tr>
+
+<tr>
+<td valign="top">                         x     
+                </td>
+
+<td valign="top">                         ECLIPSE 300         
+            </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The gradient option computes gradients of the solution (for example,
+pressure in a well) with respect to various property parameters that
+you   define, such as horizontal permeability in a layer.</p>
+
+<p>The SimOpt program uses the gradients computed by the simulator
+to achieve an efficient regression during a history match or sensitivity
+analysis, varying the property parameters via modifiers.</p>
+
+<p>These property parameter modifiers are usually set using <a href="../ecl_rm/hmmult_HMMULTxx.html#hmmult_hmmultxx">HMMULTxx</a> on the various gradient regions, set in <a href="../ecl_rm/HMxxxxxx.html#HMxxxxxx">HMxxxxxx</a>, unless otherwise
+specified.</p>
+
+<ul>
+<li>X-direction transmissibility multipliers input through parameter <span class="keyword">HMMULTX</span> applied to region <span class="keyword">HMTRANX</span></li>
+
+<li> Y-direction transmissibility multipliers input through parameter <span class="keyword">HMMULTY</span>  applied to region <span class="keyword">HMTRANY</span>  </li>
+
+<li>Z-direction transmissibility multipliers input through parameter <span class="keyword">HMMULTZ</span> applied to region <span class="keyword">HMTRANZ</span>  
+             </li>
+
+<li>X and Y-direction transmissibility multipliers input through <span class="keyword">HMMLTXY</span> applied to region <span class="keyword">HMTRNXY</span>  
+  </li>
+
+<li>Dual porosity sigma factor multipliers input through keyword <a href="../ecl_rm/HMMULTSG.html#HMMULTSG">HMMULTSG</a> applied to region <span class="keyword">HMSIGMA</span>.</li>
+
+<li>Pore volume multipliers input through parameter <span class="keyword">HMMULTPV</span> applied to region <span class="keyword">HMPORVM</span></li>
+
+<li>Analytic aquifer strengths through keywords <a href="../ecl_rm/HMMLCTAQ.html#HMMLCTAQ">HMMLCTAQ</a> applied to <a href="../ecl_rm/HMAQUCT.html#HMAQUCT">HMAQUCT</a> (Carter Tracy), and <a href="../ecl_rm/HMMLFTAQ.html#HMMLFTAQ">HMMLFTAQ</a> applied to <a href="../ecl_rm/HMAQUFET.html#HMAQUFET">HMAQUFET</a> (Fetkovich).</li>
+
+<li>Numerical aquifer pore volume, permeability and transmissibilities
+input through keyword <a href="../ecl_rm/HMMLAQUN.html#HMMLAQUN">HMMLAQUN</a> applied to region <a href="../ecl_rm/HMAQUNUM.html#HMAQUNUM">HMAQUNUM</a>.</li>
+
+<li>Transmissibility multipliers across nominated faults through <a href="../ecl_rm/HMMULTFT.html#HMMULTFT">HMMULTFT</a> applied to <a href="../ecl_rm/HMFAULTS.html#HMFAULTS">HMFAULTS</a>.</li>
+
+<li>X-direction permeability multipliers input through parameter <span class="keyword">HMMLTPX</span>, applied to region as in <span class="keyword">HMPERMX</span>.</li>
+
+<li>Y-direction permeability multipliers input through parameter <span class="keyword">HMMLTPY</span>, applied to region as in <a href="../ecl_rm/HMxxxxxx.html#HMxxxxxx">HMPERMY</a>.</li>
+
+<li>Z-direction permeability multipliers input through parameter <span class="keyword">HMMLTPZ</span>, applied to region as in <span class="keyword">HMPERMZ</span>.</li>
+
+<li>X and Y-direction permeability multipliers input through <span class="keyword">HMMLTPXY</span>, applied to region as in <span class="keyword">HMPRMXY</span>.</li>
+
+<li>Saturation table end-points: <span class="keyword">HMSWCR</span>, <span class="keyword">HMSGCR</span>, <span class="keyword">HMSOWCR</span>, <span class="keyword">HMSOGCR</span>, <span class="keyword">HMSWL</span>.</li>
+
+<li>Multipliers on vertical scaling of relative permeability: <span class="keyword">HMKRO</span>, <span class="keyword">HMKRW</span>, <span class="keyword">HMKRG</span>, <span class="keyword">HMKRORW</span>, <span class="keyword">HMKRORG</span>.</li>
+
+<li>Multipliers on vertical scaling of capillary pressure: <span class="keyword">HMPCW</span>, <span class="keyword">HMPCG</span>.</li>
+
+<li>Rock compressibility multipliers input through <a href="../ecl_rm/HMMROCK.html#HMMROCK">HMMROCK</a> applied to <a href="../ecl_rm/HMROCK.html#HMROCK">HMROCK</a>, and modifiers on rock
+compaction parameters through <a href="../ecl_rm/HMMROCKT.html#HMMROCKT">HMMROCKT</a> applied to <a href="../ecl_rm/HMROCKT.html#HMROCKT">HMROCKT</a>.</li>
+
+<li>Inter-region transmissibility multipliers between nominated regions
+using keyword <a href="../ecl_rm/HMMMREGT.html#HMMMREGT">HMMMREGT</a> applied to <a href="../ecl_rm/HMMULRGT.html#HMMULRGT">HMMULRGT</a>.</li>
+
+<li>Multipliers on the well productivity index using keyword <a href="../ecl_rm/HMWPIMLT.html#HMWPIMLT">HMWPIMLT</a>.</li>
+
+<li>Multipliers on the well connection transmissibility factor and
+skin using the keyword <a href="../ecl_rm/HMMLTWCN.html#HMMLTWCN">HMMLTWCN</a> applied to the connections specified in <a href="../ecl_rm/HMWELCON.html#HMWELCON">HMWELCON</a>.   </li>
+
+</ul>
+
+<p>All the above parameters may be used with ECLIPSE 100. In this
+release of ECLIPSE 300 pore volume, transmissibility and permeability
+parameters are available.</p>
+
+<p>The derivatives are written to a file (extension . <samp class="codeph">HMD</samp>) which can be interpreted by SimOpt.</p>
+
+<p>The data contained within the . <samp class="codeph">HMD</samp> file is generally
+encoded and is meaningless unless the SimOpt program is used. A facility
+for unencoded gradients is also available and is controlled by the
+licensing system. Please contact your ECLIPSE account manager for
+details.</p>
+
+<div class="section" id="gradientintro_output_from_the_gradient_option"><a name="gradientintro_output_from_the_gradient_option"><!-- --></a><h4 class="sectiontitle">Output from the gradient option</h4><p>Gradients of observable
+well quantities (for example,  <span class="keyword">WBP</span>, <span class="keyword">WOPR</span>) are written to the <samp class="codeph">HMD</samp> file at each timestep and
+these can be used by SimOpt to match against observed data using a
+gradient based optimization approach.</p>
+<p>The <a href="../ecl_rm/GRADWELL.html#GRADWELL">GRADWELL</a> keyword specifies
+a list of well summary vectors for which derivatives are required.</p>
+<p>Wells requiring gradient output are nominated in the <a href="../ecl_rm/RPTHMW.html#RPTHMW">RPTHMW</a> keyword</p>
+<p>ECLIPSE 100 </p>
+<p>It is
+also possible to output gradients of simulated RFT data to the <samp class="codeph">GRFT</samp> file to match against observed RFT tests by using the <a href="../ecl_rm/GRADRFT.html#GRADRFT">GRADRFT</a> keyword.</p>
+<p>ECLIPSE 100</p>
+<p>If required,
+it is also possible to output gradients of reservoir grid block solutions
+(<span class="keyword">SWAT</span>, <span class="keyword">SGAS</span>, <span class="keyword">SOIL</span>, <span class="keyword">RS</span>, <span class="keyword">RV</span>, <span class="keyword">PRESSURE</span>,<span class="keyword">DENO</span>, <span class="keyword">DENW</span>, <span class="keyword">DENG</span>, <span class="keyword">PORO</span>), as well as seismic impedances (<span class="keyword">ACIP</span>, <span class="keyword">ACIS</span>), to the <samp class="codeph">RESTART</samp> files, using the <a href="../ecl_rm/GRADRESV.html#GRADRESV"> GRADRESV</a> keyword. Currently, this is only possible using the licensing
+system. Please contact your ECLIPSE account manager for details. The
+arguments available in the <span class="keyword">GRADRESV</span> keyword are:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d700e419">Argument</th>
+
+<th valign="top" id="d700e422">Description</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d700e419 "><span class="keyword">SWAT</span></td>
+
+<td valign="top" headers="d700e422 "> Water saturation</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d700e419 "><span class="keyword">SGAS</span></td>
+
+<td valign="top" headers="d700e422 "> Gas saturation</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d700e419 "><span class="keyword">SOIL</span></td>
+
+<td valign="top" headers="d700e422 ">Oil saturation</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d700e419 "><span class="keyword">RS</span></td>
+
+<td valign="top" headers="d700e422 ">Dissolved gas-oil ratio</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d700e419 "><span class="keyword">RV</span></td>
+
+<td valign="top" headers="d700e422 ">Vaporized oil-gas ratio</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d700e419 "><span class="keyword">PRESSURE</span></td>
+
+<td valign="top" headers="d700e422 ">Oil phase pressure</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d700e419 "><span class="keyword">DENO</span></td>
+
+<td valign="top" headers="d700e422 "> Oil phase gravity density at reservoir conditions</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d700e419 "><span class="keyword">DENG</span></td>
+
+<td valign="top" headers="d700e422 ">Gas phase gravity density at reservoir conditions</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d700e419 "><span class="keyword">DENW</span></td>
+
+<td valign="top" headers="d700e422 "> Water phase gravity density at reservoir conditions</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d700e419 "><span class="keyword">PORO</span></td>
+
+<td valign="top" headers="d700e422 ">Porosity at reservoir conditions</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d700e419 "><span class="keyword">ACIP</span></td>
+
+<td valign="top" headers="d700e422 ">Pressure-wave impedance</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d700e419 "><span class="keyword">ACIS</span></td>
+
+<td valign="top" headers="d700e422 ">Shear-wave impedance</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+<div class="section" id="gradientintro_using_the_facility"><a name="gradientintro_using_the_facility"><!-- --></a><h4 class="sectiontitle">Using the facility</h4><p>The facility is initiated by setting the appropriate number of
+property parameters for which gradients are calculated in the <span class="keyword">RUNSPEC</span> keyword <a href="../ecl_rm/HMDIMS.html#HMDIMS">HMDIMS</a>.</p>
+<p>You should supply region tables in the <span class="keyword">REGIONS</span> section using keywords <a href="../ecl_rm/HMxxxxxx.html#HMxxxxxx">HMPORVM</a>, <a href="../ecl_rm/HMxxxxxx.html#HMxxxxxx">HMTRANX</a> etc. to delimit the property parameter regions on the simulation
+grid.</p>
+<p>ECLIPSE 100</p>
+<p>Alternatively, for faults which have been specified using the <a href="../ecl_rm/FAULTS.html#FAULTS">FAULTS</a> keyword, property parameters
+may be requested using the <a href="../ecl_rm/HMFAULTS.html#HMFAULTS">HMFAULTS</a> keywords in the <span class="keyword">GRID</span> section.</p>
+<p>ECLIPSE 100 </p>
+<p>Gradients
+for analytic aquifer properties may be requested by using the keywords <a href="../ecl_rm/HMAQUFET.html#HMAQUFET">HMAQUFET</a> or <a href="../ecl_rm/HMAQUCT.html#HMAQUCT">HMAQUCT</a> in the <span class="keyword">SOLUTION</span> section, whereas gradients for numerical aquifer properties may
+be requested by using the keyword <a href="../ecl_rm/HMAQUNUM.html#HMAQUNUM">HMAQUNUM</a> in the <span class="keyword">GRID</span> section.</p>
+<p>ECLIPSE 100</p>
+<p>Gradients for rock compaction and compressibility
+parameters can be obtained by specifying <a href="../ecl_rm/HMROCK.html#HMROCK">HMROCK</a> and <a href="../ecl_rm/HMROCKT.html#HMROCKT">HMROCKT</a> in the <span class="keyword">PROPS</span> section.</p>
+<p>ECLIPSE 100</p>
+<p>To obtain gradients of the solution with respect
+to inter-region transmissibility multipliers declared using keyword <a href="../ecl_rm/MULTREGT.html#MULTREGT">MULTREGT</a> in the <span class="keyword">GRID</span> section, the <a href="../ecl_rm/HMMULRGT.html#HMMULRGT">HMMULRGT</a> keyword can be used in the <span class="keyword">GRID</span> section.</p>
+<p>ECLIPSE 100</p>
+<p>To
+obtain gradients of the solution with respect to well connection transmissibility
+factor and skin multipliers declared using keyword <a href="../ecl_rm/HMMLTWCN.html#HMMLTWCN">HMMLTWCN</a> in the <span class="keyword">SOLUTION</span> section, the <a href="../ecl_rm/HMWELCON.html#HMWELCON">HMWELCON</a> keyword can be used in the <span class="keyword">SOLUTION</span> section.</p>
+<p>For each gradient property parameter, ECLIPSE calculates derivatives
+of well-flow quantities (as specified with the <a href="../ecl_rm/GRADWELL.html#GRADWELL"> GRADWELL</a> keyword) for all
+active wells. This information is written to the file <samp class="codeph">ROOT.HMD</samp>, where <samp class="codeph">ROOT</samp> is the base name of the run.</p>
+<p>ECLIPSE 100</p>
+<p>Additional
+information can be written out to the <samp class="codeph">ROOT.HMD</samp> file
+if requested; for example, refer to the <a href="../ecl_rm/GRADRESV.html#GRADRESV">GRADRESV</a> keyword.</p>
+<p>ECLIPSE 100 </p>
+<p>If a
+satisfactory match has been obtained using modifiers based on the
+gradient analysis, then the model may be used for prediction without
+the overhead in calculating the derivatives, simply by specifying
+the <a href="../ecl_rm/NOHMD.html#NOHMD">NOHMD</a> (or <a href="../ecl_rm/NOHMO.html#NOHMO">NOHMO</a>) keyword in the <span class="keyword">SCHEDULE</span> section (which
+switches off all gradient calculations). This is the mechanism for
+a 'evaluation' run in SimOpt.</p>
+</div>
+
+<div class="section" id="gradientintro_current_restrictions"><a name="gradientintro_current_restrictions"><!-- --></a><h4 class="sectiontitle">Current restrictions</h4><ul>
+<li><p>ECLIPSE 100 </p>
+                <p>The gradient option may not at present be used
+with the parallel option or with reservoir coupling.</p>
+<p>ECLIPSE 100</p>
+  </li>
+
+<li>The effects of active tracers (API, brine
+and the temperature option) and environmental tracers or the foam
+model are not currently accounted for in a rigorous fashion while
+calculating gradients. Changes in solution properties caused by active
+tracers first influence the gradient calculation one timestep after
+they influence the fluid flow properties, that is the active tracers
+are treated explicitly in the gradient calculation. In most cases,
+this effect should be very small and can often be neglected so that
+it is still possible to perform a sensitivity run to screen redundant
+parameters or enlist a regression run. ECLIPSE no longer disallows
+a run with active tracers, but the gradients will not be fully accurate. <p>ECLIPSE 100</p>
+</li>
+
+<li>LGRs employing local timestepping are not currently available
+in gradient runs. However, the gradient option is fully compatible
+with the LGR-in-place option, and also with the grid coarsening option.
+In many applications, it is possible to get an initial sensitivity
+analysis on a coarsened grid to screen for redundant parameters.<p>ECLIPSE 100</p>
+</li>
+
+<li>Gradients cannot at present be obtained with the vertical equilibrium
+option (<a href="../ecl_rm/VE.html#VE">VE</a> or <a href="../ecl_rm/COMPVE.html#COMPVE">COMPVE</a>), with the gravity
+drainage option (<a href="../ecl_rm/GRAVDR.html#GRAVDR">GRAVDR</a> or <a href="../ecl_rm/GRAVDRM.html#GRAVDRM">GRAVDRM</a>) in dual porosity runs, or with the water-induced rock compaction
+options. This is because the gradient calculation relies on the fully
+implicit nature of ECLIPSE; the VE option treats the pseudo-capillary
+pressure explicitly and the extra derivative terms are not accounted
+for. ECLIPSE no longer disallows a run with VE or gravity drainage,
+but the gradients will not be fully accurate as approximations have
+been made in the gradient calculation.             </li>
+
+<li>Gradients cannot at present be obtained for multisegment injector
+wells.<p>ECLIPSE 300 </p>
+  </li>
+
+<li>Gradients cannot be used with the grid coarsening option.</li>
+
+</ul>
+</div>
+
+<div class="section" id="gradientintro_current_uses__eclipse_300_only_"><a name="gradientintro_current_uses__eclipse_300_only_"><!-- --></a><h4 class="sectiontitle">Current Uses (ECLIPSE 300)</h4><ul>
+<li> It is possible to use the gradient option in both Black Oil and
+Compositional runs. </li>
+
+<li> In addition, this option can be used in Fully Implicit and AIM
+(Adaptive IMplicit) modes. </li>
+
+<li> The gradient option may be used with the parallel option in ECLIPSE
+300. </li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ODD3P saturation functions"/>
+<meta name="DC.subject" content="Saturation functions three-phase relative permeability models, Saturation functions, Three-phase relative permeability models, ODD3P method"/>
+<meta name="keywords" content="Saturation functions three-phase relative permeability models, Saturation functions, Three-phase relative permeability models, ODD3P method"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="satfunct_odd3p_saturation_functions"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ODD3P saturation functions</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="satfunct_odd3p_saturation_functions"><a name="satfunct_odd3p_saturation_functions"><!-- --></a>
+<h1 class="topictitle1">ODD3P saturation functions</h1>
+
+
+ <div>
+<div class="section"><h4 class="sectiontitle">Saturation function keywords</h4><p>The relative
+permeabilities and capillary pressures are expressed as a function
+of gas, oil and water saturation using the <a href="../ecl_rm/SGF3.html#SGF3">SGF3</a>, <a href="../ecl_rm/SOF3.html#SOF3">SOF3</a> and <a href="../ecl_rm/SWF3.html#SWF3">SWF3</a> keywords respectively.
+In general, three sets of these tables will be required per saturation
+region corresponding to the primary, secondary hysteresis and tertiary
+hysteresis saturation processes.</p>
+<p>In order to avoid discontinuities
+due to phase labelling changes in miscible models, the gas-water relative
+permeability data are replaced by the oil-water relative permeability
+data. Therefore, the relative permeability to water data for a water-oil
+system  k<sub>rwo</sub>  (column 2 of the <span class="keyword">SWF3</span> keyword)
+are used to represent the relative permeability to water for a gas-water
+system k<sub>rwg</sub>  (column 3 of the <span class="keyword">SWF3</span> keyword).
+Similarly, the relative permeability to oil data for an oil-water
+system  k<sub>row</sub>  (column 2 of the <span class="keyword">SOF3</span> keyword)
+are used to represent the relative permeability to gas for a gas-water
+system k<sub>rgw</sub>  (column 3 of the <span class="keyword">SGF3</span> keyword).
+It follows that the data in column 3 of the <span class="keyword">SWF3</span> and <span class="keyword">SGF3</span> keywords may be defaulted, subject to
+the caveat that sufficient information is specified in terms of initial
+values of 0.0 and final values of 1.0 in order to infer the residual
+and maximum saturations to be applied to the gas-water and water-gas
+systems. An example of the specification of these three keywords is
+shown below in abbreviated form.</p>
+<pre><code>SGF3
+---     Sg       krgo(Sg)       krgw(Sg)       Pcog(Sg)    
+     0.00000   0.000000E+00   0.000000E+00   0.000000E+00  
+     0.00010   0.000000E+00   0.000000E+00   0.000000E+00  
+     0.00034   0.141600E-13          1*      0.197385E-02  
+     0.00049   0.610900E-13          1*      0.276339E-02  
+     ...
+     0.83000   0.502886E+00          1*      0.404639E-01  
+     0.91000   0.726646E+00          1*      0.542808E-01 
+     0.95000   0.865329E+00   0.100000E+01   0.800395E+00  
+     0.96000   0.900000E+00   0.100000E+01   0.986923E+00  
+/</code></pre><pre><code>SOF3
+--     So        krow(So)       krog(So)
+     0.00000   0.000000E+00   0.000000E+00
+     0.04000   0.140000E-02   0.000000E+00
+     0.09000   0.315000E-02   0.383300E-06
+     0.17000   0.595000E-02   0.455400E-04
+     0.20000   0.700000E-02   0.333655E-03
+     ...
+     0.82000   0.670000E+00   0.360146E+00
+     0.85000   0.700000E+00   0.433916E+00
+     0.87000   0.700000E+00   0.483097E+00
+     0.95000   0.700000E+00   0.765334E+00
+     0.99767   0.700000E+00   0.987923E+00
+     0.99922   0.700000E+00   0.995944E+00
+     0.99951   0.700000E+00   0.997451E+00
+     0.99966   0.700000E+00   0.998230E+00
+     0.99990   0.700000E+00   0.100000E+01
+/</code></pre><pre><code>SWF3
+--     Sw        krwo(Sw)       krwg(Sw)       Pcwo(Sw)
+     0.05000   0.000000E+00   0.000000E+00   0.986923E+00
+     0.15000   0.000000E+00          1*      0.986923E+00
+     0.18000   0.150000E-02          1*      0.493462E-01
+     ...
+     0.80000   0.500000E+00          1*      0.102640E-01
+     0.99990   0.999750E+00   0.100000E+01   0.888300E-02
+     1.00000   0.100000E+01   0.100000E+01   0.888231E-02
+/</code></pre><p>In practice it is envisaged that the relative permeability
+and capillary pressure data will be obtained either from laboratory
+measurements of cores or from network simulation models where grain
+size distributions and pore wettabilities will be representative of
+the reservoir being modeled. The data are obtained from three discrete
+sets of two phases measurements or simulations, that is, in the absence
+of the third phase. In particular it should be noted that, for the <a href="../ecl_rm/SOF3.html#SOF3">SOF3</a> keyword, the relative
+permeability to oil for an oil-gas system should be defined in the
+absence of connate water.</p>
+</div>
+
+<div class="section"><h4 class="sectiontitle">Saturation function region numbers</h4><p>The association
+between saturation tables and saturation region numbers follows the
+usual pattern. However, whereas in the traditional hysteresis models,
+the drainage and imbibition saturation tables are associated with
+saturation regions using the keywords <a href="../ecl_rm/SATNUM.html#SATNUM"> SATNUM</a> and <a href="../ecl_rm/IMBNUM.html#IMBNUM">IMBNUM</a> respectively, for the
+ODD3P method, the keywords <a href="../ecl_rm/PSTNUM.html#PSTNUM">PSTNUM</a>, <a href="../ecl_rm/ISTNUM.html#ISTNUM">ISTNUM</a> and <a href="../ecl_rm/DSTNUM.html#DSTNUM">DSTNUM</a> are used to define the tables associated with the primary,
+secondary hysteresis and tertiary hysteresis saturations respectively.
+Internally, the <span class="keyword">SATNUM</span> and <span class="keyword">IMBNUM</span> keywords are aliases of the <span class="keyword">PSTNUM</span> and <span class="keyword">ISTNUM</span> keywords respectively and may be used as alternatives.
+This may be useful when converting existing data sets to work with
+the ODD3P model. However, there is no equivalent internal alias for
+the <span class="keyword">DSTNUM</span> keyword. It is recommended, therefore,
+that for the purposes of clarity the matching trio of <span class="keyword">PSTNUM</span>, <span class="keyword">ISTNUM</span> and <span class="keyword">DSTNUM</span> keywords
+should be used wherever possible.</p>
+<p>The saturation region keyword <span class="keyword">PSTNUM</span> refers to the primary saturation tables, <span class="keyword">ISTNUM</span> refers to the tables containing the secondary hysteresis
+saturation functions, and <span class="keyword">DSTNUM</span> refers to the
+tables containing the tertiary hysteresis saturation functions. The
+selection of the appropriate combination of saturation functions for
+a given process direction is made internally according to the current
+saturations and the history of the saturation directions thus far
+in the simulation.</p>
+<p>The <span class="keyword">PSTNUM</span>, <span class="keyword">ISTNUM</span> and <span class="keyword">DSTNUM</span> keywords are optional but are required
+if hysteresis is to be modeled. These may be used to define the entire
+set of grid blocks or some subset via the usual set of array assignment
+and manipulation operators. For grid blocks for which one or more
+of these keywords have not been specified, the following defaulting
+process will be applied:</p>
+<ul>
+<li><span class="keyword">PSTNUM</span>: Primary saturation function region
+number defaults to 1. </li>
+
+<li><span class="keyword">ISTNUM</span>: Secondary hysteresis saturation function
+region number defaults to <span class="keyword">PSTNUM</span>.</li>
+
+<li> <span class="keyword">DSTNUM</span>: Tertiary hysteresis saturation function
+region number defaults to <span class="keyword">ISTNUM</span>.</li>
+
+</ul>
+<p>Although the ODD3P method is implicitly hysteretic, hysteresis
+may be switched off for a given grid block by defining the values
+of <span class="keyword">ISTNUM</span> and <span class="keyword">DSTNUM</span> to be equal.
+In addition, the modeling of separate primary, secondary and tertiary
+processes may be switched off by specifying the values of <span class="keyword">ISTNUM</span> and <span class="keyword">DSTNUM</span> not only to be equal
+to each other but also equal to the value of <span class="keyword">PSTNUM</span>. The only constraint upon the values of <span class="keyword">PSTNUM</span>, <span class="keyword">ISTNUM</span> and <span class="keyword">DSTNUM</span> for a given
+grid block, therefore, is that if <span class="keyword">PSTNUM</span> is equal
+to <span class="keyword">ISTNUM</span> or <span class="keyword">DSTNUM</span>, then <span class="keyword">ISTNUM</span> and <span class="keyword">DSTNUM</span> must also be equal.
+Failure to comply with this constraint will cause an error to be reported
+during the checking of the input data.</p>
+</div>
+
+<div class="section"><h4 class="sectiontitle">Saturation function data constraints</h4><p>Because
+of the complexity of the ODD3P model, there is a number of specific
+input data constraints associated with the specification of the saturation
+function data for this model. These are summarized below.</p>
+<ul>
+<li>For a specified pair of hysteresis curves, the hysteresis value
+of the end-point saturation  <math><msub><mi>S</mi>
+<mrow><mi>i</mi><mi>r</mi><mi>j</mi></mrow></msub>
+</math>  is taken as the lower value of the two  <math><msub><mi>S</mi>
+<mrow><mi>i</mi><mi>r</mi><mi>j</mi></mrow></msub>
+</math>  values for the secondary and tertiary hysteresis curves,
+where  <math><msub><mi>S</mi>
+<mrow><mi>i</mi><mi>r</mi><mi>j</mi></mrow></msub>
+</math>  is defined to be the maximum tabulated saturation value
+in  <math><msub><mi>S</mi>
+<mi>i</mi></msub></math>  for which  <math><msub>
+<mi>k</mi><mrow><mi>r</mi><mi>i</mi><mi>j</mi>
+</mrow></msub></math>  is zero, with  <math><msub>
+<mi>S</mi><mi>i</mi></msub></math>  measured in the increasing
+sense. In cases where the secondary and tertiary hysteresis values
+of  <math><msub><mi>S</mi>
+<mrow><mi>i</mi><mi>r</mi><mi>j</mi></mrow></msub>
+</math>  are found to be different, which is permissible, a warning
+is issued. This is to identify possible mismatches between the pairs
+of curves specified for secondary and tertiary hysteresis operations.</li>
+
+<li>Each pair of hysteresis curves is required to form a closed hysteresis
+loop in the region enclosed between their bounding residual saturations.
+This may be expressed as follows:             <ul>
+<li>For the increasing and decreasing relative permeability functions <math><mrow><msub><mrow>
+<mi>k</mi></mrow><mrow><mi>r</mi><mi>i</mi><mi>j</mi>
+</mrow></msub><mrow><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>i</mi></mrow></msub><mrow><mo>(</mo>
+<mi>i</mi><mi>n</mi><mi>c</mi><mo>)</mo></mrow><mo>)</mo></mrow></mrow></math>  and  <math><mrow><msub><mrow>
+<mi>k</mi></mrow><mrow><mi>r</mi><mi>i</mi><mi>j</mi>
+</mrow></msub><mrow><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>i</mi></mrow></msub><mrow><mo>(</mo>
+<mi>d</mi><mi>e</mi><mi>c</mi><mo>)</mo></mrow><mo>)</mo></mrow></mrow></math>, the values should be equal at
+ <math><msub><mi>S</mi>
+<mrow><mi>i</mi><mi>r</mi><mi>j</mi></mrow></msub>
+</math>  and  <math><msub><mrow><mn>1</mn><mrow><mo>-</mo><mi>S</mi></mrow></mrow><mrow>
+<mi>j</mi><mi>r</mi><mi>i</mi></mrow></msub></math>.</li>
+
+<li>Similarly for the increasing and decreasing relative permeability
+functions <math><mrow>
+<msub><mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>j</mi><mi>i</mi></mrow></msub><mrow><mo>(</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>j</mi></mrow></msub>
+<mrow><mo>(</mo><mi>i</mi><mi>n</mi><mi>c</mi><mo>)</mo></mrow><mo>)</mo></mrow></mrow></math> and  <math><mrow><msub><mrow>
+<mi>k</mi></mrow><mrow><mi>r</mi><mi>j</mi><mi>i</mi>
+</mrow></msub><mrow><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>i</mi></mrow></msub><mrow><mo>(</mo>
+<mi>d</mi><mi>e</mi><mi>c</mi><mo>)</mo></mrow><mo>)</mo></mrow></mrow></math>, the values should be equal at
+ <math><msub><mi>S</mi>
+<mrow><mi>j</mi><mi>r</mi><mi>i</mi></mrow></msub>
+</math>  and  <math><msub><mrow><mn>1</mn><mrow><mo>-</mo><mi>S</mi></mrow></mrow><mrow>
+<mi>i</mi><mi>r</mi><mi>j</mi></mrow></msub></math>.</li>
+
+<li>Corresponding constraints apply to the increasing and decreasing
+hysteresis oil-water and gas-oil capillary pressures.            
+         </li>
+
+</ul>
+<p>If the above conditions are not satisfied, appropriate warning
+messages will be issued. Failure to comply with these conditions will
+lead to inconsistent or unpredictable results.</p>
+</li>
+
+<li>In general, it is expected that the relative permeability functions
+will be monotonically increasing over the range of the closed loop
+hysteresis curves. Similarly, it is expected that the capillary pressures
+will vary monotonically over this range. Although these conditions
+are not mandatory warning messages will be issued if they are not
+met.</li>
+
+<li>The first saturation table entries for the secondary and tertiary
+hysteresis curves are checked for equal initial values of saturation
+and a warning is issued if this test is not satisfied. This is to
+identify possible mismatches between pairs of curves specified for
+secondary and tertiary hysteresis operations.</li>
+
+<li>For the primary saturation <a href="../ecl_rm/SGF3.html#SGF3">SGF3</a> tables, the initial gas saturation value should be 0.0. Similarly
+for the primary <a href="../ecl_rm/SWF3.html#SWF3">SWF3</a> tables, the final water saturation value should be 1.0. In
+most cases, for the primary tables, negative values of capillary pressure
+are not required, and a warning is issued if negative values are encountered.
+            </li>
+
+<li>In some cases, the primary capillary pressure curve may intersect
+the secondary hysteresis or tertiary hysteresis capillary pressure
+curves; such intersections do not prevent correct operation of the
+model. For the 2014.1 version, warnings are no longer issued if any
+such conditions are encountered. However, these warnings may be reinstated
+by setting <a href="../ecl_rm/OPTIONS3.html#options3.307">item 307</a> of the <span class="keyword">OPTIONS3</span> keyword to 1 in the <span class="keyword">PROPS</span> or
+prior sections.             </li>
+
+<li>If the secondary and tertiary hysteresis capillary pressure curves
+intersect within the hysteresis saturation extent, the hysteresis
+modeling will fail and this will be reported as an error condition
+during the input data checking.</li>
+
+<li>There are no constraints on the intersection of the primary, secondary
+hysteresis and tertiary hysteresis relative permeability curves. </li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

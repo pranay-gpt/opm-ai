@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Orthomin"/>
+<meta name="DC.subject" content="Solution of the linear equations orthomin, Solution of the linear equations, Orthomin"/>
+<meta name="keywords" content="Solution of the linear equations orthomin, Solution of the linear equations, Orthomin"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sollineq_orthomin"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Orthomin</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="sollineq_orthomin"><a name="sollineq_orthomin"><!-- --></a>
+<h1 class="topictitle1">Orthomin</h1>
+
+
+ <div>
+<p>The Orthomin procedure used by ECLIPSE can be summarized in the
+steps below:</p>
+
+<ol>
+<li>Calculate the initial solution           <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.0136"/>
+ <math><mrow><mtable>
+<mtr><mtd><mi>y</mi><mo>=</mo><mrow><msup><mrow><mi>B</mi></mrow><mrow><mi>-</mi><mn>1</mn></mrow></msup>
+<mi>b</mi><mo>,</mo></mrow></mtd><mtd><mi>x</mi><mo>→</mo><mi>y</mi></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 677.1]
+              </td></tr></tbody></table></li>
+
+<li>Calculate the initial residual                <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.013c"/>
+ <math><mrow><mi>r</mi><mo>=</mo><mi>b</mi><mrow><mtext> </mtext>
+<mtext> </mtext><mo>-</mo><mtext> </mtext><mrow><mi>A</mi><mi>y</mi></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 677.2]
+              </td></tr></tbody></table><ul>
+<li>   If the colsum constraint is used, the sum of the elements of
+r is now zero </li>
+
+<li> If the rowsum constraint is used r is identically zero for the
+special case  <math>
+<mi>b</mi><mo>=</mo><mrow><mi>A</mi><mi>p</mi>
+</mrow></math>  where  <math><mi>p</mi></math>  is the vector consisting of unity in each pressure location and
+zero elsewhere.  </li>
+
+</ul>
+</li>
+
+<li>Test for convergence and escape if converged </li>
+
+<li>Find a new search direction                <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.0149"/>
+ <math><mi>y</mi>
+<mo>=</mo><mrow><msup><mrow><mi>B</mi></mrow><mrow>
+<mrow><mi>-</mi><mn>1</mn></mrow></mrow></msup><mi>b</mi></mrow></math> 
+</td><td align="right">[Eq. 677.3]
+              </td></tr></tbody></table></li>
+
+<li>Orthogonalize  <math>
+<mi>γ</mi></math>  to the stack of previous search directions
+ <math><mo>(</mo>
+<mi>z</mi><mo>)</mo></math>                            
+  <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.0150"/>
+ <math><mrow><mi>y</mi><mo>=</mo><mi>y</mi><mrow><mtext> </mtext><mo>-</mo><mtext> </mtext><mfrac><mrow><mo>(</mo><mi>y</mi><mo>⋅</mo><mi>z</mi><mo>)</mo><mi>z</mi>
+</mrow><mrow><mo>(</mo><mi>z</mi><mo>⋅</mo><mi>z</mi>
+<mo>)</mo></mrow></mfrac></mrow></mrow></math> 
+</td><td align="right">[Eq. 677.4]
+              </td></tr></tbody></table></li>
+
+<li>Find the optimum step length,  <math><mi>s</mi></math>, which minimizes the saturation normalized sum of the squares of
+the residuals (<math>
+<mrow><mi>r</mi><mo>⋅</mo><mi>r</mi></mrow></math>):                <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.0157"/>
+ <math><mrow><mi>s</mi><mo>=</mo><mfrac><mrow><mi>r</mi><mo>⋅</mo>
+<mi>q</mi></mrow><mrow><mi>q</mi><mo>⋅</mo><mi>q</mi>
+</mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 677.5]
+              </td></tr></tbody></table><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.015a"/>
+ <math><mrow><mi>q</mi><mo>=</mo><mi>A</mi><mo>⋅</mo><mi>y</mi>
+</mrow></math> 
+</td><td align="right">[Eq. 677.6]
+              </td></tr></tbody></table></li>
+
+<li>Update the solution  <math><mo>(</mo><mi>x</mi>
+<mo>→</mo><mi>x</mi><mo>+</mo><mrow><mi>s</mi><mi>y</mi></mrow><mo>)</mo></math>, the residual  <math><mi>r</mi><mo>→</mo>
+<mi>r</mi><mrow><mo>-</mo><mrow><mi>s</mi><mi>q</mi>
+</mrow></mrow></math>  and the stack  <math><mi>z</mi><mo>=</mo>
+<mo>(</mo><mrow><mi>z</mi><mo>,</mo><mi>y</mi>
+</mrow><mo>)</mo></math>. If not converged, return to step
+3. </li>
+
+</ol>
+
+<p>ECLIPSE 100 </p>
+
+<p>The progress of the linear solver may be monitored
+by setting the seventh argument of the <a href="../ecl_rm/DEBUG.html#DEBUG">DEBUG</a> keyword to 1. The convergence
+criterion for the linear solver may be modified using the <a href="../ecl_rm/TUNING.html#TUNING">TUNING</a> keyword.</p>
+
+<p>ECLIPSE 300   </p>
+
+<p>The progress of the linear solver may be monitored
+by setting the ninth argument of the <a href="../ecl_rm/DEBUG3.html#DEBUG3">DEBUG3</a> keyword to 1. The convergence
+criterion for the linear solver may be modified using the <a href="../ecl_rm/CVCRIT.html#CVCRIT">CVCRIT</a> or <a href="../ecl_rm/LSCRIT.html#LSCRIT">LSCRIT</a> keywords.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

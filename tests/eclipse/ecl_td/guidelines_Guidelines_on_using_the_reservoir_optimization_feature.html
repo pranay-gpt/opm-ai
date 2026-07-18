@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Guidelines on using the reservoir optimization feature"/>
+<meta name="DC.subject" content="Reservoir optimization guidelines, Gradient option, Example"/>
+<meta name="keywords" content="Reservoir optimization guidelines, Gradient option, Example"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="guidelines_guidelines_on_using_the_reservoir_optimization_feature"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Guidelines on using the reservoir optimization feature</title>
+</head>
+<body>
+
+
+<div class="nested0" id="guidelines_guidelines_on_using_the_reservoir_optimization_feature"><a name="guidelines_guidelines_on_using_the_reservoir_optimization_feature"><!-- --></a>
+<h1 class="topictitle1">Guidelines on using the reservoir optimization feature</h1>
+
+
+
+ <div>
+<div class="p">This section gives you some guidelines on how to use the reservoir
+optimization feature. <div class="note"><span class="notetitle">Note:</span> <span class="notebody">The starting point for the use of the
+reservoir optimization feature is that you should have an ECLIPSE
+300 model that runs without any problems.             </span></div>
+<dl>
+
+<dt class="dlterm"><a name="guidelines_screening_your_model_for_suitability"><!-- --></a>Screening your model for suitability</dt>
+
+<dd>The first thing you should do is check your model for its compatibility
+with the requirements of the Reservoir Optimization feature.</dd>
+
+
+
+<dt class="dlterm"><a name="guidelines_features_that_the_model_must_include"><!-- --></a>Features that the model must include</dt>
+
+<dd>It should be fully implicit.<p>It should have reasonably frequent
+report step output; monthly report output is a good rule-of-thumb.</p>
+<p>The adjoint method in the reservoir optimization feature uses
+report steps, as opposed to timesteps, to calculate the required gradients,
+so the gradient calculation will lose accuracy if the report steps
+are too far apart.</p>
+</dd>
+
+
+<dt class="dlterm"><a name="guidelines_features_that_the_model_should_not_include"><!-- --></a>Features that the model should not include</dt>
+
+<dd>The use of the parallel option (<a href="../ecl_rm/PARALLEL.html#PARALLEL"> PARALLEL</a> keyword).<p>The use
+of fast restarts (<a href="../ecl_rm/LOAD.html#LOAD">LOAD</a> keyword).</p>
+<p>The use of local grid refinements (<a href="../ecl_rm/CARFIN.html#CARFIN">CARFIN</a>, <a href="../ecl_rm/EXTFIN.html#EXTFIN">EXTFIN</a> or <a href="../ecl_rm/RADFIN.html#RADFIN">RADFIN</a> keywords).</p>
+<p>The
+use of grid coarsening (<a href="../ecl_rm/COARSEN.html#COARSEN">COARSEN</a> keyword).</p>
+<p>The use of the sector modeling option (<a href="../ecl_rm/SECTOR.html#SECTOR">SECTOR</a> keyword).   </p>
+<p>The
+use of the thermal option (<a href="../ecl_rm/THERMAL.html#THERMAL">THERMAL</a> keyword).</p>
+<p>AIM, IMPES or IMPSAT formulations.</p>
+<p>Any well controls which will compete against the optimizer, for example <a href="../ecl_rm/ACTION.html#ACTION">ACTION</a> keywords, <a href="../ecl_rm/WECON.html#WECON">WECON</a>.</p>
+<p>If necessary (and
+possible) you need to decide if it is possible for you to modify your
+model to meet these requirements. If you change your model, make sure
+that it can still be run successfully in ECLIPSE 300 and that these
+changes do not affect the results of the simulation dramatically.</p>
+<p>If your model is large, then it may be useful to construct a coarse
+version so that you can determine if the Reservoir Optimization feature
+gives useful results, before attempting the use the feature on the
+detailed model.</p>
+ </dd>
+
+</dl>
+</div>
+
+<div class="section" id="guidelines_deciding_the_optimization_problem_you_want_to_solve"><a name="guidelines_deciding_the_optimization_problem_you_want_to_solve"><!-- --></a><h4 class="sectiontitle">Deciding the optimization problem you want to solve</h4><p>You need to decide what objective you are trying to achieve, for
+example, maximizing discounted oil production total while minimizing
+water production total.</p>
+<p>You also need to decide what constraints
+(if any) you need to impose while trying to achieve this objective,
+for example, the water cut must never rise above 10% in certain wells
+and groups.</p>
+<p>Finally you must decide which well control parameters
+you want to use to try to achieve your constrained objective.</p>
+<ul>
+<li>Well target production/injection rates are only good for optimization
+purposes as long as the well stays on target production. Once the
+well falls off target rate control there will be no response to changing
+the target. In this situation, WBHP is a good control parameter as
+there will always be a response while the well is open.          
+  </li>
+
+<li>For smart well optimization, the use of valve parameters controlling
+the cross-sectional area of a valve segment (<a href="../ecl_rm/WSEGVALV.html#WSEGVALV">WSEGVALV</a>) is encouraged.  
+                         </li>
+
+</ul>
+<ul>
+<li>Typically the calculation of adjoint gradients (sensitivities)
+will take a time which is less than, but of the order of, the time
+of the normal simulation.</li>
+
+<li>Each simulation performed with the control parameters obtained
+by a model update from the adjoint gradients will take a similar time,
+and as this is a gradient-based optimization, the use of a line-search
+algorithm means that there may be several simulations before an optimum
+is achieved using a given search direction.</li>
+
+</ul>
+<p>The use of constraints and also simple bounds on parameters
+help to constrain the line-search step size and reduce the number
+of simulation runs required. Clearly however the overall time to run
+the optimizer can become a concern. You can control the overall run
+time as follows:</p>
+<p>Now that you have decided your optimization
+problem, there are a couple of issues for you to consider related
+to the time it takes for your model to run.</p>
+<ul>
+<li>Control on the maximum number of optimization iterations (gradient
+evaluations) and simulations is provided using the <a href="../ecl_rm/OPTDIMS.html#OPTDIMS">OPTDIMS</a> keyword.</li>
+
+<li>If the optimization problem (that is the objective function, parameters
+and constraints) is restricted to a particular sector of the model,
+then you should consider using a model of just that sector to reduce
+the time required for each simulation.        </li>
+
+<li>If your model has a long history period, and the optimization
+problem (that is the objective function, parameters and constraints)
+are only specified in the prediction part of the schedule, then you
+should consider using a restart file to reduce the time required for
+each simulation.             </li>
+
+</ul>
+</div>
+
+<div class="section" id="guidelines_modifying_your_model_for_reservoir_optimization"><a name="guidelines_modifying_your_model_for_reservoir_optimization"><!-- --></a><h4 class="sectiontitle">Modifying your model for reservoir optimization</h4><p>To specify your reservoir optimization problem in the model, you
+need to:</p>
+<ol>
+<li>Add the <a href="../ecl_rm/RESOPT.html#RESOPT">RESOPT</a> keyword to the <span class="keyword">RUNSPEC</span> section to request
+the Reservoir Optimization             </li>
+
+<li>Add the <span class="keyword">OPTIMIZE</span> section keyword before your <a href="../ecl_rm/END.html#END">END</a> keyword             </li>
+
+<li>Add the <a href="../ecl_rm/OPTFUNC.html#OPTFUNC">OPTFUNC</a> keyword to the <span class="keyword">OPTIMIZE</span> section to specify
+your objective function             </li>
+
+<li>Add the <a href="../ecl_rm/OPTCONS.html#OPTCONS">OPTCONS</a> keyword to the <span class="keyword">OPTIMIZE</span> section to specify
+your production/injection constraints.                <ol type="a">
+<li>You should ensure that none of these constraints are violated
+at the start of the optimization because the optimizer must start
+from a feasible position honoring all the constraints.<p>ECLIPSE 300
+will check for this when processing the <span class="keyword">OPTCONS</span> keyword, but it is a good idea to look at the values of constraint
+quantities in the forward simulation before adding the <span class="keyword">OPTCONS</span> keyword.</p>
+<p>For example, if the maximum FWPR in the forward simulation
+is 2000sm<sup>3</sup>/day, then setting an optimization constraint
+of 1000sm<sup>3</sup>/day is invalid. The starting point for simulation
+will violate constraints and there is no mechanism to return to a
+feasible parameter space honoring the constraint.</p>
+</li>
+
+</ol>
+             </li>
+
+<li>Add the <a href="../ecl_rm/OPTPARS.html#OPTPARS">OPTPARS</a> keyword to the <span class="keyword">OPTIMIZE</span> section to specify
+your control parameters.                       <ol type="a">
+<li>You should try to make sure that your initial parameter values
+lie within the upper and lower limits set by this keyword.<p>There
+is an initial feasibility check in ECLIPSE 300 to ensure that the
+parameter values in the forward simulation are within these limits,
+though it is a good idea to look at the range of parameter values
+in the forward simulation before specifying the limits.</p>
+</li>
+
+</ol>
+             </li>
+
+<li> Add the <a href="../ecl_rm/OPTDIMS.html#OPTDIMS">OPTDIMS</a> keyword to the <span class="keyword">OPTIMIZE</span> section to specify
+how many optimization iterations and how many simulations are allowed
+in the Reservoir Optimization feature. <div class="tip"><span class="tiptitle">Tip:</span> Initially
+these limits should both be set to one so that you can perform a simple
+sensitivity analysis for parameter screening.   </div>
+          
+  </li>
+
+<li>Add the <a href="../ecl_rm/RPTOPT.html#RPTOPT">RPTOPT</a> keyword to the <span class="keyword">OPTIMIZE</span> section and request <span class="keyword">SEPARATE</span> output.    <p>This uses more hard-disk space than
+non-separate output but does allow tracking of the progress of the
+parameters, constraints and objective function components fully. A
+separate summary file will be created for each optimization iteration,
+and these production profiles may be visualized independently in ECLIPSE
+Office.</p>
+ </li>
+
+<li>As you would in a normal simulation, add summary and reporting
+output requests for any simulation results you want to track.    
+           <ol type="a">
+<li><p>If a production constraint has been added in the <span class="keyword">OPTIMIZE</span> section it is good practice to add the mnemonic for this constraint
+to the <span class="keyword">SUMMARY</span> section so that you can track whether
+the constraint is violated in each simulation.</p>
+</li>
+
+</ol>
+             </li>
+
+</ol>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The method used for calculating the adjoint gradients relies
+on restart files (containing the well and grid block solutions) being
+generated at each report time during the simulation. Any <a href="../ecl_rm/RPTRST.html#RPTRST">RPTRST</a> keyword mnemonics that
+turn off the required reporting will be ignored.</span></div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

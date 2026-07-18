@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Transmissibility calculations"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="transmiss_transmissibility_calculations1"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Transmissibility calculations</title>
+</head>
+<body>
+
+
+<div class="nested0" id="transmiss_transmissibility_calculations1"><a name="transmiss_transmissibility_calculations1"><!-- --></a>
+<h1 class="topictitle1">Transmissibility calculations</h1>
+
+
+ <div>
+<p>There are at most three types of transmissibility calculation available
+in ECLIPSE.</p>
+
+<p>The first is the traditional block centered form, based upon the
+distances between the cell centers only. This is the default calculation
+when <a href="../ecl_rm/DX.html#DX">DX</a>, <a href="../ecl_rm/DY.html#DY">DY</a>, <a href="../ecl_rm/DZ.html#DZ">DZ</a> are specified.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">For ECLIPSE 100, this corresponds to the
+use of the <a href="../ecl_rm/OLDTRAN.html#OLDTRAN">OLDTRAN</a> keyword in the <span class="keyword">GRID</span> section.  </span></div>
+
+<p>ECLIPSE 100</p>
+
+<p>The second form also assumes a traditional
+block centered geometry but involves a different combination of cell
+cross-sectional areas and permeabilities from that assumed in the <span class="keyword">OLDTRAN</span> formulation. The second form of transmissibility
+calculation is activated using the <a href="../ecl_rm/OLDTRANR.html#OLDTRANR">OLDTRANR</a> keyword in the <span class="keyword">GRID</span> section.</p>
+
+<p>The third form is based upon the use of cell corner points, which
+are available to ECLIPSE when the <span class="keyword">COORD</span>/<span class="keyword">ZCORN</span> form of grid definition is used. In this case, it
+is possible to distinguish unambiguously between cell dip and fault
+displacement, and this option allows fault transmissibilities to be
+generated automatically.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">For ECLIPSE 100 use, this third type of transmissibility calculation
+is specified by the use of the <a href="../ecl_rm/NEWTRAN.html#NEWTRAN">NEWTRAN</a> keyword in the <span class="keyword">GRID</span> section. This is the
+default calculation when <span class="keyword">COORD</span>/<span class="keyword">ZCORN</span> are specified.                      </span></div>
+
+<p>ECLIPSE 100             </p>
+
+<p>Although it is normal to use <span class="keyword">OLDTRAN</span> with <span class="keyword">DX</span>, <span class="keyword">DY</span>, <span class="keyword">DZ</span>, <a href="../ecl_rm/TOPS.html#TOPS">TOPS</a> etc. input, and <span class="keyword">NEWTRAN</span> with <span class="keyword">COORD</span>/<span class="keyword">ZCORN</span>, all types of transmissibility calculation are available with both
+types of grid specification, as ECLIPSE holds grid data internally
+in both forms. Corner points are obtained from <span class="keyword">DX</span>/<span class="keyword">DY</span>/<span class="keyword">DZ</span>/<span class="keyword">TOPS</span> data by assuming flat blocks, and <span class="keyword">DX</span>/<span class="keyword">DY</span>/<span class="keyword">DZ</span> values are obtained from corner
+points by evaluation of the distances between cell face center points.
+However, use of <span class="keyword">NEWTRAN</span> with <span class="keyword">DX</span>/<span class="keyword">DY</span>/<span class="keyword">DZ</span>/<span class="keyword">TOPS</span> input may well produce large numbers of spurious fault connections,
+as the assumed flat grid blocks in neighboring columns will generally
+overlap, and this combination of options is not recommended.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If the grid has shales modeled as gaps in the grid, the keyword <span class="keyword">MULTZ-</span> must be specified.      </span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

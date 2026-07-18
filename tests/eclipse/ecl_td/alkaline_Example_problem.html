@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Example problem"/>
+<meta name="DC.subject" content="Enhanced oil recovery, EOR, Alkaline model example"/>
+<meta name="keywords" content="Enhanced oil recovery, EOR, Alkaline model example"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="alkaline_example_problem"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Example problem</title>
+</head>
+<body>
+
+
+<div class="nested0" id="alkaline_example_problem"><a name="alkaline_example_problem"><!-- --></a>
+<h1 class="topictitle1">Example problem</h1>
+
+
+ <div>
+<p>This example mentions only those sections of an ECLIPSE data file
+that apply to alkaline data input and output.</p>
+
+<div class="section" id="alkaline_runspec_example"><a name="alkaline_runspec_example"><!-- --></a><h4 class="sectiontitle">RUNSPEC </h4><pre><code>RUNSPEC 
+TITLE
+Example Alkaline and Surfactant Case.
+
+DIMENS
+ 5    5    1  /
+
+NONNC
+OIL
+WATER
+SURFACT
+ALKALINE
+FIELD
+
+
+
+TABDIMS
+ 2    2   20    5    6   20 /
+
+REGDIMS
+ 6    1    0    0    0    1 /
+
+WELLDIMS
+ 2    1    1    2 /
+
+START
+ 1 'JAN' 1983  /
+
+NSTACK
+ 8 /</code></pre></div>
+
+<div class="section" id="alkaline_props_example"><a name="alkaline_props_example"><!-- --></a><h4 class="sectiontitle">PROPS</h4><pre><code>PROPS 
+
+
+SWFN
+-- Table 1 - Immiscible curves - SATNUM
+    .25    .0    4.0
+    .7    1.0     .0
+/
+-- Table 2 - Miscible curves   - SURFNUM
+    .25    .0    4.0
+    .99    1.0     .0
+/
+
+SOF2 
+-- Table 1 - Immiscible curves - SATNUM
+    .3000  .0000
+    .7600 1.0000
+/
+-- Table 2 - Miscible curves   - SURFNUM
+    .0100  .0000
+    .7600 1.0000
+/
+
+PVTW
+ 4000.0  1.0  3.03E-06  .5  0.0 /
+ 4000.0  1.0  3.03E-06  .5  0.0 /
+
+PVDO
+  .0     1.0     2.0
+ 8000.0   .92    2.0
+/
+-- Table 2 defaulted
+/
+
+ROCK
+ 4000.0         .30E-05 /
+ 4000.0         .30E-05 /
+
+DENSITY
+ 52.0000  64.0000   .04400 /
+ 52.0000  64.0000   .04400 /
+
+-- Water Viscosity vs surfactant concentration tables.
+SURFVISC
+-- Surfactant      Water viscosity at 4000 psi
+-- concentration
+--   LB/STB             CENTIPOISE
+      0.0                   1.0   
+      0.1                   1.1
+      0.2                   1.2 
+      0.8                   1.3  /
+      0.0                   0.5 
+      0.1                   0.6
+      0.2                   0.7
+      0.8                   0.8  /
+
+-- Surfactant Adsorption tables
+SURFADS
+-- Surfactant       Adsorbed saturation
+-- concentration
+--   LB/STB              LB/LB
+     0.0                  0.00000
+     0.1                  0.00005
+     0.2                  0.00005 
+     1.0                  0.00005 
+/
+-- Table 2 defaulted
+/
+-- Alkaline adsorption
+ALKADS
+--   Alkaline            Adsorbed
+-- concentration        saturation
+--   LB/STB
+     0.0                  0.00000
+     0.2                  0.00002
+     1.0                  0.00005 /
+/
+-- Alkaline adsorption properties
+ALKROCK
+-- De-adsorption model
+           1              /
+/
+
+-- Alkaline multipliers for Surfactant Adsorption
+ALSURFAD
+-- alkaline             adsorption
+-- concentration        multiplier
+--   LB/STB
+     0.0                  1.00000
+     0.1                  0.99995
+     0.2                  0.99500 
+     1.0                  0.50000 /
+/
+
+-- Water/Oil surface tension vs Surfactant concentration
+SURFST
+-- Surfactant        Water/Oil Surface Tension
+-- concentration
+--   LB/STB              LB/IN
+      0.0                100.0
+      0.1                50.0
+      0.2                10.0
+      0.5                0.0  /
+ /
+-- Water/Oil surface tension multipliers vs alkaline concentration
+ALSURFST
+-- Alkaline        Water/Oil Surface Tension
+-- concentration        multiplier
+--   LB/STB
+      0.0                1.0
+      0.1                0.9
+      0.2                0.9
+      0.5                0.9  /
+ /
+
+-- Capillary de-saturation curve
+SURFCAPD
+-- LOG10(Capillary Number)     Miscibility  
+--                             Function
+        -9                       0.0
+         2                       0.0 
+         5                       1.0
+        10                       1.0 /
+/
+
+-- Extra rock properties.
+SURFROCK
+-- De-adsorption model            Rock mass 
+-- indicator                      Density
+--   1 - reversible                 
+--   2 - irreversible              LB/RB
+      1                            1000 /
+      1                            1000 / </code></pre></div>
+
+<div class="section" id="alkaline_summary_example"><a name="alkaline_summary_example"><!-- --></a><h4 class="sectiontitle">SUMMARY </h4><pre><code>SUMMARY 
+CTFRALK
+ 'P' 5 5  1 /
+/
+FTPRALK
+FTPTALK
+
+FTIRALK
+FTITALK
+
+WTPTALK
+'P' /
+
+WTITALK
+'I' /
+
+BTCNFALK
+1 1 1 /
+2 2 1 /
+5 5 1 /
+/
+BTADSALK
+1 1 1 /
+2 2 1 /
+5 5 1 /
+/
+
+FTPRSUR
+
+WTPRSUR
+'P' /
+
+WTPTSUR
+'P' /
+WTITSUR
+'I' /
+
+BTCNFSUR
+1 1 1 /
+2 2 1 /
+5 5 1 /
+/
+
+FTIPTSUR
+FTIPFSUR
+
+RTIPTSUR
+1 /
+
+RTIPFSUR
+1 /
+
+BTIPTSUR
+1 1 1 /
+/
+
+FTADSUR
+
+RTADSUR
+ 1 /
+
+BTADSUR
+1 1 1 /
+/
+
+BTCASUR
+1 1 1 /
+/</code></pre></div>
+
+<div class="section" id="alkaline_schedule_example"><a name="alkaline_schedule_example"><!-- --></a><h4 class="sectiontitle">SCHEDULE </h4><pre><code>SCHEDULE  
+RPTSCHED
+  
+                              ALKALINE
+                           /
+
+WELSPECS
+'I'  'G'   1  1  4000  'WAT'  /
+'P'  'G'   5  5  4000  'OIL'  /
+/
+
+COMPDAT
+'I       '   1   1   1   1 'OPEN'   0  .0   1.0 /
+'P       '   5   5   1   1 'OPEN'   0  .0   1.0 /
+/
+
+WCONPROD
+'P' 'OPEN' 'BHP' 5* 3999.0 /
+/
+
+WCONINJE
+'I' 'WAT' 'OPEN' 'RATE' 200.0 /
+/
+
+-- Start injecting the Surfactant Slug
+WSURFACT
+ 'I'   0.8 /
+ /
+
+-- Start injecting the Alkaline
+WALKALIN
+ 'I'   0.8 /
+ /
+
+TSTEP
+  2*100
+/
+
+-- Water chase  
+WSURFACT
+ 'I'   0.0 /
+ /
+
+WALKALIN
+ 'I'   0.0 /
+ /
+
+TSTEP
+ 5*100 /
+
+END</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WHISTCTL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WHISTCTL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WHISTCTL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WHISTCTL"><a name="WHISTCTL"><!-- --></a>
+<h1 class="keyword">WHISTCTL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="whistctl.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="whistctl.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2958e45"> x </th>
+
+<th valign="top" id="d2958e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2958e54"> x </th>
+
+<th valign="top" id="d2958e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2958e45 d2958e54 ">  </td>
+
+<td valign="top" headers="d2958e48 d2958e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2958e45 d2958e54 ">  </td>
+
+<td valign="top" headers="d2958e48 d2958e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2958e45 d2958e54 ">  </td>
+
+<td valign="top" headers="d2958e48 d2958e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2958e45 d2958e54 ">  </td>
+
+<td valign="top" headers="d2958e48 d2958e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2958e45 d2958e54 ">  </td>
+
+<td valign="top" headers="d2958e48 d2958e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2958e45 d2958e54 ">  </td>
+
+<td valign="top" headers="d2958e48 d2958e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2958e45 d2958e54 ">  </td>
+
+<td valign="top" headers="d2958e48 d2958e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2958e45 d2958e54 "> x </td>
+
+<td valign="top" headers="d2958e48 d2958e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword contains instructions that influence the control of
+all history matching wells (see keywords <a href="WCONHIST.html#WCONHIST"> WCONHIST</a> and <a href="WCONINJH.html#WCONINJH"> WCONINJH</a>).</p>
+
+<p>The first item enables you to override the history matching production
+well control modes, set in all subsequent <span class="keyword">WCONHIST</span> keywords, with a single specified control mode. In the initial stages
+of history matching, the production wells may be on RESV control so
+that they produce the correct amount of total reservoir voidage before
+the water cut and gas oil ratio have been matched. But when these
+ratios have been matched, you may wish to rerun the simulation with
+the wells producing their observed oil rates. Instead of having to
+work through all the <span class="keyword">WCONHIST</span> keywords changing <samp class="codeph">RESV</samp> to <samp class="codeph">ORAT</samp>, you may just enter the <span class="keyword">WHISTCTL</span> keyword once before the first <span class="keyword">WCONHIST</span> keyword.</p>
+
+<p>The second item can be used to instruct ECLIPSE to stop the run
+if any history matching well has changed to BHP control at the end
+of the report step. By default, the BHP lower limit of each history
+matching production well is automatically set to atmospheric pressure
+when it is first declared in <span class="keyword">WCONHIST</span>. Similarly,
+the BHP upper limit for history matching injection wells is initialized
+to a very high value when they are first declared in <span class="keyword">WCONINJH</span>. Thus if a well violates this limit and changes to BHP control,
+it is a sign that the Kh or skin factor is very badly matched. You
+can set the BHP limit to a more reasonable value to make the test
+more sensitive, using the keyword <a href="WELTARG.html#WELTARG"> WELTARG</a> placed after the first <span class="keyword">WCONHIST</span> (or <span class="keyword">WCONINJH</span>) keyword in which the well appears.</p>
+
+<p>The <span class="keyword">WHISTCTL</span> keyword is followed by a single
+record containing the following items, terminated with a slash (/).</p>
+
+<ol>
+<li> The overriding production well control mode to be applied to
+all wells specified in subsequent <span class="keyword">WCONHIST</span> keywords:
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">   
+<tbody>
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">ORAT</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Wells are controlled by the observed oil rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">WRAT</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Wells are controlled by the observed water rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GRAT</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Wells are controlled by the observed gas rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">LRAT</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Wells are controlled by the observed liquid rate (oil + water) </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">CRAT</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Wells are controlled by the observed linearly combined rate
+(coefficients must be set with <a href="LINCOM.html#LINCOM"> LINCOM</a>)</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 300</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">NGL</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Wells are controlled by the observed NGL rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">RESV</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Wells are controlled by the reservoir fluid volume rate calculated
+from the observed phase flow rates</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">BHP</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Wells are controlled by bottom hole pressure</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">NONE</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> No control mode override is applied; the control modes specified
+in subsequent <span class="keyword">WCONHIST</span> keywords will be honored</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>DEFAULT: <samp class="codeph">NONE</samp>, giving no control mode
+override</p>
+ <div class="note"><span class="notetitle">Note:</span> <span class="notebody">This keyword will only change the control mode
+of a well when the well is named in a subsequent <span class="keyword">WCONHIST</span> keyword. It has no effect on previous <span class="keyword">WCONHIST</span> keywords.</span></div>
+ </li>
+
+<li> Flag to terminate the run if any history matching well has changed
+to BHP control: 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top">Terminate the run</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top">Continue the simulation with the well on BHP control </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>DEFAULT: <samp class="codeph">NO</samp> </p>
+ </li>
+
+</ol>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The run only terminates if a well switches to BHP control; if
+you set one or more wells to BHP control with <span class="keyword">WHISTCTL</span> or <a href="WCONHIST.html#WCONHIST">  WCONHIST</a> the simulation will continue.</span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

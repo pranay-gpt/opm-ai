@@ -1,0 +1,681 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Functions available for quantity definitions"/>
+<meta name="DC.subject" content="UDQ"/>
+<meta name="keywords" content="UDQ"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="udq_functions_available_for_quantity_definitions"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Functions available for quantity definitions</title>
+</head>
+<body>
+
+
+<div class="nested0" id="udq_functions_available_for_quantity_definitions"><a name="udq_functions_available_for_quantity_definitions"><!-- --></a>
+<h1 class="topictitle1">Functions available for quantity definitions</h1>
+
+
+ <div>
+<p>The following functions are available for use in quantity definitions.
+Without brackets, the functions are evaluated in order of decreasing
+precedence, with binary functions of equal precedence evaluated left
+to right and unary functions of equal precedence evaluated right to
+left. Brackets can be used to reorder the evaluation as required.</p>
+
+<p>Binary functions take two arguments, one from the left and one
+from the right. Note, the majority of binary functions operate on
+the intersection of the two UDQ sets, that is the output is only defined
+if both corresponding input elements are defined. A smaller number
+of the binary functions operate on the union of the two UDQ sets,
+that is the output is defined if either of the corresponding input
+elements are defined. The binary functions are elemental, operating
+on each element in turn. As a consequence both the left and right
+functions need either to be of the same type, for example, a well
+UDQ set, or one of the arguments needs to be a scalar. If one argument
+is a UDQ set and the other a scalar, the scalar value is applied to
+all elements in the UDQ set.</p>
+
+<p>Unary functions take a single argument usually supplied in a following
+bracket. The Unary functions are either elemental, or return a scalar
+value. The majority of the unary functions only operate on defined
+elements although a few also operate on undefined elements.</p>
+
+<p>User-defined quantity definitions are evaluated as real numbers
+constrained to lie in the range specified by item 2 of the <a href="UDQPARAM.html#UDQPARAM">  UDQPARAM</a> keyword.
+Values exceeding this range will be limited and ECLIPSE will issue
+a message notifying you of this. Similarly, should an argument fall
+outside the domain of a function then the element will be returned
+undefined and the user notified.</p>
+
+
+<div class="tablenoborder"><a name="udq.tab.00fd"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="udq.tab.00fd" frame="border" border="1" rules="all"><caption>
+           Table 247.1  Functions of UDQ</caption>  
+  
+<thead align="left">
+<tr>
+<th valign="top" id="d4038e66"> Function </th>
+
+<th colspan="2" valign="top" id="d4038e69"> Precedence and Type </th>
+
+<th valign="top" id="d4038e72"> Description </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d4038e66 ">( </td>
+
+<td valign="top" headers="d4038e69 ">&nbsp;</td>
+ 
+<td valign="top" headers="d4038e69 ">&nbsp;</td>
+ 
+<td valign="top" headers="d4038e72 "> Opening bracket. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 ">) </td>
+
+<td valign="top" headers="d4038e69 ">&nbsp;</td>
+ 
+<td valign="top" headers="d4038e69 ">&nbsp;</td>
+ 
+<td valign="top" headers="d4038e72 "> Closing bracket. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 ">[ </td>
+
+<td valign="top" headers="d4038e69 ">&nbsp;</td>
+ 
+<td valign="top" headers="d4038e69 ">&nbsp;</td>
+ 
+<td valign="top" headers="d4038e72 "> Start of table argument list. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 ">] </td>
+
+<td valign="top" headers="d4038e69 ">&nbsp;</td>
+ 
+<td valign="top" headers="d4038e69 ">&nbsp;</td>
+ 
+<td valign="top" headers="d4038e72 "> End of table argument list. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 ">, </td>
+
+<td valign="top" headers="d4038e69 ">&nbsp;</td>
+ 
+<td valign="top" headers="d4038e69 ">&nbsp;</td>
+ 
+<td valign="top" headers="d4038e72 ">Separator for table arguments. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 ">- </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary elemental </td>
+
+<td valign="top" headers="d4038e72 ">Sign change of defined element. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">ABS()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary elemental </td>
+
+<td valign="top" headers="d4038e72 ">Absolute value of defined elements. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">AVEA()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary scalar </td>
+
+<td valign="top" headers="d4038e72 ">Arithmetic average of defined elements. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">AVEG()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary scalar </td>
+
+<td valign="top" headers="d4038e72 ">Geometric average of defined elements. The result
+will be undefined if the input UDQ set contains zero or negative elements. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">AVEH()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary scalar </td>
+
+<td valign="top" headers="d4038e72 ">Harmonic average of defined elements. The result
+will be undefined if the input UDQ set contains zero elements. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">DEF()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6  </td>
+
+<td valign="top" headers="d4038e69 ">unary elemental </td>
+
+<td valign="top" headers="d4038e72 ">1 if the element is defined, otherwise the result
+is undefined. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">EXP()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary elemental </td>
+
+<td valign="top" headers="d4038e72 ">Exponential of defined elements. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">IDV()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary elemental (all elements) </td>
+
+<td valign="top" headers="d4038e72 ">1 if the element is defined, zero if the element
+is undefined. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">LN()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary elemental </td>
+
+<td valign="top" headers="d4038e72 ">Natural logarithm of defined elements. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">LOG()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary elemental </td>
+
+<td valign="top" headers="d4038e72 ">Base 10 logarithm of defined elements. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">MAX()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary scalar </td>
+
+<td valign="top" headers="d4038e72 ">Maximum of defined elements. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">MIN()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary scalar </td>
+
+<td valign="top" headers="d4038e72 ">Minimum of defined elements. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">NORM1()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary scalar </td>
+
+<td valign="top" headers="d4038e72 ">1 norm of defined elements. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">NORM2()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary scalar </td>
+
+<td valign="top" headers="d4038e72 ">2 norm of defined elements. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">NORMI()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary scalar </td>
+
+<td valign="top" headers="d4038e72 ">Infinity norm of defined elements. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">NINT()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary elemental </td>
+
+<td valign="top" headers="d4038e72 ">Nearest integer to defined elements. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">PROD()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary scalar </td>
+
+<td valign="top" headers="d4038e72 ">Product of defined elements. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">RANDN()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary elemental </td>
+
+<td valign="top" headers="d4038e72 ">Normally distributed random number with zero
+mean and unit variance. The seed for the random number generator can
+be set using item 1 of the <a href="UDQPARAM.html#UDQPARAM">  UDQPARAM</a> keyword. The input argument is used purely to determine
+the size of the UDQ set and the defined/undefined elements. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">RANDU()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary elemental </td>
+
+<td valign="top" headers="d4038e72 ">Uniformly distributed random number between
+-1 and 1. The seed for the random number generator can be set using
+item 1 of the <span class="keyword">UDQPARAM</span> keyword. The input argument
+is used purely to determine the size of the UDQ set and the defined/undefined
+elements. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">RRNDN()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary elemental </td>
+
+<td valign="top" headers="d4038e72 ">“Really random” normally distributed random
+number with zero mean and unit variance. This is the same as the <samp class="codeph">RANDN</samp> function, but the seed for the random number generator
+is computed (using a unique number generated from the HH:MM:SS of
+the 24-hour clock) for each simulation. <p>A base simulation case
+seed value will be used in restart simulations unless <a href="UDQDIMS.html#UDQDIMS">  UDQDIMS</a> item 11 is
+set to <samp class="codeph">‘Y’</samp>.</p>
+ </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">RRNDU()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary elemental </td>
+
+<td valign="top" headers="d4038e72 ">“Really random” uniformly distributed random
+number between -1 and 1. This is the same as the <span class="keyword">RANDU</span> function, but the seed for the random number generator is computed
+(using a unique number generated from the HH:MM:SS of the 24-hour
+clock) for each simulation.<p>A base simulation case seed value will
+be used in restart simulations unless <span class="keyword">UDQDIMS</span> item
+11 is set to <samp class="codeph">‘Y’</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">SORTA()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary elemental </td>
+
+<td valign="top" headers="d4038e72 ">Position of the element in an ascending sort
+of defined elements. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">SORTD()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary elemental </td>
+
+<td valign="top" headers="d4038e72 ">Position of the element in a descending sort
+of defined elements.</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">SUM()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary scalar </td>
+
+<td valign="top" headers="d4038e72 ">Sum of defined elements. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">UNDEF()</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary elemental </td>
+
+<td valign="top" headers="d4038e72 ">1 if the element is undefined, otherwise the
+result is undefined. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">TU*[]</samp> </td>
+
+<td valign="top" headers="d4038e69 ">6 </td>
+
+<td valign="top" headers="d4038e69 ">unary elemental </td>
+
+<td valign="top" headers="d4038e72 ">The value from the specified user-defined table
+associated with the values of the elements in each of the arguments.
+The table must be defined in a <a href="UDT.html#UDT">  UDT</a> keyword, and the interpolation method used for each argument
+is specified in the table. <p>There must be one argument for each
+dimension in the table, separated by commas. All arguments must either
+be the same type of UDQ set quantity or scalar. The function returns
+a scalar if all arguments are scalar, or the same type of UDQ set
+as its UDQ set arguments.</p>
+<p>It is not possible to have further
+computations inside the square brackets - each table argument must
+be a simple one word mnemonic. However, table arguments can themselves
+be <span class="keyword">UDQ</span> s if a more complicated expression is required.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 ">&lt;= </td>
+
+<td valign="top" headers="d4038e69 ">5 </td>
+
+<td valign="top" headers="d4038e69 ">binary intersection </td>
+
+<td valign="top" headers="d4038e72 ">1 if the left argument is less than or equal
+to the right argument, else 0. The tolerance to check for equality
+is specified by item 4 of the <a href="UDQPARAM.html#UDQPARAM">  UDQPARAM</a> keyword. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 ">&gt;= </td>
+
+<td valign="top" headers="d4038e69 ">5 </td>
+
+<td valign="top" headers="d4038e69 ">binary intersection </td>
+
+<td valign="top" headers="d4038e72 ">1 if the left argument is greater than or equal
+to the right argument, else 0. The tolerance to check for equality
+is specified by item 4 of the <span class="keyword">UDQPARAM</span> keyword. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 ">&lt; </td>
+
+<td valign="top" headers="d4038e69 ">5</td>
+
+<td valign="top" headers="d4038e69 ">binary intersection </td>
+
+<td valign="top" headers="d4038e72 ">1 if the left argument is less than the right
+argument, else 0. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 ">&gt; </td>
+
+<td valign="top" headers="d4038e69 ">5</td>
+
+<td valign="top" headers="d4038e69 ">binary intersection </td>
+
+<td valign="top" headers="d4038e72 ">1 if the left argument is greater than the right
+argument, else 0. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 ">== </td>
+
+<td valign="top" headers="d4038e69 ">5</td>
+
+<td valign="top" headers="d4038e69 ">binary intersection </td>
+
+<td valign="top" headers="d4038e72 ">1 if the left argument is equal to the right
+argument, else 0. The tolerance to check for equality is specified
+by item 4 of the <span class="keyword">UDQPARAM</span> keyword. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 ">!= </td>
+
+<td valign="top" headers="d4038e69 ">5</td>
+
+<td valign="top" headers="d4038e69 ">binary intersection </td>
+
+<td valign="top" headers="d4038e72 ">1 if the left argument is not equal to the right
+argument, else 0. The tolerance to check for equality is specified
+by item 4 of the <span class="keyword">UDQPARAM</span> keyword. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 ">^ </td>
+
+<td valign="top" headers="d4038e69 ">4 </td>
+
+<td valign="top" headers="d4038e69 ">binary intersection </td>
+
+<td valign="top" headers="d4038e72 ">Exponentiation. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 ">* </td>
+
+<td valign="top" headers="d4038e69 ">3 </td>
+
+<td valign="top" headers="d4038e69 ">binary intersection </td>
+
+<td valign="top" headers="d4038e72 ">Multiplication. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 ">/ </td>
+
+<td valign="top" headers="d4038e69 ">3 </td>
+
+<td valign="top" headers="d4038e69 ">binary intersection </td>
+
+<td valign="top" headers="d4038e72 ">Division. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 ">+ </td>
+
+<td valign="top" headers="d4038e69 ">2 </td>
+
+<td valign="top" headers="d4038e69 ">binary intersection </td>
+
+<td valign="top" headers="d4038e72 ">Addition. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 ">- </td>
+
+<td valign="top" headers="d4038e69 ">2 </td>
+
+<td valign="top" headers="d4038e69 ">binary intersection </td>
+
+<td valign="top" headers="d4038e72 ">Subtraction. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">UADD</samp> </td>
+
+<td valign="top" headers="d4038e69 ">1 </td>
+
+<td valign="top" headers="d4038e69 ">binary union </td>
+
+<td valign="top" headers="d4038e72 ">Union of the two UDQ sets with intersecting
+elements added together. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">UMAX</samp> </td>
+
+<td valign="top" headers="d4038e69 ">1 </td>
+
+<td valign="top" headers="d4038e69 ">binary union </td>
+
+<td valign="top" headers="d4038e72 ">Union of the two UDQ sets with the maximum of
+intersecting elements taken. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">UMIN</samp> </td>
+
+<td valign="top" headers="d4038e69 ">1 </td>
+
+<td valign="top" headers="d4038e69 ">binary union </td>
+
+<td valign="top" headers="d4038e72 ">Union of the two UDQ sets with the minimum of
+intersecting elements taken. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d4038e66 "> <samp class="codeph">UMUL</samp> </td>
+
+<td valign="top" headers="d4038e69 ">1 </td>
+
+<td valign="top" headers="d4038e69 ">binary union </td>
+
+<td valign="top" headers="d4038e72 ">Union of the two UDQ sets with intersecting
+elements multiplied together. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">When combining connection vectors ending in L, i.e. lumped completion
+vectors, it is important to realise that the summary vector for each
+connection in a lumped completion contains the same lumped completion
+value. Unary scalar operations such as SUM and PROD can therefore
+combine the same value multiple times into the result, if they act
+on every connection in a well.</span></div>
+
+<div class="p">If item 5 of the <span class="keyword">UDQPARAM</span> keyword is set to WELL then enhanced interaction of well and connection
+UDQ sets is enabled.<ul>
+<li>the unary scalar operations will act on connection sets to produce
+well sets rather than field scalars.</li>
+
+<li>the binary operations (both intersection and union) can be used
+to combine a well set and a connection set, with the well set value
+for each connection's well being used in place of an explicit connection
+set value. The result is a connection set.</li>
+
+<li>a well set can be used in place of a connection set, with the
+well set value for each connection's well being used in place of an
+explicit connection set value. </li>
+
+</ul>
+</div>
+
+<p>Because of the ambiguous nature
+of some specifications (e.g. <samp class="codeph">DEFINE WUTEST SUM(CUTEST)</samp>), which could be intended to use either a well UDQ set or a single
+scalar value for all wells, it is not possible to have some definitions
+produce well sets and others field scalars.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Since functions can be nested,
+it is possible to generate field scalars from connection sets even
+when WELL is specified. For instance, <samp class="codeph">SUM(SUM(CUTEST))</samp> when WELL is specified is equivalent to <samp class="codeph">SUM(CUTEST)</samp> when WELL is not specified.</span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

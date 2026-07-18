@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Examples"/>
+<meta name="DC.subject" content="UDQ"/>
+<meta name="keywords" content="UDQ"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="udq_examples"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Examples</title>
+</head>
+<body>
+
+
+<div class="nested0" id="udq_examples"><a name="udq_examples"><!-- --></a>
+<h1 class="topictitle1">Examples</h1>
+
+
+ <div>
+<div class="section" id="udq_summary_section"><a name="udq_summary_section"><!-- --></a><h4 class="sectiontitle">SUMMARY section</h4><p>Request of user-defined quantities in the <a href="SUMMARY.html#SUMMARY"> SUMMARY</a> section</p>
+<pre><code>CUMW1
+P1 /
+/
+CUMW2
+P1 /
+/
+
+FUMW1
+FUMW2
+
+GUMW1
+/
+GUMW2
+/
+
+RUMW1
+/
+RUMW1ONE
+/
+RUMW1TWO
+/
+WUMW1
+/
+WUMW2
+/
+AUMW1
+/
+AUMW2
+1/
+BUMW2
+1 2 3/
+/</code></pre></div>
+
+<div class="section" id="udq_schedule_section"><a name="udq_schedule_section"><!-- --></a><h4 class="sectiontitle">SCHEDULE section</h4><p>Definition of the user-defined quantities in the <span class="keyword">SCHEDULE</span> section</p>
+<pre><code>UDQ
+-- A COUPLE OF CONNECTION QUANTITES
+ASSIGN CUMW1 2.0 /
+ASSIGN CUMW1 P12 3.0 /
+ASSIGN CUMW1 P12 10 12 1 4.0 /
+UNITS  CUMW1 CONS /
+DEFINE CUMW2 COFR/MAX(CGFR) /
+UNITS  CUMW2 CONS /
+
+-- A COUPLE OF FIELD QUANTITIES
+DEFINE FUMW1 LOG(1+SUM(WOPR)) /
+UNITS  FUMW1 FLDS /
+ASSIGN FUMW2 0 /
+DEFINE FUMW2 WOPR P1 / -- RECORD WOPR OF P1 (SCALAR) IN A FIELD UDQ
+UNITS  FUMW2 FLDS /
+
+-- A COUPLE OF GROUP QUANTITES
+DEFINE GUMW1 SORTA(GOPR) /
+UNITS  GUMW1 GRPS /
+ASSIGN GUMW2 G2 99.99 /
+UNITS  GUMW2 GRPS /
+
+-- A COUPLE OF REGION QUANTITES
+DEFINE RUMW1 ROIP /
+UNITS  RUMW1 REGS /
+ASSIGN RUMW2 2.0E-2 /
+ASSIGN RUMW2ONE 3 3.0 /
+ASSIGN RUMW2TWO 4 4.0 /
+UNITS  RUMW2 REGS /
+
+-- A COUPLE OF WELL QUANTITIES
+DEFINE WUMW1 WBHP 'P*1*' UMAX WBHP 'P*4*' /
+UNITS  WUMW1 WELLS /
+UPDATE WUMW1 NEXT /
+DEFINE WUMW2 RANDN(WBHP 'P1*') /
+UNITS  WUMW2 WELLS /
+
+-- A COUPLE OF QUANTITIES USING UDQPARAM 5 = WELL
+DEFINE WUMW3 WBHP * SUM(CUFACT) /
+DEFINE CUMW3 LOG(WUMW3) /
+
+-- A COUPLE OF AQUIFER QUANTITIES
+DEFINE AUMW1 SORTA(AAQR) /
+UNITS  AUMW1 AQUIFER /
+UPDATE AUMW1 NEXT /
+DEFINE AUMW2 RANDN(AAQR) /
+UNITS  AUMW2 AQUIFER/</code></pre><pre><code>-- A COUPLE OF BLOCK QUANTITIES
+DEFINE BUMW1 MAX(BOSAT) /
+UNITS  BUMW1 BLOCK /
+UPDATE BUMW1 NEXT /
+DEFINE BUMW2 RANDN(BOSAT) /
+UNITS  BUMW2 BLOCK/
+-- A WELL QUANTITY CALCULATED FROM A 3-DIMENSIONAL UDT
+DEFINE WUPRICE TUPRICE[FGPR,FOPR,FWPR]-TUPRICE[WGPR,WOPR,WWPR] /
+/
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Water drive"/>
+<meta name="DC.subject" content="Recovery mechanisms, Water drive"/>
+<meta name="keywords" content="Recovery mechanisms, Water drive"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="recovery_water_drive"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Water drive</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="recovery_water_drive"><a name="recovery_water_drive"><!-- --></a>
+<h1 class="topictitle1">Water drive</h1>
+
+
+ <div>
+<p>A similar procedure is available to distinguish production from
+two different water sources, for example injected water and aquifer
+water. Again, a tracer is used to track (say) the aquifer water, and
+the production is subdivided into production associated with ‘traced’
+water and production associated with the remaining water.</p>
+
+<p>To use this facility the following steps must be taken:</p>
+
+<ol>
+<li>Increase the number of water tracers by one in the <a href="../ecl_rm/TRACERS.html#TRACERS">TRACERS</a> keyword in the <span class="keyword">RUNSPEC</span> section.</li>
+
+<li>  Add a tracer called ‘WTR’ in the <span class="keyword">PROPS</span> section. The special name ‘ <samp class="codeph">WTR</samp> ’ <strong>must</strong> be used to enable the recovery mechanism to recognize the
+tracer.                <pre><code>TRACER
+ 'WTR' 'WAT' /
+/</code></pre></li>
+
+<li>Initialize the tracer in the <span class="keyword">SOLUTION</span> section
+in the usual way using the <a href="../ecl_rm/TBLK.html#TBLK">TBLK</a> or <a href="../ecl_rm/TVDP.html#TVDP">TVDP</a> keywords, and set the tracer concentration for any analytic
+aquifers using the <a href="../ecl_rm/AQANTRC.html#AQANTRC">AQANTRC</a> keyword.  <p>The initial tracer concentration should be either
+1.0 for ‘traced’ water, or 0.0 for the rest.</p>
+</li>
+
+</ol>
+
+<p>Two new oil production values associated with the traced water
+and the remaining water will be calculated as follows:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="recovery.equ.009e"/>
+ <math><mrow><mtable><mtr><mtd><mtext>DWT</mtext><mo>=</mo>
+<mtext>PV</mtext><mo>⋅</mo><msub><mrow><mi>F</mi>
+</mrow><mrow><mi>t</mi></mrow></msub><mo>⋅</mo><mi>d</mi><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow><mo>⋅</mo><mfrac><mrow><mn>1</mn></mrow><mrow><msub>
+<mrow><mi>B</mi></mrow><mrow><mi>o</mi></mrow></msub>
+</mrow></mfrac></mtd></mtr><mtr><mtd><mtext>DWR</mtext>
+<mo>=</mo><mtext>PV</mtext><mo>⋅</mo><mrow><mo>(</mo>
+<mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi>
+</mrow><mrow><mi>t</mi></mrow></msub></mrow><mo>)</mo>
+</mrow><mo>⋅</mo><mi>d</mi><mrow><mo>(</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub>
+<mo>)</mo></mrow><mo>⋅</mo><mfrac><mrow><mn>1</mn>
+</mrow><mrow><msub><mrow><mi>B</mi></mrow><mrow><mi>o</mi></mrow></msub></mrow></mfrac></mtd></mtr>
+</mtable></mrow></math> 
+</td><td align="right">[Eq. 650.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mtext>DWT</mtext>
+</math> </td>
+
+<td valign="top"> is the production due to traced water      </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mtext>DWR</mtext>
+</math> </td>
+
+<td valign="top">  is the production due to remaining water       </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mi>t</mi></msub></math> </td>
+
+<td valign="top">is the fraction of  <math><msub><mi>S</mi>
+<mi>w</mi></msub></math>  that is ‘traced’ water.
+  </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WGORPEN"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WGORPEN"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WGORPEN</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="WGORPEN"><a name="WGORPEN"><!-- --></a>
+<h1 class="keyword">WGORPEN</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wgorpen.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wgorpen.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2948e45">                         x                   
+  </th>
+
+<th valign="top" id="d2948e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2948e54">                                             
+ </th>
+
+<th valign="top" id="d2948e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2948e45 d2948e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2948e48 d2948e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2948e45 d2948e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2948e48 d2948e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2948e45 d2948e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2948e48 d2948e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2948e45 d2948e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2948e48 d2948e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2948e45 d2948e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2948e48 d2948e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2948e45 d2948e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2948e48 d2948e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2948e45 d2948e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2948e48 d2948e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2948e45 d2948e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d2948e48 d2948e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The GOR penalty option provides a means of controlling the oil
+production rate target of individual wells for each month, as a function
+of their previous month’s average gas-oil ratio. The option is specifically
+intended to model a production regulation imposed by regulatory bodies
+in certain countries.</p>
+
+<p>When this facility is activated for individual wells with the <span class="keyword">WGORPEN</span> keyword, the wells’ oil production rate target/limit
+for each calendar month is automatically set to be</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wgorpen.equ.0045"/>
+ <math><mrow><mtext>Oil Rate</mtext>
+<mo>=</mo><mfrac><mrow><mo>(</mo><mtext>Base GOR</mtext>
+<mo>)</mo><mo>⋅</mo><mo>(</mo><mtext>Maximum Rate Limit</mtext>
+<mo>)</mo></mrow><mrow><mtext>Average GOR over previous
+month</mtext></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table>
+<p>subject to the condition that it does not exceed the maximum rate
+limit. The base GOR and the maximum rate limit are parameters you
+enter.</p>
+
+<p>While this facility is in use, the timesteps are automatically
+restricted to end at the end of each calendar month (although reports
+will only be printed at the report times entered with <a href="DATES.html#DATES"> DATES</a>, <a href="TIME.html#TIME"> TIME</a> or <a href="TSTEP.html#TSTEP"> TSTEP</a>). At the end of each month, the average gas-oil
+ratio of each well’s production over the month is determined. At the
+beginning of the next timestep, the oil production rate target/limit
+for the new month is set according to the formula above, for each
+well using the facility.</p>
+
+<p>The calculated oil rate target/limit overwrites any value for this
+quantity that may have been set previously with keyword <a href="WCONPROD.html#WCONPROD"> WCONPROD</a> or <a href="WELTARG.html#WELTARG"> WELTARG</a>. The well is
+still able to switch to other modes of control if necessary, and group
+control may also be applied in the usual way. The facility can be
+applied to just a subset of the production wells, if desired. Any
+wells using this facility must previously have been declared as producers
+with keyword <span class="keyword">WCONPROD</span>. If the wells are placed
+under oil rate control in <span class="keyword">WCONPROD</span>, an oil rate
+target/limit must still be specified in that keyword, but it is overwritten
+at the start of the next timestep.</p>
+
+<p>The GOR penalty option can subsequently be turned off for individual
+wells by giving them a zero or negative Base GOR. Unless a new oil
+rate limit is specified with <span class="keyword">WCONPROD</span> or <span class="keyword">WELTARG</span>, it remains at the value last calculated. If no
+producers are using the facility, the timesteps are no longer restricted
+to terminate at the end of each calendar month.</p>
+
+<p>The <span class="keyword">WGORPEN</span> keyword should normally be applied
+at the beginning of a month. If it is entered part way through a month,
+the average GOR for that month (which is used to calculate the next
+month’s oil rate) reflects the production between the time of the
+keyword entry and the end of the month.</p>
+
+<p>The keyword is followed by any number of records, each containing
+some or all of the following items of data and terminated with a slash
+(/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash.</p>
+
+<ol>
+<li>Well name, well name template, well list or well list template
+  <p>A template enclosed in quotes can be used to refer to multiple
+wells or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+             </li>
+
+<li>Base GOR  <p>A zero or negative value turns the GOR Penalty option
+off for the specified well(s).</p>
+                <p>UNITS: sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), Mscf/stb (<samp class="codeph">FIELD</samp>), scc/scc (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li>Maximum Rate Limit  <p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), stb/day (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+             </li>
+
+<li>Initial average GOR    <p>UNITS: sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), Mscf/stb (<samp class="codeph">FIELD</samp>), scc/scc
+(<samp class="codeph">LAB</samp>), sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+<p>The value entered here is used to calculate the first month’s
+oil rate target.</p>
+<p>This item may be defaulted. Its default value
+is set as follows:</p>
+                <ul>
+<li>If the GOR penalty option is already in use, the previous month’s
+average GOR for each well will already have been calculated. It is
+left unchanged. </li>
+
+<li>If the GOR penalty option has just been turned on, the average
+GOR has not been calculated. It is therefore set equal to the well’s
+GOR at the previous timestep. If the well has just been opened, the
+average GOR defaults to the Base GOR set in item 2. </li>
+
+</ul>
+</li>
+
+</ol>
+
+<p>End data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="section" id="wgorpen_example"><a name="wgorpen_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WGORPEN
+-- well name   base GOR   MRL    Initial average GOR
+    PROD1      2.0        1000   /
+    PROD2      1.8        1000   /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

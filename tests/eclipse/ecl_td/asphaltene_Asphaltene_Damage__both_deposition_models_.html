@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Asphaltene damage (both deposition models)"/>
+<meta name="DC.subject" content="Fluid model, Asphaltene damage porosity, Asphaltene damage permeability"/>
+<meta name="keywords" content="Fluid model, Asphaltene damage porosity, Asphaltene damage permeability"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="asphaltene_asphaltene_damage__both_deposition_models_"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Asphaltene damage (both deposition models)</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="asphaltene_asphaltene_damage__both_deposition_models_"><a name="asphaltene_asphaltene_damage__both_deposition_models_"><!-- --></a>
+<h1 class="topictitle1">Asphaltene damage (both deposition models)</h1>
+
+
+ <div>
+<p>Asphaltene damage represents the effects of asphaltene on the reservoir
+and reservoir flow.</p>
+
+<div class="section" id="asphaltene_porosity"><a name="asphaltene_porosity"><!-- --></a><h4 class="sectiontitle">Porosity</h4><p>Asphaltene
+deposition reduces the fluid volume in the reservoir. In the solid
+deposition model this effect is modeled by the solid saturation. In
+the pre-2011.1 model the porosity is reduced by asphaltene deposition:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="asphaltene.equ.01af"/>
+ <math><mrow><mi>φ</mi>
+<mo>=</mo><msub><mrow><mi>φ</mi></mrow><mrow><mn>0</mn></mrow></msub><mrow><mo>-</mo><mrow><msubsup>
+<mrow><mo>∫</mo></mrow><mrow>
+<mn>0</mn></mrow><mrow><mi>t</mi></mrow></msubsup>
+<mrow><mfrac><mrow><mi>∂</mi><mi>ε</mi></mrow><mrow>
+<mi>∂</mi><mi>t</mi></mrow></mfrac><mi>d</mi><mi>t</mi></mrow></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 243.1]
+              </td></tr></tbody></table><p>where <math>
+<mrow><mi>φ</mi></mrow></math> <sub>0</sub> is the initial
+porosity, is ε the volume fraction of asphaltene deposit.</p>
+</div>
+
+<div class="section" id="asphaltene_permeability"><a name="asphaltene_permeability"><!-- --></a><h4 class="sectiontitle">Permeability</h4><p>In the three-component deposition model, solid is deposited and the
+effects of deposition on permeability can be modeled by using a solid-dependent
+mobility multiplier. See keyword <a href="../ecl_rm/SOLIDMMS.html#SOLIDMMS">SOLIDMMS</a> or <a href="../ecl_rm/SOLIDMMC.html#SOLIDMMC">SOLIDMMC</a>.</p>
+<p>In the pre-2011.1
+model the effects of deposition on permeability can be modeled in
+one of two ways, using the <a href="../ecl_rm/ASPKDAM.html#ASPKDAM">ASPKDAM</a> keyword.</p>
+<ul>
+<li>If the rock permeability is correlated to the porosity, a reduction
+in permeability can also be taken into account using a parametrized
+power law relationship given the ratio of the permeability <em>K</em> at time <em>t </em> with respect to the initial permeability <em>K</em> <sub>0</sub>:  <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="asphaltene_83091"/>
+ <math><mrow><mfrac><mrow>
+<mi>K</mi></mrow><mrow><msub><mrow><mi>K</mi></mrow>
+<mrow><mn>0</mn></mrow></msub></mrow></mfrac><mo>=</mo>
+<msup><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<mfrac><mrow><mi>ε</mi></mrow><mrow><msub><mrow><mi>φ</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow>
+</mfrac></mrow><mo>)</mo></mrow><mrow><mi>δ</mi>
+</mrow></msup></mrow></math> 
+</td><td align="right">[Eq. 243.2]
+              </td></tr></tbody></table>  <p>where δ is a user input (based on core experiment
+data).</p>
+<p>To use this model you need to specify <samp class="codeph">PORO</samp> in the second argument of <a href="../ecl_rm/ASPHALTE.html#ASPHALTE">ASPHALTE</a> keyword, and provide the exponent with the <span class="keyword">ASPKDAM</span> keyword.</p>
+             </li>
+
+<li>Alternatively, if the rock permeability is independent of the
+porosity, or data giving a relationship between the permeability and
+the amount of asphaltene deposit are available, this can be directly
+used within a lookup table. In that case the second argument of the <span class="keyword">ASPHALTE</span> keyword should be set to “TAB” and the <span class="keyword">ASPKDAM</span> keyword takes a table as an argument where the
+first column represents the volume fraction of asphaltene deposit
+and the second column is the corresponding permeability multiplier.</li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

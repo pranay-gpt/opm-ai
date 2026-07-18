@@ -1,0 +1,334 @@
+RUNSPEC
+TITLE
+          CO2 Injection Example
+
+DIMENS
+    8    8    2  /
+
+DUALPORO
+
+WATER
+
+GAS
+
+SOLVENT
+
+FIELD
+
+COAL
+
+EQLDIMS
+    1  100    2    1   20 /
+
+TABDIMS
+    1    1   20   20    2    5 /
+
+REGDIMS
+    2    1    0    0    /
+
+WELLDIMS
+    2   13    1    2 /
+
+NUPCOL
+    4 /
+
+SMRYDIMS
+  3000 /
+
+START
+  26 'JAN' 1983  /
+
+NSTACK
+   20 /
+
+GRID      ==============================================================
+
+INIT
+
+DPGRID
+
+EQUALS
+ 'DX'       75    /    PROPERTIES COMMON TO MATRIX AND FRACTURES
+ 'DY'       75    /
+ 'DIFFMMF'  1.0   /
+ 'DZ'       30    /
+ 'PERMZ'     0    /
+
+ 'PORO'   0.005      1  8  1  8  2  2  /  FRACTURE PROPERTIES
+ 'PERMX' 500000    /
+ 'PERMY' 500000    /
+ 'NTG'  0.0  3 3 3 3   1 1 /
+ 'NTG'  1.0  3 3 3 3   2 2 /
+
+-- 10 per cent dip in the X - direction.
+
+ 'TOPS'   4000     1 1   1 8  1 2   /
+ 'TOPS'   4007.5   2 2   1 8  1 2   /
+ 'TOPS'   4015     3 3   1 8  1 2   /
+ 'TOPS'   4022.5   4 4   1 8  1 2   /
+ 'TOPS'   4030     5 5   1 8  1 2   /
+ 'TOPS'   4037.5   6 6   1 8  1 2   /
+ 'TOPS'   4045     7 7   1 8  1 2   /
+ 'TOPS'   4052.5   8 8   1 8  1 2   /
+/
+
+SIGMA
+ 0.08   /
+
+PROPS     ==============================================================
+
+DIFFCOAL
+ 0.02 1.0 /
+
+LANGMUIR
+   0.0   0.0
+  257.   0.092
+  528.   0.137
+ 1000.   0.200
+/
+--
+-- Coal quality improves in the Y direction
+--
+EQUALS
+ 'MLANG'     5   1 8  1 1  1 1 /
+ 'MLANG'     7   1 8  2 2  1 1 /
+ 'MLANG'     9   1 8  3 3  1 1 /
+ 'MLANG'    12   1 8  4 4  1 1 /
+ 'MLANG'    15   1 8  5 5  1 1 /
+ 'MLANG'    20   1 8  6 6  1 1 /
+ 'MLANG'    30   1 8  7 7  1 1 /
+ 'MLANG'    35   1 8  8 8  1 1 /
+/
+
+--
+-- The same trend in the CO2 isotherm.
+--
+COPY
+ 'MLANG' 'MLANGSLV'  1 8 1 8 1 1 /
+/
+
+MULTIPLY
+ 'MLANGSLV'  1.4  1 8 1 8 1 1 /
+/
+
+LANGSOLV
+ 0.0        0.080
+ 279.       0.092
+ 661.       0.227
+1000.       0.260
+/
+COALADS
+ 0.0  0.0   1.0
+ 0.5  0.5   0.2
+ 1.0  1.0   0.0
+/
+
+--
+-- Connate gas saturation of 10 per cent
+--
+SWFN
+  0.0    0.0   0.0
+  0.2    0.0   0.0
+  0.9    1.0   0.0
+/
+SGFN
+  0.0     0.0   0.0
+  0.1     0.0   0.0
+  1.0     1.0   0.0
+/
+SSFN
+ 0     0  0
+ 0.01  0  0
+ 1     1  1
+/
+
+PVTW       1 TABLES   13 P NODES    5 R NODES    FIELD   18:05 29 NOV 83
+  .0000000   1.00000    3.03E-06    .50000    0.00E-01 /
+
+--   PGAS   BGAS   VISGAS
+PVDG
+      400    5.9   0.013
+      800    2.95  0.0135
+     1200    1.96  0.014
+     1600    1.47  0.0145
+     2000    1.18  0.015
+     2400    0.98  0.0155
+     2800    0.84  0.016
+     3200    0.74  0.0165
+     3600    0.65  0.017
+     4000    0.59  0.0175
+     4400    0.54  0.018
+     4800    0.49  0.0185
+     5200    0.45  0.019
+     5600    0.42  0.0195 /
+
+--   PGAS   BGAS   VISGAS
+PVDS
+      400    5.9   0.013
+      800    2.95  0.0135
+     1200    1.96  0.014
+     1600    1.47  0.0145
+     2000    1.18  0.015
+     2400    0.98  0.0155
+     2800    0.84  0.016
+     3200    0.74  0.0165
+     3600    0.65  0.017
+     4000    0.59  0.0175
+     4400    0.54  0.018
+     4800    0.49  0.0185
+     5200    0.45  0.019
+     5600    0.42  0.0195 /
+
+ROCK
+ 4000.00        .30E-05 /
+
+DENSITY
+ 52.0000  64.0000   .04400 /
+
+SDENSITY
+ 0.3   /
+
+
+RPTPROPS                                         FIELD   15:56 29 NOV 83
+   -- PROPS Reporting Options
+   -- 
+   'PVTO' 'PVDO' 'PVTW' 'PVTG' 'PVDG' 'DENSITY' 'GRAVITY' 'SDENSITY' 'ROCK' 
+   'ROCKTAB' 'DIFFC' 'LANG' 
+/
+
+REGIONS
+
+EQUALS
+ 'FIPNUM' 1  1 8 1 8 1 1 /
+ 'FIPNUM' 2  1 8 1 8 2 2/
+/
+
+SOLUTION   =============================================================
+
+EQUIL
+ 4015 528 3000 0 /
+
+--
+-- Initial 40 per cent of the fracture gas is CO2
+--
+SOLVFRAC
+ 128*0.4 /
+
+RPTSOL
+-- Initialisation Print Output
+-- 
+'PRES' 'SWAT' 'SGAS' 'FIP=2' 'EQUIL' 'SSOL' 'FIPSOL=1' 'GASCONC' /
+
+SUMMARY    ==========================================================
+ALL
+FPR
+FWGR
+FGPR
+FWPR
+FNPR
+FNIR
+FCGC
+FCSC
+
+RGIP
+/
+RCGC
+ /
+RCSC
+ /
+RNIP
+ /
+
+BCGC
+ 1 1 1 /
+/
+BCSC
+ 1 1 1 /
+/
+
+WBHP
+/
+WWGR
+/
+WGPR
+/
+WNPR
+/
+TCPU
+RUNSUM
+SEPARATE
+
+SCHEDULE   ===========================================================
+
+
+RPTSCHED                                         FIELD   10:17 13 JUN 85
+'PRES' 'SWAT' 'SGAS' 'RESTART=2' 'FIP=2' 'WELLS=2' 'CPU=2' 'NEWTON=2' 'SSOL' 
+'FIPSOL=1' 'GASCONC' /
+
+--
+-- Initial period with no production
+--
+TSTEP
+ 1 9 90 /
+
+WELSPECS
+'P'  'G'   8  8  4000  'GAS'  /
+'I'  'G'   1  1  4000  'GAS'  /
+/
+
+COMPDAT                                          FIELD   18:10 29 NOV 83
+'P'    2*   2   2 'OPEN'   0  .000000  .5000  .00000   .0000 0.000E-01 /
+'I'    2*   2   2 'OPEN'   0  .000000  .5000  .00000   .0000 0.000E-01 /
+/
+
+WCONPROD                                         FIELD   16:28 19 JAN 93
+'P       ','OPEN','WRAT'     1*         1000.0      100000.00000
+     1*          1*      50.000  0.000000   1* 0.00000000/
+/
+WCONINJE
+ 'I'  'GAS'  'SHUT'  'RATE'  1000.0  /
+/
+
+---------------------
+-- Initial production
+---------------------
+TUNING
+ 0.1 8* 0.1 /
+ /
+ 1* 4 50 5 200 /
+
+TSTEP
+ 1.0 9.0 90.0 900.0 1000.0
+/
+
+-------------
+-- Inject Co2
+-------------
+WCONINJE
+ 'I'  'GAS'  'OPEN'  'RATE'  100000.0  /
+/
+
+WSOLVENT
+ 'I' 1.0 /
+/
+
+TSTEP
+ 1.0 9.0 90.0 900.00 3*1000
+/
+
+------------
+-- Blow down
+------------
+WCONPROD                                         FIELD   16:28 19 JAN 93
+'P       ','OPEN','GRAT'     1*         1000.0      100000.00000
+     1*          1*      50.000  0.000000   1* 0.00000000/
+/   
+
+WCONINJE
+ 'I'  'GAS'  'SHUT'  'RATE'  100000.0  /
+/
+
+TSTEP
+ 1.0 9.0 90.0 900.00 3*1000
+/
+END

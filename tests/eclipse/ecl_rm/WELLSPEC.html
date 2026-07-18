@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WELLSPEC"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WELLSPEC"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WELLSPEC</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WELLSPEC"><a name="WELLSPEC"><!-- --></a>
+<h1 class="keyword">WELLSPEC</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wellspec.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wellspec.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2900e45">  </th>
+
+<th valign="top" id="d2900e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2900e54"> x </th>
+
+<th valign="top" id="d2900e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2900e45 d2900e54 ">  </td>
+
+<td valign="top" headers="d2900e48 d2900e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2900e45 d2900e54 ">  </td>
+
+<td valign="top" headers="d2900e48 d2900e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2900e45 d2900e54 ">  </td>
+
+<td valign="top" headers="d2900e48 d2900e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2900e45 d2900e54 ">  </td>
+
+<td valign="top" headers="d2900e48 d2900e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2900e45 d2900e54 ">  </td>
+
+<td valign="top" headers="d2900e48 d2900e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2900e45 d2900e54 ">  </td>
+
+<td valign="top" headers="d2900e48 d2900e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2900e45 d2900e54 ">  </td>
+
+<td valign="top" headers="d2900e48 d2900e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2900e45 d2900e54 "> x </td>
+
+<td valign="top" headers="d2900e48 d2900e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword introduces a new well, specifying the name and position
+of the well head, the BHP reference depth and the separator used.</p>
+
+<p>The keyword is retained for back-compatibility; you are encouraged
+to use keyword <a href="WELSPECS.html#WELSPECS"> WELSPECS</a> instead, which is compatible with both simulators.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the items of data described below, and each terminated with a slash
+(/).</p>
+
+<p>The records can be terminated early with a slash, the remaining
+items taking default values. Defaults can also be specified by a null
+repeat count of the form n*, where n is the number of consecutive
+items to be defaulted.</p>
+
+<p>The set of records is ended by a blank record, containing only
+a slash.</p>
+
+<ol>
+<li> The name of the well. <p>A character string of up to 8 letters.
+This must be specified and non-blank.</p>
+ </li>
+
+<li> The name of the group to which the well belongs. <p>DEFAULT: <samp class="codeph">FIELD</samp> </p>
+ </li>
+
+<li>The I-index of the header.</li>
+
+<li>The J-index of the header</li>
+
+<li> The bottom hole pressure reference depth. <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+ <p>If this quantity is defaulted,
+the reference depth is set equal to the center depth of the grid block
+containing the topmost connection in the well</p>
+ </li>
+
+<li> The name of the separator to which the well is connected. <p>A separator need only be nominated in the compositional case for
+production wells. The separator nominated must have been previously
+defined using the <a href="SEPCOND.html#SEPCOND">  SEPCOND</a> keyword.</p>
+ <div class="note"><span class="notetitle">Note:</span> <span class="notebody">If a separator is not specified here
+or with <a href="WSEPCOND.html#WSEPCOND"> WSEPCOND</a>, and the well can trace its parentage to a group which has a default
+separator specified (see <span class="keyword">SEPCOND</span>), then this will
+be used. If this is not the case, the separator conditions specified
+with <a href="FIELDSEP.html#FIELDSEP"> FIELDSEP</a> are
+used. If <span class="keyword">FIELDSEP</span> is not entered, a single flash
+to standard conditions is used.</span></div>
+ </li>
+
+<li> Fluids-in-place number to obtain reservoir conditions used in
+calculating a well's voidage rate. This is only required if the crossflow
+well model is being used. 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">If 0 is entered, </td>
+
+<td valign="top">the average hydrocarbon conditions in the field are used.</td>
+
+</tr>
+
+<tr>
+<td valign="top">If a negative value is entered, </td>
+
+<td valign="top">the region number is set equal to the fluids-in place region
+number of the lowest grid block in which the well is completed.</td>
+
+</tr>
+
+<tr>
+<td valign="top">If a positive value is entered,</td>
+
+<td valign="top">this is interpreted as the required fluids-in-place region
+number. A warning message is printed if the well is not completed
+in a grid block within that region.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: 0</p>
+ </li>
+
+</ol>
+
+<div class="section" id="wellspec_example"><a name="wellspec_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>Well P, in
+group G, is located in cell I=2,J=2, with a BHP reference depth of
+8345 ft, and feeds separator SepA1.</p>
+<pre><code>WELLSPEC
+ P G 2 2 8345 SepA1 /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

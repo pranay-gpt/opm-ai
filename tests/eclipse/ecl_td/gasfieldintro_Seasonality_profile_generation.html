@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Seasonality profile generation"/>
+<meta name="DC.subject" content="Normalizing profile factors, Gas field operations and reports, Gas field operations, Seasonality profile generation"/>
+<meta name="keywords" content="Normalizing profile factors, Gas field operations and reports, Gas field operations, Seasonality profile generation"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gasfieldintro_seasonality_profile_generation"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Seasonality profile generation</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="gasfieldintro_seasonality_profile_generation"><a name="gasfieldintro_seasonality_profile_generation"><!-- --></a>
+<h1 class="topictitle1">Seasonality profile generation</h1>
+
+
+ <div>
+<p>To use this facility, you enter 12 profile factors, one for each month starting
+with January, using the keyword <a href="../ecl_rm/SWINGFAC.html#SWINGFAC">   SWINGFAC</a>. The simulation
+is then advanced one contract period at a time, using the keyword <a href="../ecl_rm/GASYEAR.html#GASYEAR">GASYEAR</a> or <a href="../ecl_rm/GASPERIO.html#GASPERIO">GASPERIO</a> instead of <a href="../ecl_rm/TIME.html#TIME">TIME</a>, <a href="../ecl_rm/TSTEP.html#TSTEP">TSTEP</a> or <a href="../ecl_rm/DATES.html#DATES">DATES</a>. The contract period
+is assumed to start on the current date at which <span class="keyword">GASYEAR</span> or <span class="keyword">GASPERIO</span> is read. ECLIPSE flags an error if
+this is not the first day of a month. During the contract period,
+the monthly sales gas production rate target for the field is set
+equal to the DCQ multiplied by the month’s profile factor. At
+the end of the contract period, ECLIPSE writes an output report and
+dump a <span class="keyword">RESTART</span> file if required.</p>
+
+<p>When the profile factor, and hence the production rate, changes
+from one month to the next, ECLIPSE automatically limits the timestep
+to the end of the month. Thus ECLIPSE models the different flow rate
+periods individually, rather than taking longer timesteps with an
+average rate. There is also an option to limit the timestep to the
+end of every month irrespective of whether the rate changes or not.
+This ensures that there is at least one entry in the <span class="keyword">SUMMARY</span> file for each month. In ECLIPSE 100, timesteps limited to the
+end of the month can be identified by the mnemonic '<samp class="codeph">EMTH</samp>' in the <span class="keyword">PRINT</span> file.</p>
+
+<p>The field’s production rate is constrained to meet the month’s
+target by one of the two standard methods for group control - guide
+rate control or prioritization. By default, ECLIPSE automatically
+places the FIELD under guide rate control on reading the <span class="keyword">GASYEAR</span> or <span class="keyword">GASPERIO</span> keyword, and set
+its target gas rate each month from the DCQ and the swing or profile
+factors. You need to enter <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a> only if the field has limits on other phases, or if any groups
+have rate limits or guide rates. If on the other hand you wish the
+field’s target rate to be met by prioritization instead of guide
+rate control, you must indicate this by entering the keyword <a href="../ecl_rm/GCONPRI.html#GCONPRI">GCONPRI</a>. Place the FIELD under
+prioritization and give it a gas rate target. Any valid rate will
+do if you are going to use <span class="keyword">GASYEAR</span> or <span class="keyword">GASPERIO</span>, as the target is reset at each month in the Contract
+Period to the DCQ multiplied by the month’s swing or profile
+factor. The default priority coefficients must also be set with keyword <a href="../ecl_rm/PRIORITY.html#PRIORITY">PRIORITY</a>. If at a later date
+you wish to revert to guide rate control, place the FIELD under '<samp class="codeph">GRAT</samp>' control in keyword <span class="keyword">GCONPROD</span>, giving
+it a nominal gas rate target.</p>
+
+<p>The profile factors can be changed, if required, at the start of
+any Contract Period by entering the keyword <a href="../ecl_rm/SWINGFAC.html#SWINGFAC">SWINGFAC</a> again.</p>
+
+<div class="section" id="gasfieldintro_normalizing_the_profile_factors"><a name="gasfieldintro_normalizing_the_profile_factors"><!-- --></a><h4 class="sectiontitle">Normalizing the profile factors</h4><p>The Annual Contracted Quantity
+(ACQ) is related to the Daily Contracted Quantity by:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gasfieldintro.equ.004d"/>
+ <math><mrow><mi>A</mi>
+<mi>C</mi><mi>Q</mi></mrow><mo>=</mo><mn>365.25</mn>
+<mo>×</mo><mrow><mi>D</mi><mi>C</mi><mi>Q</mi>
+</mrow></math> 
+</td><td align="right">[Eq. 603.1]
+              </td></tr></tbody></table><p>The number 365.25 is the average number of days in a
+year, with a leap year every fourth year.</p>
+<p>In order to produce
+the required ACQ for a given DCQ, the profile factors should be normalized
+such that the sum over all months of {profile factor × number of days
+in month} = 365.25, with February allocated 28.25 days. If this "normalization
+requirement" is obeyed, then when leap years are taken into
+account every fourth year, the average annual production at a constant
+DCQ is DCQ × 365.25, which corresponds with the definition of ACQ
+given above.</p>
+<p>When the <a href="../ecl_rm/SWINGFAC.html#SWINGFAC">SWINGFAC</a> keyword is entered, ECLIPSE checks that the profile factors
+obey this normalization requirement, and issue a warning if they do
+not.</p>
+</div>
+
+<div class="section" id="gasfieldintro_operations_and_reports_during_the_contract_period"><a name="gasfieldintro_operations_and_reports_during_the_contract_period"><!-- --></a><h4 class="sectiontitle">Operations and reports during the contract period</h4><p>The keyword <a href="../ecl_rm/GASYEAR.html#GASYEAR">GASYEAR</a> or <a href="../ecl_rm/GASPERIO.html#GASPERIO">GASPERIO</a> advances the simulation through one or more complete contract
+periods. Well operations can be performed in the usual manner at the
+end of a contract period, and a printed report is generated at the
+end of each contract period depending on the <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a> or <a href="../ecl_rm/RPTPRINT.html#RPTPRINT">RPTPRINT</a> switches. But in order
+to perform well operations or request printed reports during a contract
+period, an "Annual Scheduling File" must be set up.</p>
+<p>To set up an annual scheduling file, enter the keywords defining
+the required operations before the <span class="keyword">GASYEAR</span> or <span class="keyword">GASPERIO</span> keyword on the input data file, bracketed with
+the keywords <a href="../ecl_rm/GASBEGIN.html#GASBEGIN">GASBEGIN</a> and <a href="../ecl_rm/GASEND.html#GASEND">  GASEND</a>. When ECLIPSE reads the keyword <span class="keyword">GASBEGIN</span> during the simulation, it copies the subsequent keywords up to <span class="keyword">GASEND</span> to a separate file that it sets up automatically.
+The times within each year at which the operations should be performed
+are set with the keyword <a href="../ecl_rm/GASMONTH.html#GASMONTH">  GASMONTH</a>.</p>
+<p>During each subsequent contract period, ECLIPSE reads
+the keywords from this file and performs the required operations at
+the appropriate times. The same operations will be performed each
+year, until you set up a new Annual Scheduling File. See the keyword <span class="keyword">GASBEGIN</span> for further details of this facility.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

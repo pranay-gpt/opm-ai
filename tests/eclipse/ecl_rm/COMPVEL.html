@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="COMPVEL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="COMPVEL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>COMPVEL</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="COMPVEL"><a name="COMPVEL"><!-- --></a>
+<h1 class="keyword">COMPVEL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="compvel.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="compvel.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d320e45"> x </th>
+
+<th valign="top" id="d320e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d320e54">  </th>
+
+<th valign="top" id="d320e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d320e45 d320e54 ">  </td>
+
+<td valign="top" headers="d320e48 d320e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d320e45 d320e54 ">  </td>
+
+<td valign="top" headers="d320e48 d320e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d320e45 d320e54 ">  </td>
+
+<td valign="top" headers="d320e48 d320e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d320e45 d320e54 ">  </td>
+
+<td valign="top" headers="d320e48 d320e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d320e45 d320e54 ">  </td>
+
+<td valign="top" headers="d320e48 d320e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d320e45 d320e54 ">  </td>
+
+<td valign="top" headers="d320e48 d320e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d320e45 d320e54 ">  </td>
+
+<td valign="top" headers="d320e48 d320e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d320e45 d320e54 "> x </td>
+
+<td valign="top" headers="d320e48 d320e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p><span class="keyword">COMPVEL</span> is used to reset the top and bottom
+depths of local grid well connections, to allow for partial penetration
+within a grid block when calculating the phase relative permeabilities
+at the connection. The skin factor can also be adjusted to allow for
+partial penetration.</p>
+
+<p>In runs using the vertical equilibrium option (keyword <a href="VE.html#VE"> VE</a> in the <span class="keyword">RUNSPEC</span> section), the relative permeabilities at the well connection depend
+upon the connection’s top and bottom depths and the fluid contact
+depths. Unless modified with the <span class="keyword">COMPVEL</span> keyword,
+the top and bottom depths of each connection are set to the depths
+of the center of the top and bottom faces of the local grid block
+containing the connection, giving full penetration of the grid block.</p>
+
+<p>If the <span class="keyword">COMPVEL</span> keyword is entered when the vertical
+equilibrium option is <strong>not</strong> in use, the top and bottom depths
+are automatically converted into scaled saturation table endpoints,
+which are then treated as if they had been entered with the <a href="COMPRPL.html#COMPRPL"> COMPRPL</a> keyword. The
+conversion is performed by assuming a VE-type segregation of phases
+within the grid block (see <a href="comprp_Representing_the_effects_of_partial_penetration.html#comprp_representing_the_effects_of_partial_penetration">  "Representing the effects of partial penetration"</a>  in the <a href="COMPRP.html#COMPRP"> COMPRP</a> keyword).  Note
+that, as with the <span class="keyword">COMPRPL</span> keyword, the <span class="keyword">COMPVEL</span>  keyword cannot be used in non-VE runs with the
+Hysteresis option on if the imbibition and drainage table numbers
+are different in any connection. There is also a restriction on using <span class="keyword">COMPVEL</span>  in non-VE runs that are ‘fast’ restarts
+(see keyword <a href="RESTART.html#RESTART"> RESTART</a>). The required grid block geometry data is only stored on the <samp class="codeph">SAVE</samp> file if the base run contained either keyword <a href="COMPVE.html#COMPVE"> COMPVE</a> or <span class="keyword">COMPVEL</span>. So if you wish to use <span class="keyword">COMPVEL</span> during a subsequent
+‘fast’ restart, you must include either of these keywords
+in your base run, followed by just a slash if you don’t need
+to set any partial penetration data at that time. The restriction
+does not apply to ‘flexible’ restarts, as the required
+data is generated from the <span class="keyword">GRID</span> section.</p>
+
+<p><span class="keyword">COMPVEL</span> is followed by any number of records,
+described below, each record terminated by a slash (/). A record may
+be terminated early at any item; the remaining items will assume their
+default values. The set of records must end with a blank record, containing
+only a slash (/).</p>
+
+<p>Each record can contain some or all of the following items:</p>
+
+<ol>
+<li> Well name, well name template, well list or well list template <p>A template enclosed in quotes can be used to refer to multiple wells
+or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+</li>
+
+<li> Name of local grid containing the connections specified in this
+record <p>If the local grid containing the well is not amalgamated
+(using keyword <a href="AMALGAM.html#AMALGAM"> AMALGAM</a>), this item may be defaulted or set to a blank string. The
+local grid name then defaults to the well’s local grid named
+in keyword <a href="WELSPECL.html#WELSPECL"> WELSPECL</a>.</p>
+<p>The connection locations in items 3 - 6 refer to their coordinates
+within this local grid.</p>
+</li>
+
+<li> I - location of connecting grid block(s). <p>DEFAULT: 0 (Allows
+any I-value)</p>
+</li>
+
+<li> J - location of connecting grid block(s) <p>DEFAULT: 0 (Allows
+any J-value)</p>
+</li>
+
+<li> K - location of upper connecting block in this set of data. <p>DEFAULT: 0 (Corresponds to top connection of well)</p>
+</li>
+
+<li> K - location of lower connecting block in this set of data. <p>DEFAULT: 0 (Corresponds to bottom connection of well)</p>
+<p>The following
+data quantities are applied to all the connections in the well that
+match the location indices specified in items 3 - 6. But if a location
+index is defaulted to zero, it plays no part in selecting the connections
+to which the following data applies. Thus if the I and J location
+indices are defaulted to zero, the data is applied to all connections
+in the well that are located between layers K1 and K2 specified in
+items 5 and 6. If all four location indices are defaulted, the data
+is applied to all the connections in the well.</p>
+</li>
+
+<li> Saturation table number for connection relative permeabilities. <p>The end-points of the specified saturation table are used to set
+the relative permeabilities in each saturation zone, to obtain the
+fluid mobilities at the well connection. If the table number is zero
+or positive, it overrides the saturation table number specified in
+keyword <a href="COMPDATL.html#COMPDATL"> COMPDATL</a>. If the number is zero, the fluid mobilities at the connection are
+calculated using the same saturation table as the grid block containing
+the connection.</p>
+<p>If the number is negative, the saturation table
+number specified in keyword <span class="keyword">COMPDATL</span> is used.</p>
+<p>DEFAULT: Negative</p>
+</li>
+
+<li> <samp class="codeph">CVEFRAC</samp> Fraction of vertical equilibrium curves
+to be used in calculating relative permeabilities for the connection. <p>If <samp class="codeph">CVEFRAC</samp> is 1.0, relative permeabilities are derived
+using a vertical equilibrium model, replacing the rock curve that
+applies to the connection. This assumes fully segregated flow into
+the connection. The end point values used in this Vertical Equilibrium
+model are taken from the table used for this connection, which may
+have been specified directly in item 7 above.</p>
+<p>If <samp class="codeph">CVEFRAC</samp> is 0.0, the rock curve alone will be taken: this should be used
+if a well pseudo has been generated, or if fully dispersed flow into
+the well is assumed. Again, the table used may have been specified
+directly in item 7.</p>
+<p>If <samp class="codeph">CVEFRAC</samp> takes a value
+between 0.0 and 1.0, a combination of the two above extreme cases
+results: a fraction (1.0- <samp class="codeph">CVEFRAC</samp>) of the rock curve
+and <samp class="codeph">CVEFRAC</samp> of the vertical equilibrium curve is
+taken.</p>
+<p>If <samp class="codeph">CVEFRAC</samp> &lt; 0.0, the quantity is
+defaulted to the vertical equilibrium fraction for the grid block,
+specified in keyword <a href="VEFRAC.html#VEFRAC"> VEFRAC</a>. If the <span class="keyword">VEFRAC</span> keyword was not specified,
+the default <span class="keyword">VEFRAC</span> value of 1.0 is used.</p>
+<p>This item is ignored in non-VE runs.</p>
+<p>DEFAULT: Negative</p>
+<p>(The value is taken from <span class="keyword">VEFRAC</span>.)</p>
+</li>
+
+<li> <samp class="codeph">DTOP</samp> The top depth of the top connection in the
+set matching the location indices in items 3 - 6. <p>The value should
+not be less than the depth of the top-most corner of the connecting
+grid block, or the depth of the top of the grid block at the well’s
+position (set in item 13).</p>
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: Depth of the center of the top face
+of the connecting grid block.</p>
+</li>
+
+<li> <samp class="codeph">DBOT</samp> he bottom depth of the bottom connection
+in the set matching the location indices in items 3 - 6. <p>The value
+should not exceed the depth of the bottom-most corner of the connecting
+grid block, or the depth of the bottom of the grid block at the well’s
+position (set in item 14).</p>
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: Depth of the center of the bottom
+face of the connecting grid block.</p>
+</li>
+
+<li> Flag to recalculate the skin factor taking account of partial
+penetration 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top"> The partial penetration skin factor will be calculated from
+Odeh’s formula (see keyword <a href="COMPVE.html#COMPVE"> COMPVE</a>), overriding any value entered in keyword <a href="COMPDATL.html#COMPDATL"> COMPDATL</a>. The connection
+transmissibility factor is then recalculated. The well bore diameter
+must be set in keyword <span class="keyword">COMPDATL</span>. The skin factor
+and transmissibility factor for the connection is also recalculated
+each time there is a plug-back (see keyword <a href="WPLUG.html#WPLUG"> WPLUG</a>). Any skin due to other causes (for
+example damage or stimulation) should be entered in item 12 of this
+keyword.<p>Note that subsequent use of <span class="keyword">COMPDATL</span> overrides the calculated skin with the value entered in that keyword</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top"> The skin factor and connection transmissibility factor is
+not changed from their values set in <span class="keyword">COMPDATL</span>.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">NO</samp> </p>
+</li>
+
+<li>  <math><msub><mi>S</mi>
+<mi>d</mi></msub></math>  Skin factor due to damage (+ve)
+or stimulation (-ve). <p>This is used when recalculating the skin
+factor to take account of partial penetration, if item 11 above is
+set to <samp class="codeph">YES</samp>. It is added to the partial penetration
+skin factor to give the total mechanical skin. If the perforations
+penetrate the full thickness of the grid block, the partial penetration
+skin factor is zero and the total mechanical skin has the value entered
+here.</p>
+<p>DEFAULT: 0.0</p>
+</li>
+
+<li> <samp class="codeph">GTOP</samp> Depth of the top of the grid block at the
+position of the well connection. This is only relevant if the skin
+factor is to be recalculated for partial penetration, and the well
+is located in an off-center position in a sloping grid block. <p>The
+value should not be less than the depth of the top-most corner of
+the connecting grid block.</p>
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: Depth of the center of the top face
+of the connecting grid block.</p>
+</li>
+
+<li> <samp class="codeph">GBOT</samp> Depth of the bottom of the grid block at
+the position of the well connection. This is only relevant if the
+skin factor is to be recalculated for partial penetration, and the
+well is located in an off-center position in a sloping grid block. <p>The value should not exceed the depth of the bottom-most corner of
+the connecting grid block.</p>
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: Depth of the center of the bottom
+face of the connecting grid block.</p>
+</li>
+
+</ol>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> If <samp class="codeph">DTOP</samp> and <samp class="codeph">DBOT</samp> are very close together, the fluid mobilities at the well connection
+are very sensitive to the contact depths or grid block saturations,
+which may cause convergence problems. This should be particularly
+noted when applying the keyword to horizontal wells.</div>
+
+<p>See also the keywords <a href="COMPVE.html#COMPVE"> COMPVE</a>, <a href="COMPRP.html#COMPRP"> COMPRP</a> and <a href="COMPRPL.html#COMPRPL"> COMPRPL</a>.</p>
+
+<div class="section" id="compvel_example"><a name="compvel_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>The first line
+of data sets the saturation table number, vertical equilibrium fraction,
+top-of-perforation depth and bottom-of perforation depth, for the
+connection(s) belonging to the well PROD1 in the local grid LGR1.
+The skin factor and connection transmissibility factor will be recalculated
+to account for partial penetration. There is no skin due to damage.</p>
+<p>The second line of data sets the top-of-perforation depth of the
+layer-3 connection of well PROD2 in the local grid LGR2. The skin
+factor and connection transmissibility factor remain unchanged at
+their original values.</p>
+<pre><code>COMPVEL
+ PROD1 LGR1 4*  3 1.0  2010  2050  'YES' /
+ PROD2 LGR2 2*  3 3  2*      2000 /
+ /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

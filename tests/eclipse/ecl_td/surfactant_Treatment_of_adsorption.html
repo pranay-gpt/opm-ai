@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Treatment of adsorption (ECLIPSE 100)"/>
+<meta name="DC.subject" content="Surfactant model adsorption, Surfactant, Adsorption"/>
+<meta name="keywords" content="Surfactant model adsorption, Surfactant, Adsorption"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="surfactant_treatment_of_adsorption"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Treatment of adsorption (ECLIPSE 100)</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="surfactant_treatment_of_adsorption"><a name="surfactant_treatment_of_adsorption"><!-- --></a>
+<h1 class="topictitle1">Treatment of adsorption (ECLIPSE 100)</h1>
+
+
+ <div>
+<p>The adsorption of surfactant is assumed to be instantaneous, and
+the quantity adsorbed is a function of the surrounding surfactant
+concentration. You have to supply an adsorption isotherm defined 
+as a function of surfactant concentration (see the <a href="../ecl_rm/SURFADS.html#SURFADS">SURFADS</a> keyword). As an alternative
+to <span class="keyword">SURFADS</span>, the surfactant adsorption can be specified
+using keyword <a href="../ecl_rm/ADSORP.html#ADSORP">ADSORP</a> with <span class="keyword">SURFACT</span> as an argument. <span class="keyword">ADSORP</span> specifies coefficients for a generic, analytical
+adsorption isotherm which allows for dependencies of adsorption on
+rock permeability and effective brine salinity. When used in conjunction
+with the Multi-Component Brine Model, an effective salinity for surfactant
+can be calculated which can then be used in the adsorption isotherm.
+See <a href="brinetra_Brine_Tracking.html#brinetra_brine_tracking"> "Brine Tracking"</a> for information on the Multi-Component Brine
+Model and the calculation of effective salinity for surfactant. See
+the <span class="keyword">ADSORP</span> keyword for information on the functional
+dependence of adsorption on salinity.</p>
+
+<p>The quantity of surfactant adsorbed on to the rock is given by:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.equ.00c0"/>
+ <math><mrow><mtext>Mass
+of adsorbed surfactant</mtext><mo>=</mo><mtext>PORV</mtext>
+<mo>⋅</mo><mfrac><mrow><mn>1</mn><mrow><mo>-</mo>
+<mi>φ</mi></mrow></mrow><mrow><mi>φ</mi></mrow>
+</mfrac><mo>⋅</mo><mtext>MD</mtext><mo>⋅</mo><mrow>
+<mtext>CA</mtext><mo>⁡</mo><mrow><mo>(</mo><mrow>
+<msub><mrow><mi>C</mi></mrow><mrow><mtext>surf</mtext>
+</mrow></msub></mrow><mo>)</mo></mrow></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 469.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mtext>PORV</mtext>
+</math> </td>
+
+<td valign="top">is the pore volume of the cell</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>φ</mi></math>  </td>
+
+<td valign="top">is the porosity</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mtext>MD</mtext>
+</math> </td>
+
+<td valign="top">is the mass density of the rock (see <a href="../ecl_rm/SURFROCK.html#SURFROCK">SURFROCK</a> keyword)</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><mtext>CA</mtext>
+<mo>⁡</mo><mrow><mo>(</mo><mrow><msub><mrow><mi>C</mi></mrow><mrow><mtext>surf</mtext></mrow></msub>
+</mrow><mo>)</mo></mrow></mrow></math> </td>
+
+<td valign="top"> is the adsorption isotherm as a function of local surfactant
+concentration in solution.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>There are two adsorption models that can be selected, using the
+first argument of <span class="keyword">SURFROCK</span>. The first model ensures
+that each grid block retraces the adsorption isotherm as the surfactant
+concentration falls in the cell. The second model assumes that the
+adsorbed surfactant concentration on the rock may not decrease with
+time and hence does not allow for any de-adsorption.</p>
+
+<p>In the present version of ECLIPSE the adsorption concentrations
+are updated explicitly for the surfactant concentration. In the future
+it may be necessary to implement the adsorption implicitly.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

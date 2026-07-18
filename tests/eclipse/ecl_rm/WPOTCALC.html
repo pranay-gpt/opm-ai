@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WPOTCALC"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WPOTCALC"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WPOTCALC</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WPOTCALC"><a name="WPOTCALC"><!-- --></a>
+<h1 class="keyword">WPOTCALC</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wpotcalc.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wpotcalc.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d3028e45">                         x                   
+   </th>
+
+<th valign="top" id="d3028e48">                         ECLIPSE 100         
+             </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d3028e54">   </th>
+
+<th valign="top" id="d3028e57">                         ECLIPSE 300         
+             </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d3028e45 d3028e54 ">                         x                   
+   </td>
+
+<td valign="top" headers="d3028e48 d3028e57 ">                         RUNSPEC             
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3028e45 d3028e54 ">   </td>
+
+<td valign="top" headers="d3028e48 d3028e57 ">                         GRID                
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3028e45 d3028e54 ">   </td>
+
+<td valign="top" headers="d3028e48 d3028e57 ">                         EDIT                
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3028e45 d3028e54 ">   </td>
+
+<td valign="top" headers="d3028e48 d3028e57 ">                         PROPS               
+       </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3028e45 d3028e54 ">   </td>
+
+<td valign="top" headers="d3028e48 d3028e57 ">                         REGIONS             
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3028e45 d3028e54 ">   </td>
+
+<td valign="top" headers="d3028e48 d3028e57 ">                         SOLUTION            
+          </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3028e45 d3028e54 ">   </td>
+
+<td valign="top" headers="d3028e48 d3028e57 ">                         SUMMARY             
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3028e45 d3028e54 ">   </td>
+
+<td valign="top" headers="d3028e48 d3028e57 ">                         SCHEDULE            
+          </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword controls options about the calculation of well potentials.</p>
+
+<p> By default, since 2007.1, potential calculations for shut and
+stopped wells are always performed. If you do not require these potentials,
+then the calculation can  be turned off. An example of a situation
+where the calculation of  shut and stopped well potentials is not
+required is when a stopped  well is segmented all the way to the surface
+(for example to look  at the phase segregation process after the well
+is stopped). Such  a well cannot operate at a constant THP and so
+the shut well potential  calculation will not converge.</p>
+
+<p>Shut and stopped well calculations are necessary in the following
+ situations:</p>
+
+<ul>
+<li>When the well is in a priority drilling queue (see <a href="WDRILPRI.html#WDRILPRI"> WDRILPRI</a>) or when the
+ prioritization option is used (see <a href="PRIORITY.html#PRIORITY"> PRIORITY</a>).</li>
+
+<li>When any group, well or connection requests a potential summary
+ vector, for example using the <span class="keyword">FOPP</span> keyword in
+the <a href="SUMMARY.html#SUMMARY"> SUMMARY</a> section.</li>
+
+<li>When an action uses a potential (see <a href="ACTIONX.html#ACTIONX"> ACTIONX</a>). <p>The calculation of shut and
+ stopped well potentials will be performed regardless of the <span class="keyword">WPOTCALC</span> setting in these necessary situations.</p>
+   
+                         </li>
+
+<li>When item 10 of <a href="WECON.html#WECON"> WECON</a> is set to POTN.</li>
+
+<li>When lift gas optimisation is needed.</li>
+
+</ul>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">This is not an exhaustive list; if E100 needs the results of
+well potential calculations, they will be carried out.</span></div>
+
+<p> By default, during the potential calculations, the segment volumes
+in multisegment wells are made very small. Occasionally this can lead
+to convergence problems in the well which may be cured by including
+the segment volumes at the expense of including some small transient
+effects in the potential calculation.</p>
+
+<p>The keyword is followed by up to 2 items of data, terminated with
+a  slash (/).</p>
+
+<ol>
+<li>Flag indicating whether well potential calculations should be
+ forced for all wells, regardless of whether they are shut or stopped. 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top">Shut and stopped well potentials are not calculated unless
+necessary.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top">Shut and stopped well potentials are always calculated.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>(The word may be abbreviated; only the first character
+ is significant)</p>
+                <p>DEFAULT: <samp class="codeph">YES</samp> </p>
+</li>
+
+<li>Flag indicating whether segment volumes should be
+used in the potential calculations of multisegment wells. 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"><p> <samp class="codeph">NO</samp> </p>
+</td>
+
+<td valign="top"><p>User input segment volumes will not be used.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"><p> <samp class="codeph">YES</samp> </p>
+</td>
+
+<td valign="top"><p>User input segment volumes will be used.</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>(The word may be abbreviated; only the first character
+ is significant)</p>
+                <p>DEFAULT: <samp class="codeph">NO</samp> </p>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Turning off the additional calculations of well potentials using
+ this keyword is equivalent to setting <a href="OPTIONS.html#options.101">item 101</a> in <span class="keyword">OPTIONS</span> to a non-zero multiple of 3.</span></div>
+
+<div class="section" id="wpotcalc_example"><a name="wpotcalc_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WPOTCALC
+
+ NO /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

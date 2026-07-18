@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Notes"/>
+<meta name="DC.subject" content="DYNAMICR"/>
+<meta name="keywords" content="DYNAMICR"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="dynamicr_notes"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Notes</title>
+</head>
+<body>
+
+
+<div class="nested0" id="dynamicr_notes"><a name="dynamicr_notes"><!-- --></a>
+<h1 class="topictitle1">Notes</h1>
+
+
+ <div>
+<ul>
+<li> The order of the items in the quantities is similar to the way
+summary mnemonics are defined, that is the mnemonic is the first item
+and it is then followed by a well or group name for example. </li>
+
+<li> No checks are in place on the type of quantities that are compared
+in a condition. So for example, a condition on this distance between
+two grid blocks being less than a connection’s water cut would be
+allowed. </li>
+
+<li> Unlike <a href="ACTIONX.html#ACTIONX"> ACTIONX</a>, details of whether conditions are met are not written to file -
+since they are calculated for every block. </li>
+
+<li> Full checking of the keywords entered with a <span class="keyword">DYNAMICR</span> keyword cannot be performed until the action is actually implemented,
+since it is possible to use wild cards in many of the keywords. However,
+before a simulation run is attempted the data can be run in <a href="NOSIM.html#NOSIM"> NOSIM</a> mode. This then does
+whatever checks it can on the keywords within any keyword blocks that
+have been defined. All the most common types of ‘grammatical’ and
+typographical errors will be found, but errors resulting from wild
+cards feeding inappropriate well/group names to keywords are not found. </li>
+
+<li> When using <span class="keyword">DYNAMICR</span> inside an <span class="keyword">ACTIONX</span> keyword, it is important to note that no keywords inside an <span class="keyword">ACTIONX</span> keyword are processed until the following timestep
+is run. This means that, for instance, it is not possible to specify
+a dynamic region in an <a href="ACTIONR.html#ACTIONR"> ACTIONR</a> keyword immediately following the <span class="keyword">ACTIONX</span>  keyword in which it is defined. </li>
+
+<li> The <samp class="codeph">DYNREG</samp> argument has been added to the <a href="RPTRST.html#RPTRST"> RPTRST</a> keyword in both
+the <span class="keyword">SOLUTION</span> and <span class="keyword">SCHEDULE</span> sections.
+This outputs the cell indices corresponding to the dynamic regions
+specified using the <span class="keyword">DYNAMICR</span> keyword. </li>
+
+<li> When running in <a href="NOSIM.html#NOSIM"> NOSIM</a> mode, the block-by-block calculations of region numbers are
+not performed for speed reasons, so values output to the restart file
+with the <samp class="codeph">DYNREG</samp> argument are not meaningful. </li>
+
+</ul>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

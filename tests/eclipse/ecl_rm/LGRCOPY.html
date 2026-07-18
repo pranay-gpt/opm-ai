@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="LGRCOPY"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="LGRCOPY"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>LGRCOPY</title>
+</head>
+<body>
+
+
+<div class="nested0" id="LGRCOPY"><a name="LGRCOPY"><!-- --></a>
+<h1 class="keyword">LGRCOPY</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="lgrcopy.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="lgrcopy.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1242e45"> x </th>
+
+<th valign="top" id="d1242e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1242e54"> x </th>
+
+<th valign="top" id="d1242e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1242e45 d1242e54 "> x </td>
+
+<td valign="top" headers="d1242e48 d1242e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1242e45 d1242e54 "> x </td>
+
+<td valign="top" headers="d1242e48 d1242e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1242e45 d1242e54 "> x </td>
+
+<td valign="top" headers="d1242e48 d1242e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1242e45 d1242e54 ">  </td>
+
+<td valign="top" headers="d1242e48 d1242e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1242e45 d1242e54 ">  </td>
+
+<td valign="top" headers="d1242e48 d1242e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1242e45 d1242e54 ">  </td>
+
+<td valign="top" headers="d1242e48 d1242e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1242e45 d1242e54 ">  </td>
+
+<td valign="top" headers="d1242e48 d1242e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1242e45 d1242e54 ">  </td>
+
+<td valign="top" headers="d1242e48 d1242e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword requests an option for processing the local grid refinement
+data. It allows the LGR rock properties to be automatically inherited
+from their global host cells when the LGR is defined, instead of at
+the end of processing for the <span class="keyword">GRID</span> section. This
+in turn allows you to use an operator keyword on the LGR cells without
+the need to set LGR cells first.</p>
+
+<p>If the <span class="keyword">LGRCOPY</span> keyword is present in the <span class="keyword">RUNSPEC</span> section, this option will apply to every LGR in
+the model. If individual LGRs request this option, then this keyword
+can be used inside the relevant <a href="CARFIN.html#CARFIN"> CARFIN</a> / <a href="ENDFIN.html#ENDFIN"> ENDFIN</a>, <a href="RADFIN.html#RADFIN"> RADFIN</a> / <span class="keyword">ENDFIN</span>, <a href="REFINE.html#REFINE"> REFINE</a> / <span class="keyword">ENDFIN</span> pair.</p>
+
+<p>This keyword has no associated data.</p>
+
+<div class="section" id="lgrcopy_treatment_without_lgrcopy"><a name="lgrcopy_treatment_without_lgrcopy"><!-- --></a><h4 class="sectiontitle">Treatment without
+LGRCOPY</h4><p>If <span class="keyword">LGRCOPY</span> is not specified,
+values of porosity, permeability and so on, are copied to local grid
+cells from the global host cells at the end of processing the <span class="keyword">GRID</span> section. In most cases this is adequate, but it is
+also possible to define properties directly for some, or all, of the
+cells within a local grid by specifying grid arrays between the <a href="CARFIN.html#CARFIN"> CARFIN</a> / <a href="ENDFIN.html#ENDFIN"> ENDFIN</a>, <a href="RADFIN.html#RADFIN"> RADFIN</a>, <a href="RADFIN4.html#RADFIN4"> RADFIN4</a> / <span class="keyword">ENDFIN</span> or <a href="REFINE.html#REFINE"> REFINE</a> / <span class="keyword">ENDFIN</span> pairs. When the end of the <span class="keyword">GRID</span> section is reached, any values that have not been explicitly defined
+for local cells are then copied from the global host cells.</p>
+<p>For example:</p>
+<pre><code>CARFIN
+   'LGR1'  5 10   5 10   1 4 18 18  8   5  /
+EQUALS
+ 'PORO'  0.3  1 18 1 18 1 4 /
+ 'PERMZ' 50.0 1 18 1 18 1 4 /
+ 'NTG'   0.9  1 18 1 18 1 4/
+/
+MULTIPLY
+ 'PORO'  0.5  6 13 6 13 1 2 /
+ 'NTG'   0.2  6 13 6 13 1 2 /
+/
+ENDFIN</code></pre><p>This defines the porosities only in the top four
+layers on the local grid, and these are subsequently modified for
+the top two layers with the <a href="MULTIPLY.html#MULTIPLY"> MULTIPLY</a> keyword. The porosities for cells in the bottom four layers
+are copied from their host cells in the global grid.</p>
+<p>Since properties
+are not copied from host cells until the end of the <span class="keyword">GRID</span> section is reached, when <span class="keyword">LGRCOPY</span> is not present
+it is not possible to modify any property for cells within the local
+grid (by using the <a href="ADD.html#ADD"> ADD</a>, <a href="COPY.html#COPY"> COPY</a> or <span class="keyword">MULTIPLY</span> keywords, for instance) without previously defining
+the property for those cells within the LGR, as shown in the above
+example.</p>
+</div>
+
+<div class="section" id="lgrcopy_treatment_with_lgrcopy"><a name="lgrcopy_treatment_with_lgrcopy"><!-- --></a><h4 class="sectiontitle">Treatment with
+LGRCOPY</h4><p>When <span class="keyword">LGRCOPY</span> is specified, values
+for any cells within the LGR which have not been explicitly defined
+will be copied from the global cells ‘just in time’ to allow property
+modification. It is important to note that the order of property specification
+in the data set becomes relevant here. For instance, if the LGR uses
+non-default values for <span class="keyword">DX</span>, these must be have been
+specified before the modification keyword if they are to be taken
+into account when determining which global cell each local cell lies
+in.</p>
+<p>Consider the previous example without <span class="keyword">LGRCOPY</span> use. Say, the model contains only one LGR, so the <span class="keyword">LGRCOPY</span> keyword could either be specified in the <span class="keyword">RUNSPEC</span> section to apply to that LGR, or placed just after <a href="CARFIN.html#CARFIN"> CARFIN</a> definition (as
+in this example). It is possible to have:</p>
+<pre><code>PORO
+0.3 5 10 5 10 1 2/
+NTG
+0.9 5 10 5 10 1 2/
+CARFIN
+   'LGR1'  5 10   5 10   1 4 18 18  8   5  /
+LGRCOPY
+EQUALS
+'PERMZ' 50.0 1 18 1 18 1 4 /
+/
+MULTIPLY
+ 'PORO'  0.5  6 13 6 13 1 2 /
+ 'NTG'   0.2  6 13 6 13 1 2 /
+/
+ENDFIN</code></pre><p>This defines <samp class="codeph">PORO</samp> and <samp class="codeph">NTG</samp> for the global cells which correspond to the top four
+layers on the local grid, so is the exact analogy of the example above.
+It would be more useful if, say, these values were also required for
+a larger range of global cells of which the LGR was a subset. Using <span class="keyword">LGRCOPY</span>, the range of cells in the global specification
+just needs to be expanded, whereas without it the data set needs two
+specifications for each keyword: one for the global cells and another
+one for the local cells.</p>
+<p>Similarly, <span class="keyword">LGRCOPY</span> will invoke automatic inheritance of global properties within a <a href="REFINE.html#REFINE"> REFINE</a> / <a href="ENDFIN.html#ENDFIN"> ENDFIN</a> pair in the <span class="keyword">EDIT</span> section.</p>
+<div class="caution"><span class="cautiontitle">CAUTION:</span> The <samp class="codeph">CARFIN</samp> / <a href="RADFIN.html#RADFIN"> RADFIN</a> / <samp class="codeph">REFINE</samp>... <samp class="codeph">ENDFIN</samp> keywords must be placed
+after the global properties in the data set, in order for the local
+properties to be automatically inherited from the global properties.</div>
+</div>
+
+<div class="section" id="lgrcopy_notes"><a name="lgrcopy_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li>It is not possible to use the <span class="keyword">LGRCOPY</span> keyword
+with keyword <a href="DPGRID.html#DPGRID"> DPGRID</a>.</li>
+
+<li>This keyword cannot be used with the <a href="EXTFIN.html#EXTFIN"> EXTFIN</a> / <a href="ENDFIN.html#ENDFIN"> ENDFIN</a> set for specifying unstructured local grids.</li>
+
+<li>The <span class="keyword">LGRCOPY</span> keyword can be used with the keywords <a href="EQUALS.html#EQUALS"> EQUALS</a>, <a href="ADD.html#ADD"> ADD</a>, <a href="MULTIPLY.html#MULTIPLY"> MULTIPLY</a>, <a href="COPY.html#COPY"> COPY</a>, <a href="MAXVALUE.html#MAXVALUE"> MAXVALUE</a>, <a href="MINVALUE.html#MINVALUE"> MINVALUE</a>, <a href="COPYBOX.html#COPYBOX"> COPYBOX</a> and <a href="OPERATE.html#OPERATE"> OPERATE</a>.</li>
+
+</ul>
+<dl>
+
+<dt class="dlterm">ECLIPSE 300</dt>
+
+<dd><ul>
+<li>For integer-valued keywords (<a href="MULTNUM.html#MULTNUM"> MULTNUM</a>, <a href="OPERNUM.html#OPERNUM"> OPERNUM</a> and <a href="FLUXNUM.html#FLUXNUM"> FLUXNUM</a>) in the <span class="keyword">GRID</span> section only, if you have set values
+for a subset of the local cells inside an LGR, <samp class="codeph"><span class="keyword">LGRCOPY</span></samp> is unable to copy global values to unset LGR cells.</li>
+
+<li>It is not possible to use the <span class="keyword">LGRCOPY</span> keyword
+together with the <a href="DX.html#DX"> DX</a>, <a href="DY.html#DY"> DY</a>, <a href="DZ.html#DZ"> DZ</a>, <a href="TOPS.html#TOPS"> TOPS</a>, <a href="MIDS.html#MIDS"> MIDS</a>, <a href="MULTX.html#MULTX"> MULTX</a>, <a href="MULTY.html#MULTY"> MULTY</a>, <a href="MULTZ.html#MULTZ"> MULTZ</a>, <a href="MULTX-.html#MULTX-"> MULTX-</a>, <a href="MULTY-.html#MULTY-"> MULTY-</a> and <a href="MULTZ-.html#MULTZ-"> MULTZ-</a> keywords.
+If local values for these properties are required, you need to set
+them within the refinement,  otherwise the properties will be copied
+from host cells when the end of the <span class="keyword">GRID</span> section
+is reached.</li>
+
+</ul>
+</dd>
+
+
+<dt class="dlterm">ECLIPSE 100</dt>
+
+<dd><ul>
+<li>Use of the <a href="AMALGAM.html#AMALGAM"> AMALGAM</a> keyword does not affect <span class="keyword">LGRCOPY</span>. If used
+in the <span class="keyword">GRID</span> section, <span class="keyword">LGRCOPY</span> must still be specified for each individual LGR as required.</li>
+
+<li>For radial LGRs, only properties which also exist in the Cartesian
+global grid can be copied using <span class="keyword">LGRCOPY</span> - for instance, <a href="PERMR.html#PERMR"> PERMR</a> cannot be copied
+since the global grid has <a href="PERMX.html#PERMX"> PERMX</a> and <a href="PERMY.html#PERMY"> PERMY</a>.</li>
+
+</ul>
+</dd>
+
+</dl>
+<p>ECLIPSE 100 </p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">This keyword cannot be used if the <a href="PARALLEL.html#PARALLEL"> PARALLEL</a> keyword is
+present. To allow it, set <a href="OPTIONS.html#options.275">item
+275</a>  of the <span class="keyword">OPTIONS</span> keyword to 1.</span></div>
+</div>
+
+<div class="section" id="lgrcopy_example"><a name="lgrcopy_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>LGRCOPY</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

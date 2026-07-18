@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Evaluation of quantity definitions"/>
+<meta name="DC.subject" content="UDQ"/>
+<meta name="keywords" content="UDQ"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="udq_evaluation_of_quantity_definitions"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Evaluation of quantity definitions</title>
+</head>
+<body>
+
+
+<div class="nested0" id="udq_evaluation_of_quantity_definitions"><a name="udq_evaluation_of_quantity_definitions"><!-- --></a>
+<h1 class="topictitle1">Evaluation of quantity definitions</h1>
+
+
+ <div>
+<p>A quantity definition is an expression that is used to update every
+element in the UDQ set after every timestep. Additional consideration
+maybe required if a definition includes operations on subsets of UDQ
+sets. Again, consider a simulation with four wells named P11, P12,
+P32 and P33, and the following <span class="keyword">UDQ</span> definition:</p>
+
+<pre><code>DEFINE WUMW1 WOPR ‘P*1*’ + WOPR ‘P*2*’ /</code></pre>
+<p>Internally, the following UDQ sets will be generated. Recall a
+well UDQ set has an element for every well in the simulation and if
+only a subset of the wells are selected the remaining elements are
+left undefined:</p>
+
+
+<div class="tablenoborder"><a name="udq.tab.033d"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="udq.tab.033d" frame="void" border="1" rules="all">  
+   
+<tbody>
+<tr>
+<td valign="top">                                           
+  </td>
+
+<td valign="top">  <samp class="codeph">P11</samp>                     
+                    </td>
+
+<td valign="top">  <samp class="codeph">P12</samp>                     
+                    </td>
+
+<td valign="top"> <samp class="codeph">P32</samp>                      
+                   </td>
+
+<td valign="top"> <samp class="codeph">P33</samp>                       
+                      </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WOPR ‘P*1*’</samp>   
+                          </td>
+
+<td valign="top"> <samp class="codeph">WOPR P11</samp>                 
+                          </td>
+
+<td valign="top"> <samp class="codeph">WOPR P12</samp>                 
+                         </td>
+
+<td valign="top"> <em>UNDEFINED</em>                      </td>
+
+<td valign="top"> <em>UNDEFINED</em>                      </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">+</samp>                         
+                   </td>
+
+<td valign="top">&nbsp;</td>
+ 
+<td valign="top">&nbsp;</td>
+ 
+<td valign="top">&nbsp;</td>
+ 
+<td valign="top">                                           
+  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WOPR ‘P*2*’</samp>   
+                                         </td>
+
+<td valign="top"> <em>UNDEFINED</em>                      </td>
+
+<td valign="top"> <samp class="codeph">WOPR P12</samp>                 
+                    </td>
+
+<td valign="top"> <samp class="codeph">WOPR P32</samp>                  
+                          </td>
+
+<td valign="top"> <em>UNDEFINED</em>                      </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">=</samp>                     </td>
+
+<td valign="top">&nbsp;</td>
+ 
+<td valign="top">&nbsp;</td>
+ 
+<td valign="top">&nbsp;</td>
+ 
+<td valign="top">&nbsp;</td>
+ 
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WUMW1</samp>                     
+                       </td>
+
+<td valign="top"> <em>UNDEFINED</em> </td>
+
+<td valign="top"> <samp class="codeph">2 x WOPR P12</samp>              
+                       </td>
+
+<td valign="top"> <em>UNDEFINED</em>                      </td>
+
+<td valign="top"> <em>UNDEFINED</em>                      </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Since the addition function acts on the intersection of the defined
+elements P12 is the only well for which <samp class="codeph">WUMW1</samp> is
+defined. All other wells would return the specified value for an undefined
+element. A similar result is obtained in the following example in
+which the accumulation is on a user-defined quantity:</p>
+
+<pre><code>ASSIGN WUMW1 P1 1 /
+DEFINE WUMW1 WUMW1 * WOPR /</code></pre>
+<p>for which the calculation would be:</p>
+
+
+<div class="tablenoborder"><a name="udq.tab.038c"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="udq.tab.038c" frame="void" border="1" rules="all">  
+   
+<tbody>
+<tr>
+<td valign="top">                                           
+  </td>
+
+<td valign="top"> <samp class="codeph">P11</samp>                       
+                    </td>
+
+<td valign="top"> <samp class="codeph">P12</samp>                       
+                 </td>
+
+<td valign="top"> <samp class="codeph">P32</samp>                      
+                     </td>
+
+<td valign="top"> <samp class="codeph">P33</samp>                       
+                    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WUMW1</samp>                    
+                    </td>
+
+<td valign="top"> <samp class="codeph">1</samp>                     </td>
+
+<td valign="top"> <em>UNDEFINED</em> </td>
+
+<td valign="top"> <em>UNDEFINED</em> </td>
+
+<td valign="top"> <em>UNDEFINED</em> </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">*</samp>                      </td>
+
+<td valign="top">&nbsp;</td>
+ 
+<td valign="top">&nbsp;</td>
+ 
+<td valign="top">&nbsp;</td>
+ 
+<td valign="top">&nbsp;</td>
+ 
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WOPR</samp>                      
+                       </td>
+
+<td valign="top"> <samp class="codeph">WOPR P11</samp>                  
+                </td>
+
+<td valign="top"> <samp class="codeph">WOPR P12</samp>                 
+                    </td>
+
+<td valign="top"> <samp class="codeph">WOPR P32</samp>                  
+                          </td>
+
+<td valign="top"> <samp class="codeph">WOPR P33</samp>                  
+                          </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">=</samp>                         
+         </td>
+
+<td valign="top">&nbsp;</td>
+ 
+<td valign="top">&nbsp;</td>
+ 
+<td valign="top">&nbsp;</td>
+ 
+<td valign="top">&nbsp;</td>
+ 
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WUMW1</samp>                     
+                </td>
+
+<td valign="top"> <samp class="codeph">WOPR P11</samp>                 
+                  </td>
+
+<td valign="top"> <em>UNDEFINED</em> </td>
+
+<td valign="top"> <em>UNDEFINED</em> </td>
+
+<td valign="top"> <em>UNDEFINED</em> </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Note that the binary functions act sequentially on corresponding
+elements. If you want to add together elements from different positions
+in a UDQ set this must be done on an individual basis as scalars.
+For example:</p>
+
+<pre><code>DEFINE FUMW1 WOPR P11 + WWPR P12 /</code></pre>
+<p>Alternatively, if the intention is to combine UDQ sets then functions
+that act on the union of the defined elements should be considered.
+For example in a simulation with the <a href="FIPNUM.html#FIPNUM"> FIPNUM</a> set and two additional <a href="FIP.html#FIP"> FIP</a> sets named ‘ONE’ and ‘TWO’,
+each with the three regions, you could use the definition:</p>
+
+<pre><code>DEFINE RUMW1 ROIP_NUM UMAX RGIP_ONE UMIN RWIP_TWO /</code></pre>
+<p>which would generate the UDQ sets:</p>
+
+
+<div class="tablenoborder"><a name="udq.tab.03dd"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="udq.tab.03dd" frame="border" border="1" rules="all">  
+   
+   
+  
+<tbody>
+<tr>
+<td valign="top">                                           
+  </td>
+
+<td colspan="3" valign="top">NUM set                      </td>
+
+<td colspan="3" valign="top"> ONE set                     
+                       </td>
+
+<td colspan="3" valign="top"> TWO set                    
+ </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">ROIP_NUM</samp>                  
+   </td>
+
+<td valign="top"> <samp class="codeph">X</samp> </td>
+
+<td valign="top"> <samp class="codeph">X</samp> </td>
+
+<td valign="top"> <samp class="codeph">X</samp> </td>
+
+<td valign="top"> <samp class="codeph">U</samp>                      </td>
+
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">UMAX</samp>                      </td>
+
+<td colspan="9" valign="top">                            
+                                                               </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">RGIP_ONE</samp>                  
+   </td>
+
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+<td valign="top"> <samp class="codeph">X</samp>                      </td>
+
+<td valign="top"> <samp class="codeph">X</samp> </td>
+
+<td valign="top"> <samp class="codeph">X</samp> </td>
+
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">UMIN</samp>                      </td>
+
+<td colspan="9" valign="top">                 
+                            </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">RWIP_TWO</samp>                  
+   </td>
+
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+<td valign="top"> <samp class="codeph">X</samp> </td>
+
+<td valign="top"> <samp class="codeph">X</samp> </td>
+
+<td valign="top"> <samp class="codeph">X</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">=</samp>                      </td>
+
+<td colspan="9" valign="top">                 
+                            </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">RUMW1</samp> </td>
+
+<td colspan="3" valign="top"> <samp class="codeph">ROIP_NUM</samp>    
+                 </td>
+
+<td colspan="3" valign="top"> <samp class="codeph">RGIP_ONE</samp>    
+          </td>
+
+<td colspan="3" valign="top"> <samp class="codeph">RWIP_TWO</samp>   
+                             </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>where X represents a value and U an undefined element. Note, in
+this case the choice of union functions is not significant since the
+defined portions of the UDQ sets do not overlap.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">A quantity definition applies to every element in the UDQ set.
+A quantity definition cannot be applied to selected elements only.</span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">A quantity definition sets the <samp class="codeph">UPDATE</samp> status
+of the UDQ set to <samp class="codeph">ON</samp>.</span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Reservoir coupling"/>
+<meta name="DC.subject" content="Master reservoir, Slave reservoir, Reservoir coupling, Slave reservoir"/>
+<meta name="keywords" content="Master reservoir, Slave reservoir, Reservoir coupling, Slave reservoir"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="rescouplintro_reservoir_coupling"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Reservoir coupling</title>
+</head>
+<body>
+
+
+<div class="nested0" id="rescouplintro_reservoir_coupling"><a name="rescouplintro_reservoir_coupling"><!-- --></a>
+<h1 class="keyword">Reservoir coupling</h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="rescouplintro.tab.0009"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="rescouplintro.tab.0009" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> x </td>
+
+<td valign="top"> ECLIPSE 100 </td>
+
+</tr>
+
+<tr>
+<td valign="top">  </td>
+
+<td valign="top"> ECLIPSE 300 </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The reservoir coupling facility is a special extension to ECLIPSE
+100; it is not available in ECLIPSE 300. It provides a means of coupling
+a number of separate ECLIPSE 100 simulation models to account for
+constraints on overall production and injection rates, and optionally
+the sharing of a common surface network.</p>
+
+<p>The individual simulation models are run as separate processes,
+each having its own standard ECLIPSE data file. One model is chosen
+to be the “master”, and the other models are defined as
+“slaves”. The slave processes are activated by the master,
+and run in synchronization with it. The master process imposes production
+and injection constraints on the slaves to meet overall targets. On
+suitable systems, the slave processes may be run in parallel with
+each other on separate workstations. Communication between the processes
+is handled by the message-passing system MPI, which must be present
+on the system.</p>
+
+<p>A typical situation in which the reservoir coupling facility would
+be useful is as follows. Imagine you are responsible for an area that
+contains a number of separate independent reservoirs. For each reservoir,
+you have a separate simulation model, which you have used to history
+match the reservoirs independently. The simulation models may have
+different characteristics. For example, some may be three-phase while
+others are two-phase. One model may perhaps use the Vertical Equilibrium
+option, while the others use dispersed flow. There are now plans to
+produce these reservoirs into common surface facilities, and constraints
+on overall production and injection rates must be observed. Also,
+perhaps, the network model is to be used to determine the pressure
+constraints in a common surface network linking the reservoirs.</p>
+
+<p>Without the reservoir coupling facility, the above scenario would
+require the various simulation grids to be amalgamated into a single,
+huge model. It would have to be three-phase if each phase was active
+in one or more of the reservoir models, and if one of them used the
+VE option then the whole amalgamated model would also have to use
+it. The task of amalgamating the models would be time consuming, and
+the resulting single model would be slow and expensive to run. The
+reservoir coupling facility offers an efficient solution to this problem,
+allowing the reservoirs to be represented by their original simulation
+models, but these are now coupled through their production and injection
+targets and network nodal pressures.</p>
+
+<div class="section" id="rescouplintro_master_and_slave_reservoirs"><a name="rescouplintro_master_and_slave_reservoirs"><!-- --></a><h4 class="sectiontitle">Master
+and slave reservoirs</h4><p>Each slave reservoir consists of an
+ECLIPSE 100 simulation model with its own input data file. They may
+be restarts, if required, of simulations that have previously been
+run independently. Each must have one or more slave groups, which
+act as the path for communicating flow rates and constraints with
+the master process. For example, a reservoir may have its FIELD group
+as a single slave group, or alternatively all its Level 1 groups may
+be slave groups. The slave groups need not all be on the same level,
+but one slave group cannot be subordinate to another slave group.</p>
+<p>The master reservoir is an additional ECLIPSE 100 simulation model,
+again with its own input data file. It must contain the group hierarchy
+of the whole system down as far as the slave groups in the slave reservoirs.
+The slave groups are represented in the master reservoir by master
+groups, which have no subordinate wells or groups. These are similar
+to satellite groups in concept (see keyword <a href="../ecl_rm/GSATPROD.html#GSATPROD">GSATPROD</a>), except that the
+flows of satellite groups are user-defined, whereas the flows of master
+groups are determined by the coupled slave reservoir simulations.</p>
+<p>The master reservoir may represent one of the reservoirs to be
+simulated. If so, its grid data, fluid properties and scheduling data
+for example, will be entered in the normal way in its data file. Alternatively,
+all the reservoirs to be simulated may be represented by slave reservoirs.
+In this case, the master reservoir should just be a dummy reservoir
+for example a single grid block), containing no wells but having the
+group hierarchy down to the master groups.</p>
+<div class="fignone" id="rescouplintro.XID-00000027"><a name="rescouplintro.XID-00000027"><!-- --></a>
+
+ <br/><img src="../img/rescoup1.png" width="560px"/><br/> 
+<br/><span class="figcap">
+           Figure 616.1  Three coupled reservoirs; one is the master</span></div>
+<div class="fignone" id="rescouplintro.XID-0000002b"><a name="rescouplintro.XID-0000002b"><!-- --></a>
+
+ <br/><img src="../img/rescoup2.png" width="560px"/><br/> <br/><span class="figcap">
+           Figure 616.2  Three reservoirs coupled by a dummy reservoir master</span></div>
+<p>Figures   <a href="rescouplintro_Reservoir_Coupling.html#rescouplintro.XID-00000027">616.1</a>  and <a href="rescouplintro_Reservoir_Coupling.html#rescouplintro.XID-0000002b">616.2</a>  illustrate these two cases
+applied to three coupled reservoirs. In figure <a href="rescouplintro_Reservoir_Coupling.html#rescouplintro.XID-00000027">616.1</a>, one of these reservoirs
+R1 is chosen as the master. Its own wells are under groups R1-A and
+R1-B. The other two reservoirs are represented as slaves. The master
+reservoir controls the slave reservoirs through the groups R2, R3-A
+and R3-B. These are declared as master groups in the master reservoir,
+and do not have any subordinate wells. The master group R2 is coupled
+to the FIELD group in the slave reservoir R2. The master groups R3-A
+and R3-B are coupled to the level 1 groups of the same name in the
+slave reservoir R3. In the slave reservoir R2, the FIELD group is
+declared as a slave group, coupled to group R2 in the master reservoir.
+In the slave reservoir R3, the groups R3-A and R3-B are declared as
+slave groups, coupled to the groups of the same name in the master
+reservoir. This example shows that a given slave reservoir may be
+coupled to the master by more than one group, which need not necessarily
+belong to the same parent group in the master reservoir.</p>
+<p>Figure
+  <a href="rescouplintro_Reservoir_Coupling.html#rescouplintro.XID-0000002b">616.2</a>  shows the same
+set of reservoirs, but this time all three of them are represented
+as slave reservoirs. The master reservoir is a dummy reservoir with
+no wells. It contains the group hierarchy down to the master groups.
+Note that groups R1-A and R1-B are now master groups, being coupled
+to slave groups of the same name in reservoir R1 which is now a slave
+reservoir.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="OVERTTHT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="OVERTTHT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>OVERTTHT</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="OVERTTHT"><a name="OVERTTHT"><!-- --></a>
+<h1 class="keyword">OVERTTHT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="overttht.tab.0006"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="overttht.tab.0006" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1708e45"> </th>
+
+<th valign="top" id="d1708e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1708e54">                         x </th>
+
+<th valign="top" id="d1708e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1708e45 d1708e54 "> </td>
+
+<td valign="top" headers="d1708e48 d1708e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1708e45 d1708e54 "> </td>
+
+<td valign="top" headers="d1708e48 d1708e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1708e45 d1708e54 "> </td>
+
+<td valign="top" headers="d1708e48 d1708e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1708e45 d1708e54 "> </td>
+
+<td valign="top" headers="d1708e48 d1708e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1708e45 d1708e54 "> </td>
+
+<td valign="top" headers="d1708e48 d1708e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1708e45 d1708e54 "> </td>
+
+<td valign="top" headers="d1708e48 d1708e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1708e45 d1708e54 "> </td>
+
+<td valign="top" headers="d1708e48 d1708e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1708e45 d1708e54 ">                         x </td>
+
+<td valign="top" headers="d1708e48 d1708e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword specifies a value to be overwritten on to the transmissibilities
+during the <span class="keyword">SCHEDULE</span> section, for flow in the azimuthal
+direction.</p>
+
+<p>The value is applied to the transmissibility between the cell and
+its neighbor in the appropriate <strong>positive</strong> direction.</p>
+
+<p>The default is to supply a value for each cell in the grid, that
+is each keyword should be followed by                  <math><mrow><msub><mrow>
+<mi>N</mi></mrow><mrow><mi>R</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi>N</mi></mrow><mrow><mi>θ</mi>
+</mrow></msub><mo>⋅</mo><msub><mrow><mi>N</mi></mrow>
+<mrow><mi>z</mi></mrow></msub></mrow></math> values
+in natural order, with the R index changing fastest.          </p>
+
+<p>If values are defaulted or set negative, the transmissibilities
+for the corresponding cells will not be modified.</p>
+
+<p>These keywords are normally used with <a href="BOX.html#BOX"> BOX</a> and <a href="ENDBOX.html#ENDBOX"> ENDBOX</a>, when the number of values should be the number of cells
+in the current <span class="keyword">BOX</span>.</p>
+
+<p>The form of the input is analogous to that for the <a href="OVERTY.html#OVERTY">  OVERTY</a> keyword.</p>
+
+<div class="section" id="overttht_example"><a name="overttht_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>Set transmissibility
+values in a box to zero:</p>
+ <pre><code>-- IX1-IX2 JY1-JY2 KZ1-KZ2
+BOX
+    1   4   3   3   4   6   /
+OVERTTHT
+ 12*0.0 /
+ENDBOX</code></pre> <p>The modified transmissibilities can be output
+to the Print file by using the mnemonic <samp class="codeph">MULT</samp> in the <a href="RPTSCHED.html#RPTSCHED"> RPTSCHED</a> keyword.</p>
+ <div class="note"><span class="notetitle">Note:</span> <span class="notebody">It is important to note that if the transmissibilities are
+also modified using transmissibility multiplier <a href="MULTTHT.html#MULTTHT"> MULTTHT</a>, the resulting output takes into
+account both of these actions.</span></div>
+ </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

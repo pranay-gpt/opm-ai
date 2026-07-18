@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Implementation"/>
+<meta name="DC.subject" content="Local grid coarsening, Implementation"/>
+<meta name="keywords" content="Local grid coarsening, Implementation"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrc_implementation"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Implementation</title>
+</head>
+<body>
+
+
+<div class="nested0" id="lgrc_implementation"><a name="lgrc_implementation"><!-- --></a>
+<h1 class="topictitle1">Implementation</h1>
+
+
+ <div>
+<p>Grid coarsenings are set for the duration of a run and may not
+be switched on or off at different times during a run. The amalgamations
+are computed automatically by ECLIPSE which also computes the appropriate
+non-neighbor connections between different coarsenings and between
+normal cells and coarsened cells.</p>
+
+<p>Within each amalgamation, a “representative cell” is
+chosen in the center of the amalgamation. All cells within the amalgamation
+apart from the representative cell are made inactive. The representative
+cell is given the properties (dimensions, permeability and pore volume
+for example) of the complete amalgamation.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Even if this chosen representative cell is supposed to be deemed
+inactive (due to the use of the <a href="../ecl_rm/ACTNUM.html#ACTNUM">ACTNUM</a> array, or having a zero pore volume, for instance), it
+is reactivated because ECLIPSE uses it as the storage cell for the
+upscaled quantities.              </span></div>
+
+<p>If a well is completed in an amalgamation, ECLIPSE moves its connections
+into the representative cell. Thus, if it was completed in several
+layers of a multi-layer amalgamation, it ends up with only one connection
+that is situated in the representative cell. The representative cell
+of course has the <span class="keyword">DX</span>, <span class="keyword">DY</span> and <span class="keyword">DZ</span> of the complete amalgamation, and the connection transmissibility
+factor is calculated accordingly.</p>
+
+<p>Furthermore, if a cell connects with an aquifer, then the appropriate
+connection is set up by moving the connection to the representative
+cell of the coarsening group involved.</p>
+
+<p>ECLIPSE 100             </p>
+
+<p>Just as refined cells have the decimal point
+replaced by R in solution reports (specified using <a href="../ecl_rm/RPTGRID.html#RPTGRID">RPTGRID</a>, <a href="../ecl_rm/RPTSOL.html#RPTSOL">RPTSOL</a>, or <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a>), so coarsened cells
+have the decimal point replaced by C.</p>
+
+<p>For a run involving dual porosity, the coarsenings should only
+be defined for fracture blocks. ECLIPSE copies these coarsenings into
+the matrix blocks.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

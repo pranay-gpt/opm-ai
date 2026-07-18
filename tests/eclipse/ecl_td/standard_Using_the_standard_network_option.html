@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using the standard network option"/>
+<meta name="DC.subject" content="Standard network, Network, Standard, Construction, Pumps, Compressors, Gas lift, Balancing, Artificial lift quantity, VFP table, ALQ, Balancing network, Manifold groups, Group, Sub-sea completion manifolds"/>
+<meta name="keywords" content="Standard network, Network, Standard, Construction, Pumps, Compressors, Gas lift, Balancing, Artificial lift quantity, VFP table, ALQ, Balancing network, Manifold groups, Group, Sub-sea completion manifolds"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="standard_using_the_standard_network_option"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using the standard network option</title>
+</head>
+<body>
+
+
+<div class="nested0" id="standard_using_the_standard_network_option"><a name="standard_using_the_standard_network_option"><!-- --></a>
+<h1 class="topictitle1">Using the standard network option</h1>
+
+
+ <div>
+<p>This section describes how to use the Standard (non-extended) Network
+option, in which the network structure must be the same as the <a href="../ecl_rm/GRUPTREE.html#GRUPTREE">GRUPTREE</a> hierarchy. If you
+require the network to have a different topology from the group control
+hierarchy, then you must use the Extended Network option which is
+described in a later section (see <a href="extended_The_extended_network_model.html#extended_the_extended_network_model">  "The extended network model"</a>).</p>
+
+<p>ECLIPSE 300                      </p>
+
+<p>In ECLIPSE 300 you are recommended to
+use the Extended Network option as this is more versatile than the
+Standard option. The Standard option keywords, however, are available
+to assist the porting of ECLIPSE 100 data sets.</p>
+
+<div class="section" id="standard_constructing_the_network"><a name="standard_constructing_the_network"><!-- --></a><h4 class="sectiontitle">Constructing
+the network</h4><p>The multi-level grouping tree must first be
+constructed using the keyword <a href="../ecl_rm/GRUPTREE.html#GRUPTREE">GRUPTREE</a> (but this can be omitted
+if there is only one level of groups below the FIELD).</p>
+<p>The production
+network is specified using the keyword <a href="../ecl_rm/GRUPNET.html#GRUPNET">GRUPNET</a>. With this keyword,
+one or more groups (or the FIELD itself) can be declared as fixed-pressure
+nodes, while groups below them in the network are given pipeline connections
+to their parent groups. The pressure losses in each pipeline are obtained
+from production VFP tables, in a similar way to the treatment of THP
+calculations in wells. Thus each pipeline must be associated with
+a given production VFP table, which is supplied as input data to ECLIPSE
+in the usual way. The top node of each network must be a fixed-pressure
+node. It is also possible for subordinate groups to be fixed-pressure
+nodes; these form ‘sub-networks’ whose pressures are independent
+of the main network but whose flows will be added into it.</p>
+<p>Water
+and gas injection networks are specified using the keyword <a href="../ecl_rm/GNETINJE.html#GNETINJE">GNETINJE</a>. Again, one or more
+groups can be declared as fixed-pressure nodes, and groups below them
+in the network are given pipeline connections from their parent groups.
+Each pipeline must be associated with an <strong>injection</strong> VFP table
+for water or gas injection, from which the pressure losses will be
+calculated.</p>
+<p>The pipeline VFP tables can be constructed using
+the program VFP <em>i</em>, which handles horizontal and undulating flowlines
+as well as vertical and deviated well bores. For a pipeline connecting
+a parent group and its child, the ‘tubing head’ end is
+the parent group and the ‘bottom hole’ end is the child
+group. Thus a pipeline VFP table gives the nodal pressures of the
+child group for selected values of the nodal pressure of the parent
+group and the flow rate through the pipeline (and also the water and
+gas fractions in a production network pipeline). The VFP tables should
+cover the expected range of these quantities in the pipeline. To allow
+for the case when a group has zero flow rate, the lowest flow rate
+in the table should be small, for example 1 stb/day, since the VFP <em>i</em> program does not accept a zero flow rate.</p>
+</div>
+
+<div class="section" id="standard_pumps__compressors_and_gas_lift"><a name="standard_pumps__compressors_and_gas_lift"><!-- --></a><h4 class="sectiontitle">Pumps,
+compressors and gas lift</h4><p>The VFP tables for the production
+network pipelines may also include a non-zero value of the Artificial
+Lift Quantity (ALQ), to model the effects of a pump or compressor
+on the pipeline. In this case the quantity may be identified with
+the pump or compressor power. The program VFP <em>i</em> can include
+the effects of a pump or compressor in the pipeline when calculating
+the pressure losses. The acting pump or compressor power for the pipeline,
+with which the VFP table is to be interpolated, is set with the keyword <a href="../ecl_rm/GRUPNET.html#GRUPNET">GRUPNET</a>. The specified power
+should correspond with the respective Artificial Lift Quantity value
+in the VFP tables. An additional option allows a pump or compressor
+to be switched on automatically in a pipeline when its group’s
+oil or gas production rate falls below a set limit. This option is
+selected using the keyword <a href="../ecl_rm/GNETPUMP.html#GNETPUMP">GNETPUMP</a>.</p>
+<p>Injection network pipelines can also contain pumps,
+if their VFP tables are constructed to include them. But injection
+VFP tables do not have the Artificial Lift Quantity as a variable,
+so a pump cannot be turned on or off by varying this quantity. Instead,
+two VFP tables may be constructed for the pipeline, one which includes
+the effect of the pump, and one which does not. Thus the pump can
+be turned on and off manually during the simulation by changing the
+pipeline’s VFP table number in keyword <a href="../ecl_rm/GNETINJE.html#GNETINJE">GNETINJE</a>.</p>
+<p>If wells in
+a production network are subject to gas lift, the flow of lift gas
+can be included in the network branch pressure drop calculations by
+setting item 6 in keyword <span class="keyword">GRUPNET</span> to '<samp class="codeph">FLO</samp>' or '<samp class="codeph">ALQ</samp>' for the pipelines that carry lift gas
+along with produced fluids. If '<samp class="codeph">FLO </samp>' is selected,
+the lift gas flows of the subordinate producers will be added to the
+gas flow rate along the pipeline. The lift gas flow is assumed to
+be equal to the sum of the ALQ values of the subordinate producers,
+multiplied by their efficiency factors. If '<samp class="codeph">ALQ</samp>'
+is selected, the gas flow rate will not be adjusted, but the ALQ value
+used to look up the pipeline’s pressure drop will be set equal
+to the sum of the ALQ values of the subordinate producers, multiplied
+by their efficiency factors. If either option is selected, the Artificial
+Lift Quantity for the wells (<a href="../ecl_rm/WCONPROD.html#WCONPROD">WCONPROD</a> item 12) and the pipeline (for the '<samp class="codeph">ALQ</samp>'
+option) must be defined as the rate of lift gas injection. This definition
+must be selected in the VFP <em>i</em> program if it is used to construct
+the VFP tables.</p>
+</div>
+
+<div class="section" id="standard_balancing_the_network"><a name="standard_balancing_the_network"><!-- --></a><h4 class="sectiontitle">Balancing the
+network</h4><p>The nodal pressures of the groups in the network
+are determined by a ‘network balancing’ calculation. This
+uses an iterative procedure to calculate the pressures at each node
+(or group) in the network consistent with the group flow rates and
+the pipeline pressure losses. At each iteration of the balancing calculation
+the well and group production rates are determined using the reservoir
+conditions existing at the beginning of the timestep, and the latest
+iterate of the nodal pressures. The pipeline pressure losses generated
+by these flow rates are then calculated, and the nodal pressures are
+updated at each level in the grouping tree from the fixed-pressure
+node(s) downwards using a secant method. The iterations are terminated
+when all the nodal pressures agree with the pipeline pressure losses,
+to within a certain tolerance. In ECLIPSE 100 the number of iterations
+required to balance the network each time will be written to the <samp class="codeph">PRINT</samp> file if either the 10th or the 15th <a href="../ecl_rm/RPTSCHED.html#RPTSCHED"> RPTSCHED</a> keyword switch is
+set (mnemonic <samp class="codeph">VFPPROD</samp> or <samp class="codeph">NEWTON</samp>).
+In ECLIPSE 300 the number of iterations coupling the network
+to the reservoir will automatically be printed in the timestep summary
+table in the column headed <samp class="codeph">NIT</samp>.</p>
+<p>At each network
+balancing iteration, the well and group production rates are determined
+at the latest iterate of the nodal pressures. If a group production
+target cannot be met, actions may be taken to increase production,
+such as drilling a new well (see keyword <a href="../ecl_rm/PRORDER.html#PRORDER">PRORDER</a>). However, it is
+possible that an intermediate balancing iteration with high nodal
+pressures and consequentially low well productivities may cause such
+an action to be taken prematurely. This can be prevented in ECLIPSE 100
+by using the <a href="../ecl_rm/WAITBAL.html#WAITBAL">WAITBAL</a> keyword to request that these actions should not be performed
+until the network is properly balanced. Then if more flow is required
+once the network has converged, an appropriate action is performed
+and the network must be balanced again. Using this option therefore
+requires more network balancing iterations in total. In ECLIPSE 300
+there is no need to use <span class="keyword">WAITBAL</span> as it is automatically
+enabled; the simulator always waits until the network is properly
+balanced before drilling a new well.</p>
+<p>ECLIPSE
+100                  </p>
+<p>You can control the
+frequency with which the network balancing calculations are performed.
+The keyword <a href="../ecl_rm/NETBALAN.html#NETBALAN">NETBALAN</a> is used to force a network balancing calculation to take
+place at the beginning of the next timestep, and to specify the ‘balancing
+interval’ for subsequent timesteps. Subsequent balancing calculations
+are performed at the beginning of each timestep that starts after
+the specified interval has elapsed since the previous calculation.
+The nodal pressures (which are used to set the well THP limits) are
+kept constant until updated by the next balancing calculation. The
+default value of the balancing interval is zero, which results in
+a balancing calculation being performed at the beginning of each timestep.
+The keyword <span class="keyword">NETBALAN</span> can also be used to adjust
+the convergence tolerance and the maximum number of iterations in
+the calculation.</p>
+<p>ECLIPSE 100         
+     </p>
+<p>By default, the network is balanced
+using the grid block conditions existing at the beginning of the timestep.
+By the end of the timestep, the grid block conditions and well flow
+rates may have changed, and the flows in the network branches may
+no longer be exactly consistent with the nodal pressures. The longer
+the timestep or interval between balancing calculations, the greater
+the balancing error will be at the end of the timestep. ECLIPSE 100
+checks the balancing error in each branch of the network at the end
+of each timestep, and prints out the largest error in any branch.
+The balancing error is defined as the difference between the pressure
+drop along the branch when the network was last balanced, and the
+pressure drop calculated using the current flow rates at the end of
+the timestep. The THP target of wells is also checked against the
+parent node pressure before the network is considered balanced.</p>
+<p>ECLIPSE 100                      </p>
+<p>By setting the balancing interval negative in
+keyword <span class="keyword">NETBALAN</span>, ECLIPSE 100 can be made
+to balance the network in each of the first <samp class="codeph">NUPCOL</samp> Newton iterations of every timestep. (The value of <samp class="codeph">NUPCOL</samp> may be set using either keyword <a href="../ecl_rm/NUPCOL.html#NUPCOL">NUPCOL</a> or keyword <a href="../ecl_rm/GCONTOL.html#GCONTOL">GCONTOL</a>). This option, in general,
+results in much smaller balancing errors at the end of the timestep,
+as the reservoir conditions at each successive Newton iteration more
+closely resemble the converged conditions at the end of the timestep.
+However, the option may cause the timesteps to require more Newton
+iterations to converge, as the well THP limits vary at each balancing
+calculation.</p>
+<p> ECLIPSE 300            
+     </p>
+<p>In ECLIPSE 300 the network is
+always balanced in each of the first <samp class="codeph">NUPCOL</samp> Newton
+iterations of every timestep. (This is equivalent to setting a negative
+balancing interval in ECLIPSE 100.)</p>
+<p> ECLIPSE 100                </p>
+<p>You can supply
+a target value and a maximum permitted value for the largest branch
+balancing error, in the <span class="keyword">NETBALAN</span> keyword. ECLIPSE 100
+attempts to adjust the timestep length so as to keep the balancing
+error at approximately its target value, subject of course to any
+other constraints on the timestep. Timesteps limited by the target
+balancing error can be identified by the mnemonic ‘ <samp class="codeph">NETW</samp> ’ printed in the timestep information line. If the maximum
+permitted balancing error is exceeded, ECLIPSE 100 chops the
+timestep and rebalance the network. Since timestep chops can severely
+increase the running time of a simulation, a maximum permitted balancing
+error should only be used with caution, and its value should be several
+times larger than the target error. A large balancing error is sometimes
+unavoidable during the timestep in which a well dies. You can set
+a minimum timestep size to prevent a large reduction in step size
+when wells die.</p>
+</div>
+
+<div class="section" id="standard_sub-sea_completion_manifolds"><a name="standard_sub-sea_completion_manifolds"><!-- --></a><h4 class="sectiontitle">Sub-sea
+completion manifolds</h4><p>ECLIPSE 100 
+                   </p>
+<p>When a group production
+control is going to be applied and some groups represent sub-sea completion
+manifolds in which the wells all operate at the same THP, then these
+groups should be declared as manifold groups in keyword <a href="../ecl_rm/GRUPNET.html#GRUPNET">GRUPNET</a>. If a group control
+is going to be applied to any group superior to a manifold group,
+the subordinate manifold groups should be given guide rates in keyword <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a>. If a manifold group
+has a rate target (either imposed directly or allocated as a share
+of a superior group’s rate target in proportion to its guide
+rate), ECLIPSE calculates the manifold pressure required to make the
+group produce at its target rate. The calculation is performed iteratively,
+using a secant method. The convergence tolerance and the maximum number
+of iterations allowed for this calculation can be set in keyword <a href="../ecl_rm/NETBALAN.html#NETBALAN">NETBALAN</a>. The manifold pressure
+is recalculated at each of the first <a href="../ecl_rm/NUPCOL.html#NUPCOL">NUPCOL</a> Newton iterations
+of each timestep, and the wells’ THP limits are set equal to
+the manifold pressure or the group’s nodal pressure in the network
+obtained from the latest network balancing calculation, whichever
+is the greater. If the timestep takes more than   <span class="keyword">NUPCOL</span>   Newton iterations to converge, the well THP limits are kept constant
+for the remaining iterations after the first <span class="keyword">NUPCOL</span>, and the group may not meet its flow target within the allowed convergence
+tolerance. This treatment corresponds to the standard group control
+method (see keyword <a href="../ecl_rm/GCONTOL.html#GCONTOL">GCONTOL</a>).</p>
+<p>ECLIPSE 300               
+    </p>
+<p>The treatment of manifold groups in
+ECLIPSE 300 is different in that they are regarded as inlets
+to automatic chokes (see <a href="extended_Automatic_chokes.html#extended_automatic_chokes">  "Automatic
+chokes"</a>). The group’s outlet branch contains the choke
+and must be given a VFP table number of 9999 so its only pressure
+drop is that of the choke. ECLIPSE adjusts the pressure drop across
+the choke to keep the production rate at the required target, provided
+that it has enough potential.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

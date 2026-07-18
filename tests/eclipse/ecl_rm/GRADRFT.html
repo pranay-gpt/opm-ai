@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GRADRFT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GRADRFT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GRADRFT</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GRADRFT"><a name="GRADRFT"><!-- --></a>
+<h1 class="keyword">GRADRFT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gradrft.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gradrft.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d890e45"> x </th>
+
+<th valign="top" id="d890e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d890e54">  </th>
+
+<th valign="top" id="d890e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d890e45 d890e54 ">  </td>
+
+<td valign="top" headers="d890e48 d890e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d890e45 d890e54 ">  </td>
+
+<td valign="top" headers="d890e48 d890e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d890e45 d890e54 ">  </td>
+
+<td valign="top" headers="d890e48 d890e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d890e45 d890e54 ">  </td>
+
+<td valign="top" headers="d890e48 d890e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d890e45 d890e54 ">  </td>
+
+<td valign="top" headers="d890e48 d890e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d890e45 d890e54 ">  </td>
+
+<td valign="top" headers="d890e48 d890e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d890e45 d890e54 ">  </td>
+
+<td valign="top" headers="d890e48 d890e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d890e45 d890e54 "> x </td>
+
+<td valign="top" headers="d890e48 d890e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>When using the Gradient option, it is possible to output gradients
+of RFT quantities to the RFT file for matching measured RFT. Normally,
+gradient information for well observations is written to the HMD file
+when the Gradient option is being used. The gradient data will normally
+be used by the SimOpt program.</p>
+
+<p>The keyword must be followed by a set of records specifying mnemonics
+associated with derivatives. Each record should be terminated with
+a slash (/) and the set of records must end with a slash.</p>
+
+<div class="p">The available mnemonics are:
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">PRESSURE</samp> </td>
+
+<td valign="top"> Connection grid block pressure</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">SWAT</samp> </td>
+
+<td valign="top"> Connection grid block water saturation</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">SGAS</samp> </td>
+
+<td valign="top"> Connection grid block gas saturation</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">SOIL</samp> </td>
+
+<td valign="top"> Connection grid block oil saturation</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+<p>The keyword is optional. If it is not specified, no RFT gradients
+will be output. The list of wells for which RFT gradients are required
+can be specified in the <a href="GRADWELL.html#GRADWELL"> GRADWELL</a> keyword.</p>
+
+<p>When <span class="keyword">GRADRFT</span> is specified, RFT output is automatically
+switched on at report timesteps for wells specified in the <a href="RPTHMW.html#RPTHMW"> RPTHMW</a> keyword, so that
+it is not necessary to specify the <a href="WRFT.html#WRFT"> WRFT</a> keyword in addition.</p>
+
+<p>If the keyword is entered more than once, only mnemonics from the
+most recent entry are used, so that the list may be specified again
+at a restart or during the run.</p>
+
+<p>Refer to <a href="../ecl_td/gradientintro_Gradient.html#gradientintro_gradient_option">"Gradient option"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.</p>
+
+<div class="section" id="gradrft.example"><a name="gradrft.example"><!-- --></a><h4 class="sectiontitle">Example</h4> <p>Output derivatives
+only for connection block pressure (oil phase pressure), water saturation
+and gas saturation.</p>
+ <pre><code>GRADRFT
+ PRESSURE /
+ SWAT /
+ SGAS /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

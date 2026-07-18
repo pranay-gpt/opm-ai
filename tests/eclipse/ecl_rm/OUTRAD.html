@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="OUTRAD"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="OUTRAD"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>OUTRAD</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="OUTRAD"><a name="OUTRAD"><!-- --></a>
+<h1 class="keyword">OUTRAD</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="outrad.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="outrad.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1700e45"> x </th>
+
+<th valign="top" id="d1700e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1700e54">  </th>
+
+<th valign="top" id="d1700e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1700e45 d1700e54 ">  </td>
+
+<td valign="top" headers="d1700e48 d1700e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1700e45 d1700e54 "> x </td>
+
+<td valign="top" headers="d1700e48 d1700e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1700e45 d1700e54 ">  </td>
+
+<td valign="top" headers="d1700e48 d1700e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1700e45 d1700e54 ">  </td>
+
+<td valign="top" headers="d1700e48 d1700e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1700e45 d1700e54 ">  </td>
+
+<td valign="top" headers="d1700e48 d1700e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1700e45 d1700e54 ">  </td>
+
+<td valign="top" headers="d1700e48 d1700e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1700e45 d1700e54 ">  </td>
+
+<td valign="top" headers="d1700e48 d1700e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1700e45 d1700e54 ">  </td>
+
+<td valign="top" headers="d1700e48 d1700e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword should be followed by a single positive real number
+denoting the outer radius of the reservoir, terminated by a slash
+(/).</p>
+
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>),
+cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+
+<p>If the outer radius is specified using <span class="keyword">OUTRAD</span>, the program calculates a set of cell radii (or R-direction thicknesses),
+which observe the correct inner radius (see the <a href="INRAD.html#INRAD"> INRAD</a> keyword), outer radius and number
+of cells in the R-direction.</p>
+
+<p>In addition, the keyword <a href="DRV.html#DRV"> DRV</a> may be used to specify the R-direction thicknesses of some
+of the cells. In this case, the program honors these input values
+and just calculates the <span class="keyword">DRV</span> values of the remaining
+cells.</p>
+
+<p>If an incomplete set of <span class="keyword">DRV</span> values has been
+entered, the missing radii are supplied in a geometric series when <span class="keyword">OUTRAD</span> is specified.</p>
+
+<p>For instance, if there are NR cells in the R-direction, and i<sub>L</sub> is the index of the first block for which the <span class="keyword">DRV</span> value has <strong>not</strong> explicitly been entered, then the outer radii
+for blocks 1 to i<sub>L</sub>-1 are obtained by successively accumulating
+the sum of the <span class="keyword">DRV</span> s and <span class="keyword">INRAD</span>.</p>
+
+<p>For the remaining blocks (that is, for i &gt; i<sub>L</sub>-1),
+the outer radii of two neighboring blocks in the radial direction
+(the i<sup>th</sup> and i-1<sup>th</sup> grid blocks) will be related
+by</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="outrad.equ.005c"/>
+ <math><mfrac><mrow><msub>
+<mi>R</mi><mi>i</mi></msub></mrow><mrow><msub><mi>R</mi><mrow><mi>i</mi><mrow><mo>-</mo><mn>1</mn>
+</mrow></mrow></msub></mrow></mfrac><mo>=</mo><msup>
+<mrow><mo>(</mo><mfrac><mrow><mtext>OUTRAD</mtext>
+</mrow><mrow><msub><mi>R</mi><mrow><msub><mi>i</mi>
+<mi>L</mi></msub><mrow><mo>-</mo><mn>1</mn></mrow>
+</mrow></msub></mrow></mfrac><mo>)</mo></mrow><mrow>
+<mn>1</mn><mo>/</mo><mo>(</mo><mtext>NR</mtext><mrow>
+<mo>-</mo><mo>(</mo><msub><mi>i</mi><mi>L</mi>
+</msub><mrow><mo>-</mo><mn>1</mn></mrow><mo>)</mo>
+</mrow><mo>)</mo></mrow></msup></math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table>
+<p>so that neighboring pairs of radii have the same ratio for all
+i &gt; i<sub>L</sub>-1. <math><mrow><mi>D</mi>
+<mi>R</mi></mrow></math>  for the i<sup>th</sup> cell is then
+given by  <math><msub><mrow><mi>D</mi><mi>R</mi></mrow><mi>i</mi></msub><mo>=</mo>
+<msub><mi>R</mi><mi>i</mi></msub><mrow><mo>-</mo>
+<msub><mi>R</mi><mrow><mi>i</mi><mrow><mo>-</mo><mn>1</mn></mrow></mrow></msub></mrow></math>  </p>
+
+<p>If only <span class="keyword">INRAD</span> and <span class="keyword">OUTRAD</span> are
+specified, and no <span class="keyword">DRV</span> values have been specified,
+then the grid block radii are calculated from the above formulae with
+i<sub>L</sub> = 1 and R<sub>0</sub> defined equal to <span class="keyword">INRAD</span>.</p>
+
+<p>The following restrictions apply to the use of <span class="keyword">OUTRAD</span>:</p>
+
+<ul>
+<li> It should only be used with radial geometry. </li>
+
+<li> <span class="keyword">OUTRAD</span> should not be specified when the grid
+is defined by corner-point geometry using the keyword <a href="COORD.html#COORD"> COORD</a>. </li>
+
+<li> <span class="keyword">OUTRAD</span> must be greater than <span class="keyword">INRAD</span>. </li>
+
+<li> It is ignored if a complete set of <span class="keyword">DRV</span> values
+(<samp class="codeph">NR</samp> entries) has been input. </li>
+
+</ul>
+
+<div class="section" id="outrad_example"><a name="outrad_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NR=5</samp>:</p>
+ <pre><code>INRAD
+ 0.2 /
+DRV
+ 1.0 3.0 /
+OUTRAD
+ 500 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

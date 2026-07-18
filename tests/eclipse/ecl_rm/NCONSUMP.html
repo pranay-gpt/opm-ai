@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="NCONSUMP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="NCONSUMP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>NCONSUMP</title>
+</head>
+<body>
+
+
+<div class="nested0" id="NCONSUMP"><a name="NCONSUMP"><!-- --></a>
+<h1 class="keyword">NCONSUMP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="nconsump.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="nconsump.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1506e45">x</th>
+
+<th valign="top" id="d1506e48">ECLIPSE 100</th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1506e54">&nbsp;</th>
+ 
+<th valign="top" id="d1506e56">ECLIPSE 300</th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1506e45 d1506e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1506e48 d1506e56 ">RUNSPEC</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1506e45 d1506e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1506e48 d1506e56 ">GRID</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1506e45 d1506e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1506e48 d1506e56 ">EDIT</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1506e45 d1506e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1506e48 d1506e56 ">PROPS</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1506e45 d1506e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1506e48 d1506e56 ">REGIONS</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1506e45 d1506e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1506e48 d1506e56 ">SOLUTION</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1506e45 d1506e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1506e48 d1506e56 ">SUMMARY</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1506e45 d1506e54 ">x</td>
+
+<td valign="top" headers="d1506e48 d1506e56 ">SCHEDULE</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is used to specify a constant gas consumption rate
+at a particular node in the extended network (see <a href="../ecl_td/extended_The_extended_network_model.html#extended_the_extended_network_model">"The extended network
+model"</a> in the <cite>ECLIPSE Technical Description</cite>),
+and optionally to assign the consumption also to a group in the <a href="GRUPTREE.html#GRUPTREE"> GRUPTREE</a> hierarchy. It may be used as an alternative to the <a href="GCONSUMP.html#GCONSUMP"> GCONSUMP</a> keyword when the extended network model is employed (keyword <a href="NETWORK.html#NETWORK"> NETWORK</a> present in the <span class="keyword">RUNSPEC</span> section).</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li> Node name </li>
+
+<li> Gas consumption rate at the node <p>UNITS: sm<sup>3</sup>/day
+(<samp class="codeph">METRIC</samp>), Mscf/day (<samp class="codeph">FIELD</samp>), scc/hr
+(<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: Zero</p>
+ </li>
+
+<li> Name of the group from which the node's consumption should also
+be removed <p>DEFAULT: Not removed from any group</p>
+ </li>
+
+</ol>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> <ul>
+<li>If item 3 is defaulted, the node's gas consumption is <strong>not</strong> removed from a group, even if the node is a source node  and thus
+corresponds to a group. The default action is therefore different
+from that in <span class="keyword">GCONSUMP</span>.</li>
+
+<li>The group defined in item 3 replaces any group previously defined
+for the same purpose by this keyword or item 8 in keyword <a href="NETCOMPA.html#NETCOMPA"> NETCOMPA</a>.</li>
+
+</ul>
+ </span></div>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> Do not use both <span class="keyword">NCONSUMP</span> and <span class="keyword">GCONSUMP</span> to declare consumption at corresponding nodes
+and groups; this could double the consumption.</div>
+
+<p>See also keyword <span class="keyword">GCONSUMP</span>.</p>
+
+<div class="section" id="nconsump_example"><a name="nconsump_example"><!-- --></a><h4 class="sectiontitle">Example</h4>            
+    <pre><code>NCONSUMP
+  PLAT-A    20     PLAT-A  /
+  PLAT-B    15     PLAT-B  /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Format of SUMMARY keywords beginning with C"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="summary_format_of_summary_keywords_beginning_with_c"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Format of SUMMARY keywords beginning with C</title>
+</head>
+<body>
+
+
+<div class="nested0" id="summary_format_of_summary_keywords_beginning_with_c"><a name="summary_format_of_summary_keywords_beginning_with_c"><!-- --></a>
+<h1 class="topictitle1">Format of SUMMARY keywords beginning with C</h1>
+
+
+ <div>
+<p>Keywords that begin with the letter C must be followed by a list
+of well-reservoir connections (the well name and the three block coordinates).
+Each connection must be specified on a fresh line and terminated by
+a slash (/). The three grid block coordinates may be defaulted for
+a well, which will cause the appropriate quantity to be output for <strong>all</strong> connections in the well. The list of well connections is
+terminated by a line beginning with a slash (/).</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If the connection coordinates are defaulted, as for well <samp class="codeph">PROD3</samp> below, ECLIPSE reserves a number of summary vectors
+equal to the maximum number of connections per well (<span class="keyword">NCWMAX</span>, set in <span class="keyword">RUNSPEC</span> section keyword <a href="WELLDIMS.html#WELLDIMS"> WELLDIMS</a>). If this number
+is much greater than the actual number of connections in well <samp class="codeph">PROD3</samp> then defaulting the connections can become quite wasteful.</span></div>
+
+<p>For example,</p>
+
+<pre><code>COFR
+'PROD1' 10 3 7 /
+'PROD1' 10 3 8 /
+'PROD2'  4 2 5 / 
+'PROD3'        /
+/</code></pre>
+<p>The well name may be defaulted by using the character ‘*’. If both
+the well name and the connection coordinates are defaulted (as in
+the example below), then the requested summary quantities are output
+for all well connections in the global model. If the well name is
+defaulted but the connection coordinates are provided, then the requested
+summary quantities will be output for all wells with a connection
+in the specified block. Please note that well name templates are currently
+not allowed.</p>
+
+<pre><code>COFR
+--  Well Name   Cell
+    '*'        /
+/</code></pre>
+<p>Keywords beginning with the letter '<span class="keyword">C</span>' and ending
+with the letter '<span class="keyword">L</span>' output the corresponding connection
+quantity totaled over all the connections that belong to the same
+completion (see keyword <a href="COMPLUMP.html#COMPLUMP"> COMPLUMP</a>). Any connection within the completion can be specified to
+define the completion. Note that the well name may not be defaulted
+for a completion quantity (though the block coordinates can be, which
+will cause the appropriate quantity to be output for all completions
+in the well).</p>
+
+<p>For example,</p>
+
+<pre><code>CGFRL
+'PROD1' 10 3 7 /
+'PROD2'   /
+/</code></pre>
+<p>ECLIPSE 300</p>
+
+<p>For the conductive faults option the summary
+keywords (see table <a href="summary_Conductive_Faults.html#summary.Xsummary.tab.5568">197.1</a>) should be followed by a list of conductive fault names and should
+be terminated by a slash (/). Defaulting the fault name list results
+in output for all conductive faults. For example,</p>
+
+<pre><code>CFOSAT
+'FLT1' 'FLT2' / -- Oil saturation in faults 'FLT1' and 'FLT2'
+CFPRES
+/               -- Pressure in all faults
+</code></pre>
+<p>ECLIPSE 300</p>
+
+<p>Connection or completion keywords that require
+a component index, such as  <span class="keyword">CKFR</span>, <span class="keyword">CKFT</span>, <span class="keyword">CKFRL</span> and  <span class="keyword">CKFTL</span> are described
+in <a href="summary_Format_of_SUMMARY_keywords_with_a_component_index.html#summary_format_of_summary_keywords_with_a_component_index"> "Format of SUMMARY keywords with a component index"</a>.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

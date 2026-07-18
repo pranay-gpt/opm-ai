@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WPLUG"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WPLUG"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WPLUG</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WPLUG"><a name="WPLUG"><!-- --></a>
+<h1 class="keyword">WPLUG</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wplug.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wplug.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d3022e45">                         x                   
+  </th>
+
+<th valign="top" id="d3022e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d3022e54">                                             
+ </th>
+
+<th valign="top" id="d3022e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d3022e45 d3022e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3022e48 d3022e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3022e45 d3022e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3022e48 d3022e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3022e45 d3022e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3022e48 d3022e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3022e45 d3022e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3022e48 d3022e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3022e45 d3022e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3022e48 d3022e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3022e45 d3022e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3022e48 d3022e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3022e45 d3022e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3022e48 d3022e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3022e45 d3022e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d3022e48 d3022e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword must be used to set the plug-back lengths for all
+wells that may be subject to automatic plug-backs (requested in keywords <a href="WECON.html#WECON"> WECON</a>, <a href="GECON.html#GECON"> GECON</a>, <a href="GCONPROD.html#GCONPROD"> GCONPROD</a>, <a href="GCONPRI.html#GCONPRI"> GCONPRI</a>, <a href="GCONSALE.html#GCONSALE"> GCONSALE</a>, <a href="WECONT.html#WECONT"> WECONT</a>, <a href="GECONT.html#GECONT"> GECONT</a> and <a href="WORKTHP.html#WORKTHP"> WORKTHP</a>).</p>
+
+<p>When a well is subject to an automatic plug-back a specified length
+of perforations is closed, starting from the top or bottom of the
+open connections in the well, or the top or bottom of the open connections
+in the worst offending completion, depending on the entry in item
+4. The decision on whether to start from the top or the bottom depends
+on the reason for the plug-back; plug-backs to reduce the gas fraction
+starts from the top while those intended to reduce the water fraction
+will start from the bottom. A plug-back will not necessarily close
+an entire connection. A connection is only closed when there is no
+length of perforations remaining open in the grid block.</p>
+
+<p>A plug-back will alter the depth of the top or bottom of the open
+perforations, thus affecting the ratio of fluids produced by the well.
+The initial top and bottom depths of the perforated length may be
+set in keyword <a href="COMPVE.html#COMPVE"> COMPVE</a>, or defaulted to the center depths of the top and bottom grid block
+faces to give full penetration of the grid block. If item 10 in <span class="keyword">COMPVE</span> is set to <samp class="codeph">YES</samp>, the skin factor
+and transmissibility factor of the connection will also be recalculated
+after each plug-back, to reflect the reduced length of open perforations.</p>
+
+<p>When plug-backs occur in runs that do <strong>not</strong> use the Vertical
+Equilibrium option, the new perforation depths are automatically converted
+into scaled saturation table endpoints, which are then treated as
+if they had been entered with the <a href="COMPRP.html#COMPRP"> COMPRP</a> keyword. The conversion is performed by assuming
+a VE-type segregation of phases within the grid block (see <a href="comprp_Representing_the_effects_of_partial_penetration.html#comprp_representing_the_effects_of_partial_penetration"> "Representing the effects of partial penetration"</a>). There
+is a restriction on using plug-backs in non-VE runs that are fast
+restarts (see keyword <a href="RESTART.html#RESTART"> RESTART</a>). The required grid block geometry data is only stored on
+the <samp class="codeph">SAVE</samp> file if the base run contained the keyword <span class="keyword">COMPVE</span>. So if you wish to use plug-backs during a subsequent
+fast restart, you should include keyword <span class="keyword">COMPVE</span> in your base run, followed by just a slash if you do not need to
+set any partial penetration data at that time. The restriction does
+not apply to flexible restarts, as the required data are generated
+from the <span class="keyword">GRID</span> section.</p>
+
+<p>The <span class="keyword">WPLUG</span> keyword is followed by any number
+of records, each containing the following items of data, and each
+terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li>Well name, well name template, well list or well list template
+   <p>A template enclosed in quotes can be used to refer to multiple
+wells or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+             </li>
+
+<li>Length of perforation closed each time there is a plug-back from
+the top (for example for high GOR)   <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+                <p>This item must be set to a
+value greater than zero.</p>
+</li>
+
+<li>Length of perforation closed each time there is a plug-back from
+the bottom (for example for high water cut)   <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+                <p>This item must
+be set to a value greater than zero.</p>
+</li>
+
+<li>Perform plug-backs from the top/bottom of the well or the worst
+offending completion?    
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">WELL</samp> </td>
+
+<td valign="top">Plug-backs to be performed from the top/bottom of the open
+connections in the well.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">COMP</samp> </td>
+
+<td valign="top">Plug-backs to be performed from the top/bottom of the worst
+offending completion. (Connections are lumped into completions with
+keyword <span class="keyword">COMPLUMP</span>.)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">WELL</samp>  </p>
+                <p>Only the first letter is significant.</p>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="section" id="wplug_example"><a name="wplug_example"><!-- --></a><h4 class="sectiontitle">Example</h4></div>
+
+<pre><code>WPLUG
+ 'P*'    5.0  5.0  /
+ PROD2   2.0  3.0  COMP /
+/</code></pre>
+</div>
+
+</div>
+
+
+</body>
+</html>

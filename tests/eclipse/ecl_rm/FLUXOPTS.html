@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="FLUXOPTS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="FLUXOPTS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>FLUXOPTS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="FLUXOPTS"><a name="FLUXOPTS"><!-- --></a>
+<h1 class="keyword">FLUXOPTS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="fluxopts.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="fluxopts.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d702e45">  </th>
+
+<th valign="top" id="d702e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d702e54"> x </th>
+
+<th valign="top" id="d702e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d702e45 d702e54 "> x </td>
+
+<td valign="top" headers="d702e48 d702e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d702e45 d702e54 ">  </td>
+
+<td valign="top" headers="d702e48 d702e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d702e45 d702e54 ">  </td>
+
+<td valign="top" headers="d702e48 d702e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d702e45 d702e54 ">  </td>
+
+<td valign="top" headers="d702e48 d702e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d702e45 d702e54 ">  </td>
+
+<td valign="top" headers="d702e48 d702e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d702e45 d702e54 ">  </td>
+
+<td valign="top" headers="d702e48 d702e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d702e45 d702e54 ">  </td>
+
+<td valign="top" headers="d702e48 d702e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d702e45 d702e54 ">  </td>
+
+<td valign="top" headers="d702e48 d702e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword sets optional parameters for the ECLIPSE
+300 <a href="../ecl_td/fluxintro_Flux_Boundary_Conditions.html#fluxintro_flux_boundary_conditions">"Flux boundary conditions"</a> option.</p>
+
+<ol>
+<li id="fluxopts.1"><a name="fluxopts.1"><!-- --></a>Output to run a thermal reduced run. <p>This item should be used in the full-field run to tell
+ECLIPSE whether the reduced run will be a thermal run or not.</p>
+<p>This item should be followed by one of the following
+values:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"><p> <samp class="codeph">YES</samp> </p>
+</td>
+
+<td valign="top"><p>The simulator will output the necessary information
+to run a thermal reduced run</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"><p> <samp class="codeph">NO</samp> </p>
+</td>
+
+<td valign="top"><p>The simulator will not output the necessary
+information to run a thermal reduced run</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">NO</samp> </p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">There is no need to use this item if the base run is
+thermal or there is no intention of running a thermal sector model
+from the base run. </span></div>
+</li>
+
+<li id="fluxopts.2"><a name="fluxopts.2"><!-- --></a>Factor to improve convergence. <p>Convergence degradation might be observed as the molar
+density of a given component crossing the flux boundary approaches
+zero. In order to improve performance in such cases, this item should
+be used in the reduced run.</p>
+ <p>If the simulation
+is experiencing convergence issues during a reduced run, you can set <a href="DEBUG3.html#DEBUG3"> DEBUG3</a> item 8 to 1 to
+identify the cell with worst convergence. Use the summary vector <samp class="codeph">BMLSC</samp> to assess if the convergence issues occur as a given
+component approaches zero. In such cases, this item can be used in
+the reduced run to improve its performance.</p>
+<p>By
+default, the boundary conditions are applied as a step function with
+a discontinuity when the molar density is zero. By using this item,
+the discontinuity will be replaced with a slope controlled by the
+input to the item. The actual value to be used is problem dependent.
+If the value is too high, the slope of the function around zero molar
+density might be too steep to avoid the convergence problems. If the
+value is too low, it might affect the solution.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> The correction factor on the boundary condition triggered by this
+item is not applied on thermal sector models. </span></div>
+</li>
+
+</ol>
+
+<p>The data should by terminated by a slash (/).</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

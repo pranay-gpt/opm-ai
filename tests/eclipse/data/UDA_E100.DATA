@@ -1,0 +1,314 @@
+-- =====================================================================
+-- A 5000 3D3P PROBLEM
+-- =====================================================================
+--DEBUG
+--1 1 1 1 1 1 1 1 1 1
+--1 1 1 1 1 1 1 1 1 1
+--1 1 1 1 1 1 1 1 5 1 /
+-- This data tests user defined argument facility in E100. 
+-- This functionality enables users to define argument quantities for SCHEDULE section keyword. 
+-- The following arguments can be specified now by user defined quantities (UDQ):
+-- WCONPROD, WCONINJE, WELLSTRE, WECON, GCONPROD, GCONINJE
+RUNSPEC
+TITLE
+   3D3P 5000 CELLS
+
+DIMENS
+   30   34    5  /
+
+UDQDIMS
+ 12 12 12 15 12 12 12 12 12 /
+
+UDADIMS
+ 20 20 10 /
+UDQPARAM
+2* 6500 /
+
+
+FMTOUT
+--MULTOUT
+NONNC
+
+OIL
+
+WATER
+
+GAS
+
+DISGAS
+
+FIELD
+
+EQLDIMS
+    1  100   10    1    1 /
+
+TABDIMS
+    1    1   16   12    1   12 /
+
+WELLDIMS
+   24    8    2   24 /
+
+NUPCOL
+    4 /
+
+START
+   1 'JAN' 1986  /
+
+NSTACK
+   24 /
+
+GRID    ================================================================
+
+NOGGF
+
+--     ARRAY  VALUE     ------- BOX ------
+
+EQUALS
+      'DX'     700      /
+      'DY'     700      /
+      'PORO'  0.2       /
+      'PERMX' 500       /
+      'TOPS'  5000      1  30  1  34  1  1  /
+
+      'DZ'    50        1  30  1  34  1  4  /
+      'DZ'   100        1  30  1  34  5  5  /
+
+      'PORO' 0.0       29  30  1  34  1  1 /
+      'PORO' 0.0       28  28  1  16  1  1 /
+      'PORO' 0.0       28  28  19 34  1  1 /
+
+/       EQUALS IS TERMINATED BY A NULL RECORD
+
+-- THE Y AND Z DIRECTION PERMEABILITIES ARE COPIED FROM PERMX
+--    SOURCE  DESTINATION  ------- BOX ------
+COPY
+      'PERMX'    'PERMY'   /
+      'PERMX'    'PERMZ'   /
+/
+
+MULTIPLY
+  'PERMZ' 0.1 /
+  /
+
+
+
+PROPS   ***************************************************************
+
+
+SWFN
+    .25       .00       .0
+    .75       .80       .0
+   1.0       1.0        .0
+  /
+
+SOF3
+    .00       .00    .00
+    .25       .00    .00
+    .75      0.8     .80
+  /
+
+SGFN
+    .00       .00    .0
+    .05       .00    .0
+    .75      1.00    .0
+  /
+
+RPTPROPS
+   /
+
+DENSITY
+        49.94    62.43    0.061    /
+
+ROCK
+        4000   4.0E-6   /
+
+PVTW
+        4000   1.00    3.0E-6     0.50   0   /
+
+PVTO
+0.165   400  1.012   .40  /
+0.335   800  1.0255  .39  /
+0.500  1200  1.038   .38  /
+0.665  1600  1.051   .37  /
+0.828  2000  1.063   .36  /
+0.985  2400  1.075   .35  /
+1.130  2800  1.087   .34
+       3200  1.080   .35
+       3600  1.074   .36
+       4000  1.068   .37
+       4400  1.062   .38  /
+/
+
+PVDG
+ 400  5.90  0.013
+ 800  2.95  0.0135
+1200  1.96  0.014
+1600  1.47  0.0145
+2000  1.18  0.015
+2400  0.98  0.0155
+2800  0.84  0.016
+3200  0.74  0.0165
+3600  0.65  0.017
+4000  0.56  0.0175
+4400  0.51  0.018
+/
+
+
+SOLUTION  *************************************************************
+
+EQUIL      1 TABLES   10 NODES IN EACH           FIELD   23:34 15 SEP 85
+  5040.0 3600.00 5200.00  .00000 4040.00  .00000     1      0       0 /
+
+RSVD
+4000 1.13
+6000 1.13 /
+
+
+
+SUMMARY
+
+FU_MIN
+FU_MAX
+FU_AVEA
+
+
+GOPR
+G1
+G2
+/
+
+
+WOPR
+P12 
+P16
+P20 
+P24 
+/
+
+FUGWRAT
+GWPR
+  G1
+  G2
+/
+
+FUGGRAT
+GGPR
+  G1
+  G2
+/
+
+FUGLRAT
+GLPR
+  G1
+  G2
+/
+
+FPR
+FOPR
+
+
+ALL
+SEPARATE
+RUNSUM
+
+-- MSUMLINS
+
+-- MSUMNEWT
+
+SCHEDULE ===============================================================
+RPTSCHED
+WELLS=3 'CPU=2'/
+WELSPECS
+    'P12'      'G1'    10 12   1*   'OIL'  /
+    'P16'      'G1'    10 16   1*   'OIL'  /
+    'P20'      'G2'    10 20   1*   'OIL'  /
+    'P24'      'G2'    10 24   1*   'OIL'  /
+/
+
+
+UDQ
+ASSIGN FU_OR1 21000 /
+ASSIGN FU_OR2 22000 /
+DEFINE FU_MIN MIN(GOPR) /
+DEFINE FU_MAX MAX(GOPR) /
+DEFINE FU_SUM SUM(GOPR)/2 /
+DEFINE FU_AVEA AVEA(GOPR) /
+
+DEFINE FUGWRAT MIN(GWPR) /
+DEFINE FUGLRAT MIN(GLPR) /
+DEFINE FUGGRAT MIN(GGPR) /
+ASSIGN FU_OR5  19000 /
+/
+
+
+DRSDT
+0.0 /
+
+COMPDAT
+    'P*' 2*  3  3 'OPEN' 0   -1   0.5  /
+    /
+
+WCONPROD 
+ 'P1*' 'OPEN' 'GRUP' 20000 4* 1000   /
+ 'P2*' 'OPEN' 'GRUP' 10000 4*  1000 /
+  /
+
+
+GCONPROD 
+'G1' 'ORAT' FU_OR1 /
+'G2' 'ORAT' FU_OR2  /
+/
+TSTEP
+5*20 /
+
+GCONPROD 
+'G*' 'ORAT' FU_MIN /
+/
+TSTEP
+5*20 /
+
+
+GCONPROD 
+'G1' 'ORAT' FU_OR5 /
+/
+TSTEP
+5*20 /
+
+
+GCONPROD 
+'G1' 'ORAT' FU_AVEA /
+/
+TSTEP
+5*20 /
+
+GCONPROD 
+'G1' 'ORAT' FU_MAX /
+/
+TSTEP
+5*20 /
+
+
+GCONPROD 
+'G*' 'WRAT' 1* FUGWRAT /
+/
+
+TSTEP
+5*20 /
+
+GCONPROD 
+'G*' 'GRAT' 2* FUGGRAT /
+/
+
+TSTEP
+5*20 /
+
+
+GCONPROD 
+'G*' 'LRAT' 3* FUGLRAT /
+/
+
+TSTEP
+5*20 /
+
+END
+

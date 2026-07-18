@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="LGROFF"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="LGROFF"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>LGROFF</title>
+</head>
+<body>
+
+
+<div class="nested0" id="LGROFF"><a name="LGROFF"><!-- --></a>
+<h1 class="keyword">LGROFF</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="lgroff.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="lgroff.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1248e45">                         x                   
+  </th>
+
+<th valign="top" id="d1248e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1248e54">                                             
+ </th>
+
+<th valign="top" id="d1248e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1248e45 d1248e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1248e48 d1248e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1248e45 d1248e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1248e48 d1248e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1248e45 d1248e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1248e48 d1248e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1248e45 d1248e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1248e48 d1248e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1248e45 d1248e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1248e48 d1248e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1248e45 d1248e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1248e48 d1248e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1248e45 d1248e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1248e48 d1248e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1248e45 d1248e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d1248e48 d1248e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p><span class="keyword">LGROFF</span> can be used at any time during the run
+to switch a local grid refinement off. Optionally, the local grid
+refinement can be switched on and off automatically depending on the
+number of active wells it contains. (A well is active if it is open
+or stopped, but not shut.)</p>
+
+<p>The keyword is followed by either one or two items of data, terminated
+with a slash (/).</p>
+
+<ol>
+<li>Name of the local grid refinement - up to 8 characters.   <p>A
+local grid name root ending in an asterisk (*) may be used to refer
+to several local grids in the same record.</p>
+             </li>
+
+<li>Number of active wells required to keep the refinement open. 
+     <p>If set &gt; 0, the refinement is on whenever it contains the
+stated number of active wells or more, and off whenever the number
+of active wells falls below the stated number.</p>
+                <p>DEFAULT: 0, which switches the refinement off unconditionally.</p>
+                                                                
+                       </li>
+
+</ol>
+
+<p>If the LGR is part of an amalgamation specified using the keyword <a href="AMALGAM.html#AMALGAM"> AMALGAM</a>, then the whole
+amalgamation is switched off (that is all local grids contained in
+the amalgamation are switched off). The number of active wells specified
+by item 2 refers to the amalgamation (that is it applies to all wells
+within local grids contained in the amalgamation).</p>
+
+<p>In addition, refer to the <span class="keyword">OPTIONS</span> keyword, <a href="options.html#options.56">item 56</a>.</p>
+
+<p>See also keyword <a href="LGRON.html#LGRON"> LGRON</a>.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">In parallel runs, LGRs cannot be switched on (using the <span class="keyword">LGRON</span> keyword) after they have been switched off.     
+                            </span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">In parallel runs, wells cannot be declared inside of LGRs (using
+the <a href="WELSPECL.html#WELSPECL"> WELSPECL</a> keyword)
+after the LGRs have been switched off.                           
+      </span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

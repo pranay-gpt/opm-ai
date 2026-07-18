@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Enumeration"/>
+<meta name="DC.subject" content="Initial conditions"/>
+<meta name="keywords" content="Initial conditions"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="initial_enumeration"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Enumeration</title>
+</head>
+<body>
+
+<div class="nested0" id="initial_enumeration"><a name="initial_enumeration"><!-- --></a><h1 class="topictitle1">Enumeration</h1>
+
+
+ <div><p>In some cases it may be required to start a study from a point
+in existing production, where a restart cannot be used. For example,
+when starting a compositional simulation using the results of a black
+oil model. As flow patterns have developed, this cannot be done by
+equilibration. Enumeration allows the initial solution to be specified
+directly. Three sets of data are required for all simulations:</p>
+<ul><li>The pressure: <p> <a href="../ecl_rm/PRESSURE.html#PRESSURE">PRESSURE</a>, or, for ECLIPSE 100, <a href="../ecl_rm/PRVD.html#PRVD">PRVD</a>.</p>
+</li>
+<li>Saturations:  <p> <a href="../ecl_rm/SGAS.html#SGAS">SGAS</a> and <a href="../ecl_rm/SWAT.html#SWAT">SWAT</a>  </p>
+                <p>ECLIPSE 300 </p>
+<p>or <span class="keyword">SGAS</span> and <a href="../ecl_rm/SOIL.html#SOIL">SOIL</a> </p>
+<p>ECLIPSE 300 </p>
+<p>or <span class="keyword">SOIL</span> and <span class="keyword">SWAT</span>.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"><p>In ECLIPSE 300,
+in models with the <a href="../ecl_rm/SOR.html#SOR">SOR</a> option active, using the optional keyword <a href="../ecl_rm/ROMF.html#ROMF">ROMF</a> will change the way the
+saturations are calculated. Please refer to <a href="../ecl_rm/SOR.html#sor_initialization">"SOR Initialization"</a> for more details. </p>
+</span></div>
+</li>
+<li>Composition: <p>For a black oil simulation with dissolved gas,
+either <a href="../ecl_rm/PBUB.html#PBUB">PBUB</a> or <a href="../ecl_rm/RS.html#RS">RS</a>.</p>
+                <p>For a black oil simulation with vaporized
+oil, either <a href="../ecl_rm/PDEW.html#PDEW">PDEW</a> or <a href="../ecl_rm/RV.html#RV">RV</a>.</p>
+<p>For a compositional simulation with two hydrocarbon
+phases, both <a href="../ecl_rm/XMF.html#XMF">XMF</a> and <a href="../ecl_rm/YMF.html#YMF">YMF</a>.</p>
+<p>For a compositional simulation with only a single
+hydrocarbon phase, <a href="../ecl_rm/ZMF.html#ZMF">ZMF</a>.</p>
+</li>
+</ul>
+<p>The above three sets of data are sufficient for most simulations.
+However, special options may require additional data. For example:</p>
+<ul><li><p>ECLIPSE 300</p>
+<p>Hydrocarbon components in water:</p>
+<p> <a href="../ecl_rm/AMF.html#AMF">AMF</a> </p>
+<p>ECLIPSE
+300 </p>
+</li>
+<li>  Water components in water:<p> <a href="../ecl_rm/WMF.html#WMF">WMF</a> </p>
+<p> ECLIPSE
+300 </p>
+</li>
+<li>  Solid model <p>Solid composition:</p>
+<p> <a href="../ecl_rm/SMF.html#SMF">SMF</a> </p>
+<p>ECLIPSE 300 </p>
+   </li>
+<li>The temperature:<p> <a href="../ecl_rm/TEMPI.html#TEMPI">TEMPI</a> </p>
+</li>
+</ul>
+<p>There are several alternative ways of entering this data:</p>
+<ul><li>Like <span class="keyword">GRID</span> and <span class="keyword">EDIT</span> section
+keywords, all the enumeration keywords may also be set using <a href="../ecl_rm/EQUALS.html#EQUALS">EQUALS</a>, <a href="../ecl_rm/ADD.html#ADD">ADD</a> and <a href="../ecl_rm/MULTIPLY.html#MULTIPLY">MULTIPLY</a> applied to boxes
+of cells. </li>
+<li><p>ECLIPSE 300</p>
+<p>Data can be read directly from a flexible restart file using the <a href="../ecl_rm/GETSOL.html#GETSOL">GETSOL</a> keyword. The format
+of this is:  </p>
+<pre><code>GETSOL
+PRESSURE BASE1 10 /
+SWAT BASE1 10 /
+/</code></pre><p>This would imply that the pressure and water saturation
+were to be obtained from the 10th report step of the <samp class="codeph">RESTART</samp> file with root name <samp class="codeph">BASE1</samp>.</p>
+<p>ECLIPSE 300</p>
+</li>
+<li>Instead of <a href="../ecl_rm/XMF.html#XMF">XMF</a> and <a href="../ecl_rm/YMF.html#YMF">YMF</a>, tables of composition with respect to pressure can be entered
+using the <a href="../ecl_rm/XMFVP.html#XMFVP">XMFVP</a> and <a href="../ecl_rm/YMFVP.html#YMFVP">YMFVP</a> keywords. These tables would usually be generated by the
+PVT <em>i</em> package from constant volume depletion or differential
+liberation experiments, and would specify a set of equilibrium liquid
+and vapor compositions as a function of pressure. This should help
+ensure that the chosen liquid and vapor are close to phase equilibrium
+and avoid large transient effects that occur when the initial phase
+are not in equilibrium. This is discussed further in <a href="initial_specifying_the_initial_state_of_a_run_in_eclipse_300.html#initial_specifying_the_initial_state_of_a_run_in_eclipse_300"> "Specifying the initial state of a run in ECLIPSE 300"</a>.  
+          </li>
+</ul>
+</div>
+</div>
+
+</body>
+</html>

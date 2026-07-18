@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Adjoint gradient calculations"/>
+<meta name="DC.subject" content="Optimization adjoint screening, Production optimization"/>
+<meta name="keywords" content="Optimization adjoint screening, Production optimization"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="techdesc_adjoint_gradient_calculations_in_eclipse"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Adjoint gradient calculations</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="techdesc_adjoint_gradient_calculations_in_eclipse"><a name="techdesc_adjoint_gradient_calculations_in_eclipse"><!-- --></a>
+<h1 class="topictitle1">Adjoint gradient calculations</h1>
+
+
+ <div>
+<p>After a simulation run, the optimization workflow starts with the
+calculation of the gradients of the objective function with respect
+to the chosen parameters. These gradients must take into account the
+equality constraints imposed by the fluid flow calculations solved
+in ECLIPSE.</p>
+
+<p>At each simulator timestep, ECLIPSE forces the fully implicit residual
+in each simulator grid block to be zero (see <a href="formulate_Formulation_of_the_Equations.html#formulate_formulation_of_the_equations"> "Formulation of the Equations"</a>).</p>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> The adjoint gradient calculations require a fully
+implicit formulation of the equations. If you try to use the reservoir
+optimization feature without this type of formulation, the run will
+be aborted.</div>
+
+<p>This cell residual constraint equation may be written as</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="techdesc.equ.0044"/>
+ <math><mrow><mrow>
+<mstyle><mrow><mi>R</mi></mrow>
+</mstyle><mo>(</mo><msup><mrow><msup><mstyle><mrow><mi>X</mi></mrow></mstyle>
+<mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msup>
+<mo>,</mo><mstyle><mrow><mi>X</mi>
+</mrow></mstyle></mrow><mrow><mi>n</mi></mrow></msup>
+<mo>)</mo></mrow><mo>=</mo><mfrac><mrow><mstyle><mrow><mi>M</mi></mrow></mstyle>
+<mo>(</mo><msup><mstyle><mrow><mi>X</mi></mrow></mstyle><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msup><mo>)</mo><mo>-</mo><mrow>
+<mstyle><mrow><mi>M</mi></mrow>
+</mstyle><mo>(</mo><msup><mstyle>
+<mrow><mi>X</mi></mrow></mstyle><mrow><mi>n</mi>
+</mrow></msup><mo>)</mo></mrow></mrow><mrow><mi>d</mi>
+<mi>t</mi></mrow></mfrac><mo>+</mo><mrow><mstyle><mrow><mi>F</mi></mrow></mstyle>
+<mo>(</mo><msup><mstyle><mrow><mi>X</mi></mrow></mstyle><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msup><mo>)</mo></mrow><mo>+</mo><mrow>
+<mstyle><mrow><mi>Q</mi></mrow>
+</mstyle><mrow><mo>(</mo><msup><mstyle><mrow><mi>X</mi></mrow></mstyle>
+<mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msup>
+<mo>)</mo></mrow></mrow><mo>=</mo><mn>0</mn></mrow>
+</math> 
+</td><td align="right">[Eq. 810.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> the superscripts <em>n+1</em> and <em>n</em> </td>
+
+<td valign="top">denote the current and previous timestep respectively, and</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msup><mstyle><mrow><mi>X</mi>
+</mrow></mstyle><mrow><mi>n</mi></mrow></msup></mrow>
+</math> </td>
+
+<td valign="top">are the solution variables (pressure and molar densities for
+example) at time <em>n</em>    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mstyle><mi>M</mi></mstyle><mo>(</mo><msup><mstyle><mrow><mi>X</mi></mrow></mstyle><mrow><mi>n</mi></mrow></msup>
+<mo>)</mo></mrow></math> </td>
+
+<td valign="top">is the fluid-in-place in each simulator grid block at time <em>n</em>,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mstyle><mi>F</mi></mstyle><mo>(</mo><msup><mstyle><mrow><mi>X</mi></mrow></mstyle><mrow><mi>n</mi></mrow></msup>
+<mo>)</mo></mrow></math> </td>
+
+<td valign="top">is the net flow rate into neighboring grid blocks at time <em>n</em>, and</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mstyle><mi>Q</mi></mstyle><mo>(</mo><msup><mstyle><mrow><mi>X</mi></mrow></mstyle><mrow><mi>n</mi></mrow></msup>
+<mo>)</mo></mrow></math> </td>
+
+<td valign="top">is the net flow rate into wells at time <em>n</em>.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Note that the objective function is a function of both the control
+parameters  <math>
+<mrow><munder><mrow><mi>λ</mi></mrow>
+<mrow><mo>̲</mo></mrow></munder></mrow></math> and the
+simulation primary variables  <math><mi>X</mi></math>; that is  <math>
+<mrow><mi>J</mi><mo>=</mo><mrow><mi>J</mi><mo>(</mo>
+<mi>X</mi><mo>,</mo><mrow><munder>
+<mrow><mi>λ</mi></mrow><mrow><mo>̲</mo></mrow>
+</munder></mrow><mo>)</mo></mrow></mrow></math>.</p>
+
+<p>A Lagrangian formulation of the objective function is used in order
+to comply with the constraints imposed by the cell residuals,</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="techdesc.equ.005b"/>
+ <math><mrow><mrow>
+<mi>L</mi><mo>(</mo><mstyle><mi>X</mi></mstyle><mo>,</mo><mrow><munder>
+<mrow><mi>λ</mi></mrow><mrow><mo>̲</mo></mrow>
+</munder></mrow><mo>)</mo></mrow><mo>=</mo><mrow><mi>J</mi><mo>(</mo><mstyle><mi>X</mi>
+</mstyle><mo>,</mo><mrow><munder><mrow>
+<mi>λ</mi></mrow><mrow><mo>̲</mo></mrow></munder>
+</mrow><mo>)</mo><mo>-</mo><mrow><munder>
+<mrow><mi>Φ</mi></mrow><mrow><mo>̲</mo></mrow>
+</munder></mrow><mo>⋅</mo><mrow><mstyle><mi>R</mi></mstyle><mo>(</mo>
+<mstyle><mi>X</mi></mstyle><mo>,</mo><mrow><munder><mrow><mi>λ</mi>
+</mrow><mrow><mo>̲</mo></mrow></munder></mrow><mo>)</mo></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 810.2]
+              </td></tr></tbody></table>
+<p>Note that when all the residuals are satisfied (<math><mi>R</mi><mo>=</mo>
+<mn>0</mn></math>) the Lagrangian is simply the objective function.
+The vector of Lagrange multipliers on the residuals,  <math><mrow><munder><mrow><mi>Φ</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow></math>, is known as the “adjoint vector”.</p>
+
+<p>We are interested in forming the total parameter derivatives of
+this Lagrangian:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="techdesc.XID-00000062"/>
+ <math><mrow><mfrac>
+<mrow><mi>d</mi><mi>L</mi></mrow><mrow><mi>d</mi>
+<munder><mrow><mi>λ</mi></mrow><mrow><mo>̲</mo></mrow>
+</munder></mrow></mfrac><mo>⁢</mo><mo>=</mo><mtext> </mtext><mrow><mfrac><mrow><mo>∂</mo><mi>L</mi>
+</mrow><mrow><mo>∂</mo><munder><mrow><mi>λ</mi></mrow>
+<mrow><mo>̲</mo></mrow></munder></mrow></mfrac><mo>⁢</mo><mo>+</mo><mtext> </mtext><mrow><mfrac><mrow>
+<mo>∂</mo><mi>L</mi></mrow><mrow><mo>∂</mo><mstyle><mrow><mi>X</mi></mrow></mstyle>
+</mrow></mfrac><mo>⋅</mo><mrow><mfrac><mrow><mo>∂</mo>
+<mstyle><mrow><mi>X</mi></mrow>
+</mstyle></mrow><mrow><mo>∂</mo><munder><mrow><mi>λ</mi></mrow><mrow><mo>̲</mo></mrow></munder></mrow>
+</mfrac></mrow></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 810.3]
+              </td></tr></tbody></table>
+<p>for which we require the partial Lagrangian derivatives:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="techdesc.XID-00000066"/>
+ <math><mrow><mrow>
+<mfrac><mrow><mo>∂</mo><mi>L</mi></mrow><mrow><mo>∂</mo><mstyle><mrow><mi>X</mi>
+</mrow></mstyle></mrow></mfrac><mtext> </mtext></mrow>
+<mo>=</mo><mrow><mfrac><mrow><mo>∂</mo><mi>J</mi>
+</mrow><mrow><mo>∂</mo><mstyle>
+<mrow><mi>X</mi></mrow></mstyle></mrow></mfrac><mo>⁢</mo><mo>−</mo><mtext> </mtext><mrow><mo>(</mo><mi>Φ</mi><mo>⋅</mo><mrow><mfrac><mrow>
+<mo>∂</mo><mi>R</mi></mrow><mrow><mo>∂</mo><mstyle><mrow><mi>X</mi></mrow></mstyle>
+</mrow></mfrac></mrow><mo>)</mo></mrow></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 810.4]
+              </td></tr></tbody></table>
+<p>and</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="techdesc.equ.006a"/>
+ <math><mrow><mrow>
+<mfrac><mrow><mo>∂</mo><mi>L</mi></mrow><mrow><mo>∂</mo><munder><mrow><mi>λ</mi></mrow><mo>̲</mo>
+</munder></mrow></mfrac><mtext> </mtext></mrow><mo>=</mo>
+<mrow><mfrac><mrow><mo>∂</mo><mi>J</mi></mrow><mrow>
+<mo>∂</mo><munder><mrow><mi>λ</mi></mrow><mo>̲</mo>
+</munder></mrow></mfrac><mo>⁢</mo><mo>−</mo><mtext> </mtext><mrow><mo>(</mo><munder><mrow><mi>Φ</mi></mrow><mrow><mo>̲</mo></mrow>
+</munder><mo>⋅</mo><mrow><mfrac><mrow><mo>∂</mo>
+<mstyle><mrow><mi>R</mi></mrow>
+</mstyle></mrow><mrow><mo>∂</mo><munder><mrow><mi>λ</mi></mrow><mo>̲</mo></munder></mrow></mfrac></mrow>
+<mo>)</mo></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 810.5]
+              </td></tr></tbody></table>
+<p>as well as the solution derivatives  <math><mrow><mrow><mfrac>
+<mrow><mo>∂</mo><mstyle><mi>X</mi>
+</mstyle></mrow><mrow><mo>∂</mo><munder><mrow><mi>λ</mi></mrow><mo>̲</mo></munder></mrow></mfrac></mrow>
+</mrow></math>.</p>
+
+<p>Since  <math><mi>R</mi><mo>=</mo><mn>0</mn></math>, the vector of Lagrange
+multipliers can be chosen in any way.</p>
+
+<p>As there is an implicit dependence of the solution variables on
+the control parameters,  <math><mrow><mstyle><mrow><mi>X</mi></mrow></mstyle>
+<mo>=</mo><mrow><mstyle><mrow><mi>X</mi></mrow></mstyle><mo>(</mo><mrow><munder><mrow><mi>λ</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow><mo>)</mo></mrow></mrow></math>, the natural choice of  <math><mrow><munder><mrow><mi>Φ</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow></math> is that which sets equation <a href="techdesc_Adjoint_Gradient_Calculations_in_ECLIPSE.html#techdesc.XID-00000066">810.4</a>  to zero. This removes the need
+to calculate the solution derivatives. Hence we solve the adjoint
+set of linear equations:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="techdesc.XID-00000075"/>
+ <math><mrow><mrow>
+<munder><mrow><mi>Φ</mi></mrow><mrow>
+<mo>̲</mo></mrow></munder></mrow><mo>⋅</mo><mrow>
+<mfrac><mrow><mo>∂</mo><mrow><mi>R</mi></mrow></mrow>
+<mrow><mo>∂</mo><mstyle><mi>X</mi>
+</mstyle></mrow></mfrac><mo>⁢</mo><mo>=</mo><mtext> </mtext></mrow><mfrac><mrow><mo>∂</mo><mrow><mi>J</mi></mrow></mrow><mrow><mo>∂</mo><mstyle><mi>X</mi></mstyle></mrow></mfrac>
+</mrow></math> 
+</td><td align="right">[Eq. 810.6]
+              </td></tr></tbody></table>
+<p>for the adjoint vector  <math><mrow><munder><mrow><mi>Φ</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow></math>. The dimension of the adjoint
+vector for each time period is that of the normal fluid flow Jacobian
+(number of grid cells times number of simulation variables).</p>
+
+<p>As an example, scoping equation <a href="techdesc_Adjoint_Gradient_Calculations_in_ECLIPSE.html#techdesc.XID-00000075">810.6</a>  into four distinct time periods, it may be written as:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="techdesc.XID-0000007c"/>
+ <math><mrow><mrow>
+<mrow><mo>[</mo><mtable><mtr><mtd><msup><mrow><munder><mrow><mi>Φ</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow><mrow><mn>1</mn></mrow></msup>
+</mtd><mtd><msup><mrow><munder><mrow>
+<mi>Φ</mi></mrow><mrow><mo>̲</mo></mrow></munder>
+</mrow><mrow><mn>2</mn></mrow></msup></mtd><mtd><msup>
+<mrow><munder><mrow><mi>Φ</mi></mrow>
+<mrow><mo>̲</mo></mrow></munder></mrow><mrow><mn>3</mn>
+</mrow></msup></mtd><mtd><msup><mrow><munder><mrow><mi>Φ</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow><mrow><mn>4</mn></mrow></msup>
+</mtd></mtr></mtable><mo>]</mo></mrow><mrow><mo>[</mo>
+<mtable><mtr><mtd><msup><mrow><mi>A</mi></mrow><mrow>
+<mn>11</mn></mrow></msup></mtd><mtd><mn>0</mn></mtd>
+<mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr>
+<mtr><mtd><msup><mrow><mi>A</mi></mrow><mrow><mn>2</mn><mn>1</mn></mrow></msup></mtd><mtd><msup><mrow>
+<mi>A</mi></mrow><mrow><mn>22</mn></mrow></msup></mtd>
+<mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr>
+<mtr><mtd><mn>0</mn></mtd><mtd><msup><mrow><mi>A</mi>
+</mrow><mrow><mn>32</mn></mrow></msup></mtd><mtd>
+<msup><mrow><mi>A</mi></mrow><mrow><mn>33</mn></mrow>
+</msup></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd>
+<mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><msup>
+<mrow><mi>A</mi></mrow><mrow><mn>4</mn><mn>3</mn>
+</mrow></msup></mtd><mtd><msup><mrow><mi>A</mi></mrow>
+<mrow><mn>44</mn></mrow></msup></mtd></mtr></mtable>
+<mo>]</mo></mrow></mrow><mo>=</mo><mrow><mo>[</mo>
+<mfrac><mrow><mo>∂</mo><mi>J</mi></mrow><mrow><mo>∂</mo><msup><mstyle><mrow><mi>X</mi></mrow></mstyle><mrow><mn>1</mn></mrow></msup>
+</mrow></mfrac><mfrac><mrow><mo>∂</mo><mrow><mi>J</mi>
+</mrow></mrow><mrow><mo>∂</mo><msup><mrow><mstyle><mrow><mi>X</mi></mrow></mstyle>
+</mrow><mrow><mn>2</mn></mrow></msup></mrow></mfrac>
+<mfrac><mrow><mo>∂</mo><mrow><mi>J</mi></mrow></mrow>
+<mrow><mo>∂</mo><msup><mrow><mstyle>
+<mrow><mi>X</mi></mrow></mstyle></mrow><mrow><mn>3</mn>
+</mrow></msup></mrow></mfrac><mfrac><mrow><mo>∂</mo>
+<mrow><mi>J</mi></mrow></mrow><mrow><mo>∂</mo><msup>
+<mrow><mstyle><mrow><mi>X</mi>
+</mrow></mstyle></mrow><mrow><mn>4</mn></mrow></msup>
+</mrow></mfrac><mo>]</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 810.7]
+              </td></tr></tbody></table>
+<p>where the <math><mi>A</mi></math> matrices are derivatives of the fluid flow residuals
+with respect to solution variables, given by</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="techdesc.equ.0081"/>
+ <math><mrow><msup>
+<mrow><mi>A</mi></mrow><mrow><mi>m</mi><mi>n</mi>
+</mrow></msup><mo>⁢</mo><mo>=</mo><mtext> </mtext>
+<mrow><mfrac><mrow><mo>∂</mo><msup><mstyle><mrow><mi>R</mi></mrow></mstyle>
+<mrow><mi>m</mi></mrow></msup></mrow><mrow><mo>∂</mo>
+<msup><mstyle><mrow><mi>X</mi>
+</mrow></mstyle><mrow><mi>n</mi></mrow></msup></mrow>
+</mfrac></mrow></mrow></math> 
+</td><td align="right">[Eq. 810.8]
+              </td></tr></tbody></table>
+<p>where  <math><mi>m</mi></math>  and  <math><mi>n</mi></math>  are time indices. By multiplying out <math><mrow><msup><mrow>
+<mi>A</mi></mrow><mrow><mi>m</mi><mi>n</mi></mrow>
+</msup><mo>=</mo><mrow><mrow><mfrac><mrow><mo>∂</mo>
+<msup><mstyle><mrow><mi>R</mi>
+</mrow></mstyle><mrow><mi>m</mi></mrow></msup></mrow>
+<mrow><mo>∂</mo><msup><mstyle>
+<mrow><mi>X</mi></mrow></mstyle><mrow><mi>n</mi>
+</mrow></msup></mrow></mfrac></mrow></mrow></mrow>
+</math>, equation <a href="techdesc_Adjoint_Gradient_Calculations_in_ECLIPSE.html#techdesc.XID-0000007c">810.7</a>  term
+by term the general equation, which must be solved at any given time,
+index <em>n</em> is</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="techdesc.XID-00000089"/>
+ <math><mrow><mrow>
+<msup><mrow><munder><mrow><mi>Φ</mi>
+</mrow><mrow><mo>̲</mo></mrow></munder></mrow><mrow>
+<mi>n</mi></mrow></msup><msup><mrow><mi>A</mi></mrow>
+<mrow><mi>n</mi><mi>n</mi></mrow></msup></mrow><mo>=</mo><mrow><mrow><mfrac><mrow><mo>∂</mo><mi>J</mi>
+</mrow><mrow><mo>∂</mo><msup><mstyle><mrow><mi>X</mi></mrow></mstyle>
+<mrow><mi>n</mi></mrow></msup></mrow></mfrac></mrow>
+</mrow><mrow><mo>-</mo><mrow><msup><mrow><munder><mrow><mi>Φ</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msup><msup><mrow><mi>A</mi></mrow>
+<mrow><mi>n</mi><mo>+</mo><mn>1</mn><mo>,</mo>
+<mtext> </mtext><mtext> </mtext><mi>n</mi></mrow></msup>
+</mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 810.9]
+              </td></tr></tbody></table>
+<p>This involves the value of the adjoint vector at time period, <em>n+1</em>. Since the only independent equation is the last one (for
+which we can solve for) then the adjoint <math><mrow><msup><mrow>
+<munder><mrow><mi>Φ</mi></mrow><mrow>
+<mo>̲</mo></mrow></munder></mrow><mrow><mn>4</mn>
+</mrow></msup></mrow></math> equation, equation <a href="techdesc_Adjoint_Gradient_Calculations_in_ECLIPSE.html#techdesc.XID-00000089">810.9</a>  must be solved backwards in
+time <em>.</em>          </p>
+
+<p>With the adjoint vector,  <math><mrow><munder><mrow><mi>Φ</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow></math>, chosen as the solution of
+this system, the Lagrangian gradients we require are:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="techdesc.equ.0093"/>
+ <math><mrow><mfrac>
+<mrow><mi>d</mi><mi>L</mi></mrow><mrow><mi>d</mi>
+<munder><mrow><mi>λ</mi></mrow><mrow><mo>̲</mo></mrow>
+</munder></mrow></mfrac><mo>⁢</mo><mo>=</mo><mtext> </mtext><mrow><mfrac><mrow><mo>∂</mo><mi>J</mi>
+</mrow><mrow><mo>∂</mo><munder><mrow><mi>λ</mi><mo>⁢</mo></mrow><mrow><mo>̲</mo></mrow></munder></mrow>
+</mfrac><mo>⁢</mo><mo>−</mo><mtext> </mtext><mo>⁢</mo>
+<mrow><mo>(</mo><munder><mrow><mi>Φ</mi></mrow><mrow><mo>̲</mo></mrow></munder><mo>⋅</mo><mtext> </mtext><mrow><mfrac><mrow><mo>∂</mo>
+<mstyle><mrow><mi>R</mi></mrow>
+</mstyle></mrow><mrow><mo>∂</mo><munder><mrow><mi>λ</mi><mo>⁢</mo></mrow><mrow><mo>̲</mo></mrow>
+</munder></mrow></mfrac></mrow><mo>)</mo></mrow></mrow>
+</mrow></math> 
+</td><td align="right">[Eq. 810.10]
+              </td></tr></tbody></table>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The effort of calculating these gradients is dominated by the
+solution for the adjoint vector,  <math><mrow><munder><mrow>
+<mi>Φ</mi></mrow><mrow><mo>̲</mo></mrow></munder>
+</mrow></math>, which is independent of the type or number of
+parameters. This makes the adjoint method very efficient for large
+number of parameters compared to other gradient calculation techniques.
+                     </span></div>
+
+<div class="section" id="techdesc_introducing_additional_constraints"><a name="techdesc_introducing_additional_constraints"><!-- --></a><h4 class="sectiontitle">Introducing
+Additional Constraints</h4><p>In the reservoir simulator the fluid
+flow residual equations (<math><mrow><mstyle><mi>R</mi></mstyle><mo>=</mo><mn>0</mn></mrow></math>) are constraints, which must always be
+observed as the objective function is optimized. Optionally, you may
+impose additional constraints on the system, for example limiting
+the production of a certain phase from a group of wells.</p>
+<p>The
+Lagrangian approach allows us to readily incorporate these additional
+equality constraint equations,  <math><mrow>
+<mstyle><mi>V</mi></mstyle><mo>=</mo><mstyle><mn>0</mn></mstyle>
+</mrow></math>, by the introduction of further Lagrange multipliers,
+ <math><mrow><munder><mrow><mi>Ψ</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow></math>:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="techdesc.equ.009f"/>
+ <math><mrow><mi>L</mi>
+<mrow><mo>(</mo><mstyle><mi>X</mi>
+</mstyle><mo>,</mo><munder><mrow><mi>λ</mi></mrow><mo>̲</mo></munder><mo>)</mo><mtext> </mtext><mo>=</mo>
+<mtext> </mtext><mi>J</mi><mrow><mo>(</mo><mstyle><mi>X</mi></mstyle><mo>,</mo>
+<munder><mrow><mi>λ</mi></mrow><mo>̲</mo></munder><mo>)</mo></mrow><mo>⁢</mo><mo>−</mo><mtext> </mtext><mi>Φ</mi><mo>⋅</mo><mstyle><mi>R</mi></mstyle><mrow><mo>(</mo>
+<mstyle><mi>X</mi></mstyle><mo>,</mo><munder><mrow><mi>λ</mi></mrow><mo>̲</mo>
+</munder><mo>)</mo></mrow><mo>⁢</mo><mo>−</mo><mi>Ψ</mi><mo>⋅</mo><mstyle><mi>V</mi></mstyle><mrow><mo>(</mo>
+<mstyle><mi>X</mi></mstyle><mo>,</mo><munder><mrow><mi>λ</mi></mrow><mo>̲</mo>
+</munder><mo>)</mo></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 810.11]
+              </td></tr></tbody></table><p>The Lagrangian derivatives given in equations <a href="techdesc_Adjoint_Gradient_Calculations_in_ECLIPSE.html#techdesc.XID-00000062">810.3</a>  to <a href="techdesc_Adjoint_Gradient_Calculations_in_ECLIPSE.html#techdesc.equ.006a">810.5</a>  above may be extended to include derivatives of the additional
+constraint functions. This allows us to form an extended adjoint system
+of equations, from which we obtain both  <math><mrow>
+<munder><mrow><mi>Φ</mi></mrow><mrow>
+<mo>̲</mo></mrow></munder></mrow></math> and  <math><mrow><munder><mrow><mi>Ψ</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow></math>. The Lagrangian gradient equations, <a href="techdesc_Adjoint_Gradient_Calculations_in_ECLIPSE.html#techdesc.XID-00000066">810.4</a>  and <a href="techdesc_Adjoint_Gradient_Calculations_in_ECLIPSE.html#techdesc.equ.006a">810.5</a>, then become:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="techdesc.equ.00a9"/>
+ <math><mrow><mfrac><mrow>
+<mi>d</mi><mi>L</mi></mrow><mrow><mi>d</mi><mstyle><mi>X</mi></mstyle></mrow></mfrac>
+<mo>⁢</mo><mo>=</mo><mtext> </mtext><mrow><mfrac>
+<mrow><mo>∂</mo><mi>J</mi></mrow><mrow><mo>∂</mo>
+<mstyle><mrow><mi>X</mi></mrow>
+</mstyle></mrow></mfrac><mo>⁢</mo><mo>−</mo><mtext> </mtext><mo>⁢</mo><mrow><mo>(</mo><munder><mrow><mi>Φ</mi></mrow><mrow><mo>̲</mo></mrow>
+</munder><mo>⋅</mo><mtext> </mtext><mrow><mfrac><mrow>
+<mo>∂</mo><mstyle><mrow><mi>R</mi>
+</mrow></mstyle></mrow><mrow><mo>∂</mo><mstyle><mrow><mi>X</mi></mrow></mstyle>
+</mrow></mfrac></mrow><mo>)</mo><mtext> </mtext><mo>−</mo><mtext> </mtext></mrow></mrow><mrow><mo>(</mo>
+<munder><mrow><mi>Ψ</mi></mrow><mrow>
+<mo>̲</mo></mrow></munder><mo>⋅</mo><mrow><mfrac>
+<mrow><mo>∂</mo><mi>V</mi></mrow><mrow><mo>∂</mo>
+<mstyle><mrow><mi>X</mi></mrow>
+</mstyle></mrow></mfrac></mrow><mo>)</mo></mrow><mspace/> </mrow></math> 
+</td><td align="right">[Eq. 810.12]
+              </td></tr></tbody></table><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="techdesc.XID-000000ac"/>
+ <math><mrow><mfrac><mrow>
+<mi>d</mi><mi>L</mi></mrow><mrow><mi>d</mi><munder>
+<mrow><mi>λ</mi></mrow><mo>̲</mo></munder></mrow>
+</mfrac><mo>⁢</mo><mo>=</mo><mtext> </mtext><mrow>
+<mfrac><mrow><mo>∂</mo><mi>J</mi></mrow><mrow><mo>∂</mo><munder><mrow><mi>λ</mi><mo>⁢</mo></mrow><mrow>
+<mo>̲</mo></mrow></munder></mrow></mfrac><mo>⁢</mo>
+<mo>−</mo><mtext> </mtext><mo>⁢</mo><mrow><mo>(</mo>
+<munder><mrow><mi>Φ</mi></mrow><mrow>
+<mo>̲</mo></mrow></munder><mo>⋅</mo><mtext> </mtext>
+<mrow><mfrac><mrow><mo>∂</mo><mstyle><mrow><mi>R</mi></mrow></mstyle>
+</mrow><mrow><mo>∂</mo><munder><mrow><mi>λ</mi><mo>⁢</mo></mrow><mrow><mo>̲</mo></mrow></munder></mrow>
+</mfrac></mrow><mo>)</mo><mtext> </mtext><mo>−</mo>
+<mtext> </mtext></mrow></mrow><mrow><mo>(</mo><munder><mrow><mi>Ψ</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder><mo>⋅</mo><mrow><mfrac><mrow><mo>∂</mo>
+<mi>V</mi></mrow><mrow><mo>∂</mo><munder><mrow><mi>λ</mi><mo>⁢</mo></mrow><mrow><mo>̲</mo></mrow>
+</munder></mrow></mfrac></mrow><mo>)</mo></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 810.13]
+              </td></tr></tbody></table><p>Notice that we have retained the special identity of
+the cell residual equations, as distinct from all other constraints.
+This allows us to solve for the Lagrange multipliers using modifications
+to the existing simulation fluid flow matrix  <math><mi>A</mi></math>, rather than having to construct an augmented system.</p>
+<p>In order to solve for  <math><mrow><munder><mrow><mi>Ψ</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow></math>, we arbitrarily set  <math><mrow><mfrac><mrow>
+<mo>∂</mo><mi>L</mi></mrow><mrow><mo>∂</mo><msub>
+<mrow><mi>λ</mi></mrow><mrow><mi>i</mi></mrow></msub>
+</mrow></mfrac><mo>⁢</mo><mo>=</mo><mtext> </mtext>
+<mn>0</mn></mrow></math> in equation <a href="techdesc_Adjoint_Gradient_Calculations_in_ECLIPSE.html#techdesc.XID-000000ac">810.13</a>  for as many parameters, index <em>i</em>, as there are active constraints. Consequently, equation <a href="techdesc_Adjoint_Gradient_Calculations_in_ECLIPSE.html#techdesc.XID-000000ac">810.13</a>  only applies to those parameters
+not used in determining <math><mrow><munder><mrow><mi>Ψ</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow></math>. This effectively divides the
+parameter set into 'free' and 'dependent' subsets:  <math><mrow><mrow><munder><mrow><mi>λ</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow><mo>=</mo><mo>(</mo><msub>
+<mrow><munder><mrow><mi>λ</mi></mrow>
+<mrow><mo>̲</mo></mrow></munder></mrow><mrow><mi>f</mi>
+</mrow></msub><mo>,</mo><msub><mrow><munder><mrow><mi>λ</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow><mrow><mi>d</mi></mrow></msub>
+<mo>)</mo></mrow></math>, where the free parameters are those
+for which we have Lagrangian gradients, and the dependent parameters
+are those which 'depend' on the free parameters using the constraint
+equations. This has important implications for the optimization workflow,
+as discussed in <a href="techdesc_optimizer_search_direction.html#techdesc_optimizer_search_direction"> "Optimizer search direction"</a>.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

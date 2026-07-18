@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="MULTY-"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="MULTY-"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>MULTY-</title>
+</head>
+<body>
+
+
+<div class="nested0" id="MULTY-"><a name="MULTY-"><!-- --></a>
+<h1 class="keyword">MULTY-</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="multy-.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="multy-.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1484e45"> x </th>
+
+<th valign="top" id="d1484e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1484e54"> x </th>
+
+<th valign="top" id="d1484e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1484e45 d1484e54 ">  </td>
+
+<td valign="top" headers="d1484e48 d1484e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1484e45 d1484e54 "> x </td>
+
+<td valign="top" headers="d1484e48 d1484e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1484e45 d1484e54 "> x </td>
+
+<td valign="top" headers="d1484e48 d1484e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1484e45 d1484e54 ">  </td>
+
+<td valign="top" headers="d1484e48 d1484e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1484e45 d1484e54 ">  </td>
+
+<td valign="top" headers="d1484e48 d1484e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1484e45 d1484e54 ">  </td>
+
+<td valign="top" headers="d1484e48 d1484e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1484e45 d1484e54 ">  </td>
+
+<td valign="top" headers="d1484e48 d1484e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1484e45 d1484e54 "> x </td>
+
+<td valign="top" headers="d1484e48 d1484e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword should be followed by one non-negative real number
+for every grid block in the current input box. The data must be terminated
+by a slash (/).</p>
+
+<p>The values specified act as multipliers on the transmissibilities
+calculated by the program for the -Y face of each grid block or specified
+directly using <a href="TRANY.html#TRANY"> TRANY</a> in the <span class="keyword">EDIT</span> section.</p>
+
+<p>Thus, a value of <span class="keyword">MULTY-</span> specified for block
+(I, J, K) multiplies the transmissibility between blocks (I, J, K)
+and (I, J-1, K).</p>
+
+<p>In order to use <span class="keyword">MULTY-</span>, the negative direction
+transmissibility multipliers must be enabled using the keyword <a href="GRIDOPTS.html#GRIDOPTS"> GRIDOPTS</a> in the <span class="keyword">RUNSPEC</span> section.</p>
+
+<p>Grid blocks are ordered with the X axis index cycling fastest,
+followed by the Y and Z axis indices. Repeat counts may be used for
+repeated values (for example 115*0). Note that spaces must not be
+inserted on either side of the asterisk.</p>
+
+<p>See also the <a href="MULTY.html#MULTY"> MULTY</a> keyword.</p>
+
+<p>If both the <span class="keyword">MULTY</span> keyword and <span class="keyword">MULTY-</span> are specified, then the product is used. For example, if <span class="keyword">MULTY</span> is specified for the block (I, J, K) and <span class="keyword">MULTY-</span> is specified for the block (I, J+1, K), then the
+program uses the product of the nominated <span class="keyword">MULTY</span> and <span class="keyword">MULTY-</span> values to multiply the calculated
+transmissibility between the two adjacent blocks.</p>
+
+<div class="section" id="multy-_non-neighbor_connections"><a name="multy-_non-neighbor_connections"><!-- --></a><h4 class="sectiontitle">Non-neighbor
+connections</h4> <p>Any non-neighbor connections generated due to
+faults have transmissibilities that reflect the <span class="keyword">MULTY</span> and <span class="keyword">MULTY-</span> values. A fault non-neighbor connection
+between a cell (I, J, K1) and a cell (I, J+1, K2) in an adjacent column
+has a transmissibility factor of <span class="keyword">MULTY</span> for block
+(I, J, K1) or <span class="keyword">MULTY-</span> for block (I, J+1, K2) or
+the product of the two. Non-neighbor connections entered explicitly
+using the <a href="NNC.html#NNC"> NNC</a> keyword
+are not affected.</p>
+ </div>
+
+<div class="section" id="multy-_use_in_the_grid_section"><a name="multy-_use_in_the_grid_section"><!-- --></a><h4 class="sectiontitle">Use in the GRID
+section</h4> <p>If <span class="keyword">MULTY-</span> is entered in the <span class="keyword">GRID</span> section, then it applies only to the transmissibilities
+calculated by the program using the information in the <span class="keyword">GRID</span> section, and <strong>not</strong> to any transmissibilities entered directly
+in the <span class="keyword">EDIT</span> section using the <a href="TRANY.html#TRANY"> TRANY</a> keyword. Any <span class="keyword">MULTY-</span> values that are not specified when the end of the <span class="keyword">GRID</span> section is reached, default to 1.0.</p>
+ </div>
+
+<div class="section" id="multy-_use_in_the_edit_section__eclipse_100_only_"><a name="multy-_use_in_the_edit_section__eclipse_100_only_"><!-- --></a><h4 class="sectiontitle">Use in the EDIT section (ECLIPSE 100)</h4> <p>If <span class="keyword">MULTY-</span> is entered in the <span class="keyword">EDIT</span> section, then it acts as an additional multiplier on the transmissibilities
+after reading any modified transmissibilities from the <span class="keyword">EDIT</span> section. Any non-neighbor connections are modified to reflect the
+edited values of <span class="keyword">MULTY-</span>.</p>
+<p>Use of the <span class="keyword">MULTY-</span> multiplier in the <span class="keyword">EDIT</span> section
+is <strong>not</strong> recommended in general, except as modifiers to values
+of <a href="TRANY.html#TRANY"> TRANY</a> entered
+explicitly in the <span class="keyword">EDIT</span> section. The keyword <span class="keyword">MULTY-</span> should normally be specified in the <span class="keyword">GRID</span> section rather than in the <span class="keyword">EDIT</span> section.</p>
+ </div>
+
+<div class="section" id="multy-_use_in_the_schedule_section"><a name="multy-_use_in_the_schedule_section"><!-- --></a><h4 class="sectiontitle">Use in the
+SCHEDULE section</h4> <p><span class="keyword">MULTY-</span> can be used in
+the <span class="keyword">SCHEDULE</span> section to modify the transmissibilities
+during the run. Well connection transmissibility factors are <strong>not</strong> affected by this keyword (instead, use <a href="WPIMULT.html#WPIMULT"> WPIMULT</a> for example, for this purpose).</p>
+<p>The modified transmissibilities can be output to the print file
+by using the mnemonic <samp class="codeph">MULT</samp> in the <a href="RPTSCHED.html#RPTSCHED"> RPTSCHED</a> keyword.</p>
+<p>In ECLIPSE 300, if values are defaulted or
+set negative, the transmissibilities for the corresponding cells are
+not modified.</p>
+ </div>
+
+<div class="section" id="multy-_example"><a name="multy-_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>--------  IX1-IX2  JY1-JY2  KZ1-KZ2
+BOX
+           5   5    3   8    4   6   /
+MULTY-
+  18*0   /
+ENDBOX</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

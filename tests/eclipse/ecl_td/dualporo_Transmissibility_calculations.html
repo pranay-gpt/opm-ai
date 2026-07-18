@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Transmissibility calculations"/>
+<meta name="DC.subject" content="Grid and reservoir modeling, Dual porosity, Transmissibility calculations"/>
+<meta name="keywords" content="Grid and reservoir modeling, Dual porosity, Transmissibility calculations"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="dualporo_transmissibility_calculations"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Transmissibility calculations</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="dualporo_transmissibility_calculations"><a name="dualporo_transmissibility_calculations"><!-- --></a>
+<h1 class="topictitle1">Transmissibility calculations</h1>
+
+
+ <div>
+<p>The matrix-fracture coupling transmissibility terms that exist
+between each cell of the matrix grid and the corresponding cell in
+the fracture grid are proportional to the cell bulk volume, being
+of the form:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.Xdualporo.Xdualporo.equ.0036"/>
+ <math><mrow><mtext>TR</mtext><mo>=</mo><mtext>CDARCY</mtext><mo>⋅</mo><mi>K</mi><mo>⋅</mo><mi>V</mi><mo>⋅</mo><mi>σ</mi>
+</mrow></math> 
+</td><td align="right">[Eq. 75.1]
+              </td></tr></tbody></table>
+<p>where by default:</p>
+
+<p> <math><mi>K</mi></math>  is taken as the X-direction permeability of the matrix blocks (unless <a href="../ecl_rm/PERMMF.html#PERMMF">PERMMF</a> is also specified; see
+below),</p>
+
+<p> <math><mi>V</mi></math>  is the matrix cell bulk volume (note that this is not the pore
+volume, having no porosity factor), and</p>
+
+<p> <math><mi>σ</mi></math>  is a factor of dimensionality  <math><msup>
+<mtext>LENGTH</mtext><mrow><mo>-</mo><mn>2</mn></mrow>
+</msup></math>, to account for the matrix/fracture interface area
+per unit volume, that is the size of the blocks in the matrix volume.</p>
+
+<p>The default use of the X-direction permeability can be overridden
+by using the matrix-fracture permeability specified by the <span class="keyword">PERMMF</span> keyword. Note that for one-dimensional (Y- or Z-direction)
+cases in the global grid with X-direction extension in an LGR, the
+X-direction permeability will be set to zero in all grids and <span class="keyword">PERMMF</span> must be used to enable dual porosity NNCs to be
+generated. (This is unlikely in real simulations, but many test problems
+are affected by this.)</p>
+
+<p><cite><span> <a href="biblio_Bibliography.html#biblio_20886">Kazemi
+(1976)</a> </span></cite> has proposed the following form for  <math><mi>σ</mi></math>:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.0049"/>
+ <math><mrow><mi>σ</mi>
+<mo>=</mo><mrow><mn>4</mn><mo>(</mo><mfrac><mrow>
+<mn>1</mn></mrow><mrow><msubsup><mrow><mi>l</mi>
+</mrow><mrow><mi>x</mi></mrow><mrow><mn>2</mn></mrow>
+</msubsup></mrow></mfrac><mo>+</mo><mfrac><mrow><mn>1</mn></mrow><mrow><msubsup><mrow><mi>l</mi></mrow>
+<mrow><mi>y</mi></mrow><mrow><mn>2</mn></mrow>
+</msubsup></mrow></mfrac><mo>+</mo><mfrac><mrow><mn>1</mn></mrow><mrow><msubsup><mrow><mi>l</mi></mrow>
+<mrow><mi>z</mi></mrow><mrow><mn>2</mn></mrow>
+</msubsup></mrow></mfrac><mo>)</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 75.2]
+              </td></tr></tbody></table>
+<p>where l<sub>x</sub>, l<sub>y</sub> and l<sub>z</sub> are typical
+X, Y and Z dimensions of the blocks of material making up the matrix
+volume. (<math><msub><mi>l</mi>
+<mi>x</mi></msub></math>,  <math><msub>
+<mi>l</mi><mi>y</mi></msub></math>  and  <math><msub><mi>l</mi>
+<mi>z</mi></msub></math>  are thus not related to the simulation
+grid dimensions). Alternatively, as  <math><mi>σ</mi></math>  acts as a multiplier on the matrix-fracture coupling,
+it may simply be treated as a history matching parameter.</p>
+
+<p> <math><mi>σ</mi></math>  can be specified as a single value for the whole field using the
+keyword <a href="../ecl_rm/SIGMA.html#SIGMA">SIGMA</a> or on a cell by cell basis using the keyword <a href="../ecl_rm/SIGMAV.html#SIGMAV">SIGMAV</a>. If  <math><mi>σ</mi></math>  is defined on a cell by cell basis then the values corresponding
+to the first <samp class="codeph">NDIVIZ</samp> /2 layers are used. If  <math><mi>σ</mi></math>  is printed out (<a href="../ecl_rm/RPTGRID.html#RPTGRID">RPTGRID</a> keyword) then the values in the first <samp class="codeph">NDIVIZ</samp> /2 layers are copied in to the lower <samp class="codeph">NDIVIZ</samp> /2 layers.</p>
+
+<p>The specified values of the permeabilities of cells in the fracture
+system are multiplied by the fracture porosities to yield effective
+fracture permeabilities. If the <a href="../ecl_rm/NODPPM.html#NODPPM">NODPPM</a> keyword is used then the specified permeability is used directly,
+rather than the effective permeability.</p>
+
+<p>That is, when <span class="keyword">NODPPM</span> is <strong>not</strong> specified,
+then within the fracture cells, the input <a href="../ecl_rm/PERMX.html#PERMX">PERMX</a>, <a href="../ecl_rm/PERMY.html#PERMY">PERMY</a> and <a href="../ecl_rm/PERMZ.html#PERMZ">PERMZ</a> are modified using  <math><mrow><mi>P</mi>
+<mi>E</mi><mi>R</mi><mi>M</mi><mi>X</mi><mo>(</mo>
+<mrow><mi>f</mi><mi>r</mi></mrow><mo>)</mo></mrow>
+<mo>=</mo><mrow><mi>P</mi><mi>E</mi><mi>R</mi><mi>M</mi><mi>X</mi><mo>(</mo><mrow><mi>f</mi><mi>r</mi>
+</mrow><mo>)</mo></mrow><mo>×</mo><mrow><mi>P</mi>
+<mi>O</mi><mi>R</mi><mi>O</mi><mo>(</mo><mrow><mi>f</mi><mi>r</mi></mrow><mo>)</mo></mrow></math>.</p>
+
+<p>ECLIPSE 100 </p>
+
+<p>An alternative form of the above transmissibility is available
+using the <a href="../ecl_rm/LTOSIGMA.html#LTOSIGMA">LTOSIGMA</a> keyword if the matrix block dimensions are input explicitly
+using the <a href="../ecl_rm/LX.html#LX">LX</a>, <a href="../ecl_rm/LY.html#LY">LY</a> and <a href="../ecl_rm/LZ.html#LZ">LZ</a> keywords. In this case the transmissibility is given by:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.006d"/>
+ <math><mrow><mtext>TR</mtext>
+<mo>=</mo><mtext>CDARCY</mtext><mo>⋅</mo><mi>V</mi>
+<mo>⋅</mo><mo>(</mo><mfrac><mrow><msub><mrow><mi>f</mi></mrow><mrow><mi>x</mi></mrow></msub><mo>⋅</mo>
+<msub><mrow><mi>K</mi></mrow><mrow><mi>x</mi></mrow>
+</msub></mrow><mrow><msubsup><mrow><mi>l</mi></mrow>
+<mrow><mi>x</mi></mrow><mrow><mn>2</mn></mrow>
+</msubsup></mrow></mfrac><mo>+</mo><mfrac><mrow><msub>
+<mrow><mi>f</mi></mrow><mrow><mi>y</mi></mrow></msub>
+<mo>⋅</mo><msub><mrow><mi>K</mi></mrow><mrow><mi>y</mi></mrow></msub></mrow><mrow><msubsup><mrow><mi>l</mi></mrow><mrow><mi>y</mi></mrow><mrow><mn>2</mn>
+</mrow></msubsup></mrow></mfrac><mo>+</mo><mfrac><mrow>
+<msub><mrow><mi>f</mi></mrow><mrow><mi>z</mi></mrow>
+</msub><mo>⋅</mo><msub><mrow><mi>K</mi></mrow><mrow>
+<mi>z</mi></mrow></msub></mrow><mrow><msubsup><mrow>
+<mi>l</mi></mrow><mrow><mi>z</mi></mrow><mrow><mn>2</mn></mrow></msubsup></mrow></mfrac><mo>)</mo></mrow>
+</math> 
+</td><td align="right">[Eq. 75.3]
+              </td></tr></tbody></table>
+<p>where:</p>
+
+<p> <math><msub><mi>f</mi>
+<mi>x</mi></msub></math> <math><msub>
+<mi>f</mi><mi>y</mi></msub></math> <math><msub>
+<mi>f</mi><mi>z</mi></msub></math>  are input in <span class="keyword">LTOSIGMA</span>          </p>
+
+<p> <math><msub><mi>K</mi>
+<mi>x</mi></msub></math> <math><msub>
+<mi>K</mi><mi>y</mi></msub></math> <math><msub>
+<mi>K</mi><mi>z</mi></msub></math>  are the matrix permeability
+values</p>
+
+<p> <math><msub><mi>l</mi>
+<mi>x</mi></msub></math> <math><msub>
+<mi>l</mi><mi>y</mi></msub></math> <math><msub>
+<mi>l</mi><mi>z</mi></msub></math>  are the matrix block
+dimensions input using <span class="keyword">LX</span>, <span class="keyword">LY</span> and <span class="keyword">LZ</span>.</p>
+
+<p>If the dual porosity but not the dual permeability option is selected,
+the matrix blocks have no transmissibilities between them. If dual
+porosity and dual permeability is chosen, the matrix blocks have their
+normal transmissibilities.</p>
+
+<div class="fignone" id="dualporo.dualperm.fig"><a name="dualporo.dualperm.fig"><!-- --></a>
+
+ <br/><img src="../img/dualporosity2.png" width="411px"/><br/> 
+<br/><span class="figcap">
+           Figure 75.1  A simple, dual porosity, dual permeability system.</span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

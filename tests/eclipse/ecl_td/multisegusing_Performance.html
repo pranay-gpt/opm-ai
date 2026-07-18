@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Performance"/>
+<meta name="DC.subject" content="Multisegment well model performance"/>
+<meta name="keywords" content="Multisegment well model performance"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="multisegusing_performance"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Performance</title>
+</head>
+<body>
+
+
+<div class="nested0" id="multisegusing_performance"><a name="multisegusing_performance"><!-- --></a>
+<h1 class="topictitle1">Performance</h1>
+
+
+ <div>
+<p>If the multisegment well contains looped flow paths (see the <a href="../ecl_rm/WSEGLINK.html#WSEGLINK"> WSEGLINK</a> keyword), then a
+different solver is used for the well linear equations with each well
+iteration. The <a href="../ecl_rm/WSEGSOLV.html#WSEGSOLV">WSEGSOLV</a> keyword can be used to modify the behavior of this looped
+well linear solver if required.</p>
+
+<dl>
+
+<dt class="dlterm"><a name="multisegusing_eclipse_1001"><!-- --></a>ECLIPSE 100</dt>
+
+<dd>Multisegment wells can require substantially more well iterations
+to converge than standard wells, especially when being opened or while
+switching into or out of crossflow. By default, each well is allowed
+up to <samp class="codeph">MXWSIT</samp> iterations to converge, which is set
+using keyword <a href="../ecl_rm/TUNING.html#TUNING"> TUNING</a> (or <a href="../ecl_rm/TUNINGL.html#TUNINGL"> TUNINGL</a> or <a href="../ecl_rm/TUNINGS.html#TUNINGS"> TUNINGS</a>). If it cannot converge in this number of iterations, a
+‘problem’ message is issued and the latest (unconverged)
+well solution is used. This may hamper the convergence of the non-linear
+iterations of the timestep. For multisegment wells, it is recommended
+to use the <a href="../ecl_rm/WSEGITER.html#WSEGITER"> WSEGITER</a> keyword to give the well solution more opportunity to converge.
+The keyword can increase the maximum allowed number of iterations,
+as an alternative to using <span class="keyword">TUNING</span>. Furthermore
+it can invoke a sequence of iteration cycles which traverses ‘difficult’
+regions of the residual function by taking smaller steps in the pressure
+variable. Refer to the <span class="keyword">WSEGITER</span> keyword documentation
+for a more detailed explanation of the process.<p>Other facilities
+that influence the convergence of the well solution can be controlled
+using the <span class="keyword">OPTIONS</span> keyword. Examples include <a href="../ecl_rm/OPTIONS.html#options.30">item 30</a>, which governs methods aimed at improving
+convergence by chopping the increment in all the well’s solution
+variables and <a href="../ecl_rm/OPTIONS.html#options.63">item 63</a>, which
+can be set if the explicit calculation of the hydrostatic head between
+the well connections and the corresponding grid block centers causes
+oscillations.</p>
+<p>If there are problems encountered with multisegment
+wells under THP control, especially when on the point of dying, the
+wells should be switched to using explicit water cut and GOR values
+for VFP table lookup (keyword <a href="../ecl_rm/WVFPEXP.html#WVFPEXP"> WVFPEXP</a>).</p>
+</dd>
+
+
+<dt class="dlterm"><a name="multisegusing_eclipse_3001"><!-- --></a>ECLIPSE 300</dt>
+
+<dd>Multisegment wells can require more well iterations to converge
+than standard wells require. There is a CPU expense if the simulator
+is run in compositional mode with many multisegment wells and many
+segments per well. To gain the best performance, it is recommended
+that only a few wells be run as multisegment wells and that the number
+of active segments not be large. There are tuning parameters available
+that affect the convergence, but it is not generally recommended to
+change their values. See keyword <a href="../ecl_rm/CVCRIT.html#CVCRIT">CVCRIT</a> for more details.<p>The complexity of the branches does not
+significantly affect performance of the multisegment wells. Neither
+does the number of completions that are connected.</p>
+<p>See also <a href="multiseg_The_top_segment.html#multiseg_the_top_segment">  "The
+top segment"</a>.</p>
+<p>If a multisegment well is crossflowing,
+there may be multiple solutions and consequent difficulty in converging.
+If the well exhibits these symptoms, you have the option of setting
+t <a href="../ecl_rm/OPTIONS3.html#options3.34">item 34</a> in the <span class="keyword">OPTIONS3</span> keyword to be greater than zero. If this argument
+is set to the number of the particular well in question (wells are
+numbered in the order they are input), two extra steps are taken to
+help converge when crossflowing. Firstly, the multisegment well primary
+variables at the start of each well calculation is initialized to
+the solution at the end of the last timestep. Secondly, during the
+solution of the flow control rate constraint, the search for the BHP
+puts extra weight on bisection rather than Newton. This may result
+in more iterations being taken to converge the well, but it helps
+convergence in difficult situations. If item 34 of <span class="keyword">OPTIONS3</span> is set to 10000 then all multisegment wells use the above.</p>
+</dd>
+
+
+</dl>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Interpretations of the swing requirement"/>
+<meta name="DC.subject" content="Gas field operations interpretations of the swing requirement"/>
+<meta name="keywords" content="Gas field operations interpretations of the swing requirement"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gasfieldintro_interpretations_of_the_swing_requirement"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Interpretations of the swing requirement</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="gasfieldintro_interpretations_of_the_swing_requirement"><a name="gasfieldintro_interpretations_of_the_swing_requirement"><!-- --></a>
+<h1 class="topictitle1">Interpretations of the swing requirement</h1>
+
+
+ <div>
+<p>To provide flexibility to handle different forms of contract, there
+is a choice of interpretations of the swing requirement. The chosen
+interpretation is selected by entering its associated mnemonic as
+Item 3 in keyword <a href="../ecl_rm/GASYEAR.html#GASYEAR">GASYEAR</a> or Item 4 in keyword <a href="../ecl_rm/GASPERIO.html#GASPERIO">GASPERIO</a>. If the contract period is less than a year, keyword <span class="keyword">GASPERIO</span> must be used.</p>
+
+<p>The choices within <span class="keyword">GASYEAR</span> for contract years
+are:</p>
+
+<ul>
+<li> <samp class="codeph">YEAR</samp> or <samp class="codeph">YES</samp>  <p>“The field must
+be able to produce at the DCQ multiplied by the monthly swing factor,
+for the whole contract year.”</p>
+                <p>During the first
+pass, the field is produced with a target rate of DCQ × SWING for
+the whole contract year. If this target cannot be met, ECLIPSE determines
+how much the DCQ should be reduced in order to meet the target.</p>
+<p>This is a suitable interpretation for cases where the monthly
+swing factors are the same as the profile factors, as it ensures the
+production profile fits underneath the delivery capacity decline curve.
+But for cases where the swing factors exceed the profile factors,
+this interpretation may be too stringent because it would require
+the field to be able to produce more than the Annual Contracted Quantity.</p>
+  </li>
+
+<li>  <samp class="codeph">PRO</samp> <p>“The field must be able to raise its
+production rate from DCQ × profile to DCQ × swing for an instant at
+any time in the contract year.”</p>
+                <p>During the first
+pass, the field is produced with a target rate of DCQ × PROFILE for
+the whole contract year. In addition, the delivery capacity is calculated
+and compared against a target of DCQ × SWING. If either of these targets
+are not met, ECLIPSE determines how much the DCQ should be reduced
+in order to meet them both. (The delivery capacity is calculated using
+the grid block conditions at the beginning of the timestep, that is,
+at the end of the previous timestep. Therefore it is compared against
+the DCQ × swing factor for the previous timestep.)</p>
+           
+    <p>This interpretation ensures the field is able to produce its
+ACQ (that is, DCQ × profile for each month), and has the potential
+to increase its production rate to DCQ × swing for a short period.
+But it does not test whether the increased production rate can be
+sustained for any length of time.</p>
+</li>
+
+<li>  <samp class="codeph">ACQ</samp>  <p>“The field must be able to produce
+at the DCQ multiplied by the monthly swing factor continuously until
+it has produced its Annual Contracted Quantity.”</p>
+             
+  <p>During the first pass, the field is produced with a target rate
+of DCQ × SWING, but only until it has produced its ACQ (= 365.25 ×
+DCQ). ECLIPSE simulates through the contract year until the cumulative
+sum of {monthly swing factor × number of days in the month} equals
+365.25. When accumulating this sum, February is allocated 28.25 days.
+If the target of DCQ × SWING cannot be met, ECLIPSE determines how
+much the DCQ should be reduced in order to meet the target.</p>
+<p>This interpretation ensures the field is able to produce its ACQ,
+and would be capable of operating at the increased rate of DCQ × swing
+factor continuously until its ACQ had been produced.</p>
+</li>
+
+<li>  <samp class="codeph">JAN</samp>, <samp class="codeph">FEB</samp>, <samp class="codeph">MAR</samp>, <samp class="codeph">APR</samp>, <samp class="codeph">MAY</samp>, <samp class="codeph">JUN</samp>, <samp class="codeph">JUL</samp>, <samp class="codeph">AUG </samp>, <samp class="codeph">SEP</samp>, <samp class="codeph">OCT</samp>, <samp class="codeph">NOV</samp>, <samp class="codeph">DEC</samp> <p>The field must be able to produce
+at the DCQ multiplied by the monthly swing factor continuously until
+it has produced a specified portion of its Annual Contracted Quantity”.</p>
+                <p>This is similar to the <samp class="codeph">ACQ</samp> option
+above, but the first pass is only calculated until a specified portion
+of the ACQ has been produced. The portion is defined as</p>
+<p>ACQ
+× sum over months from start of contract year to end of specified
+month of {profile factor × number of days in month}</p>
+<p> <math><mrow><mo>÷</mo>
+</mrow></math> sum over all months in the contract year of {profile
+factor × number of days in month}.</p>
+<p>When accumulating these sums,
+February is allocated 28.25 days.</p>
+</li>
+
+<li> <samp class="codeph">NO</samp>     <p>No automatic adjustment of DCQ.</p>
+                <p>The DCQ is held constant at its current value.</p>
+<p>The first pass of the contract year is omitted, and ECLIPSE goes
+immediately into the second pass.</p>
+</li>
+
+</ul>
+
+<p>In all options, the second pass of the contract year is calculated
+with the field producing at the (perhaps reduced) DCQ × PROFILE.</p>
+
+<p>The choices within <a href="../ecl_rm/GASPERIO.html#GASPERIO">GASPERIO</a> for general contract periods
+are:</p>
+
+<ul>
+<li> <samp class="codeph">PER</samp> or <samp class="codeph">YES</samp>   <p>The field must
+be able to produce at the DCQ multiplied by the monthly swing factor,
+for the whole contract period.</p>
+             </li>
+
+<li> <samp class="codeph">PRO</samp> <p>“The field must be able to raise its production
+rate from DCQ × profile to DCQ × swing for an instant at any time
+in the contract period.”</p>
+  </li>
+
+<li> <samp class="codeph">PCQ</samp>  <p>“The field must be able to produce at
+the DCQ multiplied by the monthly swing factor continuously until
+it has produced its contracted quantity for the period (= no. of days
+in the period × DCQ).”</p>
+                <p>In this option February
+has either 28 or 29 days depending on whether or not it is a leap
+year.</p>
+</li>
+
+<li>  <samp class="codeph">NO</samp>   <p>No automatic adjustment of DCQ.</p>
+ </li>
+
+</ul>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

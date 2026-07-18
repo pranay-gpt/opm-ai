@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GNETINJE"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GNETINJE"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GNETINJE</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GNETINJE"><a name="GNETINJE"><!-- --></a>
+<h1 class="keyword">GNETINJE</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gnetinje.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gnetinje.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d868e45"> x </th>
+
+<th valign="top" id="d868e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d868e54"> x </th>
+
+<th valign="top" id="d868e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d868e45 d868e54 ">  </td>
+
+<td valign="top" headers="d868e48 d868e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d868e45 d868e54 ">  </td>
+
+<td valign="top" headers="d868e48 d868e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d868e45 d868e54 ">  </td>
+
+<td valign="top" headers="d868e48 d868e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d868e45 d868e54 ">  </td>
+
+<td valign="top" headers="d868e48 d868e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d868e45 d868e54 ">  </td>
+
+<td valign="top" headers="d868e48 d868e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d868e45 d868e54 ">  </td>
+
+<td valign="top" headers="d868e48 d868e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d868e45 d868e54 ">  </td>
+
+<td valign="top" headers="d868e48 d868e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d868e45 d868e54 "> x </td>
+
+<td valign="top" headers="d868e48 d868e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword defines the structure of an injection network in the
+Network option (see <a href="../ecl_td/networkintro_Network_Option.html#networkintro_network_option">"Network option"</a> in the <cite>ECLIPSE Technical Description</cite>). Injection networks
+exist independently of the production network (if present), and separate
+networks can be defined for water and gas injection.</p>
+
+<p>In ECLIPSE 300, if you are using the Extended
+Network keywords (<a href="NODEPROP.html#NODEPROP">  NODEPROP</a> and <a href="BRANPROP.html#BRANPROP">  BRANPROP</a>) to define the production network, you must also use those
+keywords instead of <span class="keyword">GNETINJE</span> to define any injection
+networks; extended and standard network models cannot be mixed. </p>
+
+<p>In ECLIPSE 100, you must use <span class="keyword">GNETINJE</span> to define any injection networks irrespective of the model used
+for the production network.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data and terminated with a slash (/). The set
+of records must end with a blank record, containing only a slash.</p>
+
+<ol>
+<li id="gnetinje.03303929"><a name="gnetinje.03303929"><!-- --></a> Group name or group name root, <p>or <samp class="codeph">FIELD</samp> (to set a fixed pressure for the field node)</p>
+ <p>A group name root, enclosed in quotes and ending with an asterisk
+(*), can be used to refer to several groups in one record.</p>
+ </li>
+
+<li id="gnetinje.032F7DA9"><a name="gnetinje.032F7DA9"><!-- --></a> Phase of the injection network in which
+this group is a node <p> <samp class="codeph">WAT</samp> or <samp class="codeph">GAS</samp> </p>
+ </li>
+
+<li id="gentinje-032FCBC9"><a name="gentinje-032FCBC9"><!-- --></a> Fixed pressure for the group corresponding
+to the terminal node of the network <p>Default this item, or set it
+negative, if the group is not a fixed-pressure terminal node in the
+network.</p>
+ <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+<li id="gnetinje.03300A49"><a name="gnetinje.03300A49"><!-- --></a> Injection
+VFP table number for the pipeline between the group and its parent
+group. User-defined arguments can be set with keywords <a href="UDQ.html#UDQ"> UDQ</a> and <a href="UDADIMS.html#UDADIMS"> UDADIMS</a>.<p>A value of 9999 can be entered
+to indicate that there is no pressure loss in the network branch between
+the group and its parent group. Otherwise, if a non-zero table number
+is entered, the corresponding injection VFP table must have been set
+up for the phase named in item <a href="GNETINJE.html#gnetinje.032F7DA9">2</a>.</p>
+ <p>If the group
+is a fixed-pressure node (that is, if a positive value is set for
+item <a href="GNETINJE.html#gentinje-032FCBC9">3</a>) this item must be defaulted, because a fixed-pressure group
+is a terminal node and cannot have a pipeline connection to a higher
+group.</p>
+<p>If this item is defaulted for a group that is not a fixed-pressure
+node, the group is not part of the network.</p>
+<p>Two or more network
+pipelines may share the same VFP table if they have similar pressure
+loss characteristics.</p>
+<p>DEFAULT: 0 Implies the group has no pipeline
+connection to its parent group.</p>
+ </li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record containing just a slash.</p>
+
+<div class="section" id="gnetinje_example"><a name="gnetinje_example"><!-- --></a><h4 class="sectiontitle">Example</h4> <pre><code>GNETINJE
+ PLAT-A  WAT  14.7     /
+ GR-B2   WAT  1*    1  /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

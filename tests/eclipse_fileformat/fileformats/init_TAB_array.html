@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="TAB array"/>
+<meta name="DC.subject" content="INIT files"/>
+<meta name="keywords" content="INIT files"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="init_tab_array"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>TAB array</title>
+</head>
+<body>
+
+
+<div class="nested0" id="init_tab_array"><a name="init_tab_array"><!-- --></a>
+<h1 class="topictitle1">TAB array</h1>
+
+
+ <div>
+<p>The <samp class="codeph">TAB</samp> array contains the tabular data. It consists
+of <samp class="codeph">NTABDA</samp> double precision values, divided into tables
+according to the pointers defined in <span class="keyword">TABDIMS</span>.</p>
+
+<p>The ordering and contents of the data in <span class="keyword">TAB</span> can be explained by considering it as a set of sub-arrays, equivalenced
+to multi-dimensional Fortran arrays.</p>
+
+<p>For example, a sub-array with base pointer <samp class="codeph">IBASE</samp>, dimensioned for <samp class="codeph">NNODE</samp> nodes and <samp class="codeph">NTAB</samp> tables, with <samp class="codeph">NCOL</samp> columns per table, could be accessed
+by Fortran calls of the form:</p>
+
+<pre><code>CALL CALC( DTABD(IBASE), NNODE, NTAB, NCOL )</code></pre>
+<p>with the following declaration in subroutine <span class="keyword">CALC</span>:</p>
+
+<pre><code>SUBROUTINE CALC( DTAB, NNODE, NTAB, NCOL )
+DOUBLE PRECISION DTAB( NNODE,NTAB,NCOL )</code></pre>
+<p>Note that the array sizes are set to the maximum value for all
+tables. Missing values in incomplete arrays are set to a dummy number
+(that is &lt;= -10.0E20 or &gt;= 10.0E20).</p>
+
+<p>The <samp class="codeph">TAB</samp> data are accessed according to the phases
+present, as defined by the phase flag IPHS, which is item 15 of the <samp class="codeph">INIT</samp> file header array <samp class="codeph">INTEHEAD</samp>.</p>
+
+<p>The phase flag can take the following values:</p>
+
+<ol>
+<li>OIL ONLY</li>
+
+<li>WATER ONLY</li>
+
+<li>OIL AND WATER</li>
+
+<li>GAS ONLY</li>
+
+<li>OIL AND GAS</li>
+
+<li>GAS AND WATER</li>
+
+<li>OIL, WATER AND GAS</li>
+
+</ol>
+
+<p>The following logical header flags should be set in the INIT file
+header array <span class="keyword">LOGIHEAD</span>:</p>
+
+<p>Item 1 Dissolved gas flag</p>
+
+<p>Item 2 Vaporized oil flag</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

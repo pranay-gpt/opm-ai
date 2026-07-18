@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Driving a slave reservoir with a reservoir coupling file"/>
+<meta name="DC.subject" content="Reservoir coupling"/>
+<meta name="keywords" content="Reservoir coupling"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="rescouplusing_driving_a_slave_reservoir_with_a_reservoir_coupling_file"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Driving a slave reservoir with a reservoir coupling file</title>
+</head>
+<body>
+
+
+<div class="nested0" id="rescouplusing_driving_a_slave_reservoir_with_a_reservoir_coupling_file"><a name="rescouplusing_driving_a_slave_reservoir_with_a_reservoir_coupling_file"><!-- --></a>
+<h1 class="topictitle1">Driving a slave reservoir with a reservoir coupling file</h1>
+
+
+ <div>
+<p>A slave run may be performed on its own, instead of being activated
+by the master run. It will read the Reservoir Coupling file to obtain
+the constraints that the master run originally applied to its slave
+groups over the course of the simulation. MPI is not required for
+this option.</p>
+
+<p>To use this option, set up the slave’s data file as though
+it were going to be activated by the master, but in addition include
+the keyword <a href="../ecl_rm/USECUPL.html#USECUPL">USECUPL</a> as described above. The slave groups are identified with
+the keyword <a href="../ecl_rm/GRUPSLAV.html#GRUPSLAV">GRUPSLAV</a>, and you can choose whether to take their rate constraints
+from the Reservoir Coupling file, the slave’s own data file,
+or the minimum of both.</p>
+
+<p>You must set up the slave groups for production control (with keyword <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a> for guide rate control
+or keyword <a href="../ecl_rm/GCONPRI.html#GCONPRI">GCONPRI</a> for prioritization), and for injection control of the injected
+phases (with keyword <a href="../ecl_rm/GCONINJE.html#GCONINJE">GCONINJE</a>). Reinjection and voidage replacement targets applied in
+the master reservoir to groups superior to the master groups are translated
+into surface rate and reservoir volume rate targets respectively at
+the slave groups.</p>
+
+<p>If the master and slave reservoirs are coupled by a pipeline network,
+the nodal pressures of the slave groups that were set by the master
+in the original coupled run will also be read from the Reservoir Coupling
+file. The slave groups must of course be defined as fixed-pressure
+nodes in keyword <a href="../ecl_rm/GRUPNET.html#GRUPNET">GRUPNET</a>.</p>
+
+<p>A useful way of monitoring the production and injection targets
+applied to the slave groups is to write them to the <samp class="codeph">SUMMARY</samp> file using the <span class="keyword">SUMMARY</span> section keywords <span class="keyword">GOPRL</span>, <span class="keyword">GOIRL</span>, <span class="keyword">GWPRL</span>, <span class="keyword">GWIRL</span>, <span class="keyword">GGPRL</span>, <span class="keyword">GGIRL</span>, <span class="keyword">GLPRL</span>, <span class="keyword">GVPRL</span>, <span class="keyword">GVIRL</span>. See the <a href="../ecl_rm/SUMMARY.html#SUMMARY">SUMMARY</a> section description in this manual. Note that the value of
+these <span class="keyword">SUMMARY</span> quantities will differ between master
+and slave groups. The value reported in the slave group is the overall
+target applied owing to the combination of all limits on the group.
+The value reported by the same <span class="keyword">SUMMARY</span> quantities
+for the master group will be the rate limit set in the <span class="keyword">GCONPROD</span>, <span class="keyword">GCONPRI</span> or <span class="keyword">GCONINJE</span> keywords.</p>
+
+<p>As an example, to drive slave reservoir R3 in figure <a href="rescouplintro_Reservoir_Coupling.html#rescouplintro.XID-00000027">616.1</a>  from the Reservoir Coupling file written by the run ‘ <samp class="codeph">master.data</samp> ’, but imposing an additional limit on
+the gas production:</p>
+
+<pre><code>USECUPL
+ 'master'  'U' /
+GRUPSLAV
+--  slave   assoc   oil     wat/liq  gas     resv    oil     wat     gas
+--  group   master  prod    prod     prod    prod    inj     inj     inj 
+--  name    group   limits  limits   limits  limits  limits  limits  limits
+   'R3-A'     1*      1*      1*     'BOTH'  /
+   'R3-B'     1*      1*      1*     'BOTH'  /
+/
+GCONPROD
+-- group   ctl   oil   wat   gas   liq   limit   field  guide  g-r    .....
+-- name    mode  rate  rate  rate  rate  action  ctrl?  rate   phase  .....
+  'R3-*'  'ORAT' 1.0    1*   2.E5   1*   'RATE'  / 
+/
+GCONINJE
+-- group  inj    ctl   surf  resv  reinj  vrep  field  guide  g-r
+-- name   phase  mode  rate  rate  frac   frac  ctrl?  rate   defn
+  'R3-*'  'WAT' 'RATE'  10       /
+/</code></pre>
+</div>
+
+</div>
+
+
+</body>
+</html>

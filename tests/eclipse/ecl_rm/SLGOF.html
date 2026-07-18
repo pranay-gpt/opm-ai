@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SLGOF"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SLGOF"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SLGOF</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SLGOF"><a name="SLGOF"><!-- --></a>
+<h1 class="keyword">SLGOF</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="slgof.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="slgof.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2314e45"> x </th>
+
+<th valign="top" id="d2314e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2314e54"> x </th>
+
+<th valign="top" id="d2314e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2314e45 d2314e54 ">  </td>
+
+<td valign="top" headers="d2314e48 d2314e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2314e45 d2314e54 ">  </td>
+
+<td valign="top" headers="d2314e48 d2314e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2314e45 d2314e54 ">  </td>
+
+<td valign="top" headers="d2314e48 d2314e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2314e45 d2314e54 "> x </td>
+
+<td valign="top" headers="d2314e48 d2314e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2314e45 d2314e54 ">  </td>
+
+<td valign="top" headers="d2314e48 d2314e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2314e45 d2314e54 ">  </td>
+
+<td valign="top" headers="d2314e48 d2314e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2314e45 d2314e54 ">  </td>
+
+<td valign="top" headers="d2314e48 d2314e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2314e45 d2314e54 ">  </td>
+
+<td valign="top" headers="d2314e48 d2314e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">SLGOF</span> keyword may be used in runs containing
+both oil and gas as active phases, to input tables of gas relative
+permeability, oil-in-gas relative permeability and oil-gas capillary
+pressure as functions of the liquid saturation. If water is also an
+active phase in the run, the water/oil saturation functions must be
+input with keyword <a href="SWOF.html#SWOF"> SWOF</a>.</p>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a> 
+(set in the <span class="keyword">TABDIMS</span> keyword) tables of gas/oil saturation functions,
+each terminated by a slash (/). Each table consists of the following columns of
+data:</p>
+
+<ol>
+<li>The liquid saturation. <p>Values should be between 0 and 1 and
+should increase monotonically down the column. The first value in
+the column is interpreted as S<sub>1 </sub> = S<sub>wco</sub> + S<sub>or</sub>  (S<sub>wco</sub> is the connate water saturation, the
+first saturation value in the <span class="keyword">SWOF</span> keyword, or
+zero if there is no water in the run). The last value must be 1.0,
+which corresponds to a gas saturation of zero.</p>
+</li>
+
+<li>The corresponding gas relative permeability. <p>Values should
+be between 0 and 1 and should be level or decreasing down the column.
+The last value in the column must be zero.</p>
+</li>
+
+<li>The corresponding oil relative permeability when oil, gas and
+connate water are present. <p>Values should be between 0 and 1 and
+should be level or increasing down the column. If water is present
+in the run, the last value in the column (k<sub>rog</sub> at  S<sub>g</sub>=0) must be the same as the first value in the k<sub>row </sub>column in keyword <span class="keyword">SWOF</span> (that is  k<sub>row </sub>  at  S<sub>o</sub> = 1 – S<sub>wco</sub>). The first value in the
+column must be zero. </p>
+</li>
+
+<li>The corresponding oil-gas capillary pressure. <p>Values should
+be level or decreasing down the column.</p>
+ <p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+</ol>
+
+<p>Default values (represented by 1*) may be inserted as required
+in columns 2, 3 and 4. When the table is read in, defaults are replaced
+by values computed by linear interpolation.</p>
+
+<p>Each table must contain at least two, and no more than <a href="TABDIMS.html#TABDIMS.NSSFUN"> NSSFUN</a> (set in the <span class="keyword">TABDIMS</span> keyword) rows. Each row must be complete, containing an entry in every column of the table.</p>
+
+<p>The entire table may be defaulted provided the table is not the
+first. Defaulted tables are replaced with a copy of the previous table.</p>
+
+<p>The keyword families</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">(i)</samp> </td>
+
+<td valign="top"> <a href="SWOF.html#SWOF"> SWOF</a>, <a href="SGOF.html#SGOF"> SGOF</a> and <span class="keyword">SLGOF</span></td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">(ii)</samp> </td>
+
+<td valign="top"> <a href="SWFN.html#SWFN"> SWFN</a>, <a href="SGFN.html#SGFN"> SGFN</a>, <a href="SGWFN.html#SGWFN"> SGWFN</a>, <a href="SOF2.html#SOF2"> SOF2</a> and <a href="SOF3.html#SOF3"> SOF3</a> </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>provide two alternative formats for inputting the saturation functions.
+Do not mix keywords from the two families in the same run. In gas-water
+runs, or if you are using the ECLIPSE 100 Miscible Flood or Solvent
+options, the saturation functions must be input with keywords from
+family (ii).</p>
+
+<p>For two dimensional tables the following keywords can also be used: <a href="SOF32D.html#SOF32D"> SOF32D</a>, <a href="SGF32D.html#SGF32D"> SGF32D</a> and <a href="SWF32D.html#SWF32D"> SWF32D</a>.</p>
+
+<p>See <a href="../ecl_td/satfunct_Saturation_Functions.html#satfunct_saturation_functions">"Saturation Functions"</a> in the <cite>ECLIPSE Technical Description</cite> for more information,
+and a description of the methods used to compute three phase relative
+permeabilities.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The critical saturation for each relative permeability function
+is established by determining the highest saturation in the table
+for which the relative permeability is notionally zero, that is, less
+than a small threshold value. Relative permeability values which are
+lower than this threshold value will be treated as zero. For ECLIPSE
+100 and ECLIPSE 300 the default threshold values are 1.0 x 10<sup>-6</sup>  and 1.0 x 10<sup>-20</sup> respectively. These values may
+be modified using the <a href="TOLCRIT.html#TOLCRIT"> TOLCRIT</a> keyword.</span></div>
+
+<div class="section" id="slgof_example"><a name="slgof_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTSFUN</samp> = 2 and <samp class="codeph">NSSFUN</samp> = 10:</p>
+ <pre><code>SLGOF
+-- Sl    Krg     Krog  Pcog
+  .2200  1.0000  0.00  3.9000
+  .3000   .8125  0.00  3.5000
+  .4000   .5000  0.00  3.0000
+  .5000   .4200  0.00  1*
+  .6000  1*      0.00  1*
+  .7000   .2400  0.02  1*
+  .8000   .1000  0.10  1.0000
+  .9000   .0220  0.33   .5000
+  .9600   .0000  0.60   .2000
+ 1.0000   .0000  1.00   .0000   / table 1
+  .18    1.0000  0.0   0
+  .4      .5600  0.0   0
+  .5      .4400  0.0   0
+  .8      .1100  0.12  0
+  .95     .0220  0.62  0
+ 1.00     .0000  1.00  0        / table 2</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

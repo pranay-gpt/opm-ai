@@ -1,0 +1,1723 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Modeling changes in wettability due to surfactant adsorption (ECLIPSE 100)"/>
+<meta name="DC.subject" content="Surfactant model wettability and surfactant adsorption"/>
+<meta name="keywords" content="Surfactant model wettability and surfactant adsorption"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="surfactant_modeling_the_change_to_wettability"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Modeling changes in wettability due to surfactant adsorption
+(ECLIPSE 100)</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="surfactant_modeling_the_change_to_wettability"><a name="surfactant_modeling_the_change_to_wettability"><!-- --></a>
+<h1 class="topictitle1">Modeling changes in wettability due to surfactant adsorption
+(ECLIPSE 100)</h1>
+
+
+ <div>
+<p>This option models changes in the rock wettability due to the accumulation
+of surfactant by adsorption. It is activated by specifying the <a href="../ecl_rm/SURFACTW.html#SURFACTW">SURFACTW</a> keyword, which also
+activates the Surfactant Model (<a href="../ecl_rm/SURFACT.html#SURFACT">SURFACT</a> keyword).</p>
+
+<p>The <a href="../ecl_rm/SATNUM.html#SATNUM">SATNUM</a>  and <a href="../ecl_rm/SURFWNUM.html#SURFWNUM">SURFWNUM</a> keywords are used to define the oil-wet and water-wet immiscible
+saturation regions respectively and hence the associated saturation
+tables. (The <a href="../ecl_rm/HWSNUM.html#HWSNUM">HWSNUM</a> keyword may be used as an abbreviated alias for <a href="../ecl_rm/SURFWNUM.html#SURFWNUM">SURFWNUM</a>.) The keyword <a href="../ecl_rm/SURFNUM.html#SURFNUM">SURFNUM</a> is used to define the
+miscible saturation regions. Given two sets of saturation functions,
+one for immiscible oil-wet and one for immiscible water-wet, the immiscible
+water and oil table saturation end-points are interpolated firstly
+according to:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.miscible"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>o</mi>
+</mrow><mrow><mi>i</mi><mi>m</mi><mi>m</mi></mrow>
+</msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi>
+</mrow><mrow><mn>4</mn></mrow></msub><msubsup><mrow>
+<mo>⁢</mo><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi>
+<mi>o</mi></mrow><mrow><mi>o</mi><mi>w</mi></mrow>
+</msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow>
+<mrow><mn>4</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow><mrow><mi>w</mi>
+<mi>w</mi></mrow></msubsup></mrow></mrow></mtd></mtr>
+<mtr><mtd><mrow><msubsup><mrow><mi>S</mi></mrow><mrow>
+<mi>w</mi><mi>c</mi><mi>r</mi></mrow><mrow><mi>i</mi>
+<mi>m</mi><mi>m</mi></mrow></msubsup><mo>=</mo><mrow>
+<msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow>
+</msub><msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow>
+<mrow><mi>w</mi><mi>c</mi><mi>r</mi></mrow><mrow>
+<mi>o</mi><mi>w</mi></mrow></msubsup></mrow><mo>+</mo>
+<mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow>
+</msub></mrow><mo>)</mo></mrow><msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi>
+<mi>r</mi></mrow><mrow><mi>w</mi><mi>w</mi></mrow>
+</msubsup></mrow></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow><mrow><mi>i</mi>
+<mi>m</mi><mi>m</mi></mrow></msubsup><mo>=</mo><mrow>
+<msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow>
+</msub><mo>⁢</mo><msubsup><mrow><mi>S</mi></mrow>
+<mrow><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow><mrow><mi>o</mi><mi>w</mi></mrow></msubsup>
+</mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn>
+<mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow>
+<mn>4</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow><mrow>
+<mi>w</mi><mi>w</mi></mrow></msubsup></mrow></mrow>
+</mtd></mtr><mtr><mtd><mrow><msubsup><mrow><mi>S</mi>
+</mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi><mi>r</mi>
+</mrow><mrow><mi>i</mi><mi>m</mi><mi>m</mi></mrow>
+</msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi>
+</mrow><mrow><mn>4</mn></mrow></msub><mo>⁢</mo>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi><mi>r</mi></mrow><mrow><mi>o</mi>
+<mi>w</mi></mrow></msubsup></mrow><mo>+</mo><mrow>
+<mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub>
+<mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow></msub>
+</mrow><mo>)</mo></mrow><msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi>
+<mi>r</mi></mrow><mrow><mi>w</mi><mi>w</mi></mrow>
+</msubsup></mrow></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi><mi>c</mi><mi>r</mi></mrow><mrow><mi>i</mi>
+<mi>m</mi><mi>m</mi></mrow></msubsup><mo>=</mo><mrow>
+<msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow>
+</msub><msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow>
+<mrow><mi>o</mi><mi>g</mi><mi>c</mi><mi>r</mi>
+</mrow><mrow><mi>o</mi><mi>w</mi></mrow></msubsup>
+</mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn>
+<mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow>
+<mn>4</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi><mi>c</mi><mi>r</mi></mrow><mrow>
+<mi>w</mi><mi>w</mi></mrow></msubsup></mrow></mrow>
+</mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 470.1]
+              </td></tr></tbody></table>
+<p>and these are then combined with the miscible table saturation
+end-points according to:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.miscible.eq2"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>o</mi>
+</mrow><mrow><mi>i</mi></mrow></msubsup><mo>=</mo>
+<mrow><msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn>
+</mrow></msub><msubsup><mrow><mo>⁢</mo><mi>S</mi>
+</mrow><mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow>
+<mrow><mi>m</mi><mi>i</mi><mi>s</mi></mrow></msubsup>
+</mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn>
+<mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow>
+<mn>3</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow><mrow><mi>i</mi>
+<mi>m</mi><mi>m</mi></mrow></msubsup></mrow></mrow>
+</mtd></mtr><mtr><mtd><mrow><msubsup><mrow><mi>S</mi>
+</mrow><mrow><mi>w</mi><mi>c</mi><mi>r</mi></mrow>
+<mrow><mi>i</mi></mrow></msubsup><mo>=</mo><mrow>
+<msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn></mrow>
+</msub><msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow>
+<mrow><mi>w</mi><mi>c</mi><mi>r</mi></mrow><mrow>
+<mi>m</mi><mi>i</mi><mi>s</mi></mrow></msubsup></mrow>
+<mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn>
+</mrow></msub></mrow><mo>)</mo></mrow><msubsup><mrow>
+<mo>⁢</mo><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi>
+<mi>r</mi></mrow><mrow><mi>i</mi><mi>m</mi><mi>m</mi>
+</mrow></msubsup></mrow></mrow></mtd></mtr><mtr><mtd>
+<mrow><msubsup><mrow><mi>S</mi></mrow><mrow><mi>w</mi>
+<mi>m</mi><mi>a</mi><mi>x</mi></mrow><mrow><mi>i</mi>
+</mrow></msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi>
+</mrow><mrow><mn>3</mn></mrow></msub><mo>⁢</mo>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow><mrow><mi>m</mi>
+<mi>i</mi><mi>s</mi></mrow></msubsup></mrow><mo>+</mo>
+<mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn></mrow>
+</msub></mrow><mo>)</mo></mrow><msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>w</mi><mi>m</mi>
+<mi>a</mi><mi>x</mi></mrow><mrow><mi>i</mi><mi>m</mi>
+<mi>m</mi></mrow></msubsup></mrow></mrow></mtd></mtr>
+<mtr><mtd><mrow><msubsup><mrow><mi>S</mi></mrow><mrow>
+<mi>o</mi><mi>w</mi><mi>c</mi><mi>r</mi></mrow>
+<mrow><mi>i</mi></mrow></msubsup><mo>=</mo><mrow>
+<msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn></mrow>
+</msub><mo>⁢</mo><msubsup><mrow><mi>S</mi></mrow>
+<mrow><mi>o</mi><mi>w</mi><mi>c</mi><mi>r</mi>
+</mrow><mrow><mi>m</mi><mi>i</mi><mi>s</mi></mrow>
+</msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow>
+<mrow><mn>3</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi><mi>r</mi></mrow><mrow>
+<mi>i</mi><mi>m</mi><mi>m</mi></mrow></msubsup></mrow>
+</mrow></mtd></mtr><mtr><mtd><mrow><msubsup><mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi><mi>c</mi>
+<mi>r</mi></mrow><mrow><mi>i</mi></mrow></msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn></mrow></msub><msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi><mi>c</mi>
+<mi>r</mi></mrow><mrow><mi>m</mi><mi>i</mi><mi>s</mi>
+</mrow></msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn></mrow></msub></mrow>
+<mo>)</mo></mrow><msubsup><mrow><mo>⁢</mo><mi>S</mi>
+</mrow><mrow><mi>o</mi><mi>g</mi><mi>c</mi><mi>r</mi>
+</mrow><mrow><mi>i</mi><mi>m</mi><mi>m</mi></mrow>
+</msubsup></mrow></mrow></mtd></mtr></mtable></mrow>
+</math> 
+</td><td align="right">[Eq. 470.2]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>F</mi></mrow><mrow><mn>3</mn></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">is tabulated as a function of the capillary number (expressed
+in terms of its logarithm base ten) and corresponds to the second
+column of the <a href="../ecl_rm/SURFCAPD.html#SURFCAPD"> SURFCAPD</a> keyword. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>F</mi></mrow><mrow><mn>4</mn></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">is tabulated as a function of the adsorbed surfactant concentration
+and corresponds to the second column of the <a href="../ecl_rm/SURFADDW.html#SURFADDW"> SURFADDW</a> keyword. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow></msub>
+</math> </td>
+
+<td valign="top">is the saturation table derived connate water saturation.  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>c</mi><mi>r</mi></mrow></msub>
+</math> </td>
+
+<td valign="top">is the saturation table derived critical water saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow></msub></math> </td>
+
+<td valign="top">is the saturation table derived maximum water saturation. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi>
+<mi>r</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the saturation table derived critical oil saturation in
+water.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi><mi>c</mi>
+<mi>r</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the saturation table derived critical oil saturation in
+gas.</td>
+
+</tr>
+
+<tr>
+<td valign="top">superscripts <math>
+<mrow><mi>o</mi><mi>w</mi></mrow></math>, <math><mrow><mi>w</mi>
+<mi>w</mi></mrow></math> </td>
+
+<td valign="top">denote the immiscible oil-wet and water-wet immiscible table
+derived saturation end-points respectively.</td>
+
+</tr>
+
+<tr>
+<td valign="top">superscripts <math>
+<mrow><mi>i</mi><mi>m</mi><mi>m</mi></mrow></math>, <math><mrow><mi>m</mi><mi>i</mi><mi>s</mi></mrow></math> </td>
+
+<td valign="top">denote the immiscible and miscible table derived saturation
+end-points respectively.</td>
+
+</tr>
+
+<tr>
+<td valign="top">superscript <math>
+<mrow><mi>i</mi></mrow></math> </td>
+
+<td valign="top">denotes the interpolation between the immiscible and miscible
+table derived saturation end-points.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The immiscible oil-wet and water-wet capillary pressures and relative
+permeabilities are looked up in the immiscible oil-wet and water-wet
+saturation tables by applying two-point saturation (horizontal) end-point
+scaling using the interpolated saturation end-points:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.interpolation"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi>
+</mrow><mrow><mi>o</mi><mi>w</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow>
+<mrow><mi>i</mi></mrow></msubsup><mo>,</mo><msubsup>
+<mrow><mtext> </mtext><mi>S</mi></mrow><mrow><mi>w</mi>
+<mi>m</mi><mi>a</mi><mi>x</mi><mo>⁡</mo></mrow>
+<mrow><mi>i</mi></mrow></msubsup><mo>,</mo><msubsup>
+<mrow><mtext> </mtext><mi>P</mi></mrow><mrow><mi>c</mi>
+<mi>o</mi><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow><mrow><mi>o</mi><mi>w</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mtext> </mtext><mi>P</mi></mrow><mrow>
+<mi>c</mi><mi>o</mi><mi>w</mi></mrow><mrow><mi>w</mi>
+<mi>w</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>w</mi></mrow></msub><msubsup><mrow><mo>,</mo>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow><mrow><mi>i</mi></mrow>
+</msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>S</mi></mrow><mrow><mi>w</mi><mi>m</mi><mi>a</mi>
+<mi>x</mi><mo>⁡</mo></mrow><mrow><mi>i</mi></mrow>
+</msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi>
+<mi>m</mi><mi>a</mi><mi>x</mi></mrow><mrow><mi>w</mi>
+<mi>w</mi></mrow></msubsup><mo>)</mo>
+</mrow></mtd></mtr><mtr><mtd><mrow><msubsup><mrow>
+<mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi></mrow><mrow><mi>o</mi><mi>w</mi></mrow>
+</msubsup><mo>=</mo><mi>f</mi><mo>(</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>w</mi></mrow>
+</msub><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>r</mi>
+</mrow><mrow><mi>i</mi></mrow></msubsup><mo>,</mo>
+<mtext> </mtext><msubsup><mrow><mi>S</mi></mrow><mrow>
+<mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi><mo>⁡</mo>
+</mrow><mrow><mi>i</mi></mrow></msubsup><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow>
+<mi>r</mi><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow><mrow><mi>o</mi><mi>w</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow>
+<mi>r</mi><mi>w</mi></mrow><mrow><mi>w</mi><mi>w</mi>
+</mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>w</mi>
+</mrow></msub><msubsup><mrow><mo>,</mo><mtext> </mtext>
+<mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>r</mi>
+</mrow><mrow><mi>i</mi></mrow></msubsup><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>S</mi></mrow><mrow>
+<mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi><mo>⁡</mo>
+</mrow><mrow><mi>i</mi></mrow></msubsup><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow>
+<mi>r</mi><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow><mrow><mi>w</mi><mi>w</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow>
+<mi>r</mi><mi>o</mi><mi>g</mi></mrow><mrow><mi>o</mi>
+<mi>w</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>o</mi><mi>g</mi></mrow></msub><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi><mi>c</mi><mi>r</mi></mrow><mrow>
+<mi>i</mi></mrow></msubsup><mo>,</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>m</mi><mi>a</mi>
+<mi>x</mi><mo>⁡</mo></mrow></msub><mo>,</mo><msubsup>
+<mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi>
+<mi>o</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow>
+<mrow><mi>o</mi><mi>w</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow>
+<mi>r</mi><mi>o</mi><mi>g</mi></mrow><mrow><mi>w</mi>
+<mi>w</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>o</mi><mi>g</mi></mrow></msub><msubsup><mrow><mo>,</mo><mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi>
+<mi>c</mi><mi>r</mi></mrow><mrow><mi>i</mi></mrow>
+</msubsup><mo>,</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>o</mi><mi>m</mi><mi>a</mi><mi>x</mi><mo>⁡</mo></mrow></msub><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi>
+<mi>m</mi><mi>a</mi><mi>x</mi></mrow><mrow><mi>w</mi>
+<mi>w</mi></mrow></msubsup><mo>)</mo>
+</mrow></mtd></mtr><mtr><mtd><mrow><msubsup><mrow>
+<mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>w</mi></mrow><mrow><mi>o</mi><mi>w</mi>
+</mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi>
+<mi>w</mi></mrow></msub><msubsup><mrow><mo>,</mo>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi><mi>r</mi></mrow><mrow><mi>i</mi>
+</mrow></msubsup><mo>,</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>o</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+<mo>⁡</mo></mrow></msub><mo>,</mo><msubsup><mrow>
+<mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow><mrow>
+<mi>o</mi><mi>w</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr><mtr><mtd><mrow><msubsup>
+<mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi>
+<mi>o</mi><mi>w</mi></mrow><mrow><mi>w</mi><mi>w</mi>
+</mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi>
+<mi>w</mi></mrow></msub><msubsup><mrow><mo>,</mo><mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi>
+<mi>r</mi></mrow><mrow><mi>i</mi></mrow></msubsup><mo>,</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi>
+<mi>m</mi><mi>a</mi><mi>x</mi><mo>⁡</mo></mrow>
+</msub><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>m</mi>
+<mi>a</mi><mi>x</mi></mrow><mrow><mi>w</mi><mi>w</mi>
+</mrow></msubsup><mo>)</mo></mrow></mtd>
+</mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 470.3]
+              </td></tr></tbody></table>
+<p>The miscible relative permeabilities are looked up in the miscible
+tables by applying two-point saturation (horizontal) end-point scaling
+using the interpolated saturation end-points:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.interpolation.eq3"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi>
+</mrow><mrow><mi>m</mi><mi>i</mi><mi>s</mi></mrow>
+</msubsup><mo>=</mo><mi>f</mi><mo>(</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>w</mi></mrow>
+</msub><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>r</mi>
+</mrow><mrow><mi>i</mi></mrow></msubsup><mo>,</mo>
+<mtext> </mtext><msubsup><mrow><mi>S</mi></mrow><mrow>
+<mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi><mo>⁡</mo>
+</mrow><mrow><mi>i</mi></mrow></msubsup><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow>
+<mi>r</mi><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow><mrow><mi>m</mi><mi>i</mi><mi>s</mi></mrow>
+</msubsup><mo>)</mo></mrow></mtd></mtr>
+<mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>g</mi>
+</mrow><mrow><mi>m</mi><mi>i</mi><mi>s</mi></mrow>
+</msubsup><mo>=</mo><mi>f</mi><mo>(</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi></mrow></msub><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi>
+<mi>c</mi><mi>r</mi></mrow><mrow><mi>i</mi></mrow>
+</msubsup><mo>,</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>o</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow></msub><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>m</mi>
+<mi>a</mi><mi>x</mi></mrow><mrow><mi>m</mi><mi>i</mi>
+<mi>s</mi></mrow></msubsup><mo>)</mo>
+</mrow></mtd></mtr><mtr><mtd><mrow><msubsup><mrow>
+<mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>w</mi></mrow><mrow><mi>m</mi><mi>i</mi>
+<mi>s</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>o</mi><mi>w</mi></mrow></msub><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi><mi>r</mi></mrow><mrow>
+<mi>i</mi></mrow></msubsup><mo>,</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>m</mi><mi>a</mi>
+<mi>x</mi></mrow></msub><mo>,</mo><msubsup><mrow>
+<mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow><mrow>
+<mi>m</mi><mi>i</mi><mi>s</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr></mtable></mrow>
+</math> 
+</td><td align="right">[Eq. 470.4]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><mi>f</mi>
+</mrow></math> </td>
+
+<td valign="top">signifies the end-point scaling operation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">is the grid block water saturation. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the oil saturation for oil relative permeability to water.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the oil saturation for oil relative permeability to gas. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi><mi>m</mi><mi>a</mi>
+<mi>x</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the maximum oil saturation, <math><mrow>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>=</mo>
+<mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<mtext> </mtext><msubsup><mrow><mi>S</mi></mrow><mrow>
+<mi>w</mi><mi>c</mi><mi>o</mi></mrow><mrow><mi>i</mi>
+</mrow></msubsup></mrow><mrow><mo>-</mo><mtext> </mtext>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>g</mi><mi>c</mi><mi>o</mi></mrow><mrow><mi>o</mi><mi>w</mi>
+</mrow></msubsup></mrow><mo>)</mo></mrow>
+</math>.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>g</mi><mi>c</mi><mi>o</mi>
+</mrow></msub></mrow></math> </td>
+
+<td valign="top">is the saturation table derived connate gas saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi><mi>m</mi>
+<mi>a</mi><mi>x</mi><mo>⁡</mo></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">is the saturation table derived maximum water relative permeability. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>m</mi>
+<mi>a</mi><mi>x</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the saturation table derived maximum oil relative permeability.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi>
+<mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">is the saturation table derived maximum oil-water capillary
+pressure.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>For the default three-phase oil relative permeability model, the
+oil saturations used to look up the oil relative permeabilities are:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.oilsats.eq1"/>
+ <math><mrow><mtable><mtr><mtd><mrow><mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi></mrow></msub>
+</mrow><mo>=</mo><mtext> </mtext><mrow><mo>(</mo><mn>1</mn><mo>⁢</mo><mtext> </mtext><mrow><mo>-</mo>
+<mtext> </mtext><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>w</mi></mrow></msub><mo>-</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub></mrow>
+<mo>)</mo></mrow></mrow></mtd></mtr><mtr><mtd><mrow>
+<mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi>
+<mi>g</mi></mrow></msub></mrow><mo>=</mo><mtext> </mtext>
+<mrow><mo>(</mo><mn>1</mn><mo>⁢</mo><mtext> </mtext>
+<mrow><mo>-</mo><mtext> </mtext><msub><mrow><mtext> </mtext><mi>S</mi></mrow><mrow><mi>w</mi></mrow>
+</msub><mo>-</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>g</mi></mrow></msub></mrow><mo>)</mo></mrow>
+</mrow></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 470.5]
+              </td></tr></tbody></table>
+<p>For the Stone 1 and Stone 2 three-phase oil relative permeability
+models, the oil saturations used to look up the oil relative permeabilities
+are:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.oilrelperms"/>
+ <math><mrow><mtable><mtr><mtd><mrow><mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi></mrow></msub>
+</mrow><mo>=</mo><mtext> </mtext><mrow><mo>(</mo><mn>1</mn><mo>⁢</mo><mtext> </mtext><mrow><mo>-</mo>
+<mtext> </mtext><msub><mrow><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>w</mi></mrow></msub></mrow><mo>)</mo>
+</mrow></mrow></mtd></mtr><mtr><mtd><mrow><mrow><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi>
+</mrow></msub></mrow><mo>=</mo><mtext> </mtext><mrow>
+<mo>(</mo><mn>1</mn><mo>⁢</mo><mtext> </mtext><mrow>
+<mo>-</mo><mtext> </mtext><msub><mrow><mtext> </mtext>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>g</mi>
+</mrow></msub><mo>-</mo><mtext> </mtext><msubsup><mrow>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow><mrow><mi>i</mi></mrow>
+</msubsup></mrow><mo>)</mo></mrow></mrow></mtd></mtr>
+</mtable></mrow></math> 
+</td><td align="right">[Eq. 470.6]
+              </td></tr></tbody></table>
+<p>The immiscible oil-wet and water-wet relative permeabilities and
+capillary pressure are interpolated according to:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.interpolation.eq3.immiscible"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi>
+</mrow><mrow><mi>i</mi><mi>m</mi><mi>m</mi></mrow>
+</msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi>
+</mrow><mrow><mn>4</mn></mrow></msub><msubsup><mrow>
+<mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi></mrow><mrow><mi>o</mi><mi>w</mi></mrow>
+</msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow>
+<mrow><mn>4</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi></mrow><mrow><mi>w</mi><mi>w</mi></mrow>
+</msubsup></mrow></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow>
+<mi>r</mi><mi>o</mi><mi>w</mi></mrow><mrow><mi>i</mi>
+<mi>m</mi><mi>m</mi></mrow></msubsup><mo>=</mo><mrow>
+<msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow>
+</msub><mo>⁢</mo><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>w</mi>
+</mrow><mrow><mi>o</mi><mi>w</mi></mrow></msubsup>
+</mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn>
+<mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow>
+<mn>4</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>w</mi></mrow><mrow><mi>w</mi><mi>w</mi>
+</mrow></msubsup></mrow></mrow></mtd></mtr><mtr><mtd>
+<mrow><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow>
+<mrow><mi>r</mi><mi>o</mi><mi>g</mi></mrow><mrow>
+<mi>i</mi><mi>m</mi><mi>m</mi></mrow></msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow></msub><mo>⁢</mo><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi>
+<mi>g</mi></mrow><mrow><mi>o</mi><mi>w</mi></mrow>
+</msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow>
+<mrow><mn>4</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>g</mi></mrow><mrow><mi>w</mi><mi>w</mi>
+</mrow></msubsup></mrow></mrow></mtd></mtr><mtr><mtd>
+<mrow><msubsup><mrow><mi>P</mi></mrow><mrow><mi>c</mi>
+<mi>o</mi><mi>w</mi></mrow><mrow><mi>i</mi><mi>m</mi>
+<mi>m</mi></mrow></msubsup><mo>=</mo><mrow><msub>
+<mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow></msub>
+<msubsup><mrow><mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi></mrow><mrow><mi>o</mi><mi>w</mi>
+</mrow></msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow></msub></mrow>
+<mo>)</mo></mrow><msubsup><mrow><mi>P</mi></mrow>
+<mrow><mi>c</mi><mi>o</mi><mi>w</mi></mrow><mrow>
+<mi>w</mi><mi>w</mi></mrow></msubsup></mrow></mrow>
+</mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 470.7]
+              </td></tr></tbody></table>
+<p>The immiscible and miscible relative permeabilities are interpolated
+according to:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.interpolation.eq4"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi>
+</mrow><mrow><mi>i</mi></mrow></msubsup><mo>=</mo>
+<mrow><msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn>
+</mrow></msub><msubsup><mrow><mtext> </mtext><mi>k</mi>
+</mrow><mrow><mi>r</mi><mi>w</mi></mrow><mrow><mi>m</mi><mi>i</mi><mi>s</mi></mrow></msubsup></mrow>
+<mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn>
+</mrow></msub></mrow><mo>)</mo></mrow><msubsup><mrow>
+<mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi></mrow>
+<mrow><mi>i</mi><mi>m</mi><mi>m</mi></mrow></msubsup>
+</mrow></mrow></mtd></mtr><mtr><mtd><mrow><msubsup>
+<mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi>
+<mi>o</mi><mi>w</mi></mrow><mrow><mi>i</mi></mrow>
+</msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi>
+</mrow><mrow><mn>3</mn></mrow></msub><mo>⁢</mo>
+<msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow>
+<mi>r</mi><mi>o</mi><mi>w</mi></mrow><mrow><mi>m</mi>
+<mi>i</mi><mi>s</mi></mrow></msubsup></mrow><mo>+</mo>
+<mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn></mrow>
+</msub></mrow><mo>)</mo></mrow><msubsup><mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>w</mi>
+</mrow><mrow><mi>i</mi><mi>m</mi><mi>m</mi></mrow>
+</msubsup></mrow></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mtext> </mtext><mi>P</mi></mrow><mrow>
+<mi>c</mi><mi>o</mi><mi>w</mi></mrow><mrow><mi>i</mi>
+</mrow></msubsup><mo>=</mo><mrow><mo>⁢</mo><msubsup>
+<mrow><mtext> </mtext><mi>P</mi></mrow><mrow><mi>c</mi>
+<mi>o</mi><mi>w</mi></mrow><mrow><mi>i</mi><mi>m</mi>
+<mi>m</mi></mrow></msubsup></mrow></mrow></mtd></mtr>
+</mtable></mrow></math> 
+</td><td align="right">[Eq. 470.8]
+              </td></tr></tbody></table>
+<p>Default three-phase oil relative permeability model:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.interpolation.relperm"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi>
+<mi>g</mi></mrow><mrow><mi>i</mi></mrow></msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn></mrow></msub><mo>⁢</mo><msubsup><mrow><mtext> </mtext><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi>
+<mi>g</mi></mrow><mrow><mi>m</mi><mi>i</mi><mi>s</mi>
+</mrow></msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn></mrow></msub></mrow>
+<mo>)</mo></mrow><msubsup><mrow><mi>k</mi></mrow>
+<mrow><mi>r</mi><mi>o</mi><mi>g</mi></mrow><mrow>
+<mi>i</mi><mi>m</mi><mi>m</mi></mrow></msubsup></mrow>
+</mrow></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 470.9]
+              </td></tr></tbody></table>
+<p>Stone 1 and 2 three-phase oil relative permeability models:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.interpolation.stone"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>g</mi>
+</mrow><mrow><mi>i</mi></mrow></msubsup><mo>=</mo>
+<mrow><msubsup><mrow><mi>k</mi></mrow><mrow><mi>r</mi>
+<mi>o</mi><mi>g</mi></mrow><mrow><mi>i</mi><mi>m</mi>
+<mi>m</mi></mrow></msubsup></mrow></mrow></mtd></mtr>
+</mtable></mrow></math> 
+</td><td align="right">[Eq. 470.10]
+              </td></tr></tbody></table>
+<p>The water-oil capillary pressure is only interpolated between the
+immiscible oil-wet and water-wet values. The gas saturation functions
+are looked up in the immiscible oil-wet table; that is, the gas relative
+permeability and gas-oil capillary pressure are assumed to exhibit
+no dependence upon surfactant concentration or surfactant adsorption. </p>
+
+<p>When end-point scaling is specified via the <a href="../ecl_rm/ENDSCALE.html#ENDSCALE">ENDSCALE</a> keyword the interpolations
+follow a similar pattern to that described above in the absence of
+end-point scaling. Hence given two sets of immiscible water and oil
+saturation functions, one for oil-wet and one for water-wet, the scaled
+saturation end points are interpolated firstly according to:  </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.wettability.interpolation.eq5"/>
+ <math><mrow><mtable><mtr><mtd><msubsup><mrow><mi>S</mi>
+</mrow><mrow><mi>W</mi><mi>L</mi></mrow><mrow><mi>I</mi><mi>M</mi><mi>M</mi></mrow></msubsup><mo>=</mo>
+<msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow>
+</msub><msubsup><mrow><mi>S</mi></mrow><mrow><mi>W</mi>
+<mi>L</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msubsup><mo>+</mo><mrow><mo>(</mo><mn>1</mn><mo>−</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn>
+</mrow></msub><mo>)</mo><msubsup><mrow><mi>S</mi>
+</mrow><mrow><mi>W</mi><mi>L</mi></mrow><mrow><mi>W</mi><mi>W</mi></mrow></msubsup></mrow></mtd></mtr>
+<mtr><mtd><msubsup><mrow><mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi><mi>P</mi><mi>C</mi></mrow><mrow>
+<mi>I</mi><mi>M</mi><mi>M</mi></mrow></msubsup><mo>=</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn>
+</mrow></msub><msubsup><mrow><mi>S</mi></mrow><mrow>
+<mi>W</mi><mi>L</mi><mi>P</mi><mi>C</mi></mrow>
+<mrow><mi>O</mi><mi>W</mi></mrow></msubsup><mo>+</mo>
+<mrow><mo>(</mo><mn>1</mn><mo>−</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow></msub><mo>)</mo>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi><mi>P</mi><mi>C</mi></mrow><mrow><mi>W</mi>
+<mi>W</mi></mrow></msubsup></mrow></mtd></mtr><mtr>
+<mtd><msubsup><mrow><mi>S</mi></mrow><mrow><mi>W</mi>
+<mi>C</mi><mi>R</mi></mrow><mrow><mi>I</mi><mi>M</mi>
+<mi>M</mi></mrow></msubsup><mo>=</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow></msub><msubsup>
+<mrow><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi>
+<mi>R</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msubsup><mo>+</mo><mrow><mo>(</mo><mn>1</mn><mo>−</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn>
+</mrow></msub><mo>)</mo><msubsup><mrow><mi>S</mi>
+</mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi></mrow>
+<mrow><mi>W</mi><mi>W</mi></mrow></msubsup></mrow>
+</mtd></mtr><mtr><mtd><msubsup><mrow><mi>S</mi></mrow>
+<mrow><mi>W</mi><mi>U</mi></mrow><mrow><mi>I</mi>
+<mi>M</mi><mi>M</mi></mrow></msubsup><mo>=</mo><msub>
+<mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow></msub>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>W</mi><mi>U</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msubsup><mo>+</mo><mrow><mo>(</mo><mn>1</mn><mo>−</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn>
+</mrow></msub><mo>)</mo><msubsup><mrow><mi>S</mi>
+</mrow><mrow><mi>W</mi><mi>U</mi></mrow><mrow><mi>W</mi><mi>W</mi></mrow></msubsup></mrow></mtd></mtr>
+<mtr><mtd><msubsup><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow>
+<mi>I</mi><mi>M</mi><mi>M</mi></mrow></msubsup><mo>=</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn>
+</mrow></msub><msubsup><mrow><mi>S</mi></mrow><mrow>
+<mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow>
+<mrow><mi>O</mi><mi>W</mi></mrow></msubsup><mo>+</mo>
+<mrow><mo>(</mo><mn>1</mn><mo>−</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow></msub><mo>)</mo>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>W</mi>
+<mi>W</mi></mrow></msubsup></mrow></mtd></mtr><mtr>
+<mtd><msubsup><mrow><mi>S</mi></mrow><mrow><mi>O</mi>
+<mi>G</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>I</mi>
+<mi>M</mi><mi>M</mi></mrow></msubsup><mo>=</mo><msub>
+<mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow></msub>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>O</mi>
+<mi>W</mi></mrow></msubsup><mo>+</mo><mrow><mo>(</mo>
+<mn>1</mn><mo>−</mo><msub><mrow><mi>F</mi></mrow>
+<mrow><mn>4</mn></mrow></msub><mo>)</mo><msubsup>
+<mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi>
+<mi>C</mi><mi>R</mi></mrow><mrow><mi>W</mi><mi>W</mi>
+</mrow></msubsup></mrow></mtd></mtr></mtable></mrow>
+</math> 
+</td><td align="right">[Eq. 470.11]
+              </td></tr></tbody></table>
+<p>and these are then combined with the miscible scaled end-points
+according to:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.wettability.interpolation.eq6"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi></mrow><mrow>
+<mi>I</mi></mrow></msubsup><mo>=</mo><mrow><msub>
+<mrow><mi>F</mi></mrow><mrow><mn>3</mn></mrow></msub>
+<msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>O</mi></mrow><mrow><mi>M</mi>
+<mi>I</mi><mi>S</mi></mrow></msubsup></mrow><mo>+</mo>
+<mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn></mrow>
+</msub></mrow><mo>)</mo></mrow><msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi>
+</mrow><mrow><mi>I</mi><mi>M</mi><mi>M</mi></mrow>
+</msubsup></mrow></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>I</mi></mrow>
+</msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi>
+</mrow><mrow><mn>3</mn></mrow></msub><msubsup><mrow>
+<mo>⁢</mo><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi>
+<mi>R</mi></mrow><mrow><mi>M</mi><mi>I</mi><mi>S</mi>
+</mrow></msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn></mrow></msub></mrow>
+<mo>)</mo></mrow><msubsup><mrow><mo>⁢</mo><mi>S</mi>
+</mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi></mrow>
+<mrow><mi>I</mi><mi>M</mi><mi>M</mi></mrow></msubsup>
+</mrow></mrow></mtd></mtr><mtr><mtd><mrow><msubsup>
+<mrow><mi>S</mi></mrow><mrow><mi>W</mi><mi>U</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><mo>=</mo>
+<mrow><msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn>
+</mrow></msub><mo>⁢</mo><msubsup><mrow><mi>S</mi>
+</mrow><mrow><mi>W</mi><mi>M</mi><mi>A</mi><mi>X</mi>
+</mrow><mrow><mi>M</mi><mi>I</mi><mi>S</mi></mrow>
+</msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow>
+<mrow><mn>3</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>W</mi><mi>U</mi></mrow><mrow><mi>I</mi><mi>M</mi>
+<mi>M</mi></mrow></msubsup></mrow></mrow></mtd></mtr>
+<mtr><mtd><mrow><msubsup><mrow><mi>S</mi></mrow><mrow>
+<mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow>
+<mrow><mi>I</mi></mrow></msubsup><mo>=</mo><mrow>
+<msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn></mrow>
+</msub><mo>⁢</mo><msubsup><mrow><mi>S</mi></mrow>
+<mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>M</mi><mi>I</mi><mi>S</mi></mrow>
+</msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow>
+<mrow><mn>3</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow>
+<mi>I</mi><mi>M</mi><mi>M</mi></mrow></msubsup></mrow>
+</mrow></mtd></mtr><mtr><mtd><mrow><msubsup><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi><mi>C</mi>
+<mi>R</mi></mrow><mrow><mi>I</mi></mrow></msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn></mrow></msub><msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi><mi>C</mi>
+<mi>R</mi></mrow><mrow><mi>M</mi><mi>I</mi><mi>S</mi>
+</mrow></msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn></mrow></msub></mrow>
+<mo>)</mo></mrow><msubsup><mrow><mo>⁢</mo><mi>S</mi>
+</mrow><mrow><mi>O</mi><mi>G</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>I</mi><mi>M</mi><mi>M</mi></mrow>
+</msubsup></mrow></mrow></mtd></mtr></mtable></mrow>
+</math> 
+</td><td align="right">[Eq. 470.12]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the scaled minimum water saturation for relative permeability.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi><mi>P</mi>
+<mi>C</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled minimum water saturation for oil-water capillary
+pressure.    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi>
+</mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled critical water saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>W</mi><mi>U</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the scaled maximum water saturation. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi>
+<mi>R</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled critical oil saturation in water.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi><mi>C</mi>
+<mi>R</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled critical oil saturation in gas.</td>
+
+</tr>
+
+<tr>
+<td valign="top">superscripts <math>
+<mrow><mi>I</mi><mi>M</mi><mi>M</mi></mrow></math>, <math><mrow><mi>M</mi><mi>I</mi><mi>S</mi></mrow></math> </td>
+
+<td valign="top">denote the immiscible interpolated and the miscible scaled
+saturation end-points respectively. </td>
+
+</tr>
+
+<tr>
+<td valign="top">superscript <math>
+<mrow><mi>I</mi></mrow></math> </td>
+
+<td valign="top">denotes the interpolation between the immiscible and miscible
+scaled saturation end-points.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Lower and upper case subscripts and superscripts are used here
+to signify the table derived and the scaled end-points respectively. </p>
+
+<p>The oil-wet immiscible saturation tables are scaled using the set
+of end-point scaling keywords consisting of: <a href="../ecl_rm/swl_SWL_ISWL.html#swl_swl_iswl">SWL</a>, <a href="../ecl_rm/SWLPC.html#SWLPC">SWLPC</a>, <a href="../ecl_rm/SWCR.html#SWCR">SWCR</a>, <a href="../ecl_rm/swu_SWU_ISWU.html#swu_swu_iswu">SWU</a>, <a href="../ecl_rm/sgl_SGL_ISGL.html#sgl_sgl_isgl">SGL</a>, <a href="../ecl_rm/SGLPC.html#SGLPC">SGLPC</a>, <a href="../ecl_rm/SGCR.html#SGCR">SGCR</a>, <a href="../ecl_rm/sgu_SGU_ISGU.html#sgu_sgu_isgu">SGU</a>, <a href="../ecl_rm/SOWCR.html#SOWCR">SOWCR</a>, <a href="../ecl_rm/SOGCR.html#SOGCR">SOGCR</a>, <a href="../ecl_rm/krwx_KRW-IKRWR.html#krwx_krw-ikrwr">KRW</a>, <a href="../ecl_rm/krwx_KRW-IKRWR.html#krwx_krw-ikrwr">KRWR</a>, <a href="../ecl_rm/krgx_KRG-IKRGR.html#krgx_krg-ikrgr">KRG</a>, <a href="../ecl_rm/krgx_KRG-IKRGR.html#krgx_krg-ikrgr">KRGR</a>, <a href="../ecl_rm/kroxx_KRO-ORG.html#kroxx_kro-org">KRO</a>, <a href="../ecl_rm/kroxx_KRO-ORG.html#kroxx_kro-org">KRORW</a>, <a href="../ecl_rm/kroxx_KRO-ORG.html#kroxx_kro-org">KRORG</a>, <a href="../ecl_rm/pcw_PCW_IPCW.html#pcw_pcw_ipcw">PCW</a> and <a href="../ecl_rm/pcg_PCG_IPCG.html#pcg_pcg_ipcg">PCG</a>. For versions prior to 2014.1, this set of end-points was
+also used for the water-wet immiscible saturation tables. Pre-2014.1
+behavior may be restored by setting <a href="../ecl_rm/OPTIONS.html#options.225">item 225</a> of the <span class="keyword">OPTIONS</span> keyword
+to 1.</p>
+
+<p>The water-wet immiscible saturation tables are scaled using the
+reduced set of end-point scaling keywords consisting of <a href="../ecl_rm/HWSWL.html#hwswl">HWSWL</a>, <a href="../ecl_rm/HWSWLPC.html#HWSWLPC">HWSWLPC</a>, <a href="../ecl_rm/HWSWCR.html#HWSWCR">HWSWCR</a>, <a href="../ecl_rm/HWSWU.html#hwswu">HWSWU</a>, <a href="../ecl_rm/HWSOWCR.html#HWSOWCR">HWSOWCR</a>, <a href="../ecl_rm/HWSOGCR.html#HWSOGCR">HWSOGCR</a>, <a href="../ecl_rm/HWKRW.html#hwkrw">HWKRW</a>, <a href="../ecl_rm/HWKRWR.html#hwkrwr">HWKRWR</a>, <a href="../ecl_rm/HWKRO.html#hwkro">HWKRO</a>, <a href="../ecl_rm/HWKRORW.html#hwkrorw">HWKRORW</a>, <a href="../ecl_rm/HWKRORG.html#hwkrorg">HWKRORG</a> and <a href="../ecl_rm/HWPCW.html#hwpcw">HWPCW</a>. This set does not include
+any gas end-points because only the oil-wet immiscible saturation
+functions are used for gas relative permeability and for oil-gas capillary
+pressure.</p>
+
+<p>The miscible saturation tables are scaled using the reduced set
+of end-point scaling keywords consisting of  <a href="../ecl_rm/SSWL.html#SSWL">SSWL</a>,  <a href="../ecl_rm/SSWCR.html#SSWCR">SSWCR</a>,  <a href="../ecl_rm/SSWU.html#SSWU">SSWU</a>,  <a href="../ecl_rm/SSGL.html#SSGL">SSGL</a>,  <a href="../ecl_rm/SSGCR.html#SSGCR">SSGCR</a>,  <a href="../ecl_rm/SSOWCR.html#SSOWCR">SSOWCR</a>,  <a href="../ecl_rm/SSOGCR.html#SSOGCR">SSOGCR</a>,  <a href="../ecl_rm/SKRW.html#SKRW">SKRW</a>,  <a href="../ecl_rm/SKRWR.html#SKRWR">SKRWR</a>,  <a href="../ecl_rm/SKRO.html#SKRO">SKRO</a>,  <a href="../ecl_rm/SKRORW.html#SKRORW">SKRORW</a> and  <a href="../ecl_rm/SKRORG.html#SKRORG">SKRORG</a>. </p>
+
+<p>The capillary pressure and relative permeabilities are looked up
+in the immiscible oil-wet and water-wet saturation tables using the
+sets of scaled end-points shown below. For capillary pressure, only
+two-point scaling is employed. For the relative permeabilities, two-point
+or three-point end-point scaling is employed according to whether
+item 1 of the <a href="../ecl_rm/SCALECRS.html#SCALECRS">SCALECRS</a> keyword has been set to NO or YES respectively. (Two-point
+scaling is selected by default if this keyword is omitted.) For the
+immiscible oil relative permeability to water and for three-point
+scaling, the critical water saturation end-point is taken from the
+interpolated value or the respective oil-wet and water-wet values
+according to whether the default or the Stone 1 or 2 three-phase oil
+relative permeability models has been selected.</p>
+
+<p>The immiscible oil-wet and water-wet oil-water capillary pressures
+are calculated according to:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.lookup"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>P</mi></mrow><mrow><mi>C</mi><mi>O</mi>
+<mi>W</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msubsup><mo>=</mo><mi>f</mi><mo>(</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>W</mi></mrow>
+</msub><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi><mi>P</mi>
+<mi>C</mi></mrow><mrow><mi>I</mi></mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>S</mi></mrow>
+<mrow><mi>W</mi><mi>U</mi><mo>⁡</mo></mrow><mrow>
+<mi>I</mi></mrow></msubsup><mo>,</mo><msubsup><mrow>
+<mtext> </mtext><mi>P</mi></mrow><mrow><mi>C</mi><mi>W</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msubsup><mo>)</mo></mrow></mtd></mtr>
+<mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>P</mi></mrow><mrow><mi>C</mi><mi>O</mi><mi>W</mi>
+</mrow><mrow><mi>W</mi><mi>W</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>W</mi></mrow></msub>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>W</mi><mi>L</mi><mi>P</mi><mi>C</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>S</mi></mrow><mrow>
+<mi>W</mi><mi>U</mi><mo>⁡</mo></mrow><mrow><mi>I</mi>
+</mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>P</mi></mrow><mrow><mi>C</mi><mi>W</mi></mrow>
+<mrow><mi>W</mi><mi>W</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr></mtable></mrow>
+</math> 
+</td><td align="right">[Eq. 470.13]
+              </td></tr></tbody></table>
+<p>For two-point scaling the immiscible oil-wet and water-wet relative
+permeabilities are calculated according to: </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.lookup.2point"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow>
+<mi>O</mi><mi>W</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>W</mi></mrow></msub><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>I</mi>
+</mrow></msubsup><msubsup><mrow><mo>,</mo><mtext> </mtext>
+<mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi>
+<mi>r</mi></mrow><mrow><mi>o</mi><mi>w</mi></mrow>
+</msubsup><mo>,</mo><mtext> </mtext><msubsup><mrow><mi>S</mi></mrow><mrow><mi>W</mi><mi>U</mi><mo>⁡</mo>
+</mrow><mrow><mi>I</mi></mrow></msubsup><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>W</mi></mrow><mrow><mi>O</mi><mi>W</mi>
+</mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi><mi>R</mi>
+</mrow><mrow><mi>O</mi><mi>W</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow><mi>W</mi><mi>W</mi></mrow>
+</msubsup><mo>=</mo><mi>f</mi><mo>(</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>W</mi></mrow>
+</msub><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi><mi>r</mi></mrow><mrow>
+<mi>w</mi><mi>w</mi></mrow></msubsup><mo>,</mo><mtext> </mtext><msubsup><mrow><mi>S</mi></mrow><mrow><mi>W</mi><mi>U</mi><mo>⁡</mo></mrow><mrow><mi>I</mi>
+</mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow>
+<mrow><mi>W</mi><mi>W</mi></mrow></msubsup><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>W</mi><mi>R</mi></mrow><mrow><mi>W</mi>
+<mi>W</mi></mrow></msubsup><mo>)</mo>
+</mrow></mtd></mtr><mtr><mtd><mrow><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>G</mi>
+</mrow><mrow><mi>O</mi><mi>W</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi></mrow>
+</msub><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi><mi>C</mi>
+<mi>R</mi></mrow><mrow><mi>I</mi></mrow></msubsup>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>g</mi><mi>c</mi><mi>r</mi></mrow>
+<mrow><mi>o</mi><mi>w</mi></mrow></msubsup><mo>,</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi></mrow></msub><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>O</mi></mrow><mrow><mi>O</mi><mi>W</mi>
+</mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>R</mi>
+<mi>G</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msubsup><mo>)</mo></mrow></mtd></mtr>
+<mtr><mtd><mrow><msubsup><mrow><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>O</mi><mi>G</mi></mrow><mrow><mi>W</mi>
+<mi>W</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>O</mi><mi>G</mi></mrow></msub><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi><mi>C</mi><mi>R</mi></mrow><mrow>
+<mi>I</mi></mrow></msubsup><msubsup><mrow><mo>,</mo>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>g</mi><mi>c</mi><mi>r</mi></mrow><mrow><mi>o</mi><mi>w</mi>
+</mrow></msubsup><mo>,</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi>
+</mrow></msub><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi></mrow>
+<mrow><mi>W</mi><mi>W</mi></mrow></msubsup><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>O</mi><mi>R</mi><mi>G</mi></mrow>
+<mrow><mi>W</mi><mi>W</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>W</mi></mrow><mrow><mi>O</mi><mi>W</mi>
+</mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi>
+<mi>W</mi></mrow></msub><msubsup><mrow><mo>,</mo>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>I</mi>
+</mrow></msubsup><msubsup><mrow><mo>,</mo><mtext> </mtext>
+<mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>r</mi>
+</mrow><mrow><mi>o</mi><mi>w</mi></mrow></msubsup><mo>,</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi>
+<mi>M</mi><mi>A</mi><mi>X</mi></mrow></msub><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow>
+<mrow><mi>R</mi><mi>O</mi></mrow><mrow><mi>O</mi>
+<mi>W</mi></mrow></msubsup><mo>,</mo><msubsup><mrow>
+<mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>R</mi><mi>W</mi></mrow><mrow><mi>O</mi>
+<mi>W</mi></mrow></msubsup><mo>)</mo>
+</mrow></mtd></mtr><mtr><mtd><mrow><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>W</mi>
+</mrow><mrow><mi>W</mi><mi>W</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msub><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi>
+<mi>R</mi></mrow><mrow><mi>I</mi></mrow></msubsup>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>w</mi><mi>c</mi><mi>r</mi></mrow>
+<mrow><mi>w</mi><mi>w</mi></mrow></msubsup><mo>,</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi></mrow></msub><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>O</mi></mrow><mrow><mi>W</mi><mi>W</mi>
+</mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>R</mi>
+<mi>W</mi></mrow><mrow><mi>W</mi><mi>W</mi></mrow>
+</msubsup><mo>)</mo></mrow></mtd></mtr>
+</mtable></mrow></math> 
+</td><td align="right">[Eq. 470.14]
+              </td></tr></tbody></table>
+<p>For three-point scaling the immiscible oil-wet and water-wet relative
+permeabilities are calculated according to: </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.lookup.3point"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow>
+<mi>O</mi><mi>W</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>W</mi></mrow></msub><msubsup><mrow>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>G</mi><mi>L</mi></mrow><mrow><mi>H</mi></mrow></msubsup><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow>
+<mi>I</mi></mrow></msubsup><mo>,</mo><mtext> </mtext>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>W</mi><mi>U</mi><mo>⁡</mo></mrow><mrow><mi>I</mi></mrow>
+</msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow>
+<mi>O</mi><mi>W</mi></mrow></msubsup><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>W</mi><mi>R</mi></mrow><mrow><mi>O</mi>
+<mi>W</mi></mrow></msubsup><mo>)</mo>
+</mrow></mtd></mtr><mtr><mtd><mrow><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow>
+<mi>W</mi><mi>W</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>W</mi></mrow></msub><msubsup><mrow>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>G</mi><mi>L</mi></mrow><mrow><mi>H</mi></mrow></msubsup><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow>
+<mi>I</mi></mrow></msubsup><mo>,</mo><mtext> </mtext>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>W</mi><mi>U</mi><mo>⁡</mo></mrow><mrow><mi>I</mi></mrow>
+</msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow>
+<mi>W</mi><mi>W</mi></mrow></msubsup><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>W</mi><mi>R</mi></mrow><mrow><mi>W</mi>
+<mi>W</mi></mrow></msubsup><mo>)</mo>
+</mrow></mtd></mtr><mtr><mtd><mrow><msubsup><mrow>
+<mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>G</mi></mrow><mrow><mi>O</mi><mi>W</mi>
+</mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi>
+<mi>G</mi></mrow></msub><msubsup><mrow><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi></mrow><mrow><mi>I</mi></mrow>
+</msubsup><mo>,</mo><mtext> </mtext><mi>S</mi></mrow>
+<mrow><mi>O</mi><mi>G</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>G</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>O</mi>
+<mi>W</mi></mrow></msubsup><mo>,</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi>
+<mi>X</mi></mrow></msub><mo>,</mo><msubsup><mrow>
+<mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>R</mi>
+<mi>G</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msubsup><mo>)</mo></mrow></mtd></mtr>
+<mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>G</mi>
+</mrow><mrow><mi>W</mi><mi>W</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi></mrow>
+</msub><msubsup><mrow><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><mo>,</mo>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>I</mi>
+</mrow></msubsup><msubsup><mrow><mo>,</mo><mtext> </mtext>
+<mi>S</mi></mrow><mrow><mi>G</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>O</mi><mi>W</mi></mrow></msubsup><mo>,</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi>
+<mi>M</mi><mi>A</mi><mi>X</mi></mrow></msub><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow>
+<mrow><mi>R</mi><mi>O</mi></mrow><mrow><mi>W</mi>
+<mi>W</mi></mrow></msubsup><mo>,</mo><msubsup><mrow>
+<mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>R</mi><mi>G</mi></mrow><mrow><mi>W</mi>
+<mi>W</mi></mrow></msubsup><mo>)</mo>
+</mrow></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 470.15]
+              </td></tr></tbody></table>
+<p>Default three-phase oil relative permeability model:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.3phase.relperm"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi>
+<mi>W</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msubsup><mo>=</mo><mi>f</mi><mo>(</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow></msub><msubsup><mrow><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi></mrow><mrow><mi>H</mi></mrow>
+</msubsup><mo>,</mo><mtext> </mtext><mi>S</mi></mrow>
+<mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>I</mi>
+</mrow></msubsup><mo>,</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi>
+</mrow></msub><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi></mrow>
+<mrow><mi>O</mi><mi>W</mi></mrow></msubsup><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>O</mi><mi>R</mi><mi>W</mi></mrow>
+<mrow><mi>O</mi><mi>W</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>O</mi><mi>W</mi></mrow><mrow><mi>W</mi>
+<mi>W</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>O</mi><mi>W</mi></mrow></msub><msubsup><mrow>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>G</mi><mi>L</mi></mrow><mrow><mi>H</mi></mrow></msubsup><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi>
+<mi>R</mi></mrow><mrow><mi>I</mi></mrow></msubsup>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi></mrow>
+<mrow><mi>I</mi></mrow></msubsup><mo>,</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>M</mi>
+<mi>A</mi><mi>X</mi></mrow></msub><mo>,</mo><msubsup>
+<mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi>
+<mi>O</mi></mrow><mrow><mi>W</mi><mi>W</mi></mrow>
+</msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>R</mi>
+<mi>W</mi></mrow><mrow><mi>W</mi><mi>W</mi></mrow>
+</msubsup><mo>)</mo></mrow></mtd></mtr>
+</mtable></mrow></math> 
+</td><td align="right">[Eq. 470.16]
+              </td></tr></tbody></table>
+<p>Stone 1 and 2 three-phase oil relative permeability models:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.stone1"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi>
+<mi>W</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msubsup><mo>=</mo><mi>f</mi><mo>(</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow></msub><msubsup><mrow><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi></mrow><mrow><mi>H</mi></mrow>
+</msubsup><mo>,</mo><mtext> </mtext><mi>S</mi></mrow>
+<mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>O</mi>
+<mi>W</mi></mrow></msubsup><mo>,</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi>
+<mi>X</mi></mrow></msub><mo>,</mo><msubsup><mrow>
+<mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>R</mi>
+<mi>W</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msubsup><mo>)</mo></mrow></mtd></mtr>
+<mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>W</mi>
+</mrow><mrow><mi>W</mi><mi>W</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msub><msubsup><mrow><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi>
+</mrow><mrow><mi>H</mi></mrow></msubsup><mo>,</mo>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>I</mi>
+</mrow></msubsup><msubsup><mrow><mo>,</mo><mtext> </mtext>
+<mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>W</mi><mi>W</mi></mrow></msubsup><mo>,</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi>
+<mi>M</mi><mi>A</mi><mi>X</mi></mrow></msub><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow>
+<mrow><mi>R</mi><mi>O</mi></mrow><mrow><mi>W</mi>
+<mi>W</mi></mrow></msubsup><mo>,</mo><msubsup><mrow>
+<mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>R</mi><mi>W</mi></mrow><mrow><mi>W</mi>
+<mi>W</mi></mrow></msubsup><mo>)</mo>
+</mrow></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 470.17]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>W</mi></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">is the grid block water saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the oil saturation for oil relative permeability to water.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the oil saturation for oil relative permeability to gas. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>r</mi>
+</mrow></msub></mrow></math> </td>
+
+<td valign="top">is the saturation table derived critical water saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi>
+<mi>r</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the saturation table derived critical oil in water saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi>
+<mi>X</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled maximum oil saturation,  <math><mrow>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi></mrow></msub><mo>⁢</mo>
+<mo>=</mo><mo>(</mo><mn>1</mn><mrow>
+<mo>-</mo><mtext> </mtext><msubsup><mrow><mi>S</mi>
+</mrow><mrow><mi>W</mi><mi>L</mi></mrow><mrow><mi>I</mi></mrow></msubsup></mrow><mo>-</mo><mtext> </mtext>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi></mrow><mrow><mi>OW</mi></mrow></msubsup><mo>)</mo></mrow></math>.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the scaled minimum gas saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>G</mi><mi>C</mi><mi>R</mi>
+</mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled critical gas saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>g</mi><mi>c</mi><mi>r</mi>
+</mrow></msub></mrow></math> </td>
+
+<td valign="top">is the saturation table derived critical gas saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi><mo>⁡</mo>
+</mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled maximum water relative permeability. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi><mi>R</mi>
+<mo>⁡</mo></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled water relative permeability at residual oil saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the scaled maximum oil relative permeability.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>R</mi>
+<mi>G</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled oil relative permeability at residual gas saturation. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>R</mi>
+<mi>W</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled oil relative permeability at residual water saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>C</mi><mi>W</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the scaled maximum oil-water capillary pressure.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Noting that:</p>
+
+<ol>
+<li>For the scaling of both the oil-wet and water-wet immiscible saturation
+tables, specifically, for the scaling of the relative permeabilities
+of oil to gas and water, only the oil-wet immiscible minimum and critical
+scaled gas saturations are used.</li>
+
+<li>For two-point scaling, the positioning of the relative permeability
+at residual saturation of the displacing phase is determined by the
+two-point scaled table value of the displacing critical phase saturation
+whereas, for three-point scaling, this is determined by the scaled
+end-point of the displacing phase critical saturation.</li>
+
+<li>For the default three-phase oil relative permeability model, the
+critical water saturation used in the scaling of the oil-wet and water-wet
+oil relative permeabilities to water is based upon the interpolated
+value, whereas for the Stone 1 and 2 three-phase oil relative permeability
+models, the scaling is based upon the respective immiscible oil-wet
+and water-wet values.</li>
+
+</ol>
+
+<p>For the miscible relative permeabilities, either two-point or three-point
+end-point scaling is employed according to whether item 1 of the <a href="../ecl_rm/SCALECRS.html#SCALECRS">SCALECRS</a> keyword has been set
+to NO or YES respectively. For two-point scaling the miscible saturation
+functions are looked up in the miscible saturation tables applying
+the set of scaled end-points shown below:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.miscible.eq3"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow>
+<mi>M</mi><mi>I</mi><mi>S</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>W</mi></mrow></msub>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi></mrow>
+<mrow><mi>I</mi></mrow></msubsup><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi><mi>r</mi></mrow><mrow>
+<mi>m</mi><mi>i</mi><mi>s</mi></mrow></msubsup><mo>,</mo><mtext> </mtext><msubsup><mrow><mi>S</mi></mrow>
+<mrow><mi>W</mi><mi>U</mi><mo>⁡</mo></mrow><mrow>
+<mi>I</mi></mrow></msubsup><mo>,</mo><msubsup><mrow>
+<mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow><mi>M</mi><mi>I</mi><mi>S</mi>
+</mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi><mi>R</mi>
+</mrow><mrow><mi>M</mi><mi>I</mi><mi>S</mi></mrow>
+</msubsup><mo>)</mo></mrow></mtd></mtr>
+<mtr><mtd><mrow><msubsup><mrow><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>O</mi><mi>G</mi></mrow><mrow><mi>M</mi>
+<mi>I</mi><mi>S</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>O</mi><mi>G</mi></mrow></msub>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>O</mi><mi>G</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>g</mi><mi>c</mi><mi>r</mi></mrow><mrow><mi>m</mi>
+<mi>i</mi><mi>s</mi></mrow></msubsup><mo>,</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>M</mi>
+<mi>A</mi><mi>X</mi></mrow></msub><mo>,</mo><msubsup>
+<mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi>
+<mi>O</mi></mrow><mrow><mi>M</mi><mi>I</mi><mi>S</mi>
+</mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>R</mi>
+<mi>G</mi></mrow><mrow><mi>M</mi><mi>I</mi><mi>S</mi>
+</mrow></msubsup><mo>)</mo></mrow></mtd>
+</mtr><mtr><mtd><mrow><msubsup><mrow><mi>K</mi></mrow>
+<mrow><mi>R</mi><mi>O</mi><mi>W</mi></mrow><mrow>
+<mi>M</mi><mi>I</mi><mi>S</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msub><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi>
+<mi>R</mi></mrow><mrow><mi>I</mi></mrow></msubsup>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>w</mi><mi>c</mi><mi>r</mi></mrow>
+<mrow><mi>m</mi><mi>i</mi><mi>s</mi></mrow></msubsup>
+<mo>,</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi></mrow></msub>
+<mo>,</mo><msubsup><mrow><mtext> </mtext><mi>K</mi>
+</mrow><mrow><mi>R</mi><mi>O</mi></mrow><mrow><mi>M</mi><mi>I</mi><mi>S</mi></mrow></msubsup><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>O</mi><mi>R</mi><mi>W</mi></mrow>
+<mrow><mi>M</mi><mi>I</mi><mi>S</mi></mrow></msubsup>
+<mo>)</mo></mrow></mtd></mtr></mtable>
+</mrow></math> 
+</td><td align="right">[Eq. 470.18]
+              </td></tr></tbody></table>
+<p>For three-point scaling the miscible water relative permeability
+and the oil relative permeability to gas are looked up in the miscible
+tables applying the set of scaled end-points shown below:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.miscible.eq4"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow>
+<mi>M</mi><mi>I</mi><mi>S</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>W</mi></mrow></msub>
+<msubsup><mrow><msubsup><mrow><mo>,</mo><mtext> </mtext>
+<mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi></mrow>
+<mrow><mi>M</mi><mi>I</mi><mi>S</mi></mrow></msubsup>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>I</mi>
+</mrow></msubsup><msubsup><mrow><mo>,</mo><mtext> </mtext>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi>
+<mi>R</mi></mrow><mrow><mi>M</mi><mi>I</mi><mi>S</mi>
+</mrow></msubsup><mo>,</mo><mtext> </mtext><msubsup>
+<mrow><mi>S</mi></mrow><mrow><mi>W</mi><mi>U</mi>
+<mo>⁡</mo></mrow><mrow><mi>I</mi></mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow>
+<mrow><mi>R</mi><mi>W</mi></mrow><mrow><mi>M</mi>
+<mi>I</mi><mi>S</mi></mrow></msubsup><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>W</mi><mi>R</mi></mrow><mrow><mi>M</mi>
+<mi>I</mi><mi>S</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr><mtr><mtd><mrow><msubsup>
+<mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi>
+<mi>O</mi><mi>G</mi></mrow><mrow><mi>M</mi><mi>I</mi>
+<mi>S</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>O</mi><mi>G</mi></mrow></msub><msubsup><mrow>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>W</mi><mi>L</mi></mrow><mrow><mi>I</mi></mrow></msubsup><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi><mi>C</mi>
+<mi>R</mi></mrow><mrow><mi>I</mi></mrow></msubsup>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>G</mi><mi>C</mi><mi>R</mi></mrow>
+<mrow><mi>M</mi><mi>I</mi><mi>S</mi></mrow></msubsup>
+<mo>,</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi></mrow></msub>
+<mo>,</mo><msubsup><mrow><mtext> </mtext><mi>K</mi>
+</mrow><mrow><mi>R</mi><mi>O</mi></mrow><mrow><mi>M</mi><mi>I</mi><mi>S</mi></mrow></msubsup><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>O</mi><mi>R</mi><mi>G</mi></mrow>
+<mrow><mi>M</mi><mi>I</mi><mi>S</mi></mrow></msubsup>
+<mo>)</mo></mrow></mtd></mtr></mtable>
+</mrow></math> 
+</td><td align="right">[Eq. 470.19]
+              </td></tr></tbody></table>
+<p>For the miscible oil relative permeability to water and for three-point
+scaling, the critical water saturation end-point is taken from the
+interpolated value for the default three-phase oil relative permeability
+model: </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.miscible.eq5"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi>
+<mi>W</mi></mrow><mrow><mi>M</mi><mi>I</mi><mi>S</mi>
+</mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi>
+<mi>W</mi></mrow></msub><msubsup><mrow><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi></mrow><mrow><mi>M</mi><mi>I</mi>
+<mi>S</mi></mrow></msubsup><mo>,</mo><mtext> </mtext>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi>
+<mi>R</mi></mrow><mrow><mi>I</mi></mrow></msubsup>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi></mrow>
+<mrow><mi>I</mi></mrow></msubsup><mo>,</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>M</mi>
+<mi>A</mi><mi>X</mi></mrow></msub><mo>,</mo><msubsup>
+<mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi>
+<mi>O</mi></mrow><mrow><mi>M</mi><mi>I</mi><mi>S</mi>
+</mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>R</mi>
+<mi>W</mi></mrow><mrow><mi>M</mi><mi>I</mi><mi>S</mi>
+</mrow></msubsup><mo>)</mo></mrow></mtd>
+</mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 470.20]
+              </td></tr></tbody></table>
+<p>but from the miscible value for the Stone 1 and 2 three-phase oil
+relative permeability models:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.miscible.eq6"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi>
+<mi>W</mi></mrow><mrow><mi>M</mi><mi>I</mi><mi>S</mi>
+</mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi>
+<mi>W</mi></mrow></msub><msubsup><mrow><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi></mrow><mrow><mi>M</mi><mi>I</mi>
+<mi>S</mi></mrow></msubsup><mo>,</mo><mtext> </mtext>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi>
+<mi>R</mi></mrow><mrow><mi>I</mi></mrow></msubsup>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi></mrow>
+<mrow><mi>M</mi><mi>I</mi><mi>S</mi></mrow></msubsup>
+<mo>,</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi></mrow></msub>
+<mo>,</mo><msubsup><mrow><mtext> </mtext><mi>K</mi>
+</mrow><mrow><mi>R</mi><mi>O</mi></mrow><mrow><mi>M</mi><mi>I</mi><mi>S</mi></mrow></msubsup><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>O</mi><mi>R</mi><mi>W</mi></mrow>
+<mrow><mi>M</mi><mi>I</mi><mi>S</mi></mrow></msubsup>
+<mo>)</mo></mrow></mtd></mtr></mtable>
+</mrow></math> 
+</td><td align="right">[Eq. 470.21]
+              </td></tr></tbody></table>
+<p>The immiscible oil-wet and water-wet relative permeabilities and
+capillary pressure are interpolated according to:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.relperm.cappress.eq1"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi>
+</mrow><mrow><mi>I</mi><mi>M</mi><mi>M</mi></mrow>
+</msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi>
+</mrow><mrow><mn>4</mn></mrow></msub><msubsup><mrow>
+<mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow>
+<mrow><mn>4</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow><mi>W</mi><mi>W</mi></mrow>
+</msubsup></mrow></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>O</mi><mi>W</mi></mrow><mrow><mi>I</mi>
+<mi>M</mi><mi>M</mi></mrow></msubsup><mo>=</mo><mrow>
+<msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow>
+</msub><mo>⁢</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>W</mi>
+</mrow><mrow><mi>O</mi><mi>W</mi></mrow></msubsup>
+</mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn>
+<mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow>
+<mn>4</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>W</mi></mrow><mrow><mi>W</mi><mi>W</mi>
+</mrow></msubsup></mrow></mrow></mtd></mtr><mtr><mtd>
+<mrow><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow>
+<mrow><mi>R</mi><mi>O</mi><mi>G</mi></mrow><mrow>
+<mi>I</mi><mi>M</mi><mi>M</mi></mrow></msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow></msub><mo>⁢</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi>
+<mi>G</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow>
+<mrow><mn>4</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>G</mi></mrow><mrow><mi>W</mi><mi>W</mi>
+</mrow></msubsup></mrow></mrow></mtd></mtr><mtr><mtd>
+<mrow><msubsup><mrow><mi>P</mi></mrow><mrow><mi>C</mi>
+<mi>O</mi><mi>W</mi></mrow><mrow><mi>I</mi><mi>M</mi>
+<mi>M</mi></mrow></msubsup><mo>=</mo><mrow><msub>
+<mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow></msub>
+<msubsup><mrow><mi>P</mi></mrow><mrow><mi>C</mi><mi>O</mi><mi>W</mi></mrow><mrow><mi>O</mi><mi>W</mi>
+</mrow></msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>4</mn></mrow></msub></mrow>
+<mo>)</mo></mrow><msubsup><mrow><mi>P</mi></mrow>
+<mrow><mi>C</mi><mi>O</mi><mi>W</mi></mrow><mrow>
+<mi>W</mi><mi>W</mi></mrow></msubsup></mrow></mrow>
+</mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 470.22]
+              </td></tr></tbody></table>
+<p>The miscible and immiscible relative permeabilities and capillary
+pressure are interpolated according to:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.relperm.cappress.eq2"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><mo>=</mo>
+<mrow><msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn>
+</mrow></msub><msubsup><mrow><mtext> </mtext><mi>K</mi>
+</mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow><mi>M</mi><mi>I</mi><mi>S</mi></mrow></msubsup></mrow>
+<mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn>
+</mrow></msub></mrow><mo>)</mo></mrow><msubsup><mrow>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow>
+<mrow><mi>I</mi><mi>M</mi><mi>M</mi></mrow></msubsup>
+</mrow></mrow></mtd></mtr><mtr><mtd><mrow><msubsup>
+<mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi>
+<mi>O</mi><mi>W</mi></mrow><mrow><mi>I</mi></mrow>
+</msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi>
+</mrow><mrow><mn>3</mn></mrow></msub><mo>⁢</mo>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>O</mi><mi>W</mi></mrow><mrow><mi>M</mi>
+<mi>I</mi><mi>S</mi></mrow></msubsup></mrow><mo>+</mo>
+<mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn></mrow>
+</msub></mrow><mo>)</mo></mrow><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>W</mi>
+</mrow><mrow><mi>I</mi><mi>M</mi><mi>M</mi></mrow>
+</msubsup></mrow></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mtext> </mtext><mi>P</mi></mrow><mrow>
+<mi>C</mi><mi>O</mi><mi>W</mi></mrow><mrow><mi>I</mi>
+</mrow></msubsup><mo>=</mo><mrow><mo>⁢</mo><msubsup>
+<mrow><mtext> </mtext><mi>P</mi></mrow><mrow><mi>C</mi>
+<mi>O</mi><mi>W</mi></mrow><mrow><mi>I</mi><mi>M</mi>
+<mi>M</mi></mrow></msubsup></mrow></mrow></mtd></mtr>
+</mtable></mrow></math> 
+</td><td align="right">[Eq. 470.23]
+              </td></tr></tbody></table>
+<p>Default three-phase oil relative permeability model:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.wettability.model.eq1"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi>
+<mi>G</mi></mrow><mrow><mi>I</mi></mrow></msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn></mrow></msub><mo>⁢</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi>
+<mi>G</mi></mrow><mrow><mi>M</mi><mi>I</mi><mi>S</mi>
+</mrow></msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>3</mn></mrow></msub></mrow>
+<mo>)</mo></mrow><msubsup><mrow><mi>K</mi></mrow>
+<mrow><mi>R</mi><mi>O</mi><mi>G</mi></mrow><mrow>
+<mi>I</mi><mi>M</mi><mi>M</mi></mrow></msubsup></mrow>
+</mrow></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 470.24]
+              </td></tr></tbody></table>
+<p>Stone 1 and 2 three-phase oil relative permeability models:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.relperm.model.eq2"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>G</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><mo>=</mo>
+<mrow><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi>
+<mi>O</mi><mi>G</mi></mrow><mrow><mi>I</mi><mi>M</mi>
+<mi>M</mi></mrow></msubsup></mrow></mrow></mtd></mtr>
+</mtable></mrow></math> 
+</td><td align="right">[Eq. 470.25]
+              </td></tr></tbody></table>
+<p>The gas-oil capillary pressure and gas relative permeability are
+assumed to be independent of surfactant concentration and surfactant
+adsorption. Hence the gas-oil capillary pressure is calculated according
+to:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.gasoil.cappress"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msub><mrow><mi>P</mi>
+</mrow><mrow><mi>C</mi><mi>O</mi><mi>G</mi></mrow>
+</msub><mo>=</mo><mi>f</mi><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>G</mi>
+</mrow></msub><mo>,</mo><mtext> </mtext><msubsup><mrow>
+<mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi><mi>P</mi>
+<mi>C</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msubsup><mo>,</mo><mtext> </mtext><msubsup><mrow><mi>S</mi></mrow><mrow><mi>G</mi><mi>U</mi></mrow><mrow>
+<mi>O</mi><mi>W</mi></mrow></msubsup><mo>,</mo><mtext> </mtext><msubsup><mrow><mi>P</mi></mrow><mrow><mi>C</mi><mi>G</mi></mrow><mrow><mi>O</mi><mi>W</mi>
+</mrow></msubsup><mo>)</mo></mrow></mrow>
+</mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 470.26]
+              </td></tr></tbody></table>
+<p>For two-point scaling the gas relative permeability is calculated
+according to:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.2point.gaspress"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msub><mrow><mi>K</mi>
+</mrow><mrow><mi>R</mi><mi>G</mi></mrow></msub><mo>=</mo><mi>f</mi><mrow><mo>(</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>G</mi></mrow></msub>
+<mo>,</mo><mtext> </mtext><msubsup><mrow><mi>S</mi>
+</mrow><mrow><mi>G</mi><mi>C</mi><mi>R</mi></mrow>
+<mrow><mi>O</mi><mi>W</mi></mrow></msubsup><mo>,</mo>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi><mi>c</mi><mi>r</mi></mrow><mrow><mi>o</mi>
+<mi>w</mi></mrow></msubsup><mo>,</mo><mtext> </mtext>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>G</mi><mi>U</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msubsup><mo>,</mo><mtext> </mtext><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>G</mi></mrow><mrow>
+<mi>O</mi><mi>W</mi></mrow></msubsup><mo>,</mo><mtext> </mtext><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>G</mi><mi>R</mi></mrow><mrow><mi>O</mi>
+<mi>W</mi></mrow></msubsup><mo>)</mo>
+</mrow></mrow></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 470.27]
+              </td></tr></tbody></table>
+<p>For three-point scaling the gas relative permeability is calculated
+according to:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.modeling.3point.gaspress"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msub><mrow><mi>K</mi>
+</mrow><mrow><mi>R</mi><mi>G</mi></mrow></msub><mo>=</mo><mi>f</mi><mrow><mo>(</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>G</mi></mrow></msub>
+<mo>,</mo><mtext> </mtext><msubsup><mrow><mi>S</mi>
+</mrow><mrow><mi>G</mi><mi>C</mi><mi>R</mi></mrow>
+<mrow><mi>O</mi><mi>W</mi></mrow></msubsup><mo>,</mo>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>O</mi>
+<mi>W</mi></mrow></msubsup><mo>,</mo><mtext> </mtext>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>G</mi><mi>U</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msubsup><mo>,</mo><mtext> </mtext><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>G</mi></mrow><mrow>
+<mi>O</mi><mi>W</mi></mrow></msubsup><mo>,</mo><mtext> </mtext><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>G</mi><mi>R</mi></mrow><mrow><mi>O</mi>
+<mi>W</mi></mrow></msubsup><mo>)</mo>
+</mrow></mrow></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 470.28]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>G</mi></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">is the grid block gas saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi><mi>P</mi>
+<mi>C</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled  minimum gas saturation for capillary pressure.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>G</mi><mi>U</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the scaled maximum gas saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi><mi>c</mi>
+<mi>r</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the saturation table derived critical oil saturation in
+gas.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>C</mi><mi>G</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the scaled maximum oil-gas capillary pressure.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>G</mi><mo>⁡</mo>
+</mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled maximum gas relative permeability.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>G</mi><mi>R</mi>
+<mo>⁡</mo></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled gas relative permeability at residual oil saturation.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Hence only the oil-wet table and oil-wet scaled end-points are
+used for modeling the immicsible gas saturation functions. If the
+current grid block gas saturation exceeds the maximum oil-wet scaled
+gas saturation, the values of gas relative permeability and gas-oil
+capillary pressure are assumed to remain constant at their corresponding
+maximum values.      </p>
+
+<p>The <a href="../ecl_rm/LOWSALT.html#LOWSALT">LOWSALT</a> keyword can be used in conjunction with the Surfactant Option
+(<a href="../ecl_rm/SURFACT.html#SURFACT">SURFACT</a> keyword) or the Surfactant Option with Wettability Dependence
+(<a href="../ecl_rm/SURFACTW.html#SURFACTW">SURFACTW</a> keyword) to model additionally the effects of salinity dependence.
+See <a href="brinetra_Brine_Tracking.html#brinetra_brine_tracking"> "Brine tracking"</a> for more information upon the <span class="keyword">LOWSALT</span> option.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

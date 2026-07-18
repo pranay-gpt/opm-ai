@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="MINPVV"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="MINPVV"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>MINPVV</title>
+</head>
+<body>
+
+
+<div class="nested0" id="MINPVV"><a name="MINPVV"><!-- --></a>
+<h1 class="keyword">MINPVV</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="minpvv.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="minpvv.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1388e45">                         x                   
+  </th>
+
+<th valign="top" id="d1388e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1388e54">                         x                   
+  </th>
+
+<th valign="top" id="d1388e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1388e45 d1388e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1388e48 d1388e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1388e45 d1388e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d1388e48 d1388e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1388e45 d1388e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1388e48 d1388e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1388e45 d1388e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1388e48 d1388e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1388e45 d1388e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1388e48 d1388e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1388e45 d1388e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1388e48 d1388e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1388e45 d1388e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1388e48 d1388e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1388e45 d1388e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1388e48 d1388e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is used to declare a threshold pore volume that a
+cell must exceed or it will made inactive.</p>
+
+<p>The keyword should be followed by one positive real number for
+every cell in the current input box, specifying its threshold pore
+volume in the current units, terminated with a slash (/).</p>
+
+<p>UNITS: rm<sup>3</sup> (<samp class="codeph">METRIC</samp>), rb (<samp class="codeph">FIELD</samp>), rcc (<samp class="codeph">LAB</samp>), rm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+
+<p>DEFAULT: 0.000001 (all unit sets)</p>
+
+<p>The keyword causes any cell with a pore volume less than the input
+value associated with that cell to become inactive.</p>
+
+<p>An inactive cell does not contribute to the total pore volume of
+the system, and is treated by default as a barrier. In order for non-neighbor
+connections to be established between adjoining cells across an inactive
+cell, pinchouts must be enabled using the keyword <a href="PINCH.html#PINCH"> PINCH</a> or <a href="PINCHOUT.html#PINCHOUT"> PINCHOUT</a>, and non-neighbor connections must be enabled
+(they are enabled by default unless keyword <a href="NONNC.html#NONNC"> NONNC</a> is encountered in the <span class="keyword">RUNSPEC</span> section).</p>
+
+<p>Cells which have been set inactive via the <a href="ACTNUM.html#ACTNUM"> ACTNUM</a> keyword remain so even if their
+pore volume exceeds the threshold; using <span class="keyword">MINPVV</span> only affects active cells.</p>
+
+<p>Any minimum pore volumes that are not specified by the end of the <span class="keyword">GRID</span> section default to 1.0E-6 (in the current units).
+In the absence of <a href="MINPV.html#MINPV"> MINPV</a> or <span class="keyword">MINPVV</span>, this is the default for all cells.
+With these keywords, values down to 1.0E-20 can be specified, but
+care should be taken as active cells with very tiny pore volumes can
+cause serious convergence issues.</p>
+
+<p>A list of all the cells that are made inactive can be obtained
+by the argument <samp class="codeph">MINPVV</samp> in the <a href="RPTGRID.html#RPTGRID"> RPTGRID</a> keyword.</p>
+
+<p>In ECLIPSE 100, a sum of the total pore volume
+removed from the grid is output, along with the total number of cells
+removed (using the <samp class="codeph">MINPVV</samp> mnemonic).</p>
+
+<p>See also keyword <a href="MINPV.html#MINPV"> MINPV</a>.</p>
+
+<p>In ECLIPSE 100, values of <samp class="codeph">MINPVV</samp> set for global grid cells will be copied to any LGR cells which
+they contain. This may cause smaller LGR cells to be deactivated and,
+if this is not the desired behavior, more suitable values should be
+provided by specifying <span class="keyword">MINPV</span> or <span class="keyword">MINPVV</span> between <a href="CARFIN.html#CARFIN"> CARFIN</a> (or other local grid-defining keyword) and <a href="ENDFIN.html#ENDFIN"> ENDFIN</a>. </p>
+
+<p>In ECLIPSE 300, values of <samp class="codeph">MINPVV</samp> set for global grid cells will <strong>not</strong> be copied to any LGR cells
+which they contain. This may cause LGR cells to remain active when
+their global host cell was intended to be inactive, and more suitable
+values should be provided by specifying <span class="keyword">MINPV</span> or <span class="keyword">MINPVV</span> between <a href="CARFIN.html#CARFIN"> CARFIN</a> (or other local grid-defining keyword) and <a href="ENDFIN.html#ENDFIN"> ENDFIN</a>. </p>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> Cells which have been deactivated by the <a href="ACTNUM.html#ACTNUM"> ACTNUM</a> keyword will remain
+inactive even if the cell volume is greater than the minimum set by <span class="keyword">MINPVV</span>. Cells which have been left active by the <span class="keyword">ACTNUM</span> keyword will be made inactive if the cell volume
+is less than the minimum set by <span class="keyword">MINPVV</span>.</div>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> In ECLIPSE 100, using the <a href="PORV.html#PORV"> PORV</a> keyword in the <span class="keyword">EDIT</span> section to reset the pore volumes to greater than the minimum value
+will reactivate an inactive cell regardless of how it was deactivated,
+whether by <a href="ACTNUM.html#ACTNUM"> ACTNUM</a> or by <span class="keyword">MINPVV</span>. However in ECLIPSE 300 this reactivation
+will not take place.</div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">In a <span class="keyword">THERMAL</span> simulation a cell will only
+be set inactive if the rock volume is also less than the minimum rock
+volume specified with the <a href="MINROCKV.html#MINROCKV"> MINROCKV</a> keyword.</span></div>
+
+<div class="section" id="minpvv_example"><a name="minpvv_example"><!-- --></a><h4 class="sectiontitle">Example</h4>              
+  <pre><code>---------- IX1-IX2 JY1-JY2 KZ1-KZ2
+BOX
+             1   8   2   2   2   3
+MINPVV 
+ 1000.0 1000.0 1000.0 1000.0 1000.0 1000.0 1000.0 1000.0
+  500.0  500.0  500.0  500.0  500.0  500.0  500.0  500.0   /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

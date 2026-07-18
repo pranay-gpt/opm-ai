@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Single phase states in EoS compositional models"/>
+<meta name="DC.subject" content="Initial conditions, Single phase state, Equations of state, Compositional models"/>
+<meta name="keywords" content="Initial conditions, Single phase state, Equations of state, Compositional models"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="initial_single_phase_states_in_eos_compositional_models"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Single phase states in EoS compositional models</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="initial_single_phase_states_in_eos_compositional_models"><a name="initial_single_phase_states_in_eos_compositional_models"><!-- --></a>
+<h1 class="topictitle1">Single phase states in EoS compositional models</h1>
+
+
+ <div>
+<p>ECLIPSE 300 </p>
+
+<p>Distinguishing whether a single phase fluid
+is a liquid or a vapor is not always straightforward, and is sometimes
+arbitrary, for example if the fluid is supercritical,            
+     <math><mi>P</mi><mo>&gt;</mo>
+<msub><mi>P</mi><mi>c</mi></msub></math>  or  <math><mi>T</mi><mo>&gt;</mo>
+<msub><mi>T</mi><mi>c</mi></msub></math>. If the fluid
+properties (for example density, viscosity) are determined correctly,
+then it might be thought that determining whether the fluid is liquid
+or vapor is only a matter of labelling / reporting and has no effect
+on the simulation. However, the label is important, since it effects
+wells controlled by liquid or gas rates.          </p>
+
+<p>To determine a single phase state at                  <math><mo>(</mo><mi>P</mi>
+<mo>,</mo><mi>T</mi><mo>)</mo></math>  correctly, the
+bubble point  <math>
+<mrow><msub><mrow><mi>P</mi></mrow><mrow><mi>b</mi>
+<mi>u</mi><mi>b</mi></mrow></msub><mrow><mo>(</mo>
+<mi>T</mi><mo>)</mo></mrow></mrow></math>, dew point
+ <math><mrow><msub>
+<mrow><mi>P</mi></mrow><mrow><mi>d</mi><mi>e</mi>
+<mi>w</mi></mrow></msub><mrow><mo>(</mo><mi>T</mi>
+<mo>)</mo></mrow></mrow></math> or critical point  <math><mo>(</mo><msub>
+<mi>P</mi><mi>c</mi></msub><mo>,</mo><msub><mi>T</mi>
+<mi>c</mi></msub><mo>)</mo></math>  may be needed. These
+cannot be calculated quickly, and to do so for every flash would slow
+down the simulation significantly. Therefore an approximate critical
+temperature is calculated for the mixture using the Li formula:  
+       </p>
+
+<p>                              <math><mrow>
+<msubsup><mrow><mi>T</mi></mrow><mrow><mi>c</mi>
+</mrow><mrow><mi>m</mi><mi>i</mi><mi>x</mi></mrow>
+</msubsup><mo>=</mo><msub><mrow><mi>F</mi></mrow>
+<mrow><mi>L</mi><mi>i</mi></mrow></msub><mo>⋅</mo>
+<mfrac><mrow><msubsup><mrow><mo>∑</mo></mrow><mrow><mi>j</mi></mrow><mrow><mo> </mo></mrow></msubsup><mrow><msub><mrow><mi>T</mi>
+</mrow><mrow><mi>c</mi><mi>j</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi>V</mi></mrow><mrow><mi>c</mi>
+<mi>j</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi>z</mi></mrow><mrow><mi>j</mi></mrow></msub></mrow>
+</mrow><mrow><msubsup><mrow><mo>∑</mo></mrow><mrow><mi>j</mi></mrow><mrow><mo> </mo></mrow></msubsup><mrow><msub><mrow><mi>V</mi>
+</mrow><mrow><mi>c</mi><mi>j</mi></mrow></msub><msub>
+<mrow><mi>z</mi></mrow><mrow><mi>j</mi></mrow></msub>
+</mrow></mrow></mfrac></mrow></math>                   
+  </p>
+
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>z</mi>
+<mi>j</mi></msub></math> </td>
+
+<td valign="top">is the mole fraction of component  <math><mi>j</mi></math>  in the fluid,          </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>T</mi>
+<mrow><mi>c</mi><mi>j</mi></mrow></msub></math> </td>
+
+<td valign="top">is the critical temperature of component  <math><mi>j</mi></math>, given by the <a href="../ecl_rm/TCRIT.html#TCRIT">TCRIT</a> keyword,          </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>V</mi>
+<mrow><mi>c</mi><mi>j</mi></mrow></msub></math> </td>
+
+<td valign="top">is the critical volume of component  <math><mi>j</mi></math>, given by the <a href="../ecl_rm/VCRIT.html#VCRIT">VCRIT</a> keyword,          </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mrow><mi>L</mi><mi>i</mi></mrow></msub></math> </td>
+
+<td valign="top"> is a tuning factor.  </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>                                     </p>
+
+<p>Single phase states are then labelled as liquid if            
+     <math><msubsup><mi>T</mi>
+<mi>c</mi><mrow><mi>m</mi><mi>i</mi><mi>x</mi>
+</mrow></msubsup><mo>&gt;</mo><mi>T</mi></math>  and gas
+if  <math><msubsup><mi>T</mi>
+<mi>c</mi><mrow><mi>m</mi><mi>i</mi><mi>x</mi>
+</mrow></msubsup><mo>&lt;</mo><mi>T</mi></math>.   
+      </p>
+
+<p>The tuning factor                  <math><msub>
+<mi>F</mi><mrow><mi>L</mi><mi>i</mi></mrow></msub>
+</math>  can be set using the <a href="../ecl_rm/FACTLI.html#FACTLI">FACTLI</a> keyword. Alternatively the simulator will calculate a value
+of  <math><msub><mi>F</mi>
+<mrow><mi>L</mi><mi>i</mi></mrow></msub></math>  to
+ensure where possible that any single phase cell in the reservoir
+has the correct user-specified liquid or vapor state.          </p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

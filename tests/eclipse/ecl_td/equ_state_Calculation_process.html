@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Calculation process"/>
+<meta name="DC.subject" content="Fluid modeling, Equations of state, Equations of state, Hydrocarbon mixtures"/>
+<meta name="keywords" content="Fluid modeling, Equations of state, Equations of state, Hydrocarbon mixtures"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="equ_state_calculation_process"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Calculation process</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="equ_state_calculation_process"><a name="equ_state_calculation_process"><!-- --></a>
+<h1 class="topictitle1">Calculation process</h1>
+
+
+ <div>
+<p>This section outlines the calculation process used by ECLIPSE 300
+to determine phase compositions, and the amount of liquid and vapor
+present in a grid block, at equilibrium.</p>
+
+<p>The ECLIPSE 300 calculation process utilizes linear, non-linear
+(Newton) and flash iterations to obtain a converged solution. The
+final solution at the end of a timestep for each grid block consists
+of: a pressure; water, oil and gas saturations; liquid and vapor molar
+fractions; and mole fractions of each component in the liquid and
+vapor phase.</p>
+
+<p>The remainder of this section describes the iteration process used
+to flash the mixture in each grid block, to determine the molar volumes
+and the phase compositions at equilibrium.</p>
+
+<p>After the linear problem converges, there are new pressure, water
+and molar densities for each grid block.</p>
+
+<p>A stability test tells us if there are one or two hydrocarbon phases.
+If there are two hydrocarbon phases then K-values,               
+ <math><msub><mi>K</mi>
+<mi>i</mi></msub></math>, are assigned to each component,
+i. These values can be estimated from the values used in the previous
+iteration, using equation <a href="equ_state_Calculation_process.html#equ_state.XID-000001e5">229.9</a>, or, when no previous values exist, from Wilson's formula:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="equ_state.equ.01bb"/>
+ <math><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>=</mo><mfrac><mrow><msup><mrow><mi>e</mi></mrow>
+<mrow><mo>[</mo><mrow><mrow><mn>5.37</mn><mo>(</mo>
+<mn>1</mn><mo>+</mo><msub><mrow><mi>ω</mi></mrow>
+<mrow><mi>i</mi></mrow></msub><mo>)</mo></mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><mfrac><mrow><mn>1</mn></mrow><mrow><msub><mrow><mi>T</mi></mrow>
+<mrow><mi>r</mi><mi>i</mi></mrow></msub></mrow>
+</mfrac></mrow><mo>)</mo></mrow><mo>]</mo></mrow>
+</msup></mrow><mrow><msub><mrow><mi>P</mi></mrow>
+<mrow><mi>r</mi><mi>i</mi></mrow></msub></mrow>
+</mfrac></mrow></math> 
+</td><td align="right">[Eq. 229.1]
+              </td></tr></tbody></table>
+<p>Then, given                  <math><msub>
+<mi>z</mi><mi>i</mi></msub></math>  and  <math><msub><mi>K</mi>
+<mi>i</mi></msub></math>, ECLIPSE 300 solves the Flash Equation
+to obtain the molar fraction of vapor, V. The flash equation solved
+by ECLIPSE 300 is:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="equ_state.equ.01c1"/>
+ <math><mrow><mrow><mi>g</mi><mo>(</mo><mi>V</mi><mo>)</mo></mrow><mo>=</mo><mrow><mrow><mstyle><mrow>
+<munderover><mrow><mo>∑</mo></mrow><mrow><mtext>i=1</mtext></mrow><mrow>
+<msub><mrow><mtext>N</mtext>
+</mrow><mrow><mtext>comps</mtext>
+</mrow></msub></mrow></munderover></mrow></mstyle></mrow>
+<mfrac><mrow><msub><mrow><mi>z</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>(</mo><msub><mrow><mi>K</mi>
+</mrow><mrow><mi>i</mi></mrow></msub><mrow><mo>-</mo>
+<mn>1</mn></mrow><mo>)</mo></mrow><mrow><mn>1</mn>
+<mo>+</mo><mrow><mi>V</mi><mo>(</mo><msub><mrow><mi>K</mi></mrow><mrow><mi>i</mi></mrow></msub><mrow>
+<mtext> </mtext><mo>-</mo><mtext> </mtext><mn>1</mn>
+</mrow><mo>)</mo></mrow></mrow></mfrac></mrow><mo>=</mo><mn>0</mn></mrow></math> 
+</td><td align="right">[Eq. 229.2]
+              </td></tr></tbody></table>
+<p>ECLIPSE 300 solves this equation to obtain the mole fractions of
+each component in the liquid and vapor phases:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="equ_state.equ.01c5"/>
+ <math><mrow><mtable>
+<mtr><mtd><msub><mrow><mi>x</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>=</mo><msub><mrow><mi>z</mi>
+</mrow><mrow><mi>i</mi></mrow></msub><mo>/</mo><mo>[</mo><mn>1</mn><mo>+</mo><mrow><mi>V</mi><mo>(</mo>
+<msub><mrow><mi>K</mi></mrow><mrow><mi>i</mi></mrow>
+</msub><mrow><mo>-</mo><mn>1</mn></mrow><mo>)</mo>
+</mrow><mo>]</mo><mo>,</mo></mtd><mtd><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo>
+<mrow><mi>…</mi><mi>…</mi><msub><mrow><mi>N</mi>
+</mrow><mrow><mi>c</mi><mi>o</mi><mi>m</mi><mi>p</mi>
+<mi>s</mi></mrow></msub></mrow></mtd></mtr></mtable>
+</mrow></math> 
+</td><td align="right">[Eq. 229.3]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="equ_state.equ.01c9"/>
+ <math><mrow><mtable>
+<mtr><mtd><msub><mrow><mi>y</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>=</mo><mo>(</mo><mrow><msub>
+<mrow><mi>K</mi></mrow><mrow><mi>i</mi></mrow></msub>
+<msub><mrow><mi>z</mi></mrow><mrow><mi>i</mi></mrow>
+</msub></mrow><mo>)</mo><mo>/</mo><mo>[</mo><mn>1</mn><mo>+</mo><mrow><mi>V</mi><mo>(</mo><msub>
+<mrow><mi>K</mi></mrow><mrow><mi>i</mi></mrow></msub>
+<mrow><mo>-</mo><mn>1</mn></mrow><mo>)</mo></mrow>
+<mo>]</mo><mo>,</mo></mtd><mtd><mi>i</mi><mo>=</mo>
+<mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mrow><mi>…</mi><mi>…</mi><msub><mrow><mi>N</mi></mrow><mrow>
+<mi>c</mi><mi>o</mi><mi>m</mi><mi>p</mi><mi>s</mi>
+</mrow></msub></mrow></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 229.4]
+              </td></tr></tbody></table>
+<p>Using these mole fractions, the Peng-Robinson equation of state
+can then be expressed as a cubic equation of the compressibility factor,
+Z:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="equ_state.equ.01ce"/>
+ <math><mrow><msup><mrow>
+<mi>Z</mi></mrow><mrow><mn>3</mn></mrow></msup><mrow>
+<mo>-</mo><mrow><msup><mrow><mi>Z</mi></mrow><mrow>
+<mn>2</mn></mrow></msup><mrow><mo>(</mo><mn>1</mn>
+<mrow><mo>-</mo><mi>b</mi></mrow><mo>)</mo></mrow>
+</mrow></mrow><mo>+</mo><mrow><mi>Z</mi><mo>(</mo>
+<mi>a</mi><mrow><mo>-</mo><mrow><mn>3</mn><msup>
+<mrow><mi>b</mi></mrow><mrow><mn>2</mn></mrow></msup>
+</mrow><mo>-</mo><mrow><mn>2</mn><mi>b</mi></mrow>
+</mrow><mo>)</mo><mo>-</mo><mo>(</mo><mrow><mi>a</mi>
+<mi>b</mi><mo>-</mo><msup><mrow><mi>b</mi></mrow>
+<mrow><mn>2</mn></mrow></msup><mo>-</mo><msup><mrow>
+<mi>b</mi></mrow><mrow><mn>3</mn></mrow></msup></mrow>
+<mo>)</mo></mrow><mo>=</mo><mn>0</mn></mrow></math> 
+</td><td align="right">[Eq. 229.5]
+              </td></tr></tbody></table>
+<p>where</p>
+
+<p>Z is defined by                  <math><mi>Z</mi><mo>=</mo><mfrac><mrow><mrow><mi>P</mi><mi>V</mi></mrow></mrow><mrow><mrow><mi>R</mi><mi>T</mi>
+</mrow></mrow></mfrac></math> and the two remaining parameters
+are defined by:          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="equ_state.equ.01d4"/>
+ <math><mi>a</mi><mo>=</mo>
+<mfrac><mrow><mrow><mi>A</mi><mi>P</mi></mrow></mrow>
+<mrow><mrow><msup><mi>R</mi><mn>2</mn></msup><msup>
+<mi>T</mi><mn>2</mn></msup></mrow></mrow></mfrac>
+</math> 
+</td><td align="right">[Eq. 229.6]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="equ_state.equ.01d7"/>
+ <math><mi>b</mi><mo>=</mo>
+<mfrac><mrow><mrow><mi>B</mi><mi>P</mi></mrow></mrow>
+<mrow><mrow><mi>R</mi><mi>T</mi></mrow></mrow></mfrac>
+</math> 
+</td><td align="right">[Eq. 229.7]
+              </td></tr></tbody></table>
+<p>The solution of this cubic equation gives, in a two phase region,
+three real roots. The largest root is the compressibility factor of
+the vapor phase, and the smallest positive root is the compressibility
+factor of the liquid phase.</p>
+
+<p>With this information, ECLIPSE 300 calculates the fugacity of each
+component in the liquid and vapor phases.</p>
+
+<p>When a grid block is in equilibrium at a given pressure and temperature,
+the fugacities of all components must be the same in the liquid and
+the vapor. In other words:</p>
+
+<p>                              <math><msub>
+<mi>f</mi><mrow><mi>L</mi><mi>i</mi></mrow></msub>
+<mo>=</mo><msub><mi>f</mi><mrow><mi>V</mi><mi>i</mi>
+</mrow></msub></math> </p>
+
+<p>A convergence criterion is used to determine if a grid block is
+in equilibrium (if                  <math><mi>ε</mi></math>  is very small),          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="equ_state.equ.01e1"/>
+ <math><mrow><mrow><mstyle><mrow><munderover><mrow><mo>∑</mo>
+</mrow><mrow><mtext>i=1</mtext>
+</mrow><mrow><msub><mrow><mtext>N</mtext></mrow><mrow><mtext>comps</mtext></mrow></msub></mrow>
+</munderover></mrow></mstyle><msup><mrow><mo>(</mo>
+<mfrac><mrow><msub><mrow><mi>f</mi></mrow><mrow><mi>i</mi><mi>L</mi></mrow></msub></mrow><mrow><msub>
+<mrow><mi>f</mi></mrow><mrow><mi>i</mi><mi>V</mi>
+</mrow></msub></mrow></mfrac><mrow><mo>-</mo><mn>1</mn>
+</mrow><mo>)</mo></mrow><mrow><mn>2</mn></mrow></msup>
+</mrow><mo>&lt;</mo><mi>ε</mi></mrow></math> 
+</td><td align="right">[Eq. 229.8]
+              </td></tr></tbody></table>
+<p>If equilibrium is not achieved, then new estimates for the K-values
+are made and the iteration process continues with a new solution of
+the flash equation, etc. Using successive substitution, the new estimate
+of the K-value is:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="equ_state.XID-000001e5"/>
+ <math><mrow><msubsup>
+<mrow><mi>K</mi></mrow><mrow><mi>i</mi></mrow><mrow>
+<mi>N</mi><mi>E</mi><mi>W</mi></mrow></msubsup><mo>=</mo><msubsup><mrow><mi>K</mi></mrow><mrow><mi>i</mi>
+</mrow><mrow><mi>O</mi><mi>L</mi><mi>D</mi></mrow>
+</msubsup><mo>⋅</mo><mo>[</mo><mfrac><mrow><msub>
+<mrow><mi>f</mi></mrow><mrow><mi>i</mi><mi>L</mi>
+</mrow></msub></mrow><mrow><msub><mrow><mi>f</mi>
+</mrow><mrow><mi>i</mi><mi>V</mi></mrow></msub></mrow>
+</mfrac><mo>]</mo></mrow></math> 
+</td><td align="right">[Eq. 229.9]
+              </td></tr></tbody></table>
+<p>After equilibrium is achieved, ECLIPSE 300 begins the next non-linear
+iteration.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

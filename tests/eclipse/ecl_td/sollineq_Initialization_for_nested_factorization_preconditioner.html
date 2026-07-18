@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Initialization for nested factorization preconditioner"/>
+<meta name="DC.subject" content="Solution of the linear equations initialization for nested factorization preconditioner, Solution of the linear equations, Initialization for the nested factorization preconditioner"/>
+<meta name="keywords" content="Solution of the linear equations initialization for nested factorization preconditioner, Solution of the linear equations, Initialization for the nested factorization preconditioner"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sollineq_initialization_for_nested_factorization_preconditioner"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Initialization for nested factorization preconditioner</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="sollineq_initialization_for_nested_factorization_preconditioner"><a name="sollineq_initialization_for_nested_factorization_preconditioner"><!-- --></a>
+<h1 class="topictitle1">Initialization for nested factorization preconditioner</h1>
+
+
+ <div>
+<p>Before iteration begins we must compute the diagonal matrix  <math><mi>G</mi></math>. ECLIPSE computes and stores  <math><msup><mi>G</mi>
+<mrow><mo>-</mo><mn>1</mn></mrow></msup></math>  rather
+than  <math><mi>G</mi>
+</math>  as this is more efficient in subsequent calculations. To
+conserve material, using the <strong>colsum</strong> variant on the preconditioner
+we have</p>
+
+<p> <math><mi>G</mi>
+<mo>=</mo><mi>D</mi><mrow><mo>-</mo><mrow><mtext>L1</mtext><msup><mi>G</mi><mrow><mo>-</mo><mn>1</mn>
+</mrow></msup><mtext>U1</mtext></mrow><mo>-</mo><mrow>
+<mtext>colsum	</mtext><mo>(</mo><mrow><mtext>L2</mtext>
+<msup><mi>T</mi><mrow><mo>-</mo><mn>1</mn></mrow>
+</msup><mtext>U2</mtext></mrow><mo>)</mo></mrow><mo>-</mo><mrow><mtext>colsum</mtext><mo>(</mo><mrow>
+<mtext>L3</mtext><msup><mi>P</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup><mtext>U3</mtext></mrow><mo>)</mo>
+</mrow></mrow></math> </p>
+
+<p>The calculation proceeds one cell at a time; thus when  <math><msup><mi>G</mi>
+<mrow><mo>-</mo><mn>1</mn></mrow></msup></math>  is
+known for a cell, we can calculate the contribution  <math><mrow><mtext>L1</mtext>
+<msup><mi>G</mi><mrow><mo>-</mo><mn>1</mn></mrow>
+</msup><mtext>U1</mtext></mrow></math>  to the value of
+ <math><mi>G</mi>
+</math>  in the next cell. When  <math><msup><mi>G</mi>
+<mrow><mo>-</mo><mn>1</mn></mrow></msup></math>  is
+known on a line, we can calculate the contribution of  <math><mrow><mtext>colsum	</mtext>
+<mo>(</mo><mrow><mtext>L2</mtext><msup><mi>T</mi>
+<mrow><mo>-</mo><mn>1</mn></mrow></msup><mtext>U2</mtext>
+</mrow><mo>)</mo></mrow></math>  to  <math><mi>G</mi></math>  on the next line. When  <math><mi>G</mi></math>  is known on a plane, we can calculate the contribution of  <math><mrow><mtext>colsum</mtext>
+<mo>(</mo><mrow><mtext>L3</mtext><msup><mi>P</mi>
+<mrow><mo>-</mo><mn>1</mn></mrow></msup><mtext>U3</mtext>
+</mrow><mo>)</mo></mrow></math>  to  <math><mi>G</mi></math>  on the next plane. The cost of computing  <math><mi>G</mi></math>  (and  <math><msup>
+<mi>G</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup>
+</math>) is reported under the mnemonic <samp class="codeph">GINV</samp> in
+the ECLIPSE timing reports.</p>
+
+<p>Alternatively, the <strong>rowsum</strong> variant on the preconditioner
+leads to a similar expression for <math><mi>G</mi></math>, that is:</p>
+
+<p> <math><mi>G</mi>
+<mo>=</mo><mi>D</mi><mrow><mo>-</mo><mrow><mtext>L1</mtext><msup><mi>G</mi><mrow><mo>-</mo><mn>1</mn>
+</mrow></msup><mtext>U1</mtext></mrow><mo>-</mo><mrow>
+<mtext>rowsum	</mtext><mo>(</mo><mrow><mtext>L2</mtext>
+<msup><mi>T</mi><mrow><mo>-</mo><mn>1</mn></mrow>
+</msup><mtext>U2</mtext></mrow><mo>)</mo></mrow><mo>-</mo><mrow><mtext>rowsum</mtext><mo>(</mo><mrow>
+<mtext>L3</mtext><msup><mi>P</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup><mtext>U3</mtext></mrow><mo>)</mo>
+</mrow></mrow></math> </p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

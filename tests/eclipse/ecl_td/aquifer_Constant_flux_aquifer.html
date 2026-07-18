@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Constant flux aquifer"/>
+<meta name="DC.subject" content="Grid model, Reservoir model, Constant flux aquifers, Aquifer, Constant flux"/>
+<meta name="keywords" content="Grid model, Reservoir model, Constant flux aquifers, Aquifer, Constant flux"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="aquifer_constant_flux_aquifer"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Constant flux aquifer</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="aquifer_constant_flux_aquifer"><a name="aquifer_constant_flux_aquifer"><!-- --></a>
+<h1 class="topictitle1">Constant flux aquifer</h1>
+
+
+ <div>
+<p>For a constant flux aquifer you specify its water influx rate directly
+by the user, instead of it being calculated by an analytic aquifer
+model. For the purpose of dimensioning, among other things, it is
+classed with the other analytic aquifer models.</p>
+
+<p>One use of a constant flux aquifer is to model rainfall influx
+for environmental applications.</p>
+
+<p>The water flow rate into a grid block from a constant flux aquifer
+is given by:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="aquifer.equ.0173"/>
+ <math><mrow><msub><mrow>
+<mi>Q</mi></mrow><mrow><mi>a</mi><mi>i</mi></mrow>
+</msub><mo>=</mo><msub><mrow><mi>F</mi></mrow><mrow>
+<mi>a</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi>A</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>⋅</mo>
+<mi>m</mi></mrow></math> 
+</td><td align="right">[Eq. 70.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>Q</mi>
+<mrow><mi>a</mi><mi>i</mi></mrow></msub></math> </td>
+
+<td valign="top"> is the inflow rate from the aquifer to the connecting grid
+block  <math><mi>i</mi></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mi>a</mi></msub></math> </td>
+
+<td valign="top"> is the aquifer flux, which you specify   </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>A</mi>
+<mi>i</mi></msub></math> </td>
+
+<td valign="top"> is the area of the connecting face of grid block  <math><mi>i</mi></math>, which is calculated directly from the cell geometry</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>m</mi></math> </td>
+
+<td valign="top"> is the aquifer influx multiplier, which you specify.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The aquifer should be defined using the <a href="../ecl_rm/AQUFLUX.html#AQUFLUX">AQUFLUX</a> keyword in the <span class="keyword">SOLUTION</span> section, and the aquifer connections to one or
+more faces of the reservoir should be made via the keywords <a href="../ecl_rm/AQUANCON.html#AQUANCON">AQUANCON</a> and <a href="../ecl_rm/AQANCONL.html#AQANCONL">AQANCONL</a>. The latter two keywords
+help to distinguish between connections to a global grid cell or a
+local grid cell.</p>
+
+<p>To achieve time-dependency, the flux may be modified during simulation
+by reentering the <span class="keyword">AQUFLUX</span> keyword in the <span class="keyword">SCHEDULE</span> section.</p>
+
+<p>In order to use the facility, the parameters <samp class="codeph">NANAQU</samp> (defining the maximum number of analytic aquifers) and <samp class="codeph">NCAMAX</samp> (defining the maximum number of grid block connected to any single
+analytic aquifer) should be set using the <span class="keyword">RUNSPEC</span> section keyword <a href="../ecl_rm/AQUDIMS.html#AQUDIMS">AQUDIMS</a>.</p>
+
+<p><span class="keyword">SUMMARY</span> file quantities for the aquifer may
+be obtained using <span class="keyword">AAQR</span> (influx rate) and <span class="keyword">AAQT</span> (cumulative influx) in the <span class="keyword">SUMMARY</span> section.</p>
+
+<p>For Tracer Tracking runs, the concentrations of water phase tracers
+in the aquifer may be supplied using the keyword <a href="../ecl_rm/AQANTRC.html#AQANTRC">AQANTRC</a>.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>The keyword <a href="../ecl_rm/RAINFALL.html#RAINFALL">RAINFALL</a> can be used to model a monthly varying flux rate for a constant
+flux aquifer.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

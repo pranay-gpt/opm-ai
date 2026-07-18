@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="MPFANUM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="MPFANUM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>MPFANUM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="MPFANUM"><a name="MPFANUM"><!-- --></a>
+<h1 class="keyword">MPFANUM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="mpfanum.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="mpfanum.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1424e45"> x </th>
+
+<th valign="top" id="d1424e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1424e54"> x </th>
+
+<th valign="top" id="d1424e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1424e45 d1424e54 ">  </td>
+
+<td valign="top" headers="d1424e48 d1424e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1424e45 d1424e54 "> x </td>
+
+<td valign="top" headers="d1424e48 d1424e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1424e45 d1424e54 ">  </td>
+
+<td valign="top" headers="d1424e48 d1424e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1424e45 d1424e54 ">  </td>
+
+<td valign="top" headers="d1424e48 d1424e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1424e45 d1424e54 ">  </td>
+
+<td valign="top" headers="d1424e48 d1424e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1424e45 d1424e54 ">  </td>
+
+<td valign="top" headers="d1424e48 d1424e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1424e45 d1424e54 ">  </td>
+
+<td valign="top" headers="d1424e48 d1424e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1424e45 d1424e54 ">  </td>
+
+<td valign="top" headers="d1424e48 d1424e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">MPFANUM</span> keyword indicates regions in which
+to apply the multipoint flux discretization (see keywords <a href="MPFA.html#MPFA"> MPFA</a> and <a href="MPFNNC.html#MPFNNC"> MPFNNC</a> and also <a href="../ecl_td/tensors_Tensor_Permeability.html#tensors_tensor_permeability">"Tensor permeability"</a> in the <cite>ECLIPSE Technical Description</cite>).</p>
+
+<p>The <span class="keyword">MPFANUM</span> keyword should be followed by one
+integer for every grid block in the current input box, specifying
+the discretization flag for each grid block. The flag should be set
+either to 1 to indicate that the multipoint flux discretization is
+to be employed, or to zero in regions where the standard finite-difference
+discretization is required (five points in 2D, seven points in 3D).</p>
+
+<p>Any grid blocks not explicitly assigned a <span class="keyword">MPFANUM</span> value are defaulted to a value of 1. You must set the <span class="keyword">MPFANUM</span> value explicitly to zero for any regions where the nine-point scheme
+is not required.</p>
+
+<p>Grid blocks are ordered with the X axis index cycling fastest,
+followed by the Y and Z axis indices. Repeat counts may be used for
+repeated values (for example 115*2). Note that spaces must not be
+inserted on either side of the asterisk.</p>
+
+<p>When using the ECLIPSE 100 Local Grid Refinement option, the <span class="keyword">MPFANUM</span> array should <strong>not</strong> be defined between the <a href="CARFIN.html#CARFIN"> CARFIN</a> and <a href="ENDFIN.html#ENDFIN"> ENDFIN</a> keywords. Within
+local grids, the <span class="keyword">MPFANUM</span> array is inherited from
+the host cells in the global grid.</p>
+
+<div class="section" id="mpfanum_example"><a name="mpfanum_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>To apply the <span class="keyword">MPFA</span> scheme only in a 2*2*2 region in a 4*4*3 field:</p>
+<pre><code>MPFANUM
+ 1 1 0 0
+ 1 1 0 0
+ 0 0 0 0
+ 0 0 0 0
+ 1 1 0 0
+ 1 1 0 0
+ 0 0 0 0
+ 0 0 0 0
+ 16*0 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

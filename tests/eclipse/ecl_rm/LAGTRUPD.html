@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="LAGTRUPD"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="LAGTRUPD"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>LAGTRUPD</title>
+</head>
+<body>
+
+
+<div class="nested0" id="LAGTRUPD"><a name="LAGTRUPD"><!-- --></a>
+<h1 class="keyword">LAGTRUPD</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="lagtrupd.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="lagtrupd.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1220e45">  </th>
+
+<th valign="top" id="d1220e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1220e54"> x </th>
+
+<th valign="top" id="d1220e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1220e45 d1220e54 ">  </td>
+
+<td valign="top" headers="d1220e48 d1220e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1220e45 d1220e54 ">  </td>
+
+<td valign="top" headers="d1220e48 d1220e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1220e45 d1220e54 ">  </td>
+
+<td valign="top" headers="d1220e48 d1220e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1220e45 d1220e54 ">  </td>
+
+<td valign="top" headers="d1220e48 d1220e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1220e45 d1220e54 ">  </td>
+
+<td valign="top" headers="d1220e48 d1220e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1220e45 d1220e54 ">  </td>
+
+<td valign="top" headers="d1220e48 d1220e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1220e45 d1220e54 ">  </td>
+
+<td valign="top" headers="d1220e48 d1220e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1220e45 d1220e54 "> x </td>
+
+<td valign="top" headers="d1220e48 d1220e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data consists of four items, describing the maximum time between
+retraces of the streamlines, the maximum time between updates of tracer
+concentrations of the streamlines, the maximum change in any completion
+flow rate before retraces of the streamlines, and the tracer solver
+method. The data must be terminated by a slash (/).</p>
+
+<ol>
+<li> The maximum time between retraces of the streamlines. <p>UNITS:
+day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 0.0</p>
+ </li>
+
+<li> The maximum time between updates of the tracer concentration
+on the streamlines. <p>UNITS: day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 0.0</p>
+ </li>
+
+<li> The maximum fractional change in completion component flow rate
+before a streamline retrace is forced. <p>DEFAULT: 0.05</p>
+ </li>
+
+<li> Tracer solver method:
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">ADVEC</samp> </td>
+
+<td valign="top"> Tracer concentrations are advected along streamlines and averaged
+at each cell. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">COMPR</samp> </td>
+
+<td valign="top"> as <samp class="codeph">ADVEC</samp> with compression taken into account.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>DEFAULT: <samp class="codeph">COMPR</samp> </p>
+ </li>
+
+</ol>
+
+<div class="section" id="lagtrupd_example"><a name="lagtrupd_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>Streamlines
+will be retraced every 182.5 days or when any completion changes its
+flow rate by 10% in any component. Tracer concentrations are stored
+on streamlines at trace, and then every 60 days thereafter. Cell tracer
+concentrations are derived by advecting tracer concentrations along
+streamlines from the last time when they were written to streamlines,
+and then averaging over streamlines in each cell.</p>
+ <pre><code>LAGTRUPD
+ 182.5   60.0   0.1   'ADVEC'  /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

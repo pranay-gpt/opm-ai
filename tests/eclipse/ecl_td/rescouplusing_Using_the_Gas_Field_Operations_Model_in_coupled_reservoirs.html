@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using the gas field operations model in coupled reservoirs"/>
+<meta name="DC.subject" content="Reservoir coupling and gas field operations, Reservoir coupling, Gas field operations"/>
+<meta name="keywords" content="Reservoir coupling and gas field operations, Reservoir coupling, Gas field operations"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="rescouplusing_using_the_gas_field_operations_model_in_coupled_reservoirs"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using the gas field operations model in coupled reservoirs</title>
+</head>
+<body>
+
+
+<div class="nested0" id="rescouplusing_using_the_gas_field_operations_model_in_coupled_reservoirs"><a name="rescouplusing_using_the_gas_field_operations_model_in_coupled_reservoirs"><!-- --></a>
+<h1 class="topictitle1">Using the gas field operations model in coupled reservoirs</h1>
+
+
+ <div>
+<p>The gas field operations model (see <a href="gasfieldintro_Gas_Field_Operations_Model.html#gasfieldintro_gas_field_operations_model"> "Gas field operations model"</a>) may be used to a limited extent
+in coupled reservoirs. The master run handles all the decisions concerning
+the calculation of DCQs, while the slaves take the more passive role
+of communicating to the master their production rates over each pass
+of the contract year, and their delivery capacities. The master run
+synchronizes with the slaves to start each pass of the contract year,
+and sets the target rate of each slave group every month for calculating
+the swing, the profile, and delivery capacities.</p>
+
+<p>The restrictions on running the model are as follows.</p>
+
+<ul>
+<li>All contract groups must be situated in the master reservoir;
+there must be no contract groups in the slaves. The master run should
+contain the keyword <a href="../ecl_rm/SWINGFAC.html#SWINGFAC">SWINGFAC</a> (for a single contract group) or <a href="../ecl_rm/GSWINGF.html#GSWINGF">GSWINGF</a> (for multiple contract
+groups). These keywords must not be used in the slave runs.</li>
+
+<li>Each slave must use the <a href="../ecl_rm/GASYEAR.html#GASYEAR">GASYEAR</a> or <a href="../ecl_rm/GASPERIO.html#GASPERIO">GASPERIO</a> keyword in synchronization with the master. Each contract
+period must start on the same date and be of the same length in all
+the coupled runs. In the slave runs, all <span class="keyword">GASYEAR</span> keyword items except item 1, or all <span class="keyword">GASPERIO</span> keyword
+items except items 1 and 2, are ignored and should be defaulted, as
+there are no contract groups that require their DCQ to be calculated.
+In the master run, the timesteps will be limited to one month, regardless
+of the setting of <span class="keyword">GASYEAR</span> item 4 or <span class="keyword">GASPERIO</span> item 5.             </li>
+
+<li>If the <samp class="codeph">PRO</samp> option is selected in item 3 of keyword <span class="keyword">GASYEAR</span> or item 4 of <span class="keyword">GASPERIO</span>, the master
+run cannot activate the drilling queue in a slave reservoir to keep
+the delivery capacity above DCQ x swing factor. This is because the
+master has no information about individual wells in the slave reservoirs.
+            </li>
+
+<li>All automatic compressors (see keyword <a href="../ecl_rm/GASFCOMP.html#GASFCOMP">GASFCOMP</a>) must be situated
+in the master reservoir. Any in the slave reservoirs will be ignored.</li>
+
+<li>In the master reservoir, there must be no gas consumption or import
+rate specified for the master groups (keyword <a href="../ecl_rm/GCONSUMP.html#GCONSUMP">GCONSUMP</a>). This is because
+their consumption or import rates are set equal to those of their
+corresponding slave groups in the slave reservoirs. This also applies
+to consumption by automatic compressors. An automatic compressor (keyword <span class="keyword">GASFCOMP</span>) located at a master group should not be given
+a gas consumption rate.             </li>
+
+<li>Reservoir Coupling files should only be used with care. They store
+the master groups’ flows during the second pass of the contract
+year, when producing at DCQ x profile factor. But the flows during
+the first pass (when producing at DCQ x swing factor) are <strong>not</strong> recorded. Thus if you replace a slave reservoir by a reservoir coupling
+file, its production rate in the first pass will be the same as in
+the second pass. This will only be correct when the swing factors
+are the same as the profile factors. A Reservoir Coupling file cannot
+be used to drive a slave on its own when it is using the gas field
+operations model.</li>
+
+</ul>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

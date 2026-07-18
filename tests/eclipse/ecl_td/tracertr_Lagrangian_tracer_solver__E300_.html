@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Lagrangian tracer solver (ECLIPSE 300)"/>
+<meta name="DC.subject" content="Lagrangian tracer tracking (ECLIPSE 300)"/>
+<meta name="keywords" content="Lagrangian tracer tracking (ECLIPSE 300)"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="tracertr_lagrangian_tracer_solver__e300_"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Lagrangian tracer solver (ECLIPSE 300)</title>
+</head>
+<body>
+
+
+<div class="nested0" id="tracertr_lagrangian_tracer_solver__e300_"><a name="tracertr_lagrangian_tracer_solver__e300_"><!-- --></a>
+<h1 class="topictitle1">Lagrangian tracer solver (ECLIPSE 300)</h1>
+
+
+ <div>
+<p>The Lagrangian tracer solver is activated with the <a href="../ecl_rm/LAGTRAC.html#LAGTRAC">LAGTRAC</a> keyword in the <span class="keyword">RUNSPEC</span> section and the <a href="../ecl_rm/LAGTRUPD.html#LAGTRUPD">LAGTRUPD</a> keyword in the <span class="keyword">SCHEDULE</span> section.</p>
+
+<p>This solver is used in place of the standard implicit tracer solver
+for all tracers when activated. It uses FrontSim technology (for example
+the Pollock method) to trace a set of streamlines based on the flows
+computed by ECLIPSE. The tracer solver uses these streamlines to find
+the source of fluid in each cell and updates the tracer concentration
+in each cell according to the tracer concentration in the source cells.</p>
+
+<p>This technique is not fundamentally conservative and does require
+that the streamline set accurately represents the flow of fluid in
+the reservoir. Assuming that this is the case, this method can give
+a faster, less numerically diffusive tracer solution. To ensure that
+the streamlines accurately describe the reservoir flow it is important
+that there are enough streamlines and that the streamlines are updated
+if the reservoir flow changes due to changes to well controls, movement
+of fronts and so on. The updates occur according to the data entered
+in the <span class="keyword">LAGTRUPD</span> keyword.</p>
+
+<p>The tracer concentration at the time that the streamline is traced
+is stored on the streamline; it is this value that is used, along
+with the time since this value was stored, to determine tracer concentration
+at the destination cell. This allows a solution with less numerical
+diffusion. You can update these concentrations without retracing the
+streamlines using <span class="keyword">LAGTRUPD</span>. In any event these
+values are updated at each report step.</p>
+
+<p>As the Lagrangian Tracer Solver is a streamline-based method, some
+physical processes are not solved as accurately as others. Gravity
+segregation can lead to the net flow of a component giving a poor
+representation of the movement of tracers; as the liquid phase drops
+and the vapor phase rises the net flow of a component will not necessarily
+give good results. Another area of difficulty is strongly convergent
+or divergent flow, such as one might find in a reservoir produced
+by pressure depletion. While the <span class="keyword">LAGTRAC</span> algorithm
+contains correction terms for compression and divergence, in strong
+cases these first order corrections will not be sufficient.</p>
+
+<div class="section" id="tracertr_lagrangian_tracer_solver_speed_and_accuracy"><a name="tracertr_lagrangian_tracer_solver_speed_and_accuracy"><!-- --></a><h4 class="sectiontitle">Lagrangian tracer solver speed and accuracy</h4><p>The
+Lagrangian tracer solver is very quick at calculating tracer distributions
+once a streamline set has been traced. Tracing a set of streamlines
+is a slow process. As a result there is a trade-off between speed
+and accuracy which may be controlled by judicious use of the <a href="../ecl_rm/LAGTRAC.html#LAGTRAC">LAGTRAC</a> and <a href="../ecl_rm/LAGTRUPD.html#LAGTRUPD"> LAGTRUPD</a> keywords.</p>
+<p>The
+third argument of the <span class="keyword">LAGTRAC</span> keyword should be
+used to determine the number of streamlines to be traced; more streamlines
+will slow down both the streamline tracing and the solution of the
+tracer concentration. The default value has been chosen to give a
+reliably accurate solution, but this can be reduced in most cases
+to a value of 0.05.</p>
+<p>The <span class="keyword">LAGTRUPD</span> keyword
+may be used to control the frequency with which streamlines are retraced.
+The default values cause streamlines to be retraced every timestep;
+this is safe but slow. In the majority of cases the retrace frequency
+can be reduced dramatically, with a retrace roughly every report step
+being reasonable, and a value of at least 0.1 for argument 3 also
+being safe in most cases.</p>
+<p>One final point to consider is that
+a set of streamlines can be used for more than one tracer. This means
+that multiple tracers which have the same carrier (that is tracers
+with the same argument 2 in <a href="../ecl_rm/TRACER.html#TRACER">TRACER</a> and all <a href="../ecl_rm/LUMPING.html#LUMPING">LUMPING</a> tracers) are all solved using one streamline set. As the
+majority of the cost of the Lagrangian tracer option is associated
+with tracing the streamlines, this means that every tracer after the
+first for a given carrier has a very marginal cost in memory and CPU
+time. This contrasts sharply with the standard tracer solver where
+the cost of calculation is almost proportional to the number of tracers.</p>
+</div>
+
+<div class="section" id="tracertr_lagrangian_tracer_solver_in_parallel"><a name="tracertr_lagrangian_tracer_solver_in_parallel"><!-- --></a><h4 class="sectiontitle">Lagrangian tracer solver in parallel</h4><p>The Lagrangian tracer
+solver is compatible with the <a href="../ecl_rm/PARALLEL.html#PARALLEL">PARALLEL</a> keyword. This is implemented
+by gathering the grid and flow information necessary to trace a streamline
+onto the master processor and then copying this information to all
+processors. Each processor then traces some of the streamlines required,
+and the streamlines are finally mirrored across processors. This allows
+the tracer solver to run without any cross-processor communication
+being necessary except when tracing streamlines.</p>
+</div>
+
+<div class="section" id="tracertr_lagrangian_tracer_summary"><a name="tracertr_lagrangian_tracer_summary"><!-- --></a><h4 class="sectiontitle">Lagrangian
+tracer summary</h4><p>The <a href="../ecl_rm/LAGTRAC.html#LAGTRAC">LAGTRAC</a> keyword is used to activate the Lagrangian Tracer Solver.
+The <a href="../ecl_rm/LAGTRUPD.html#LAGTRUPD">LAGTRUPD</a> keyword is then used to define the solver method and the
+streamline update strategy. The <a href="../ecl_rm/RPTSLN.html#RPTSLN">RPTSLN</a> keyword can be used to output the streamlines produced by
+the Lagrangian solver as SLN format files. <a href="../ecl_rm/LTRACE.html#LTRACE">  LTRACE</a> and <a href="../ecl_rm/NOLTRACE.html#NOLTRACE">NOLTRACE</a> keywords are also
+available to allow you to fine-tune the update of the streamlines.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

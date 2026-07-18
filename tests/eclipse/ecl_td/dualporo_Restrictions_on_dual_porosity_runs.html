@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Restrictions on dual porosity runs"/>
+<meta name="DC.subject" content="Grid and reservoir modeling, Dual porosity"/>
+<meta name="keywords" content="Grid and reservoir modeling, Dual porosity"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="dualporo_restrictions_on_dual_porosity_runs"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Restrictions on dual porosity runs</title>
+</head>
+<body>
+
+
+<div class="nested0" id="dualporo_restrictions_on_dual_porosity_runs"><a name="dualporo_restrictions_on_dual_porosity_runs"><!-- --></a>
+<h1 class="topictitle1">Restrictions on dual porosity runs</h1>
+
+
+ <div>
+<p>The following restrictions apply to dual porosity (<a href="../ecl_rm/DUALPORO.html#DUALPORO"> DUALPORO</a>) runs (except in
+single porosity regions specified using <a href="../ecl_rm/DPNUM.html#DPNUM"> DPNUM</a>), but <strong>not</strong> to
+dual porosity, dual permeability (<a href="../ecl_rm/DUALPERM.html#DUALPERM"> DUALPERM</a>) runs.</p>
+
+<ul>
+<li>Wells connect only to fracture cells - not to matrix cells.</li>
+
+<li>Non-neighbor connections (keyword <a href="../ecl_rm/NNC.html#NNC"> NNC</a>) may not be used with matrix cells. The internal connection
+of each matrix cell to its appropriate fracture cell is made automatically
+by ECLIPSE.</li>
+
+<li>Each active matrix cell must connect with an active fracture cell.</li>
+
+</ul>
+
+<p>In single porosity regions, there are no active fracture cells.
+Within these regions, data is only required for the matrix cells;
+any data for the fracture cells are ignored. Wells should connect
+to matrix blocks within single porosity regions.</p>
+
+<p>For a coal bed methane model, the <a href="../ecl_rm/DUALPERM.html#DUALPERM"> DUALPERM</a> option should only
+be used if the instant adsorption model in ECLIPSE 300 is activated
+(<a href="../ecl_rm/CBMOPTS.html#CBMOPTS"> CBMOPTS</a>) or if the time-dependent adsorption model is used with
+Multi-Porosity. With the time-dependent sorption model, one of the
+submatrix porosities will then represent the pore volume of the matrix
+having conductivity to neighbor matrix grid blocks, while grid cells
+assigned to be coal will get a zero transmissibility.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

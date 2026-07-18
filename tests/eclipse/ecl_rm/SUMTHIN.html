@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SUMTHIN"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SUMTHIN"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SUMTHIN</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SUMTHIN"><a name="SUMTHIN"><!-- --></a>
+<h1 class="keyword">SUMTHIN</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="sumthin.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="sumthin.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2476e45"> x </th>
+
+<th valign="top" id="d2476e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2476e54"> x </th>
+
+<th valign="top" id="d2476e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2476e45 d2476e54 ">  </td>
+
+<td valign="top" headers="d2476e48 d2476e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2476e45 d2476e54 ">  </td>
+
+<td valign="top" headers="d2476e48 d2476e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2476e45 d2476e54 ">  </td>
+
+<td valign="top" headers="d2476e48 d2476e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2476e45 d2476e54 ">  </td>
+
+<td valign="top" headers="d2476e48 d2476e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2476e45 d2476e54 ">  </td>
+
+<td valign="top" headers="d2476e48 d2476e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2476e45 d2476e54 ">  </td>
+
+<td valign="top" headers="d2476e48 d2476e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2476e45 d2476e54 "> x </td>
+
+<td valign="top" headers="d2476e48 d2476e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2476e45 d2476e54 "> x </td>
+
+<td valign="top" headers="d2476e48 d2476e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword reduces the amount of data saved in the summary output
+files. This is achieved by only allowing one datum to be recorded
+for each <span class="keyword">SUMMARY</span> keyword in a given time period.
+This time period is defined by the only item in this keyword. The
+first timestep in each period is output, with all subsequent output
+suppressed. Data are also recorded each report timestep regardless
+of the time since the last data were output.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"><span class="keyword">SUMTHIN</span> will not change the timesteps used
+by ECLIPSE. This keyword does not change the way that the simulation
+is solved, it simply prevents the simulation from writing some data
+to the summary files. This means that data are not output at regular
+times. If you wish to achieve this use <a href="RPTONLY.html#RPTONLY"> RPTONLY</a>. </span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">For ECLIPSE 100, the <span class="keyword">SUMTHIN</span> and <a href="RPTONLY.html#RPTONLY"> RPTONLY</a> keywords
+are ignored if the <a href="RPTCPL.html#RPTCPL"> RPTCPL</a> keyword is found, as they conflict with the <span class="keyword">RPTCPL</span>.</span></div>
+
+<p>The <span class="keyword">SUMTHIN</span> keyword contains one item, the time
+period for which only one set of data will be output. This should
+be followed by a slash (/). If the time period entered is zero, thinning
+will be switched off.</p>
+
+<p>UNITS: day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+
+<p>See also the keyword <span class="keyword">RPTONLY</span>.</p>
+
+<div class="section" id="sumthin_example"><a name="sumthin_example"><!-- --></a><h4 class="sectiontitle">Example</h4>             
+   <p>One set of data will be output in each 50 day period (in FIELD
+units). As a result the first timestep in each 50 day period will
+be written to the summary files, along with any report timesteps.
+This means that the first timestep between 0 and 50 is output, then
+the first timestep between 50 and 100 and so on.</p>
+          <pre><code>SUMTHIN
+50.0 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Phase pressures in ECLIPSE 300"/>
+<meta name="DC.subject" content="Initial conditions, Equilibration"/>
+<meta name="keywords" content="Initial conditions, Equilibration"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="initial_phase_pressures_in_eclipse_300"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Phase pressures in ECLIPSE 300</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="initial_phase_pressures_in_eclipse_300"><a name="initial_phase_pressures_in_eclipse_300"><!-- --></a>
+<h1 class="topictitle1">Phase pressures in ECLIPSE 300</h1>
+
+
+ <div>
+<p>By default, oil and gas phase pressures are derived from the pressure
+solution variable                  <math><mi>P</mi></math>  using the formula          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="initial.XID-00000156"/>
+ <math><mrow><mrow><mi>P</mi><mi>o</mi><mi>i</mi><mi>l</mi></mrow><mo>=</mo><mi>P</mi><mrow><mtext> </mtext><mo>-</mo>
+<mtext> </mtext><mrow><mi>P</mi><mi>c</mi><mi>o</mi>
+<mi>g</mi></mrow><mo>×</mo><mo>(</mo><mfrac>
+<mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi>
+</mrow></msub></mrow><mrow><mrow><mi>S</mi><mi>o</mi>
+</mrow><mo>+</mo><mrow><mi>S</mi><mi>g</mi></mrow>
+</mrow></mfrac><mo>)</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 385.1]
+              </td></tr></tbody></table>
+<p>and</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="initial.XID-0000015a"/>
+ <math><mrow><mi>P</mi>
+<mi>g</mi><mi>a</mi><mi>s</mi></mrow><mo>=</mo><mi>P</mi><mo>+</mo><mrow><mi>P</mi><mi>c</mi><mi>o</mi>
+<mi>g</mi></mrow><mo>×</mo><mo>(</mo><mfrac>
+<mrow><msub><mi>S</mi><mi>o</mi></msub></mrow><mrow>
+<mrow><mi>S</mi><mi>o</mi></mrow><mo>+</mo><mrow>
+<mi>S</mi><mi>g</mi></mrow></mrow></mfrac><mo>)</mo>
+</math> 
+</td><td align="right">[Eq. 385.2]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><mi>P</mi>
+<mi>c</mi><mi>o</mi><mi>g</mi></mrow></math> </td>
+
+<td valign="top">  is the gas-oil capillary pressure,   </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>S</mi>
+<mi>o</mi></msub></math>  and  <math><msub>
+<mi>S</mi><mi>g</mi></msub></math> </td>
+
+<td valign="top"> are the oil and gas saturations respectively.      </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This P<sub>c </sub>splitting technique is performed to enable better
+convergence and property smoothness above the critical point. It may
+be disabled using keyword <a href="../ecl_rm/FORMOPTS.html#FORMOPTS">FORMOPTS</a>, option <samp class="codeph">NOPCSPT</samp>. When reporting initialization
+data using the <a href="../ecl_rm/RPTRST.html#RPTRST">RPTRST</a> or <a href="../ecl_rm/RPTSOL.html#RPTSOL">RPTSOL</a> keywords, the pressures are defined as</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">PRESSURE</samp> </td>
+
+<td valign="top">is the solution variable                        <math><mi>P</mi></math>  which is derived from the phase pressures calculated during the <a href="../ecl_rm/EQUIL.html#EQUIL">EQUIL</a> hydrostatic equilibration
+and reported with the <samp class="codeph">SOLVD</samp> option in <span class="keyword">RPTSOL</span>.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">POIL</samp> </td>
+
+<td valign="top">is the oil phase pressure                        <math><msub><mi>P</mi>
+<mrow><mi>o</mi><mi>i</mi><mi>l</mi></mrow></msub>
+</math>  defined in equation <a href="initial_Phase_Pressures_in_ECLIPSE_300.html#initial.XID-00000156">385.1</a>                                                </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">PGAS</samp> </td>
+
+<td valign="top">is the gas phase pressure                        <math><msub><mi>P</mi>
+<mrow><mi>g</mi><mi>a</mi><mi>s</mi></mrow></msub>
+</math>  defined in equation <a href="initial_Phase_Pressures_in_ECLIPSE_300.html#initial.XID-0000015a">385.2</a>                                     </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The P<sub>c</sub> splitting technique applies only to the ECLIPSE
+300 compositional mode.</span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

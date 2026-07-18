@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Accurate fluids in place calculation"/>
+<meta name="DC.subject" content="Initial conditions, Equilibration, Fluid in place, Accurate calculation"/>
+<meta name="keywords" content="Initial conditions, Equilibration, Fluid in place, Accurate calculation"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="initial_accurate_fluids_in_place_calculation"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Accurate fluids in place calculation</title>
+</head>
+<body>
+
+
+<div class="nested0" id="initial_accurate_fluids_in_place_calculation"><a name="initial_accurate_fluids_in_place_calculation"><!-- --></a>
+<h1 class="topictitle1">Accurate fluids in place calculation</h1>
+
+
+ <div>
+<p>There is a choice of methods to calculate the initial fluid in
+place values (the initial oil, water and gas saturations) in each
+grid block. These are selected using the ninth argument of the <a href="../ecl_rm/EQUIL.html#EQUIL">EQUIL</a> keyword, which specifies
+the number of sub-layers (N) used to obtain the initial saturations.</p>
+
+<div class="section" id="initial_center-point_equilibration__n_0_"><a name="initial_center-point_equilibration__n_0_"><!-- --></a><h4 class="sectiontitle">Center-point
+equilibration (N=0)</h4><p>The simulator sets the fluid saturations
+in each grid block according to the conditions at its center. This
+is the fastest method, and yields a stable initial state since the
+phase pressure differences in the simulation are also taken between
+cell centers. But it is the least accurate method, particularly in
+cases where the fluid contact passes through large grid blocks.</p>
+</div>
+
+<div class="section" id="initial_horizontal_fine_grid_equilibration__n_0_"><a name="initial_horizontal_fine_grid_equilibration__n_0_"><!-- --></a><h4 class="sectiontitle">Horizontal fine grid equilibration (N&lt;0)</h4><p>The top and
+bottom halves of each grid block are each divided into -N layers of
+equal thickness, and the saturations are determined locally in each
+layer. The phase saturations for the block are set equal to the average
+of the saturations in each layer. This option provides a more accurate
+calculation of the fluids in place, but may yield a solution that
+is not completely stable in the initial state.</p>
+</div>
+
+<div class="section" id="initial_tilted_block_fine_grid_equilibration__n_0_"><a name="initial_tilted_block_fine_grid_equilibration__n_0_"><!-- --></a><h4 class="sectiontitle">Tilted block fine grid equilibration (N&gt;0)</h4><p>This option
+is similar to the previous one, but it takes into account the slope
+of each grid block. The top and bottom faces of the blocks are treated
+as planes that are tilted about their central points. If the <a href="../ecl_rm/NEWTRAN.html#NEWTRAN">NEWTRAN</a> keyword has been entered,
+the tilt is determined from the block corner point depths. Otherwise
+the faces are tilted towards the centers of the corresponding faces
+of the neighboring blocks within the equilibration region. The top
+and bottom halves of the grid blocks are each divided into N horizontal
+layers of equal thickness, but the thickness of the layers in the
+top half is generally different from the thickness of the layers in
+the bottom half. This is because generally the distance from the block
+center line to the highest corner is not the same as the distance
+from the block center line to the lowest corner, if the upper and
+lower faces have different tilts. The phase saturations in each block
+are calculated as a weighted average of the saturations in the 2 N
+layers, weighted according to the area of each layer that is enclosed
+within the block multiplied by the layer thickness. This option provides
+the most accurate calculation of fluids in place, but may yield a
+solution which is not completely stable in the initial state.</p>
+<p>ECLIPSE 100</p>
+<p>With
+fine grid equilibration there is a redistribution of fluids between
+grid blocks near the contacts when the simulation begins, which occurs
+independently of any external driving force (wells for example). The
+reason is that a steady state solution on the fine equilibration grid
+(in which each block is subdivided into several layers) is not necessarily
+a steady state solution on the coarser simulation grid. If the redistribution
+of fluids produces a significant transient when the simulation is
+started, you can overcome this by setting the 'quiescence switch'
+(the switch <samp class="codeph">QUIESC</samp> in keyword <a href="../ecl_rm/EQLOPTS.html#EQLOPTS">EQLOPTS</a> in the <span class="keyword">RUNSPEC</span> section). If this switch is on, modifications are applied to the
+phase pressures to make the initial solution a true steady state.
+These pressure modifications are applied for the duration of the run.</p>
+<p>ECLIPSE 100 </p>
+<p>If the vertical equilibrium option is used (keyword <a href="../ecl_rm/VE.html#VE">VE</a> in the <span class="keyword">RUNSPEC</span> section),
+an exact VE equilibration method can be chosen by selecting center-point
+equilibration. Instead of the center-point calculation, the option
+calculates the fluid saturations in each grid block directly from
+the contact depths. It employs the same relationship between saturations
+and contact depths that is subsequently used for the simulation. This
+is the recommended option in VE runs.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

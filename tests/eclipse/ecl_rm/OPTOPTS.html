@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="OPTOPTS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="OPTOPTS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>OPTOPTS</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="OPTOPTS"><a name="OPTOPTS"><!-- --></a>
+<h1 class="keyword">OPTOPTS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="optopts.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="optopts.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1686e45">  </th>
+
+<th valign="top" id="d1686e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1686e54"> x </th>
+
+<th valign="top" id="d1686e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1686e45 d1686e54 ">  </td>
+
+<td valign="top" headers="d1686e48 d1686e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1686e45 d1686e54 ">  </td>
+
+<td valign="top" headers="d1686e48 d1686e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1686e45 d1686e54 ">  </td>
+
+<td valign="top" headers="d1686e48 d1686e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1686e45 d1686e54 ">  </td>
+
+<td valign="top" headers="d1686e48 d1686e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1686e45 d1686e54 ">  </td>
+
+<td valign="top" headers="d1686e48 d1686e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1686e45 d1686e54 ">  </td>
+
+<td valign="top" headers="d1686e48 d1686e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1686e45 d1686e54 ">  </td>
+
+<td valign="top" headers="d1686e48 d1686e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1686e45 d1686e54 ">  </td>
+
+<td valign="top" headers="d1686e48 d1686e57 "> SCHEDULE </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1686e45 d1686e54 "> x </td>
+
+<td valign="top" headers="d1686e48 d1686e57 "> OPTIMIZE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is used to specify options that control the operation
+of the optimizer.</p>
+
+<p>The keyword is followed by a single record consisting of three
+integers. The record is terminated with a slash (/):</p>
+
+<ol>
+<li> Flag indicating which method is to be used to calculate the search
+direction in the optimizer. A value of 1 indicates that the steepest
+descent method is to be used, while a value of 2 indicates that the
+conjugate gradient method is to be used. <p>DEFAULT: 1</p>
+ </li>
+
+<li> Flag indicating which method is to be used to determine the free/dependent
+parameter split used when handling active constraints. <p>A value
+of 1 indicates that the first parameters in the list should be taken
+as the dependent parameters at each time period - this was the behavior
+pre-2006.1. The use of this method means that the performance of the
+optimizer can be dependent on the order that the parameters are specified
+in the <a href="OPTPARS.html#OPTPARS"> OPTPARS</a> keyword.</p>
+ <p>A value of 2 indicates that the dependent parameters should be
+chosen as the ones for which the constraints have the greatest sensitivity
+at each time period. The use of this method should mean that the optimization
+is not dependent on the order that the parameters are specified in
+the <span class="keyword">OPTPARS</span> keyword.</p>
+<p>DEFAULT: 2</p>
+ </li>
+
+<li id="optopts_73890"><a name="optopts_73890"><!-- --></a>Flag indicating which formulation is to be
+used for calculating the Lagrangian gradients. <p>In the <strong>original</strong> formulation,  as described in <a href="../ecl_td/techdesc_Adjoint_Gradient_Calculations_in_ECLIPSE.html#techdesc_introducing_additional_constraints">Introducing Additional
+Constraints</a> in the <cite>ECLIPSE Technical Description</cite> is used to eliminate <math><mrow><munder><mrow>
+<mi>Ψ</mi></mrow><mo>̲</mo>
+</munder></mrow></math>. </p>
+ <p>In the <strong>alternative</strong> formulation,
+as described in <a href="../ecl_td/techdesc_Adjoint_Gradient_Calculations_in_ECLIPSE.html#techdesc_introducing_additional_constraints">Introducing Additional
+Constraints</a> in the <cite>ECLIPSE Technical Description</cite> is used to eliminate <math><mrow><munder><mrow>
+<mi>Φ</mi></mrow><mo>̲</mo>
+</munder></mrow></math>. </p>
+<p>A value of 1 indicates that
+the (more expensive) alternative formulation should only be used when
+necessary, and the original formulation should be used otherwise.
+item 11 of the <a href="OPTTUNE.html#OPTTUNE"> OPTTUNE</a>  keyword is used to decide when the switch between the two
+formulations is necessary.</p>
+<p>A value of 2 indicates that the original
+formulation should always be used.</p>
+<p>A value of 3 indicates that
+the alternative formulation should always be used.</p>
+<p>A value of
+4 indicates that the method used in the previous versions of the code
+should be used. This is the same as original formulation but with
+an attempt made to continue the optimization if insensitive constraints
+are encountered. This formulation is only present for back-compatibility.
+The mechanism used to continue the optimization has no mathematical
+or physical foundation and may only work for a small number of cases.
+It has been entirely superseded by the alternative formulation.</p>
+<p>DEFAULT: 1</p>
+ </li>
+
+</ol>
+
+<div class="section" id="optopts_example"><a name="optopts_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>This example
+shows how to change the optimizer to use the conjugate gradient method,
+and also to use the specified <a href="OPTPARS.html#OPTPARS"> OPTPARS</a> parameter order for choosing the dependent parameters when
+handling constraints.</p>
+ <pre><code>OPTOPTS
+     2  1  /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

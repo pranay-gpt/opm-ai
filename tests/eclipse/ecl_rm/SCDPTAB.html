@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SCDPTAB"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SCDPTAB"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SCDPTAB</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SCDPTAB"><a name="SCDPTAB"><!-- --></a>
+<h1 class="keyword">SCDPTAB</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="scdptab.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="scdptab.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2214e45"> x </th>
+
+<th valign="top" id="d2214e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2214e54"> x </th>
+
+<th valign="top" id="d2214e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2214e45 d2214e54 ">  </td>
+
+<td valign="top" headers="d2214e48 d2214e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2214e45 d2214e54 ">  </td>
+
+<td valign="top" headers="d2214e48 d2214e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2214e45 d2214e54 ">  </td>
+
+<td valign="top" headers="d2214e48 d2214e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2214e45 d2214e54 ">  </td>
+
+<td valign="top" headers="d2214e48 d2214e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2214e45 d2214e54 ">  </td>
+
+<td valign="top" headers="d2214e48 d2214e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2214e45 d2214e54 ">  </td>
+
+<td valign="top" headers="d2214e48 d2214e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2214e45 d2214e54 ">  </td>
+
+<td valign="top" headers="d2214e48 d2214e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2214e45 d2214e54 "> x </td>
+
+<td valign="top" headers="d2214e48 d2214e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword may be used to input tables which give the total rate
+of scale deposition per unit flow rate of water into a well connection
+as a function of the fraction of sea water present in the water flowing
+through this connection. The sea water fraction is equated to the
+concentration of a passive water tracer which is nominated in keyword <a href="SCDPTRAC.html#SCDPTRAC"> SCDPTRAC</a>. The tables
+defined here are allocated to individual wells with the <a href="WSCTAB.html#WSCTAB"> WSCTAB</a> keyword. The effect
+of the deposited scale on the PI of the well should be defined in
+scale damage tables supplied by the <a href="SCDATAB.html#SCDATAB"> SCDATAB</a> keyword.</p>
+
+<p>The keyword is followed by  <samp class="codeph">NTSCDP</samp> tables <strong>exactly</strong>, each containing two columns and no more than <samp class="codeph">NPSCDP</samp> rows of data. The dimensions <samp class="codeph">NTSCDP</samp> and <samp class="codeph">NPSCDP</samp> are entered in the <span class="keyword">RUNSPEC</span> section
+keyword <a href="SCDPDIMS.html#SCDPDIMS">  SCDPDIMS</a>. Each table should be terminated with a slash (/).</p>
+
+<ol>
+<li>The fraction of sea water present in the water flowing into a
+well connection. <p>The values should increase monotonically down
+the column.</p>
+</li>
+
+<li>The corresponding total rate of scale deposition per unit flow
+rate of water through the connection. <p>UNITS: gm/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), lb/stb (<samp class="codeph">FIELD</samp>), gm/scc (<samp class="codeph">LAB</samp>), gm/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+</ol>
+
+<p>Empty tables (containing just their terminating slash) default
+to a copy of the previous table. Extrapolation outside the range of
+a table will return the value of the nearest point in the table.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The scale deposition tables are <strong>not</strong> written to the Restart
+files. Accordingly they must be present in any restarted data set.
+Thus it is also possible to change the tables at a restart. </span></div>
+
+<div class="section" id="scdptab_example"><a name="scdptab_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTSCDP=2</samp>. <samp class="codeph">NPSCDP</samp> ≥5:</p>
+ <pre><code>SCDPTAB
+-- sea   scale
+-- water deposition
+-- frac  rate
+   0.0   0.0
+   0.1   1.00
+   0.15  2.00
+   0.4   4.00
+   0.8   9.00  /
+
+   0.0   0.0
+   0.01  0.1
+   0.04  0.4
+   0.12  1.00
+   0.4   9.00  /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Vector data in user files"/>
+<meta name="DC.subject" content="User data files"/>
+<meta name="keywords" content="User data files"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="userdata_vector_data_in_user_files"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Vector data in user files</title>
+</head>
+<body>
+
+
+<div class="H1" id="userdata_vector_data_in_user_files"><a name="userdata_vector_data_in_user_files"><!-- --></a>
+<h1 class="topictitle1">Vector data in user files</h1>
+
+
+ <div>
+<p>Vector data read from user files are handled in some post-processing
+software in the same way as vector data read from summary files. However,
+summary files must be used if there is a requirement to sequence restarted
+runs. The keyword <span class="keyword">VECTOR</span> denotes the start of a
+set of vector data. It should be followed by additional keywords specifying
+origin, units, well name and so on, depending on vector type (see <a href="summary_Vector_naming_convention.html#summary_vector_naming_convention"> "Vector naming convention"</a>). The vector values are input on
+one or more lines, delimited by the keywords <span class="keyword">VECTOR</span>, <span class="keyword">SOLUTION</span>, <span class="keyword">WELLINFO</span>, <span class="keyword">END</span> or the end of the file. You should ensure that a suitable
+reference vector (for example <span class="keyword">TIME</span>) with the correct
+number of points is available for plotting vectors. </p>
+
+
+<div class="tablenoborder"><a name="userdata.XID-0000001c"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="userdata.XID-0000001c" frame="border" border="1" rules="all"><caption>
+           Table 49.1  Vector Keywords</caption>   
+<thead align="left">
+<tr>
+<th valign="top" id="d126e71"> Keyword </th>
+
+<th valign="top" id="d126e74"> Associated Data </th>
+
+<th valign="top" id="d126e77"> Description </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d126e71 ">  <span class="keyword">VECTOR</span>  </td>
+
+<td valign="top" headers="d126e74 "> Vector mnemonic </td>
+
+<td valign="top" headers="d126e77 "> Indicates the start of data for a vector and
+defines its mnemonic. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d126e71 ">  <span class="keyword">ORIGIN</span>  </td>
+
+<td valign="top" headers="d126e74 "> Data origin </td>
+
+<td valign="top" headers="d126e77 "> Origin mnemonic to be used</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d126e71 ">  <span class="keyword">UNITS</span>  </td>
+
+<td valign="top" headers="d126e74 "> Units name </td>
+
+<td valign="top" headers="d126e77 "> The units for this vector, used to assign axes
+to a line graph. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d126e71 ">  <span class="keyword">WELL</span>  </td>
+
+<td valign="top" headers="d126e74 "> Well name </td>
+
+<td valign="top" headers="d126e77 "> Well name, required for well and completion data
+(vector mnemonic initial letter C or W). </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d126e71 ">  <span class="keyword">GROUP</span>  </td>
+
+<td valign="top" headers="d126e74 "> Group name </td>
+
+<td valign="top" headers="d126e77 "> Group name, required for group data (vector mnemonic
+with initial letter G). </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d126e71 ">  <span class="keyword">NODE</span>  </td>
+
+<td valign="top" headers="d126e74 "> Node name </td>
+
+<td valign="top" headers="d126e77 "> Node name, required for network node data (vector
+mnemonic with initial letter N). </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d126e71 ">  <span class="keyword">AQUIFER</span>  </td>
+
+<td valign="top" headers="d126e74 "> Aquifer number </td>
+
+<td valign="top" headers="d126e77 "> Aquifer index number for vector mnemonic with
+initial letter A. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d126e71 ">  <span class="keyword">BLOCK</span>  </td>
+
+<td valign="top" headers="d126e74 "> Block indices </td>
+
+<td valign="top" headers="d126e77 "> Grid block I,J,K indices (integers separated
+by blank spaces). </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d126e71 ">  <span class="keyword">REGION</span>  </td>
+
+<td valign="top" headers="d126e74 "> Region number </td>
+
+<td valign="top" headers="d126e77 "> Region number for vector mnemonic starting with
+R. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d126e71 ">  <span class="keyword">TO</span>  </td>
+
+<td valign="top" headers="d126e74 "> Region number </td>
+
+<td valign="top" headers="d126e77 "> Destination region for region to region flows
+(mnemonic starting R*F where * is any letter). </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d126e71 ">  <span class="keyword">LGR</span>  </td>
+
+<td valign="top" headers="d126e74 "> LGR name </td>
+
+<td valign="top" headers="d126e77 "> Local grid name, required for LGR data (initial
+letters of mnemonic LB, LC or LW). </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d126e71 ">  <span class="keyword">LOCAL</span>  </td>
+
+<td valign="top" headers="d126e74 "> Block indices </td>
+
+<td valign="top" headers="d126e77 "> Local grid block I,J,K indices </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d126e71 ">  <span class="keyword">SEGMENT</span>  </td>
+
+<td valign="top" headers="d126e74 "> Well segment no. </td>
+
+<td valign="top" headers="d126e77 "> Well segment number (vector mnemonic with initial
+letter S) </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d126e71 ">  <span class="keyword">GPNAME</span>  </td>
+
+<td valign="top" headers="d126e74 "> Gradient parameter name </td>
+
+<td valign="top" headers="d126e77 "> Gradient parameter name, used with special history
+matching vectors (for example TCPUH) </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d126e71 ">  <span class="keyword">GPNUMBER</span>  </td>
+
+<td valign="top" headers="d126e74 "> Gradient parameter number </td>
+
+<td valign="top" headers="d126e77 "> Gradient parameter number, used with special
+history matching vectors (for example TCPUH) </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

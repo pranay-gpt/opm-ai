@@ -1,0 +1,415 @@
+---------------------------------------------------------------------
+-- Simple test case for the Solvent Flood model
+--
+-- 1D displacement
+--
+-- 100 days water, 100 days solvent, lean chase
+---------------------------------------------------------------------
+RUNSPEC
+TITLE
+ 1D TEST CASE FOR SOLVENT CODE - WITH DISSOLVED GAS
+
+DIMENS
+   15    1    1  /
+
+NONNC
+
+OIL
+
+WATER
+
+GAS
+
+DISGAS
+
+SOLVENT
+
+FIELD
+
+MISCIBLE
+    1   20    'NONE'   /
+
+EQLDIMS
+    1  100   10    1   20 /
+
+TABDIMS
+    1    1   19   15   15   15 /
+
+REGDIMS
+   15    1    0    0  /
+
+WELLDIMS
+    4    4    4    4 /
+
+START
+   1 'JAN' 1982  /
+
+NSTACK
+   24 /
+   
+--Request output for run-time monitoring
+MONITOR
+--Request a restart index file
+RSSPEC
+
+GRID    ==============================================================
+
+NOGGF
+
+EQUALS
+  'DX'      100  /
+  'DY'      100  /
+  'DZ'      100  /
+  'TOPS'   4000  /
+  'PORO'   0.25  /
+  'PERMX'   200  /
+/
+
+RPTGRID
+ -- Report Levels for Grid Section Data
+ -- 
+ 'DX' 
+ 'DY' 
+ 'DZ' 
+ 'PERMX' 
+ 'PERMY' 
+ 'PERMZ' 
+ 'MULTX' 
+ 'MULTY' 
+ 'MULTZ' 
+ 'PORO' 
+ 'NTG' 
+ 'TOPS' 
+ 'PORV' 
+ 'DEPTH' 
+ 'TRANX' 
+ 'TRANY' 
+ 'TRANZ' 
+ 'COORDSYS' 
+ 'COORD' 
+ 'ZCORN' 
+ 'NNC' 
+ 'AQUNUM' 
+ 'AQUCON' 
+ 'ALLNNC' 
+ / 
+
+PROPS    ===============================================================
+STONE2
+-------- THE PROPS SECTION DEFINES THE REL. PERMEABILITIES, CAPILLARY
+-------- PRESSURES, AND THE PVT PROPERTIES OF THE RESERVOIR FLUIDS
+----------------------------------------------------------------------
+-- WATER RELATIVE PERMEABILITY AND CAPILLARY PRESSURE ARE TABULATED AS
+-- A FUNCTION OF WATER SATURATION.
+--
+--  SWAT   KRW   PCOW
+SWFN
+
+    0.22  0       7
+    0.3   0.07    4
+    0.4   0.15    3
+    0.5   0.24    2.5
+    0.6   0.33    2
+    0.8   0.65    1
+    0.9   0.83    0.5
+    1     1       0      /
+
+-- SIMILARLY FOR GAS
+--
+--  SGAS   KRG   PCOG
+SGFN       1 TABLES   19 NODES IN EACH           FIELD   16:31 18 JAN 85
+    .0000  .0000  .0000
+    .0400  .0000  .2000
+    .1000  .0220  .5000
+    .2000  .1000 1.0000
+    .3000  .2400 1.5000
+    .4000  .3400 2.0000
+    .5000  .4200 2.5000
+    .6000  .5000 3.0000
+    .7000  .8125 3.5000
+    .7800 1.0000 3.9000
+/
+
+-- OIL RELATIVE PERMEABILITY IS TABULATED AGAINST OIL SATURATION
+-- FOR OIL-WATER AND OIL-GAS-CONNATE WATER CASES
+--
+--  SOIL     KROW     KROG
+SOF3
+    0        0         0
+    0.2      0         0
+    0.38     0.00432   0
+    0.4      0.0048    0.004
+    0.48     0.05288   0.02
+    0.5      0.0649    0.036
+    0.58     0.11298   0.1
+    0.6      0.125     0.146
+    0.68     0.345     0.33
+    0.7      0.4       0.42
+    0.74     0.7       0.6
+    0.78     1         1          /
+--  SOIL     KROW
+SOF2
+    0        0
+    0.2      0
+    0.38     0.00432
+    0.4      0.0048
+    0.48     0.05288
+    0.5      0.0649
+    0.58     0.11298
+    0.6      0.125
+    0.68     0.345
+    0.7      0.4
+    0.74     0.7
+    0.78     1       /
+
+SSFN
+--          KRG*     KRS*
+  0         0.0     0.0
+  0.5       0.4     0.8
+  1.0       1.0     1.0
+ /
+MISC
+  0.0 0.0
+  0.1 0.3
+  1.0 1.0 /
+
+SORWMIS
+  0.0  0.05
+  1.0  0.10 /
+SGCWMIS
+  0.0  0.00
+  1.0  0.00 /
+
+TLMIXPAR
+ 0.8 /
+
+-- PVT PROPERTIES OF WATER
+--
+--    REF. PRES. REF. FVF  COMPRESSIBILITY  REF VISCOSITY  VISCOSIBILITY
+PVTW
+        3600     1.00341        3.0D-6          0.96             0  /
+
+
+-- ROCK COMPRESSIBILITY
+--
+--    REF. PRES   COMPRESSIBILITY
+ROCK
+         3600          4.0D-6   /
+
+-- SURFACE DENSITIES OF RESERVOIR FLUIDS
+--
+--        OIL   WATER   GAS
+DENSITY
+           45   63.02   0.0702  /
+SDENSITY
+                        0.0702  /
+
+-- PVT PROPERTIES OF DRY GAS (NO VAPOURISED OIL)
+-- WE WOULD USE PVTG TO SPECIFY THE PROPERTIES OF WET GAS
+--
+--   PGAS   BGAS   VISGAS
+PVDG
+      400    5.9   0.013
+      800    2.95  0.0135
+     1200    1.96  0.014
+     1600    1.47  0.0145
+     2000    1.18  0.015
+     2400    0.98  0.0155
+     2800    0.84  0.016
+     3200    0.74  0.0165
+     3600    0.65  0.017
+     4000    0.59  0.0175
+     4400    0.54  0.018
+     4800    0.49  0.0185
+     5200    0.45  0.019
+     5600    0.42  0.0195 /
+
+-- PVT PROPERTIES OF DRY GAS (NO VAPOURISED OIL)
+-- WE WOULD USE PVTG TO SPECIFY THE PROPERTIES OF WET GAS
+--
+--   PGAS   BGAS   VISGAS
+PVDS
+      400    5.9   0.013
+      800    2.95  0.0135
+     1200    1.96  0.014
+     1600    1.47  0.0145
+     2000    1.18  0.015
+     2400    0.98  0.0155
+     2800    0.84  0.016
+     3200    0.74  0.0165
+     3600    0.65  0.017
+     4000    0.59  0.0175
+     4400    0.54  0.018
+     4800    0.49  0.0185
+     5200    0.45  0.019
+     5600    0.42  0.0195 /
+
+-- PVT PROPERTIES OF LIVE OIL (WITH DISSOLVED GAS)
+-- WE WOULD USE PVDO TO SPECIFY THE PROPERTIES OF DEAD OIL
+--
+PVTO
+   0.165      400   1.012    1.17  /
+   0.335      800   1.0255   1.14  /
+   0.500     1200   1.038    1.11  /
+   0.665     1600   1.051    1.08  /
+   0.828     2000   1.063    1.06  /
+   0.985     2400   1.075    1.03  /
+   1.130     2800   1.087    1.00  /
+   1.270     3200   1.0985   0.98  /
+   1.390     3600   1.11     0.95  /
+   1.500     4000   1.12     0.94  /
+   1.600     4400   1.13     0.92  /
+   1.700     5000   1.14     0.91  /
+   1.750     5200   1.148    0.9   /
+   1.810     5600   1.155    0.89
+             6000   1.1504   0.89
+             6400   1.1458   0.89
+             6800   1.1412   0.89
+             7200   1.1367   0.89  /
+/
+
+RPTPROPS
+-- PROPS Reporting Options
+-- 
+'PVTG' 'PVDG' 'PVDS' 'SSFN' 
+/
+
+SOLUTION   ==============================================================
+
+RS
+ 15*1.65 /
+
+PRESSURE
+ 15*5500.0 /
+
+SWAT
+ 15*0.2 /
+
+SSOL
+ 15*0.0 /
+
+SGAS
+ 15*0.0 /
+
+RPTSOL
+  -- Initialisation Print Output
+  -- 
+'PRES' 'SOIL' 'SWAT' 'SGAS' 'RS' 'SSOL' /
+
+SUMMARY
+
+FOPR
+FGPR
+FWPR
+FNPR
+
+FOPT
+FGPT
+FWPT
+FNPT
+
+FOIR
+FGIR
+FWIR
+FNIR
+
+FOIT
+FGIT
+FWIT
+FNIT
+
+FWCT
+
+BNSAT
+ 1 1 1 /
+ 5 1 1 /
+10 1 1 /
+15 1 1 /
+/
+BOSAT
+ 1 1 1 /
+ 5 1 1 /
+10 1 1 /
+15 1 1 /
+/
+BGSAT
+ 1 1 1 /
+ 5 1 1 /
+10 1 1 /
+15 1 1 /
+/
+BWSAT
+ 1 1 1 /
+ 5 1 1 /
+10 1 1 /
+15 1 1 /
+/
+
+RUNSUM
+
+ALL
+
+MSUMLINS
+
+MSUMNEWT
+
+SEPARATE
+
+SCHEDULE   ==============================================================
+
+
+WELSPECS
+'GINJ'  'G'   1  1 4005.00 'GAS'   1*  'NO'  'SHUT' 'NO' 1* 'SEG' /
+'PROD'  'G'  15  1 4005.00 'OIL'   0.0 'NO'  'SHUT' 'NO' 1* 'SEG' /
+'WINJ'  'G'   1  1 4005.00 'WAT'   1*  'NO'  'SHUT' 'NO' 1* 'SEG' /
+/
+
+COMPDAT
+'GINJ'  1  1 1 1 'OPEN' 0 1* 0.4 /
+'PROD'  15 1 1 1 'OPEN' 0 1* 0.4 /
+'WINJ'  1  1 1 1 'OPEN' 0 1* 0.4 /
+/
+
+WCONPROD
+'PROD'  'OPEN' 'BHP' 1*  1*  1*  2000.0  1*  3990.0  /
+/
+
+WCONINJE
+'GINJ'  'GAS' 'SHUT' 'RATE' 1500.0  /
+'WINJ'  'WAT' 'OPEN' 'RATE'  500.0  /
+/
+
+RPTSCHED
+  'PRES' 'SOIL' 'SWAT' 'SGAS' 'RS' 'WELLS=1' 'SUMMARY=2' 'NEWTON=2' 'PWAT' 
+'PGAS' 'SSOL' /
+
+TSTEP
+100.0
+/
+
+WCONINJE
+'GINJ'  'GAS' 'OPEN' 'RATE' 1500.0  /
+'WINJ'  'WAT' 'SHUT' 'RATE'  500.0  /
+/
+
+WSOLVENT
+'GINJ'  1.0  /
+/
+
+TUNING
+ 1* 5 /
+ /
+ /
+
+TSTEP
+ 100.0
+/
+
+WSOLVENT
+'GINJ'  0.0  /
+/
+
+TSTEP
+1.0 49.0 50.0 100.0 100.0 100.0 /
+
+END

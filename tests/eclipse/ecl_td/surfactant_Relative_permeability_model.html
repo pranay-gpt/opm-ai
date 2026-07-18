@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Relative permeability model"/>
+<meta name="DC.subject" content="Surfactant model relative permeability, Surfactant, Relative permeability"/>
+<meta name="keywords" content="Surfactant model relative permeability, Surfactant, Relative permeability"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="surfactant_relative_permeability_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Relative permeability model</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="surfactant_relative_permeability_model"><a name="surfactant_relative_permeability_model"><!-- --></a>
+<h1 class="topictitle1">Relative permeability model</h1>
+
+
+ <div>
+<p>The Surfactant Relative Permeability Model allows a transition
+from immiscible relative permeability curves at low capillary number
+to miscible relative permeability curves at high capillary number.
+The <a href="../ecl_rm/SURFCAPD.html#SURFCAPD">SURFCAPD</a> keyword is used to define an interpolation parameter <math><msub><mi>F</mi>
+<mrow><mi>k</mi><mi>r</mi></mrow></msub></math> as
+a tabulated function of the logarithm (base 10) of the capillary number,
+such that the weighting function  <math><mrow><mi>F</mi>
+</mrow></math> is given by <math><mrow><mi>F</mi>
+<mo>=</mo><mrow><msub><mrow><mi>F</mi></mrow><mrow>
+<mi>k</mi><mi>r</mi></mrow></msub><mo>(</mo><mrow>
+<mi>log</mi><mo>⁡</mo><msub><mrow><mi>N</mi></mrow>
+<mrow><mi>c</mi></mrow></msub></mrow><mo>)</mo></mrow>
+</mrow></math>. </p>
+
+<p>The relative permeability used at a given value of the miscibility
+function is calculated in two steps. Figure <a href="surfactant_Relative_permeability_model.html#surfactantrelperm.calculationofrelperm">466.1</a>  illustrates
+the calculation for a look-up saturation of  <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>t</mi></mrow></msub></mrow>
+</math>. Firstly, the saturation end points of the curves are interpolated
+and both the immiscible and the miscible curves are scaled using  <math><mrow><mi>F</mi>
+</mrow></math> to honor these points. Secondly, the relative permeability
+values are looked up on both curves as functions of the current grid
+block saturation, and the final relative permeability is taken as
+an interpolation between these two values using  <math><mrow><mi>F</mi>
+</mrow></math>. This procedure is used to calculate the water
+relative permeability  <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>w</mi></mrow></msub></math>  and
+the oil-to-water relative permeability  <math><msub>
+<mi>k</mi><mrow><mi>r</mi><mi>o</mi><mi>w</mi>
+</mrow></msub></math>.</p>
+
+<div class="fignone" id="surfactantrelperm.calculationofrelperm"><a name="surfactantrelperm.calculationofrelperm"><!-- --></a>
+
+ <br/><img src="../img/surfactant_interpolation_eclipse.png" width="560px"/><br/> 
+<br/><span class="figcap">
+           Figure 466.1  Calculation of the relative permeability</span></div>
+
+<p>In the three-phase case, the oil relative permeability to water <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>o</mi><mi>w</mi></mrow></msub>
+</math>  is then used with either of the two STONE’s three-phase
+relative permeability models or the default model to calculate the
+oil relative permeability  <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>o</mi></mrow></msub></math>.</p>
+
+<p>ECLIPSE 100            </p>
+
+<p>For the default three-phase oil relative permeability
+model, both the oil relative permeability to water and the oil relative
+permeability to gas are interpolated in the manner described above
+before being combined to form the three-phase oil relative permeability.</p>
+
+<p>The well relative permeability model will be taken as the block
+relative permeability following the above procedure, if the connection
+relative permeability tables are defaulted. However, if the connection
+relative permeability table number is set in the <a href="../ecl_rm/COMPDAT.html#COMPDAT">COMPDAT</a> keyword, or if the <a href="../ecl_rm/COMPRP.html#COMPRP">COMPRP</a> keyword is used, then
+that relative permeability table will be used with no modification
+to account for the surfactant present in the grid block.</p>
+
+<p>The <a href="../ecl_rm/LOWSALT.html#LOWSALT">LOWSALT</a> keyword can be used in conjunction with the Surfactant Option
+to model additionally the effects of salinity dependence. See <a href="brinetra_Brine_Tracking.html#brinetra_brine_tracking"> "Brine
+tracking"</a> for more information upon the <span class="keyword">LOWSALT</span> option.</p>
+
+<p>ECLIPSE 300        
+         </p>
+
+<p>For the default three-phase oil relative permeability model, only
+the oil-to-water relative permeability is interpolated in the manner
+described above. For compositional cases, there is an extra step in
+calculating the oil relative permeability. The oil-to-water relative
+permeability  <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>o</mi><mi>w</mi></mrow></msub>
+</math>  value is determined as above from the miscible and immiscible
+values. It is then combined with the gas-to-water relative permeability
+ <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>g</mi><mi>w</mi></mrow></msub>
+</math>  to determine a hydrocarbon-to-water relative permeability
+ <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>h</mi><mi>w</mi></mrow></msub>
+</math>. See <a href="satfunct_Near_critical_oil_and_gas_relative_permeabilities.html#satfunct_near_critical_oil_and_gas_relative_permeabilities"> "Near critical oil and gas relative permeabilities"</a>. The hydrocarbon-to-water
+relative permeability  <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>h</mi><mi>w</mi></mrow></msub>
+</math>  is then used in one of the three-phase relative permeability
+models to calculate  <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>o</mi></mrow></msub></math>.</p>
+
+<p>The Surfactant Model does not currently support the modeling of
+relative permeability hysteresis in the water and oil phases.</p>
+
+<div class="section" id="surfactant_surfactant_model_in_cells_with_no_surfactant"><a name="surfactant_surfactant_model_in_cells_with_no_surfactant"><!-- --></a><h4 class="sectiontitle">Surfactant model in cells with no surfactant</h4><p>The
+capillary number depends on both the velocity and the oil-water surface
+tension. Therefore, the capillary number, and hence  <math><msub><mi>F</mi>
+<mrow><mi>k</mi><mi>r</mi></mrow></msub></math>, can
+vary even when there is no surfactant present. This means that when
+the surfactant model is used, relative permeability interpolation
+may occur even if surfactant is not injected.</p>
+<p>ECLIPSE 100           </p>
+<p>This behavior is
+avoided in ECLIPSE 100. The interpolation of relative permeability
+is only performed for blocks with a non-zero surfactant concentration.
+For blocks with zero surfactant concentration the immiscible curves
+are used. The pre-2010.1 behavior, which is the same as ECLIPSE 300
+behavior, of interpolating relative permeability for all blocks, regardless
+of surfactant concentration, can be restored by setting <a href="../ecl_rm/OPTIONS.html#options.147"> item 147</a> of the <span class="keyword">OPTIONS</span> keyword
+to a non-zero value.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

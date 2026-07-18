@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GSATINJE"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GSATINJE"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GSATINJE</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GSATINJE"><a name="GSATINJE"><!-- --></a>
+<h1 class="keyword">GSATINJE</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gsatinje.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gsatinje.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d944e45"> x </th>
+
+<th valign="top" id="d944e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d944e54"> x </th>
+
+<th valign="top" id="d944e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d944e45 d944e54 ">  </td>
+
+<td valign="top" headers="d944e48 d944e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d944e45 d944e54 ">  </td>
+
+<td valign="top" headers="d944e48 d944e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d944e45 d944e54 ">  </td>
+
+<td valign="top" headers="d944e48 d944e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d944e45 d944e54 ">  </td>
+
+<td valign="top" headers="d944e48 d944e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d944e45 d944e54 ">  </td>
+
+<td valign="top" headers="d944e48 d944e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d944e45 d944e54 ">  </td>
+
+<td valign="top" headers="d944e48 d944e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d944e45 d944e54 ">  </td>
+
+<td valign="top" headers="d944e48 d944e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d944e45 d944e54 "> x </td>
+
+<td valign="top" headers="d944e48 d944e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword specifies the rate at which oil, water and gas is
+to be injected by a satellite group.</p>
+
+<p>Satellite groups provide a means of incorporating known production
+and injection flows from other reservoirs or regions that are not
+part of the simulation grid. They have no associated wells or subordinate
+groups, but act as sources of production flow and/or sinks of injection
+flow. The <span class="keyword">GSATINJE</span> keyword is used to specify the
+injection rates of one or more satellite groups. These rates are held
+constant until they are reset in a subsequent <span class="keyword">GSATINJE</span> keyword. If the satellite groups are also producing fluid, their
+production rates must be set with keyword <a href="GSATPROD.html#GSATPROD">  GSATPROD</a>. See keyword <span class="keyword">GSATPROD</span> for further description of satellite groups.</p>
+
+<p>When using ECLIPSE 300 for compositional runs,
+the composition of the injected oil or gas should be defined with
+keyword <a href="GSATCOMP.html#GSATCOMP">  GSATCOMP</a>. If the fluid compositions are left undefined, the injected oil
+and gas compositions will default to the compositions obtained by
+flashing the initial reservoir fluids-in-place through the field separator.</p>
+
+<p>The <span class="keyword">GSATINJE</span> keyword is followed by any number
+of records, each containing the following items of data, and each
+terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li> Satellite group name or group name root <p>A group name root,
+enclosed in quotes and ending with an asterisk (*), can be used to
+refer to several groups in one record. The groups must previously
+have been declared with keyword <a href="GRUPTREE.html#GRUPTREE">  GRUPTREE</a>, to define their position in the grouping
+hierarchy.</p>
+ <p>If a complete group name (without an asterisk) is
+entered, and the group has not been declared earlier, ECLIPSE creates
+a new group with that name and places it on level 1 directly subordinate
+to the <samp class="codeph">FIELD</samp>.</p>
+<p>Satellite groups cannot have
+wells or subordinate groups.</p>
+ </li>
+
+<li id="gsatinje.XID-00000055"><a name="gsatinje.XID-00000055"><!-- --></a> Phase to which the following rates
+apply <p> <samp class="codeph">OIL</samp>, <samp class="codeph">WAT</samp> or <samp class="codeph">GAS</samp> </p>
+ <p>Satellite groups may inject more than one phase. A separate
+data record is needed for each phase.</p>
+ </li>
+
+<li> Surface injection rate of the phase in item <a href="GSATINJE.html#gsatinje.XID-00000055">2</a> <p>The value must be greater
+than or equal to zero.</p>
+ <p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), stb/day for oil, water or liquid (<samp class="codeph">FIELD</samp>), Mscf/day
+for gas (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: Zero</p>
+ </li>
+
+<li> Reservoir volume injection rate of the phase in item <a href="GSATINJE.html#gsatinje.XID-00000055">2</a> <p>You need to enter a value
+here only if you want the reservoir volume injection rate of the superior
+groups and the field to include that of the satellite group. If this
+quantity is left as zero for all the satellite groups, the field’s
+reservoir volume injection rate will just represent the fluid injected
+into the simulation grid. The choice is important if a superior group
+has a reservoir volume injection rate target or a voidage replacement
+target, or a target production balancing fraction.</p>
+ <p>UNITS: rm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), rb/day (<samp class="codeph">FIELD</samp>), rcc/hr (<samp class="codeph">LAB</samp>), rm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: Zero</p>
+<p>The value must be greater than or equal
+to zero.</p>
+ <p>ECLIPSE 100</p>
+</li>
+
+<li> <p>Mean calorific value of gas injected
+by the group</p>
+<p>A value need only be entered here if the gas calorific
+value control option is being used (see <a href="../ecl_td/gcalvalintro_Gas_Calorific_Value_Control.html#gcalvalintro_gas_calorific_value_control">"Gas calorific value
+control"</a> in the <cite>ECLIPSE Technical Description</cite>).</p>
+<p>The value must be greater than or equal to zero.</p>
+<p>UNITS:
+kJ/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), Btu/Mscf (<samp class="codeph">FIELD</samp>), J/scc (<samp class="codeph">LAB</samp>), kJ/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: Zero</p>
+ </li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="section" id="gsatinje.example"><a name="gsatinje.example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <pre><code>GSATINJE
+-- group   inj      surf    resv
+-- name    phase    rate    rate
+  SAT-A    WAT      7520    7520   /
+  SAT-A    GAS     17760   10240   /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

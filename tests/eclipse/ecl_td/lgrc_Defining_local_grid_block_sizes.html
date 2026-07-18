@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Defining local grid block sizes"/>
+<meta name="DC.subject" content="Local grid refinement, Block sizes"/>
+<meta name="keywords" content="Local grid refinement, Block sizes"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrc_defining_local_grid_block_sizes"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Defining local grid block sizes</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="lgrc_defining_local_grid_block_sizes"><a name="lgrc_defining_local_grid_block_sizes"><!-- --></a>
+<h1 class="topictitle1">Defining local grid block sizes</h1>
+
+
+ <div>
+<p>Most <span class="keyword">GRID</span> section keywords may be inserted between <a href="../ecl_rm/CARFIN.html#CARFIN"> CARFIN</a>, <a href="../ecl_rm/RADFIN.html#RADFIN"> RADFIN</a> or <a href="../ecl_rm/RADFIN4.html#RADFIN4"> RADFIN4</a> and <a href="../ecl_rm/ENDFIN.html#ENDFIN"> ENDFIN</a> to alter refined grid
+block properties from those of the host cells. Alternatively, grid
+data for local grids may be input using the <span class="keyword">REFINE</span> keyword if the local grid has previously been defined using <span class="keyword">CARFIN</span>, <span class="keyword">RADFIN</span> or <span class="keyword">RADFIN4</span>.</p>
+
+<p>If <a href="../ecl_rm/DX.html#DX"> DX</a>, <a href="../ecl_rm/DY.html#DY"> DY</a> or <a href="../ecl_rm/DZ.html#DZ"> DZ</a> are specified for the local grid then ECLIPSE checks for
+consistency with the dimensions of the global host cells. Local grid
+block sizes can also be defined in terms of fractions of the host
+grid using the following keywords, which are especially useful if
+the global grid has been defined in corner geometry:</p>
+
+<p> <a href="../ecl_rm/NXFIN.html#NXFIN"> NXFIN</a>, <a href="../ecl_rm/NYFIN.html#NYFIN"> NYFIN</a>, <a href="../ecl_rm/NZFIN.html#NZFIN"> NZFIN</a> Define number of local cells in each host cell</p>
+
+<p> <a href="../ecl_rm/HXFIN.html#HXFIN"> HXFIN</a>, <a href="../ecl_rm/HYFIN.html#HYFIN"> HYFIN</a>, <a href="../ecl_rm/HZFIN.html#HZFIN"> HZFIN</a> Define ratios for splitting the host cell into local blocks.</p>
+
+<p>For example, to define a local grid of 5 layers in a host of 2
+layers:</p>
+
+<pre><code>CARFIN 'LGR2'  3  5  1  2  4  5  6  4  5 /
+NZFIN 3   2  /
+HZFIN 1.0  2.0  3.0 2.0  1.0  /</code></pre>
+<p>This gives 3 local layers in the top host layer, with <span class="keyword">DZ</span> values in the ratio 1:2:3 and 2 local layers in the
+bottom host layer, with <span class="keyword">DZ</span> values in the ratio
+2:1. For example, if the host layer thicknesses are 60 ft. and 30
+ft., local <span class="keyword">DZ</span> values are 10 ft., 20 ft., 30 ft.,
+20 ft., 10 ft.</p>
+
+<p>This option could be used to set up a logarithmic refinement, for
+example for a Cartesian refinement:</p>
+
+<pre><code>HXFIN 1.0 10.0 100.0 /</code></pre>
+<p>Note that the numbers used in the <span class="keyword">HXFIN</span>, <span class="keyword">HYFIN</span>, <span class="keyword">HZFIN</span> data could correspond to
+actual <span class="keyword">DX</span>, <span class="keyword">DY</span>, <span class="keyword">DZ</span> values, but these need not fit exactly in the host cell, as they
+are adjusted automatically. If no ratios are given, the default is
+to split the host cell in equal proportions. Data may be defaulted
+for some or all host cells, but data must be complete if given for
+a particular host cell. For example, to divide a host grid of 3 layers
+into 7 local cells, with splitting ratios defined for the middle layer:</p>
+
+<pre><code>NZFIN 3 2 2 /
+HZFIN 3* 1.0 2.0 2* /</code></pre>
+<p>A logarithmic Cartesian refinement can also be set
+up using any combination of the <a href="../ecl_rm/LXFIN.html#LXFIN"> LXFIN</a>, <a href="../ecl_rm/LYFIN.html#LYFIN">LYFIN</a> and <a href="../ecl_rm/LZFIN.html#LZFIN"> LZFIN</a> keywords. These will automatically generate suitable equivalent
+values for the corresponding <span class="keyword">N*FIN</span> and <span class="keyword">H*FIN</span> keywords, based on the user's specified central (fracture)
+cell thickness and preferred geometry type. For example, to generate
+a logarithmic grid in the y-direction with a central cell width of
+1.5:</p>
+
+<pre><code>LYFIN 1.5 LINEAR /
+</code></pre>
+<p>The equivalent <span class="keyword">N*FIN</span> and <span class="keyword">H*FIN</span> keywords will be output to the PRT file, and can
+be modified and used to replace the <span class="keyword">L*FIN</span> if adjustment
+is required.</p>
+
+<p>The keywords <span class="keyword">HZFIN</span> and <span class="keyword">NZFIN</span> can also be used in radial refinements declared by <span class="keyword">RADFIN</span> or <span class="keyword">RADFIN4</span>, to define the vertical splitting. <a href="../ecl_rm/INRAD.html#INRAD"> INRAD</a> should always be specified
+for radial refinements. If <a href="../ecl_rm/OUTRAD.html#OUTRAD"> OUTRAD</a> is specified after <span class="keyword">RADFIN</span> or <span class="keyword">RADFIN4</span> then its value applies to the inner radius of the
+outermost cell of the local grid, because the outermost cell assumes
+the odd shape required to fit into the Cartesian host cell. If <a href="../ecl_rm/DR.html#DR"> DR</a> or <a href="../ecl_rm/DRV.html#DRV"> DRV</a> values are specified after <span class="keyword">RADFIN</span> or <span class="keyword">RADFIN4</span> then the sum of <span class="keyword">INRAD</span> and the <span class="keyword">DR</span> values must be less than the <span class="keyword">DX</span> and <span class="keyword">DY</span> values of the host cells so that the refinement fits
+within the host cell dimensions. An incomplete set of <span class="keyword">DR</span> or <span class="keyword">DRV</span> values may be provided for a local grid
+and any missing data for the outer rings is completed automatically
+as a geometric series (ECLIPSE 100), or logarithmic series (ECLIPSE
+300) to fit within the host block. Rather than supplying the <span class="keyword">DR</span> values directly, you can instead define relative sizes
+for the <span class="keyword">DR</span> values using the <a href="../ecl_rm/HRFIN.html#HRFIN"> HRFIN</a> keyword:</p>
+
+<pre><code>RADFIN
+--NAME  I1 I2 J1 J2 K1 K2 NR NT NZ 
+'LGR3'   6  6  4  4   1  5  5  4  20 /
+INRAD 0.25  /
+OUTRAD
+ 3000.0 /
+HRFIN
+ 1.0 2.0 3.0 4.0 /</code></pre>
+<p>This gives  <math><mrow><mi>N</mi>
+<mi>R</mi><mo>-</mo><mn>1</mn></mrow></math>  linearly
+increasing <span class="keyword">DR</span> values scaled such that their sum
+is equal to <span class="keyword">OUTRAD</span>. <span class="keyword">HRFIN</span> could
+be useful when the default logarithmic distribution creates tiny cells
+near the well bore, which can lead to convergence problems.</p>
+
+<p>If the global grid is corner-point, then the <a href="../ecl_rm/ZCORN.html#ZCORN"> ZCORN</a> and <a href="../ecl_rm/COORD.html#COORD"> COORD</a> keywords may be used
+between the <a href="../ecl_rm/CARFIN.html#CARFIN"> CARFIN</a> / <a href="../ecl_rm/ENDFIN.html#ENDFIN"> ENDFIN</a> and <a href="../ecl_rm/RADFIN.html#RADFIN"> RADFIN</a> / <span class="keyword">ENDFIN</span> pairs for example to provide
+finer control over the local grid geometry. If multiple reservoirs
+are used (see <span class="keyword">RUNSPEC</span> section keyword <a href="../ecl_rm/NUMRES.html#NUMRES"> NUMRES</a>) then local grids
+cannot straddle two or more reservoirs; only one reservoir is allowed
+within each local grid. In order to model a local grid straddling
+two reservoirs, you should specify several adjacent constituent local
+grids stacked vertically which can then be amalgamated using the <a href="../ecl_rm/AMALGAM.html#AMALGAM"> AMALGAM</a> keyword (see below).
+If the local grid geometry is input in this way, the local corner
+points should be consistent with those of the host cells. ECLIPSE
+issues an error message if this is not so.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

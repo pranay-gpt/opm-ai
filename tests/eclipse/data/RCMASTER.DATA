@@ -1,0 +1,303 @@
+RUNSPEC
+TITLE
+  MULTI-LEVEL GROUP CONTROL IN COUPLED RESERVOIRS - MASTER RUN
+
+DIMENS
+    1    1    1  /
+
+OIL
+
+WATER
+
+GAS
+
+DISGAS
+
+FIELD
+
+TABDIMS
+    1    1   16   15    3   15 /
+
+REGDIMS
+    3    1    0    0   /
+
+WELLDIMS
+    1    1   10    1 /
+
+START
+   1 'JAN' 1994  /
+
+NSTACK
+    4 /
+    
+
+GRID    ================================================================
+
+EQUALS
+     'DX'     1000    /
+     'DY'     1000    /
+     'DZ'     20      /
+     'PERMX'  300     /
+     'PERMY'  300     /
+     'PERMZ'  30      /
+     'PORO'   0.3     /
+     'TOPS'   7000    /
+/
+
+NOGGF
+
+RPTGRID
+    /
+INIT
+
+PROPS    ===============================================================
+
+SWFN
+
+  0.22  0     7
+  0.3   0.07  4
+  0.4   0.15  3
+  0.5   0.24  2.5
+  0.6   0.33  2
+  0.8   0.65  1
+  0.9   0.83  0.5
+  1     1     0      /
+
+SGFN
+
+  0     0       0
+  0.04  0       0.2
+  0.1   0.022   0.5
+  0.2   0.1     1
+  0.3   0.24    1.5
+  0.4   0.34    2
+  0.5   0.42    2.5
+  0.6   0.5     3
+  0.7   0.8125  3.5
+  0.78  1       3.9    /
+
+SOF3
+
+0        0         0
+0.2      0         0
+0.38     0.00432   0
+0.4      0.0048    0.004
+0.48     0.05288   0.02
+0.5      0.0649    0.036
+0.58     0.11298   0.1
+0.6      0.125     0.146
+0.68     0.345     0.33
+0.7      0.4       0.42
+0.74     0.7       0.6
+0.78     1         1          /
+
+PVTW
+3000  1.00341  3.0D-6  0.96  0  /
+
+ROCK
+3600    4.0D-6   /
+
+DENSITY
+45   63.02   0.0702  /
+
+PVDG
+ 400  5.9   0.013
+ 800  2.95  0.0135
+1200  1.96  0.014
+1600  1.47  0.0145
+2000  1.18  0.015
+2400  0.98  0.0155
+2800  0.84  0.016
+3200  0.74  0.0165
+3600  0.65  0.017
+4000  0.59  0.0175
+4400  0.54  0.018
+4800  0.49  0.0185
+5200  0.45  0.019
+5600  0.42  0.0195 /
+
+PVTO
+   0.165      400   1.012    1.17  /
+   0.335      800   1.0255   1.14  /
+   0.500     1200   1.038    1.11  /
+   0.665     1600   1.051    1.08  /
+   0.828     2000   1.063    1.06  /
+   0.985     2400   1.075    1.03  /
+   1.130     2800   1.087    1.00  /
+   1.270     3200   1.0985   0.98  /
+   1.390     3600   1.11     0.95  /
+   1.500     4000   1.12     0.94  /
+   1.600     4400   1.13     0.92  /
+   1.676     4800   1.14     0.91  /
+   1.750     5200   1.148    0.9   /
+   1.810     5600   1.155    0.89
+             6000   1.1504   0.89
+             6400   1.1458   0.89
+             6800   1.1412   0.89
+             7200   1.1367   0.89  /
+/
+
+RPTPROPS
+     /
+
+SOLUTION    ============================================================
+
+--   DATUM  DATUM   OWC    OWC    GOC    GOC   RSVD   RVVD   SOLN
+--   DEPTH  PRESS  DEPTH   PCOW  DEPTH   PCOG  TABLE  TABLE  METH
+
+EQUIL
+     7010   4000   9000    0.0   7010    0.0    0      0       5  /
+
+SUMMARY   =============================================================
+
+FOPR
+
+FWPR
+
+FGPR
+
+GLPR
+ 'PLAT-A' /
+
+GOPR
+/
+
+GWPR
+/
+
+GGPR
+/
+
+FWIR
+
+FGIR
+
+GWIR
+/
+
+GGIR
+/
+
+GVIR
+/
+
+FMCTP
+
+GMCTP
+/
+
+FMCTW
+
+GMCTW
+/
+
+FMCTG
+
+GMCTG
+/
+
+DATE
+
+RUNSUM
+SEPARATE
+
+SCHEDULE  =============================================================
+
+SKIPREST
+
+SLAVES
+  'SLAVE1' 'RCSLAVE1' '*' '.' /
+  'SLAVE2' 'RCSLAVE2' '*' '.' /
+  'SLAVE3' 'RCSLAVE3' '*' '.' /
+/
+DUMPCUPL
+  'U' /
+
+DRSDT
+1E20 /
+
+RPTSCHED
+ 'WELLS=2' 'SUMMARY=2' 'CPU=2' 'WELSPECS' /
+
+
+GRUPTREE
+ 'GR-A1'  'PLAT-A'  /
+ 'GR-A2'  'PLAT-A'  /
+ 'SP-B'   'PLAT-B'  /
+ 'SP-C'   'PLAT-B'  /
+ 'GR-B1'  'SP-B'    /
+ 'GR-B2'  'SP-B'    /
+ 'GR-C1'  'SP-C'    /
+ 'GR-C2'  'SP-C'    /
+ /
+
+
+GRUPMAST
+--  MASTER   SLAVE   SLAVE   LIMITING
+--  GROUP    NAME    GROUP   RATE CHANGE
+    'GR-A1' 'SLAVE1' 'G-A1'     0.1  /
+    'GR-A2' 'SLAVE1' 'G-A2'     0.1  /
+    'GR-B1' 'SLAVE2'   1*       0.1  /
+    'GR-B2' 'SLAVE2'   1*       0.1  /
+    'GR-C1' 'SLAVE3'   1*       0.1  /
+    'GR-C2' 'SLAVE3'   1*       0.1  /
+/
+
+GCONPROD
+--  GROUP      CNTL   OIL   WATER  GAS   LIQU   LIMIT    AVAIL  GUID
+--  NAME       MODE   RATE  RATE   RATE  RATE   ACTION   FLD    RATE
+   'FIELD'    'ORAT' 40000  /
+   'PLAT-A'   'LRAT'  2*          70000  20000   'RATE'  'NO'  /
+   'PLAT-B'   'NONE'  2*          55000    1*    'RATE'  'YES' /
+   'GR-*'     'NONE'  5*                                 'YES'  1000  'LIQ' /
+/
+
+GCONINJE
+--  GROUP    PHASE    CNTL   SRAT VRAT REIN VREP AVAIL GUID  GRAT
+--  NAME      INJ     MODE                        FLD  RATE  DEFN
+   'FIELD'   'GAS'   'REIN'   1*   1*   0.5 /
+   'FIELD'   'WAT'   'VREP'   1*   1*   1*   0.8 /
+   'PLAT-A'  'GAS'   'FLD'    1*   1*   1*   1*   1*   1*   'VOID'  /
+   'PLAT-A'  'WAT'   'FLD'    1*   1*   1*   1*   1*   1*   'NETV'  /
+   'SP-C'    'GAS'   'FLD'    1*   1*   1*   1*   1*   1*   'VOID'  /
+   'SP-C'    'WAT'   'FLD'    1*   1*   1*   1*   1*   1*   'NETV'  /
+   'SP-B'    'WAT'   'VREP'   1*   1*   1*   1.0 'NO' /
+   'GR-*'    'GAS'   'FLD'    5*                       100  'RATE'  /
+   'GR-*'    'WAT'   'FLD'    5*                       100  'RATE'  /
+/
+
+TUNING
+1  50  /
+/
+/
+
+RCMASTS
+ 10 /
+
+DATES
+ 11  'JAN'  1994  /
+ 20  'FEB'  1994  /
+  1  'APR'  1994  /
+  1  'JLY'  1994  /
+  1  'OCT'  1994  /
+/
+
+-- RESTART FILE DUMP
+RPTSCHED
+'RESTART=2' 'WELLS=2' 'SUMMARY=2' 'CPU=2' 'WELSPECS' /
+
+DATES
+  1  'JAN'  1995  /
+/
+
+RPTSCHED
+ 'WELLS=2' 'SUMMARY=2' 'CPU=2' 'WELSPECS' /
+
+DATES
+  1  'APR'  1995  /
+  1  'JLY'  1995  /
+  1  'OCT'  1995  /
+  1  'JAN'  1996  /
+/
+
+END

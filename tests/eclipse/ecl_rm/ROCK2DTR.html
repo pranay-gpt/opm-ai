@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ROCK2DTR"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ROCK2DTR"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ROCK2DTR</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ROCK2DTR"><a name="ROCK2DTR"><!-- --></a>
+<h1 class="keyword">ROCK2DTR</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="rock2dtr.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="rock2dtr.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2028e45"> x </th>
+
+<th valign="top" id="d2028e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2028e54">  </th>
+
+<th valign="top" id="d2028e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2028e45 d2028e54 ">  </td>
+
+<td valign="top" headers="d2028e48 d2028e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2028e45 d2028e54 ">  </td>
+
+<td valign="top" headers="d2028e48 d2028e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2028e45 d2028e54 ">  </td>
+
+<td valign="top" headers="d2028e48 d2028e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2028e45 d2028e54 "> x </td>
+
+<td valign="top" headers="d2028e48 d2028e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2028e45 d2028e54 ">  </td>
+
+<td valign="top" headers="d2028e48 d2028e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2028e45 d2028e54 ">  </td>
+
+<td valign="top" headers="d2028e48 d2028e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2028e45 d2028e54 ">  </td>
+
+<td valign="top" headers="d2028e48 d2028e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2028e45 d2028e54 ">  </td>
+
+<td valign="top" headers="d2028e48 d2028e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">ROCK2DTR</span> keyword can optionally be used
+in runs where the water induced compaction model has been activated
+by the  <a href="ROCK2D.html#ROCK2D"> ROCK2D</a> keyword,
+to specify the associated transmissibility modification as a function
+of both pressure and water saturation. If the <span class="keyword">ROCK2DTR</span> keyword is absent (but  <span class="keyword">ROCK2D</span> is present) the
+transmissibility is kept constant.</p>
+
+<p>The data comprises <samp class="codeph">NTROCC</samp> (see keyword <a href="ROCKCOMP.html#ROCKCOMP">  ROCKCOMP</a> in the <span class="keyword">RUNSPEC</span> section) tables of water induced compaction transmissibility
+multipliers, in the form of two-dimensional tables versus. pressure
+and water saturation increase.</p>
+
+<p>Each table consists of up to <a href="TABDIMS.html#TABDIMS.NSSFUN"> NSSFUN</a> (set in the <span class="keyword">TABDIMS</span> keyword) records of data, and is terminated by a slash (/). Each
+record consists of up to <samp class="codeph">NSSFUN</samp> data items, terminated
+by a slash, defining the two-dimensional function. Each record consists
+of the following data:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">Item 1</td>
+
+<td valign="top">The pressure value.<p>The pressure values must increase monotonically
+within the set of records defining a table.</p>
+<p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>)</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top">Subsequent items:</td>
+
+<td valign="top">The transmissibility multiplier corresponding to the pressure
+in item 1 and each saturation increase value in the corresponding
+ <a href="ROCKWNOD.html#ROCKWNOD"> ROCKWNOD</a> table.<p>The number of entries should be equal to the number of entries in
+the corresponding <span class="keyword">ROCKWNOD</span> table.</p>
+<p>The <samp class="codeph">NTROCC</samp> tables correspond to the rock compaction table region
+numbers, which are set using keyword  <a href="ROCKNUM.html#ROCKNUM"> ROCKNUM</a>.</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The behavior of the reservoir when the pressure in a grid block
+increases will depend on the first data item in the <span class="keyword">ROCKCOMP</span> keyword in the <span class="keyword">RUNSPEC</span> section. If the reversible
+option is selected the two-dimensional table will be looked up at
+the prevailing pressure. If the irreversible option is selected the
+table will be looked up using the minimum pressure that the grid block
+attains during the run.</p>
+
+<p>If the overburden pressure supplied in the <span class="keyword">OVERBURD</span> keyword is greater than the fluid pressure (which it often will
+be), the effective fluid pressure (P<sub>eff fl</sub> = P<sub>fluid</sub> - Overburden) will be negative. In this case the <span class="keyword">ROCK2D</span> table will have to be supplied with negative pressures
+in column 1. At present the  <samp class="codeph">STRESS</samp> option in the <span class="keyword">ROCKOPTS</span> keyword is not available with <span class="keyword">ROCK2D</span>.</p>
+
+<p>See also keywords <a href="ROCKTABW.html#ROCKTABW"> ROCKTABW</a>,  <span class="keyword">ROCK2D</span>, <span class="keyword">ROCKWNOD</span>,
+ <a href="ROCKOPTS.html#ROCKOPTS"> ROCKOPTS</a> and <a href="OVERBURD.html#OVERBURD">  OVERBURD</a>, and <a href="../ecl_td/rockcomp_Rock_Compaction.html#rockcomp_rock_compaction">"Rock compaction"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<div class="section" id="rock2dtr_example"><a name="rock2dtr_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTROCC</samp> = 1 and <samp class="codeph">NSSFUN</samp> = 4.</p>
+ <pre><code>ROCK2DTR
+    0.0   0.81
+          0.80
+          0.74
+          0.73 /
+ 1000.0   0.93
+          0.92
+          0.87
+          0.86 /
+ 9000.0   1.0
+          1.0
+          0.94
+          0.94 /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

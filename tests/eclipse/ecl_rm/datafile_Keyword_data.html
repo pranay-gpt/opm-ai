@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Keyword data"/>
+<meta name="DC.subject" content="Data file keyword data, Data file keyword data repeat counts, Data file keyword data default values, Data file keyword data charactere strings, Data file keyword data default values"/>
+<meta name="keywords" content="Data file keyword data, Data file keyword data repeat counts, Data file keyword data default values, Data file keyword data charactere strings, Data file keyword data default values"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="datafile_keyword_data"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Keyword data</title>
+</head>
+<body>
+
+
+<div class="nested0" id="datafile_keyword_data"><a name="datafile_keyword_data"><!-- --></a>
+<h1 class="topictitle1">Keyword data</h1>
+
+
+ <div>
+<p>The data for a keyword should follow that keyword on a new line.
+The data may be split up by blanks or new lines, and position on the
+line is not significant.</p>
+
+<div class="section" id="datafile_repeat_counts"><a name="datafile_repeat_counts"><!-- --></a><h4 class="sectiontitle">Repeat counts</h4><p>In the data following a keyword, asterisks may be used to signify
+repeat counts. A data quantity can be repeated a required number of
+times by preceding it with the required number and an asterisk. For
+example, the two following cases are equivalent:</p>
+<pre><code>SATNUM
+1 1 1 1 1 1 1 1 1 1
+2 2 2 2 2 2 2 2 2 2 /</code></pre><pre><code>SATNUM
+10*1 10*2 /</code></pre><p>There must be no intervening blank spaces
+next to the asterisk on either side.</p>
+</div>
+
+<div class="section" id="datafile_default_values"><a name="datafile_default_values"><!-- --></a><h4 class="sectiontitle">Default values</h4><p>Certain items of data can be defaulted to a built-in default value.
+The keyword description indicates when defaults can be applied. There
+are two ways of setting quantities to their default values. Firstly,
+by ending a data record prematurely with a slash (/) the quantities
+remaining unspecified are set to their default values. Secondly, selected
+quantities positioned before the slash can be defaulted by entering <samp class="codeph">n*</samp> where n is the number of consecutive quantities to be
+defaulted. For example, <samp class="codeph">3*</samp> causes the next three
+quantities in the keyword data to be given their default values. There
+must be no blank space between the number and the asterisk. If there
+is only one item at a time to be defaulted, then <samp class="codeph">1*</samp> must be entered. An asterisk by itself is not sufficient.</p>
+<p>An example would be the following line, in which well PROD1 is given
+a minimum economic oil production rate of 2000, its minimum economic
+gas rate is defaulted to zero, its maximum water cut limit is set
+to 0.8, its maximum gas-oil ratio and water-gas ratio limits are defaulted
+to infinity, the workover procedure is set to shut the worst-offending
+connection, and all remaining items in the record are defaulted:</p>
+<pre><code>WECON
+ PROD1 2000 1* 0.8 2* CON /
+/</code></pre></div>
+
+<div class="section" id="datafile_character_strings"><a name="datafile_character_strings"><!-- --></a><h4 class="sectiontitle">Character strings</h4><p>When character information, such as well names or mnemonics, is
+entered you may  optionally enter the information within quotes. For
+example, the following two keyword entries are equivalent:</p>
+<pre><code>RPTSCHED
+ PRESSURE SOIL SGAS /
+</code></pre><pre><code>RPTSCHED
+ 'PRESSURE' 'SOIL' 'SGAS' /</code></pre><p>Quotes around strings
+are required when a name:</p>
+<ul>
+<li>contains embedded blanks;</li>
+
+<li>starts with a number;</li>
+
+<li>contains non-alphanumeric characters;</li>
+
+<li>uses the wildcard <samp class="codeph">*</samp> character in well and group
+name roots, or well name lists.</li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

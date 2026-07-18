@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PETGRID"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PETGRID"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PETGRID</title>
+</head>
+<body>
+
+
+<div class="nested0" id="PETGRID"><a name="PETGRID"><!-- --></a>
+<h1 class="keyword">PETGRID</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="petgrid.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="petgrid.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1790e45">                         x                   
+  </th>
+
+<th valign="top" id="d1790e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1790e54">                         x                   
+  </th>
+
+<th valign="top" id="d1790e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1790e45 d1790e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1790e48 d1790e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1790e45 d1790e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d1790e48 d1790e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1790e45 d1790e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1790e48 d1790e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1790e45 d1790e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1790e48 d1790e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1790e45 d1790e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1790e48 d1790e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1790e45 d1790e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1790e48 d1790e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1790e45 d1790e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1790e48 d1790e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1790e45 d1790e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1790e48 d1790e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword allows the grid geometry to be imported from either
+a Generic Simulation Grid (GSG) file.</p>
+
+<p>This type of file format has to be imported using Petrel.</p>
+
+<p>ECLIPSE will read a <samp class="codeph">.GSG</samp> file. The root extension <strong>must</strong> be provided.</p>
+
+<p>ECLIPSE cannot generate a <samp class="codeph">GRID</samp> / <samp class="codeph">EGRID</samp> output file when the geometry is read from a <samp class="codeph">GSG</samp> file with the <span class="keyword">PETGRID</span> keyword. If an <samp class="codeph">EGRID</samp> / <samp class="codeph">GRID</samp> is required, export it from
+Petrel.</p>
+
+<div class="section"><h4 class="sectiontitle">.GSG files</h4><p>The <samp class="codeph">.GSG</samp> file
+can contain grid geometry for both global and local grids. Either
+corner point geometry with straight pillars or corner point geometry
+with curved or truncated pillars can be imported.</p>
+<p>For any <samp class="codeph">.GSG</samp> file containing LGRs, it is important to note that
+the <a href="PETOPTS.html#PETOPTS"> PETOPTS</a> keyword,
+together with the <samp class="codeph">LGRSIMGD</samp> argument, must be set
+in the <span class="keyword">RUNSPEC</span> section of the data file. This helps
+in the preprocessing of the LGRs within the simulators.</p>
+<p>For
+straight pillar geometry, non-neighbor connections and transmissibilities
+can be determined by the simulators, but if values are present in
+the <samp class="codeph">.GSG</samp> file then they will be used and no calculations
+will be performed. For curved or truncated pillar geometry they must
+be specified in the <samp class="codeph">.GSG</samp> file. All other grid-cell
+based global and local properties for the <span class="keyword">GRID</span>, <span class="keyword">EDIT</span>, <span class="keyword">PROPS</span>, <span class="keyword">REGIONS</span> and <span class="keyword">SOLUTION</span> sections can be imported. This includes
+any necessary <a href="DUALPORO.html#DUALPORO"> DUALPORO</a> and  <a href="DUALPERM.html#DUALPERM"> DUALPERM</a> cell based properties, for instance the multiplier to be
+used in determining the matrix-fracture coupling transmissibilities.</p>
+ <div class="note"><span class="notetitle">Note:</span> <span class="notebody">Where the transmissibilities are imported from the <samp class="codeph">.GSG</samp> file rather than calculated, any keywords which would
+have been used in their initial calculation in the GRID section will
+have no effect. If transmissibility multipliers are required, they
+should be specified in the <span class="keyword">EDIT</span> section.</span></div>
+<p>Since the <samp class="codeph">.GSG</samp> file is exported from Petrel,
+it is advisable that the geometry be viewed there. ECLIPSE will <strong>not </strong> output any kind of <samp class="codeph">GRID</samp> file if the <span class="keyword">PETGRID</span> keyword is present in the data set. A warning message
+will be issued if <samp class="codeph">GRID</samp> file output is requested when
+the <span class="keyword">PETGRID</span> keyword is used.</p>
+</div>
+
+<div class="section"><h4 class="sectiontitle">.OPF files</h4><div class="p"><div class="attention"><span class="attentiontitle">Attention:</span> The <span class="keyword">PETGRID</span> keyword was introduced in 2005A in order to import
+the <samp class="codeph">.OPF</samp> file format which was introduced for the
+FrontSim simulator. From the 2008.1 release, this file format was
+no longer supported in ECLIPSE. From the 2012.1 release, the file
+format support is withdrawn. An alternate method must be chosen, for
+instance, using the <samp class="codeph">.GSG</samp> format, importing <samp class="codeph">GRID</samp> files and/or using ECLIPSE keywords.</div>
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

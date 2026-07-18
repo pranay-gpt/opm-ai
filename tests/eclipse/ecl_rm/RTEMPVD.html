@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="RTEMPVD"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="RTEMPVD"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>RTEMPVD</title>
+</head>
+<body>
+
+
+<div class="nested0" id="RTEMPVD"><a name="RTEMPVD"><!-- --></a>
+<h1 class="keyword">RTEMPVD</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="rtempvd.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="rtempvd.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2144e45">                         x                   
+  </th>
+
+<th valign="top" id="d2144e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2144e54">                         x                   
+  </th>
+
+<th valign="top" id="d2144e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2144e45 d2144e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2144e48 d2144e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2144e45 d2144e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2144e48 d2144e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2144e45 d2144e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2144e48 d2144e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2144e45 d2144e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2144e48 d2144e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2144e45 d2144e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2144e48 d2144e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2144e45 d2144e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d2144e48 d2144e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2144e45 d2144e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2144e48 d2144e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2144e45 d2144e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2144e48 d2144e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">RTEMPVD</span> keyword is used to specify the initial
+reservoir temperature as a function of depth, in runs where the Temperature
+option is active (see keyword <a href="TEMP.html#TEMP"> TEMP</a> in the <span class="keyword">RUNSPEC</span> section).</p>
+
+<p>The data comprises <samp class="codeph">NTEQUL</samp> (see keyword <a href="EQLDIMS.html#EQLDIMS"> EQLDIMS</a>) tables of temperature
+versus depth, one for each equilibration region. Each table consists
+of 2 columns of data, and must be terminated by a slash (/).</p>
+
+<ol>
+<li>Depth values. <p>The values should increase monotonically down
+the column.</p>
+ <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li>The corresponding values of reservoir temperature. <p>UNITS: °C
+(<samp class="codeph">METRIC</samp>), °F (<samp class="codeph">FIELD</samp>), °C (<samp class="codeph">LAB</samp>), °C (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+</ol>
+
+<p>There must be the same number of entries in each column of a given
+table. This number should not be less than 2 or greater than <samp class="codeph">NDRXVD</samp> (see keyword <span class="keyword">EQLDIMS</span>).</p>
+
+<p>The entire table may be defaulted provided that the table is not
+the first. Defaulted tables are replaced with a copy of the previous
+table.</p>
+
+<p>Note that this keyword sets up the initial temperature distribution,
+but as there are no heat sources/sinks at the top and bottom of the
+reservoir this thermal gradient will not be in equilibrium. Over a
+long time period the reservoir equilibrates to a constant temperature.
+However, as this equilibration process is usually very slow it may
+often be ignored in many reservoir applications.</p>
+
+<p>See also keywords <a href="RTEMPA.html#RTEMPA"> RTEMPA</a>, <a href="SPECHEAT.html#SPECHEAT"> SPECHEAT</a>, <a href="SPECROCK.html#SPECROCK"> SPECROCK</a> and <a href="WTEMP.html#WTEMP"> WTEMP</a>, and the <a href="../ecl_td/temperat_Temperature_option.html#temperat_temperature_option">"Temperature option"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>The <span class="keyword">RTEMPVD</span> keyword is
+an alias for the <a href="TEMPVD.html#TEMPVD"> TEMPVD</a> keyword.</p>
+
+<div class="section" id="rtempvd_example"><a name="rtempvd_example"><!-- --></a><h4 class="sectiontitle">Example</h4>             
+   <pre><code>RTEMPVD
+1000 90 
+2000 93 
+3000 100 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

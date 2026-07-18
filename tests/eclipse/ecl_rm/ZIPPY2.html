@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ZIPPY2"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ZIPPY2"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ZIPPY2</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ZIPPY2"><a name="ZIPPY2"><!-- --></a>
+<h1 class="keyword">ZIPPY2</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="zippy2.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="zippy2.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d3154e45">                         x                   
+  </th>
+
+<th valign="top" id="d3154e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d3154e54">                         x                   
+  </th>
+
+<th valign="top" id="d3154e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d3154e45 d3154e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3154e48 d3154e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3154e45 d3154e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3154e48 d3154e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3154e45 d3154e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3154e48 d3154e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3154e45 d3154e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3154e48 d3154e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3154e45 d3154e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3154e48 d3154e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3154e45 d3154e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3154e48 d3154e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3154e45 d3154e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3154e48 d3154e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3154e45 d3154e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d3154e48 d3154e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>ECLIPSE chooses its timestep by referring to a number of conditions;
+it takes the most restrictive. These conditions are explained elsewhere.
+The basic principle is that, subject to accuracy, ECLIPSE takes the
+largest timestep possible. However, the biggest timestep is not necessarily
+the most efficient in terms of computational cost per simulated day.
+Use of this keyword adds another constraint on the timestep selection
+that takes a smaller timestep if it is predicted that this is more
+efficient.</p>
+
+<p>The aim of this keyword is to provide a near optimal performance
+run with one keyword call using no, or minimal, <em>a priori</em> knowledge
+of the problem. This is to be compared with the number of calls to <a href="TUNING.html#TUNING"> TUNING</a> and the amount
+of <em>a posteriori</em> knowledge that would be required to achieve
+the same result using conventional means.</p>
+
+<p>When using LGRs the timestep restriction applies to the global
+grid only. This restriction does not apply when used with LGRs-in-place;
+see the <a href="LGRLOCK.html#LGRLOCK"> LGRLOCK</a> keyword.</p>
+
+<p>The feature can be turned off by using the <a href="ZIPP2OFF.html#ZIPP2OFF">   ZIPP2OFF</a> keyword.</p>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> The problem of timestep selection has not been
+solved for the general case. Using this keyword on many ‘well-behaved’
+data sets increases the run time unless the right combination of options
+is selected--which is no improvement over the <span class="keyword">TUNING</span> keyword. Use of <span class="keyword">ZIPPY2</span> in such cases is not recommended.</div>
+
+<p>There is one group of problems, though, where use of this keyword
+will make a significant impact on the run times. These are runs that
+are very choppy, where the “ <samp class="codeph">NON-LINEAR EQUATION CONVERGENCE
+FAILURE</samp> ” message is occurs throughout the run, or large portions
+of it.</p>
+
+<p>There follows a full list of possible options within <span class="keyword">ZIPPY2</span>. After this listing a selection of recommended choices is given.
+All the options must be enclosed in quotation marks ' '.</p>
+
+<p>Many of the options contain integer or real number data items and
+these should be input in the usual ECLIPSE manner of ‘ <samp class="codeph">KEYWORD</samp> = <em>integer</em> ’. In some case two numbers are required; these should
+be separated with a comma, for example, ‘ <samp class="codeph">KEYWORD</samp> =1,5’.</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">   
+<tbody>
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%">‘ <samp class="codeph">NEWTON</samp> = <em>integer</em> ’ </td>
+
+<td valign="top" width="33.33333333333333%">Sets the maximum number of Newton iterations.<p>Included as
+an alternative to setting it in the <span class="keyword">TUNING</span> keyword.
+Note that setting it here overwrites any previous value set with the <span class="keyword">TUNING</span> keyword and that any subsequent use of the <span class="keyword">TUNING</span> keyword overwrites any value entered here.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%">‘ <samp class="codeph">MINCHOP</samp> = <em>real</em> ’</td>
+
+<td valign="top" width="33.33333333333333%"> Sets the minimum choppable timestep.<p>Included as an alternative
+to setting it in the <span class="keyword">TUNING</span> keyword. Note that
+setting it here overwrites any value set previously with the <span class="keyword">TUNING</span> keyword and that any subsequent use of the <span class="keyword">TUNING</span> keyword overwrites any value entered here.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%">‘ <samp class="codeph">MINSTEP</samp> = <em>real</em> ’ </td>
+
+<td valign="top" width="33.33333333333333%">Sets the minimum timestep<p>Included as an alternative to setting
+it in the <span class="keyword">TUNING</span> keyword. Note that setting it
+here overwrites any value set previously with the <span class="keyword">TUNING</span> keyword and that any subsequent use of the <span class="keyword">TUNING</span> keyword overwrites any value entered here.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%">‘ <samp class="codeph">MAXSTEP</samp> = <em>real</em> ’ </td>
+
+<td valign="top" width="33.33333333333333%">Sets the maximum timestep.<p>Included as an alternative to
+setting it in the <span class="keyword">TUNING</span> keyword. Note that setting
+it here overwrites any value set previously with the <span class="keyword">TUNING</span> keyword and that any subsequent use of the <span class="keyword">TUNING</span> keyword overwrites any value entered here.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%">‘ <samp class="codeph">NEXTSTEP</samp> = <em>real</em> ’</td>
+
+<td valign="top" width="33.33333333333333%"> Sets the next timestep.<p>Included as an alternative to setting
+it in the <span class="keyword">TUNING</span> keyword. Note that setting it
+here overwrites any value set previously with the <span class="keyword">TUNING</span> keyword and that any subsequent use of the <span class="keyword">TUNING</span> keyword overwrites any value entered here. The same applies to the
+use of the <a href="NEXTSTEP.html#NEXTSTEP"> NEXTSTEP</a> keyword.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%">‘ <samp class="codeph">TIGHTEN</samp> = <em>real</em> ’</td>
+
+<td valign="top" width="33.33333333333333%"> Sets the amount to tighten convergence tolerances by.<p>Included
+as an alternative to setting it in the <span class="keyword">TUNING</span> keyword.
+Note that setting it here overwrites any values set previously with
+the <span class="keyword">TUNING</span> keyword and that any subsequent use
+of the <span class="keyword">TUNING</span> keyword overwrites any value entered
+here.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%">‘ <samp class="codeph">SIM</samp> = <em>real</em> ’</td>
+
+<td valign="top" width="33.33333333333333%"> Simple timestep selection algorithm<p>Attempts to select timesteps
+so that the user-given number of Newtons is needed to solve it. A
+real number is preferable to an integer. No other keywords are needed
+if this option is selected.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%">‘ <samp class="codeph">AGGRESSIVE=YES</samp> ’</td>
+
+<td valign="top" width="33.33333333333333%"> Can only be used with the SIM option above</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%">‘ <samp class="codeph">AGGRESSIVE=NO</samp> ’ </td>
+
+<td valign="top" width="33.33333333333333%">Attempts to increase timesteps faster when it feels safe to
+do so.<p>This option performs better with higher values of SIM (see
+example below), and will result in more chops but will also often
+lead to a reduction in CPU time.</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

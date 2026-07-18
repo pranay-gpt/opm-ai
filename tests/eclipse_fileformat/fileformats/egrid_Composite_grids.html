@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Composite grids"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="egrid_composite_grids"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Composite grids</title>
+</head>
+<body>
+
+
+<div class="nested0" id="egrid_composite_grids"><a name="egrid_composite_grids"><!-- --></a>
+<h1 class="topictitle1">Composite grids</h1>
+
+
+ <div>
+<p>Keywords for grids composed of sub-grids are valid following a <span class="keyword">GRIDHEAD</span> keyword with type 0. They are arranged as follows:</p>
+
+<ol>
+<li><span class="keyword">EXTREPGL</span> (optional for LGRs)</li>
+
+<li><span class="keyword">BOXES</span> (optional)</li>
+
+<li>For each sub-grid <ol type="a">
+<li><span class="keyword">NAME</span></li>
+
+<li><span class="keyword">GRIDHEAD</span></li>
+
+<li>Keywords for sub-grid</li>
+
+</ol>
+ </li>
+
+</ol>
+
+<p>Composite grids support both a simulation numbering and a virtual
+grid. The simulation numbering gives a single IJK numbering across
+all sub-grid cells in order to provide a more efficient solution scheme
+in structured solvers. Each active sub-grid cell is mapped to exactly
+one simulation cell. A simulation cell is therefore associated with
+zero or one sub-grid cell. In the virtual grid all present sub-grid
+cells are sorted into a regular grid for visualization purposes. Each
+present sub-grid cell belongs to one virtual grid cell but a virtual
+grid cell can contain many sub-grid cells.</p>
+
+<p>Keywords for each sub-grid should be processed until the next <span class="keyword">NAME</span> keyword (or LGR keyword for the last sub-grid) or
+the end of file in encountered. Note that currently only unstructured
+grids are included in composite grids.</p>
+
+
+<div class="tablenoborder"><a name="egrid.tab.02b8"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="egrid.tab.02b8" frame="border" border="1" rules="all"><caption>
+           Table 27.1  Composite grid keywords </caption>    
+<thead align="left">
+<tr>
+<th valign="top" id="d8e91"> Keyword </th>
+
+<th valign="top" id="d8e94"> No. of Items </th>
+
+<th valign="top" id="d8e97"> Data Type </th>
+
+<th valign="top" id="d8e100">Contents </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d8e91 "> <span class="keyword">GRIDHEAD</span> </td>
+
+<td valign="top" headers="d8e94 "> 100 </td>
+
+<td valign="top" headers="d8e97 "> INTE </td>
+
+<td valign="top" headers="d8e100 "> In addition to items described in Table 5.2: <p>25) Number of sub-grids</p>
+<p>26) NX of simulation numbering</p>
+<p>27) NY of simulation numbering</p>
+<p>28) NZ of simulation
+numbering</p>
+<p>29) NX of virtual grid (or 0 if none defined)</p>
+<p>30) NY of virtual grid (or 0 if none defined)</p>
+<p>31) NZ
+of virtual grid (or 0 if none defined)</p>
+<p>32) 0 - general unstructured
+grid, 1 - coordinate line based unstructured grid</p>
+<p>33) 0 - disable
+hinge nodes on coordinate line based unstructured grids, 1 - enable
+hinge nodes</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d8e91 "> <span class="keyword">EXTREPGL</span> </td>
+
+<td valign="top" headers="d8e94 "> NUMHOST </td>
+
+<td valign="top" headers="d8e97 "> INTE </td>
+
+<td valign="top" headers="d8e100 "> Integer array of host cell ids for an LGR. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d8e91 "> <span class="keyword">BOXES</span> </td>
+
+<td valign="top" headers="d8e94 "> 6*NUMBOXES </td>
+
+<td valign="top" headers="d8e97 "> INTE </td>
+
+<td valign="top" headers="d8e100 "> Integer array BOXES(NUMBOXES,6) bounding occupancy
+boxes of present cells in the simulation grid. Each box is defined
+by minimum i,j,k maximum i,j,k. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d8e91 "> <span class="keyword">NAME</span> </td>
+
+<td valign="top" headers="d8e94 "> N </td>
+
+<td valign="top" headers="d8e97 "> CHAR </td>
+
+<td valign="top" headers="d8e100 "> Name of sub-grid. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

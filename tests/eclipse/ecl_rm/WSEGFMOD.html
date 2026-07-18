@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WSEGFMOD"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WSEGFMOD"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WSEGFMOD</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="WSEGFMOD"><a name="WSEGFMOD"><!-- --></a>
+<h1 class="keyword">WSEGFMOD</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wsegfmod.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wsegfmod.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d3058e45">                         x </th>
+
+<th valign="top" id="d3058e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d3058e54">                         x </th>
+
+<th valign="top" id="d3058e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d3058e45 d3058e54 "> </td>
+
+<td valign="top" headers="d3058e48 d3058e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3058e45 d3058e54 "> </td>
+
+<td valign="top" headers="d3058e48 d3058e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3058e45 d3058e54 "> </td>
+
+<td valign="top" headers="d3058e48 d3058e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3058e45 d3058e54 "> </td>
+
+<td valign="top" headers="d3058e48 d3058e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3058e45 d3058e54 "> </td>
+
+<td valign="top" headers="d3058e48 d3058e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3058e45 d3058e54 "> </td>
+
+<td valign="top" headers="d3058e48 d3058e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3058e45 d3058e54 "> </td>
+
+<td valign="top" headers="d3058e48 d3058e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3058e45 d3058e54 ">                         x </td>
+
+<td valign="top" headers="d3058e48 d3058e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword specifies the multiphase flow model that is used to
+calculate the pressure losses within individual segments of a multisegment
+well (see <a href="../ecl_td/multisegintro_Multi-segment_Wells.html#multisegintro_multi-segment_wells">"Multisegment wells"</a> in the <cite>ECLIPSE Technical Description</cite>). The choices
+are a no-slip homogeneous flow model, in which all the phases flow
+with the same velocity, and a drift flux model, which allows slip
+between the phases and can result in countercurrent flow - heavy and
+light phases flowing in opposite directions - at low flow rates (see <a href="../ecl_td/driftflx_The_drift_flux_slip_model.html#driftflx_the_drift_flux_slip_model">"The drift flux
+slip model"</a> in the <cite>ECLIPSE Technical Description</cite>). Alternatively, individual segments can have their pressure losses
+either obtained from a VFP table (see keyword <a href="WSEGTABL.html#WSEGTABL"> WSEGTABL</a>) or calculated from a built-in
+model of a particular flow control device (see keywords <a href="WSEGVALV.html#WSEGVALV"> WSEGVALV</a>, <a href="WSEGFLIM.html#WSEGFLIM">  WSEGFLIM</a> and <a href="WSEGLABY.html#WSEGLABY"> WSEGLABY</a>).</p>
+
+<p>Segments not specified in keyword <span class="keyword">WSEGFMOD</span>, <span class="keyword">WSEGTABL</span>, <span class="keyword">WSEGVALV</span>, <span class="keyword">WSEGFLIM</span> or <span class="keyword">WSEGLABY</span> will use the default flow model selected
+in item 7 of Record 1 of keyword <a href="WELSEGS.html#WELSEGS">  WELSEGS</a>.</p>
+
+<p>The <span class="keyword">WSEGFMOD</span> keyword is followed by a number
+of data records, each containing the following items of data. Each
+record is terminated with a slash (/), and the set of records must
+end with an additional blank record containing just a slash.</p>
+
+<ol>
+<li>Well name, well name template, well list or well list template<p>A template enclosed in quotes can be used to refer to multiple wells
+or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+ <p>The well must previously have had its segments defined with keyword <span class="keyword">WELSEGS</span>.</p>
+</li>
+
+<li>Segment number at the start of the range <p>An integer between
+2 and <samp class="codeph">NSEGMX</samp> (see item 2 in the keyword <a href="WSEGDIMS.html#WSEGDIMS"> WSEGDIMS</a> keyword).</p>
+</li>
+
+<li>Segment number at the end of the range <p>An integer between 2
+and <samp class="codeph">NSEGMX</samp>, not less than item 2.</p>
+<p>The following
+data items in this record are applied to all the segments in the range.
+To enter data for a single segment, set items 2 and 3 equal.</p>
+ </li>
+
+<li>Multiphase flow model used for pressure drop calculations
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">HO</samp> </td>
+
+<td valign="top">No-slip homogeneous flow model.<p>All the phases flow with
+the same velocity.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">DF</samp> </td>
+
+<td valign="top">Drift flux model.<p>Slip between the phases is a combination
+of profile slip (a velocity ratio) and local slip (a vertical relative
+velocity). At low flow rates the local slip can cause countercurrent
+flow, when the heavy and light phases flow in opposite directions.</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>If the drift flux model is requested for <strong>any</strong> segment,
+the well’s flow model in item 7 of Record 1 of keyword <span class="keyword">WELSEGS</span> must also be set to <samp class="codeph">DF</samp>.</p>
+ <p>DEFAULT:    <samp class="codeph">HO</samp> </p>
+</li>
+
+<li>Multiplying factor for the gas-liquid drift velocity (drift flux
+model only)<p>The drift velocity is calculated as for a vertical pipe,
+then scaled automatically according to the segment’s inclination
+(see <a href="../ecl_td/driftflx_The_drift_velocity.html#driftflx_the_drift_velocity">"The drift velocity"</a> in the <cite>ECLIPSE Technical Description</cite>). A multiplying
+factor entered here will be applied to the scaled local slip velocity.</p>
+<p>A value of 0.0 turns off the local slip.</p>
+<p>The oil-water drift
+velocity multiplier is set for all segments in item 7 of keyword <a href="WSEGDFPA.html#WSEGDFPA"> WSEGDFPA</a>.</p>
+<p>DEFAULT:   as
+set in item 1 of keyword <span class="keyword">WSEGDFPA</span>.</p>
+</li>
+
+<li>Coefficient A for the gas-liquid profile parameter (drift flux
+model only)<p>This represents the value of the profile parameter at
+low values of the gas holdup fraction and flow velocity.</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wsegfmod.equ.0082"/>
+ <math><mrow><msub>
+<mrow><mi>C</mi></mrow><mrow><mn>0</mn></mrow></msub>
+<mo>=</mo><mfrac><mrow><mi>A</mi></mrow><mrow><mo>[</mo><mn>1</mn><mo>+</mo><mrow><mrow><mo>(</mo>
+<mi>A</mi><mrow><mo>-</mo><mn>1</mn></mrow><mo>)</mo>
+</mrow><msup><mrow><msup><mrow><mi>β</mi></mrow>
+<mrow><mo>*</mo></mrow></msup></mrow><mrow><mn>2</mn>
+</mrow></msup></mrow><mo>]</mo></mrow></mfrac></mrow>
+</math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table><p>The equations for <math><msub><mi>C</mi>
+<mn>0</mn></msub></math>  are discussed in <a href="../ecl_td/driftflx_The_profile_parameter.html#driftflx_the_profile_parameter">"The profile parameter"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+<p>A value
+of 1.0 turns off the profile slip.</p>
+<p>The value of A must not be
+less than 1.0</p>
+<p>The oil-water profile parameter coefficient A
+is set for all segments in item 8 of keyword <span class="keyword">WSEGDFPA</span>.</p>
+<p>DEFAULT:   as specified in keyword <a href="WSEGDFMD.html#WSEGDFMD">  WSEGDFMD</a> or item 4
+of keyword <span class="keyword">WSEGDFPA</span></p>
+</li>
+
+<li>Coefficient B for the gas-liquid profile parameter (drift flux
+model only)<p>This represents the value of the gas holdup fraction
+or the flooding velocity fraction above which the profile parameter
+starts to decrease.</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wsegfmod.equ.0094"/>
+ <math><mrow><mtable>
+<mtr><mtd><msup><mrow><mi>β</mi></mrow><mrow><mo>*</mo></mrow></msup><mo>=</mo><mfrac><mrow><mo>(</mo>
+<mi>β</mi><mrow><mo>-</mo><mi>B</mi></mrow><mo>)</mo></mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><mi>B</mi></mrow><mo>)</mo></mrow></mfrac>
+</mtd><mtd><mstyle><mrow><mi>s</mi>
+</mrow></mstyle><mstyle><mrow><mi>u</mi>
+<mi>b</mi><mi>j</mi><mi>e</mi></mrow></mstyle><mstyle><mrow><mi>c</mi><mi>t</mi><mo>⁢</mo>
+<mtext> </mtext><mi>t</mi><mi>o</mi></mrow></mstyle>
+</mtd><mtd><mn>0</mn><mo>≤</mo><msup><mrow><mi>β</mi></mrow><mrow><mo>*</mo></mrow></msup><mo>≤</mo><mn>1</mn></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 247.2]
+              </td></tr></tbody></table><p>where</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wsegfmod.equ.0099"/>
+ <math><mrow><mi>β</mi><mo>=</mo><mrow><mtext>max</mtext><mo>(</mo>
+<msub><mrow><mi>α</mi></mrow><mrow><mi>g</mi>
+</mrow></msub><mo>,</mo><mrow><msub><mrow><mi>F</mi>
+</mrow><mrow><mi>v</mi></mrow></msub><mfrac><mrow>
+<msub><mrow><mi>α</mi></mrow><mrow><mi>g</mi>
+</mrow></msub><mrow><mo>|</mo><mi>j</mi><mo>|</mo>
+</mrow></mrow><mrow><msub><mrow><mi>v</mi></mrow>
+<mrow><mi>s</mi><mi>g</mi><mi>f</mi></mrow></msub>
+</mrow></mfrac></mrow><mo>)</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 247.3]
+              </td></tr></tbody></table><p>A and B must obey the relation <math><mrow><mi>B</mi>
+<mo>&lt;</mo><mo>(</mo><mn>2</mn><mrow><mo>-</mo>
+<mi>A</mi></mrow><mo>)</mo><mo>/</mo><mi>A</mi>
+</mrow></math> </p>
+<p>DEFAULT:   as specified in
+keyword <span class="keyword">WSEGDFMD</span> or item 5 of keyword <span class="keyword">WSEGDFPA</span>             </p>
+</li>
+
+<li>Multiplier <math>
+<msub><mi>F</mi><mi>v</mi></msub></math>  of the flooding
+velocity fraction in the profile reduction term  <math><mi>β</mi>
+</math>  in the gas-liquid profile parameter (drift flux model only) <p>A value of 1.0 reduces the profile parameter to 1.0 when the gas
+superficial velocity reaches the flooding velocity.</p>
+<p>A value
+of 0.0 makes the profile parameter independent of the flow velocity.</p>
+<p>DEFAULT:   as set in item 6 of keyword <span class="keyword">WSEGDFPA</span></p>
+</li>
+
+<li>Coefficient B1 for the oil-water profile parameter <math><mrow><msub><mi>C</mi><mn>0</mn></msub><mi>′</mi></mrow></math> (drift flux model only) <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wsegfmod.equ.00ac"/>
+ <math><mrow><mtable><mtr><mtd><msubsup><mrow><mi>C</mi>
+</mrow><mrow><mn>0</mn></mrow><mrow><mo>′</mo>
+</mrow></msubsup><mo>=</mo><mrow><mi>A</mi><mtext>     when  </mtext><mo>(</mo>
+<msub><mrow><mi>α</mi></mrow><mrow><mi>o</mi>
+<mi>l</mi></mrow></msub><mo>≤</mo><mrow><mi>B</mi>
+<mn>1</mn></mrow><mo>)</mo></mrow></mtd></mtr><mtr>
+<mtd><msubsup><mrow><mi>C</mi></mrow><mrow><mn>0</mn>
+</mrow><mrow><mo>′</mo></mrow></msubsup><mo>=</mo>
+<mrow><mn>1</mn><mtext>     when  </mtext>
+<mo>(</mo><msub><mrow><mi>α</mi></mrow><mrow>
+<mi>o</mi><mi>l</mi></mrow></msub><mo>≥</mo><mrow>
+<mi>B</mi><mn>2</mn></mrow><mo>)</mo></mrow></mtd>
+</mtr><mtr><mtd><msubsup><mrow><mi>C</mi></mrow><mrow>
+<mn>0</mn></mrow><mrow><mo>′</mo></mrow></msubsup>
+<mo>=</mo><mi>A</mi><mrow><mo>-</mo><mrow><mrow><mo>(</mo><mi>A</mi><mrow><mo>-</mo><mn>1</mn></mrow>
+<mo>)</mo></mrow><mo>(</mo><mfrac><mrow><msub><mrow>
+<mi>α</mi></mrow><mrow><mi>o</mi><mi>l</mi>
+</mrow></msub><mrow><mo>-</mo><mrow><mi>B</mi><mn>1</mn></mrow></mrow></mrow><mrow><mi>B</mi><mn>2</mn>
+<mo>-</mo><mrow><mi>B</mi><mn>1</mn></mrow></mrow>
+</mfrac><mo>)</mo><mtext>     when </mtext>
+<mrow><mo>(</mo><mrow><mi>B</mi><mn>1</mn></mrow>
+<mo>&lt;</mo><msub><mrow><mi>α</mi></mrow><mrow>
+<mi>o</mi><mi>l</mi></mrow></msub><mo>&gt;</mo><mrow>
+<mi>B</mi><mn>2</mn></mrow><mo>)</mo></mrow></mrow>
+</mrow></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 247.4]
+              </td></tr></tbody></table><p>The equations for <math><mrow><msub><mi>C</mi><mn>0</mn></msub><mi>′</mi></mrow></math>  are discussed in <a href="../ecl_td/driftflx_Three-phase_flow_and_oil-water_slip.html#driftflx_three-phase_flow_and_oil-water_slip">"Three-phase flow
+and oil-water slip"</a> in the <cite>ECLIPSE Technical Description</cite>. The value of <em>A</em> is set from item 6.</p>
+<p>DEFAULT: as specified
+in keyword <span class="keyword">WSEGDFMD</span> or item 9 of keyword <span class="keyword">WSEGDFPA</span></p>
+</li>
+
+<li>Coefficient B2 for the oil-water profile parameter (drift flux
+model only)<p>B1 and B2 must obey the relation <math><mrow><mi>B</mi>
+<mn>1</mn></mrow><mo>≤</mo><mrow><mo>(</mo><mn>2</mn><mrow><mo>-</mo><mi>A</mi></mrow><mo>)</mo>
+<mi>B</mi><mn>2</mn></mrow></math> </p>
+<p>DEFAULT: as
+specified in keyword <a href="WSEGDFMD.html#WSEGDFMD">  WSEGDFMD</a> or item 10 of keyword <a href="WSEGDFPA.html#WSEGDFPA">  WSEGDFPA</a> </p>
+ </li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of data records with a slash.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If <span class="keyword">WSEGFMOD</span> is applied to a segment that
+has previously been declared as a sub-critical valve (<a href="WSEGVALV.html#WSEGVALV"> WSEGVALV</a>), a flow limiting
+valve (<a href="WSEGFLIM.html#WSEGFLIM">  WSEGFLIM</a>), a labyrinth device (<a href="WSEGLABY.html#WSEGLABY">  WSEGLABY</a>) or a VFP table lookup segment (<a href="WSEGTABL.html#WSEGTABL"> WSEGTABL</a>), it loses its former attributes
+and become a standard segment using either the homogeneous or the
+drift flux flow model according to item 4.  The top segment (segment
+1) always uses the homogeneous flow model. There are no pressure losses
+calculated along this segment. </span></div>
+
+<div class="section" id="wsegfmod_example"><a name="wsegfmod_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WSEGFMOD
+-- Well  Segments   Flow   Local  Prof  Prof   Prof   Prof  Prof
+-- Name  From  To   Model  Slip    A     B    v mult   B1    B2
+   PROD1  2    6     DF     1.1   1.3   0.3    1.0     0.5   0.9 /
+   PROD1  7   12     DF    /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

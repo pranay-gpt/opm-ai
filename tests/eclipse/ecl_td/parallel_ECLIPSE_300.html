@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ECLIPSE 300"/>
+<meta name="DC.subject" content="ECLIPSE 300 parallel partitioning"/>
+<meta name="keywords" content="ECLIPSE 300 parallel partitioning"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="parallel_eclipse_300"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ECLIPSE 300</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="parallel_eclipse_300"><a name="parallel_eclipse_300"><!-- --></a>
+<h1 class="topictitle1">ECLIPSE 300</h1>
+
+
+ <div>
+<p>In a parallel run the reservoir is partitioned areally into domains,
+each of which is assigned a processor. The default is to divide the
+reservoir into one-dimensional strips, along the reservoir’s largest
+N<sub>x</sub>  or N<sub>y</sub>  direction. However, for large numbers
+of domains, a two-dimensional decomposition is desirable, to avoid
+thin strip domains. For example, with 16 processors, a 4 by 4 layout
+of domains can be realized by:</p>
+
+<pre><code>NPROCX
+4 /
+NPROCY
+4 /</code></pre>
+<p>If the basic simulation grid is 120 by 120 by 10, this will imply
+that each processor treats a domain of dimension 30 by 30 by 10.</p>
+
+<p>For reservoirs with a significant number of inactive cells, the
+default partitioning is not sufficient to load-balance the domains;
+that is ensure all domains have roughly the same number of active
+cells and therefore work. It is possible to control further the way
+in which cells are assigned to domains. By default, the x- or y- dimension
+of the grid is equally divided. However, this may be overridden using
+the <a href="../ecl_rm/PSPLITX.html#PSPLITX">PSPLITX</a> and <a href="../ecl_rm/PSPLITY.html#PSPLITY">PSPLITY</a> keywords in the <samp class="codeph">RUNSPEC</samp> section. Suppose,
+in the case above, we also specified</p>
+
+<pre><code>PSPLITX
+60 120 /
+40 80 120 /
+40 60 80 120 /
+/</code></pre>
+<p>The division of cells in the x-direction for the 4-processor case
+would then be as shown below. Note that this keyword also contains
+partitions for the 2 and 3 processor cases.</p>
+
+
+<div class="tablenoborder"><a name="parallel.XID-000000c7"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="parallel.XID-000000c7" frame="border" border="1" rules="all"><caption>
+           Table 767.1  The division of cells between processors using the PSPLITX
+keyword.</caption>  
+<thead align="left">
+<tr>
+<th valign="top" id="d1056e81">Process                      </th>
+
+<th valign="top" id="d1056e84"> Cells                      </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1056e81 ">1                      </td>
+
+<td valign="top" headers="d1056e84 ">1 to 40                      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1056e81 ">2                                         </td>
+
+<td valign="top" headers="d1056e84 ">41 to 60                                     
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1056e81 ">3           </td>
+
+<td valign="top" headers="d1056e84 "> 61 to 80      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1056e81 ">4   </td>
+
+<td valign="top" headers="d1056e84 ">81 to 120                      </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword <span class="keyword">PSPLITY</span> is analogous. The simulator
+will output good estimates of these keywords by using the <samp class="codeph">PART</samp> mnemonic in the <a href="../ecl_rm/RPTSOL.html#RPTSOL">RPTSOL</a> keyword. By performing an initial NOSIM run, then pasting
+the suggested <span class="keyword">PSPLITX</span> and <span class="keyword">PSPLITY</span> output in the <span class="keyword">RUNSPEC</span> section, good load balancing
+can be achieved for all combinations of processors. The percentage
+active cell load balancing of the current run is reported to the <samp class="codeph">PRT</samp> file. This is defined <math>
+<mtext>Active cell load balance %</mtext><mo>=</mo><mfrac>
+<mrow><mtext>total active cells in reservoir</mtext></mrow>
+<mrow><mrow><mi>m</mi><mi>a</mi><mi>x</mi><mo>(</mo>
+<mtext>active cells per partition</mtext><mo>)</mo><mo>×</mo>
+<mtext>number of procs</mtext></mrow></mrow></mfrac><mo>×</mo><mn>100</mn></math>                       </p>
+
+<p>This figure represents the maximum parallel speed-up that can be
+achieved for a given run. For example, if the active cell load balance
+is 75% for a 4-processor job, then the maximum parallel speed-up that
+can be achieved is 3 (ignoring any super-linear speed-up that may
+be achieved by cache effects). The actual parallel speed-up achieved
+may be much lower than this. Consequently it is advisable to monitor
+this figure, especially if large parts of the reservoir are inactive.
+ECLIPSE 300 gives suggestions for better partitions if the <samp class="codeph">PART</samp> mnemonic is put in the <span class="keyword">RPTSOL</span> keyword
+in the <span class="keyword">SOLUTION</span> section. The <samp class="codeph">PRINT</samp> file contains suggestions on how the current partition may be improved.
+In addition the <samp class="codeph">Debug</samp> file contains a list of all
+the possible combinations of <span class="keyword">PDIVX</span> and <span class="keyword">PDIVY</span>. This information can only be obtained once the <span class="keyword">GRID</span> section is processed. A two-stage procedure is required
+to utilize the partition suggestions from ECLIPSE 300.</p>
+
+<ol>
+<li>Run the simulator with default partitions with the <samp class="codeph">PART</samp> mnemonic in the <span class="keyword">RPTSOL</span> keyword (no <samp class="codeph">SCHEDULE</samp> section is necessary).             </li>
+
+<li>If the active cell load balance is low, paste the relevant <span class="keyword">PDIVX</span> and/or <span class="keyword">PDIVY</span> output from the Debug
+file of the first run into the <span class="keyword">RUNSPEC</span> section,
+and run again. </li>
+
+</ol>
+
+<p>To examine the partition of a particular run, the <samp class="codeph">PART</samp> mnemonic can be placed in the <a href="../ecl_rm/RPTRST.html#RPTRST">RPTRST</a> keyword, and then plotted from the <samp class="codeph">RESTART</samp> file using any standard package (for example, Petrel). This is useful
+to determine if any wells cross partition boundaries.</p>
+
+<p>Note the WARP linear solver splits each parallel partition into
+a number of sub-grids, which are connected through NNCs; see <a href="sollineq_The_ECLIPSE_300_WARP_linear_solver.html#sollineq_the_eclipse_300_warp_linear_solver"> "The ECLIPSE 300 WARP linear solver"</a> for a detailed description.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

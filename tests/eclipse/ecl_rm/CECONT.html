@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="CECONT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="CECONT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>CECONT</title>
+</head>
+<body>
+
+
+<div class="nested0" id="CECONT"><a name="CECONT"><!-- --></a>
+<h1 class="keyword">CECONT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="cecont.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="cecont.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d232e45"> x </th>
+
+<th valign="top" id="d232e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d232e54">&nbsp;</th>
+ 
+<th valign="top" id="d232e56"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d232e45 d232e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d232e48 d232e56 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d232e45 d232e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d232e48 d232e56 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d232e45 d232e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d232e48 d232e56 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d232e45 d232e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d232e48 d232e56 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d232e45 d232e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d232e48 d232e56 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d232e45 d232e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d232e48 d232e56 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d232e45 d232e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d232e48 d232e56 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d232e45 d232e54 "> x </td>
+
+<td valign="top" headers="d232e48 d232e56 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p><span class="keyword">CECONT</span> is used to set tracer economic limits
+for production well connections, including polymer and brine. If an
+individual connection violates one of its economic limits it will
+be automatically closed. The well connections must already be defined
+before this keyword can be used.</p>
+
+<p><span class="keyword">CECONT</span> is followed by any number of records,
+described below, each record terminated by a slash (/). A record may
+be terminated early at any item; the remaining items assume their
+default values. Default values can be specified before the slash by
+a null repeat count of the form n*, where n is the number of consecutive
+items to be defaulted. There are two types of record; one describes
+the connection and the second lists the tracers and their limits.</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<p>Records of the first kind can contain some or all of the following
+items:</p>
+
+<ol>
+<li>Well name, well name template, well list or well list template<p>A template enclosed in quotes can be used to refer to multiple wells
+or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+</li>
+
+<li>I - location of connecting grid block(s)<p>DEFAULT: 0 (allows
+any I-value)</p>
+</li>
+
+<li>J - location of connecting grid block(s)<p>DEFAULT: 0 (allows
+any J-value)</p>
+</li>
+
+<li>K - location of upper connecting block in this set of data<p>DEFAULT:
+0 (corresponds to top connection of well)</p>
+</li>
+
+<li>K - location of lower connecting block in this set of data<p>DEFAULT:
+0 (corresponds to bottom connection of well)</p>
+<p>The following economic
+limits will be applied to all the connections in the well that match
+the location indices specified in items 2 - 5. However, if a location
+index is defaulted to zero, it plays no part in selecting which connections
+have these limits. Thus if the I and J location indices are defaulted
+to zero, the economic limits are applied to all connections in the
+well that are located between layers K1 and K2 specified in items
+4 and 5. If all four location indices are defaulted, the limits are
+applied to all the connections in the well.</p>
+</li>
+
+<li>Workover procedure when a limit is violated 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">CON</samp> </td>
+
+<td valign="top"> Shut the connection </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">+CON</samp> </td>
+
+<td valign="top"> Shut the connection and all below it (see keyword <a href="COMPORD.html#COMPORD"> COMPORD</a>)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">CON</samp> </p>
+</li>
+
+<li>Continue checking stopped wells?
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top"> The connection economic limits continue to be checked even
+if the well is stopped (as crossflow may still occur).</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top"> Connection economic limits are not checked in stopped wells.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">NO</samp> </p>
+</li>
+
+</ol>
+
+<p>End the record with a slash (/)</p>
+
+<p>A maximum of three subsequent records can follow, for each well
+connection or range of connections. These records can contain some
+or all of the following items.</p>
+
+<ol>
+<li>Tracer name (Use PLY for a polymer and BRI for brine)</li>
+
+<li>Maximum total tracer rate<p>DEFAULT: No limit</p>
+</li>
+
+<li>Maximum total tracer concentration (not available for partitioned
+tracers)<p>DEFAULT:   No limit.</p>
+<p>The following are only available
+for two-phase tracers</p>
+</li>
+
+<li>Maximum free tracer rate<p>DEFAULT: No limit</p>
+</li>
+
+<li>Maximum free tracer concentration<p>DEFAULT: No limit</p>
+</li>
+
+<li>Maximum solution tracer rate<p>DEFAULT: No limit</p>
+</li>
+
+<li>Maximum solution tracer concentration<p>DEFAULT: No limit.</p>
+</li>
+
+</ol>
+
+<p>End the record with a slash (/).</p>
+
+<p>End the data for this well connection with a blank line containing
+just a slash(/).</p>
+
+<p>Note that this means that the keyword will end with two blank lines
+containing just slashes.</p>
+
+<div class="section" id="cecont_notes"><a name="cecont_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li> If keyword <a href="COMPLUMP.html#COMPLUMP">  COMPLUMP</a> is used to lump connections into completions, the connection
+economic limits are applied to whole completions (that is a whole
+completion is closed if its total rate or concentration exceeds the
+limit set for its connections). All connections in the same completion
+must be given the same limits. </li>
+
+<li> Crossflowing (injecting) connections have a negative production
+rate. Thus setting item 11 or 12 to a small negative value causes
+the connection to be shut if it attempts to crossflow. The default
+of -1.0E20 allows the connection to remain open if it crossflows. </li>
+
+<li> No units are given for the tracer rates. The rates are those
+of the carrier flow rate. </li>
+
+<li> Since the tracers are solved after the main reservoir simulation
+if it is subsequently discovered that a limit is violated, the timestep
+is always repeated with the action being enforced from the start of
+the timestep. Even with doing this it may be that the ‘action’ lags
+the violation by a timestep. </li>
+
+<li> This keyword needs to end with two lines containing only slashes.
+See the examples below. </li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

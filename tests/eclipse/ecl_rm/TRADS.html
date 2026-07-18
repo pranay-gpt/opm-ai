@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="TRADS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="TRADS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>TRADS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="TRADS"><a name="TRADS"><!-- --></a>
+<h1 class="keyword">TRADS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="trads.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="trads.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2636e45"> x </th>
+
+<th valign="top" id="d2636e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2636e54">  </th>
+
+<th valign="top" id="d2636e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2636e45 d2636e54 ">  </td>
+
+<td valign="top" headers="d2636e48 d2636e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2636e45 d2636e54 ">  </td>
+
+<td valign="top" headers="d2636e48 d2636e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2636e45 d2636e54 ">  </td>
+
+<td valign="top" headers="d2636e48 d2636e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2636e45 d2636e54 "> x </td>
+
+<td valign="top" headers="d2636e48 d2636e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2636e45 d2636e54 ">  </td>
+
+<td valign="top" headers="d2636e48 d2636e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2636e45 d2636e54 ">  </td>
+
+<td valign="top" headers="d2636e48 d2636e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2636e45 d2636e54 ">  </td>
+
+<td valign="top" headers="d2636e48 d2636e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2636e45 d2636e54 ">  </td>
+
+<td valign="top" headers="d2636e48 d2636e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword should only be used when the Environmental Tracer
+option is active (see the 4th data item in the <a href="TRACERS.html#TRACERS"> TRACERS</a> keyword). The <span class="keyword">TRADS</span> keyword inputs data describing the adsorption of a tracer on to
+the rock formation. The keyword should be concatenated with the tracer
+name.</p>
+
+<p>For example:</p>
+
+<p><span class="keyword">TRADSXXX</span> is the keyword required to input adsorption
+data for tracer XXX as specified in the <a href="TRACER.html#TRACER">  TRACER</a> keyword.</p>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a> 
+(set in the <span class="keyword">TABDIMS</span> keyword) tables of
+tracer adsorption functions, each terminated by a slash (/), describing
+the adsorption of tracer by the rock formation. Each table applies
+to its corresponding saturation function region, defined by keyword <a href="SATNUM.html#SATNUM">  SATNUM</a> in the <span class="keyword">REGIONS</span> section (if <samp class="codeph">NTSFUN</samp> &gt; 1).</p>
+
+<div class="p">Each table consists of 2 columns of data. Column:<ol>
+<li>The local tracer concentration in the solution surrounding the
+rock.<p>The values should increase monotonically down the column.</p>
+<p>The units are those of tracer concentration. By default the concentrations
+are dimensionless, and can be thought of as:</p>
+<p>UNITS: sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), stb/stb for liquid phase
+tracers, Mscf/Mscf for gas phase tracers (<samp class="codeph">FIELD</samp>),
+scc/scc (<samp class="codeph">LAB</samp>)</p>
+<p>If a unit has been specified
+for this tracer in keyword <span class="keyword">TRACER</span>, the units employed
+here are:</p>
+<p>UNITS: TR/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>),
+TR/stb for liquid phase tracers, TR/Mscf for gas phase tracers (<samp class="codeph">FIELD</samp>), TR/scc (<samp class="codeph">LAB</samp>)</p>
+<p>where TR is
+the unit supplied for this tracer.</p>
+</li>
+
+<li>The corresponding saturated concentration of tracer adsorbed on
+to the rock formation.<p>These values should increase monotonically
+down the column.</p>
+<p>Units are (for dimensionless tracers, which
+are thought of as volume fractions as stated above):</p>
+<p>UNITS:
+sm<sup>3</sup>/kg (<samp class="codeph">METRIC</samp>), stb/lb for liquid phase
+tracers, Mscf/lb for gas phase tracers (<samp class="codeph">FIELD</samp>), scc/gm
+(<samp class="codeph">LAB</samp>)</p>
+<p>or (for tracers given units in keyword <span class="keyword">TRACER</span>):</p>
+<p>UNITS: TR/kg (<samp class="codeph">METRIC</samp>),
+TR/lb (<samp class="codeph">FIELD</samp>), TR/gm (<samp class="codeph">LAB</samp>)</p>
+<p>where TR is the unit supplied for this tracer.</p>
+</li>
+
+</ol>
+</div>
+
+<p>Each table must contain at least two, and no more than <a href="TABDIMS.html#TABDIMS.NSSFUN"> NSSFUN</a> (set in the <span class="keyword">TABDIMS</span> keyword) rows. Each row must be complete, containing an entry in every column of the table.</p>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> The first row in the adsorption tables should
+consist of a pair of zeroes.</div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">When adsorption is specified for a partitioned tracer, the adsorped
+amount is calculated based on the tracer concentration in the solution
+phase. For the generalized, multi-partitioned tracers (that is a tracer
+with <samp class="codeph">MULT</samp> specified in the 4th item of the <span class="keyword">TRACER</span> keyword) the concentration to be used in adsorption
+calculations can be changed by setting the 6th item of the <span class="keyword">TRACER</span> keyword.</span></div>
+
+<p>See <a href="../ecl_td/enviro_Environmental_Tracers.html#enviro_environmental_tracers">"Environmental tracers"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.</p>
+
+<p>Tracer adsorption functions can also be specified using the <a href="ADSORP.html#ADSORP">  ADSORP</a> keyword.</p>
+
+<div class="section" id="trads_example"><a name="trads_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NTSFUN</samp> = 2 and <samp class="codeph">NSSFUN</samp> = 5 for tracers WT1
+and WT2</p>
+<pre><code>TRADSWT1
+.0000 .00000
+.0003 .00005
+.0005 .00007
+.0008 .00008
+.0010 .00008 /
+
+.0000 .00000
+.0010 .00010 /
+
+TRADSWT2
+.0000 .00000
+.0003 .00005
+.0005 .00007
+.0008 .00008
+.0010 .00008 /
+
+.0000 .00000
+.0010 .00010 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

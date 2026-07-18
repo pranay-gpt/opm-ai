@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Multi porosity"/>
+<meta name="DC.subject" content="Multi porosity"/>
+<meta name="keywords" content="Multi porosity"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="multiporo_multi_porosity"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Multi porosity</title>
+</head>
+<body>
+
+
+<div class="nested0" id="multiporo_multi_porosity"><a name="multiporo_multi_porosity"><!-- --></a>
+<h1 class="keyword">Multi porosity</h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="multiporo.tab.0009"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="multiporo.tab.0009" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">                         x                   
+  </td>
+
+<td valign="top">                         ECLIPSE 100         
+            </td>
+
+</tr>
+
+<tr>
+<td valign="top">                         x                   
+  </td>
+
+<td valign="top">                         ECLIPSE 300         
+            </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>In ECLIPSE 300 you can define a multi porosity model as an extension
+to the dual porosity model to model the fracture system and a number
+of matrix pore systems.</p>
+
+<p>There are two ways to supply the grid properties for the matrix
+sub cells:</p>
+
+<ul>
+<li>Using the keyword <a href="../ecl_rm/NMATOPTS.html#NMATOPTS">NMATOPTS</a> the matrix sub cells are assigned pore volumes as described
+in the <a href="dualporo_Discretized_matrix_model__ECLIPSE_100_.html#dualporo_discretized_matrix_model__eclipse_100_"> "Discretized matrix model (ECLIPSE 100)"</a>. The grid is geometrically
+partitioned as a “Russian Doll” of nested matrix sub-cells.
+This enables grid data to be supplied only for the dual porosity part
+of the grid and the nested matrix sub-grid cells data are generated
+automatically. New <a href="../ecl_rm/SIGMAV.html#SIGMAV">SIGMAV</a> factors are automatically generated from the input <span class="keyword">SIGMA</span>/<span class="keyword">SIGMAV</span> factors from the primary
+matrix. You can still set other data such as permeabilities,  although
+this is not recommended. By default, if these are not specified, the
+input primary matrix values are used to populate the sub-cell values. </li>
+
+<li>Input over the grid. The data is supplied for the entire simulation
+grid, similarly to the dual porosity model, but with grid data such
+as permeabilities also for the matrix-matrix connections.  </li>
+
+</ul>
+
+<p>In either case the number of pore systems is input using the <a href="../ecl_rm/NMATRIX.html#NMATRIX">NMATRIX</a> keyword. This general
+setup gives a variety of possibilities for studying the transient
+behavior in the matrix. In particular the option can be used for.</p>
+
+<ul>
+<li>Shale gas reservoirs. See <a href="shalegas_Shale_Gas.html#shalegas_shale_gas"> "Shale gas"</a>.</li>
+
+<li> Coal bed methane. See <a href="coalbed_Adsorption_models_in_ECLIPSE_300.html#coalbed_adsorption_models_in_eclipse_300"> "Adsorption models in ECLIPSE 300"</a> </li>
+
+</ul>
+
+<p>The special case of triple porosity systems to represent vuggy
+carbonates uses the same underlying multi porosity model, but restricts
+the number of porosities to 3 (fracture, matrix, vugs with fracture
+and matrix connections) or 4 (with additional “isolated”
+vugs connected only to the matrix). This model is activated using
+the <a href="../ecl_rm/TRPLPORO.html#TRPLPORO">TRPLPORO</a> keyword, which also specifies if isolated vugs are to be
+used. The data are supplied for the entire simulation grid, as with
+the multi porosity option (2) above. This model is described in more
+detail in the Triple Porosity section below. Triple porosity is also
+available in ECLIPSE 100 but the general multi-porosity feature is <strong>not</strong> available.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

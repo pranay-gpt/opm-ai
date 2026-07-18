@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Instantaneous gradients"/>
+<meta name="DC.subject" content="Gradient option"/>
+<meta name="keywords" content="Gradient option"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="tech_desc_instantaneous_gradients"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Instantaneous gradients</title>
+</head>
+<body>
+
+
+<div class="nested0" id="tech_desc_instantaneous_gradients"><a name="tech_desc_instantaneous_gradients"><!-- --></a>
+<h1 class="topictitle1">Instantaneous gradients</h1>
+
+
+ <div>
+<p>The instantaneous gradient facility provides an alternative set
+of derivatives to those generated for history matching purposes. Recall
+the history matching philosophy in which derivatives of various solution
+quantities at the current timestep are computed with respect to variations
+in a set of parameters at time zero. In contrast, the instantaneous
+gradient option computes derivatives of solution quantities at the
+current timestep with respect to variations in the parameters at the
+current timestep. The instantaneous gradient option harness the existing
+ECLIPSE gradient code with the exception that the gradient data need
+not be propagated forward in time. As a result the instantaneous gradient
+option can be switched on and off during the course of a simulation
+via the <a href="../ecl_rm/GUPFREQ.html#GUPFREQ"> GUPFREQ</a> keyword.</p>
+
+<p>The aim of the instantaneous gradient feature is to provide information
+on the sensitivity of a well to its, and other wells’, control modes.
+For example, if the well P1 is under bottom hole pressure control
+the gradient of the oil flow rate with respect to the bottom hole
+pressure can be requested. The calculation of such a gradient combines
+two factors, the response of the well to a variation in its own bottom
+hole pressure, and the response of the reservoir to the variation
+in the well’s bottom hole pressure. Since the response of the reservoir
+is part of the gradient calculation the interaction between wells
+can also be studied. For example, the relationship between the water
+flow rate of well P1 and the water injection rate of well I1. However,
+it should be noted that a number of approximations are made within
+the gradient calculation that can reduce the accuracy of the calculation
+when considering the influence of one well upon another.</p>
+
+<p>The instantaneous gradient options is activated via the <a href="../ecl_rm/GDIMS.html#GDIMS"> GDIMS</a> keyword in the <span class="keyword">RUNSPEC</span> section. Since the gradient output is available
+as summary data an unencoded gradient license is required. In the
+summary section the gradient of the oil, water, gas flow rates and
+the bottom hole pressure with respect to a gradient parameter can
+be requested with the keywords <span class="keyword">WOFWCn</span>, <span class="keyword">WWFWCn</span>, <span class="keyword">WGFWCn</span> and <span class="keyword">WBHWCn</span>, where n is the parameter number required. The gradient parameters
+are defined by specifying wells using the <a href="../ecl_rm/GWRTWCV.html#GWRTWCV"> GWRTWCV</a> keyword in the <span class="keyword">SCHEDULE</span> section. Wells selected as gradient parameters
+must be under either oil, water, gas rate or bottom hole pressure
+control since the response of the group hierarchy is not included
+in the gradient calculation. In addition the feature is restricted
+to the standard well model in unrefined grids.</p>
+
+<div class="section" id="tech_desc_example_usage"><a name="tech_desc_example_usage"><!-- --></a><h4 class="sectiontitle">Example usage</h4><p>Specify two instantaneous gradient parameters in the <span class="keyword">RUNSPEC</span> section.</p>
+<pre><code>GDIMS
+ 2 /</code></pre><p>Request gradient output in the <span class="keyword">SUMMARY</span> section. The first item requests that the gradient of the oil flow
+rate for wells P1 and P2 with respect to the instantaneous gradient
+parameter 1. The second item that the water flow rate for wells P1
+and I1 with respect to the instantaneous gradient parameter 2.</p>
+<pre><code>WOFWC1
+ P1 P2 /
+
+WWFWC2
+ P1 I1 /</code></pre><p>Specify the instantaneous gradient parameters
+in the <span class="keyword">SCHEDULE</span> section. Define the first parameter
+to be the control mode of well P1, the second to be the control mode
+of well I1. Compute the gradients at the next timestep only. The values
+of the requested instantaneous gradient summary mnemonics will be
+frozen at the last computed value.</p>
+<pre><code>GWRTWCV
+ P1 / -- gradient parameter 1
+ I1 / -- gradient parameter 2
+/
+
+GUPFREQ
+ NEXT /</code></pre><p>At a later point in the simulation re-specify
+the instantaneous gradient parameters and compute the gradients for
+all subsequent timesteps.</p>
+<pre><code>GWRTWCV
+ P2 / -- gradient parameter 1
+ I2 / -- gradient parameter 2
+/
+
+GUPFREQ
+ ALL /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="FOAMMOBS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="FOAMMOBS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>FOAMMOBS</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="FOAMMOBS"><a name="FOAMMOBS"><!-- --></a>
+<h1 class="keyword">FOAMMOBS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="foammobs.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="foammobs.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d740e45"> x </th>
+
+<th valign="top" id="d740e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d740e54">  </th>
+
+<th valign="top" id="d740e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d740e45 d740e54 ">  </td>
+
+<td valign="top" headers="d740e48 d740e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d740e45 d740e54 ">  </td>
+
+<td valign="top" headers="d740e48 d740e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d740e45 d740e54 ">  </td>
+
+<td valign="top" headers="d740e48 d740e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d740e45 d740e54 "> x </td>
+
+<td valign="top" headers="d740e48 d740e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d740e45 d740e54 ">  </td>
+
+<td valign="top" headers="d740e48 d740e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d740e45 d740e54 ">  </td>
+
+<td valign="top" headers="d740e48 d740e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d740e45 d740e54 ">  </td>
+
+<td valign="top" headers="d740e48 d740e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d740e45 d740e54 ">  </td>
+
+<td valign="top" headers="d740e48 d740e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is optional in runs using the foam model, and supplies
+tables of data to describe the shear dependence of the foam mobility
+reduction factor. See <a href="../ecl_td/foam_Foam_Model.html#foam_foam_model">"Foam model"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.</p>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTPVT"> NTPVT</a>  (set in the <span class="keyword">TABDIMS</span> keyword)
+tables of mobility data. Each table consists of two columns of data,
+terminated with a slash (/).</p>
+
+<ol>
+<li>The gas phase flow velocity.<p>The values should increase monotonically
+down the column.</p>
+<p>The first entry should be 0.0.</p>
+<p>UNITS:
+m/day (<samp class="codeph">METRIC</samp>), ft/day (<samp class="codeph">FIELD</samp>),
+cm/hr (<samp class="codeph">LAB</samp>)</p>
+</li>
+
+<li>The corresponding shear modifier on the foam mobility reduction
+factor, <math><mrow>
+<msub><mrow><mi>M</mi></mrow><mrow><mi>s</mi></mrow>
+</msub><mrow><mo>(</mo><mi>v</mi><mo>)</mo></mrow>
+</mrow></math>. <p>The values are usually between zero and 1.</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">0.0</td>
+
+<td valign="top"> leaves the mobility reduction factor unaffected</td>
+
+</tr>
+
+<tr>
+<td valign="top">1.0</td>
+
+<td valign="top"> returns the gas mobility to the pure gas mobility.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>  <math><mrow><mtext>MF</mtext>
+<mo>=</mo><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<mtext>MP</mtext></mrow><mo>)</mo><mrow><msub><mrow>
+<mi>M</mi></mrow><mrow><mi>s</mi></mrow></msub><mo>⁡</mo><mrow><mo>(</mo><mi>v</mi><mo>)</mo></mrow>
+</mrow></mrow><mo>+</mo><mtext>MP</mtext></mrow></math> </p>
+<p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mtext>MF</mtext>
+</math> </td>
+
+<td valign="top">   is the final mobility reduction factor </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mtext>MP</mtext>
+</math> </td>
+
+<td valign="top">   is the mobility reduction factor including the pressure
+effect (from the <a href="FOAMMOB.html#FOAMMOB">  FOAMMOB</a> and <a href="FOAMMOBP.html#FOAMMOBP">  FOAMMOBP</a> keywords) </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>M</mi></mrow><mrow><mi>s</mi></mrow></msub><mrow>
+<mo>(</mo><mi>v</mi><mo>)</mo></mrow></mrow></math> </td>
+
+<td valign="top">  is the shear dependency function </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>v</mi></math> </td>
+
+<td valign="top">   is the gas velocity. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</li>
+
+</ol>
+
+<p>Each table must contain at least two, and no more than <a href="TABDIMS.html#TABDIMS.NPPVT"> NPPVT</a> (set
+in the TABDIMS keyword) rows. Each row must be complete, containing
+an entry in every column of the table.</p>
+
+<div class="section" id="foammobs_example"><a name="foammobs_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NTPVT</samp> = 1 and <samp class="codeph">NPPVT</samp> ≥ 4:</p>
+<pre><code>FOAMMOBS          
+-- 
+-- Velocity       Shear modifier
+--
+    0.0               0.0
+    0.02              0.0
+    0.04              1.0
+    0.06              1.0   /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

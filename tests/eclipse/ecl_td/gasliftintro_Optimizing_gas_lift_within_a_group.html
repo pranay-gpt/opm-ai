@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Optimizing gas lift within a group"/>
+<meta name="DC.subject" content="Gas lift optimization, Group, Weighted incremental gradient"/>
+<meta name="keywords" content="Gas lift optimization, Group, Weighted incremental gradient"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gasliftintro_optimizing_gas_lift_within_a_group"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Optimizing gas lift within a group</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gasliftintro_optimizing_gas_lift_within_a_group"><a name="gasliftintro_optimizing_gas_lift_within_a_group"><!-- --></a>
+<h1 class="topictitle1">Optimizing gas lift within a group</h1>
+
+
+ <div>
+<p>If a group has any production rate constraints, and/or a limit
+on its total rate of lift gas supply, ECLIPSE allocates lift gas preferentially
+to the wells that gain the most benefit from it. Lift gas increments
+are allocated in turn to the well that currently has the largest weighted
+incremental gradient. The procedure takes account of any limits on
+the group production rate or lift gas supply applied to any level
+of group, including the FIELD level group.</p>
+
+<p>The optimization procedure loops over all the groups on each level,
+firstly updating the distribution of the lift gas increments currently
+allocated to the group, then removing any surplus increments from
+the group. The currently allocated increments are redistributed by
+comparing the largest weighted incremental gradient and the smallest
+weighted decremental gradient of the subordinate wells. Consider,
+for example, that the largest weighted incremental gradient belongs
+to well W1, and exceeds the smallest weighted decremental gradient,
+which belongs to well W2. It would be more profitable to subtract
+an increment of lift gas from well W2 and allocate it to well W1.
+After the exchange, the incremental and decremental gradients of wells
+W1 and W2 are recalculated. The exchange of increments continues until
+no weighted incremental gradient exceeds a weighted decremental gradient,
+at which point any surplus lift gas increments are removed from the
+group. The group has surplus lift gas if it exceeds any production
+rate limits or a lift gas supply limit, or contains any wells that
+have a weighted decremental gradient less than the minimum economic
+gradient. Lift gas increments are removed in turn from the well that
+currently has the smallest weighted decremental gradient, until there
+is no surplus lift gas in the group.</p>
+
+<p>The final stage of the optimization process involves looking to
+see whether any lift gas increments could profitably be added anywhere
+in the field. ECLIPSE looks for the well with the largest weighted
+incremental gradient that does not exceed its own lift gas supply
+limit, and does not belong to a group that exceeds a rate limit or
+a lift gas supply limit. (Note that this means that, in general, no
+further lift gas will be allocated once a field rate target is achieved.
+However, selected wells may be allocated further lift gas in order
+to continue optimizing the oil rate if item 7 of the <a href="../ecl_rm/WLIFTOPT.html#WLIFTOPT"> WLIFTOPT</a> keyword is set to <samp class="codeph">YES</samp>, for wells which belong to groups which are under gas
+target control.) If the well's weighted incremental gradient
+exceeds the minimum economic gradient, it receives another increment
+of lift gas. The process continues until no well can profitably receive
+any more lift gas increments.</p>
+
+<p>The whole optimization process is efficient because it starts from
+the previous optimized distribution of lift gas. If the previous lift
+gas distribution is still the optimum, then no lift gas increments
+need be added or subtracted. This is more efficient than building
+the lift gas distribution up from zero at each timestep.</p>
+
+<p>If wells have efficiency factors to take account of regular downtime
+(see keyword <a href="../ecl_rm/WEFAC.html#WEFAC"> WEFAC</a>), their lift gas injection rates are multiplied by their
+efficiency factors when they are added to the group lift gas supply
+rate. This is consistent with the summation of flow rates for wells
+with downtime, and preserves the ratio of production rate to lift
+gas injection rate.</p>
+
+<p>If groups have efficiency factors to model synchronized downtime
+of their subordinate wells (see keyword <a href="../ecl_rm/GEFAC.html#GEFAC"> GEFAC</a>), their lift gas injection
+rates are multiplied by their efficiency factors when they are added
+to the lift gas supply rate of the parent group.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

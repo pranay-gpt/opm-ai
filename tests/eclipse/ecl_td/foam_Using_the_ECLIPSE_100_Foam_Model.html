@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using the ECLIPSE 100 foam model"/>
+<meta name="DC.subject" content="Enhanced oil recovery, Foam transport, adsorption and decay, Foam gas mobility reduction tabular model, Foam gas mobility reduction functional model, Foam output controls, Foam restrictions, Foam, ECLIPSE 100, Restrictions, Environmental tracers"/>
+<meta name="keywords" content="Enhanced oil recovery, Foam transport, adsorption and decay, Foam gas mobility reduction tabular model, Foam gas mobility reduction functional model, Foam output controls, Foam restrictions, Foam, ECLIPSE 100, Restrictions, Environmental tracers"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="foam_using_the_eclipse_100_foam_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using the ECLIPSE 100 foam model</title>
+</head>
+<body>
+
+
+<div class="nested0" id="foam_using_the_eclipse_100_foam_model"><a name="foam_using_the_eclipse_100_foam_model"><!-- --></a>
+<h1 class="topictitle1">Using the ECLIPSE 100 foam model</h1>
+
+
+ <div>
+<p>The Foam Model is activated by specifying the <a href="../ecl_rm/FOAM.html#FOAM">FOAM</a> keyword in the <span class="keyword">RUNSPEC</span> section.</p>
+
+<p>It is possible to output the geometric data used to compute the
+shear thinning effect by using the <samp class="codeph">FOAM</samp> mnemonic
+in the <a href="../ecl_rm/RPTGRID.html#RPTGRID">RPTGRID</a> keyword. This outputs a map of the 1/(poro*area) values used
+to calculate the gas velocity.</p>
+
+<div class="section" id="foam_foam_transport__adsorption_and_decay"><a name="foam_foam_transport__adsorption_and_decay"><!-- --></a><h4 class="sectiontitle">Foam
+transport, adsorption and decay</h4><p>The optional <a href="../ecl_rm/FOAMOPTS.html#FOAMOPTS">FOAMOPTS</a> keyword may be used
+to select the transport phase for the foam and the method of modeling
+gas mobility reduction due to foam. If this keyword is not specified,
+the transport phase will default to gas and the tabular model for
+gas mobility reduction will be used. </p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">  
+ 
+<thead align="left">
+<tr>
+<th valign="top" id="d526e109">Restriction</th>
+
+<th valign="top" id="d526e112">Foam transport, adsorption and decay keywords</th>
+
+<th valign="top" id="d526e115">Description</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d526e109 ">&nbsp;</td>
+
+<td valign="top" headers="d526e112 "> <a href="../ecl_rm/FOAMOPTS.html#FOAMOPTS">FOAMOPTS</a> </td>
+
+<td valign="top" headers="d526e115 ">Foam transport phase and mobility reduction method options.
+  </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d526e109 ">Optional</td>
+
+<td valign="top" headers="d526e112 "> <a href="../ecl_rm/FOAMADS.html#FOAMADS">FOAMADS</a> </td>
+
+<td valign="top" headers="d526e115 ">Foam adsorption data</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d526e109 ">&nbsp;</td>
+
+<td valign="top" headers="d526e112 "> <a href="../ecl_rm/FOAMROCK.html#FOAMROCK">FOAMROCK</a> </td>
+
+<td valign="top" headers="d526e115 ">Foam-rock properties</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d526e109 ">Optional</td>
+
+<td valign="top" headers="d526e112 "> <a href="../ecl_rm/FOAMDCYW.html#FOAMDCYW">FOAMDCYW</a> </td>
+
+<td valign="top" headers="d526e115 ">Foam decay data as a function of water saturation</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d526e109 ">Optional</td>
+
+<td valign="top" headers="d526e112 "> <a href="../ecl_rm/FOAMDCYO.html#FOAMDCYO"> FOAMDCYO</a> </td>
+
+<td valign="top" headers="d526e115 ">Foam decay data as a function of oil saturation</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+<div class="section" id="foam_gas_mobility_reduction.tabular_model"><a name="foam_gas_mobility_reduction.tabular_model"><!-- --></a><h4 class="sectiontitle">Gas
+mobility reduction - tabular model</h4><p>If the tabular method
+of modeling gas mobility reduction as a function of either or both
+pressure and shear is selected, there is one obligatory keyword in
+the <span class="keyword">PROPS</span> section to describe the reduction in
+gas mobility as a function of foam concentration. In addition there
+are two optional keywords which can be used to control the gas mobility. </p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">  
+ 
+<thead align="left">
+<tr>
+<th valign="top" id="d526e225">Restriction</th>
+
+<th valign="top" id="d526e228">Gas mobility tabular model keywords</th>
+
+<th valign="top" id="d526e231">Description</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d526e225 ">Required</td>
+
+<td valign="top" headers="d526e228 "> <a href="../ecl_rm/FOAMMOB.html#FOAMMOB">FOAMMOB</a> </td>
+
+<td valign="top" headers="d526e231 ">Tables of the gas mobility reduction factor as a function of
+foam concentration</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d526e225 ">Optional</td>
+
+<td valign="top" headers="d526e228 "> <a href="../ecl_rm/FOAMMOBP.html#FOAMMOBP">FOAMMOBP</a> </td>
+
+<td valign="top" headers="d526e231 "> Gas mobility reduction as a function of pressure</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d526e225 ">Optional</td>
+
+<td valign="top" headers="d526e228 "> <a href="../ecl_rm/FOAMMOBS.html#FOAMMOBS">FOAMMOBS</a> </td>
+
+<td valign="top" headers="d526e231 ">Gas mobility reduction as a function of shear </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+<div class="section" id="foam_gas_mobility_reduction.functional_model"><a name="foam_gas_mobility_reduction.functional_model"><!-- --></a><h4 class="sectiontitle">Gas mobility reduction - functional model</h4><p>The functional
+method of modeling gas mobility can only be used if the foam transport
+phase is water. If the functional method is selected, the following
+keywords are available in the <span class="keyword">PROPS</span> section to
+describe the reduction in gas mobility in the presence of foam. The
+Gas mobility functional model keywords:</p>
+
+<div class="tablenoborder"><a name="foam.tab.017e"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="foam.tab.017e" frame="border" border="1" rules="all">  
+ 
+<thead align="left">
+<tr>
+<th valign="top" id="d526e310">Restriction</th>
+
+<th valign="top" id="d526e313">Gas mobility functional model keywords</th>
+
+<th valign="top" id="d526e316">Description</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d526e310 ">Required</td>
+
+<td valign="top" headers="d526e313 "> <a href="../ecl_rm/FOAMFSC.html#FOAMFSC">FOAMFSC</a> </td>
+
+<td valign="top" headers="d526e316 ">Foam mobility reduction dependence on foam surfactant concentration </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d526e310 ">Optional</td>
+
+<td valign="top" headers="d526e313 "> <a href="../ecl_rm/FOAMFRM.html#FOAMFRM">FOAMFRM</a> </td>
+
+<td valign="top" headers="d526e316 ">Foam mobility reference reduction factor</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d526e310 ">Optional</td>
+
+<td valign="top" headers="d526e313 "> <a href="../ecl_rm/FOAMFCN.html#FOAMFCN">FOAMFCN</a> </td>
+
+<td valign="top" headers="d526e316 ">Foam mobility reduction dependence on capillary number </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d526e310 ">Obligatory if the <span class="keyword">FOAMFCN</span> keyword specified</td>
+
+<td valign="top" headers="d526e313 "> <a href="../ecl_rm/FOAMFST.html#FOAMFST">FOAMFST</a> </td>
+
+<td valign="top" headers="d526e316 ">Gas-water interfacial tension as a function of foam surfactant
+concentration </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d526e310 ">Optional</td>
+
+<td valign="top" headers="d526e313 "> <a href="../ecl_rm/FOAMFSO.html#FOAMFSO">FOAMFSO</a> </td>
+
+<td valign="top" headers="d526e316 ">Foam mobility reduction dependence on oil saturation </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d526e310 ">Optional</td>
+
+<td valign="top" headers="d526e313 "> <a href="../ecl_rm/FOAMFSW.html#FOAMFSW">FOAMFSW</a> </td>
+
+<td valign="top" headers="d526e316 ">Foam mobility reduction dependence on water saturation</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>With the exception of the <span class="keyword">FOAMFSC</span> keyword,
+which must be specified if the functional model of gas mobility reduction
+is selected, and the <span class="keyword">FOAMFST</span> keyword, which must
+be specified if the <span class="keyword">FOAMFCN</span> keyword is specified,
+all of these keywords are optional.</p>
+<p>The Foam Model’s <span class="keyword">PROPS</span> section data can be written to the <samp class="codeph">PRINT</samp> file by using the <samp class="codeph">FOAM</samp> mnemonic in the <a href="../ecl_rm/RPTPROPS.html#RPTPROPS">RPTPROPS</a> keyword.</p>
+<p>The
+injected foam concentration of a water or gas injector is specified
+using the <a href="../ecl_rm/WFOAM.html#WFOAM">WFOAM</a> keyword in the <span class="keyword">SCHEDULE</span> section.</p>
+</div>
+
+<div class="section" id="foam_output_controls"><a name="foam_output_controls"><!-- --></a><h4 class="sectiontitle">Output controls</h4><p>Output to the <samp class="codeph">PRINT</samp> file can be controlled by using
+the following arguments in the <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a> and <a href="../ecl_rm/RPTSOL.html#RPTSOL">RPTSOL</a> keywords:      </p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d526e487">Argument</th>
+
+<th valign="top" id="d526e490">Description</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d526e487 "> <samp class="codeph">FOAM</samp> </td>
+
+<td valign="top" headers="d526e490 ">Foam concentration for each grid block.     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d526e487 "> <samp class="codeph">FIPFOAM </samp> </td>
+
+<td valign="top" headers="d526e490 ">A foam balance sheet for the field and each region.  </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d526e487 "> <samp class="codeph">FOAMADS</samp> </td>
+
+<td valign="top" headers="d526e490 "> Foam currently adsorbed onto the rock.    </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d526e487 "> <samp class="codeph">FOAMDCY </samp> </td>
+
+<td valign="top" headers="d526e490 "> The decay half life and the total decayed foam.  </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d526e487 "> <samp class="codeph">FOAMMOB</samp> </td>
+
+<td valign="top" headers="d526e490 ">The gas mobility reduction factor. Note that, for the tabular
+model of gas mobility reduction, the gas mobility reduction includes
+the pressure dependent effect but <strong>not</strong> the shear effect, because
+the shear effect is calculated from the local velocities.</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d526e487 "> <samp class="codeph">WELLS=2</samp> </td>
+
+<td valign="top" headers="d526e490 ">Generates a field/group/well/connections summary of the foam
+injection and production. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>The list of <span class="keyword">SUMMARY</span> keywords has been
+extended to output foam-specific data. These keywords follow the passive
+tracer format with a keyword concatenated with the tracer name. Here
+foam is identified with the tracer name FOA. For example, the keyword
+for the field total foam production would be <samp class="codeph">FTPRFOA</samp>.</p>
+</div>
+
+<div class="section" id="foam_restrictions"><a name="foam_restrictions"><!-- --></a><h4 class="sectiontitle">Restrictions</h4><p>If a
+cell is defined with zero pore volume in the <span class="keyword">GRID</span> section, then making it active by changing the pore volume in the <span class="keyword">EDIT</span> section using <a href="../ecl_rm/PORV.html#PORV">PORV</a>, is not allowed with the foam option.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

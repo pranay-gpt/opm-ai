@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="HDISP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="HDISP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>HDISP</title>
+</head>
+<body>
+
+
+<div class="nested0" id="HDISP"><a name="HDISP"><!-- --></a>
+<h1 class="keyword">HDISP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="hdisp.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="hdisp.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d978e45"> x </th>
+
+<th valign="top" id="d978e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d978e54">  </th>
+
+<th valign="top" id="d978e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d978e45 d978e54 ">  </td>
+
+<td valign="top" headers="d978e48 d978e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d978e45 d978e54 ">  </td>
+
+<td valign="top" headers="d978e48 d978e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d978e45 d978e54 ">  </td>
+
+<td valign="top" headers="d978e48 d978e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d978e45 d978e54 "> x </td>
+
+<td valign="top" headers="d978e48 d978e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d978e45 d978e54 ">  </td>
+
+<td valign="top" headers="d978e48 d978e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d978e45 d978e54 ">  </td>
+
+<td valign="top" headers="d978e48 d978e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d978e45 d978e54 ">  </td>
+
+<td valign="top" headers="d978e48 d978e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d978e45 d978e54 ">  </td>
+
+<td valign="top" headers="d978e48 d978e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">HDISP</span> keyword inputs the tracer mechanical
+dispersivity; the longitudinal value and the transverse value. The
+model assumes that the relative importance of diffusion and advection
+are independent of flow velocity and so can be characterized by a
+length scale, the mechanical dispersivity. The keyword should be concatenated
+with the tracer name. <span class="keyword">HDISP</span> cannot be used in parallel
+runs and is only compatible with the standard and TVD tracer solvers.</p>
+
+<p>For example: <span class="keyword">HDISPXXX</span> is the keyword required
+to input the dispersivity for tracer <samp class="codeph">XXX</samp> as specified
+in the <a href="TRACER.html#TRACER">  TRACER</a> keyword.</p>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTPVT"> NTPVT</a> 
+(set in the <span class="keyword">TABDIMS</span> keyword) tables of
+diffusion data, each terminated by a slash (/). Each table applies
+to its corresponding PVT region, defined by keyword <a href="PVTNUM.html#PVTNUM">  PVTNUM</a> (if <samp class="codeph">NTPVT</samp> &gt; 1).</p>
+
+<p>Each table consists of the following items of data:</p>
+
+<ol>
+<li>The tracer mechanical dispersivity in the longitudinal (streamwise)
+direction. <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>)</p>
+</li>
+
+<li>The tracer mechanical dispersivity in the transverse direction
+(perpendicular to the stream). <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>)</p>
+</li>
+
+</ol>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> The use of <span class="keyword">HDISP</span> can cause some runs to
+become much slower. In such cases it may be worth using the <a href="SAMG.html#SAMG">  SAMG</a> keyword. </span></div>
+
+<div class="section" id="hdisp_example"><a name="hdisp_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NTPVT</samp> = 2 for tracers WT1 and WT2</p>
+ <pre><code>HDISPWT1
+ 100 3 /
+ 35 1/
+HDISPWT2
+ 80 0/
+ 35 0/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

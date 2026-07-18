@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WELSEGS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WELSEGS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WELSEGS</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="WELSEGS"><a name="WELSEGS"><!-- --></a>
+<h1 class="keyword">WELSEGS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="welsegs.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="welsegs.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2926e45"> x </th>
+
+<th valign="top" id="d2926e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2926e54"> x </th>
+
+<th valign="top" id="d2926e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2926e45 d2926e54 ">  </td>
+
+<td valign="top" headers="d2926e48 d2926e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2926e45 d2926e54 ">  </td>
+
+<td valign="top" headers="d2926e48 d2926e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2926e45 d2926e54 ">  </td>
+
+<td valign="top" headers="d2926e48 d2926e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2926e45 d2926e54 ">  </td>
+
+<td valign="top" headers="d2926e48 d2926e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2926e45 d2926e54 ">  </td>
+
+<td valign="top" headers="d2926e48 d2926e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2926e45 d2926e54 ">  </td>
+
+<td valign="top" headers="d2926e48 d2926e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2926e45 d2926e54 ">  </td>
+
+<td valign="top" headers="d2926e48 d2926e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2926e45 d2926e54 "> x </td>
+
+<td valign="top" headers="d2926e48 d2926e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is used to designate a well to be a multisegment well,
+and to define the segment structure of the well. The well must previously
+have been introduced with the <a href="WELSPECS.html#WELSPECS"> WELSPECS</a> keyword (or <a href="WELSPECL.html#WELSPECL"> WELSPECL</a> if the well is situated in a local grid refinement).</p>
+
+<p>The keyword can only be used on one well at a time, so it must
+be specified more than once if there is more than one multisegment
+well.</p>
+
+<p>The <span class="keyword">WELSEGS</span> keyword may be re-entered for a
+particular well later in the run, if you wish to change its segment
+structure (for example to add a new branch). Only the new or modified
+segments need to be entered; the properties of all the other segments
+are retained. But if the segment structure is changed, you should
+then reenter the <a href="COMPSEGS.html#COMPSEGS"> COMPSEGS</a> (or <a href="COMPSEGL.html#COMPSEGL"> COMPSEGL</a>) data to reallocate the grid block connections to the new
+segments.</p>
+
+<p>Multisegment wells are described in detail in <a href="../ecl_td/multisegintro_Multi-segment_Wells.html#multisegintro_multi-segment_wells">"Multisegment wells"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<p>The keyword is followed by a number of data records to describe
+the segment properties and geometry of the (possibly multibranched)
+well. Each record is terminated with a slash (/), and the set of records
+must end with an additional blank record containing just a slash.</p>
+
+<p>The data items in each record are:</p>
+
+<div class="section" id="welsegs_record_1"><a name="welsegs_record_1"><!-- --></a><h4 class="sectiontitle">Record 1</h4><p>The first
+record identifies the well, sets some general flags, and sets the
+properties of its top segment, the one nearest the wellhead. This
+segment is labeled segment number 1.</p>
+<ol>
+<li>Name of the well </li>
+
+<li>Depth of the nodal point of the top segment <p>ECLIPSE takes this
+value to be the BHP reference depth of the well. BHP reference depth
+data entered elsewhere are ignored for multisegment wells.</p>
+   
+            <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+<p>This
+item must be entered the first time each multisegment well is defined
+in <span class="keyword">WELSEGS</span>. On subsequent entries of <span class="keyword">WELSEGS</span> it may be defaulted to keep its original value. The depth should
+not normally be changed during the simulation.</p>
+</li>
+
+<li>Length down the tubing to the nodal point of the top segment  <p>This item fixes the position of the top segment’s node (the BHP reference
+point) relative to the ‘zero tubing length reference point’, from
+which all the tubing length values are measured. There are no pressure
+losses calculated across this segment, as the multisegment well model
+does not calculate pressure losses above the nodal point of the top
+segment. (Pressure losses between the BHP reference depth and the
+tubing head should normally be handled by VFP tables in the usual
+way.)</p>
+ <p>A zero value entered here implies that tubing lengths
+are measured from the BHP reference point in the top segment.</p>
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>),
+cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT:
+0.0 (the first time a multisegment well is declared), no change (on
+any subsequent entries).</p>
+</li>
+
+<li>Effective wellbore volume of the top segment<p>This quantity is
+used to calculate wellbore storage effects in the top segment.</p>
+                <p>UNITS: m<sup>3</sup> (<samp class="codeph">METRIC</samp>),
+ft<sup>3</sup> (<samp class="codeph">FIELD</samp>), cc (<samp class="codeph">LAB</samp>),
+m<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 1.0E-5, giving
+negligible storage effects (the first time a multisegment well is
+declared), no change (on any subsequent entries).</p>
+</li>
+
+<li>Type of tubing length and depth information entered in the subsequent
+records of this keyword 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">INC</samp> </td>
+
+<td valign="top"> The length and depth values entered in items 5 and 6 of the
+subsequent records refer to the incremental changes of these quantities
+along each segment.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">ABS</samp> </td>
+
+<td valign="top"> The length and depth values entered in items 5 and 6 of the
+subsequent records refer to the absolute values of the tubing length
+and depth at the segment nodes.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+                <p>DEFAULT: There is no default; this item <strong>must</strong> be set.</p>
+             </li>
+
+<li>Components of the pressure drop to be included in the calculation
+for each of the well’s segments: 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">HFA</samp> </td>
+
+<td valign="top"> Hydrostatic + friction + acceleration</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">HF-</samp> </td>
+
+<td valign="top"> Hydrostatic + friction</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">H--</samp> </td>
+
+<td valign="top"> Hydrostatic only. This item must be contained within quotes.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>For segments whose friction+hydrostatic pressure drops
+are obtained from a VFP table (item 5 in keyword <a href="WSEGTABL.html#WSEGTABL"> WSEGTABL</a> set to <samp class="codeph">FH</samp>), the total pressure drop is treated as friction; the
+hydrostatic component is not separated out. If <samp class="codeph">HFA</samp> is selected here, the acceleration pressure drop is calculated separately
+using a homogeneous flow model and added to the pressure drop interpolated
+from the VFP table. In this case, ideally the VFP table should not
+contain the acceleration pressure loss, as it is then accounted twice;
+but this component of the pressure loss is generally very small. (See <a href="../ecl_td/vfptabls_Pressure_drops_from_VFP_tables.html#vfptabls_pressure_drop_components">"Pressure drop components"</a> in the <cite>ECLIPSE Technical Description</cite>.) If this well
+contains flow control devices specified with keywords <a href="WSEGAICD.html#WSEGAICD"> WSEGAICD</a>, <a href="WSEGSICD.html#WSEGSICD"> WSEGSICD</a>, <a href="WSEGLABY.html#WSEGLABY"> WSEGLABY</a> or <a href="WSEGVALV.html#WSEGVALV">  WSEGVALV</a>, or looped
+flow paths specified with keyword <a href="WSEGLINK.html#WSEGLINK"> WSEGLINK</a>, then this item must be set so that friction
+is included.</p>
+<p>DEFAULT: <samp class="codeph">HFA</samp> </p>
+ </li>
+
+<li> Default Multiphase flow model for the well’s segments 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">HO</samp> </td>
+
+<td valign="top"> Homogeneous flow; the phases all flow with the same velocity.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">DF</samp> </td>
+
+<td valign="top">A Drift Flux Model, which allows for slip between the phases.
+The slip is a combination of profile slip (a velocity ratio) and local
+slip (a relative vertical velocity). At low flow rates the local slip
+can cause countercurrent flow, where the heavy and light phases flow
+in opposite directions. (See <a href="../ecl_td/driftflx_The_drift_flux_slip_model.html#driftflx_the_drift_flux_slip_model">"The drift flux
+slip model"</a> in the <cite>ECLIPSE Technical Description</cite>.)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>The first time each segment is defined with <span class="keyword">WELSEGS</span>, its multiphase flow model is set according to the above choice.
+The keyword <a href="WSEGFMOD.html#WSEGFMOD"> WSEGFMOD</a> may subsequently be used to change the flow model for specific segments
+or reset the model’s parameters for specific segments.</p>
+<p>If <span class="keyword">WELSEGS</span> is entered again for the same well, this item does <strong>not</strong> affect the flow model for segments that have been defined
+in an earlier entry. The exception to this is when <samp class="codeph">HO</samp> is entered; any segments that use the drift flux model change to
+homogeneous flow.</p>
+<p>ECLIPSE 100</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> <samp class="codeph">DF</samp> must be selected here if <strong>any</strong> of the well's segments are to use the Drift Flux Model. The
+top segment (segment 1) always uses the Homogeneous Flow Model; there
+are no pressure losses calculated along this segment.  </span></div>
+<p>Individual
+segments may also be designated to have their pressure drops determined
+from VFP tables instead of a built-in Flow Model (see keyword <a href="WSEGTABL.html#WSEGTABL"> WSEGTABL</a>).</p>
+<p>DEFAULT: <samp class="codeph">HO</samp> </p>
+</li>
+
+<li>X coordinate of the nodal point of the top segment, relative to
+the origin of the grid   <p>The X and Y coordinates of the segment
+nodes are stored on the restart or graphics files to enable graphics
+applications to produce plots of the well trajectory. The data is
+not used for any other purpose and may be left defaulted if trajectory
+plots are not required.</p>
+                <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.0 (the first time a multisegment
+well is declared), no change (on any subsequent entries).</p>
+ </li>
+
+<li>Y coordinate of the nodal point of the top segment, relative to
+the origin of the grid     <p>UNITS: m (<samp class="codeph">METRIC</samp>),
+ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 0.0 (the first time a multisegment
+well is declared), no change (on any subsequent entries).</p>
+ </li>
+
+<li id="welsegs_Record_64311"><a name="welsegs_Record_64311"><!-- --></a><p>Thermal Option
+only</p>
+<p>Cross-sectional area of the pipe wall used in thermal conductivity
+calculation </p>
+(see note 3). <p>UNITS: m<sup>2</sup> (<samp class="codeph">METRIC</samp>), ft<sup>2</sup> (<samp class="codeph">FIELD</samp>), cm<sup>2</sup> (<samp class="codeph">LAB</samp>), m<sup>2</sup> (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT:
+0.0</p>
+             </li>
+
+<li id="welsegs_Record_85468"><a name="welsegs_Record_85468"><!-- --></a><p>Thermal Option
+only</p>
+<p>Volumetric heat capacity of the pipe wall.</p>
+<p>UNITS:
+kJ/m<sup>3</sup>/K (<samp class="codeph">METRIC</samp>), Btu/ft<sup>3</sup>/°R
+(<samp class="codeph">FIELD</samp>), J/cc/K (<samp class="codeph">LAB</samp>), kJ/m<sup>3</sup>/K (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.0</p>
+ </li>
+
+<li id="welsegs_Record_40814"><a name="welsegs_Record_40814"><!-- --></a><p>Thermal Option
+only</p>
+<p>Thermal conductivity of the pipe wall.</p>
+<p>UNITS: kJ/m/day/K
+(<samp class="codeph">METRIC</samp>), Btu/ft/day/°R (<samp class="codeph">FIELD</samp>),
+J/cm/hr/K (<samp class="codeph">LAB</samp>), kJ/m/day/K (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.0</p>
+ </li>
+
+</ol>
+<p>End the data record with a slash (/).</p>
+</div>
+
+<div class="section" id="welsegs_each_subsequent_record"><a name="welsegs_each_subsequent_record"><!-- --></a><h4 class="sectiontitle">Each subsequent
+record</h4><p>The subsequent records define the properties of all
+the well's segments except for the top segment. The segments must
+be numbered between 2 and <samp class="codeph">NSEGMX</samp> (entered in the <span class="keyword">RUNSPEC</span> section keyword <a href="WSEGDIMS.html#WSEGDIMS"> WSEGDIMS</a>). Segments may be entered in any
+order, and neighboring segments need not be numbered consecutively;
+ECLIPSE reorders them internally. A contiguous set of segments having
+the same properties can be entered together in a single record as
+a range. The segments within a range must have consecutively increasing
+numbers.</p>
+<ol>
+<li>Segment number at the start of the range (nearest the top segment)
+ <p>An integer between 2 and <samp class="codeph">NSEGMX</samp>.</p>
+         </li>
+
+<li>Segment number at the far end of the range <p>An integer between
+2 and <samp class="codeph">NSEGMX</samp>, not less than item 1.</p>
+         
+       <p>The remaining items in this record set the properties of
+the segments in this range. To enter properties for a single segment,
+set items 1 and 2 equal.</p>
+</li>
+
+<li>The branch number  <p>An integer between 1 and <samp class="codeph">NLBRMX</samp> (set in the <span class="keyword">RUNSPEC</span> section in keyword <a href="WSEGDIMS.html#WSEGDIMS"> WSEGDIMS</a>).</p>
+               <p>Segments situated on the main stem must have a
+branch number of 1. Lateral branches should be numbered between 2
+and <samp class="codeph">NLBRMX</samp>. Lateral branches may also have subordinate
+branches; in this case each branch must have a higher branch number
+than its parent branch.</p>
+         </li>
+
+<li>Number of the segment to which the segment at the start of the
+range (item 1) is joined, that is its neighbor in the direction of
+the wellhead. This is its <strong>outlet segment</strong>; the convention being
+that production flows are positive. <p>A node that is a branch point
+in a multilateral well can be the outlet segment of two or more segments
+on different branches.</p>
+         </li>
+
+<li>If item 5 of Record 1 is <samp class="codeph">INC</samp>:<p>The length of
+each segment in the range, that is the distance between its nodal
+point and that of its neighbor in the direction of the wellhead.</p>
+<p>Or, if item 5 of Record 1 is <samp class="codeph">ABS</samp>: </p>
+<p>The
+length down the tubing (from the zero tubing length reference point)
+at the nodal point of the <strong>last</strong> segment in the range. ECLIPSE
+divides the length between this point and the node of the range’s
+outlet segment (item 4) into n equal lengths, where n is the number
+of segments in this range.</p>
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+         </li>
+
+<li>If item 5 of Record 1 is <samp class="codeph">INC</samp>:  <p>Depth change
+along each segment in the range, that is the depth of its nodal point
+minus the depth of its outlet segment’s nodal point.</p>
+<p>Or, if
+item 5 of Record 1 is <samp class="codeph">ABS</samp>: </p>
+<p>The depth of the
+nodal point of the <strong>last</strong> segment in the range. ECLIPSE calculates
+the depths of any other segments in this range by interpolating between
+this depth and the depth of the range’s outlet segment (item 4), linearly
+according to their length down the tubing.</p>
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+         </li>
+
+<li>Tubing internal diameter (or the equivalent diameter for annular
+cross-sections)           <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft
+(<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+         </li>
+
+<li>The effective absolute roughness of the tubing.   <p>This quantity
+is used to calculate the Fanning friction factor.</p>
+           <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>),
+cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+        
+    </li>
+
+<li>Cross-sectional area for fluid flow            <p>UNITS: m<sup>2</sup> (<samp class="codeph">METRIC</samp>), ft<sup>2</sup> (<samp class="codeph">FIELD</samp>), cm<sup>2</sup> (<samp class="codeph">LAB</samp>), m<sup>2</sup> (<samp class="codeph">PVT-M</samp>)</p>
+           <p>DEFAULT: <math><mrow><mi>π</mi>
+<mo>(</mo><msup><mi>D</mi><mn>2</mn></msup><mo>/</mo>
+<mn>4</mn><mo>)</mo></mrow></math>           </p>
+    
+    </li>
+
+<li>Volume of the segment           <p>UNITS: m<sup>3</sup> (<samp class="codeph">METRIC</samp>), ft<sup>3</sup> (<samp class="codeph">FIELD</samp>), cc (<samp class="codeph">LAB</samp>), m<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+       
+   <p>DEFAULT: <math>
+<mrow><mi>A</mi><mo>⋅</mo><mi>L</mi></mrow></math>           </p>
+         </li>
+
+<li>If item 5 of Record 1 is <samp class="codeph">INC</samp>:   <p>The length
+of each segment in the range projected onto the X-axis, that is the
+X coordinate of its nodal point minus that of its neighbor in the
+direction of the wellhead.</p>
+<p>Or, if item 5 of Record 1 is <samp class="codeph">ABS</samp>:</p>
+<p>X coordinate of the nodal point of the <strong>last</strong> segment in the range, relative to the origin of the grid. ECLIPSE
+calculates the X coordinates of any other segments in this range by
+interpolating between this value and the X coordinate of the range’s
+outlet segment (item 4), linearly according to their length down the
+tubing.</p>
+<p>The X and Y coordinates of the segment nodes are stored
+on the restart or graphics files to enable graphics applications to
+produce plots of the well trajectory. The data is not used for any
+other purpose and may be left defaulted if trajectory plots are not
+required.</p>
+           <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft
+(<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.0</p>
+         </li>
+
+<li>If item 5 of Record 1 is <samp class="codeph">INC</samp>: <p>The length of
+each segment in the range projected onto the Y-axis, that is the Y
+coordinate of its nodal point minus that of its neighbor in the direction
+of the wellhead.</p>
+<p>Or, If item 5 of Record 1 is <samp class="codeph">ABS</samp>:</p>
+<p>Y coordinate of the nodal point of the <strong>last</strong> segment
+in the range, relative to the origin of the grid. ECLIPSE calculates
+the Y coordinates of any other segments in this range by interpolating
+between this value and the Y coordinate of the range’s outlet segment
+(item 4), linearly according to their length down the tubing.</p>
+ <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>),cm
+(<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+           
+       <p>DEFAULT: 0.0</p>
+         </li>
+
+<li id="welsegs_Each_subsequent_35719"><a name="welsegs_Each_subsequent_35719"><!-- --></a>  Cross-sectional area of the
+pipe wall used in thermal conductivity calculation (see note <a href="WELSEGS.html#welsegsnotes.thermalnote">3</a>). For tubing with circular
+cross-sections the area can be calculated using the formula      
+    <math><mrow><mi>A</mi><mo>=</mo><mi>π</mi><mo>⋅</mo><mo>(</mo>
+<msup><mrow><msub><mrow><mi>r</mi></mrow><mrow><mi>o</mi></mrow></msub></mrow><mrow><mn>2</mn></mrow>
+</msup><mrow><mo>-</mo><msup><mrow><msub><mrow><mi>r</mi></mrow><mrow><mi>i</mi></mrow></msub></mrow>
+<mrow><mn>2</mn></mrow></msup></mrow><mo>)</mo></mrow>
+</math> where <em>r<sub>o</sub></em> is the outer radius of and <em>r<sub>i</sub></em> is the inner radius. (ECLIPSE 300 thermal option
+only.)             <p>UNITS: m<sup>2</sup> (<samp class="codeph">METRIC</samp>), ft<sup>2</sup> (<samp class="codeph">FIELD</samp>), cm<sup>2</sup> (<samp class="codeph">LAB</samp>), m<sup>2</sup> (<samp class="codeph">PVT-M</samp>)</p>
+       
+     <p>DEFAULT: item 10 of Record 1</p>
+         </li>
+
+<li id="welsegs_Each_subsequent_16784"><a name="welsegs_Each_subsequent_16784"><!-- --></a> Volumetric heat capacity of
+the pipe wall (ECLIPSE 300 thermal option only).<p>UNITS: kJ/m<sup>3</sup>/K (<samp class="codeph">METRIC</samp>), Btu/ft<sup>3</sup>/°R (<samp class="codeph">FIELD</samp>), J/cc/K (<samp class="codeph">LAB</samp>), kJ/m<sup>3</sup>/K
+(<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: item 11 of Record 1</p>
+  
+      </li>
+
+<li id="welsegs_Each_subsequent_46425"><a name="welsegs_Each_subsequent_46425"><!-- --></a>Thermal conductivity of the
+pipe wall (ECLIPSE 300 thermal option only).<p>UNITS: kJ/m/day/K (<samp class="codeph">METRIC</samp>), Btu/ft/day/°R (<samp class="codeph">FIELD</samp>), J/cm/hr/K
+(<samp class="codeph">LAB</samp>), kJ/m/day/K (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: item 12 of Record 1</p>
+</li>
+
+</ol>
+<p>End the data record with a slash (/).</p>
+<p>End the set of
+data records with a slash.</p>
+</div>
+
+<div class="section" id="welsegs_notes"><a name="welsegs_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ol>
+<li> Multisegment well data can be complicated to enter. It is advisable
+to check your data by examining the output in the Print file.<p>ECLIPSE 100</p>
+<p>The output
+is generated by entering the argument <samp class="codeph">WELSPECS</samp> in
+the <a href="RPTSCHED.html#RPTSCHED"> RPTSCHED</a> keyword.</p>
+<p>ECLIPSE 300</p>
+<p>The
+output is generated by <a href="RPTPRINT.html#RPTPRINT"> RPTPRINT</a> keyword switches 6 and 7. This allows <samp class="codeph">WELL</samp> and <samp class="codeph">COMPLETION</samp> reports to be written which in turn
+prints out new segment and new completion data in addition to a multisegment
+well report.</p>
+</li>
+
+<li>Multisegment wells must use the average density calculation for
+the hydrostatic head (item 12 of keyword <a href="WELSPECS.html#WELSPECS"> WELSPECS</a> is automatically be set to <samp class="codeph">AVG</samp>). </li>
+
+<li id="welsegsnotes.thermalnote"><a name="welsegsnotes.thermalnote"><!-- --></a>In thermal simulations (Thermal
+option), heat can be conducted both across and along the pipe wall.
+Conduction across the pipe wall (between the well and the formation,
+or between inner tubing and outer annulus segments) is governed by
+the <a href="WSEGHEAT.html#WSEGHEAT"> WSEGHEAT</a> keyword.
+Conduction along the pipe wall, between each segment and its outlet
+segment, is determined by the cross-sectional area of the pipe wall
+material (item <a href="WELSEGS.html#welsegs_Each_subsequent_35719">13</a>) and its thermal conductivity (item <a href="WELSEGS.html#welsegs_Each_subsequent_46425">15</a>). Since the top segment
+has no outlet segment, its thermal conductivity (item <a href="WELSEGS.html#welsegs_Record_40814">12</a> of record 1) is used purely
+as a default value for the other segments. <p>Heat can also be stored
+in the pipe wall. The amount of energy that it stored within the pipe
+wall of each segment depends on the volume of the pipe wall material
+and its heat capacity. The volume of pipe wall material is equal to
+the segment length multiplied by the pipe wall cross-sectional area
+(item <a href="WELSEGS.html#welsegs_Each_subsequent_35719">13</a>). The
+heat capacity is defined in item <a href="WELSEGS.html#welsegs_Each_subsequent_16784">14</a>. The corresponding
+data items for the top segment (items <a href="WELSEGS.html#welsegs_Record_64311">10</a> and <a href="WELSEGS.html#welsegs_Record_85468">11</a> of record
+1) govern the heat storage in that segment and also act as default
+values for the other segments.</p>
+             </li>
+
+</ol>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

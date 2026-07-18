@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="AMFVD"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="AMFVD"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>AMFVD</title>
+</head>
+<body>
+
+
+<div class="nested0" id="AMFVD"><a name="AMFVD"><!-- --></a>
+<h1 class="keyword">AMFVD</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="amfvd.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="amfvd.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d84e45">  </th>
+
+<th valign="top" id="d84e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d84e54"> x </th>
+
+<th valign="top" id="d84e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d84e45 d84e54 ">  </td>
+
+<td valign="top" headers="d84e48 d84e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d84e45 d84e54 ">  </td>
+
+<td valign="top" headers="d84e48 d84e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d84e45 d84e54 ">  </td>
+
+<td valign="top" headers="d84e48 d84e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d84e45 d84e54 "> x </td>
+
+<td valign="top" headers="d84e48 d84e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d84e45 d84e54 ">  </td>
+
+<td valign="top" headers="d84e48 d84e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d84e45 d84e54 "> x </td>
+
+<td valign="top" headers="d84e48 d84e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d84e45 d84e54 ">  </td>
+
+<td valign="top" headers="d84e48 d84e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d84e45 d84e54 ">  </td>
+
+<td valign="top" headers="d84e48 d84e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword can be used in a <a href="THERMAL.html#THERMAL"> THERMAL</a> run together with the <a href="CO2STORE.html#CO2STORE"> CO2STORE</a> option and/or when water K<sub>w</sub> values are defined using <a href="KWTABTn.html#KWTABTn"> KWTABTn</a>.</p>
+
+<p>The data comprises a table of aqueous mole fractions (for example,
+CO<sub>2</sub>, H<sub>2</sub>S and  H<sub>2</sub>O)  versus depth.
+Each table consists of the number of components plus 1 columns of
+data and must be terminated by a slash (/). Note that in a thermal
+run the  H<sub>2</sub>O  component also should be specified. </p>
+
+<p>When water-oil contact and gas-oil contact is above reservoir top
+then <a href="COMPVD.html#COMPVD"> COMPVD</a> and <a href="ZMFVD.html#ZMFVD"> ZMFVD</a> are not needed, <span class="keyword">AMFVD</span> would be enough for initialization.</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">Column 1</td>
+
+<td valign="top">Depth values.<p>Values should increase monotonically.</p>
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>),
+cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top">Columns 2 to N<sub>comps</sub> +1</td>
+
+<td valign="top">  Corresponding mole fraction for each component including
+water (H<sub>2</sub>O). </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>If <span class="keyword">AMFVD</span> is not used in equilibrated cases (<a href="EQUIL.html#EQUIL"> EQUIL</a> keyword present)
+then water will be entirely composed of H<sub>2</sub>O. </p>
+
+<p>The initial aqueous mole fractions will be set from this keyword,
+unless the concentration exceeds the saturated value in which case
+the saturated value will be taken. Note, however, that the aqueous
+concentration may not be in equilibrium with the gaseous concentration.
+The concentration reported at initialization is the concentration
+after flashing the system, and hence dissolved gases (for example,
+CO<sub>2</sub>  or  H<sub>2</sub>S) may be redistributed between the
+phases in each grid block. </p>
+
+<div class="section" id="amfvd_example"><a name="amfvd_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>Aqua mole fractions
+versus depth, one component and water.</p>
+<pre><code>AMFVD
+----- gas   water
+100   0.001 0.999
+10000 0.002 0.998/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

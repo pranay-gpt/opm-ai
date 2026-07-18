@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Global keywords"/>
+<meta name="DC.subject" content="Data file global keywords, Data file reading the input file, Data file echoing the input file, Data file message print limits, Data file message stop limits, Data file global keyword debugging, Data file ending input files, Data file global keyword list"/>
+<meta name="keywords" content="Data file global keywords, Data file reading the input file, Data file echoing the input file, Data file message print limits, Data file message stop limits, Data file global keyword debugging, Data file ending input files, Data file global keyword list"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="datafile_global_keywords"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Global keywords</title>
+</head>
+<body>
+
+
+<div class="nested0" id="datafile_global_keywords"><a name="datafile_global_keywords"><!-- --></a>
+<h1 class="topictitle1">Global keywords</h1>
+
+
+ <div>
+<p>Some keywords may occur in any section of the input file. These
+keywords and brief descriptions of their functions are listed below.</p>
+
+<div class="section" id="datafile_reading_and_echoing_the_input_file"><a name="datafile_reading_and_echoing_the_input_file"><!-- --></a><h4 class="sectiontitle">Reading
+and echoing the input file</h4><p>The <a href="ECHO.html#ECHO"> ECHO</a> and <a href="NOECHO.html#NOECHO"> NOECHO</a> keywords turn on and off the echoing of the input file to
+the print file. The initial default is echoing on.</p>
+<p>The <a href="INCLUDE.html#INCLUDE"> INCLUDE</a> keyword enables
+data to be read from another named file. It is followed by the name
+of a file from which input is to be taken. Once read, the file is
+closed, and input resumed from the main file, starting from the keyword
+after the <span class="keyword">INCLUDE</span>.</p>
+<p>An example would be:</p>
+<pre><code>INCLUDE
+CASE6G.DATA /
+
+</code></pre><p>The <a href="SKIP.html#SKIP"> SKIP</a> keyword causes all subsequent keywords to be skipped (ignored) until
+an <a href="ENDSKIP.html#ENDSKIP"> ENDSKIP</a> keyword
+is encountered. The <a href="SKIP100.html#SKIP100"> SKIP100</a> keyword skips the intervening keywords when running ECLIPSE
+100. Similarly the <a href="SKIP300.html#SKIP300"> SKIP300</a> keyword skips the intervening keywords when running ECLIPSE
+300. This family of keywords is intended to ease the porting of data
+files between the two simulators.</p>
+<p>ECLIPSE
+100</p>
+<p>The <a href="COLUMNS.html#COLUMNS"> COLUMNS</a> keyword can be used to reset the left and
+right margins for reading the input data file. Only data within these
+margins are read and processed. The default setting for the left and
+right margins is 1 and 132 respectively.</p>
+<p>ECLIPSE 100</p>
+<p>The <a href="FORMFEED.html#FORMFEED"> FORMFEED</a> keyword sets the formfeed character
+in the Print file. The default is to use standard FORTRAN carriage
+control.</p>
+</div>
+
+<div class="section" id="datafile_setting_message_print_and_stop_limits"><a name="datafile_setting_message_print_and_stop_limits"><!-- --></a><h4 class="sectiontitle">Setting message print and stop limits</h4><p>ECLIPSE has a message
+handling system that has six levels of severity:</p>
+<ol>
+<li> Messages</li>
+
+<li> Comments </li>
+
+<li> Warnings </li>
+
+<li> Problems </li>
+
+<li> Errors </li>
+
+<li> Bugs </li>
+
+</ol>
+<p>When one of these occurs, it is logged to the short form output,
+the Print file, the debug file, and optionally the message file (see
+the <a href="MSGFILE.html#MSGFILE"> MSGFILE</a> keyword).
+After a certain number of occurrences (the ‘print limit’) of a particular
+type of message the program will not print any more of that type.
+Also, after a certain number of occurrences (the ‘stop limit’) of
+a particular type of message the run automatically stops. The <a href="MESSAGES.html#MESSAGES"> MESSAGES</a> keyword allows
+you to modify the default print and stop limits.</p>
+<p>ECLIPSE 100</p>
+<p>It is
+possible to suppress the output of Warning messages by entering the <a href="NOWARN.html#NOWARN"> NOWARN</a> keyword, and subsequently
+reactivate them with the <a href="WARN.html#WARN"> WARN</a> keyword. Output of warnings for PVT and VFP table extrapolation
+may be controlled with <a href="EXTRAPMS.html#EXTRAPMS"> EXTRAPMS</a>.</p>
+</div>
+
+<div class="section" id="datafile_controlling_debug"><a name="datafile_controlling_debug"><!-- --></a><h4 class="sectiontitle">Controlling debug</h4><p>The <a href="DEBUG.html#DEBUG"> DEBUG</a> and <a href="DEBUG3.html#DEBUG3"> DEBUG3</a> keywords control
+output to the debug file in ECLIPSE 100 and ECLIPSE 300 respectively.
+Each of the integers following the keyword controls output from a
+program option or turns on a test. This is intended mainly for program
+development purposes.</p>
+</div>
+
+<div class="section" id="datafile_ending_input_files"><a name="datafile_ending_input_files"><!-- --></a><h4 class="sectiontitle">Ending input files</h4><p>The <a href="END.html#END"> END</a> keyword
+terminates the reading of data prior to the actual end of a input
+file. The program does not echo or process data after this. <span class="keyword">END</span> may be used in an <samp class="codeph">INCLUDE</samp> file. To
+end reading of an <samp class="codeph">INCLUDE</samp> file prior to the actual
+end of file, and return control to the main input file, <a href="ENDINC.html#ENDINC"> ENDINC</a> may be used. <span class="keyword">END</span> and <span class="keyword">ENDINC</span> are generated automatically
+at the actual end of the relevant files, and so normally need not
+be used.</p>
+</div>
+
+<div class="section" id="datafile_list_of_global_keywords"><a name="datafile_list_of_global_keywords"><!-- --></a><h4 class="sectiontitle">List of global
+keywords</h4>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">   
+<thead align="left">
+<tr>
+<th valign="top" width="33.33333333333333%" id="d3264e248">Restriction</th>
+
+<th valign="top" width="33.33333333333333%" id="d3264e251">Keyword</th>
+
+<th valign="top" width="33.33333333333333%" id="d3264e254">Description</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d3264e248 ">ECLIPSE 100</td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e251 "> <a href="COLUMNS.html#COLUMNS"> COLUMNS</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e254 "> Reset left and right margins for reading data input file </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d3264e248 ">ECLIPSE 100</td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e251 "> <a href="DEBUG.html#DEBUG"> DEBUG</a>  </td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e254 ">Set debug output control switches</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d3264e248 ">ECLIPSE 300</td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e251 "> <a href="DEBUG3.html#DEBUG3"> DEBUG3</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e254 "> Set debug output control switches </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d3264e248 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e251 "> <a href="ECHO.html#ECHO"> ECHO</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e254 "> Switch on the echo of the data printed at the start of each
+run. </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d3264e248 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e251 "> <a href="END.html#END"> END</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e254 ">  Terminate reading the data. </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d3264e248 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e251 "> <a href="ENDINC.html#ENDINC"> ENDINC</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e254 ">Terminate reading the Include file and return to the main data
+file.  </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d3264e248 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e251 "> <a href="ENDSKIP.html#ENDSKIP"> ENDSKIP</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e254 ">Terminates skipping of keywords (<span class="keyword">SKIP</span>, <span class="keyword">SKIP100</span>, <span class="keyword">SKIP300</span>).  </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d3264e248 ">ECLIPSE 100</td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e251 "> <a href="EXTRAPMS.html#EXTRAPMS"> EXTRAPMS</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e254 ">Request warning messages for PVT and VFP table extrapolation</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d3264e248 ">ECLIPSE 100</td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e251 "> <a href="FORMFEED.html#FORMFEED"> FORMFEED</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e254 "> Sets the formfeed character in the Print file</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d3264e248 ">ECLIPSE 100</td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e251 "> <a href="GETDATA.html#GETDATA"> GETDATA</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e254 "> Imports named array data from previous Initial or Restart
+files. (<span class="keyword">GRID</span>, <span class="keyword">EDIT</span>, <span class="keyword">PROPS</span>, <span class="keyword">REGIONS</span> and <span class="keyword">SOLUTION</span> sections.) </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d3264e248 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e251 "> <a href="INCLUDE.html#INCLUDE"> INCLUDE</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e254 "> Insert the contents of a specified file.  </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d3264e248 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e251 "> <a href="MESSAGES.html#MESSAGES"> MESSAGES</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e254 ">  Reset print and stop limits for messages of all severity
+types.  </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d3264e248 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e251 "> <a href="NOECHO.html#NOECHO"> NOECHO</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e254 "> Switch off the echo of the data printed at the start of each
+run.  </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d3264e248 ">ECLIPSE 100</td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e251 "> <a href="NOWARN.html#NOWARN"> NOWARN</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e254 "> Suppress warning messages</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d3264e248 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e251 "> <a href="SKIP.html#SKIP"> SKIP</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e254 "> Skips the following keywords until <span class="keyword">ENDSKIP</span> is read. </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d3264e248 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e251 "> <a href="SKIP100.html#SKIP100"> SKIP100</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e254 "> Instructs ECLIPSE 100 to skip the following keywords until <span class="keyword">ENDSKIP</span> is read; it is ignored in ECLIPSE 300.  </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d3264e248 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e251 "> <a href="SKIP300.html#SKIP300"> SKIP300</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e254 "> Instructs ECLIPSE 300 to skip the following keywords until <span class="keyword">ENDSKIP</span> is read; it is ignored in ECLIPSE 100.  </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d3264e248 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e251 "> <a href="WARN.html#WARN"> WARN</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d3264e254 ">Reactivate warning messages after suppression by <span class="keyword">NOWARN</span> in ECLIPSE 100. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

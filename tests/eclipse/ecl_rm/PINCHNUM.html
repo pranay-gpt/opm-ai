@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PINCHNUM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PINCHNUM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PINCHNUM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="PINCHNUM"><a name="PINCHNUM"><!-- --></a>
+<h1 class="keyword">PINCHNUM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="pinchnum.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="pinchnum.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1802e45"> x </th>
+
+<th valign="top" id="d1802e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1802e54">  </th>
+
+<th valign="top" id="d1802e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1802e45 d1802e54 ">  </td>
+
+<td valign="top" headers="d1802e48 d1802e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1802e45 d1802e54 "> x </td>
+
+<td valign="top" headers="d1802e48 d1802e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1802e45 d1802e54 ">  </td>
+
+<td valign="top" headers="d1802e48 d1802e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1802e45 d1802e54 ">  </td>
+
+<td valign="top" headers="d1802e48 d1802e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1802e45 d1802e54 ">  </td>
+
+<td valign="top" headers="d1802e48 d1802e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1802e45 d1802e54 ">  </td>
+
+<td valign="top" headers="d1802e48 d1802e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1802e45 d1802e54 ">  </td>
+
+<td valign="top" headers="d1802e48 d1802e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1802e45 d1802e54 ">  </td>
+
+<td valign="top" headers="d1802e48 d1802e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">PINCHNUM</span> keyword identifies regions for
+calculation of pinchouts. The threshold thickness and options for
+calculating the pinchouts should be supplied for each <span class="keyword">PINCHNUM</span> region using the <a href="PINCHREG.html#PINCHREG"> PINCHREG</a> keyword.</p>
+
+<p>To use this keyword, <samp class="codeph">NRPINC</samp> must be set greater
+than zero in item 3 of the <span class="keyword">RUNSPEC</span> section keyword <a href="GRIDOPTS.html#GRIDOPTS"> GRIDOPTS</a>, to define
+the maximum number of <span class="keyword">PINCHNUM</span> regions.</p>
+
+<p>The <span class="keyword">PINCHNUM</span> keyword should be followed by one
+integer for each grid cell, specifying the region number to which
+it belongs. The data must be terminated by a slash (/).</p>
+
+<p>Any cells not explicitly assigned a value of <span class="keyword">PINCHNUM</span> are taken to be in region 1.</p>
+
+<p>See also keywords <span class="keyword">PINCHREG</span> and <a href="PINCH.html#PINCH"> PINCH</a>.</p>
+
+<p>In ECLIPSE 100:</p>
+
+<ul>
+<li>For use with the dual porosity option, only the matrix cells or
+the fracture cells need to be input. The cell values in the other
+porosity will be copied automatically. If you want to specify matrix
+cells and fracture cells separately, then set <a href="OPTIONS.html#options.117">item 117</a> in <span class="keyword">OPTIONS</span> to be greater than 1. This will also affect use of the <a href="MULTNUM.html#MULTNUM"> MULTNUM</a>, <a href="FLUXNUM.html#FLUXNUM"> FLUXNUM</a> or <a href="OPERNUM.html#OPERNUM"> OPERNUM</a> keywords.</li>
+
+<li>The <span class="keyword">PINCHNUM</span> keyword cannot be used inside
+a <span class="keyword">CARFIN</span>/<span class="keyword">RADFIN</span>...<span class="keyword">ENDFIN</span> bracket.</li>
+
+</ul>
+
+<div class="section" id="pinchnum_example"><a name="pinchnum_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>To define
+4 separate regions in a 4*4*3 field, with <samp class="codeph">NRPINC=4</samp>:</p>
+ <pre><code>PINCHNUM
+ 1 1 2 2
+ 1 1 2 2
+ 3 3 4 4
+ 3 3 4 4
+ 1 1 2 2
+ 1 1 2 2
+ 3 3 4 4
+ 3 3 4 4
+ 1 1 2 2
+ 1 1 2 2
+ 3 3 4 4
+ 3 3 4 4
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GUIDECAL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GUIDECAL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GUIDECAL</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="GUIDECAL"><a name="GUIDECAL"><!-- --></a>
+<h1 class="keyword">GUIDECAL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="guidecal.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="guidecal.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d962e45"> x </th>
+
+<th valign="top" id="d962e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d962e54">  </th>
+
+<th valign="top" id="d962e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d962e45 d962e54 ">  </td>
+
+<td valign="top" headers="d962e48 d962e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d962e45 d962e54 ">  </td>
+
+<td valign="top" headers="d962e48 d962e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d962e45 d962e54 ">  </td>
+
+<td valign="top" headers="d962e48 d962e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d962e45 d962e54 ">  </td>
+
+<td valign="top" headers="d962e48 d962e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d962e45 d962e54 ">  </td>
+
+<td valign="top" headers="d962e48 d962e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d962e45 d962e54 ">  </td>
+
+<td valign="top" headers="d962e48 d962e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d962e45 d962e54 ">  </td>
+
+<td valign="top" headers="d962e48 d962e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d962e45 d962e54 "> x </td>
+
+<td valign="top" headers="d962e48 d962e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword provides an additional way of influencing the mean
+calorific value of the produced gas, for use with the gas calorific
+value control option (see <a href="../ecl_td/gcalvalintro_Gas_Calorific_Value_Control.html#gcalvalintro_gas_calorific_value_control">"Gas calorific value
+control"</a> in the <cite>ECLIPSE Technical Description</cite>),
+by calculating the individual well guide rates (and any group guide
+rates) as a function of their calorific values. Well guide rates that
+are not set directly with keyword <a href="WGRUPCON.html#WGRUPCON">  WGRUPCON</a> are calculated at the start of each timestep
+as a function of their production potentials. By default the guide
+rates are set equal to their production potentials, but the keyword <a href="GUIDERAT.html#GUIDERAT">  GUIDERAT</a> can be used
+to specify the coefficients of a more general function of production
+potentials.</p>
+
+<p>The keyword <span class="keyword">GUIDECAL</span> can be used to make the
+guide rate calculation take account of calorific values also. It sets
+the coefficients A and B of a function B<sub>W</sub>  which depends
+on the calorific value  <math><msub><mi>C</mi>
+<mrow><mi>g</mi><mi>W</mi></mrow></msub></math>  </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="guidecal.XID-0000004b"/>
+ <math><msub><mi>β</mi>
+<mi>W</mi></msub><mo>=</mo><msup><mrow><mo>(</mo>
+<mn>1</mn><mo>+</mo><mrow><mi>A</mi><msub><mi>C</mi>
+<mrow><mi>g</mi><mi>W</mi></mrow></msub></mrow><mo>)</mo></mrow><mi>B</mi></msup></math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table>
+<p>When a well W has its guide rate calculated from its production
+potentials (that is not set to a fixed value with keyword <span class="keyword">WGRUPCON</span>), the resulting guide rate is multiplied by B<sub>W</sub>. Thus by setting appropriate values for the coefficients
+A and B in keyword <span class="keyword">GUIDECAL</span>, it is possible to
+either increase or decrease the well guide rates with increasing calorific
+value. For example, setting a positive value for B bias the production
+towards wells with higher calorific values, while negative values
+of B bias the production towards wells with lower calorific values. </p>
+
+<p>If <strong>groups</strong> are given guide rates that are calculated from
+the guide rate formula in keyword <span class="keyword">GUIDERAT</span> (that
+is item <a href="GCONPROD.html#gconprod.XID-000000fc">10</a> in <a href="GCONPROD.html#GCONPROD">  GCONPROD</a> is set to <samp class="codeph">FORM</samp>), their guide rates are also multiplied by B<sub>G</sub>, which is calculated as for  B<sub>W</sub>  but using the groups’
+mean calorific values. </p>
+
+<p>The <span class="keyword">GUIDECAL</span> keyword requires two items of data,
+terminated with a slash (/):</p>
+
+<ol>
+<li> The coefficient A in equation <a href="GUIDECAL.html#guidecal.XID-0000004b">247.1</a> <p>This must not be negative.</p>
+ </li>
+
+<li> The coefficient B in equation <a href="GUIDECAL.html#guidecal.XID-0000004b">247.1</a>  </li>
+
+</ol>
+
+<div class="section" id="guidecal.example"><a name="guidecal.example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <pre><code>GUIDECAL
+ 0.001  1.0 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

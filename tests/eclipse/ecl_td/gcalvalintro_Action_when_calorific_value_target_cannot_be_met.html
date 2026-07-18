@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Action when calorific value target cannot be met"/>
+<meta name="DC.subject" content="Gas calorific value control"/>
+<meta name="keywords" content="Gas calorific value control"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gcalvalintro_action_when_calorific_value_target_cannot_be_met"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Action when calorific value target cannot be met</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="gcalvalintro_action_when_calorific_value_target_cannot_be_met"><a name="gcalvalintro_action_when_calorific_value_target_cannot_be_met"><!-- --></a>
+<h1 class="topictitle1">Action when calorific value target cannot be met</h1>
+
+
+ <div>
+<p>In order to meet the mean calorific value target, the set of wells
+under group control must include at least one well producing gas with
+a calorific value greater than the target, and at least one producing
+with less than the target calorific value. ECLIPSE can take certain
+remedial actions when there is insufficient high or low calorific
+value gas available.</p>
+
+<div class="section" id="gcalvalintro_not_enough_high_calorific_value_gas"><a name="gcalvalintro_not_enough_high_calorific_value_gas"><!-- --></a><h4 class="sectiontitle">Not enough high calorific value gas</h4><p>If the group is meeting
+its production rate target, but the numerator of equation <a href="gcalvalintro_Adjusting_guide_rates_to_control_mean_calorific_value.html#gcalvalintro.XID-0000007e">642.7</a>  is zero or negative, there are two actions that ECLIPSE may
+take:</p>
+<ul>
+<li>Increase the productivity of high calorific value gas sources.
+       <p>If group production rules have been specified (keyword <a href="../ecl_rm/PRORDER.html#PRORDER">PRORDER</a>), ECLIPSE performs
+the requested actions with the aim of obtaining more high quality
+gas. The <samp class="codeph">DRILL</samp> action opens the next suitable well
+from the drilling queue that has a calorific value greater than the
+target value. The <samp class="codeph">REPERF</samp> action selects the well
+with the largest sum of {connection factor * gas phase mobility *
+                       <math><mrow><mo>(</mo>
+<msub><mrow><mi>C</mi></mrow><mrow><mi>g</mi><mi>W</mi></mrow></msub><mrow><mtext> </mtext><mo>-</mo>
+<mtext> </mtext><msubsup><mrow><mi>C</mi></mrow><mrow>
+<mi>g</mi><mi>G</mi></mrow><mrow><mtext>targ</mtext>
+</mrow></msubsup></mrow><mo>)</mo></mrow></math> } of
+its remaining connections on <samp class="codeph">AUTO</samp>, and opens the
+next connection in its <samp class="codeph">AUTO</samp> queue. The <samp class="codeph">THP</samp>, <samp class="codeph">RETUBE</samp> and <samp class="codeph">LIFT</samp> actions select
+the well with the largest value of  <math><mrow><mi>Δ</mi><msub><mrow><mi>Q</mi>
+</mrow><mrow><mi>g</mi><mi>W</mi></mrow></msub><mo>(</mo><msub><mrow><mi>C</mi></mrow><mrow><mi>g</mi>
+<mi>W</mi></mrow></msub><mrow><mo>-</mo><msubsup>
+<mrow><mi>C</mi></mrow><mrow><mi>g</mi><mi>G</mi>
+</mrow><mrow><mtext>targ</mtext></mrow></msubsup></mrow>
+<mo>)</mo></mrow></math>, where  <math><mrow>
+<mi>Δ</mi><msub><mi>Q</mi><mrow><mi>g</mi><mi>W</mi></mrow></msub></mrow></math>  is the increase in
+gas production rate that would result from the action. <samp class="codeph">COMP</samp> actions are not triggered by a calorific value target. If the <span class="keyword">PRORDER</span> keyword is not present, only the <samp class="codeph">DRILL</samp> action will be performed, if there are wells in the drilling queue. </p>
+</li>
+
+<li>Cut back the group’s gas rate target to bring more high
+calorific value gas wells under group control.    <p>If the productivity
+of high calorific value gas sources cannot be enhanced by the production
+rule actions described above, but there are some high calorific value
+gas sources that have dropped out of group control because they are
+unable to meet their share of the target, it could be possible to
+bring them back under group control by decreasing the group’s
+gas rate target. If this action is requested, ECLIPSE cuts back the
+group’s gas rate target by a specified fraction each time this
+situation arises, until the rate target is low enough to bring them
+back under group control. The need to maintain the target calorific
+value takes precedence over the group’s rate target.</p>
+   
+  </li>
+
+</ul>
+</div>
+
+<div class="section" id="gcalvalintro_not_enough_low_calorific_value_gas"><a name="gcalvalintro_not_enough_low_calorific_value_gas"><!-- --></a><h4 class="sectiontitle">Not enough low calorific value gas</h4><p>If the group is meeting
+its production rate target, but the denominator of equation <a href="gcalvalintro_Adjusting_guide_rates_to_control_mean_calorific_value.html#gcalvalintro.XID-0000007e">642.7</a>  is zero or negative, there are two actions that ECLIPSE may
+take:</p>
+<ul>
+<li>Increase the productivity of low calorific value gas sources.
+  <p>The production rule actions as described above are invoked, but
+this time with the aim of making more low calorific value gas available.
+The <samp class="codeph">DRILL</samp> action looks for a well with a calorific
+value less than the target. The <samp class="codeph">REPERF</samp> action selects
+he well with the largest sum of {connection factor * gas phase mobility
+*                        <math><mrow><mo>(</mo>
+<msubsup><mrow><mi>C</mi></mrow><mrow><mi>g</mi><mi>G</mi></mrow><mrow><mtext>targ</mtext></mrow></msubsup>
+<mrow><mtext> </mtext><mo>-</mo><mtext> </mtext><msub>
+<mrow><mtext> </mtext><mi>C</mi></mrow><mrow><mi>g</mi>
+<mi>W</mi></mrow></msub></mrow><mo>)</mo></mrow>
+</math> } of its remaining connections on <samp class="codeph">AUTO </samp>.
+The <samp class="codeph">THP</samp>, <samp class="codeph">RETUBE</samp> and <samp class="codeph">LIFT </samp> actions select the well with the largest value of  <math><mrow><mi>Δ</mi>
+<msub><mrow><mi>Q</mi></mrow><mrow><mi>g</mi><mi>W</mi></mrow></msub><mo>(</mo><msubsup><mrow><mi>C</mi></mrow><mrow><mi>g</mi><mi>G</mi></mrow><mrow>
+<mtext>targ</mtext></mrow></msubsup><mrow><mtext> </mtext>
+<mo>-</mo><mtext> </mtext><msub><mrow><mi>C</mi>
+</mrow><mrow><mi>g</mi><mi>W</mi></mrow></msub></mrow>
+<mo>)</mo></mrow></math>. </p>
+    </li>
+
+<li>Cut back the group's gas rate target to bring more low calorific
+value gas wells under group control. This is performed as described
+above, if the production rule actions are not able to restore the
+group's mean calorific value.</li>
+
+</ul>
+</div>
+
+<div class="section" id="gcalvalintro_not_enough_gas_to_meet_the_group___s_rate_target"><a name="gcalvalintro_not_enough_gas_to_meet_the_group___s_rate_target"><!-- --></a><h4 class="sectiontitle">Not enough gas to meet the group's rate target</h4><p>If there are no wells at all under group control, the group's
+rate target will no longer be met. ECLIPSE may take the following
+actions:</p>
+<ul>
+<li> Apply the production rules to enhance gas production. <p>The
+production rules are applied in the usual way to maintain the group's
+production target (as described in keyword <a href="../ecl_rm/PRORDER.html#PRORDER"> PRORDER</a>), but with the following
+difference. If the group's mean calorific value is below the
+target value, ECLIPSE initially only considers the wells that are
+producing gas with calorific value higher than the group's target;
+if no such wells are available for action then the low quality wells
+are examined also. Conversely if the group's mean calorific
+value is above the target value, ECLIPSE initially only considers
+the wells that are producing gas with calorific value lower than the
+group's target; if no such wells are available for action then
+the high quality wells are examined also.</p>
+ </li>
+
+<li> Cut back the group's gas rate target to bring some high
+and low calorific value gas wells under group control. <p>This is
+performed as described above, if the production rule actions are not
+able to restore the group's mean calorific value.</p>
+ </li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="REGDIMS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="REGDIMS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>REGDIMS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="REGDIMS"><a name="REGDIMS"><!-- --></a>
+<h1 class="keyword">REGDIMS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="regdims.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="regdims.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1992e45">                         x </th>
+
+<th valign="top" id="d1992e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1992e54">                         x </th>
+
+<th valign="top" id="d1992e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1992e45 d1992e54 ">                         x </td>
+
+<td valign="top" headers="d1992e48 d1992e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1992e45 d1992e54 "> </td>
+
+<td valign="top" headers="d1992e48 d1992e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1992e45 d1992e54 "> </td>
+
+<td valign="top" headers="d1992e48 d1992e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1992e45 d1992e54 "> </td>
+
+<td valign="top" headers="d1992e48 d1992e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1992e45 d1992e54 "> </td>
+
+<td valign="top" headers="d1992e48 d1992e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1992e45 d1992e54 "> </td>
+
+<td valign="top" headers="d1992e48 d1992e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1992e45 d1992e54 "> </td>
+
+<td valign="top" headers="d1992e48 d1992e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1992e45 d1992e54 "> </td>
+
+<td valign="top" headers="d1992e48 d1992e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data consists of some or all of the following items which describe
+the maximum number of regions associated with miscellaneous keywords
+in the <span class="keyword">GRID</span>,  <span class="keyword">EDIT</span>,  <span class="keyword">PROPS</span>,  <span class="keyword">REGIONS</span> or  <span class="keyword">SOLUTION</span> section.</p>
+
+<p>The data must be terminated by a slash (/).</p>
+
+<ol>
+<li>The maximum number of fluid-in-place regions (<samp class="codeph">NTFIP</samp>) defined with keyword  <a href="FIPNUM.html#FIPNUM"> FIPNUM</a>  in the regions section. A balance sheet showing all fluid
+movements between fluid-in-place regions can be generated at each
+report time. If additional sets of fluid-in-place regions have been
+defined with keyword  <a href="FIP.html#FIP"> FIP</a>, the maximum region number in this keyword must also not exceed
+this number. <p>Since the fluid-in-place balance sheet reports region-to-region
+flows, the storage required is proportional to the square of <samp class="codeph">NTFIP</samp>. Very large values of <samp class="codeph">NTFIP</samp>  should
+therefore be avoided, as excessive storage may be required and in
+addition the restart files will be very large.</p>
+ <p>This quantity
+may also be defined by <a href="TABDIMS.html#TABDIMS.NTFIP"> NTFIP</a> in keyword <span class="keyword">TABDIMS</span>. If it
+is set in both places, the greater of the two settings is used. Additionally,
+if item 1 of  <a href="DYNRDIMS.html#DYNRDIMS"> DYNRDIMS</a> is defined, the greatest of the three settings is used.</p>
+ <p> DEFAULT: 1</p>
+ </li>
+
+<li>The number of sets of fluid-in-place regions (<samp class="codeph">NMFIPR</samp>). The standard set is defined by <samp class="codeph">FIPNUM</samp> in the
+ <span class="keyword">REGIONS</span> section. Any additional sets are defined
+by <a href="FIP.html#FIP"> FIPxxx</a> keywords
+in the <span class="keyword">REGIONS</span> section. <p> DEFAULT: 1</p>
+ <p>ECLIPSE 300</p>
+ <div class="note"><span class="notetitle">Note:</span> <span class="notebody"> If
+dynamic regions are used in addition to additional sets of standard
+fluid-in-place regions, this value needs to be the actual number of
+specified sets of fluid-in-place regions, not the maximum number.</span></div>
+ <p>ECLIPSE 100</p>
+</li>
+
+<li> The maximum number of independent reservoir
+regions (<samp class="codeph">NRFREG</samp>).  (See <a href="../ecl_td/independ_Independent_Reservoir_Regions.html#independ_independent_reservoir_regions">"Independent reservoir
+regions"</a> in the  <cite>ECLIPSE Technical Description</cite> and the keyword  <a href="ISOLNUM.html#ISOLNUM"> ISOLNUM</a> in the <span class="keyword">GRID</span> section.) <p> DEFAULT: 0</p>
+</li>
+
+<li>The maximum number of flux regions for the Flux option (<samp class="codeph">NTFREG</samp>); or the maximum number of regions used by the <a href="FLUXNUM.html#FLUXNUM"> FLUXNUM</a> keyword in the <span class="keyword">GRID</span> section. <p>This quantity may also be defined by  <a href="TABDIMS.html#TABDIMS.MXNFLX"> MXNFLX</a> in
+keyword  <span class="keyword">TABDIMS</span>; if it is set in both places,
+the maximum of the two is used.</p>
+ <p> DEFAULT: 0</p>
+ <p>ECLIPSE 100</p>
+ <div class="note"><span class="notetitle">Note:</span> <span class="notebody"> If
+this value is defaulted or set to 0 and the 2nd item of <a href="GRIDOPTS.html#GRIDOPTS"> GRIDOPTS</a> is also defaulted
+or set to 0, the simulator behaves as though all grid blocks are in <a href="MULTNUM.html#MULTNUM"> MULTNUM</a> region 1. This
+has no effect except that specifying multipliers for region 1 will
+not generate a warning or error, and is a side-effect of the default
+value for <span class="keyword">MULTNUM</span> being 1. </span></div>
+ <p>ECLIPSE 300</p>
+</li>
+
+<li> The maximum number of user-defined regions
+to be used in the enhanced  <a href="TRACK.html#TRACK"> TRACK</a> option. <p> DEFAULT: 0</p>
+                 <div class="caution"><span class="cautiontitle">CAUTION:</span> This number should, if possible, be no larger than the actual number
+of regions to be used, as any 'surplus' represents, depending on how
+many components are to be tracked, a considerable overhead in terms
+of both storage and CPU.</div>
+</li>
+
+<li>Coal Bed Methane option: The number of Coal Bed Methane regions, <samp class="codeph">NTCREG</samp>, as used by  <a href="COALNUM.html#COALNUM"> COALNUM</a> in the <span class="keyword">GRID</span> section. <p>DEFAULT: 1</p>
+ </li>
+
+<li>The maximum number of user-defined regions used by the <a href="OPERNUM.html#OPERNUM"> OPERNUM</a>  keyword in the <span class="keyword">GRID</span> and <span class="keyword">REGIONS</span> sections. <p>DEFAULT:
+0</p>
+ </li>
+
+<li>The maximum number of double-precision work arrays for use with
+the  <a href="OPERATE.html#OPERATE"> OPERATE</a> and
+ <a href="OPERATER.html#OPERATER"> OPERATER</a> keywords.
+An integer value between 1 and 9999 should be specified. <p>DEFAULT:
+0</p>
+ </li>
+
+<li>The maximum number of integer work arrays for use with the <span class="keyword">OPERATE</span> and <span class="keyword">OPERATER</span> keywords.  An integer
+value between 1 and 999 should be specified. <p>DEFAULT: 0</p>
+ <p>ECLIPSE 100</p>
+</li>
+
+<li> The number of polymer flooding mixing regions, <samp class="codeph">NPLMIX</samp>, as used by  <a href="PLMIXNUM.html#PLMIXNUM"> PLMIXNUM</a> in the <span class="keyword">REGIONS</span> section. <p>Default: 1</p>
+ </li>
+
+</ol>
+
+<div class="section" id="regdims_example"><a name="regdims_example"><!-- --></a><h4 class="sectiontitle">Example</h4>        <pre><code>REGDIMS
+ 5  5  0  1  /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="EQUIL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="EQUIL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>EQUIL</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="EQUIL"><a name="EQUIL"><!-- --></a>
+<h1 class="keyword">EQUIL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="equil.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="equil.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d650e45"> x </th>
+
+<th valign="top" id="d650e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d650e54"> x </th>
+
+<th valign="top" id="d650e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d650e45 d650e54 ">  </td>
+
+<td valign="top" headers="d650e48 d650e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d650e45 d650e54 ">  </td>
+
+<td valign="top" headers="d650e48 d650e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d650e45 d650e54 ">  </td>
+
+<td valign="top" headers="d650e48 d650e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d650e45 d650e54 ">  </td>
+
+<td valign="top" headers="d650e48 d650e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d650e45 d650e54 ">  </td>
+
+<td valign="top" headers="d650e48 d650e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d650e45 d650e54 "> x </td>
+
+<td valign="top" headers="d650e48 d650e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d650e45 d650e54 ">  </td>
+
+<td valign="top" headers="d650e48 d650e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d650e45 d650e54 ">  </td>
+
+<td valign="top" headers="d650e48 d650e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword sets the contacts and pressures for conventional hydrostatic
+equilibrium. It should be followed by <samp class="codeph">NTEQUL</samp> records
+of data, each record terminated with a slash (/). <samp class="codeph">NTEQUL</samp> refers to the number of equilibration regions, as entered in the <span class="keyword">RUNSPEC</span> section (keyword <a href="EQLDIMS.html#EQLDIMS"> EQLDIMS</a>). </p>
+
+<p>Each record refers to a separate equilibration region (1 to <samp class="codeph">NTEQUL</samp>), and contains the following items of data:</p>
+
+<ol>
+<li> Datum depth <p>In problems containing dissolved gas or vaporized
+oil, if R<sub>S</sub> or R<sub>V</sub> versus depth tables are not
+provided (see items 7 and 8), the datum depth must lie at the gas-oil
+contact.</p>
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+<p>ECLIPSE 100 DEFAULT: 0.0</p>
+<p>ECLIPSE 300 Default not defined</p>
+</li>
+
+<li>Pressure at the datum depth. <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma
+(<samp class="codeph">PVT-M</samp>)</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> If the datum depth lies above the
+gas-oil contact, the pressure refers to the gas phase. If the datum
+depth lies below the water-oil contact, the pressure refers to the
+water phase. Otherwise, the pressure refers to the oil phase. </span></div>
+</li>
+
+<li>Contact depth <p>Depth of the water-oil contact (for three-phase
+or oil-water problems) or</p>
+<p>Depth of the gas-water contact (for
+gas-water problems).</p>
+<p>This value is ignored in single-phase and
+oil-gas problems.</p>
+<p>The contact can lie below the bottom of the
+reservoir if there is no mobile water initially present.</p>
+<p>The
+values of the water saturation above and below the transition region
+are set at the end-point saturations in the water capillary pressure
+table.</p>
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT:    0.0</p>
+<p>Thermal option</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> If the water-oil
+contact lies above the reservoir and if, based on the composition
+provided at the datum depth, oil is heavier than water, then the pressure
+in item 2 refers to the oil phase and the reservoir will be initialized
+with heavy oil. A non-zero value for <span class="keyword">OPTIONS3</span> <a href="OPTIONS3.html#options3.217"> item 217</a> can be used to restore
+pre-2010.1 behavior for thermal heavy oil equilibration. </span></div>
+</li>
+
+<li> Capillary pressure at the contact <p>Oil-water capillary pressure
+at the water-oil contact (for three-phase or oil-water problems) or</p>
+<p>Gas-water capillary pressure at the gas-water contact (for gas-water
+problems).</p>
+<p>This value is ignored in single-phase and oil-gas
+problems.</p>
+<p>Capillary pressures rather than saturations are used
+in order that more than one saturation table may be used in an equilibration
+region.</p>
+<p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT:    0.0</p>
+</li>
+
+<li>Depth of the gas-oil contact. <p>This value is ignored in single-phase,
+oil-water and gas-water problems.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> The contact should lie
+above the top of the reservoir if there is no initial free gas. The
+contact should lie below the bottom of the reservoir if there is only
+free gas (with vaporized oil) initially present. The values of the
+gas saturation above and below the transition region are set at the
+end-point saturations in the gas capillary pressure table. In three-phase
+gas condensate problems in which there is no initial free oil (that
+is all the oil is initially contained in the gas phase), the gas-oil
+contact should be at the same depth as the water-oil contact. It then
+acts as a gas-water contact, and the initial solution is calculated
+in a manner analogous to a gas-water problem. </span></div>
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+
+<p>ECLIPSE 100 </p>
+<p>DEFAULT:    0.0</p>
+</li>
+
+<li> Gas-oil capillary pressure at the gas-oil contact <p>This value
+is ignored in single-phase, oil-water and gas-water problems.</p>
+<p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT:    0.0</p>
+<p>Black Oil cases</p>
+</li>
+
+<li>Integer selecting the type of initialization for live black oil<p>A positive integer causes the dissolved gas concentration in undersaturated
+oil to be calculated from either an R<sub>s</sub> versus depth table
+or a P<sub>b</sub> versus depth table, subject to an upper limit equal
+to the saturated <span class="keyword">RS</span> value at the local pressure.
+The R<sub>s</sub> versus Depth table is entered using keyword <a href="RSVD.html#RSVD"> RSVD</a>. The P<sub>b</sub> versus
+Depth table is entered using keyword <a href="PBVD.html#PBVD"> PBVD</a>. If multiple tables are defined, the table
+applicable to a grid cell is that specified by the <a href="EQLNUM.html#EQLNUM"> EQLNUM</a> keyword, which
+defines equilibration regions.</p>
+<p>A zero or negative value causes
+the dissolved gas concentration in undersaturated oil to be set equal
+to the saturated R<sub>s</sub> value at the gas-oil contact. In this
+case, an R<sub>s</sub> versus depth or a P<sub>b</sub> versus depth
+table need not be provided, but the datum depth (item 1) must coincide
+with the gas-oil contact, that is the bubble point is set to the local
+pressure at the reference depth).</p>
+<p>This value is ignored if dissolved
+gas is not present in black oil runs.</p>
+<p>This value is ignored
+in compositional runs.</p>
+<p>DEFAULT:    0</p>
+<p>Black Oil cases</p>
+</li>
+
+<li>Integer selecting the type of initialization for black oil runs
+with wet gas<p>A positive integer causes the vaporized oil concentration
+in undersaturated gas to be calculated from either an R<sub>v</sub> versus depth table or a P<sub>d</sub> versus Depth table, subject
+to an upper limit equal to the saturated R<sub>v</sub> value at the
+local pressure. The R<sub>v</sub> versus depth table is entered using
+keyword <a href="RVVD.html#RVVD"> RVVD</a>. The
+P<sub>d</sub> versus depth table is entered using keyword <a href="PDVD.html#PDVD"> PDVD</a>. If multiple tables
+are defined, the table applicable to a grid cell is that specified
+by the <a href="EQLNUM.html#EQLNUM"> EQLNUM</a> keyword,
+which defines equilibration regions.</p>
+<p>A zero or negative value
+causes the vaporized oil concentration in undersaturated gas to be
+set equal to the saturated R<sub>v</sub> value at the gas-oil contact,
+subject to an upper limit equal to the saturated R<sub>v</sub> value
+at the local pressure. In this case, an R<sub>v</sub> versus Depth
+or a P<sub>d</sub> versus depth table need not be provided, but the
+datum depth (Item 1) must coincide with the gas-oil contact (that
+is the dew point is set to the local pressure at the reference depth).</p>
+<p>This value is ignored if vaporized oil is not present in black
+oil runs.</p>
+<p>This value is ignored in compositional runs.</p>
+<p>DEFAULT:    0</p>
+</li>
+
+<li> Integer (N) defining the accuracy of the initial fluids in place
+calculation. 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">N=0</td>
+
+<td valign="top">Causes the simulator to set the fluid saturations in each grid
+block according to the conditions at the center of the block. This
+produces a steady-state solution, but the fluids in place will not
+be accurate if a contact passes near the center of a large grid block.</td>
+
+</tr>
+
+<tr>
+<td valign="top">N&lt;0</td>
+
+<td valign="top">Causes the simulator to take an average of the conditions at <math><mrow><mrow><mn>2</mn><mo>|</mo><mi>N</mi><mo>|</mo></mrow><mo>+</mo><mn>1</mn></mrow></math> equally-spaced sub-blocks
+within each grid block. The blocks are treated as being horizontal.
+The larger N is, the more accurate will be the initial fluids in place
+calculation. But the resulting initial conditions will not be absolutely
+steady-state, in that there will be a small readjustment if the simulator
+is run for a period with no wells. </td>
+
+</tr>
+
+<tr>
+<td valign="top">N&gt;0</td>
+
+<td valign="top">Is equivalent to the N &lt; 0 option, but the grid blocks are
+treated as being tilted. If the <a href="NEWTRAN.html#NEWTRAN"> NEWTRAN</a> method has been used, the tilt on the top
+and bottom faces of each grid block is determined from the block’s
+corner point depths. Otherwise the top and bottom faces are orientated
+towards their neighbors within the equilibration region. The simulator
+takes an average of the conditions at N levels within each half (upper
+and lower) of the block, weighted according to the block’s horizontal
+cross-section at each level.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>This option cannot be used in radial geometry.</p>
+<p>N
+is limited to 20.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If the <a href="DEPTH.html#DEPTH"> DEPTH</a> keyword is specified or upscaling due to coarsening
+has taken place, the center of the block is not necessarily the geometric
+center.</span></div>
+<p>ECLIPSE 100</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">When N
+is non-zero, if the <samp class="codeph">QUIESCENCE</samp> option is selected
+(using keyword <a href="EQLOPTS.html#EQLOPTS"> EQLOPTS</a>), modifications will be applied to the phase pressures to
+make the initial solution a true steady-state. These pressure modifications
+will be applied for the duration of the run. The absolute size of
+N is limited to 20. The <samp class="codeph">QUIESCENCE</samp> option should not
+be selected when N=0 as the initial conditions will always be quiescent
+in this case.</span></div>
+<p>ECLIPSE 300</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> For back compatibility with pre-2000A versions of ECLIPSE 300, the <span class="keyword">OLDEQUIL</span> keyword will cause ECLIPSE 300 to use horizontal
+block integration in equally spaced N layers. </span></div>
+<p>ECLIPSE 100</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> If the vertical equilibrium
+option is being used, however, (keyword <a href="VE.html#VE"> VE</a>), an exact VE equilibration method will be used
+if N = 0. The fluid saturations are determined directly from the depth
+of the contact levels within each block. This is the preferred option
+for VE runs. Refer to the <a href="VEFIN.html#VEFIN"> VEFIN</a> keyword and see also <a href="../ecl_td/ve_Vertical_Equilibrium.html#ve_vertical_equilibrium">"Vertical equilibrium"</a> in the <cite>ECLIPSE Technical Description</cite> for details of
+the behavior in mixed VE/non-VE <span class="keyword">LGR</span> runs.</span></div>
+<p>DEFAULT: In ECLIPSE 100, the value is defaulted
+to -5 (giving a 10-point average of conditions within each block),
+unless the vertical equilibrium option is being used, in which case
+it is defaulted to 0. </p>
+<p>In ECLIPSE 300,
+the value is defaulted to 0.</p>
+<p>ECLIPSE 300</p>
+</li>
+
+<li>Integer selecting the type of initialization
+in the compositional case.<p>For a gas-water run, the data is entered
+as for an oil-water system - that is the contact depth and capillary
+pressure as items 3 and 4.</p>
+<p>See <a href="../ecl_td/initial_Initializing_the_Study.html#initial_initializing_the_study">"Initializing the
+study"</a> in the <cite>ECLIPSE Technical Description</cite> for
+more details of the initialization of compositional studies.</p>
+<p>Possible values are:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">1</td>
+
+<td valign="top">Continuous hydrocarbon phase initial state (that is no gas-oil
+contact in the reservoir). This includes super critical fluids which
+make a smooth transition from a gas to an oil.</td>
+
+</tr>
+
+<tr>
+<td valign="top">2</td>
+
+<td valign="top"> Gas-oil contact, with vapor composition specified at contact.
+Pressure at datum depth will be set to retrograde dew point pressure</td>
+
+</tr>
+
+<tr>
+<td valign="top">3</td>
+
+<td valign="top"> Gas-oil contact, with liquid composition specified at contact.
+Pressure at datum depth is set to bubble point pressure</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: 1.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> If item 10 is set to 1 and a gas-oil
+contact is specified within the reservoir, then to ensure proper phase-labeling
+there must be compositional variation across the contact. The compositional
+variation can be specified using <a href="COMPVD.html#COMPVD"> COMPVD</a> or <a href="ZMFVD.html#ZMFVD"> ZMFVD</a>. This requirement is implemented in 2009.1. For the pre-2009.1
+calculation, <a href="OPTIONS3.html#options3.172">item 172</a>  of <span class="keyword">OPTIONS3</span> should be set to a non-zero value. </span></div>
+<p>ECLIPSE 300</p>
+</li>
+
+<li>If this is set to 1 the field pressure is
+not set to the saturation pressure at the contact if options 2 or
+3 are selected in item 10.<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> If item 10 is set to 2 or 3 in the
+compositional case, it is assumed that the datum depth corresponds
+to the Gas-oil contact. Given the vapor composition at the contact
+(if item 10 = 2) or the oil compositional at the contact (if item
+10 = 3), then the dew point or bubble point pressure will be calculated.
+This saturation pressure, <math><msub><mi>P</mi>
+<mrow><mi>s</mi><mi>a</mi><mi>t</mi></mrow></msub>
+</math>, should be equal to the datum pressure,  <math><msub><mi>P</mi>
+<mrow><mi>d</mi><mi>a</mi><mi>t</mi><mi>u</mi><mi>m</mi></mrow></msub></math>, specified in item 2 of this
+keyword. If item 11 is not set, then the test <math><mrow><mrow><mo>|</mo><mrow><msub><mrow><msub><mrow><mi>P</mi></mrow>
+<mrow><mi>d</mi><mi>a</mi><mi>t</mi><mi>u</mi><mi>m</mi></mrow></msub><mrow><mo>-</mo><mi>P</mi></mrow>
+</mrow><mrow><mi>s</mi><mi>a</mi><mi>t</mi></mrow>
+</msub></mrow><mo>|</mo></mrow><mo>&lt;</mo><mi>ε</mi>
+</mrow></math>  where  <math><mi>ε</mi></math>  is 1 atmosphere is performed. If the condition is not true, the
+datum pressure is reset to the calculated saturation pressure. Setting
+item 11 = 1 ensures the user-specified datum pressure is retained
+regardless of the result of the above test; note this is not an equilibrium
+system. See <a href="../ecl_td/initial_Initializing_the_Study.html#initial_initializing_the_study">"Initializing the
+study"</a> in the <cite>ECLIPSE Technical Description</cite> for
+more details. </span></div>
+</li>
+
+</ol>
+
+<div class="section" id="equil_notes"><a name="equil_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><p>The end points of
+the water and gas saturation tables (see <a href="SWFN.html#SWFN"> SWFN</a> and <a href="SGFN.html#SGFN"> SGFN</a>) determine the phase saturations outside the transition zones.
+It is therefore important that these should be consistent with each
+other. The highest gas saturation value (S<sub>g,max</sub>) in the
+gas table should not exceed one minus the lowest water saturation
+value (S<sub>w,min</sub>) in the water saturation table, otherwise
+a negative oil saturation would result in the gas cap. If there is
+to be no oil in the gas cap above the gas-oil transition zone, then
+set</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="equil.equ.0111"/>
+ <math><msub><mi>S</mi>
+<mrow><mi>g</mi><mo>,</mo><mtext>max</mtext></mrow>
+</msub><mo>=</mo><mn>1</mn><mrow><mo>-</mo><msub>
+<mi>S</mi><mrow><mi>w</mi><mo>,</mo><mtext>min</mtext>
+</mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table><p>A residual oil saturation (S<sub>o,res</sub>) in the
+gas cap can be produced by setting</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="equil.equ.0116"/>
+ <math><msub><mi>S</mi>
+<mrow><mi>g</mi><mo>,</mo><mtext>max</mtext></mrow>
+</msub><mo>=</mo><mn>1</mn><mrow><mo>-</mo><msub>
+<mi>S</mi><mrow><mi>w</mi><mo>,</mo><mtext>min</mtext>
+</mrow></msub><mo>-</mo><msub><mi>S</mi><mrow><mi>o</mi><mo>,</mo><mtext>res</mtext></mrow></msub></mrow>
+</math> 
+</td><td align="right">[Eq. 247.2]
+              </td></tr></tbody></table><p>In problems containing a gas-water contact, the water
+saturation tables are assumed to contain the water-gas capillary pressure
+values versus water saturation. The gas capillary pressure values
+should be set to zero.</p>
+<p>The equilibration calculation assumes
+that gas is lighter than oil and oil is lighter than water at reservoir
+conditions. An error condition may result if this is not so.</p>
+<p>ECLIPSE 100</p>
+<p>It is
+also possible to specify negative depth values.</p>
+<p>ECLIPSE 300</p>
+<p>By default,
+oil and gas phase pressures are derived from the pressure solution
+variable <math><mi>P</mi></math>  using the formula </p>
+<p>  <math><mrow><mi>P</mi>
+<mi>o</mi><mi>i</mi><mi>l</mi></mrow><mo>=</mo><mi>P</mi><mrow><mo>-</mo><mrow><mi>P</mi><mi>c</mi>
+<mi>o</mi><mi>g</mi></mrow><mo>×</mo><mo>(</mo>
+<mfrac><mrow><msub><mi>S</mi><mi>g</mi></msub></mrow>
+<mrow><mrow><mi>S</mi><mi>o</mi></mrow><mo>+</mo>
+<mrow><mi>S</mi><mi>g</mi></mrow></mrow></mfrac><mo>)</mo></mrow></math>  </p>
+<p>and</p>
+<p>  <math><mrow><mi>P</mi>
+<mi>g</mi><mi>a</mi><mi>s</mi></mrow><mo>=</mo><mi>P</mi><mo>+</mo><mrow><mi>P</mi><mi>c</mi><mi>o</mi>
+<mi>g</mi></mrow><mo>×</mo><mo>(</mo><mfrac><mrow>
+<msub><mi>S</mi><mi>o</mi></msub></mrow><mrow><mrow>
+<mi>S</mi><mi>o</mi></mrow><mo>+</mo><mrow><mi>S</mi>
+<mi>g</mi></mrow></mrow></mfrac><mo>)</mo></math>  </p>
+<p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><mi>P</mi>
+<mi>c</mi><mi>o</mi><mi>g</mi></mrow></math> </td>
+
+<td valign="top"> is the gas-oil capillary pressure, </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>S</mi>
+<mi>o</mi></msub></math>  and  <math><msub>
+<mi>S</mi><mi>g</mi></msub></math> </td>
+
+<td valign="top">are the oil and gas saturations respectively. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>This Pc-splitting technique is performed
+to enable better convergence and property smoothness above the critical
+point. It may be disabled using keyword <a href="FORMOPTS.html#FORMOPTS"> FORMOPTS</a>, option <samp class="codeph">NOPCSPT</samp>. When reporting initialization data using the <a href="RPTRST.html#RPTRST"> RPTRST</a>, <a href="RPTSOL.html#RPTSOL"> RPTSOL</a> or <a href="OUTSOL.html#OUTSOL"> OUTSOL</a> keywords, the mnemonic <samp class="codeph">PRESSURE</samp> is the solution
+variable <math><mi>P</mi></math>  which is derived from the phase pressures calculated during the <span class="keyword">EQUIL</span> hydrostatic equilibration and reported with the <samp class="codeph">SOLVD</samp> option in <span class="keyword">RPTSOL</span>, <samp class="codeph">POIL</samp> is the oil phase pressure  <math><msub><mi>P</mi>
+<mrow><mi>o</mi><mi>i</mi><mi>l</mi></mrow></msub>
+</math>  and <samp class="codeph">PGAS</samp> is the gas phase pressure  <math><msub><mi>P</mi>
+<mrow><mi>g</mi><mi>a</mi><mi>s</mi></mrow></msub>
+</math>, as discussed in the above two equations. </p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> The Pc-splitting technique applies only to the
+ECLIPSE 300 compositional mode. </span></div>
+<p>For non-Thermal simulations,
+the <span class="keyword">EQUIL</span> keyword should not be used for non-equilibrium
+initialization runs, and precludes the use of <a href="PBUB.html#PBUB"> PBUB</a>, <a href="PDEW.html#PDEW"> PDEW</a>, <a href="SWAT.html#SWAT"> SWAT</a>, <a href="SGAS.html#SGAS"> SGAS</a>, <a href="SOIL.html#SOIL"> SOIL</a>, <a href="XMF.html#XMF"> XMF</a> and <a href="YMF.html#YMF"> YMF</a> for
+example. </p>
+<p>Thermal option</p>
+<p>An additional
+initialization method can also be used for Thermal simulations. This
+mixed hydrostatic equilibration option should be triggered using only
+items 1 and 2 of the <span class="keyword">EQUIL</span>  keyword, together with
+saturation arrays (<a href="SOIL.html#SOIL"> SOIL</a>, for instance) and the <a href="NEI.html#NEI"> NEI</a> keyword. This initialization method should not be mixed with
+the standard equilibration method, otherwise an error message will
+be issued. </p>
+<p>For additional information on defining the initial
+reservoir conditions (via equilibration, enumeration, restarts or
+using a mixed hydrostatic equilibration option, refer to <a href="../ecl_td/initial_Initializing_the_Study.html#initial_initializing_the_study">"Initializing the
+study"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+</div>
+
+<div class="section" id="equil_example"><a name="equil_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NTEQUL=2</samp>:</p>
+<pre><code>EQUIL
+ 7100 4000 8000 0.0 6500 0.0 1 0 -3   /
+ 7000 4000 7800 0.0 7000 0.0          /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

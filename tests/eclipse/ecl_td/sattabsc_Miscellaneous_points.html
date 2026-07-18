@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Miscellaneous points"/>
+<meta name="DC.subject" content="End-point scaling, Saturation table scaling"/>
+<meta name="keywords" content="End-point scaling, Saturation table scaling"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sattabsc_miscellaneous_points"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Miscellaneous points</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="sattabsc_miscellaneous_points"><a name="sattabsc_miscellaneous_points"><!-- --></a>
+<h1 class="topictitle1">Miscellaneous points</h1>
+
+
+ <div>
+<p>The end-point scaling option is activated using the keyword <a href="../ecl_rm/ENDSCALE.html#ENDSCALE">ENDSCALE</a> in the <span class="keyword">RUNSPEC</span> section. The directional scaling options are activated by specifying
+the appropriate arguments of <span class="keyword">ENDSCALE</span>.</p>
+
+<p>The end point saturations may be supplied in one of two ways:</p>
+
+<ul>
+<li>by cell, using the keywords <a href="../ecl_rm/swl_SWL_ISWL.html#swl_swl_iswl">SWL</a>, <a href="../ecl_rm/SWCR.html#SWCR"> SWCR</a>, <a href="../ecl_rm/swu_SWU_ISWU.html#swu_swu_iswu">SWU</a>, <a href="../ecl_rm/sgl_SGL_ISGL.html#sgl_sgl_isgl">SGL</a>, <a href="../ecl_rm/SGCR.html#SGCR">SGCR</a>, <a href="../ecl_rm/sgu_SGU_ISGU.html#sgu_sgu_isgu">SGU</a>, <a href="../ecl_rm/SOWCR.html#SOWCR">SOWCR</a>, <a href="../ecl_rm/SOGCR.html#SOGCR">SOGCR</a>; or,             </li>
+
+<li>by depth, using the <a href="../ecl_rm/ENPTVD.html#ENPTVD">ENPTVD</a> keyword.   </li>
+
+</ul>
+
+<p>The cell keywords need not specify data for the whole field - any
+values that are not set do not cause an error, (as for <a href="../ecl_rm/PORO.html#PORO">  PORO</a> or <a href="../ecl_rm/DX.html#DX">DX</a>), but imply that they are to be obtained
+from the default values for the cell, or from <span class="keyword">ENPTVD</span>, if present.</p>
+
+<p>If <span class="keyword">SWL</span>, <span class="keyword">SOGCR</span> and <span class="keyword">ENPTVD</span> are used, values taken from <span class="keyword">ENPTVD</span> are used to fill in any data that is not set, as long as the endpoint
+table number is not 0. End point table numbers are set in the <span class="keyword">REGIONS</span> section, using <a href="../ecl_rm/ENDNUM.html#ENDNUM">ENDNUM</a>, and default to 1, but
+a value of 0 may be entered.</p>
+
+<p>The overall process is thus:</p>
+
+<ol>
+<li>If keywords <span class="keyword">SWL</span> and <span class="keyword">SOGCR</span> are present, use the value</li>
+
+<li>If not, and <span class="keyword">ENPTVD</span> is present with non-zero <span class="keyword">ENDNUM</span>, use this</li>
+
+<li>Otherwise, use defaults obtained from tables.</li>
+
+</ol>
+
+<p>The values of the end-point arrays <span class="keyword">SWL</span> and <span class="keyword">SOGCR</span> may be printed out for each cell using <a href="../ecl_rm/RPTSOL.html#RPTSOL">RPTSOL</a> with the appropriate
+mnemonic, and output for plotting with Petrel using <a href="../ecl_rm/RPTRST.html#RPTRST">RPTRST</a>.</p>
+
+<p>ECLIPSE 100                             
+    </p>
+
+<p>If the Hysteresis model is active, the imbibition
+end points can be specified using the <a href="../ecl_rm/IMPTVD.html#IMPTVD">IMPTVD</a> keyword.</p>
+
+<p>When the end-point scaling option is activated, the scaling keywords
+are entirely optional. If a particular end point keyword is not present
+in the input data file, the unscaled end points are substituted and
+used in the scaling calculations.</p>
+
+<p>By default only scaled quantities are reported in any <samp class="codeph">INIT</samp> file generated. To display the actual end points used in the simulation
+for each grid cell the keyword <a href="../ecl_rm/FILLEPS.html#FILLEPS">FILLEPS</a> should be added.</p>
+
+<p>The directional capability of the scaling option may be used to
+control the saturation functions which apply to the different faces
+of each grid cell. The facility is similar to the directional relative
+permeability option and allows saturation end points to be defined
+on the X,Y and Z faces of each cell or, in the highly directional
+case, on the +X,-X,+Y,-Y,+Z and -Z faces of each cell. Note that the
+saturation table look-ups required by the well model and equilibration
+algorithm are performed using the <a href="../ecl_rm/SATNUM.html#SATNUM">SATNUM</a> table for each cell.
+If directional scaling is active, the isotropic end points are used
+to rescale the saturation tables within the well model and the equilibration
+algorithm. Note that if the directional form of an end point is not
+explicitly defined for a given cell, then it is taken from the relevant
+table, and is <strong>not</strong> defaulted to the isotropic form (except for
+pseudo-critical end points arising from the initial fluid mobility
+correction enabled by entering <samp class="codeph">MOBILE</samp> in keyword <a href="../ecl_rm/EQLOPTS.html#EQLOPTS">EQLOPTS</a>).</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">When directional scaling is used, the isotropic form must also
+be supplied if scaling is required in equilibration and well block
+flows. </span></div>
+
+<p>Data checking is performed on the rescaled saturation tables in
+each cell. The checks ensure that the connate, critical and maximum
+saturations are in increasing order and that the rescaled tables are
+consistent for each phase. In the case of directional scaling, the
+data checking is performed on the rescaled tables for each grid face.</p>
+
+<p>The scaling calculation is performed on the saturation tables used
+for flow between grid cells and well connections. If, however, the
+saturation table for the well connection differs from that of the
+connecting cell then the scaling option is disabled. In this case,
+any scaling required in the connection saturation table should be
+done using the <a href="../ecl_rm/COMPRP.html#COMPRP">COMPRP</a> keyword. If the table numbers are equal then the end points
+used are those of the connecting cell. These end points will then
+be overridden by any subsequent end points defined using the <span class="keyword">COMPRP</span> keyword.</p>
+
+<p>ECLIPSE 100                             
+    </p>
+
+<p>In the present version of ECLIPSE 100 the <a href="../ecl_rm/SWLPC.html#SWLPC">SWLPC</a> and <a href="../ecl_rm/SGLPC.html#SGLPC">SGLPC</a> values cannot be supplied
+using the <a href="../ecl_rm/ENPTVD.html#ENPTVD">ENPTVD</a> depth type keywords.</p>
+
+<p>ECLIPSE 100                             
+  </p>
+
+<p>The end-point scaling option should not be used at present with
+the vertical equilibrium option.</p>
+
+<p>ECLIPSE 100                             
+    </p>
+
+<p>The unscaled and scaled maximum oil saturations
+used for the two-point end-point scaling of the oil relative permeability
+to water and gas are calculated according to  <math><msub>
+<mi>S</mi><mrow><mi>o</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>=</mo><mn>1</mn><mrow><mo>-</mo><msub><mi>S</mi><mrow><mi>w</mi><mi>c</mi>
+<mi>o</mi></mrow></msub></mrow></math>  and  <math><mrow><mi>S</mi>
+<mi>O</mi><mi>U</mi></mrow><mo>=</mo><mn>1</mn>
+<mrow><mo>-</mo><mrow><mi>S</mi><mi>W</mi><mi>L</mi>
+</mrow></mrow></math>  respectively. These can modified to include
+connate gas; that is,  <math><msub><mi>S</mi>
+<mrow><mi>o</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow></msub><mo>=</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mi>S</mi><mrow><mi>w</mi><mi>c</mi><mi>o</mi>
+</mrow></msub><mo>-</mo><msub><mi>S</mi><mrow><mi>g</mi><mi>c</mi><mi>o</mi></mrow></msub></mrow>
+</math>  and  <math><mrow><mi>S</mi>
+<mi>O</mi><mi>U</mi></mrow><mo>=</mo><mn>1</mn>
+<mrow><mo>-</mo><mrow><mi>S</mi><mi>W</mi><mi>L</mi>
+</mrow><mo>-</mo><mrow><mi>S</mi><mi>G</mi><mi>L</mi>
+</mrow></mrow></math>  respectively by setting <a href="../ecl_rm/OPTIONS.html#options.205">item 205</a> of the <span class="keyword">OPTIONS</span> keyword
+to 1.</p>
+
+<p>  ECLIPSE 300 </p>
+
+<p>The saturation table end-points can depend
+on temperature in a thermal simulation using the keywords <a href="../ecl_rm/ENKRVT.html#ENKRVT">ENKRVT</a>, <a href="../ecl_rm/ENPCVT.html#ENPCVT">ENPCVT</a> and <a href="../ecl_rm/ENPTVT.html#ENPTVT">ENPTVT</a>.</p>
+
+<p>ECLIPSE 300                             
+    </p>
+
+<p>The saturation table end-points can depend
+on composition using the keywords <a href="../ecl_rm/ENKRVC.html#ENKRVC">ENKRVC</a>, <a href="../ecl_rm/ENPCVC.html#ENPCVC">ENPCVC</a> and <a href="../ecl_rm/ENPTVC.html#ENPTVC">ENPTVC</a>.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

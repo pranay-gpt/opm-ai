@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The effect of closing wells during drilling and workovers"/>
+<meta name="DC.subject" content="Group production rules"/>
+<meta name="keywords" content="Group production rules"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="groupprd_the_effect_of_closing_wells_during_drilling_and_workovers"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The effect of closing wells during drilling and workovers</title>
+</head>
+<body>
+
+
+<div class="nested0" id="groupprd_the_effect_of_closing_wells_during_drilling_and_workovers"><a name="groupprd_the_effect_of_closing_wells_during_drilling_and_workovers"><!-- --></a>
+<h1 class="topictitle1">The effect of closing wells during drilling and workovers</h1>
+
+
+ <div>
+<p>The rate at which new wells can be drilled and existing wells worked
+over can be controlled by specifying non-zero durations for these
+processes (see keywords <a href="../ecl_rm/WDRILTIM.html#WDRILTIM"> WDRILTIM</a> and <a href="../ecl_rm/WORKLIM.html#WORKLIM"> WORKLIM</a>) and defining drilling and workover rigs (see keyword <a href="../ecl_rm/GRUPRIG.html#GRUPRIG"> GRUPRIG</a>). A drilling or workover
+process will occupy the appropriate rig for the specified time. A
+well cannot be drilled (or worked over) in a given timestep if all
+available drilling (or workover) rigs are occupied for the whole timestep.</p>
+
+<p>By default, a well starts flowing at the beginning of the timestep
+in which its drilling operation starts, and it continues flowing while
+it is being worked over. However, there is an option to treat wells
+as shut for the duration of their drilling and workover processes
+(see keyword <span class="keyword">WDRILTIM</span> item 3). This is achieved
+by giving the wells temporary reduced efficiency factors, which reflect
+the proportion of the timestep in which they are unable to flow. But
+while this option gives more realistic behavior, it can cause a problem
+in the operation of the group production rules.</p>
+
+<p>When a well is treated as shut for the duration of its drilling
+or workover process, the full benefit of this action is not realized
+until the timestep after the process has been completed. In fact the
+immediate effect of a '<samp class="codeph">REPERF</samp>' action
+may be a temporary reduction in production rate, if the workover takes
+a non-zero time and the well is closed for its duration. Consequently,
+the immediate effect of a '<samp class="codeph">DRILL</samp>' or
+'<samp class="codeph">REPERF</samp>' action may not be sufficient
+to enable the group to reach its target rate, and ECLIPSE attempts
+more actions from the production rule list, even if these would not
+have been necessary once the drilling or workover process is complete.</p>
+
+<p>If you wish to treat wells as shut while being drilled or worked
+over, it is advisable to set the item in record 2 of the <a href="../ecl_rm/PRORDER.html#PRORDER"> PRORDER</a> keyword to '<samp class="codeph">NO</samp>. This prevents the performance of any further
+production rule actions for the same group following a '<samp class="codeph">DRILL</samp>' or '<samp class="codeph">REPERF</samp>' action
+until the benefits of this action are fully realized.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

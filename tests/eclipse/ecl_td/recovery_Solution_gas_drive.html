@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Solution gas drive"/>
+<meta name="DC.subject" content="Recovery mechanisms, Solution gas drive"/>
+<meta name="keywords" content="Recovery mechanisms, Solution gas drive"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="recovery_solution_gas_drive"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Solution gas drive</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="recovery_solution_gas_drive"><a name="recovery_solution_gas_drive"><!-- --></a>
+<h1 class="topictitle1">Solution gas drive</h1>
+
+
+ <div>
+<p>Dividing the oil production between the above set of recovery mechanisms
+will give the total oil production due to gas influx, but this does
+not differentiate between the oil production associated with free
+gas influx and that associated with solution gas.</p>
+
+<p>The oil production due to gas influx can be subdivided into oil
+produced by solution gas drive and oil produced by free gas, by using
+the tracer tracking facility. If a gas tracer is defined and initialized
+to be 1.0 for gas dissolved in the oil, and 0.0 for free gas, then
+the recovery mechanism option will use the tracer information to calculate
+the split between solution gas and free gas.</p>
+
+<p>To use this facility the following steps must be taken:</p>
+
+<ol>
+<li>Increase the number of gas tracers by one in the <a href="../ecl_rm/TRACERS.html#TRACERS">TRACERS</a> keyword in the <span class="keyword">RUNSPEC</span> section.</li>
+
+<li>Add a tracer called ‘DGS’ in the <a href="../ecl_rm/PROPS.html#PROPS">PROPS</a> section. The special name
+‘DGS’ <strong>must</strong> be used to enable the recovery mechanism
+to recognize the tracer.                <pre><code>TRACER
+ 'DGS' 'GAS' /
+/</code></pre></li>
+
+<li>Initialize the tracer in the <a href="../ecl_rm/SOLUTION.html#SOLUTION">SOLUTION</a> section, giving the
+solution gas a value of 1.0 and the free gas a value of 0.0, for example: <pre><code>TBLKFDGS
+ 300*0 /
+TBLKSDGS
+ 300*1 /</code></pre></li>
+
+</ol>
+
+<p>Two new oil production values associated with solution gas and
+free gas will be calculated as follows:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="recovery.equ.0076"/>
+ <math><mrow><mtable><mtr><mtd><mtext>DS</mtext><mo>=</mo>
+<mtext>PV</mtext><mo>⋅</mo><msub><mrow><mi>F</mi>
+</mrow><mrow><mi>s</mi></mrow></msub><mo>⋅</mo><mi>d</mi><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow><mo>⋅</mo><mfrac><mrow><mn>1</mn></mrow><mrow><msub>
+<mrow><mi>B</mi></mrow><mrow><mi>o</mi></mrow></msub>
+</mrow></mfrac></mtd></mtr><mtr><mtd><mtext>DF</mtext>
+<mo>=</mo><mtext>PV</mtext><mo>⋅</mo><mrow><mo>(</mo>
+<mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi>
+</mrow><mrow><mi>s</mi></mrow></msub></mrow><mo>)</mo>
+</mrow><mo>⋅</mo><mi>d</mi><mrow><mo>(</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub>
+<mo>)</mo></mrow><mo>⋅</mo><mfrac><mrow><mn>1</mn>
+</mrow><mrow><msub><mrow><mi>B</mi></mrow><mrow><mi>o</mi></mrow></msub></mrow></mfrac></mtd></mtr>
+</mtable></mrow></math> 
+</td><td align="right">[Eq. 649.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mtext>DS</mtext>
+</math> </td>
+
+<td valign="top">is the production due to solution gas    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mtext>DF</mtext>
+</math> </td>
+
+<td valign="top">is the production due to free gas        </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mi>s</mi></msub></math> </td>
+
+<td valign="top"> is the fraction of  <math><msub>
+<mi>S</mi><mi>g</mi></msub></math>  that was originally
+solution gas.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

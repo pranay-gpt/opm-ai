@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Model 3 description"/>
+<meta name="DC.subject" content="The ECLIPSE 100 polymer flood simulation model treatment of non-Newtonian rheology model 3"/>
+<meta name="keywords" content="The ECLIPSE 100 polymer flood simulation model treatment of non-Newtonian rheology model 3"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="polymer_model_3_description"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Model 3 description</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="polymer_model_3_description"><a name="polymer_model_3_description"><!-- --></a>
+<h1 class="topictitle1">Model 3 description</h1>
+
+
+ <div>
+<p>Model 3 is implemented via two approaches, as detailed below. Note
+that the representative radius for the well inflows described above
+for Model 1 also applies in each approach below.</p>
+
+<div class="section"><h4 class="sectiontitle">Approach I: Based on velocity</h4><p>In this first
+approach, for a specified set of reference conditions comprising polymer
+concentration, salinity and temperature, the shear thinning/thickening
+multipliers,                  <math><msup>
+<mi>Z</mi><mrow><mi>r</mi><mi>e</mi><mi>f</mi>
+</mrow></msup></math>, are specified as a function of water
+phase/polymer flow velocity,  <math><mrow><mi>V</mi>
+</mrow></math>, this time using the <a href="../ecl_rm/PLYSHLOG.html#PLYSHLOG">PLYSHLOG</a> keyword.          </p>
+<p>As in Model 1, the velocities corresponding to the water and polymer
+flows are calculated according to equation <a href="polymer_Model_1_description.html#polymer.XID-000000e2">439.1</a>  (or according to equation <a href="polymer_Model_1_description.html#polymer.XID-FlowToVelOld">439.2</a>  if <span class="keyword">OPTIONS</span> keyword <a href="../ecl_rm/OPTIONS.html#options.228">item 228</a> is set to 1).</p>
+<p>The resulting shear
+viscosities are again obtained using equation <a href="polymer_Model_1_description.html#polymer.equ.00ef">439.3</a>  where the calculation of each shear
+thinning/thickening multiplier (multiplier <math><mrow>
+<msubsup><mrow><mi>Z</mi></mrow><mrow><mi>w</mi>
+</mrow><mrow><mo>*</mo></mrow></msubsup></mrow></math> for the water phase flows and multiplier <math><mrow><msubsup><mrow>
+<mi>Z</mi></mrow><mrow><mi>p</mi></mrow><mrow><mo>*</mo></mrow></msubsup></mrow></math> for the polymer flows)
+comprises the following series of steps:</p>
+<ul>
+<li>For each velocity in <a href="../ecl_rm/PLYSHLOG.html#PLYSHLOG">PLYSHLOG</a>, calculate a corresponding viscosity multiplier using   
+       <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="polymer.XID-0000013d"/>
+ <math><mrow><mrow><mi>Z</mi><mo>(</mo><mi>V</mi><mo>)</mo></mrow><mo>=</mo><mfrac><mrow><mn>1</mn><mo>+</mo><mrow><mrow>
+<mo>(</mo><mi>P</mi><mrow><mo>-</mo><mn>1</mn>
+</mrow><mo>)</mo></mrow><msup><mrow><mi>M</mi></mrow>
+<mrow><mi>r</mi><mi>e</mi><mi>f</mi></mrow></msup>
+<mrow><mo>(</mo><mi>V</mi><mo>)</mo></mrow></mrow>
+</mrow><mrow><mi>P</mi></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 440.1]
+              </td></tr></tbody></table><p>where </p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msup><mi>M</mi>
+<mrow><mi>r</mi><mi>e</mi><mi>f</mi></mrow></msup>
+</math> </td>
+
+<td valign="top"> is calculated by applying the reverse of equation <a href="polymer_Model_3_description.html#polymer.XID-0000013d">440.1</a>  and using the reference data
+provided in <span class="keyword">PLYSHLOG</span>, and  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>P</mi></math> </td>
+
+<td valign="top"> is the viscosity multiplier interpolated at the given conditions
+using the relevant polymer viscosity keyword (one of <a href="../ecl_rm/PLYVISC.html#PLYVISC">PLYVISC</a>, <a href="../ecl_rm/PLYVISCS.html#PLYVISCS">PLYVISCS</a>, <a href="../ecl_rm/PLYVISCT.html#PLYVISCT">PLYVISCT</a>, <a href="../ecl_rm/PLYVSCST.html#PLYVSCST">PLYVSCST</a>).           </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</li>
+
+<li>Take the natural logarithm of each viscosity multiplier calculated
+above and the natural logarithm of each corresponding velocity and
+construct the piecewise linear function through the resulting set
+of data points:<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="polymer.XID-maplnVtolnZ"/>
+ <math><mrow><mrow><mi>f</mi><mo>:</mo><mi>ln</mi><mo>⁡</mo><mi>V</mi>
+</mrow><mo>↦</mo><mrow><mi>ln</mi><mo>⁡</mo><mi>Z</mi></mrow></mrow></math> 
+</td><td align="right">[Eq. 440.2]
+              </td></tr></tbody></table>                        </li>
+
+<li>Find where the relationship between the unsheared and sheared
+velocities satisfies the input shear data obtained experimentally,
+this done by locating the point of intersection of the above piecewise
+linear function and the straight line represented by: <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="polymer.equ.0151"/>
+ <math><mrow><mrow><mi>ln</mi><mo>⁡</mo><mi>V</mi></mrow><mo>+</mo><mrow>
+<mi>ln</mi><mo>⁡</mo><mi>Z</mi></mrow><mo>=</mo>
+<mrow><mi>ln</mi><mo>⁡</mo><msub><mrow><mi>V</mi>
+</mrow><mrow><mn>0</mn></mrow></msub></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 440.3]
+              </td></tr></tbody></table><p>in which   <math><mrow><msub><mrow>
+<mi>V</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow>
+</math> is the Darcy velocity corresponding to the water phase/polymer
+flow calculated from equation <a href="polymer_Model_1_description.html#polymer.XID-000000e2">439.1</a>  (or equation <a href="polymer_Model_1_description.html#polymer.XID-FlowToVelOld">439.2</a>  if <span class="keyword">OPTIONS</span> keyword <a href="../ecl_rm/OPTIONS.html#options.228">item 228</a> is set to 1) without any shear effects.
+This intersection provides the shear-modified velocity for the given
+water phase/polymer flow and the relevant shear thinning/thickening
+multiplier.                </p>
+ </li>
+
+</ul>
+<p>Note that the shear data specified via the <span class="keyword">PLYSHLOG</span> keyword must satisfy the constraint</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="polymer.equ.015c"/>
+ <math><mrow><mfrac><mrow>
+<mi>d</mi><mrow><mi>ln</mi><mo>⁡</mo><msup><mrow>
+<mi>M</mi></mrow><mrow><mi>r</mi><mi>e</mi><mi>f</mi>
+</mrow></msup></mrow></mrow><mrow><mi>d</mi><mrow><mi>ln</mi><mo>⁡</mo><mi>V</mi></mrow></mrow></mfrac><mo>&gt;</mo><mrow><mo>-</mo><mn>1</mn></mrow></mrow></math> 
+</td><td align="right">[Eq. 440.4]
+              </td></tr></tbody></table><p>which henceforth ensures a unique point of intersection.
+In view of equation <a href="polymer_Model_1_description.html#polymer.equ.00ef">439.3</a>, the
+reservoir flow rates in equation <a href="polymer_The_polymer_flood_simulation_model.html#polymer.XID-0000002e">434.1</a>  and equation <a href="polymer_The_polymer_flood_simulation_model.html#polymer.XID-00000031">434.2</a>  are
+modified accordingly together with the associated derivatives, that
+is, the unsheared flows are multiplied by the reciprocal of the relevant
+shear multiplier calculated as per above. A similar transformation
+is likewise applied to the unsheared well component mobilities.  
+ </p>
+</div>
+
+<div class="section"><h4 class="sectiontitle">Approach II: Based on shear rate</h4><p>In this
+second approach, the shear multiplier is specified instead as a function
+of water phase/polymer flow shear rate. Once again the shear data
+is specified using the <a href="../ecl_rm/PLYSHLOG.html#PLYSHLOG">PLYSHLOG</a> keyword, for a specified set of reference conditions. Keyword <a href="../ecl_rm/SHRATE.html#SHRATE">SHRATE</a> must also be specified
+in order to activate this option. In this case, the first column in
+each <span class="keyword">PLYSHLOG</span> table corresponds to the shear rate,
+                       <math><mrow><mi>γ</mi>
+</mrow></math>.                </p>
+<div class="p">This approach follows Approach
+I very closely, but with the following modifications:<ul>
+<li>The calculation of shear multiplier in equation <a href="polymer_Model_3_description.html#polymer.XID-0000013d">440.1</a>  is done for each shear rate (as
+opposed to velocity) entered in the <span class="keyword">PLYSHLOG</span> table.</li>
+
+<li>Take the natural logarithm of each shear rate in <span class="keyword">PLYSHLOG</span> and take the natural logarithm of the corresponding viscosity multiplier
+calculated via equation <a href="polymer_Model_3_description.html#polymer.XID-0000013d">440.1</a>.
+Construct the piecewise linear function through the resulting set
+of data points:<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="polymer.XID-maplnGammatolnZ"/>
+ <math><mrow><mrow><mi>f</mi><mo>:</mo><mi>ln</mi><mo>⁡</mo><mi>γ</mi>
+</mrow><mo>↦</mo><mrow><mi>ln</mi><mo>⁡</mo><mi>Z</mi></mrow></mrow></math> 
+</td><td align="right">[Eq. 440.5]
+              </td></tr></tbody></table>        </li>
+
+<li>Locate the point of intersection of the above piecewise linear
+function and the straight line represented by:<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="polymer.equ.017c"/>
+ <math><mrow><mrow><mi>ln</mi><mo>⁡</mo><mi>γ</mi></mrow><mo>+</mo><mrow>
+<mi>ln</mi><mo>⁡</mo><mi>Z</mi></mrow><mo>=</mo>
+<mrow><mi>ln</mi><mo>⁡</mo><msub><mrow><mi>γ</mi>
+</mrow><mrow><mn>0</mn></mrow></msub></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 440.6]
+              </td></tr></tbody></table><p>in which                        <math><mrow>
+<msub><mrow><mi>γ</mi></mrow><mrow><mn>0</mn></mrow>
+</msub></mrow></math> is the shear rate corresponding to the
+given inter-block water phase/polymer flow prior to shear thinning/thickening
+and is calculated as follows,                </p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="polymer.XID-00000181"/>
+ <math><mrow><msub><mrow>
+<mi>γ</mi></mrow><mrow><mn>0</mn></mrow></msub><mo>=</mo><mrow><msub><mrow><mi>C</mi></mrow><mrow><mi>γ</mi></mrow></msub><msub><mrow><mi>V</mi></mrow>
+<mrow><mn>0</mn></mrow></msub><msqrt><mrow><mfrac>
+<mrow><mi>φ</mi><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>w</mi></mrow></msub></mrow><mrow><mi>K</mi><msub>
+<mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi>
+</mrow></msub></mrow></mfrac></mrow></msqrt></mrow>
+</mrow></math> 
+</td><td align="right">[Eq. 440.7]
+              </td></tr></tbody></table><p>where:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>V</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top"> is the unsheared inter-block velocity calculated from equation <a href="polymer_Model_1_description.html#polymer.XID-000000e2">439.1</a>  (or from equation <a href="polymer_Model_1_description.html#polymer.XID-FlowToVelOld">439.2</a>  if <span class="keyword">OPTIONS</span> keyword <a href="../ecl_rm/OPTIONS.html#options.228">item 228</a> is set to 1)        </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>K</mi></math> </td>
+
+<td valign="top"> is the absolute permeability      </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>w</mi></mrow></msub></math> </td>
+
+<td valign="top">is the water relative permeability associated with the flow
+from the upwind cell          </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>S</mi>
+<mi>w</mi></msub></math> </td>
+
+<td valign="top"> is the water saturation in the upwind cell   </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>φ</mi></math> </td>
+
+<td valign="top">is the average porosity of the two cells and      </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>C</mi>
+<mi>γ</mi></msub></math> </td>
+
+<td valign="top">is the shear rate constant specified via the <span class="keyword">SHRATE </span>keyword.   </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</li>
+
+</ul>
+</div>
+<p>At a well connection, the transformation <a href="polymer_Model_3_description.html#polymer.XID-00000181">440.7</a>  is applied once again to convert,
+this time, from the velocity in the connection to the corresponding
+shear rate. Corresponding grid block quantities are used in order
+to carry out this default conversion which therefore replicates that
+applied in the reservoir flow calculation.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"><p>The pre-2014.1
+conversion from velocity to shear rate used for reservoir flows is
+given by</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="polymer.XID-VelToShearResOld"/>
+ <math><mrow><msub><mrow>
+<mi>γ</mi></mrow><mrow><mn>0</mn></mrow></msub><mo>=</mo><mrow><msub><mrow><mi>C</mi></mrow><mrow><mi>γ</mi></mrow></msub><msub><mrow><mi>V</mi></mrow>
+<mrow><mn>0</mn></mrow></msub><msqrt><mrow><mfrac>
+<mrow><mi>φ</mi></mrow><mrow><mi>K</mi><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub><msub>
+<mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi>
+</mrow></msub></mrow></mfrac></mrow></msqrt></mrow>
+</mrow></math> 
+</td><td align="right">[Eq. 440.8]
+              </td></tr></tbody></table><p>and the pre-2014.1 conversion from velocity to shear
+rate for well connections is given by</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="polymer.equ.0197"/>
+ <math><mrow><msub><mrow>
+<mi>γ</mi></mrow><mrow><mn>0</mn></mrow></msub><mo>=</mo><mfrac><mrow><msub><mrow><mi>C</mi></mrow>
+<mrow><mi>γ</mi></mrow></msub><msubsup><mrow><mi>V</mi>
+</mrow><mrow><mn>0</mn></mrow><mrow><mi>w</mi><mi>c</mi></mrow></msubsup></mrow><mrow><msup><mrow><mi>D</mi></mrow><mrow><mi>w</mi><mi>c</mi></mrow></msup>
+</mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 440.9]
+              </td></tr></tbody></table><p>in which <math><mrow><msubsup><mrow>
+<mi>V</mi></mrow><mrow><mn>0</mn></mrow><mrow><mi>w</mi><mi>c</mi></mrow></msubsup></mrow></math> and
+ <math><msup><mi>D</mi>
+<mrow><mi>w</mi><mi>c</mi></mrow></msup></math>  represent,
+respectively, the unsheared velocity and the diameter in the given
+wellbore connection. Note that conversions <a href="polymer_Model_3_description.html#polymer.XID-VelToShearResOld">440.8</a>  and <a href="polymer_Model_3_description.html#polymer.equ.0197">440.9</a>  may be activated in conjunction with
+the new default velocity calculation (by setting <span class="keyword">OPTIONS</span> keyword <a href="../ecl_rm/OPTIONS.html#options.228">item 228</a> to 2)
+or activated in conjunction with the pre-2014.1 velocity calculation
+(by setting <span class="keyword">OPTIONS</span> keyword item 228 to 3). The
+possible options and corresponding conversions are summarized in the
+following table.</p>
+
+<div class="tablenoborder"><a name="OptionsAvailableForConvertingBetwe-02C3BF99"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="OptionsAvailableForConvertingBetwe-02C3BF99" frame="border" border="1" rules="all"><caption>
+           Table 440.3  Options available for converting between (i) flow rate and
+velocity, and (ii) velocity and shear rate for models using the SHRATE
+keyword</caption>     
+<thead align="left">
+<tr>
+<th valign="top" id="d1116e916">&nbsp;</th>
+ 
+<th valign="top" id="d1116e918"> Default</th>
+
+<th valign="top" id="d1116e921"> OPTIONS item 228 set to 1</th>
+
+<th valign="top" id="d1116e924"> OPTIONS item 228 set to 2</th>
+
+<th valign="top" id="d1116e927"> OPTIONS item 228 set to 3</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1116e916 "> <strong> Conversions applied</strong> </td>
+
+<td valign="top" headers="d1116e918 ">Equations <a href="polymer_Model_1_description.html#polymer.XID-000000e2">439.1</a>  and <a href="polymer_Model_3_description.html#polymer.XID-00000181">440.7</a> </td>
+
+<td valign="top" headers="d1116e921 "> Equations <a href="polymer_Model_1_description.html#polymer.XID-FlowToVelOld">439.2</a>  and <a href="polymer_Model_3_description.html#polymer.XID-00000181">440.7</a> </td>
+
+<td valign="top" headers="d1116e924 "> Equations <a href="polymer_Model_1_description.html#polymer.XID-000000e2">439.1</a>, <a href="polymer_Model_3_description.html#polymer.XID-VelToShearResOld">440.8</a>  and <a href="polymer_Model_3_description.html#polymer.equ.0197">440.9</a> </td>
+
+<td valign="top" headers="d1116e927 "> Equations <a href="polymer_Model_1_description.html#polymer.XID-FlowToVelOld">439.2</a>, <a href="polymer_Model_3_description.html#polymer.XID-VelToShearResOld">440.8</a>  and <a href="polymer_Model_3_description.html#polymer.equ.0197">440.9</a> </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</span></div>
+<p>The shear effect is skipped in those cases where
+a conversion from velocity to shear rate is not possible due to zero
+denominator terms associated with  <a href="polymer_Model_3_description.html#polymer.XID-00000181">440.7</a>  and  <a href="polymer_Model_3_description.html#polymer.XID-VelToShearResOld">440.8</a>.</p>
+<p>As with Approach I, the input <span class="keyword">PLYSHLOG</span> data
+must satisfy the constraint</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="polymer.equ.019f"/>
+ <math><mrow><mfrac><mrow>
+<mi>d</mi><mrow><mi>ln</mi><mo>⁡</mo><msup><mrow>
+<mi>M</mi></mrow><mrow><mi>r</mi><mi>e</mi><mi>f</mi>
+</mrow></msup></mrow></mrow><mrow><mi>d</mi><mrow><mi>ln</mi><mo>⁡</mo><mi>γ</mi></mrow></mrow></mfrac><mo>&gt;</mo><mrow><mo>-</mo><mn>1</mn></mrow></mrow></math> 
+</td><td align="right">[Eq. 440.10]
+              </td></tr></tbody></table><p>which yields a unique point of intersection. Again,
+the unsheared reservoir flow rates and unsheared well component mobilities
+are modified by multiplying through by the reciprocal of the relevant
+shear thinning/thickening factor. The associated derivatives are modified
+in line with this shear effect.</p>
+</div>
+
+<div class="section"><h4 class="sectiontitle">Cases where the shear effect is omitted</h4><p>Shear thinning/thickening is not applied in those cases where:</p>
+<ul>
+<li>The value of the unsheared velocity (or shear rate) is less than
+the minimum velocity (or shear rate) specified in <span class="keyword">PLYSHLOG</span>.</li>
+
+<li>There is no significant effect due to the polymer concentration
+(case where                                <math><mi>P</mi><mo>=</mo><mn>1</mn></math>)  </li>
+
+</ul>
+<p>In such cases, the shear viscosities are equal to the effective
+component viscosities, that is, <math><mrow>
+<msubsup><mrow><mi>Z</mi></mrow><mrow><mi>w</mi>
+</mrow><mrow><mo>*</mo></mrow></msubsup><mo>=</mo>
+<msubsup><mrow><mi>Z</mi></mrow><mrow><mi>p</mi>
+</mrow><mrow><mo>*</mo></mrow></msubsup><mo>=</mo><mn>1</mn></mrow></math>.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

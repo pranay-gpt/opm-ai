@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Viscous displacement (ECLIPSE 100)"/>
+<meta name="DC.subject" content="Grid and reservoir modeling, Dual porosity"/>
+<meta name="keywords" content="Grid and reservoir modeling, Dual porosity"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="dualporo_viscous_displacement__eclipse_100_"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Viscous displacement (ECLIPSE 100)</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="dualporo_viscous_displacement__eclipse_100_"><a name="dualporo_viscous_displacement__eclipse_100_"><!-- --></a>
+<h1 class="topictitle1">Viscous displacement (ECLIPSE 100)</h1>
+
+
+ <div>
+<p>Viscous displacement of a fluid is simply the movement of that
+fluid when a pressure differential is applied. In a dual porosity
+system there is a pressure gradient in the fracture system moving
+the fluid through the fracture, towards the production wells. In many
+cases this pressure gradient is small as the fracture system has a
+very high effective permeability. In these cases it is reasonable
+to ignore the viscous displacement of fluids from the matrix by the
+fracture pressure gradient. However, if the fracture system has a
+more moderate permeability then flow to and from the matrix caused
+by the fracture pressure gradient may be expected to act as a significant
+production mechanism.</p>
+
+<p>The viscous displacement option that models this effect is activated
+using the <a href="../ecl_rm/VISCD.html#VISCD">VISCD</a> keyword in the <span class="keyword">RUNSPEC</span> section. The representative
+matrix block sizes are input using the <a href="../ecl_rm/LX.html#LX">LX</a>, <a href="../ecl_rm/LY.html#LY">LY</a> and <a href="../ecl_rm/LZ.html#LZ">LZ</a> keywords in the <span class="keyword">GRID</span> section.</p>
+
+<p>Provided that the representative matrix block sizes have been input
+using the <span class="keyword">LX</span>, <span class="keyword">LY</span> and <span class="keyword">LZ</span> keywords, it is possible to calculate the <a href="../ecl_rm/SIGMA.html#SIGMA">SIGMA</a> factor from these matrix
+block dimensions using the <a href="../ecl_rm/LTOSIGMA.html#LTOSIGMA">LTOSIGMA</a> keyword. Note that if <span class="keyword">SIGMA</span> is calculated
+in this way then any input <span class="keyword">SIGMA</span> data will be ignored.</p>
+
+<p>The ECLIPSE viscous displacement model is based on a technique
+described by <cite><span> <a href="biblio_Bibliography.html#biblio_31238">Gilman and Kazemi (1988)</a> </span></cite>.</p>
+
+<div class="fignone" id="dualoporo.viscous.displacement.fracture.gradient"><a name="dualoporo.viscous.displacement.fracture.gradient"><!-- --></a>
+
+ <br/><img src="../img/dualporosity6.png" width="229px"/><br/> 
+<br/><span class="figcap">
+           Figure 82.1  A representative matrix block in a fracture potential gradient</span></div>
+
+<p>Consider a representative matrix block in a fracture potential
+gradient. The average fracture potential is given by P<sub>f</sub>, with an effective pressure drop across the block of  <math><msub><mi>P</mi>
+<mn>1</mn></msub><mrow><mo>-</mo><msub><mi>P</mi>
+<mn>2</mn></msub></mrow></math>.</p>
+
+<p>If the matrix pressure is  <math><msub>
+<mi>P</mi><mrow><mi>m</mi><mn>1</mn></mrow></msub>
+</math>, which is greater than both  <math><msub>
+<mi>P</mi><mn>1</mn></msub></math>  and  <math><msub><mi>P</mi>
+<mn>2</mn></msub></math>  then clearly the flow will be from
+matrix to fracture,</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.01c9"/>
+ <math><mrow><mi>F</mi>
+<mo>=</mo><mfrac><mrow><mi>T</mi></mrow><mrow><mn>2</mn></mrow></mfrac><mo>⋅</mo><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>m</mi></mrow></msub><mo>(</mo>
+<msub><mrow><mi>P</mi></mrow><mrow><mi>m</mi><mn>1</mn></mrow></msub><mrow><mo>-</mo><msub><mrow><mi>P</mi></mrow><mrow><mn>1</mn></mrow></msub></mrow>
+<mo>)</mo><mo>+</mo><mfrac><mrow><mi>T</mi></mrow>
+<mrow><mn>2</mn></mrow></mfrac><mo>⋅</mo><mrow><msub>
+<mrow><mi>M</mi></mrow><mrow><mi>m</mi></mrow></msub>
+<mo>(</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>m</mi><mn>1</mn></mrow></msub><mrow><mo>-</mo><msub>
+<mrow><mi>P</mi></mrow><mrow><mn>2</mn></mrow></msub>
+</mrow><mo>)</mo></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 82.1]
+              </td></tr></tbody></table>
+<p>where:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mi>T</mi></math> </td>
+
+<td valign="top"> is the matrix-fracture transmissibility</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>M</mi>
+<mi>m</mi></msub></math> </td>
+
+<td valign="top">is the matrix mobility.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Hence</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.01d2"/>
+ <math><mrow><mi>F</mi>
+<mo>=</mo><mi>T</mi><mo>⋅</mo><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>m</mi></mrow></msub><mo>(</mo>
+<msub><mrow><mi>P</mi></mrow><mrow><mi>m</mi><mn>1</mn></mrow></msub><mrow><mo>-</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>f</mi></mrow></msub></mrow>
+<mo>)</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 82.2]
+              </td></tr></tbody></table>
+<p>that is the usual matrix-fracture flow since  <math><msub><mi>P</mi>
+<mi>f</mi></msub><mo>=</mo><mo>(</mo><msub><mi>P</mi>
+<mn>1</mn></msub><mo>+</mo><msub><mi>P</mi><mn>2</mn>
+</msub><mo>)</mo><mo>/</mo><mn>2</mn></math>.</p>
+
+<p>If the matrix pressure is lower than both P<sub>1</sub> and P<sub>2</sub> (for example P<sub>m3</sub>) then the flow is from fracture
+to matrix, and as above can be expressed as:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.01db"/>
+ <math><mrow><mi>F</mi>
+<mo>=</mo><mrow><msub><mrow><mi>T</mi><mo>⋅</mo><mi>M</mi></mrow><mrow><mi>f</mi></mrow></msub><mo>(</mo>
+<msub><mrow><mi>P</mi></mrow><mrow><mi>f</mi></mrow>
+</msub><mrow><mo>-</mo><msub><mrow><mi>P</mi></mrow>
+<mrow><mi>m</mi><mn>3</mn></mrow></msub></mrow><mo>)</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 82.3]
+              </td></tr></tbody></table>
+<p>where:</p>
+
+<p> <math><msub><mi>M</mi>
+<mi>f</mi></msub></math>  is the fracture mobility.</p>
+
+<p>But in the case where the matrix pressure is P<sub>m2</sub>, where
+ <math><msub><mi>P</mi>
+<mn>1</mn></msub><mo>&gt;</mo><msub><mi>P</mi><mrow>
+<mi>m</mi><mn>2</mn></mrow></msub><mo>&gt;</mo><msub>
+<mi>P</mi><mn>2</mn></msub></math>, flow will occur from
+fracture to matrix at one end and from matrix to fracture at the other.
+In this case the flow is given by</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.01e4"/>
+ <math><mrow><mi>F</mi>
+<mo>=</mo><mfrac><mrow><mi>T</mi></mrow><mrow><mn>2</mn></mrow></mfrac><mo>⋅</mo><msub><mrow><mi>M</mi>
+</mrow><mrow><mi>f</mi></mrow></msub><mo>⋅</mo><mrow>
+<mo>(</mo><msub><mrow><mi>P</mi></mrow><mrow><mn>1</mn></mrow></msub><mrow><mo>-</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>m</mi><mn>2</mn></mrow></msub>
+</mrow><mo>)</mo></mrow><mrow><mo>-</mo><mtext> </mtext>
+<mfrac><mrow><mi>T</mi></mrow><mrow><mn>2</mn></mrow>
+</mfrac></mrow><mo>⋅</mo><msub><mrow><mi>M</mi></mrow>
+<mrow><mi>m</mi></mrow></msub><mo>⋅</mo><mrow><mo>(</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>m</mi>
+<mn>2</mn></mrow></msub><mrow><mo>-</mo><msub><mrow>
+<mi>P</mi></mrow><mrow><mn>2</mn></mrow></msub></mrow>
+<mo>)</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 82.4]
+              </td></tr></tbody></table>
+<p>This can be written as</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.XID-000001e8"/>
+ <math><mrow><mi>F</mi>
+<mo>=</mo><mfrac><mrow><mi>T</mi></mrow><mrow><mn>2</mn></mrow></mfrac><mo>⋅</mo><msub><mrow><mi>M</mi>
+</mrow><mrow><mi>f</mi></mrow></msub><mo>⋅</mo><mo>(</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>f</mi>
+</mrow></msub><mo>+</mo><mfrac><mrow><mo>(</mo><msub>
+<mrow><mi>P</mi></mrow><mrow><mn>1</mn></mrow></msub>
+<mrow><mo>-</mo><msub><mrow><mi>P</mi></mrow><mrow>
+<mn>2</mn></mrow></msub></mrow><mo>)</mo></mrow><mrow>
+<mn>2</mn></mrow></mfrac><mrow><mo>-</mo><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>m</mi><mn>2</mn></mrow>
+</msub></mrow><mo>)</mo><mrow><mo>-</mo><mfrac><mrow>
+<mi>T</mi></mrow><mrow><mn>2</mn></mrow></mfrac>
+</mrow><mo>⋅</mo><msub><mrow><mi>M</mi></mrow><mrow>
+<mi>m</mi></mrow></msub><mo>⋅</mo><mo>(</mo><msub>
+<mrow><mi>P</mi></mrow><mrow><mi>m</mi><mn>2</mn>
+</mrow></msub><mrow><mo>-</mo><msub><mrow><mi>P</mi>
+</mrow><mrow><mi>f</mi></mrow></msub></mrow><mo>+</mo>
+<mfrac><mrow><mo>(</mo><msub><mrow><mi>P</mi></mrow>
+<mrow><mn>1</mn></mrow></msub><mrow><mo>-</mo><msub>
+<mrow><mi>P</mi></mrow><mrow><mn>2</mn></mrow></msub>
+</mrow><mo>)</mo></mrow><mrow><mn>2</mn></mrow>
+</mfrac><mo>)</mo></mrow></math> 
+</td><td align="right">[Eq. 82.5]
+              </td></tr></tbody></table>
+<p>P1 and P2 are not known directly in the simulator, but an estimate
+of the fracture potential gradient can be made from the adjacent cell
+pressures. Now</p>
+
+<p> <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mn>1</mn></mrow></msub><mrow>
+<mo>-</mo><msub><mrow><mi>P</mi></mrow><mrow><mn>2</mn></mrow></msub></mrow><mo>=</mo><mi>G</mi><mo>⋅</mo><mi>L</mi></mrow></math> </p>
+
+<p>where:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mi>G</mi></math> </td>
+
+<td valign="top"> is the fracture pressure gradient</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>L</mi></math> </td>
+
+<td valign="top">is the representative dimension of the matrix block in the
+appropriate direction, input using the <span class="keyword">LX</span>, <span class="keyword">LY</span> and <span class="keyword">LZ</span> keywords.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Equation <a href="dualporo_Viscous_displacement__ECLIPSE_100_.html#dualporo.XID-000001e8">82.5</a>  can be written
+as a standard matrix-fracture flow with modified up-winding and an
+extra term associated with the viscous displacement</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.01f8"/>
+ <math><mrow><mi>F</mi>
+<mo>=</mo><mfrac><mrow><mi>T</mi></mrow><mrow><mn>2</mn></mrow></mfrac><mo>⋅</mo><msub><mrow><mi>M</mi>
+</mrow><mrow><mi>f</mi></mrow></msub><mo>⋅</mo><mrow>
+<mo>(</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>f</mi></mrow></msub><mrow><mo>-</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>m</mi><mn>2</mn></mrow></msub>
+</mrow><mo>)</mo></mrow><mrow><mo>-</mo><mfrac><mrow>
+<mi>T</mi></mrow><mrow><mn>2</mn></mrow></mfrac>
+</mrow><mo>⋅</mo><msub><mrow><mi>M</mi></mrow><mrow>
+<mi>m</mi></mrow></msub><mo>⋅</mo><mrow><mo>(</mo>
+<msub><mrow><mi>P</mi></mrow><mrow><mi>m</mi><mn>2</mn></mrow></msub><mrow><mo>-</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>f</mi></mrow></msub></mrow>
+<mo>)</mo></mrow><mo>+</mo><mfrac><mrow><mi>T</mi>
+</mrow><mrow><mn>4</mn></mrow></mfrac><mo>⋅</mo><mi>G</mi><mo>⋅</mo><mi>L</mi><mo>⋅</mo><mrow><mo>(</mo>
+<msub><mrow><mi>M</mi></mrow><mrow><mi>f</mi></mrow>
+</msub><mrow><mo>-</mo><msub><mrow><mi>M</mi></mrow>
+<mrow><mi>m</mi></mrow></msub></mrow><mo>)</mo></mrow>
+</mrow></math> 
+</td><td align="right">[Eq. 82.6]
+              </td></tr></tbody></table>
+<p>The matrix-fracture flows are modified in a similar manner for
+all three directions.</p>
+
+<p>The fracture potential gradient, G, is estimated from the potential
+differences to the surrounding cells.</p>
+
+<div class="fignone" id="dualporo.vicous.potential.difference"><a name="dualporo.vicous.potential.difference"><!-- --></a>
+
+ <br/><img src="../img/dualporosity7.png" width="236px"/><br/> 
+<br/><span class="figcap">
+           Figure 82.2  Estimating the potential differences to the surrounding cells</span></div>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.0201"/>
+ <math><mrow><mi>G</mi><mo>=</mo><mfrac><mrow><mrow><mo>|</mo><msub>
+<mrow><mi>P</mi></mrow><mrow><mi>l</mi></mrow></msub>
+<mo>−</mo><mi>P</mi><mo>|</mo></mrow></mrow><mrow>
+<mn>2</mn><msub><mrow><mi>D</mi></mrow><mrow><mi>l</mi></mrow></msub></mrow></mfrac><mo>+</mo><mfrac>
+<mrow><mrow><mo>|</mo><mi>P</mi><mo>−</mo><msub>
+<mrow><mi>P</mi></mrow><mrow><mi>r</mi></mrow></msub>
+<mo>|</mo></mrow></mrow><mrow><mn>2</mn><msub><mrow>
+<mi>D</mi></mrow><mrow><mi>r</mi></mrow></msub></mrow>
+</mfrac></mrow></math> 
+</td><td align="right">[Eq. 82.7]
+              </td></tr></tbody></table>
+<p>where:</p>
+
+<p> <math><mrow><mrow>
+<mo>|</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>l</mi></mrow></msub><mo>−</mo><mi>P</mi><mo>|</mo>
+</mrow></mrow></math> and <math><mrow><mrow><mo>|</mo><mi>P</mi><mo>−</mo><msub><mrow><mi>P</mi>
+</mrow><mrow><mi>r</mi></mrow></msub><mo>|</mo></mrow>
+</mrow></math> are the absolute values of the potential difference
+to adjacent cells</p>
+
+<p>D<sub>l</sub> and D<sub>r </sub>are the distance between the cell
+centers.</p>
+
+<p>In this version of ECLIPSE the fracture potential gradients are
+calculated from the potential differences at the previous timestep.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

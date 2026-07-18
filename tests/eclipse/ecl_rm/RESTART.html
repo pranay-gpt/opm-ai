@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="RESTART"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="RESTART"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>RESTART</title>
+</head>
+<body>
+
+
+<div class="nested0" id="RESTART"><a name="RESTART"><!-- --></a>
+<h1 class="keyword">RESTART</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="restart.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="restart.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2002e45"> x </th>
+
+<th valign="top" id="d2002e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2002e54"> x </th>
+
+<th valign="top" id="d2002e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2002e45 d2002e54 ">  </td>
+
+<td valign="top" headers="d2002e48 d2002e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2002e45 d2002e54 ">  </td>
+
+<td valign="top" headers="d2002e48 d2002e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2002e45 d2002e54 ">  </td>
+
+<td valign="top" headers="d2002e48 d2002e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2002e45 d2002e54 ">  </td>
+
+<td valign="top" headers="d2002e48 d2002e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2002e45 d2002e54 ">  </td>
+
+<td valign="top" headers="d2002e48 d2002e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2002e45 d2002e54 "> x </td>
+
+<td valign="top" headers="d2002e48 d2002e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2002e45 d2002e54 ">  </td>
+
+<td valign="top" headers="d2002e48 d2002e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2002e45 d2002e54 ">  </td>
+
+<td valign="top" headers="d2002e48 d2002e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword should be followed by a line containing between 2 and
+4 items of data, terminated by a slash (/).</p>
+
+<ol>
+<li> The root name of the Restart file or Save file. </li>
+
+<li> The number of the report from which the run is to be restarted.<ul>
+<li>When using a restart file, the report number does not reset to
+zero after each 10000 reports (for example the restart file produced
+after '<samp class="codeph">.X9999</samp>' is '<samp class="codeph">.Y0000</samp>' but the
+report numbers are still 9999 and 10000 respectively). See the <cite>ECLIPSE File Formats Reference Manual</cite> for more details.</li>
+
+<li>If the run which generated the file referred to in item 1 had
+the  <a href="RPTRST.html#RPTRST"> RPTRST</a> mnemonic <samp class="codeph">BASIC=6</samp>, then each timestep in that run will have generated
+restart or save file information. In this case, the report number
+that needs to be entered here is the timestep number. This information
+can be obtained from the print file for that run.</li>
+
+</ul>
+ <p>ECLIPSE 100</p>
+</li>
+
+<li> If the time-dependent data is stored on
+the Save file instead of the Restart file, the string  <samp class="codeph">SAVE</samp> should be entered here. <p>Default this item if the time-dependent
+data is to be read from the Restart file.</p>
+ <p>ECLIPSE 100</p>
+ </li>
+
+<li>A string denoting the formatted/unformatted
+status of the Save file from which the time-dependent data is to be
+read.
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">UNFORMATTED</samp> </td>
+
+<td valign="top">The <samp class="codeph">SAVE</samp> file is unformatted</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">FORMATTED</samp> </td>
+
+<td valign="top">The <samp class="codeph">SAVE</samp> file is formatted</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>This item is only relevant if the time-dependent data is
+to be read from the Save file (that is item 3 is <samp class="codeph">SAVE</samp>).</p>
+<p>DEFAULT: <samp class="codeph">UNFORMATTED</samp> </p>
+ </li>
+
+</ol>
+
+<p>See also keyword <a href="SAVE.html#SAVE"> SAVE</a> in the <span class="keyword">RUNSPEC</span> section, and keywords  <a href="LOAD.html#LOAD"> LOAD</a>, <span class="keyword">RPTRST</span>,  <a href="RPTSCHED.html#RPTSCHED"> RPTSCHED</a> and
+ <a href="SKIPREST.html#SKIPREST"> SKIPREST</a>.</p>
+
+<div class="section" id="restart_example"><a name="restart_example"><!-- --></a><h4 class="sectiontitle">Example</h4>             
+   <pre><code>RESTART
+ BASE 11 /</code></pre>          <p>causes the current
+run to restart from report time 11 of a previous run whose root file-name
+was  		 <samp class="codeph">BASE</samp>, reading the solution data from the
+Restart file.</p>
+ 		 <p>For more information see <a href="../ecl_td/Restarts.html#Restarts">"Restarts"</a> in the <cite>ECLIPSE Technical Description</cite>          </p>
+ </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

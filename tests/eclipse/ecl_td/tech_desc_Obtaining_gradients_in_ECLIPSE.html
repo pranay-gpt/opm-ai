@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Obtaining gradients in ECLIPSE"/>
+<meta name="DC.subject" content="Gradient option"/>
+<meta name="keywords" content="Gradient option"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="tech_desc_obtaining_gradients_in_eclipse"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Obtaining gradients in ECLIPSE</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="tech_desc_obtaining_gradients_in_eclipse"><a name="tech_desc_obtaining_gradients_in_eclipse"><!-- --></a>
+<h1 class="topictitle1">Obtaining gradients in ECLIPSE</h1>
+
+
+ <div>
+<p>At each simulator timestep, ECLIPSE forces the fully implicit residual
+in each simulator grid block to be zero (see <a href="formulate_Formulation_of_the_Equations.html#formulate_formulation_of_the_equations"> "Formulation of the equations"</a>).</p>
+
+<p>This can be written as</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="tech_desc.XID-00000008"/>
+ <math><mrow><mi>R</mi>
+<mo>(</mo><msub><mi>X</mi><mrow><mi>t</mi><mo>+</mo>
+<mrow><mi>d</mi><mi>t</mi></mrow></mrow></msub><mo>,</mo><msub><mi>X</mi><mi>t</mi></msub><mo>,</mo>
+<mi>λ</mi><mo>)</mo></mrow><mo>=</mo><mfrac>
+<mrow><mrow><msub><mi>M</mi><mrow><mi>t</mi><mo>+</mo><mrow><mi>d</mi><mi>t</mi></mrow></mrow></msub>
+<mo>(</mo><msub><mi>X</mi><mrow><mi>t</mi><mo>+</mo>
+<mrow><mi>d</mi><mi>t</mi></mrow></mrow></msub><mo>,</mo><mi>λ</mi><mo>)</mo><mo>-</mo><mrow>
+<msub><mi>M</mi><mi>t</mi></msub><mo>(</mo><msub>
+<mi>X</mi><mi>t</mi></msub><mo>,</mo><mi>λ</mi>
+<mo>)</mo></mrow></mrow></mrow><mrow><mrow><mi>d</mi>
+<mi>t</mi></mrow></mrow></mfrac><mo>+</mo><mrow><msub>
+<mi>F</mi><mrow><mi>t</mi><mo>+</mo><mrow><mi>d</mi>
+<mi>t</mi></mrow></mrow></msub><mo>(</mo><msub><mi>X</mi><mrow><mi>t</mi><mo>+</mo><mrow><mi>d</mi>
+<mi>t</mi></mrow></mrow></msub><mo>,</mo><mi>λ</mi>
+<mo>)</mo></mrow><mo>+</mo><mrow><msub><mi>Q</mi>
+<mrow><mi>t</mi><mo>+</mo><mrow><mi>d</mi><mi>t</mi>
+</mrow></mrow></msub><mo>(</mo><msub><mi>X</mi><mrow>
+<mi>t</mi><mo>+</mo><mrow><mi>d</mi><mi>t</mi>
+</mrow></mrow></msub><mo>,</mo><mi>λ</mi><mo>)</mo></mrow><mo>=</mo><mn>0</mn></math> 
+</td><td align="right">[Eq. 824.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">the subscripts  <math><mi>t</mi></math>  and  <math><mi>t</mi><mo>+</mo>
+<mrow><mi>d</mi><mi>t</mi></mrow></math> </td>
+
+<td valign="top">denote quantities at the current and advanced time, with a
+simulator timestep of  <math><mrow><mi>d</mi>
+<mi>t</mi></mrow></math>,   </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>M</mi></math> </td>
+
+<td valign="top"> is the fluid-in-place in each simulator grid block, </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>F</mi></math> </td>
+
+<td valign="top"> is the net flow rate into neighboring grid blocks,  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>Q</mi></math> </td>
+
+<td valign="top">is the net flow rate into wells during the timestep,   </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>λ</mi>
+</math> </td>
+
+<td valign="top"> is any gradient parameter,     </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>X</mi></math> </td>
+
+<td valign="top"> is the set of solution variables in each grid block.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>For ECLIPSE 100,                  <math><mi>X</mi></math>  represents pressure and saturations, and for ECLIPSE 300,  <math><mi>X</mi></math>  represents pressure and molar densities.          </p>
+
+<p>Differentiating equation <a href="tech_desc_Obtaining_gradients_in_ECLIPSE.html#tech_desc.XID-00000008">824.1</a>  throughout with respect to                  <math><mi>λ</mi></math>  yields          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="tech_desc.equ.0020"/>
+ <math><mrow><mn>0</mn>
+<mo>⁢</mo><mo>=</mo><mtext> </mtext><mfrac><mrow><mi>d</mi><mi>R</mi></mrow><mrow><mi>d</mi><mi>λ</mi>
+</mrow></mfrac><mo>⁢</mo><mo>=</mo><mtext> </mtext>
+<mrow><mfrac><mrow><mo>∂</mo><mi>R</mi></mrow>
+<mrow><mo>∂</mo><mi>λ</mi></mrow></mfrac>
+<mo>⁢</mo><mo>+</mo><mtext> </mtext><mrow><mfrac>
+<mrow><mo>∂</mo><mi>R</mi></mrow><mrow><mo>∂</mo>
+<msub><mrow><mi>X</mi></mrow><mrow><mi>t</mi><mo>⁢</mo><mo>+</mo><mtext> </mtext><mi>d</mi><mi>t</mi>
+</mrow></msub></mrow></mfrac><mo>⋅</mo><mrow><mfrac>
+<mrow><mo>∂</mo><msub><mrow><mi>X</mi></mrow>
+<mrow><mi>t</mi><mo>⁢</mo><mo>+</mo><mtext> </mtext>
+<mi>d</mi><mi>t</mi></mrow></msub></mrow><mrow><mo>∂</mo><mi>λ</mi></mrow></mfrac></mrow></mrow>
+</mrow><mo>⁢</mo><mo>+</mo><mtext> </mtext><mrow>
+<mfrac><mrow><mo>∂</mo><mi>R</mi></mrow><mrow>
+<mo>∂</mo><msub><mrow><mi>X</mi></mrow><mrow><mi>t</mi></mrow></msub></mrow></mfrac><mo>⋅</mo><mrow>
+<mfrac><mrow><mo>∂</mo><msub><mrow><mi>X</mi>
+</mrow><mrow><mi>t</mi></mrow></msub></mrow><mrow><mo>∂</mo><mi>λ</mi></mrow></mfrac></mrow></mrow>
+</mrow></math> 
+</td><td align="right">[Eq. 824.2]
+              </td></tr></tbody></table>
+<p>which can be written as</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="tech_desc.XID-00000024"/>
+ <math><mrow><mi>J</mi>
+<mo>⋅</mo><mfrac><mrow><mi>∂</mi><msub><mrow><mi>X</mi></mrow><mrow><mi>t</mi><mo>+</mo><mrow><mi>d</mi><mi>t</mi></mrow></mrow></msub></mrow><mrow>
+<mi>∂</mi><mi>λ</mi></mrow></mfrac><mo>=</mo>
+<mrow><mo>-</mo><mfrac><mrow><mi>∂</mi><mi>R</mi>
+</mrow><mrow><mi>∂</mi><msub><mrow><mi>X</mi>
+</mrow><mrow><mi>t</mi></mrow></msub></mrow></mfrac>
+<mo>⋅</mo><mfrac><mrow><mi>∂</mi><msub><mrow><mi>X</mi></mrow><mrow><mi>t</mi></mrow></msub></mrow>
+<mrow><mi>∂</mi><mi>λ</mi></mrow></mfrac>
+<mrow><mo>-</mo><mrow><mrow><mfrac><mrow><mo>∂</mo>
+<mi>R</mi></mrow><mrow><mo>∂</mo><mi>λ</mi>
+</mrow></mfrac></mrow></mrow></mrow></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 824.3]
+              </td></tr></tbody></table>
+<p>where the Jacobian                  <math><mi>J</mi><mo>=</mo><mrow><mi>∂</mi><mi>R</mi>
+</mrow><mo>/</mo><mrow><mi>∂</mi><msub><mi>X</mi>
+<mrow><mi>t</mi><mo>+</mo><mrow><mi>d</mi><mi>t</mi>
+</mrow></mrow></msub></mrow></math>  is the same as that
+used to solve the reservoir equations, so no additional matrix setup
+is required. Therefore, for each gradient parameter  <math><mi>λ</mi>
+</math>  selected, a set of linear equations, equation <a href="tech_desc_Obtaining_gradients_in_ECLIPSE.html#tech_desc.XID-00000024">824.3</a>  must be solved at each simulator
+timestep to determine the gradient  <math><mfrac>
+<mrow><mrow><mi>∂</mi><msub><mi>X</mi><mrow><mi>t</mi><mo>+</mo><mrow><mi>d</mi><mi>t</mi></mrow>
+</mrow></msub></mrow></mrow><mrow><mrow><mi>∂</mi>
+<mi>λ</mi></mrow></mrow></mfrac></math>. When there
+are several gradient parameters, each requires the solution of the
+same set of linear equations, equation <a href="tech_desc_Obtaining_gradients_in_ECLIPSE.html#tech_desc.XID-00000024">824.3</a>  but with different right hand
+sides. The right hand sides contain two terms. The first is the product
+of  <math><mrow><mi>∂</mi>
+<mi>R</mi></mrow><mo>/</mo><msub><mrow><mi>∂</mi>
+<mi>X</mi></mrow><mi>t</mi></msub></math>, which is
+independent of  <math><mi>λ</mi>
+</math>, and the previously calculated gradient at the old timestep,
+ <math><msub><mrow><mi>∂</mi><mi>X</mi></mrow><mi>t</mi></msub><mo>/</mo><mrow><mi>∂</mi><mi>λ</mi></mrow>
+</math>.          </p>
+
+<p>For a fully implicit discretization the second term in the right
+hand side of equation <a href="tech_desc_Obtaining_gradients_in_ECLIPSE.html#tech_desc.XID-00000024">824.3</a>  is
+given by:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="tech_desc.Xtech_desc.XID-00000032"/>
+ <math><mrow><mfrac><mrow>
+<mi>∂</mi><mi>R</mi></mrow><mrow><mi>∂</mi>
+<mi>λ</mi></mrow></mfrac><mo>=</mo><mrow><mfrac>
+<mrow><mn>1</mn></mrow><mrow><mi>d</mi><mi>t</mi>
+</mrow></mfrac><mo>(</mo><mfrac><mrow><mi>∂</mi>
+<msub><mrow><mi>M</mi></mrow><mrow><mi>t</mi><mo>+</mo><mrow><mi>d</mi><mi>t</mi></mrow></mrow></msub>
+</mrow><mrow><mi>∂</mi><mi>λ</mi></mrow>
+</mfrac><mrow><mtext> </mtext><mo>-</mo><mtext> </mtext>
+<mfrac><mrow><mi>d</mi><msub><mrow><mi>M</mi></mrow>
+<mrow><mi>t</mi></mrow></msub></mrow><mrow><mi>d</mi>
+<mi>λ</mi></mrow></mfrac></mrow><mo>)</mo></mrow>
+<mo>+</mo><mfrac><mrow><mi>∂</mi><msub><mrow><mi>F</mi></mrow><mrow><mi>t</mi><mo>+</mo><mrow><mi>d</mi><mi>t</mi></mrow></mrow></msub></mrow><mrow>
+<mi>∂</mi><mi>λ</mi></mrow></mfrac><mo>+</mo>
+<mfrac><mrow><mi>∂</mi><msub><mrow><mi>Q</mi>
+</mrow><mrow><mi>t</mi><mo>+</mo><mrow><mi>d</mi>
+<mi>t</mi></mrow></mrow></msub></mrow><mrow><mi>∂</mi>
+<mi>λ</mi></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 824.4]
+              </td></tr></tbody></table>
+<p>Evaluation of equation <a href="tech_desc_Obtaining_gradients_in_ECLIPSE.html#tech_desc.Xtech_desc.XID-00000032">824.4</a>  depends on the parameter                  <math><mi>λ</mi>
+</math>, and additional code is required for each new parameter.
+If, for example  <math><mi>λ</mi>
+</math>  is a pore volume multiplier, then it would appear linearly
+in the accumulation terms, and not appear in the flow or well terms.
+Therefore equation <a href="tech_desc_Obtaining_gradients_in_ECLIPSE.html#tech_desc.Xtech_desc.XID-00000032">824.4</a>  could be evaluated as:          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="tech_desc.equ.003a"/>
+ <math><mrow><mfrac><mrow>
+<mi>∂</mi><mi>R</mi></mrow><mrow><mi>∂</mi>
+<mi>λ</mi></mrow></mfrac><mo>=</mo><mrow><mfrac>
+<mrow><mn>1</mn></mrow><mrow><mi>d</mi><mi>t</mi>
+</mrow></mfrac><mo>(</mo><mfrac><mrow><mi>∂</mi>
+<msub><mrow><mi>M</mi></mrow><mrow><mi>t</mi><mo>+</mo><mrow><mi>d</mi><mi>t</mi></mrow></mrow></msub>
+</mrow><mrow><mi>∂</mi><mi>λ</mi></mrow>
+</mfrac><mrow><mtext> </mtext><mo>-</mo><mtext> </mtext>
+<mfrac><mrow><mi>d</mi><msub><mrow><mi>M</mi></mrow>
+<mrow><mi>t</mi></mrow></msub></mrow><mrow><mi>d</mi>
+<mi>λ</mi></mrow></mfrac></mrow><mo>)</mo></mrow>
+<mo>=</mo><mrow><mfrac><mrow><mn>1</mn></mrow><mrow>
+<mi>λ</mi></mrow></mfrac><mfrac><mrow><mo>(</mo>
+<msub><mrow><mi>M</mi></mrow><mrow><mi>t</mi><mo>+</mo><mrow><mi>d</mi><mi>t</mi></mrow></mrow></msub>
+<mrow><mtext> </mtext><mo>-</mo><mtext> </mtext><msub>
+<mrow><mi>M</mi></mrow><mrow><mi>t</mi></mrow></msub>
+</mrow><mo>)</mo></mrow><mrow><mi>d</mi><mi>t</mi>
+</mrow></mfrac></mrow></mrow></math> 
+</td><td align="right">[Eq. 824.5]
+              </td></tr></tbody></table>
+<p>where the right hand side has already been calculated in evaluating
+the residual equation <a href="tech_desc_Obtaining_gradients_in_ECLIPSE.html#tech_desc.XID-00000008">824.1</a>.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

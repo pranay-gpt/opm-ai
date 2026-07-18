@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Defining local grid rock properties"/>
+<meta name="DC.subject" content="Local grid refinement, Rock properties"/>
+<meta name="keywords" content="Local grid refinement, Rock properties"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrc_defining_local_grid_rock_properties"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Defining local grid rock properties</title>
+</head>
+<body>
+
+
+<div class="nested0" id="lgrc_defining_local_grid_rock_properties"><a name="lgrc_defining_local_grid_rock_properties"><!-- --></a>
+<h1 class="topictitle1">Defining local grid rock properties</h1>
+
+
+ <div>
+<p>By default, values of porosity, permeability and transmissibility
+multipliers, for example, are copied to local grid cells from the
+global host cells. In most cases this is adequate, but it is possible
+to define properties directly for some or all of the cells within
+a local grid by specifying grid arrays between the <a href="../ecl_rm/CARFIN.html#CARFIN">CARFIN</a> / <a href="../ecl_rm/ENDFIN.html#ENDFIN">ENDFIN</a>, <a href="../ecl_rm/RADFIN.html#RADFIN">RADFIN</a> /<span class="keyword">ENDFIN</span>, <a href="../ecl_rm/RADFIN4.html#RADFIN4">RADFIN4</a> /<span class="keyword">ENDFIN</span> or <a href="../ecl_rm/REFINE.html#REFINE">REFINE</a> /<span class="keyword">ENDFIN</span> pairs. When the end of the <span class="keyword">GRID</span> section is reached,
+any values that have not been explicitly defined for local cells are
+then copied from the global host cells. For example:</p>
+
+<pre><code>CARFIN -- NAME     I1-I2 J1-J2 K1-K2 NX NY NZ NWMAX    'NORTH'  5 10   5 10   1 4 18 18  8   5  /
+EQUALS  'PORO'  0.3  1 18 1 18 1 4 /  'PERMZ' 50.0 1 18 1 18 1 4 /  'NTG'   0.9  1 18 1 18 1 8 / /
+MULTIPLY  'PORO'  0.5  6 13 6 13 1 2 /  'NTG'   0.2  6 13 6 13 1 2 / /
+ENDFIN</code></pre>
+<p>This defines the porosities only in the top four layers on the
+local grid, and these are subsequently modified for the top two layers
+with the <a href="../ecl_rm/MULTIPLY.html#MULTIPLY">MULTIPLY</a> keyword. The porosities for cells in the bottom four layers
+are copied from their host cells in the global grid.</p>
+
+<p>Since by default ECLIPSE does not copy any properties from host
+cells until the end of the <span class="keyword">GRID</span> section is reached,
+it is not permitted to modify any property for cells within the local
+grid (by using the <a href="../ecl_rm/ADD.html#ADD">ADD</a>, <a href="../ecl_rm/COPY.html#COPY">COPY</a>, <span class="keyword">MULTIPLY</span> or <a href="../ecl_rm/OPERATE.html#OPERATE">OPERATE</a> keywords) without previously
+defining the property for those cells.</p>
+
+<p>This behavior can be changed by specifying the <a href="../ecl_rm/LGRCOPY.html#LGRCOPY">LGRCOPY</a> keyword in the <span class="keyword">RUNSPEC</span>, <span class="keyword">GRID</span>, <span class="keyword">EDIT</span>, <span class="keyword">PROPS</span> or <span class="keyword">REGIONS</span> section,
+depending on the simulator used. This will cause global values to
+be copied ‘just in time’ to the corresponding local grid cells. There
+are limitations on the use of this associated with the order of the
+keywords in the data file - for instance, global values of <span class="keyword">DX</span> must have been set before the LGR operations are carried
+out in order for the correct global parent cell to be allocated to
+each LGR cell. If <span class="keyword">DX</span> is redefined for the global
+cells after an operation requiring the <span class="keyword">LGRCOPY</span> functionality
+to be used has been invoked, this will trigger an error. Similar limitations
+apply to all keywords which may affect which global cell a particular
+LGR cell is physically located in.</p>
+
+<p>Special care should be taken with the <a href="../ecl_rm/MINPV.html#MINPV">MINPV</a> keyword. It is likely
+that a suitable minimum pore volume for the global grid will not be
+suitable for much smaller local grid cells. A more suitable value
+should be specified for them using <a href="../ecl_rm/MINPVV.html#MINPVV">MINPVV</a>. In ECLIPSE 100, if
+this is set for the host global cells it will be copied to the LGR
+cells. In ECLIPSE 300, this is not the case and it must be specified
+directly for the local grid cells.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

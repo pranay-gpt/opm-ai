@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Example"/>
+<meta name="DC.subject" content="Thermal properties example"/>
+<meta name="keywords" content="Thermal properties example"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="props_Example"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Example</title>
+</head>
+<body>
+
+
+<div class="nested0" id="props_Example"><a name="props_Example"><!-- --></a>
+<h1 class="topictitle1">Example</h1>
+
+
+ <div>
+<p>For a two hydrocarbon component study, the <span class="keyword">PROPS</span> section may look something like this</p>
+
+<pre><code>PROPS ====================================
+
+-- Temperature variation with depth - deg F
+TEMPVD
+624 105 /
+1500 105 /
+
+-- Standard Conditions Temp deg F Press psia
+STCOND
+60 14.7 /
+
+-- Water Saturation Rel Perm Function
+SWFN
+.2000 .0000 0.0
+.4000 .00035 0.0
+.5000 .00101 0.0
+.6000 .00213 0.0
+.7000 .0038 0.0
+/
+
+-- Gas Saturation Rel Perm Function
+SGCN
+.0000 .0000 0.0
+.0200 .0000 0.0
+.1000 .07059 0.0
+.2000 .15882 0.0
+.3000 .24706 0.0
+.4000 .33529 0.0
+.5000 .42353 0.0
+.6000 .51176 0.0
+.7000 .6000 0.0
+/
+
+-- Two Phase Oil Saturation Rel Perm Functions
+SOF3
+.2000 .0000 .0000
+.3000 .0000 .1666
+.4000 .02468 .33333
+.5000 .12155 .500000
+.6000 .30885 .66667
+.7000 .59856 .83333
+.8000 1.0000 1.0000
+/
+
+-- Stone 3-phase oil rel perm
+STONE
+
+-- Relative permeability endpoints vs temperature (deg F)
+ENKRVT
+-- temp Krwmax Krgmax Kromax Krwro  Krgro Krorg Krorw
+   100  1*     1*     1*     0.0038 1*    1*    1*
+   450  1*     1*     1*     0.1    1*    1*    1*     /
+-- Saturation endpoints vs temperature (deg F)
+ENPTVT
+-- temp  Swc  Swir  Swmax  Sgc  Sgr  Sgmax  Sorw  Sorg
+   100   0.20 0.20  1*     1*   1*   1*     0.3   0.2
+   450   0.45 0.45  1*     1*   1*   1*     0.1   0.05 /
+
+-- Component gas viscosities cp 
+
+GASVISCT
+100  .0112  1
+200  .0128  1
+300  .0145  1
+400  .016   1
+/
+-- Component oil phase viscosities cp
+OILVISCT
+ 75 7500  7500
+100 2000  2000
+125  532   532
+150  210   210
+200   50    50
+250   15    15
+300    8.1   8.1
+400    3.0   3.0
+500    1.5   1.5
+/
+
+-- Crookston K-value coefficients
+KVCR
+1.89   1*
+3226.8 1*
+0      1*
+362.7  1*
+0      1*
+/
+
+-- Heats of vaporization Btu/lb
+HEATVAP
+350  /
+-- Critical temperatures deg R
+TCRIT
+358 10000 /
+-- Critical pressures psia
+PCRIT
+666.37  1* /
+
+-- Component reference densities in oil phase lb/ft**3
+DREF
+60.975 60.975 /
+-- Component compressibilities in oil phase 1/psi
+CREF
+0.00002  0.0000126 /
+-- Component specific heats Btu/lb/deg R
+SPECHA
+0.52 0.432 /
+CNAMES
+SGAS HEAVY /
+MW
+17.3 500 /
+
+-- Thermal expansion coefficients 1/deg R
+THERMEX1
+.00035 .000315 /
+
+-- Oil component gas phase compressibilities 1/psi
+ZFACTOR
+0.95 /
+
+-- Water properties
+PVTW
+--  Pref       Bw        Cw          Vw        Cvw
+--  PSIA       RB/STB    1/PSI       CPOISE    1/PSI
+    75.000     1.0       3.E-08      .3        7.E-09
+ /
+-- Ref press  rock compressibility
+-- psia       1/psi
+ROCK
+100  5.0E-05  /
+
+-- global mole fraction vs depth
+ZMFVD
+624 0.0001 0.9999 /</code></pre>
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using the polymer flood model"/>
+<meta name="DC.subject" content="The ECLIPSE 100 polymer flood simulation model, Polymer flood, Using"/>
+<meta name="keywords" content="The ECLIPSE 100 polymer flood simulation model, Polymer flood, Using"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="polymer_using_the_polymer_flood_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using the polymer flood model</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="polymer_using_the_polymer_flood_model"><a name="polymer_using_the_polymer_flood_model"><!-- --></a>
+<h1 class="topictitle1">Using the polymer flood model</h1>
+
+
+ <div>
+<p>The option is activated by the keyword <a href="../ecl_rm/POLYMER.html#POLYMER">POLYMER</a> in the <span class="keyword">RUNSPEC</span> section. If salt-sensitivity for polymer is required, this can be
+set by adding the keyword <a href="../ecl_rm/BRINE.html#BRINE">BRINE</a> to the <span class="keyword">RUNSPEC</span> section. By default the
+polymer model is not salt-sensitive.</p>
+
+<p>The mixing parameter data is obligatory and should be provided
+using the keyword <a href="../ecl_rm/PLMIXPAR.html#PLMIXPAR">PLMIXPAR</a>. The maximum number of mixing parameter regions is set using
+the parameter <samp class="codeph">NPLMIX</samp> in the keyword <a href="../ecl_rm/REGDIMS.html#REGDIMS">REGDIMS</a>. The associated mixing
+region for each grid cell is specified using the <a href="../ecl_rm/PLMIXNUM.html#PLMIXNUM">PLMIXNUM</a> keyword. The mixing
+region for each well is specified using <a href="../ecl_rm/WELSPECS.html#WELSPECS">WELSPECS</a> or <a href="../ecl_rm/WELSPECL.html#WELSPECL">WELSPECL</a> as appropriate. The
+maximum polymer and salt concentrations to be used in calculating
+the effective fluid component viscosities are entered under the keyword <a href="../ecl_rm/PLYMAX.html#PLYMAX">PLYMAX</a>.</p>
+
+<p>The viscosity of a fully mixed polymer solution needs to be defined
+as function of the solution concentration. This should be done using
+the keyword <a href="../ecl_rm/PLYVISC.html#PLYVISC">PLYVISC</a>. If the salt-sensitive option is activated (<span class="keyword">BRINE</span> specified), then the keywords <a href="../ecl_rm/SALTNODE.html#SALTNODE">SALTNODE</a> and <a href="../ecl_rm/PLYVISCS.html#PLYVISCS">PLYVISCS</a> should be used to
+enter the two-dimensional table for the viscosity of the solution.</p>
+
+<p>The polymer adsorption data should be entered using either with
+the keyword <a href="../ecl_rm/PLYADS.html#PLYADS">PLYADS</a>, with the <a href="../ecl_rm/PLYADSS.html#PLYADSS">PLYADSS</a> keyword accompanied by the keyword <a href="../ecl_rm/ADSALNOD.html#ADSALNOD">ADSALNOD</a>, or with the <a href="../ecl_rm/ADSORP.html#ADSORP">ADSORP</a> keyword with <samp class="codeph">POLYMER</samp> as argument in the <span class="keyword">PROPS</span> section.
+When the <span class="keyword">ADSORP</span> keyword is used, the polymer adsorption
+can be set to depend on the salinity and rock permeability. In this
+case, with the standard brine option, the salt’s mass concentration
+is directly used in the analytic model, and therefore the units of
+the coefficients need to be interpreted accordingly.</p>
+
+<p>Note that the multi-component brine model (<a href="../ecl_rm/ECLMC.html#ECLMC">ECLMC</a> keyword in the <span class="keyword">RUNSPEC</span> section) cannot currently be used with the polymer/brine
+flood model.</p>
+
+<p>Other polymer-rock parameters such as the rock mass density used
+in the adsorption calculation, the dead pore volume and the residual
+resistance factor are input using the keyword <a href="../ecl_rm/PLYROCK.html#PLYROCK">PLYROCK</a>.</p>
+
+<p>If required, individual cell values can be set for the rock mass
+density, the residual resistance factor, and the maximum adsorbed
+polymer using <a href="../ecl_rm/PLYRMDEN.html#PLYRMDEN">PLYRMDEN</a>, <a href="../ecl_rm/PLYKRRF.html#PLYKRRF">PLYKRRF</a> and <a href="../ecl_rm/PLYCAMAX.html#PLYCAMAX">PLYCAMAX</a> respectively.</p>
+
+<p>Non-Newtonian rheology can be activated by setting one of the following:</p>
+
+<ul>
+<li>The <a href="../ecl_rm/PLYSHEAR.html#PLYSHEAR">PLYSHEAR</a> keyword in the <span class="keyword">PROPS</span> section for model
+1.             </li>
+
+<li>Opting for the Herschel-Bulkley model as described in <a href="non-newtonian_Non-Newtonian_fluid_flows.html#non-newtonian_non-newtonian_fluid_flows"> "Non-Newtonian fluid flows"</a>.             </li>
+
+<li>The <a href="../ecl_rm/PLYSHLOG.html#PLYSHLOG">PLYSHLOG</a> keyword in the <span class="keyword">PROPS</span> section for model
+3 (approach I).             </li>
+
+<li>The <span class="keyword">PLYSHLOG</span> and <a href="../ecl_rm/SHRATE.html#SHRATE">SHRATE</a> keywords in the <span class="keyword">PROPS</span> section for model 3 (approach II).              
+                                                                 
+                                     </li>
+
+</ul>
+
+<p>If Model 1 is activated, the shear thinning/thickening data consists
+of tables of viscosity reduction as a function of local velocity.
+The values of                        <math><mn>1</mn><mo>/</mo><mo>(</mo><mi>φ</mi><mo>∙</mo><mi>A</mi><mo>)</mo></math>  used to calculate the velocity can
+be printed out using the mnemonic <samp class="codeph">POLYMER</samp> in the <a href="../ecl_rm/RPTGRID.html#RPTGRID">RPTGRID</a> keyword. The representative
+radius used in the well inflow calculation is output with the well
+connection data.   </p>
+
+<p>If model 3 (approach I) is activated, the shear thinning/thickening
+data consists of tables of shear multipliers as a function of local
+velocity, and these correspond to a specified set of reference conditions.
+If model 3 (approach II) is activated, the multipliers are specified
+as a function of local shear rate instead.</p>
+
+<p>Note however that if non-Newtonian rheology is not an important
+effect, it should be omitted as the calculation of the velocity dependent
+viscosity can significantly increase the CPU requirements for the
+run.</p>
+
+<p>When the brine option is activated in conjunction with polymer,
+the initial salt concentrations are specified with either the <a href="../ecl_rm/SALT.html#SALT">SALT</a> keyword (if the enumeration
+method is used for initialization) or the <a href="../ecl_rm/SALTVD.html#SALTVD">SALTVD</a> keyword (if the <a href="../ecl_rm/EQUIL.html#EQUIL">EQUIL</a> keyword is used). The
+initial polymer concentration and the initial adsorbed polymer concentration
+are both automatically set to zero by default; however the <a href="../ecl_rm/SPOLY.html#SPOLY">SPOLY</a> keyword can be used to
+override this.</p>
+
+<p>If the model contains analytic aquifers, the initial salt concentration
+in each aquifer should be specified using the appropriate keywords <a href="../ecl_rm/AQUCT.html#AQUCT">AQUCT</a>, <a href="../ecl_rm/AQUFET.html#AQUFET">AQUFET</a> or <a href="../ecl_rm/AQUFETP.html#AQUFETP">AQUFETP</a>. Since the aquifer
+volume is large, the polymer concentration is assumed to be always
+zero - any polymer entering the aquifer due to backflow is adsorbed
+by the aquifer rock.</p>
+
+<p>If the standard brine is used, the polymer and salt well injection
+concentration should be set using the keyword <a href="../ecl_rm/WPOLYMER.html#WPOLYMER">WPOLYMER</a> in the <span class="keyword">SCHEDULE</span> section.</p>
+
+<p>Note that the multi-component brine model (<a href="../ecl_rm/ECLMC.html#ECLMC">ECLMC</a> keyword in the <span class="keyword">RUNSPEC</span> section) cannot currently be used with the Polymer/Brine
+Flood Model (that is, the combination of polymer and brine using the <a href="../ecl_rm/SALTNODE.html#SALTNODE">SALTNODE</a> keyword; <span class="keyword">ECLMC</span> can be used with the basic Polymer Flood Model).</p>
+
+<p>A bisection algorithm has been added in 2015.1 to
+counter a particular type of convergence problem sometimes encountered
+during a timestep solve. This type of problem occurs when the solution
+polymer concentration oscillates between two distinct intervals of
+the adsorption data supplied by either <a href="../ecl_rm/PLYADS.html#PLYADS">PLYADS</a> or <a href="../ecl_rm/PLYADSS.html#PLYADSS">PLYADSS</a>. Note that, if the
+latter keyword is used, then potential oscillations involving the
+salt concentration are also considered. For those cases where an oscillation
+is detected, the proposed solution change is bisected in order to
+break the non-converging cycle of Newton iteration updates. The bisection
+is only applied after a minimum number of Newton iterations, the latter
+set using Item 11 of Record 3 of the <a href="../ecl_rm/TUNING.html#TUNING">TUNING</a> keyword. This bisection
+algorithm can be deactivated by setting <span class="keyword">OPTIONS</span> keyword <a href="../ecl_rm/OPTIONS.html#options.261">item 261</a> to 1.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

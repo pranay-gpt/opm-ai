@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GLIFTLIM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GLIFTLIM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GLIFTLIM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GLIFTLIM"><a name="GLIFTLIM"><!-- --></a>
+<h1 class="keyword">GLIFTLIM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gliftlim.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gliftlim.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d862e45"> x </th>
+
+<th valign="top" id="d862e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d862e54">  </th>
+
+<th valign="top" id="d862e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d862e45 d862e54 ">  </td>
+
+<td valign="top" headers="d862e48 d862e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d862e45 d862e54 ">  </td>
+
+<td valign="top" headers="d862e48 d862e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d862e45 d862e54 ">  </td>
+
+<td valign="top" headers="d862e48 d862e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d862e45 d862e54 ">  </td>
+
+<td valign="top" headers="d862e48 d862e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d862e45 d862e54 ">  </td>
+
+<td valign="top" headers="d862e48 d862e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d862e45 d862e54 ">  </td>
+
+<td valign="top" headers="d862e48 d862e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d862e45 d862e54 ">  </td>
+
+<td valign="top" headers="d862e48 d862e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d862e45 d862e54 "> x </td>
+
+<td valign="top" headers="d862e48 d862e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword can be used to limit the number of wells that are automatically
+switched to artificial lift (see keyword <a href="WLIFT.html#WLIFT">  WLIFT</a> and <a href="PRORDER.html#PRORDER">  PRORDER</a>). Limits can be set for individual groups or the field as
+a whole. A well will not be switched to artificial lift if it would
+exceed the lift capacity of its superior groups (including the field).
+Lift capacity limits will not prevent retubing from being carried
+out (see item 4 in keyword <span class="keyword">WLIFT</span>). No action will
+be taken if wells already placed on artificial lift exceed these limits.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li> Group name or group name root <p>or <samp class="codeph">FIELD</samp> (if
+the limits apply to the field as a whole)</p>
+ <p>A group name root,
+enclosed in quotes and ending with an asterisk (*), can be used to
+refer to several groups in one record.</p>
+ </li>
+
+<li> Maximum total lift capacity. <p>This acts as a limit on the sum
+of the artificial lift quantity (ALQ) values of all subordinate open
+producers multiplied by their efficiency factors. If the ALQ refers
+to the pump power, this item limits the total pump power that can
+be applied in the group. For gas lift, if the ALQ refers to the lift
+gas injection rate, this item limits the group's total lift gas injection
+rate.</p>
+ <div class="note"><span class="notetitle">Note:</span> <span class="notebody"> If you wish to omit the efficiency factors from the
+sum of the well ALQ values, set <a href="options.html#options.49">item 49</a> in <span class="keyword">OPTIONS</span> to &gt; 0. This restores
+back-compatibility with pre-96A versions of ECLIPSE, in which efficiency
+factors are not taken into account. Alternatively, group efficiency
+factors could be applied instead (see keyword <a href="GEFAC.html#GEFAC">  GEFAC</a>). </span></div>
+<p>If the item is defaulted
+or set to zero, this limit will not be applied.</p>
+<p>UNITS: These
+depend on what the ALQ was meant to represent when the table was created.
+Refer to section <a href="vfpprod_Record_6_ALQ_values.html#vfpprod_record_6_alq_values"> "Record 6:ALQ values"</a> in the description of keyword <span class="keyword">VFPPROD</span>.</p>
+ </li>
+
+<li> Maximum number of wells on artificial lift. This acts as a limit
+on the number of subordinate open producers that have a non-zero value
+for their artificial lift quantity. <p>If the item is defaulted or
+set to zero, this limit is not applied.</p>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="section" id="gliftlim_example"><a name="gliftlim_example"><!-- --></a><h4 class="sectiontitle">Example</h4> <pre><code>GLIFTLIM
+ PLAT-A  800.0    /
+ PLAT-B  1*    20 /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

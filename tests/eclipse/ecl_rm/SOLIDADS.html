@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SOLIDADS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SOLIDADS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SOLIDADS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SOLIDADS"><a name="SOLIDADS"><!-- --></a>
+<h1 class="keyword">SOLIDADS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="solidads.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="solidads.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2336e45">  </th>
+
+<th valign="top" id="d2336e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2336e54"> x </th>
+
+<th valign="top" id="d2336e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2336e45 d2336e54 ">  </td>
+
+<td valign="top" headers="d2336e48 d2336e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2336e45 d2336e54 ">  </td>
+
+<td valign="top" headers="d2336e48 d2336e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2336e45 d2336e54 ">  </td>
+
+<td valign="top" headers="d2336e48 d2336e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2336e45 d2336e54 "> x </td>
+
+<td valign="top" headers="d2336e48 d2336e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2336e45 d2336e54 ">  </td>
+
+<td valign="top" headers="d2336e48 d2336e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2336e45 d2336e54 ">  </td>
+
+<td valign="top" headers="d2336e48 d2336e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2336e45 d2336e54 ">  </td>
+
+<td valign="top" headers="d2336e48 d2336e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2336e45 d2336e54 ">  </td>
+
+<td valign="top" headers="d2336e48 d2336e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a>  (set in the <span class="keyword">TABDIMS</span> keyword)
+tables of solid adsorption functions describing the adsorption of
+solid by the rock formation. See <a href="../ecl_td/solidintro_Solid_Phase.html#solidintro_solid_phase">"Solid phase"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.</p>
+
+<p>Each table consists of the following columns of data and is terminated
+by a slash (/):</p>
+
+<ol>
+<li>The local solid concentration in the solution surrounding the
+rock. <p>The values should increase monotonically down the column.</p>
+ <p>UNITS: kg/m<sup>3</sup> (<samp class="codeph">METRIC</samp>), lb/ft<sup>3</sup> (<samp class="codeph">FIELD</samp>), gm/cc (<samp class="codeph">LAB</samp>), kg/m<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li>The corresponding concentration of solid adsorbed by the rock
+formation. <p>These values should not decrease down the column.</p>
+ <p>UNITS: kg/kg (<samp class="codeph">METRIC</samp>), lb/lb (<samp class="codeph">FIELD</samp>), gm/gm (<samp class="codeph">LAB</samp>), kg/kg (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+</ol>
+
+<p>Each table must contain at least two, and no more than <a href="TABDIMS.html#TABDIMS.NSSFUN"> NSSFUN</a> (set
+in the <span class="keyword">TABDIMS</span> keyword) rows. Each row must be
+complete, containing an entry in every column of the table.</p>
+
+<p>The adsorbed concentration is measured as weight of solids per
+weight of rock. The rock density can be set with the <a href="ROCKDEN.html#ROCKDEN"> ROCKDEN</a> keyword.</p>
+
+<p>If this keyword is not used then it is assumed that all solids
+are adsorbed to the rock. If this keyword is used, but the rock density
+is set to zero (or not set) then it is assumed that no solids are
+adsorbed to the rock.</p>
+
+<div class="section" id="solidads_example"><a name="solidads_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTSFUN</samp> = 2 and <samp class="codeph">NSSFUN</samp> = 6</p>
+ <pre><code>SOLIDADS
+0   .00000 
+0   .00001
+3   .00005 
+5   .00007 
+8   .00008 
+10  .00008  / 
+
+0  .00000
+10  .00010  /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

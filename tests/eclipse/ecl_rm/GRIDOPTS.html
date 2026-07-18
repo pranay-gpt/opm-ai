@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GRIDOPTS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GRIDOPTS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GRIDOPTS</title>
+</head>
+<body>
+
+<div class="nested0" id="GRIDOPTS"><a name="GRIDOPTS"><!-- --></a><h1 class="keyword">GRIDOPTS</h1>
+
+ <div>
+<div class="tablenoborder"><a name="gridopts.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gridopts.tab.0005" class="flagtable" frame="border" border="1" rules="all">  <thead align="left"><tr><th valign="top" id="d914e35"> x </th>
+<th valign="top" id="d914e37"> ECLIPSE 100 </th>
+</tr>
+<tr><th valign="top" id="d914e40"> x </th>
+<th valign="top" id="d914e42"> ECLIPSE 300 </th>
+</tr>
+</thead>
+<tbody><tr><td valign="top" headers="d914e35 d914e40 "> x </td>
+<td valign="top" headers="d914e37 d914e42 "> RUNSPEC </td>
+</tr>
+<tr><td valign="top" headers="d914e35 d914e40 ">  </td>
+<td valign="top" headers="d914e37 d914e42 "> GRID </td>
+</tr>
+<tr><td valign="top" headers="d914e35 d914e40 ">  </td>
+<td valign="top" headers="d914e37 d914e42 "> EDIT </td>
+</tr>
+<tr><td valign="top" headers="d914e35 d914e40 ">  </td>
+<td valign="top" headers="d914e37 d914e42 "> PROPS </td>
+</tr>
+<tr><td valign="top" headers="d914e35 d914e40 ">  </td>
+<td valign="top" headers="d914e37 d914e42 "> REGIONS </td>
+</tr>
+<tr><td valign="top" headers="d914e35 d914e40 ">  </td>
+<td valign="top" headers="d914e37 d914e42 "> SOLUTION </td>
+</tr>
+<tr><td valign="top" headers="d914e35 d914e40 ">  </td>
+<td valign="top" headers="d914e37 d914e42 "> SUMMARY </td>
+</tr>
+<tr><td valign="top" headers="d914e35 d914e40 ">  </td>
+<td valign="top" headers="d914e37 d914e42 "> SCHEDULE </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This keyword requests additional options for processing the grid
+data. It should be followed by some or all of the following items,
+terminated with a slash (/).</p>
+<ol><li>Allow the alternative transmissibility multipliers including <a href="MULTX-.html#MULTX-"> MULTX-</a>, <a href="MULTY-.html#MULTY-"> MULTY-</a>, <a href="MULTZ-.html#MULTZ-"> MULTZ-</a> (which apply to
+the grid block faces X-, Y-, Z-) to be used in the <span class="keyword">GRID</span>, <span class="keyword">EDIT</span> or <span class="keyword">SCHEDULE</span> sections.
+Similarly, the keyword is required if the alternative diffusivity
+multipliers, which include <a href="DIFFMX-.html#DIFFMX-"> DIFFMX-</a>, <a href="DIFFMY-.html#DIFFMY-"> DIFFMY-</a>, <a href="DIFFMZ-.html#DIFFMZ-"> DIFFMZ-</a>, are
+used. 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  <tbody><tr><td valign="top"> <samp class="codeph">YES</samp> </td>
+<td valign="top">Keywords <span class="keyword">MULTX-</span>, <span class="keyword">DIFFX-</span> and related keywords may be used</td>
+</tr>
+<tr><td valign="top"> <samp class="codeph">NO</samp> </td>
+<td valign="top">Otherwise</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">NO</samp> </p>
+ </li>
+<li> <samp class="codeph">NRMULT</samp> <p>The maximum number of <a href="MULTNUM.html#MULTNUM"> MULTNUM</a> regions entered
+in the <span class="keyword">GRID</span> section, which apply either to inter-region
+transmissibility multipliers using the <a href="MULTREGT.html#MULTREGT"> MULTREGT</a> keyword, or pore volume multipliers using
+the <a href="MULTREGP.html#MULTREGP"> MULTREGP</a> keyword.
+For both cases, if this item is set to zero or defaulted then any
+multiplier is applied between flux regions entered using <a href="FLUXNUM.html#FLUXNUM"> FLUXNUM</a>.</p>
+<p>ECLIPSE 100</p>
+<p> <samp class="codeph">MULTNUM</samp> regions
+can similarly be used for diffusivity and thermal conductivity multipliers
+(<a href="MULTREGD.html#MULTREGD"> MULTREGD</a> and <a href="MULTREGH.html#MULTREGH"> MULTREGH</a>).</p>
+<p>DEFAULT:
+0</p>
+<p>ECLIPSE 100</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> If this value
+is defaulted or set to 0 and the 4th item of <a href="REGDIMS.html#REGDIMS"> REGDIMS</a> is also defaulted or set to 0,
+the simulator behaves as though all grid blocks are in <a href="MULTNUM.html#MULTNUM"> MULTNUM</a> region 1. This
+has no effect except that specifying multipliers for region 1 will
+not generate a warning or error, and is a side-effect of the default
+value for <samp class="codeph">MULTNUM</samp> being 1. </span></div>
+<p>ECLIPSE 300</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> If this value is defaulted or set to 0, the maximum
+number of <span class="keyword">MULTNUM</span> regions is set to be the same
+as the maximum number of <span class="keyword">FLUXNUM</span> regions. However,
+if you also specify <span class="keyword">MULTNUM</span>, the simulator will
+use the <span class="keyword">MULTNUM</span> values and will not substitute <span class="keyword">FLUXNUM</span>.</span></div>
+<p>ECLIPSE 100</p>
+</li>
+<li> <samp class="codeph">NRPINC</samp> <p>The maximum number
+of <a href="PINCHNUM.html#PINCHNUM"> PINCHNUM</a> regions
+entered in the <span class="keyword">GRID</span> section, which apply to the
+calculation of pinchouts by region.</p>
+<p>DEFAULT: 0</p>
+<p>ECLIPSE 300</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Any values read in for
+this item is ignored by the simulator.</span></div>
+</li>
+</ol>
+<p>ECLIPSE 100 </p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">This keyword can be specified once only,
+unless <a href="OPTIONS.html#options.223">item 223</a> in the <span class="keyword">OPTIONS</span> keyword is set to 1 for backward compatibility
+purposes. If specified more than once,  <span class="keyword">GRIDOPTS</span> will overwrite values while re-specifying them. It does not undo
+options which were triggered by the first specification, in particular
+the choice of which region set is used by default for <a href="MULTREGT.html#MULTREGT"> MULTREGT</a>.</span></div>
+<div class="section" id="gridopts.example"><a name="gridopts.example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>GRIDOPTS
+ YES   0   3 /</code></pre></div>
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Wettability change"/>
+<meta name="DC.subject" content="Fluid model, Asphaltene damage wettability (both deposition models)"/>
+<meta name="keywords" content="Fluid model, Asphaltene damage wettability (both deposition models)"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="asphaltene_wettability_change"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Wettability change</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="asphaltene_wettability_change"><a name="asphaltene_wettability_change"><!-- --></a>
+<h1 class="topictitle1">Wettability change</h1>
+
+
+ <div>
+<p>Asphaltene deposition can trigger a wettability change. The exact
+physics on how this alteration occurs is still a research topic, however
+it has been reported that some of its effect can be captured by a
+relative permeability shift from a water-wet system to an oil-wet
+system.</p>
+
+<p>It is assumed that the wettability can be determined from the water-oil
+capillary pressure values: if the water-oil capillary pressure is
+zero or negative, the grid cell is assumed to be oil-wet and there
+will be no wettability change.</p>
+
+<p>If the grid cell is water-wet, that is it has a positive water/oil
+capillary pressure, the relative permeabilities (entered using, for
+example, <a href="../ecl_rm/SWFN.html#SWFN">SWFN</a> and <a href="../ecl_rm/SOF3.html#SOF3">SOF3</a>) are combined with the oil-wet saturation functions entered
+using the <a href="../ecl_rm/ASPKROW.html#ASPKROW">ASPKROW</a> keyword as follows:</p>
+
+<ol>
+<li>The weighting factor <em>F</em> is determined as a function of the
+volume fraction of asphaltene deposit (<math><msub><mi>S</mi>
+<mi>s</mi></msub></math>  or  <math><mi>ε</mi></math>), provided using the <a href="../ecl_rm/ASPWETF.html#ASPWETF">ASPWETF</a> keyword.</li>
+
+<li>The critical oil in water and water saturations are scaled<p> 
+                  <math>
+<mrow><mtable><mtr><mtd><mrow><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>c</mi>
+<mi>r</mi></mrow></msub><mo>=</mo><mrow><mi>F</mi>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>c</mi><mi>r</mi><mi>a</mi></mrow></msub></mrow><mo>+</mo><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<mi>F</mi></mrow><mo>)</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>o</mi><mi>c</mi><mi>r</mi><mi>i</mi>
+</mrow></msub></mrow></mrow></mtd></mtr><mtr><mtd>
+<mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>w</mi>
+<mi>c</mi><mi>r</mi></mrow></msub><mo>=</mo><mrow>
+<mi>F</mi><msub><mrow><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>r</mi><mi>a</mi></mrow></msub>
+</mrow><mo>+</mo><mrow><mo>(</mo><mn>1</mn><mrow>
+<mo>-</mo><mi>F</mi></mrow><mo>)</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>r</mi>
+<mi>i</mi></mrow></msub></mrow></mrow></mtd></mtr>
+</mtable></mrow></math> </p>
+<p>where <em>S<sub>ocra</sub></em> and <em>S<sub>ocri</sub></em> are the critical oil in water saturations from
+the <a href="../ecl_rm/ASPKROW.html#ASPKROW">ASPKROW</a> table and <a href="../ecl_rm/SOF3.html#SOF3">SOF3</a> table respectively, and <em>S<sub>wcra</sub></em>  and <em>S<sub>wcri</sub></em> are the critical water saturations from the <span class="keyword">ASPKROW</span> table and <a href="../ecl_rm/SWFN.html#SWFN">SWFN</a> table respectively.</p>
+</li>
+
+<li>Then a lookup for relative permeability is carried out on the
+scaled saturations from step 1, followed by a linear interpolation
+between the resulting water-wet and oil-wet relative permeabilities
+as:<p> <math><mrow>
+<mtable><mtr><mtd><mrow><msub><mrow>
+<mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi></mrow>
+</msub><mo>=</mo><mrow><mi>F</mi><msub><mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi><mi>a</mi>
+</mrow></msub></mrow><mo>+</mo><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><mi>F</mi></mrow><mo>)</mo>
+<msub><mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi><mi>i</mi></mrow></msub></mrow></mrow></mtd>
+</mtr><mtr><mtd><mrow><msub><mrow><mi>k</mi></mrow>
+<mrow><mi>r</mi><mi>o</mi><mi>w</mi></mrow></msub>
+<mo>=</mo><mrow><mi>F</mi><msub><mrow><mi>k</mi>
+</mrow><mrow><mi>r</mi><mi>o</mi><mi>w</mi><mi>a</mi>
+</mrow></msub></mrow><mo>+</mo><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><mi>F</mi></mrow><mo>)</mo>
+<msub><mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>o</mi><mi>w</mi><mi>i</mi></mrow></msub></mrow>
+</mrow></mtd></mtr></mtable></mrow></math> </p>
+        <p>where <em>k<sub>rwa</sub></em> and <em>k<sub>rwi</sub></em> and the oil-wet
+and water-wet relative permeabilities to water respectively (from <span class="keyword">ASPKROW</span> and <span class="keyword">SWFN</span>), and <em>k<sub>rowa</sub></em> and <em>k<sub>rowi</sub></em> and the oil-wet and the water-wet
+relative permeabilities to oil respectively (from <span class="keyword">ASPKROW</span> and <span class="keyword">SOF3</span>).</p>
+</li>
+
+</ol>
+
+<p>The number of tables in the <span class="keyword">ASPKROW</span> keyword
+is the same as the number of saturation tables (set by <a href="../ecl_rm/TABDIMS.html#TABDIMS.NTSFUN">NTSFUN</a> in the <span class="keyword">TABDIMS</span> keyword), and the maximum
+number of rows in each table is also the same as for the saturation
+tables (set by <a href="../ecl_rm/TABDIMS.html#TABDIMS.NSSFUN">NSSFUN</a> in the <span class="keyword">TABDIMS</span> keyword).</p>
+
+<p>The number of tables in the <a href="../ecl_rm/ASPWETF.html#ASPWETF">ASPWETF</a> keyword is the same as the number of saturation tables, and
+the maximum number of rows in each table is set by <a href="../ecl_rm/TABDIMS.html#TABDIMS.MXRATF">MXRATF</a> in the <span class="keyword">TABDIMS</span> keyword.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

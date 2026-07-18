@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SIGMAGD"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SIGMAGD"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SIGMAGD</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="SIGMAGD"><a name="SIGMAGD"><!-- --></a>
+<h1 class="keyword">SIGMAGD</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="sigmagd.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="sigmagd.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2282e45"> x </th>
+
+<th valign="top" id="d2282e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2282e54"> x </th>
+
+<th valign="top" id="d2282e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2282e45 d2282e54 ">  </td>
+
+<td valign="top" headers="d2282e48 d2282e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2282e45 d2282e54 "> x </td>
+
+<td valign="top" headers="d2282e48 d2282e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2282e45 d2282e54 ">  </td>
+
+<td valign="top" headers="d2282e48 d2282e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2282e45 d2282e54 ">  </td>
+
+<td valign="top" headers="d2282e48 d2282e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2282e45 d2282e54 ">  </td>
+
+<td valign="top" headers="d2282e48 d2282e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2282e45 d2282e54 ">  </td>
+
+<td valign="top" headers="d2282e48 d2282e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2282e45 d2282e54 ">  </td>
+
+<td valign="top" headers="d2282e48 d2282e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2282e45 d2282e54 ">  </td>
+
+<td valign="top" headers="d2282e48 d2282e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword can be used to specify an alternative matrix-fracture
+coupling for matrix cells in which the production mechanism is gravity
+drainage due to the presence of gas in the fractures.</p>
+
+<p>If this keyword is used, the sigmagd factor is applied to the entire
+grid.</p>
+
+<p>Different sigmagd values can be specified on a cell by cell basis
+using the <a href="SIGMAGDV.html#SIGMAGDV"> SIGMAGDV</a> keyword.</p>
+
+<p>The particular formula used to prescribe the alternative is different
+between ECLIPSE 100 and ECLIPSE 300. In ECLIPSE 100 this keyword is
+used to provide a different sigma factor for regions swept by gas,
+while the standard sigma factor is used for regions swept by water.
+In ECLIPSE 300 however, the keyword is used to provide an alternative
+sigma factor value when the gravity drainage potential is the dominant
+pressure term, while allowing smooth variation of sigma as the pressure
+increases. The next paragraphs provide details on these two formulas.</p>
+
+<p>In ECLIPSE 100 the matrix-fracture transmissibility based on <span class="keyword">SIGMAGD</span> will be used to calculate the oil flow when the
+following conditions are satisfied:</p>
+
+<ul>
+<li> The gravity drainage model is active. </li>
+
+<li> Oil flow is from the matrix to the fracture. </li>
+
+<li> The gravity drainage head associated with gas in the fracture
+is greater than the head associated with water.</li>
+
+</ul>
+
+<p>Hence regions in which the fractures are swept by gas will drain
+through a transmissibility based on <span class="keyword">SIGMAGD</span>, and
+regions swept by water will be produced through a transmissibility
+based on <a href="SIGMA.html#SIGMA"> SIGMA</a>.</p>
+
+<p>The <span class="keyword">SIGMAGD</span> keyword is only available in three-phase
+dual porosity runs (keyword <a href="DUALPORO.html#DUALPORO"> DUALPORO</a> in the <span class="keyword">RUNSPEC</span> section).</p>
+
+<p>This sigma factor may be related to the matrix block size by the
+expression:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sigmagd.equ.0058"/>
+ <math><mi>Σ</mi><mo>=</mo>
+<mrow><mn>4</mn><mo>(</mo><mfrac><mrow><mn>1</mn>
+</mrow><mrow><msubsup><mi>l</mi><mi>x</mi><mrow>
+<mtext> </mtext><mn>2</mn></mrow></msubsup></mrow>
+</mfrac><mo>+</mo><mfrac><mrow><mn>1</mn></mrow><mrow>
+<msubsup><mi>l</mi><mi>y</mi><mrow><mtext> </mtext>
+<mn>2</mn></mrow></msubsup></mrow></mfrac><mo>+</mo>
+<mfrac><mrow><mn>1</mn></mrow><mrow><msubsup><mi>l</mi>
+<mi>z</mi><mrow><mtext> </mtext><mn>2</mn></mrow>
+</msubsup></mrow></mfrac><mo>)</mo></mrow></math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table>
+<p>where <math><msub><mi>l</mi>
+<mi>x</mi></msub></math>,  <math><msub>
+<mi>l</mi><mi>y</mi></msub></math>  and  <math><msub><mi>l</mi>
+<mi>z</mi></msub></math>  are typical X, Y and Z dimensions
+of the matrix blocks. </p>
+
+<p>The relationship was proposed by Kazemi (1976).</p>
+
+<p>The dimensions of the matrix blocks used above are not the dimensions
+of the simulation grid, but of the elements of matrix material in
+the reservoir.</p>
+
+<p>Alternatively sigma may be treated as a simple history matching
+factor.</p>
+
+<p>When calculating the matrix-fracture transmissibility
+for gravity drainage, the matrix Z-permeabilities are used by default,
+rather than the X-permeabilities. The pre-99A treatment (using the
+X-permeabilities) may be restored using <a href="OPTIONS.html#options.70">item 70</a> in the <span class="keyword">OPTIONS</span> keyword.</p>
+
+<p>In ECLIPSE 300, if <span class="keyword">SIGMA</span> and <span class="keyword">SIGMAGD</span> are both entered, the program uses
+an interpolated value, depending on the relative sizes of the capillary
+pressure and gravity drainage pressure terms. Thus if capillary pressures
+dominates, <span class="keyword">SIGMA</span> values are used, whilst if gravity
+drainage dominates <span class="keyword">SIGMAGD</span> values are used.</p>
+
+<p>If neither <span class="keyword">SIGMAGD</span> nor <span class="keyword">SIGMAGDV</span> are specified, the transmissibilities are based on the sigma value
+supplied by the <span class="keyword">SIGMA</span> or <a href="SIGMAV.html#SIGMAV"> SIGMAV</a> keywords, unless <a href="LTOSIGMA.html#LTOSIGMA"> LTOSIGMA</a> is specified.</p>
+
+<p>Refer to <a href="../ecl_td/dualporo_Recovery_mechanisms.html#dualporo_gravity_imbibition_drainage">"Gravity imbibition/drainage"</a> in the <cite>ECLIPSE Technical Description</cite> for more details.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

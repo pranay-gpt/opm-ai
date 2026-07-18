@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Examples in ECLIPSE 100"/>
+<meta name="DC.subject" content="TUNING"/>
+<meta name="keywords" content="TUNING"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="tuning_examples_in_eclipse_100"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Examples in ECLIPSE 100</title>
+</head>
+<body>
+
+
+<div class="nested0" id="tuning_examples_in_eclipse_100"><a name="tuning_examples_in_eclipse_100"><!-- --></a>
+<h1 class="topictitle1">Examples in ECLIPSE 100</h1>
+
+
+ <div>
+<div class="section" id="tuning_example_1"><a name="tuning_example_1"><!-- --></a><h4 class="sectiontitle">Example 1</h4><p>To set all
+the default values explicitly:</p>
+<pre><code>TUNING
+ 1 365 0.1 0.15 3 0.3 0.1 1.25 0.75 /
+  0.1  0.001  1E-7   0.0001
+ 10    0.01   1E-6   0.001   0.001  /
+ 12  1  25  1  8  8  4*1E6          /</code></pre></div>
+
+<div class="section" id="tuning_example_2"><a name="tuning_example_2"><!-- --></a><h4 class="sectiontitle">Example 2</h4><p>To limit
+the next timestep to one tenth of a day, and to impose an upper limit
+of 10 days for all subsequent timesteps:</p>
+<pre><code>TUNING
+ 0.1  10.0  /
+            /
+            /</code></pre></div>
+
+<div class="section" id="tuning_example_3"><a name="tuning_example_3"><!-- --></a><h4 class="sectiontitle">Example 3</h4><p>To set <a href="IMPES.html#IMPES"> IMPES</a> defaults with relaxed
+material balance:</p>
+<pre><code>IMPES
+ /
+TUNING
+                    /
+ 2*  1E-5  3*  1E-4 /
+                    /</code></pre></div>
+
+<div class="section" id="tuning_example_4"><a name="tuning_example_4"><!-- --></a><h4 class="sectiontitle">Example 4</h4><p>To ensure
+that pressure and saturation changes are small at the last Newton
+iteration. In this case it is also advisable to set a minimum of 3
+linear iterations or to tighten the convergence of the linear equations
+to avoid the situation where the non-linear equations are required
+to be solved to a higher accuracy than the linear equations:</p>
+<pre><code>TUNING
+ /
+ /             LITMIN            DDPLIM    DDSLIM
+   12   1   25    3    8    8    0.0001    0.0001   /</code></pre></div>
+
+<div class="section" id="tuning_example_5"><a name="tuning_example_5"><!-- --></a><h4 class="sectiontitle">Example 5</h4><p>To run the
+Chappelear Nolen Coning study with relaxed controls:</p>
+<pre><code>TUNING
+ / TIM.TRC  NLN.BNC  MAT.BAL  LIN.CNV
+    0.1      0.5      0.0001   .001
+   10.0      1.0      0.001    .01
+ /
+ 12   1   25   1   8   8
+ /</code></pre></div>
+
+<div class="section" id="tuning_example_6"><a name="tuning_example_6"><!-- --></a><h4 class="sectiontitle">Example 6</h4><p>To obtain
+consistency of an <a href="IMPES.html#IMPES"> IMPES</a> run with older versions of ECLIPSE 100 by increasing the throughput
+constraint to a large value, making it ineffectual:</p>
+<pre><code>TUNING
+ 1  365  0.1  0.15  3  0.3  0.1  1.25  1.0E10  /
+ /
+ /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

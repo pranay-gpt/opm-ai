@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Dual porosity"/>
+<meta name="DC.subject" content="Grid and reservoir modeling, Dual porosity"/>
+<meta name="keywords" content="Grid and reservoir modeling, Dual porosity"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="dualporo_dual_porosity"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Dual porosity</title>
+</head>
+<body>
+
+
+<div class="nested0" id="dualporo_dual_porosity"><a name="dualporo_dual_porosity"><!-- --></a>
+<h1 class="keyword">Dual porosity</h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="dualporo.tab.0009"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="dualporo.tab.0009" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">                         x                   
+  </td>
+
+<td valign="top">                         ECLIPSE 100         
+            </td>
+
+</tr>
+
+<tr>
+<td valign="top">                         x                   
+  </td>
+
+<td valign="top">                         ECLIPSE 300         
+            </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>In a naturally fractured (for example carbonate) reservoir, fluids
+exist in two interconnected systems:</p>
+
+<ul>
+<li>The rock matrix, which usually provides the bulk of the reservoir
+volume</li>
+
+<li>The highly permeable rock fractures.</li>
+
+</ul>
+
+<p>To model such systems in ECLIPSE, two simulation cells are associated
+with each block in the geometric grid, representing the matrix and
+fracture volumes of the cell. In ECLIPSE, the porosity, permeability,
+depth etc. of these may be independently defined. A matrix-fracture
+coupling transmissibility is constructed automatically by ECLIPSE
+to simulate flow between the two systems due to fluid expansion, gravity
+drainage, capillary pressure etc. This procedure is referred to as
+“dual porosity” modeling.</p>
+
+<p>If the matrix blocks are linked only through the fracture system,
+this is considered to be a dual-porosity, single-permeability system,
+since fluid flow through the reservoir takes place only in the fracture
+network, with the matrix blocks acting as sources. However, if there
+is the possibility of flow directly between neighboring matrix blocks,
+this is conventionally considered to be a dual-porosity, dual-permeability
+system. Dual porosity runs are specified by the keyword <a href="../ecl_rm/DUALPORO.html#DUALPORO">DUALPORO</a> in <span class="keyword">RUNSPEC</span>, while dual permeability requires the <a href="../ecl_rm/DUALPERM.html#DUALPERM"> DUALPERM</a> keyword. It should
+be noted that dual porosity, dual permeability runs are computationally
+more expensive than dual-porosity, single-permeability runs.</p>
+
+<p>In a dual porosity or dual permeability run of ECLIPSE, the number
+of layers in the Z-direction should be doubled. ECLIPSE associates
+the first half of the grid (the first <samp class="codeph">NDIVIZ</samp> /2 layers)
+with the matrix blocks, and the second half with the fractures. In
+such runs <samp class="codeph">NDIVIZ</samp> must therefore be even; ECLIPSE
+checks that this is the case.</p>
+
+<p>For local grid refinements, the <samp class="codeph">NDIVIZ</samp> /2 rule
+is applied to the number of refined cells (item 10 in <a href="../ecl_rm/CARFIN.html#CARFIN">CARFIN</a>) in the LGR. The position
+of the LGR in the host grid (<span class="keyword">CARFIN</span> items 6 and
+7) is specified by its location in the matrix; it will automatically
+be duplicated in the fracture.</p>
+
+<p>ECLIPSE 300 </p>
+
+<p>Note that for ECLIPSE 300, if the multiporosity
+option is used (see <a href="multiporo_multi_porosity.html#multiporo_multi_porosity"> "Multi
+porosity"</a> and keyword <a href="../ecl_rm/NMATRIX.html#NMATRIX">NMATRIX</a>) then the first NDIVIZ/N layers will be the matrix blocks,
+where N is the number of porosities. References to <samp class="codeph">NDIVIZ</samp> /2 in this chapter should be checked against the multi porosity documentation
+if there is more than one matrix porosity.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>However, for the <a href="dualporo_discretized_matrix_model__eclipse_100_.html#dualporo_discretized_matrix_model__eclipse_100_"> "Discretized
+matrix model (ECLIPSE 100)"</a> (“Russian Doll model”)
+the additional blocks are all internal to the ECLIPSE calculation,
+and the matrix in the grid is always NDIVIZ/2 layers regardless of
+the number of matrix subdivisions. This is because the properties
+of the matrix sub-cells cannot be specified independently, but are
+all copies of the same matrix cell data.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

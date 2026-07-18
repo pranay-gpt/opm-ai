@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SAPCW"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sapcw"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SAPCW</title>
+</head>
+<body>
+
+<div class="nested0" id="sapcw"><a name="sapcw"><!-- --></a><h1 class="keyword">SAPCW</h1>
+ <div>
+<div class="tablenoborder"><a name="sapcw.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="sapcw.tab.0005" class="flagtable" frame="border" border="1" rules="all">  <thead align="left"><tr><th valign="top" id="d2184e32">   </th>
+<th valign="top" id="d2184e34"> ECLIPSE 100 </th>
+</tr>
+<tr><th valign="top" id="d2184e37"> x </th>
+<th valign="top" id="d2184e39"> ECLIPSE 300 </th>
+</tr>
+</thead>
+<tbody><tr><td valign="top" headers="d2184e32 d2184e37 ">  </td>
+<td valign="top" headers="d2184e34 d2184e39 "> RUNSPEC </td>
+</tr>
+<tr><td valign="top" headers="d2184e32 d2184e37 ">  </td>
+<td valign="top" headers="d2184e34 d2184e39 "> GRID </td>
+</tr>
+<tr><td valign="top" headers="d2184e32 d2184e37 ">  </td>
+<td valign="top" headers="d2184e34 d2184e39 "> EDIT </td>
+</tr>
+<tr><td valign="top" headers="d2184e32 d2184e37 "> x </td>
+<td valign="top" headers="d2184e34 d2184e39 "> PROPS </td>
+</tr>
+<tr><td valign="top" headers="d2184e32 d2184e37 ">  </td>
+<td valign="top" headers="d2184e34 d2184e39 "> REGIONS </td>
+</tr>
+<tr><td valign="top" headers="d2184e32 d2184e37 ">  </td>
+<td valign="top" headers="d2184e34 d2184e39 "> SOLUTION </td>
+</tr>
+<tr><td valign="top" headers="d2184e32 d2184e37 ">  </td>
+<td valign="top" headers="d2184e34 d2184e39 "> SUMMARY </td>
+</tr>
+<tr><td valign="top" headers="d2184e32 d2184e37 ">  </td>
+<td valign="top" headers="d2184e34 d2184e39 "> SCHEDULE </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The <span class="keyword">SAPCW</span> keyword specifies the maximum value
+of oil-water capillary pressure for scaling the capillary pressure
+saturation tables for high concentrations of adsorbed solids.</p>
+<p>The <span class="keyword">SAPCW</span> keyword should only be used if water
+and oil are present in the model  and if end-point scaling has been
+specified via the <span class="keyword">RUNSPEC</span> keyword <a href="ENDSCALE.html#ENDSCALE"> ENDSCALE</a> and the solid
+wettability adsorption option has been selected via the <span class="keyword">RUNSPEC</span> keyword <a href="SOLID.html#SOLID"> SOLID</a> and
+the <span class="keyword">PROPS</span> keyword <a href="SOLWTAB.html#SOLWTAB"> SOLWTAB</a>. </p>
+<p>The <span class="keyword">SAPCW</span> keyword should be followed by one
+real number for each grid block in the current input box specifying
+the maximum oil-water capillary pressure. The data must be terminated
+by a slash (/). </p>
+<p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+<p>Grid blocks are ordered with the X-axis index cycling fastest followed
+by the Y and Z indices. Repeat counts may be used for repeated values
+(for example 10*0.21). Note that spaces must not be inserted on either
+side of the asterisk.</p>
+<p>If the keyword <span class="keyword">SAPCW</span> is omitted for some or
+all of the grid blocks in a model where it could be specified, the
+maximum oil-water capillary pressures at connate water saturation
+will default to the values defined in the appropriate capillary pressure
+tables defined via the <a href="SOLWNUM.html#SOLWNUM"> SOLWNUM</a> keyword.</p>
+<p>See <a href="../ecl_td/sattabsc_Saturation_Table_Scaling.html#sattabsc_saturation_table_scaling">"Saturation table
+scaling"</a> in the <cite>ECLIPSE Technical Description</cite> for
+details of the end-point scaling procedure.</p>
+<div class="section" id="SAPCW.notes"><a name="SAPCW.notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul><li>The <span class="keyword">SAPCW</span> keyword should not be used in combination
+with the J-function option specified by the keywords <a href="JFUNC.html#JFUNC"> JFUNC</a> or <a href="JFUNCR.html#JFUNCR"> JFUNCR</a> because the J-function
+calculation is used to define the water capillary pressure scaling
+and any values defined by the input <span class="keyword">LPCW</span> keyword
+will be ignored. In this case the maximum capillary pressure for each
+cell is reported in the <span class="keyword">INIT</span> file.</li>
+<li>The <span class="keyword">SAPCW</span> values used to scale the oil-water
+capillary pressure must be consistent with the capillary pressure
+values in the tables. In particular both must possess the same sign.</li>
+</ul>
+</div>
+<div class="section" id="sapcw_example"><a name="sapcw_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>-- In the RUNSPEC  section :
+DIMENS
+ 1  7  3  /
+ENDSCALE 
+ /
+-- In the PROPS section :
+-------- IX1-IX2 JY1-JY2 KZ1-KZ2
+BOX
+           1   1   2   7   1   3
+SAPCW
+ 6*10.0
+ 6*12.5
+ 6*15.0 /</code></pre></div>
+</div>
+</div>
+
+</body>
+</html>

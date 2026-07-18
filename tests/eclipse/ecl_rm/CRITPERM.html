@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="CRITPERM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="CRITPERM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>CRITPERM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="CRITPERM"><a name="CRITPERM"><!-- --></a>
+<h1 class="keyword">CRITPERM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="critperm.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="critperm.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d352e45"> x </th>
+
+<th valign="top" id="d352e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d352e54"> </th>
+
+<th valign="top" id="d352e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d352e45 d352e54 "> </td>
+
+<td valign="top" headers="d352e48 d352e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d352e45 d352e54 "> x </td>
+
+<td valign="top" headers="d352e48 d352e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d352e45 d352e54 "> </td>
+
+<td valign="top" headers="d352e48 d352e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d352e45 d352e54 "> </td>
+
+<td valign="top" headers="d352e48 d352e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d352e45 d352e54 "> </td>
+
+<td valign="top" headers="d352e48 d352e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d352e45 d352e54 "> </td>
+
+<td valign="top" headers="d352e48 d352e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d352e45 d352e54 "> </td>
+
+<td valign="top" headers="d352e48 d352e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d352e45 d352e54 "> </td>
+
+<td valign="top" headers="d352e48 d352e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">CRITPERM</span> keyword may optionally be used
+in compressed vertical equilibrium runs (keyword <a href="VE.html#VE">  VE</a> in the <span class="keyword">RUNSPEC</span> section).
+It specifies a critical permeability, above which cells can be collapsed,
+or merged with other cells in the same column, to form the larger
+compressed vertical equilibrium cells. </p>
+
+<p>The keyword should be followed by a single real number that denotes
+the critical permeability for cell compression. </p>
+
+<p>UNITS: mD (<samp class="codeph">METRIC</samp>), mD (<samp class="codeph">FIELD</samp>), mD (<samp class="codeph">LAB</samp>), mD (<samp class="codeph">PVT-M</samp>) </p>
+
+<p>A cell is only collapsed into a larger compressed vertical equilibrium
+cell if the Z-direction permeability (entered using keyword <a href="PERMZ.html#PERMZ">  PERMZ</a>) exceeds this value. </p>
+
+<p>If this keyword is not present, the critical permeability for cell
+compression defaults to 0.0, that is cells with Z-permeability &gt; 0.0
+can be collapsed. </p>
+
+<p>A cell is merged with the next active cell below, provided that <strong>none</strong> of the following situations occur: </p>
+
+<ul>
+<li> An integer of 0 has been entered for that cell in keyword <a href="COLLAPSE.html#COLLAPSE">  COLLAPSE</a> </li>
+
+<li> <span class="keyword">TRANZ</span> = 0.0 </li>
+
+<li> <span class="keyword">PERMZ</span> ≤ critical value entered in <span class="keyword">CRITPERM</span> </li>
+
+<li> There is an inactive cell with <span class="keyword">DZ</span> &gt; 0.0 between
+the two active cells </li>
+
+<li> Either cell has been refined using <a href="RADFIN.html#RADFIN">  RADFIN</a> or <a href="CARFIN.html#CARFIN">  CARFIN</a> (see <a href="../ecl_td/lgrc_Local_Grid_Refinement_and_Coarsening.html#lgrc_local_grid_refinement_and_coarsening">"Local grid refinement
+and coarsening"</a> in the <cite>ECLIPSE Technical Description</cite>). </li>
+
+</ul>
+
+<p>See also keyword <span class="keyword">COLLAPSE</span> and <a href="../ecl_td/ve_Compressed_vertical_equilibrium_option.html#ve_compressed_vertical_equilibrium_option">"Compressed vertical
+equilibrium option"</a> in the <cite>ECLIPSE Technical Description</cite>. </p>
+
+<div class="section" id="critperm_example"><a name="critperm_example"><!-- --></a><h4 class="sectiontitle">Example</h4> <pre><code>CRITPERM
+ 0.2 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

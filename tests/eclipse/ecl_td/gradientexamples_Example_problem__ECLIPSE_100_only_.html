@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Example problem (ECLIPSE 100)"/>
+<meta name="DC.subject" content="Gradient option, Example, ECLIPSE 100"/>
+<meta name="keywords" content="Gradient option, Example, ECLIPSE 100"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gradientexamples_example_problem__eclipse_100_only_"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Example problem (ECLIPSE 100)</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gradientexamples_example_problem__eclipse_100_only_"><a name="gradientexamples_example_problem__eclipse_100_only_"><!-- --></a>
+<h1 class="topictitle1">Example problem (ECLIPSE 100)</h1>
+
+
+ <div>
+<div class="section" id="gradientexamples_runspec"><a name="gradientexamples_runspec"><!-- --></a><h4 class="sectiontitle">RUNSPEC</h4><pre><code>TITLE
+  HISTORY MATCHING TEST CASE
+
+DIMENS
+   10   10    3  /
+
+NONNC
+
+FAULTDIM
+   20 /
+
+OIL
+
+WATER
+
+GAS
+
+DISGAS
+
+FIELD
+
+EQLDIMS
+    1  100   10    1    1 /
+
+TABDIMS
+    2    2   16   12    3   12    1    1 /
+
+REGDIMS
+    3    3    0   / 
+
+AQUDIMS
+    0    0    2    0    2  120  /
+
+HMDIMS
+ 4  4  10  2  6 / 
+
+WELLDIMS
+    4    1    1    4 /
+
+START
+  19 'OCT' 1982  /
+
+NSTACK
+   24 /
+
+FMTOUT
+
+FMTIN
+
+FMTHMD</code></pre></div>
+
+<div class="section" id="gradientexamples_grid"><a name="gradientexamples_grid"><!-- --></a><h4 class="sectiontitle">GRID</h4><p>In this
+section, the geometry of the simulation grid and the rock permeabilities
+and porosities are defined.</p>
+<p>The X and Y direction cell sizes
+(<a href="../ecl_rm/DX.html#DX"> DX</a>, <a href="../ecl_rm/DY.html#DY"> DY</a>) and the porosities are constant throughout
+the grid. These are set in the first 3 lines after the <a href="../ecl_rm/EQUALS.html#EQUALS"> EQUALS</a> keyword. The cell
+thicknesses (<a href="../ecl_rm/DZ.html#DZ"> DZ</a>) and permeabilities are then set for each layer. The cell
+top depths (<a href="../ecl_rm/TOPS.html#TOPS"> TOPS</a>) are needed only in the top layer (although they could be
+set throughout the grid). The specified <a href="../ecl_rm/MULTZ.html#MULTZ"> MULTZ</a> values act as multipliers
+on the transmissibilities between the current layer and the layer
+below.</p>
+<pre><code>GRID -----------------------------------------------------------------------
+-- ARRAY  VALUE     ------- BOX ------
+
+EQUALS
+      'DX'    1000      /
+      'DY'    1000      /
+      'PORO'  0.3       /
+
+      'DZ'    20        1  10  1  10  1  1  /
+      'PERMX' 500       /
+      'TOPS'  8325      /
+
+      'DZ'    30        1  10  1  10  2  2  /
+      'PERMX' 50        /
+      'TOPS'  8345      /
+
+      'DZ'    50        1  10  1  10  3  3  /
+      'PERMX' 200       /
+      'TOPS'  8395      /
+
+/     EQUALS IS TERMINATED BY A NULL RECORD
+-- THE Y AND Z DIRECTION PERMEABILITIES ARE COPIED FROM PERMX
+--    SOURCE  DESTINATION  ------- BOX ------
+
+COPY
+      'PERMX'    'PERMY'   1  10  1  10  1  3  /
+      'PERMX'    'PERMZ'   /
+/
+
+FAULTS
+ 'MAJOR'  3 3   1 4    1 3  'X' /
+ 'MAJOR'  3 5   4 4    1 3  'Y' /
+ 'MAJOR'  5 5   5 10   1 3  'X' /
+ 'MINOR'  6 6   1 3    1 3  'X' /
+ 'MINOR'  6 10  3 3    1 3  'Y' /
+/
+
+MULTFLT
+ 'MAJOR'  0.001 /
+ 'MINOR'  01 /
+/
+
+HMFAULTS
+ 'MAJOR' /
+ 'MINOR' /
+/
+OLDTRAN
+EQUALS
+ 'HMMULTX' 1.05 2  5 1 10 1 2 /
+ 'HMMULTY' 1.05 1 10 2  5 1 2 /
+/
+-- OUTPUT OF DX, DY, DZ, PERMX, PERMY, PERMZ, MULTZ, PORO AND TOPS DATA
+-- IS REQUESTED, AND OF THE CALCULATED PORE VOLUMES AND X, Y AND Z
+-- TRANSMISSIBILITIES
+
+RPTGRID 
+  'DX'  'DY'  'DZ'  'PERMX'  'PERMY'  'PERMZ'  'MULTZ'
+  'PORO'  'TOPS'  'PORV'  'TRANX'  'TRANY'  'TRANZ'  /</code></pre></div>
+
+<div class="section" id="gradientexamples_props"><a name="gradientexamples_props"><!-- --></a><h4 class="sectiontitle">PROPS</h4><p>The <span class="keyword">PROPS</span> section defines the relative permeabilities, capillary
+pressures, and the PVT properties of the reservoir fluids.</p>
+<p>Water
+relative permeability and capillary pressure are tabulated as a function
+of water saturation.</p>
+<pre><code>PROPS-----------------------------------------------------------------------------
+     SWAT   KRW   PCOW
+SWFN
+    0.12  0       0
+    1.0   1.0     0  /
+/
+
+</code></pre><p>Similarly for gas:</p>
+<pre><code>--  SGAS   KRG   PCOG
+SGFN
+    0     0       0
+    0.02  0       0
+    0.05  0.005   0
+    0.12  0.025   0
+    0.2   0.075   0
+    0.25  0.125   0
+    0.3   0.19    0
+    0.4   0.41    0
+    0.45  0.6     0
+    0.5   0.72    0
+    0.6   0.87    0
+    0.7   0.94    0
+    0.88  0.98    0
+/
+/</code></pre><p>Oil relative permeability is tabulated against oil
+saturation for oil-water and oil-gas-connate water cases:</p>
+<pre><code>--  SOIL     KROW     KROG
+SOF3
+    0        0        0
+    0.18     0        0
+    0.28     0.0001   0.0001
+    0.38     0.001    0.001
+    0.43     0.01     0.01
+    0.48     0.021    0.021
+    0.58     0.09     0.09
+    0.63     0.2      0.2
+    0.68     0.35     0.35
+    0.76     0.7      0.7
+    0.83     0.98     0.98
+    0.86     0.997    0.997
+    0.879    1        1
+    0.88     1        1    /
+/</code></pre><p>PVT properties of water</p>
+<pre><code>--  REF. PRES. REF. FVF  COMPRESSIBILITY  REF VISCOSITY  VISCOSIBILITY
+PVTW
+       4014.7     1.029        3.13D-6           0.31            0 /
+/</code></pre><p>Rock compressibility</p>
+<pre><code>--    REF. PRES   COMPRESSIBILITY
+ROCK
+        14.7          3.0D-6          /
+/</code></pre><p>Surface densities of reservoir fluids</p>
+<pre><code>--        OIL   WATER   GAS
+DENSITY
+         49.1   64.79  0.06054  /
+/</code></pre><p>PVT properties of dry gas with no vaporized oil (use <a href="../ecl_rm/PVTG.html#PVTG"> PVTG</a> to specify the properties
+of Wet Gas)</p>
+<pre><code>--   PGAS   BGAS   VISGAS
+PVDG
+     14.7 166.666   0.008
+    264.7  12.093   0.0096
+    514.7   6.274   0.0112
+   1014.7   3.197   0.014
+   2014.7   1.614   0.0189
+   2514.7   1.294   0.0208
+   3014.7   1.080   0.0228
+   4014.7   0.811   0.0268
+   5014.7   0.649   0.0309
+   9014.7   0.386   0.047   /
+/</code></pre><p>PVT properties of live oil with dissolved gas (use <a href="../ecl_rm/PVDO.html#PVDO"> PVDO</a> to specify the properties
+of dead oil).</p>
+<p>For each value of R<sub>s</sub> the saturation
+pressure, FVF and viscosity are specified. For R<sub>s</sub>=1.27
+and 1.618, the FVF and viscosity of Undersaturated Oil are defined
+as a R<sub>s</sub>, but must be supplied for the highest R<sub>s</sub> (1.618).</p>
+<pre><code>--   RS      POIL  FVFO  VISO
+PVTO
+    0.001    14.7 1.062  1.04    /
+    0.0905  264.7 1.15   0.975   /
+    0.18    514.7 1.207  0.91    /
+    0.371  1014.7 1.295  0.83    /
+    0.636  2014.7 1.435  0.695   /
+    0.775  2514.7 1.5    0.641   /
+    0.93   3014.7 1.565  0.594   /
+    1.270  4014.7 1.695  0.51
+           5014.7 1.671  0.549
+           9014.7 1.579  0.74    /
+    1.618  5014.7 1.827  0.449
+           9014.7 1.726  0.605   /
+    1.630  8014.7 1.828  0.449
+           9014.7 1.8    0.605   /
+/
+/</code></pre><p>Carter Tracy aquifer influence table</p>
+<pre><code>AQUTAB
+  0.01  0.112
+  0.05  0.229
+  0.1   0.315
+  0.15  0.376
+  0.2   0.424
+  0.25  0.469
+  0.3   0.503
+  0.4   0.564
+  0.5   0.616
+  0.6   0.659
+/</code></pre><p>Output controls for <span class="keyword">PROPS</span> data
+activated for <a href="../ecl_rm/SOF3.html#SOF3"> SOF3</a>, <a href="../ecl_rm/SWFN.html#SWFN"> SWFN</a>, <a href="../ecl_rm/SGFN.html#SGFN"> SGFN</a>, <a href="../ecl_rm/PVTW.html#PVTW"> PVTW</a>, <a href="../ecl_rm/PVDG.html#PVDG"> PVDG</a>, <a href="../ecl_rm/DENSITY.html#DENSITY"> DENSITY</a> and <a href="../ecl_rm/ROCK.html#ROCK"> ROCK</a> keywords</p>
+<pre><code>RPTPROPS
+  'SOF2' '=' 1  'SWFN' '=' 1  'SGFN' '=' 1  'PVTW' '=' 1
+  'PVTG' '=' 1  'DENSITY'  'ROCK'  /</code></pre></div>
+
+<div class="section" id="gradientexamples_regions"><a name="gradientexamples_regions"><!-- --></a><h4 class="sectiontitle">REGIONS</h4><p>The <span class="keyword">REGIONS</span> section defines how the reservoir is split into
+regions by saturation function, PVT function, fluid in place region
+and gradient region for example.</p>
+<pre><code>REGIONS --------------------------------------------------------------------
+
+EQUALS
+ 'PVTNUM'  2   1 10 1 10 1 3 /
+ 'SATNUM'  2   1 10 1 10 1 3 /
+ 'HMTRANZ' 1   1 10 1 10 1 3 /
+ 'HMTRANX' 1   1 10 1 10 1 3 /
+ 'HMTRNXY' 1   1 10 1 10 1 3 /
+ 'HMTRANY' 1   1 10 1 10 1 1 /
+ 'HMTRANY' 2   1 10 1 10 1 2 /
+ 'HMTRANY' 3   1 10 1 10 1 3 /
+/
+
+BOX
+ 1 10   1 10   2 2 /
+
+SATNUM
+ 1 2 1 2 1   2 1 2 1 2
+ 2 1 2 1 2   1 2 1 2 1
+ 1 2 1 2 1   2 1 2 1 2
+ 2 1 2 1 2   1 2 1 2 1
+ 1 2 1 2 1   2 1 2 1 2
+ 2 1 2 1 2   1 2 1 2 1
+ 1 2 1 2 1   2 1 2 1 2
+ 2 1 2 1 2   1 2 1 2 1
+ 1 2 1 2 1   2 1 2 1 2
+ 2 1 2 1 2   1 2 1 2 1
+/
+
+ENDBOX
+
+COPY
+ 'SATNUM' 'FIPXXX' /
+/
+
+EQUALS
+ 'FIPNUM'  1   4*          1 1  /
+ 'FIPNUM'  2   4*          2 2  /
+ 'FIPNUM'  3   4*          3 3  /
+ 'FIPYYY'  1   1 3  1 10   1 3  /
+ 'FIPYYY'  2   4 7   4*         /
+ 'FIPYYY'  3   7 10  4*         /
+/
+
+RPTREGS 
+  'PVTNUM'  'SATNUM'  'EQLNUM'  'FIPNUM'  'HM'  /</code></pre></div>
+
+<div class="section" id="gradientexamples_solution"><a name="gradientexamples_solution"><!-- --></a><h4 class="sectiontitle">SOLUTION</h4><p>The <span class="keyword">SOLUTION</span> section defines the initial state
+of the solution variables (phase pressures, saturations and Gas-Oil
+ratios)</p>
+<pre><code>SOLUTION ----------------------------------------------------------------------
+-- DATA FOR INITIALISING FLUIDS TO POTENTIAL EQUILIBRIUM
+--
+--    DATUM  DATUM   OWC    OWC    GOC    GOC    RSVD   RVVD   SOLN
+--    DEPTH  PRESS  DEPTH   PCOW  DEPTH   PCOG  TABLE  TABLE   METH
+
+EQUIL
+      8400   4800   8500    0     8200    0      1      0       0  /
+
+-- VARIATION OF INITIAL RS WITH DEPTH
+--
+--    DEPTH    RS
+
+RSVD
+       8200  1.270
+       8500  1.270  /
+
+--CARTER TRACY AQUIFER CONNECTING TO BOTTOM FACE OF RESERVOIR
+AQUCT
+   1  5100.0  1*  20.0   0.10  3.0E-5  2400.0  140.0  360  1  1  /
+/
+AQUANCON
+ 1   1  10   1  10   3   3  'K+'  /
+/
+HMAQUCT
+--     PERM   THETA  
+  1   'YES'   'YES'  /
+/
+
+-- OUTPUT CONTROLS
+-- (SWITCH ON OUTPUT OF INITIAL GRID BLOCK PRESSURES
+--                      FLUID VISCOSITIES
+--                      PHASE RESERVOIR DENSITIES  )
+
+RPTSOL  
+  'PRES'  'FIP=3'  'VOIL'  'VWAT'  'VGAS'  'DENO'
+  'DENW'  'DENG'  /</code></pre></div>
+
+<div class="section" id="gradientexamples_summary"><a name="gradientexamples_summary"><!-- --></a><h4 class="sectiontitle">SUMMARY</h4><p>This
+section specifies data to be written to the <span class="keyword">SUMMARY</span> files and, which may later be used with the ECLIPSE graphics package</p>
+<pre><code>-- FIELD OIL PRODUCTION
+FOPR
+-- WELL GAS-OIL RATIO FOR PRODUCER
+
+WGOR
+'PRODUCER'
+/
+-- WELL BOTTOM-HOLE PRESSURE
+
+WBHP
+'PRODUCER'
+/
+
+--AQUIFER INFLUX
+
+FAQT
+
+AAQR
+/
+
+AAQR
+/
+
+-- CPU TIMES
+
+TCPU
+
+TCPUH
+/ </code></pre></div>
+
+<div class="section" id="gradientexamples_schedule"><a name="gradientexamples_schedule"><!-- --></a><h4 class="sectiontitle">SCHEDULE</h4><p>The <span class="keyword">SCHEDULE</span> section defines the operations to
+be simulated</p>
+<pre><code>SCHEDULE ----------------------------------------------------------------------
+RPTSCHED
+  'PRES'  'SOIL'  'SWAT'  'SGAS'  'RS'  'FIP=3'
+  'WELLS' 'CPU=2'  'WELSPECS'  'NEWTON=2'
+  'VOIL'  'VWAT'  'VGAS'  'DENO'  'DENW'  'DENG'  /
+
+RPTRST
+  'BASIC=3'  'FIP'  'FREQ=2'  'PRES'  'VISC'
+  'DEN'  /
+
+DRSDT
+  100.0
+/
+
+GRADWELL
+ 'WBHP' /
+ 'WBP'  /
+ 'WWCT' /
+ 'WOPR' /
+ 'WWPR' /
+/
+
+RPTHMW
+ 'PROD*' 'ON'  /
+ 'INJE*' 'OFF' /
+/</code></pre><p>Set initial timestep to 1 day and maximum to 6 months</p>
+<pre><code>TUNING
+/
+/
+ 8*  200.0 /</code></pre><p>Well specification
+data</p>
+<pre><code>--   WELL   GROUP LOCATION BHP   PI
+--   NAME      NAME   I  J    DEPTH DEFN
+
+WELSPECS
+    'PRODUCER' 'G'   10 10    8400 'OIL'  /
+    'PRODUCE2' 'G'   10 1     8400 'OIL'  /
+    'INJECTOR' 'G'   1  1     8335 'GAS'  /
+    'INJECT2' 'G'    1  10    8335 'GAS'  /
+/</code></pre><p>Completion specification data</p>
+<pre><code>--     WELL     -LOCATION- OPEN/ SAT CONN  WELL
+--     NAME     I  J K1 K2 SHUT  TAB FACT  DIAM
+
+COMPDAT
+    'PRODUCER'  10 10 3  3 'OPEN' 0   -1   0.5  /
+    'PRODUCE2'  10 1  3  3 'OPEN' 0   -1   0.5  /
+    'INJECTOR'   1  1 1  1 'OPEN' 1   -1   0.5  /
+    'INJECT2'   1  10 1  1 'OPEN' 1   -1   0.5  /
+  /
+
+WCONHIST
+     'PRODUCER' 'OPEN' 'ORAT' 20000 /
+     'PRODUCE2' 'OPEN' 'ORAT' 20000 /
+  /
+
+WELTARG
+     'PRODUCER' 'BHP' 1000 /
+     'PRODUCE2' 'BHP' 1000 /
+  /</code></pre><p>Injection well controls</p>
+<pre><code>--      WELL     INJ   OPEN/  CNTL    FLOW
+--      NAME    TYPE   SHUT   MODE    RATE      BHP
+
+WCONINJE
+     'INJECTOR' 'GAS' 'OPEN' 'RATE'  100000 1* 10000  /
+     'INJECT2' 'GAS' 'OPEN' 'RATE'  100000 1* 10000  /
+  /
+
+TSTEP
+ 6*40
+ /
+
+END</code></pre></div>
+
+<div class="section" id="gradientexamples_eclipse_300"><a name="gradientexamples_eclipse_300"><!-- --></a><h4 class="sectiontitle">ECLIPSE 300</h4><div class="note"><span class="notetitle">Note:</span> <span class="notebody">The above example shows the majority of parameters available
+for use within ECLIPSE 100. At present the only parameters available
+for use within ECLIPSE 300 are pore volume, transmissibility and permeability
+multipliers. </span></div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

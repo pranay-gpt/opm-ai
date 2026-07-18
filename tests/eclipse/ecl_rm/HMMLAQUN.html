@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="HMMLAQUN"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="HMMLAQUN"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>HMMLAQUN</title>
+</head>
+<body>
+
+
+<div class="nested0" id="HMMLAQUN"><a name="HMMLAQUN"><!-- --></a>
+<h1 class="keyword">HMMLAQUN</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="hmmlaqun.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="hmmlaqun.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1016e45"> x </th>
+
+<th valign="top" id="d1016e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1016e54">  </th>
+
+<th valign="top" id="d1016e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1016e45 d1016e54 ">  </td>
+
+<td valign="top" headers="d1016e48 d1016e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1016e45 d1016e54 "> x </td>
+
+<td valign="top" headers="d1016e48 d1016e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1016e45 d1016e54 ">  </td>
+
+<td valign="top" headers="d1016e48 d1016e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1016e45 d1016e54 ">  </td>
+
+<td valign="top" headers="d1016e48 d1016e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1016e45 d1016e54 ">  </td>
+
+<td valign="top" headers="d1016e48 d1016e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1016e45 d1016e54 ">  </td>
+
+<td valign="top" headers="d1016e48 d1016e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1016e45 d1016e54 ">  </td>
+
+<td valign="top" headers="d1016e48 d1016e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1016e45 d1016e54 ">  </td>
+
+<td valign="top" headers="d1016e48 d1016e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword applies multipliers to properties determining the
+performance of a numerical aquifer defined in keyword <a href="AQUNUM.html#AQUNUM"> AQUNUM</a>. It is intended
+to be used as a modifier on the base data specified in the <span class="keyword">AQUNUM</span> keyword during history matching.</p>
+
+<p>The keyword should be followed by a number of records defining
+the aquifers and multipliers for each aquifer.</p>
+
+<p>The set of records must end with a single line containing only
+a slash (/). The set of records must be terminated with a blank record
+containing just a slash.</p>
+
+<p>Each record refers to a separate numerical aquifer, and contains
+the following items of data:</p>
+
+<ol>
+<li>Aquifer identification number <p>The identification number is
+specified in <span class="keyword">AQUNUM</span> item 1.</p>
+</li>
+
+<li>Multiplier on aquifer pore volume <p>DEFAULT: 1.0</p>
+</li>
+
+<li>Multiplier on aquifer permeability <p>DEFAULT: 1.0</p>
+ <div class="note"><span class="notetitle">Note:</span> <span class="notebody">The
+aquifer-grid connection transmissibility is also modified when the
+aquifer permeability multiplier is used. For further information on
+the transmissibility calculation see <a href="../ecl_td/aquifer_Aquifer_Modeling_Facilities.html#aquifer_aquifer_modeling_facilities">"Aquifer modeling
+facilities"</a> in the <cite>ECLIPSE Technical Description</cite>.</span></div>
+ </li>
+
+<li>Multiplier on aquifer-grid connection transmissibility <p>DEFAULT:
+1.0</p>
+</li>
+
+</ol>
+
+<p>See also the <a href="HMAQUNUM.html#HMAQUNUM"> HMAQUNUM</a> keyword.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The aquifer pore volume cannot be modified by editing grid block
+pore volumes (<span class="keyword">PORV</span>) for the aquifer cells or by
+specifying pore volume multipliers (<span class="keyword">MULTPV</span>). See
+the <span class="keyword">AQUNUM</span> keyword.</span></div>
+
+<div class="section" id="hmmlaqun_example"><a name="hmmlaqun_example"><!-- --></a><h4 class="sectiontitle">Example</h4>            
+    <pre><code>AQUNUM 
+--Aq. IX IY IZ Area   Length Poro. Perm. Depth Pressure PVT Sat. 
+   1   7  1  1 1.0E+5 2000   1*    200.0   1*    1*      1    1 /
+   1   8  1  1 1.0E+5 2000   1*    200.0   1*    1*      1    1 /
+   1   9  1  1 1.0E+5 2000   1*    200.0   1*    1*      1    1 /
+   1  10  1  1 1.0E+5 2000   1*    200.0   1*    1*      1    1 /
+/ 
+HMMLAQUN
+-- Aquifer   PoreV parameter   Perm. parameter   Trans. parameter
+     1          1.01              1.3             1.0 /       
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

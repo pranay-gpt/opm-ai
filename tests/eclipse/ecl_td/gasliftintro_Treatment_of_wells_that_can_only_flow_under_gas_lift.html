@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Treatment of wells that can only flow under gas lift"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gasliftintro_treatment_of_wells_that_can_only_flow_under_gas_lift"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Treatment of wells that can only flow under gas lift</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gasliftintro_treatment_of_wells_that_can_only_flow_under_gas_lift"><a name="gasliftintro_treatment_of_wells_that_can_only_flow_under_gas_lift"><!-- --></a>
+<h1 class="topictitle1">Treatment of wells that can only flow under gas lift</h1>
+
+
+ <div>
+<p>Later in the life of the field, it may happen that some wells can
+only flow under gas lift. If ECLIPSE decides it is not economic to
+allocate lift gas to such a well, it dies. Once a well has died, it
+remains shut or stopped and is not considered any longer as a candidate
+for gas lift. However, to retain the well as a candidate for gas lift,
+if required, with the possibility of allocating lift gas to it at
+a later time if it becomes economical to do so, use the <a href="../ecl_rm/WTEST.html#WTEST"> WTEST</a> keyword to revive the
+well periodically for testing. When the well is revived, the optimization
+process considers it along with the other wells for allocation of
+lift gas increments. If it is not economic to allocate any lift gas
+to the well it will die again but, if it is economic to allocate lift
+gas to the well, it will resume production.</p>
+
+<p>To give the well a fair chance of revival, ECLIPSE works out the
+number of lift gas increments that would give the well the largest
+ratio of oil production rate to lift gas injection rate. For example,
+the well may require three increments simply to initiate flow whereas
+five increments would provide the best ratio of oil production to
+lift gas injection (see figure <a href="gasliftintro_Treatment_of_wells_that_can_only_flow_under_gas_lift.html#gasliftintro.XID-00000074">599.1</a>). The well’s incremental gradient would be set equal to this
+ratio (line O - A), to be compared with the incremental and decremental
+gradients of the other wells and, if this gradient is large enough,
+the well is given five increments of lift gas to start it flowing
+(position A).</p>
+
+<div class="fignone" id="gasliftintro.XID-00000074"><a name="gasliftintro.XID-00000074"><!-- --></a>
+
+ <br/><img src="../img/incgradc.png" width="560px"/><br/> 
+<br/><span class="figcap">
+           Figure 599.1  Incremental gradient calculation</span></div>
+
+<p>Thereafter the well is treated as a normal well for optimization,
+with single increments being added or subtracted as necessary. However,
+if the well is only just able to flow at a particular rate of gas
+lift, that is, if the removal of another increment would cause the
+well to die, the decremental gradient is calculated in a special way.
+In the current example the well can flow with three lift gas increments,
+but not with two. If one increment is subtracted the well does not
+flow but it has two remaining increments allocated which are wasted.
+Hence if the lift gas rate is decreased it is expedient to remove
+all three increments at once. The well’s decremental gradient at that
+point is calculated as its oil rate divided by three increments of
+lift gas (line O - B) and, if this gradient compares unfavorably with
+the other wells, all three increments are removed and the well dies.</p>
+
+<div class="section" id="gasliftintro_keeping_wells_alive_with_a_minimum_lift_gas_rate"><a name="gasliftintro_keeping_wells_alive_with_a_minimum_lift_gas_rate"><!-- --></a><h4 class="sectiontitle">Keeping wells alive with a minimum lift gas rate</h4><p>Wells can be prevented from dying by ensuring they are always allocated
+at least enough lift gas to keep them flowing. This can be done by
+setting a minimum lift gas injection rate for each well in keyword <a href="../ecl_rm/WLIFTOPT.html#WLIFTOPT">WLIFTOPT</a>. If a positive value
+is specified, the well is allocated at least that amount of lift gas,
+unless it is unable to flow with that rate of lift gas injection or
+unless it can already meet one of its own rate limits before receiving
+its minimum lift gas rate. Alternatively a negative number can be
+specified for the minimum lift gas rate. In this case, ECLIPSE allocates
+at least enough lift gas to enable the well to flow, provided that
+it can flow at a lift gas injection rate within the maximum value
+specified for the well. If there is not enough lift gas available
+to satisfy all the wells’ minimum requirements, the wells are allocated
+their minimum requirements in decreasing order of their weighting
+factor.</p>
+<p>If a well with a minimum lift gas requirement belongs
+to a group (including the FIELD level group) having a production rate
+target that can be achieved without any lift gas, by default no lift
+gas is allocated to the well, regardless of any minimum requirement.
+However, if the well is given a weighting factor greater than 1.0,
+the well will receive its minimum lift gas requirement even if the
+group could achieve its production rate target without any gas lift.
+Thus, to allocate lift gas to keep a well flowing, if required, regardless
+of whether lift gas is needed to achieve a group or field production
+rate target, assign a weighting factor greater than 1.0 (for example
+1.01) together with a negative value for the minimum lift gas rate.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">There is a possible conflict when an economic limit is applied
+to a well (for example using the <a href="../ecl_rm/WECON.html#WECON">WECON</a> keyword) that has been instructed to be kept flowing in the
+manner described above using gas lift optimization. When the well’s
+flow becomes too low, it may be shut and hence will not be available
+to take part in the allocation of gas lift. Take care to avoid conflicting
+economic limits if a well is to be kept alive by means of gas lift
+optimization.</span></div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

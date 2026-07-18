@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SLAVES"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SLAVES"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SLAVES</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SLAVES"><a name="SLAVES"><!-- --></a>
+<h1 class="keyword">SLAVES</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="slaves.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="slaves.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2312e45"> x </th>
+
+<th valign="top" id="d2312e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2312e54">  </th>
+
+<th valign="top" id="d2312e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2312e45 d2312e54 ">  </td>
+
+<td valign="top" headers="d2312e48 d2312e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2312e45 d2312e54 ">  </td>
+
+<td valign="top" headers="d2312e48 d2312e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2312e45 d2312e54 ">  </td>
+
+<td valign="top" headers="d2312e48 d2312e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2312e45 d2312e54 ">  </td>
+
+<td valign="top" headers="d2312e48 d2312e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2312e45 d2312e54 ">  </td>
+
+<td valign="top" headers="d2312e48 d2312e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2312e45 d2312e54 ">  </td>
+
+<td valign="top" headers="d2312e48 d2312e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2312e45 d2312e54 ">  </td>
+
+<td valign="top" headers="d2312e48 d2312e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2312e45 d2312e54 "> x </td>
+
+<td valign="top" headers="d2312e48 d2312e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is used in a reservoir coupling master run to identify
+the slave reservoir data files, and to indicate where they are located.
+ECLIPSE starts their simulation processes, which waits for further
+instructions from the master run. (See <a href="../ecl_td/rescouplintro_Reservoir_Coupling.html#rescouplintro_reservoir_coupling">"Reservoir coupling"</a> in the <cite>ECLIPSE Technical Description</cite>.)</p>
+
+<p>The keyword is followed by a data record for each active slave
+reservoir. Each record contains the following items of data, and should
+be terminated with a slash (/). The set of records must end with a
+blank record, containing only a slash (/).</p>
+
+<ol>
+<li> Name of the slave reservoir <p>(This should be up to 8 characters
+long)</p>
+ <p>The slave reservoir name is used to identify the slave
+reservoir in keyword <a href="GRUPMAST.html#GRUPMAST"> GRUPMAST</a>.</p>
+ </li>
+
+<li> The root name of the slave reservoir’s ECLIPSE data file <p>(This
+should be up to 72 characters long)</p>
+ </li>
+
+<li> This item should just be ‘*’ in almost all cases; this allows
+the system to pick which hosts to put the slaves on, depending on
+the host file supplied. In very specific cases this item should be
+the host name of the machine on which the slave process is to be run.
+If a host name has to be specified the following caveats apply: <p>(If specified the host name can be up to 32 characters long)</p>
+ <p>Enter the master’s host name here, if the slave resides on the same
+machine as the master run.</p>
+ </li>
+
+<li> The path-name of the directory in which the data file is located,
+from the root directory of the host machine <p>(This should be up
+to 72 characters long)</p>
+ </li>
+
+<li> Number of processors the slave is to be run on. If the slave
+is to be run in parallel this should be an integer corresponding to
+the first item in the <a href="PARALLEL.html#PARALLEL">  PARALLEL</a> keyword in the slave data set. This value should be set to
+1 for runs in serial mode. <p>DEFAULT: 1</p>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="section" id="slaves_notes"><a name="slaves_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li>The <span class="keyword">SLAVES</span> keyword can only be entered once
+in a run, so all slave processes must be started together. If at a
+later date you wish to add another slave reservoir, this may be done
+in a restart run, adding the new slave reservoir to the others in
+the <span class="keyword">SLAVES</span> keyword.</li>
+
+<li>The <span class="keyword">SLAVES</span> keyword data is <strong>not</strong> carried
+over on the restart file. In restart runs the keyword must be entered
+again, naming all the slave processes to be activated during the run.</li>
+
+<li>Up to 20 slave reservoirs are allowed. ECLIPSE must be re-dimensioned
+if more are required.</li>
+
+<li>If a slave reservoir is removed in a restart run (by not specifying
+it again in the <span class="keyword">SLAVES</span> keyword), any master groups
+that were originally associated with it will automatically be flagged
+to read their flows from the Reservoir Coupling file instead. Alternatively,
+if the slave reservoir is actually no longer producing, you could
+redefine the master groups as satellite groups with keywords <a href="GSATPROD.html#GSATPROD"> GSATPROD</a> and <a href="GSATINJE.html#GSATINJE"> GSATINJE</a>, giving them zero production and injection rates.</li>
+
+<li>After reading the <span class="keyword">SLAVES</span> keyword data, ECLIPSE
+starts the slave simulation processes. If a particular slave process
+cannot be started, the master run will print an error message and
+terminate the other processes. If a slave’s host machine has insufficient
+free memory to run the process, the operating system may kill the
+process after MPI has started it. To prevent this situation from hanging
+the other coupled processes, the master run waits up to 30 seconds
+for each slave process to send its initial communication. If no response
+is received within 30 seconds of starting a slave process, the master
+run prints an error message and terminates the other processes.</li>
+
+<li>The master run may not include the <a href="PARALLEL.html#PARALLEL"> PARALLEL</a> keyword, so no data set should contain both
+the <span class="keyword">PARALLEL</span> keyword and the <span class="keyword">SLAVES</span> keyword. Slave simulations may be parallel, but the master must
+run in serial mode.</li>
+
+</ul>
+</div>
+
+<div class="section" id="slaves_example"><a name="slaves_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>SLAVES
+--    slave   datafile    machine        directory
+--    name    root        hostname       of data file
+--
+     'upper'  'base'      '*'        '/usr/models/upper' /
+     'lower'  'base'      '*'        '/usr/models/lower' /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

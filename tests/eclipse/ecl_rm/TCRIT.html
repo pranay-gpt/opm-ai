@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="TCRIT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="TCRIT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>TCRIT</title>
+</head>
+<body>
+
+
+<div class="nested0" id="TCRIT"><a name="TCRIT"><!-- --></a>
+<h1 class="keyword">TCRIT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="tcrit.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="tcrit.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2538e45">  </th>
+
+<th valign="top" id="d2538e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2538e54"> x </th>
+
+<th valign="top" id="d2538e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2538e45 d2538e54 ">  </td>
+
+<td valign="top" headers="d2538e48 d2538e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2538e45 d2538e54 ">  </td>
+
+<td valign="top" headers="d2538e48 d2538e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2538e45 d2538e54 ">  </td>
+
+<td valign="top" headers="d2538e48 d2538e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2538e45 d2538e54 "> x </td>
+
+<td valign="top" headers="d2538e48 d2538e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2538e45 d2538e54 ">  </td>
+
+<td valign="top" headers="d2538e48 d2538e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2538e45 d2538e54 ">  </td>
+
+<td valign="top" headers="d2538e48 d2538e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2538e45 d2538e54 ">  </td>
+
+<td valign="top" headers="d2538e48 d2538e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2538e45 d2538e54 ">  </td>
+
+<td valign="top" headers="d2538e48 d2538e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>In a run with N<sub>comps</sub>  components, this keyword associates
+a critical temperature with each component. </p>
+
+<p>The keyword should be followed by N<sub>comps</sub>  values. </p>
+
+<p>If multiple equations of state are being used, a set of data should
+be entered for each reservoir EoS. The number of reservoir equation
+of state regions is entered as <a href="TABDIMS.html#TABDIMS.NMEOSR"> NMEOSR</a> in keyword <span class="keyword">TABDIMS</span>.  The use of multiple EoS regions is discussed in <a href="../ecl_td/eos_regions_Equations_of_State_Regions.html#eos_regions_equations_of_state_regions">"Equations of state
+regions"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<p>UNITS: K (<samp class="codeph">METRIC</samp>), °R (<samp class="codeph">FIELD</samp>),
+K (<samp class="codeph">LAB</samp>), K (<samp class="codeph">PVT-M</samp>)</p>
+
+<p>DEFAULT: There are no component-wise default values. You should
+not  default these to the internal default value.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">When using the <a href="CO2STORE.html#CO2STORE"> CO2STORE</a> option, the special components have specific internal values
+and any values specified for them in this keyword will be ignored.</span></div>
+
+<div class="section" id="tcrit_example"><a name="tcrit_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>TCRIT
+140 270 450 670 /</code></pre><div class="note"><span class="notetitle">Note:</span> <span class="notebody"><p>Thermal
+option</p>
+For live oil properties - a component can be made nonvolatile
+or non-condensable using the <a href="CVTYPE.html#CVTYPE"> CVTYPE</a> keyword. This keyword will also reset the component critical
+temperature, to 10<sup>4</sup> for nonvolatile components and to 10<sup>-6</sup> for non-condensable components. For back-compatibility with
+earlier versions of ECLIPSE, components with critical temperatures
+of 10<sup>4</sup> and above will also be assumed to be nonvolatile,
+while those with temperatures of 10<sup>-6</sup> will be assumed to
+be non-condensable. For surface calculations, the volatility types
+are set by default to the reservoir values. If different volatility
+types are required at the surface, the <a href="CVTYPES.html#CVTYPES"> CVTYPES</a> keyword can be used. In this case the <a href="TCRITS.html#TCRITS"> TCRITS</a> keyword should
+also be used to ensure the correct critical temperatures are used
+in the surface calculations.</span></div>
+<p>The Thermal option is described
+in <a href="../ecl_td/thermalintro_Thermal_Option.html#thermalintro_thermal_option">"Thermal option"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

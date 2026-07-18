@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ESSNODE"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ESSNODE"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ESSNODE</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ESSNODE"><a name="ESSNODE"><!-- --></a>
+<h1 class="keyword">ESSNODE</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="essnode.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="essnode.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d654e45">                         x </th>
+
+<th valign="top" id="d654e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d654e54">                        x </th>
+
+<th valign="top" id="d654e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d654e45 d654e54 "> </td>
+
+<td valign="top" headers="d654e48 d654e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d654e45 d654e54 "> </td>
+
+<td valign="top" headers="d654e48 d654e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d654e45 d654e54 "> </td>
+
+<td valign="top" headers="d654e48 d654e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d654e45 d654e54 ">                         x </td>
+
+<td valign="top" headers="d654e48 d654e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d654e45 d654e54 "> </td>
+
+<td valign="top" headers="d654e48 d654e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d654e45 d654e54 "> </td>
+
+<td valign="top" headers="d654e48 d654e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d654e45 d654e54 "> </td>
+
+<td valign="top" headers="d654e48 d654e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d654e45 d654e54 "> </td>
+
+<td valign="top" headers="d654e48 d654e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTPVT"> NTPVT</a>  (set in the <span class="keyword">TABDIMS</span> keyword)
+tables of salt concentration  (or effective salinity) values, each
+terminated by a slash (/), describing the nodal values for salt concentration
+(or effective salinity) to be used in the calculation of the oil-water
+surface tension.</p>
+
+<p>Each table consists of up to <a href="TABDIMS.html#TABDIMS.NPPVT"> NPPVT</a> (set in the <span class="keyword">TABDIMS</span> keyword) values of the salt concentration. Within each table the
+values should be strictly increasing.</p>
+
+<p>The number of salt concentrations in each table must equal the
+number of surface tension values that are entered per surfactant concentration
+node within the corresponding table in <a href="SURFSTES.html#SURFSTES"> SURFSTES</a>.</p>
+
+<p>In ECLIPSE 100, the values of salt concentration
+should be non-negative. If keyword <a href="ECLMC.html#ECLMC">  ECLMC</a> is selected, the <a href="BRINE.html#BRINE"> BRINE</a> keyword activates the Multi-Component Brine
+Model which can be used with <span class="keyword">SURFSTES</span> and <span class="keyword">ESSNODE</span>.</p>
+
+<p>In ECLIPSE 300, the effective salinity of
+the water phase is computed as a function of the water component concentrations.
+The exact expression for this computation can be specified by keyword <a href="SALTEFF.html#SALTEFF"> SALTEFF</a>.</p>
+
+<div class="section" id="essnode_example"><a name="essnode_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NTPVT</samp> = 2 and <samp class="codeph">NPPVT ≥ 3</samp>:</p>
+<pre><code>ESSNODE
+ 0
+ 50
+ 100/
+ 0
+ 15
+ 35/</code></pre></div>
+
+<div class="section" id="essnode_units"><a name="essnode_units"><!-- --></a><h4 class="sectiontitle">Units</h4><p>ECLIPSE 100</p>
+<p>Depending on whether salinity-dependent
+surfactant model is activated together with brine or multi-component
+brine options, <span class="keyword">ESSNODE</span> will contain values of salt
+concentration or effective salinity respectively. Accordingly, the
+units will be</p>
+<p>UNITS: kg/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), lb/stb (<samp class="codeph">FIELD</samp>), gm/scc (<samp class="codeph">LAB</samp>), or</p>
+<p>UNITS: dimensionless.</p>
+<p>ECLIPSE 300</p>
+<p>Depending
+on the coefficients provided in the <span class="keyword">SALTEFF</span> keyword,
+effective salinity can have the following units (see <a href="../ecl_td/watercompintro_effective_salinity.html#watercompintro_effective_salinity">"Effective salinity
+calculations"</a> in the <cite>ECLIPSE Technical Description</cite>):</p>
+<p>UNITS: kg/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), lb/stb (<samp class="codeph">FIELD</samp>), gm/scc (<samp class="codeph">LAB</samp>),
+or</p>
+<p>UNITS: dimensionless.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

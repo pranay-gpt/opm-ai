@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="AMALGAM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="AMALGAM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>AMALGAM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="AMALGAM"><a name="AMALGAM"><!-- --></a>
+<h1 class="keyword">AMALGAM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="amalgam.tab.0006"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="amalgam.tab.0006" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d80e45"> x </th>
+
+<th valign="top" id="d80e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d80e54">  </th>
+
+<th valign="top" id="d80e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d80e45 d80e54 ">  </td>
+
+<td valign="top" headers="d80e48 d80e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d80e45 d80e54 "> x </td>
+
+<td valign="top" headers="d80e48 d80e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d80e45 d80e54 ">  </td>
+
+<td valign="top" headers="d80e48 d80e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d80e45 d80e54 ">  </td>
+
+<td valign="top" headers="d80e48 d80e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d80e45 d80e54 ">  </td>
+
+<td valign="top" headers="d80e48 d80e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d80e45 d80e54 ">  </td>
+
+<td valign="top" headers="d80e48 d80e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d80e45 d80e54 ">  </td>
+
+<td valign="top" headers="d80e48 d80e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d80e45 d80e54 ">  </td>
+
+<td valign="top" headers="d80e48 d80e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">This keyword is not required by ECLIPSE 300.
+Connections are generated between nested and adjoining local grids
+in ECLIPSE 300 in all runs.<p>For information on amalgamating grids
+in ECLIPSE 300, see <a href="../ecl_td/lgrc_Amalgamating_cartesian_local_grids__ECLIPSE__100_.html#lgrc_amalgamating_cartesian_local_grids__eclipse__100_">"Amalgamating Cartesian
+local grids (ECLIPSE 100)"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+</span></div>
+
+<p>The <span class="keyword">AMALGAM</span> keyword is used to define groups
+of LGRs which are to be amalgamated.</p>
+
+<p>This keyword can be followed by any number of records. Each record
+is of arbitrary length and is terminated by a slash (/). The set of
+records must be terminated with a blank record containing just a slash.</p>
+
+<p>Each record defines one amalgamation, and should consist of the
+names of all the LGRs in the amalgamation (up to 8 characters). An
+LGR name root, ending with an asterisk (*) and enclosed in quotes,
+can be used to refer to several LGRs at once.</p>
+
+<p>LGRs within the same amalgamation are allowed to touch, but must
+not overlap and may not be nested within each other. ECLIPSE treats
+an amalgamation as a single entity, with non-neighbor connections
+between any LGRs which touch.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Additional non-neighbor connections may arise owing to domain
+decomposition in parallel runs and may require the inclusion of additional
+LGRs in an amalgamation.<p>Non-neighbor connections must <strong>not</strong> be disabled by the keyword <a href="NONNC.html#NONNC">  NONNC</a> in the <span class="keyword">RUNSPEC</span> section.</p>
+</span></div>
+
+<p>This facility allows you to refine the grid more efficiently around
+deviated wells. Wells may be completed in several local grids, as
+long as they belong to the same amalgamation.</p>
+
+<p>For these wells, it is necessary to use the keywords <a href="COMPLMPL.html#COMPLMPL">  COMPLMPL</a>, <a href="WELOPENL.html#WELOPENL">  WELOPENL</a> and <a href="WFRICTNL.html#WFRICTNL">  WFRICTNL</a> in place
+of <a href="COMPLUMP.html#COMPLUMP">  COMPLUMP</a>, <a href="WELOPEN.html#WELOPEN">  WELOPEN</a> and <a href="WFRICTN.html#WFRICTN">  WFRICTN</a>. (<span class="keyword">COMPLMPL</span> lumps connections into completions; <span class="keyword">WELOPENL</span> shuts or reopens well connections; and <span class="keyword">WFRICTNL</span> permits the modeling of friction wells completed across several
+local grids if the Wellbore Friction Option is active.)</p>
+
+<p>If LGRs that do not touch are amalgamated, ECLIPSE still lumps
+them together as a single entity in the solution process. Thus, their
+local timesteps are synchronized.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Only Cartesian LGRs may be amalgamated.</span></div>
+
+<p>VE and dispersed flow models must be used in all or none of the
+LGRs in an amalgamation. The options under keyword <a href="QMOBIL.html#QMOBIL">  QMOBIL</a> must be the same
+for all LGRs within an amalgamation.</p>
+
+<p>The maximum number of wells allowed in any amalgamation is the
+sum of the maxima specified in item 11 of keyword <a href="CARFIN.html#CARFIN">  CARFIN</a> for all the local grids in the
+amalgamation.</p>
+
+<p>Since an amalgamation of local grids is solved as a single entity
+in ECLIPSE, <a href="LGRON.html#LGRON">  LGRON</a> and <a href="LGROFF.html#LGROFF">  LGROFF</a> actions
+for any local grid in an amalgamation apply to the whole amalgamation.</p>
+
+<p>See also keywords <a href="COMPDATL.html#COMPDATL">  COMPDATL</a>, <span class="keyword">WELOPENL</span>, <span class="keyword">COMPLMPL</span>, <a href="WPIMULTL.html#WPIMULTL">  WPIMULTL</a> and <span class="keyword">WFRICTNL</span>.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">When using the Flux Boundary Conditions option (see keyword <a href="USEFLUX.html#USEFLUX"> USEFLUX</a>) all local grid
+refinements within an amalgamation must be in the same flux region
+(see keyword <a href="FLUXNUM.html#FLUXNUM"> FLUXNUM</a>).<p>When using the flux boundary conditions option (see keyword <span class="keyword">USEFLUX</span>) in parallel, amalgamations may not be used outside
+of the <span class="keyword">USEFLUX</span> region.</p>
+</span></div>
+
+<div class="section" id="amalgam_example"><a name="amalgam_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>Two local grid
+amalgamations:</p>
+<pre><code>AMALGAM
+ 'NORTH*' /
+ LGR1 LGR2 LGR3 LGR4 /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

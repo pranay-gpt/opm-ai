@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Examples"/>
+<meta name="DC.subject" content="CARFIN"/>
+<meta name="keywords" content="CARFIN"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="carfin_examples"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Examples</title>
+</head>
+<body>
+
+
+<div class="nested0" id="carfin_examples"><a name="carfin_examples"><!-- --></a>
+<h1 class="topictitle1">Examples</h1>
+
+
+ <div>
+<div class="section" id="carfin_example_1"><a name="carfin_example_1"><!-- --></a><h4 class="sectiontitle">Example 1</h4>  		  <pre><code>CARFIN
+--Name  I1 I2 J1 J2 K1 K2  NX NY NZ
+  REF1  19 19  3  3  1  2    3   1    6  /
+--Enter data for this local grid
+PORO
+0.25 0.28 0.21 0.225 0.23 0.18
+0.17 0.15 0.22 0.165 0.17 0.16
+0.20 0.21 0.19 0.120 0.15 0.17 /
+ENDFIN</code></pre>  		</div>
+
+<div class="section" id="carfin_example_2"><a name="carfin_example_2"><!-- --></a><h4 class="sectiontitle">Example 2</h4>  		    		
+ <p>Nested refinement, located at the boundary (K1=1) of both REF1
+and the global grid.   </p>
+  		  <pre><code>--Define a local grid REF1
+CARFIN
+--Name  I1 I2 J1 J2 K1 K2  NX NY NZ NWMAX PARENT
+  REF1  16 19 3  3  1  4   8  4  16   1* GLOBAL /
+ENDFIN
+--Define a local grid REF2 contained within REF1
+CARFIN
+--Name  I1 I2 J1 J2 K1 K2  NX NY NZ NWMAX PARENT
+  REF2   2 3  2  3  1  8   4  4  16  1*   REF1 /
+--Enter data for this local grid here if required
+ENDFIN</code></pre>  		</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

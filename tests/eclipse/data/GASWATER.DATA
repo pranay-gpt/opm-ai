@@ -1,0 +1,184 @@
+--
+-- THIS IS A GAS-WATER QUARTER FIVE SPOT.
+--
+RUNSPEC
+TITLE
+ GAS-WATER TEST CASE
+
+DIMENS
+   20   20    4  /
+
+WATER
+
+GAS
+
+FIELD
+
+SATOPTS
+                                     'HYSTER'   /
+
+TABDIMS
+    2    1   20   20    1   20 /
+
+WELLDIMS
+    2    1    1    2 /
+
+START
+   1 'JAN' 1983  /
+
+GRID      ==============================================================
+
+DXV
+  20*75.0 /
+
+DYV
+  20*75.0 /
+
+DZ
+ 1600*30.0 /
+
+TOPS
+  400*4000.0 /
+
+PORO
+ 1600*0.2 /
+
+PERMX
+ 1600*50.0 /
+
+PERMY
+ 1600*50.0 /
+
+PERMZ
+ 1600*50.0 /
+
+PROPS     ==============================================================
+
+RVCONST
+ 0.01 /
+
+SWFN
+    .25    .0    0.0
+    .7    1.0    0.0
+/
+    .25    .0    0.0
+    .5    1.0    0.0
+/
+
+SGFN
+    .3     .0    0.0
+    .75   1.0    0.0
+/
+    .5     .0    0.0
+    .75   1.0    0.0
+/
+
+
+PVTW
+  .0  1.0  3.03E-06  .5  0.0 /
+
+PVDG
+  .0     1.0     2.0
+ 8000.0   .92    2.0
+/
+
+ROCK
+ 4000.0         .30E-05 /
+
+DENSITY
+ 52.0000  64.0000   .04400 /
+
+RPTPROPS
+   -- PROPS Reporting Options
+   -- 
+/
+
+REGIONS    =============================================================
+
+SATNUM
+1600*1 /
+
+IMBNUM
+1600*1 /
+
+SOLUTION   =============================================================
+
+DEBUG
+2 4 /
+
+SWAT
+ 1600*0.7 /
+
+PRVD
+ 4000  4000
+ 4300  4150 /
+
+
+
+RPTSOL
+-- Initialisation Print Output
+-- 
+'PRES' 'SWAT' 'RESTART=2' /
+
+SUMMARY
+
+ALL
+
+SEPARATE
+
+MSUMLINS
+
+MSUMNEWT
+
+SCHEDULE   ===========================================================
+
+RPTSCHED
+'PRES' 'SWAT' 'RESTART=2' /
+
+WELSPECS
+'I'  'G'   1  1  4000  'GAS'  /
+'P'  'G'  20 20  4000  'WAT'  /
+/
+
+WELDEBUG
+'I' 2211 /
+'P' 2211 /
+/
+
+COMPDAT
+'I       '   1   1   1   1 'OPEN'   0  .0   1.0 /
+'P       '  20  20   1   1 'OPEN'   0  .0   1.0 /
+/
+
+WCONPROD
+'P' 'OPEN' 'BHP' 5* 4000.0 /
+/
+
+---------------------------------------------------------------------
+
+WCONINJE
+'I' 'GAS' 'OPEN' 'RATE' 200.0 /
+/
+
+TSTEP
+10 /
+
+TSTEP
+ 2990
+/
+
+------------------------------------------------------------------------
+
+WCONINJE
+'I' 'WAT' 'OPEN' 'RATE' 200.0 /
+/
+
+TSTEP
+10
+/
+
+TSTEP
+ 2990
+/
+
+END

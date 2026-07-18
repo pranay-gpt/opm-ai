@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="K-values"/>
+<meta name="DC.subject" content="Thermal properties for K-values"/>
+<meta name="keywords" content="Thermal properties for K-values"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="props_k-values"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>K-values</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="props_k-values"><a name="props_k-values"><!-- --></a>
+<h1 class="topictitle1">K-values</h1>
+
+
+ <div>
+<p>Distribution of volatile components between the oil and gas phases
+is determined by K-values. The mole fraction  <math><msup>
+<mi>y</mi><mi>c</mi></msup></math>  of volatile component
+ <math><mi>c</mi></math>  in the gas phase is given by  <math><mrow><msup><mrow>
+<mi>y</mi></mrow><mrow><mi>c</mi></mrow></msup><mo>=</mo><mrow><msup><mrow><mi>K</mi></mrow><mrow><mi>c</mi></mrow></msup><mo>⁡</mo><mrow><mrow><mrow><mo>(</mo><mi>P</mi><mo>,</mo><mi>T</mi><mo>)</mo>
+</mrow></mrow></mrow></mrow><mo>⋅</mo><msup><mrow><mi>x</mi></mrow><mrow><mi>c</mi></mrow></msup></mrow>
+</math>, where  <math><msup><mi>x</mi>
+<mi>c</mi></msup></math>  is the mole fraction of component
+ <math><mi>c</mi></math>  in the oil phase and  <math><mrow><msup><mrow>
+<mi>K</mi></mrow><mrow><mi>c</mi></mrow></msup><mo>⁡</mo><mrow><mrow><mrow><mo>(</mo><mi>P</mi><mo>,</mo><mi>T</mi><mo>)</mo></mrow></mrow></mrow>
+</mrow></math> is the equilibrium K-value, which depends on the
+pressure  <math><mi>P</mi></math>  and the temperature  <math><mi>T</mi></math>. Four methods are available for specifying oil component K-values:</p>
+
+<ul>
+<li>Keyword <a href="../ecl_rm/KVCR.html#KVCR">KVCR</a> uses the K-value correlation given in <cite><span> <a href="biblio_Bibliography.html#biblio_70682">Coats (1980)</a> </span></cite> and <cite><span> <a href="biblio_Bibliography.html#biblio_75620">Crookston et al (1979)</a> </span></cite>, where the K-value for
+each oil component is given by                <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="props.equ.00ce"/>
+ <math><mrow><mrow><mi>K</mi><mo>(</mo><mi>P</mi><mo>,</mo><mi>T</mi><mo>)</mo></mrow><mo>=</mo><mrow><mo>(</mo><mi>A</mi>
+<mo>+</mo><mi>B</mi><mo>/</mo><mi>P</mi><mo>+</mo>
+<mi>C</mi><mo>⋅</mo><mi>P</mi><mo>)</mo></mrow><mo>⋅</mo><msup><mrow><mi>e</mi></mrow><mrow><mrow><mo>-</mo><mi>D</mi></mrow><mo>/</mo><mo>(</mo><mi>T</mi><mrow><mo>-</mo><mi>E</mi></mrow><mo>)</mo>
+</mrow></msup></mrow></math> 
+</td><td align="right">[Eq. 330.1]
+              </td></tr></tbody></table><p>Some care needs to be taken when using this formula
+to ensure that <em>K</em> is always positive and increases as <em>T</em> increases. A simplified version that avoids these problems can be
+used:</p>
+                <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="props.XID-000000d4"/>
+ <math><mrow><mrow><mi>K</mi><mo>(</mo><mi>P</mi><mo>,</mo><mi>T</mi><mo>)</mo></mrow><mo>=</mo><mrow><mo>(</mo><mi>B</mi>
+<mo>/</mo><mi>P</mi><mo>)</mo></mrow><mo>⋅</mo>
+<msup><mrow><mi>e</mi></mrow><mrow><mrow><mo>-</mo>
+<mi>D</mi></mrow><mo>/</mo><mi>T</mi></mrow></msup>
+</mrow></math> 
+</td><td align="right">[Eq. 330.2]
+              </td></tr></tbody></table><p>Values for  <math><mi>B</mi></math>  and  <math><mi>D</mi></math>  can be calculated by setting</p>
+<p>        <math><mi>K</mi><mo>=</mo><msub><mi>P</mi><mrow><mi>s</mi>
+<mi>a</mi><mi>t</mi></mrow></msub><mo>/</mo><mi>P</mi></math> </p>
+<p>and finding the best straight line</p>
+<p> <math><mrow><mrow><mi>ln</mi><mo>⁡</mo></mrow><mrow><mo>(</mo><mi>P</mi>
+<mi>s</mi><mi>a</mi><mi>t</mi><mo>)</mo></mrow><mo>=</mo><mrow><mi>ln</mi><mo>⁡</mo></mrow><mrow><mo>(</mo><mi>B</mi><mo>)</mo></mrow><mrow><mo>−</mo>
+<mi>D</mi></mrow><mrow><mo>/</mo><mrow><mi>T</mi>
+</mrow></mrow></mrow></math> </p>
+<p>through a set of points
+ <math><mo>(</mo><mn>1</mn>
+<mo>/</mo><mi>T</mi><mo>,</mo><msub><mi>P</mi><mrow>
+<mi>s</mi><mi>a</mi><mi>t</mi></mrow></msub><mo>)</mo></math>. Suggested values for some components are given
+in the following tables.</p>
+</li>
+
+</ul>
+
+
+<div class="tablenoborder"><a name="props.XID-000000e3"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="props.XID-000000e3" frame="border" border="1" rules="all"><caption>
+           Table 330.1  K-value coefficients (Field units) </caption>    
+<thead align="left">
+<tr>
+<th valign="top" id="d1194e428">&nbsp;</th>
+ 
+<th valign="top" id="d1194e430">&nbsp;</th>
+ 
+<th valign="top" id="d1194e432">B (Psi)</th>
+
+<th valign="top" id="d1194e435">D (°R)</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1194e428 ">C1                            </td>
+
+<td valign="top" headers="d1194e430 "> Methane                              </td>
+
+<td valign="top" headers="d1194e432 ">168900               </td>
+
+<td valign="top" headers="d1194e435 ">1904                              </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1194e428 "> C2                          </td>
+
+<td valign="top" headers="d1194e430 ">Ethane              </td>
+
+<td valign="top" headers="d1194e432 "> 170400              </td>
+
+<td valign="top" headers="d1194e435 ">3062                                 </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1194e428 ">C3                                </td>
+
+<td valign="top" headers="d1194e430 ">Propane                             </td>
+
+<td valign="top" headers="d1194e432 ">528400              </td>
+
+<td valign="top" headers="d1194e435 "> 4571                                </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1194e428 ">C6                </td>
+
+<td valign="top" headers="d1194e430 "> Hexane                             </td>
+
+<td valign="top" headers="d1194e432 "> 686800                             </td>
+
+<td valign="top" headers="d1194e435 "> 6598                 </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1194e428 "> C10                               </td>
+
+<td valign="top" headers="d1194e430 ">Decane                               </td>
+
+<td valign="top" headers="d1194e432 ">1214000                              </td>
+
+<td valign="top" headers="d1194e435 ">  9966                              </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+
+<div class="tablenoborder"><a name="props.XID-00000128"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="props.XID-00000128" frame="border" border="1" rules="all"><caption>
+           Table 330.2  K-value coefficients (Metric units)</caption>    
+<thead align="left">
+<tr>
+<th valign="top" id="d1194e538">&nbsp;</th>
+ 
+<th valign="top" id="d1194e540">&nbsp;</th>
+ 
+<th valign="top" id="d1194e542">  B (Bars)                            </th>
+
+<th valign="top" id="d1194e545"> D (K)                          </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1194e538 ">C1                            </td>
+
+<td valign="top" headers="d1194e540 "> Methane                              </td>
+
+<td valign="top" headers="d1194e542 "> 11650                               </td>
+
+<td valign="top" headers="d1194e545 ">1058                 </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1194e538 "> C2                          </td>
+
+<td valign="top" headers="d1194e540 ">Ethane              </td>
+
+<td valign="top" headers="d1194e542 ">11750                              </td>
+
+<td valign="top" headers="d1194e545 "> 1701                             </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1194e538 ">C3                                </td>
+
+<td valign="top" headers="d1194e540 ">Propane                             </td>
+
+<td valign="top" headers="d1194e542 "> 36440                               </td>
+
+<td valign="top" headers="d1194e545 "> 2539         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1194e538 ">C6                </td>
+
+<td valign="top" headers="d1194e540 "> Hexane                             </td>
+
+<td valign="top" headers="d1194e542 ">  47360                             </td>
+
+<td valign="top" headers="d1194e545 ">3666           </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1194e538 "> C10                               </td>
+
+<td valign="top" headers="d1194e540 ">Decane                               </td>
+
+<td valign="top" headers="d1194e542 ">  83740                            </td>
+
+<td valign="top" headers="d1194e545 ">5537                             </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<ul>
+<li>Keyword <a href="../ecl_rm/KVWI.html#KVWI">KVWI</a> uses the Wilson correlation (<cite><span> <a href="biblio_Bibliography.html#biblio_88894">Wilson, 1968</a> </span></cite>),
+where the K-value for each oil component is given by  <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="props.XID-0000016f"/>
+ <math><mrow><mrow><mi>K</mi><mo>(</mo><mi>P</mi><mo>,</mo><mi>T</mi><mo>)</mo></mrow><mo>=</mo><msup><mrow><mi>e</mi></mrow>
+<mrow><mn>5.372697</mn><mo>⋅</mo><mo>(</mo><mn>1</mn>
+<mo>+</mo><msub><mrow><mi>A</mi></mrow><mrow><mi>c</mi></mrow></msub><mo>)</mo><mo>⋅</mo><mo>(</mo>
+<mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>T</mi>
+</mrow><mrow><mi>c</mi><mi>r</mi><mi>i</mi><mi>t</mi>
+</mrow></msub><mo>/</mo><mi>T</mi></mrow><mo>)</mo>
+</mrow></msup><mo>⋅</mo><msub><mrow><mi>P</mi></mrow>
+<mrow><mi>c</mi><mi>r</mi><mi>i</mi><mi>t</mi>
+</mrow></msub><mo>/</mo><mi>P</mi></mrow></math> 
+</td><td align="right">[Eq. 330.3]
+              </td></tr></tbody></table><p>This is the same as equation <a href="props_K-values.html#props.XID-000000d4">330.2</a>  with coefficients</p>
+<p> <math><mrow><mi>B</mi>
+<mo>=</mo><msup><mrow><mi>e</mi></mrow><mrow><mn>5.372697</mn><mo>⋅</mo><mo>(</mo><mn>1</mn><mo>+</mo>
+<msub><mrow><mi>A</mi></mrow><mrow><mi>c</mi></mrow>
+</msub><mo>)</mo></mrow></msup><mo>⋅</mo><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>r</mi><mi>i</mi>
+<mi>t</mi></mrow></msub></mrow></math> </p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="props.equ.0176"/>
+ <math><mrow><mi>D</mi>
+<mo>=</mo><mn>5.372697</mn><mo>⋅</mo><mo>(</mo><mn>1</mn><mo>+</mo><msub><mrow><mi>A</mi></mrow><mrow>
+<mi>c</mi></mrow></msub><mo>)</mo><mo>⋅</mo><msub>
+<mrow><mi>T</mi></mrow><mrow><mi>c</mi><mi>r</mi>
+<mi>i</mi><mi>t</mi></mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 330.4]
+              </td></tr></tbody></table><p>determined from the acentric factor  <math><msub><mi>A</mi>
+<mi>c</mi></msub></math>, critical temperature  <math><msub><mi>T</mi>
+<mrow><mi>c</mi><mi>r</mi><mi>i</mi><mi>t</mi>
+</mrow></msub></math>  and critical pressure  <math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>r</mi><mi>i</mi><mi>t</mi>
+</mrow></msub></math>, which are defined by keywords <a href="../ecl_rm/ACF.html#ACF">ACF</a>, <a href="../ecl_rm/TCRIT.html#TCRIT">TCRIT</a> and <a href="../ecl_rm/PCRIT.html#PCRIT">PCRIT</a> respectively.</p>
+</li>
+
+<li>Keywords <a href="../ecl_rm/KVTABTn.html#KVTABTn">KVTABTn</a> and  <a href="../ecl_rm/KVTEMP.html#KVTEMP">KVTEMP</a> can be used to enter the K-values as tables.</li>
+
+<li>Keywords <a href="../ecl_rm/KVGEN.html#KVGEN">KVGEN</a> and <span class="keyword">KVTEMP</span> can be used to generate the
+K-values tables, using an equation of state, if one of the keywords <a href="../ecl_rm/CGDTYPE.html#CGDTYPE">CGDTYPE</a>, <a href="../ecl_rm/CODTYPE.html#CODTYPE">CODTYPE</a>, <a href="../ecl_rm/CGVTYPE.html#CGVTYPE">CGVTYPE</a> or <a href="../ecl_rm/COVTYPE.html#COVTYPE">COVTYPE</a> are used (activating
+input using an equation of state (EoS)).</li>
+
+</ul>
+
+<div class="section"><h4 class="sectiontitle">Surface K-values</h4><p>The default K-values for
+surface calculations are the reservoir K-values. Different values
+can be used if required:</p>
+<ul>
+<li>If keyword <a href="../ecl_rm/KVCR.html#KVCR">KVCR</a> is used to set the reservoir K-values, keyword <a href="../ecl_rm/KVCRS.html#KVCRS">KVCRS</a> can be used to set the
+surface K-values</li>
+
+<li>If keyword <a href="../ecl_rm/KVWI.html#KVWI">KVWI</a> is used to set the reservoir K-values, keywords <a href="../ecl_rm/ACFS.html#ACFS">ACFS</a>, <a href="../ecl_rm/TCRITS.html#TCRITS">TCRITS</a> and <a href="../ecl_rm/PCRITS.html#PCRITS">PCRITS</a> can be used to set the
+coefficients of the Wilson correlation, equation <a href="props_K-values.html#props.XID-0000016f">330.3</a>  for surface conditions.</li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Converting friction wells to multisegment wells"/>
+<meta name="DC.subject" content="Multisegment wells, Converting friction wells, Wellbore friction"/>
+<meta name="keywords" content="Multisegment wells, Converting friction wells, Wellbore friction"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="fricwells_converting_friction_wells_to_multi-segment_wells"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Converting friction wells to multisegment wells</title>
+</head>
+<body>
+
+
+<div class="nested0" id="fricwells_converting_friction_wells_to_multi-segment_wells"><a name="fricwells_converting_friction_wells_to_multi-segment_wells"><!-- --></a>
+<h1 class="topictitle1">Converting friction wells to multisegment wells</h1>
+
+
+ <div>
+<p>ECLIPSE 100 </p>
+
+<p>The keywords <a href="../ecl_rm/WFRICSEG.html#WFRICSEG">WFRICSEG</a> and <a href="../ecl_rm/WFRICSGL.html#WFRICSGL">WFRICSGL</a> provide an additional
+way of defining a multisegment well, as an alternative to the <a href="../ecl_rm/WELSEGS.html#WELSEGS">WELSEGS</a> and <a href="../ecl_rm/COMPSEGS.html#COMPSEGS">COMPSEGS</a> (or <a href="../ecl_rm/COMPSEGL.html#COMPSEGL"> COMPSEGL</a>) keywords. Their
+primary purpose is to offer you a very simple way of converting existing
+data sets that use the wellbore friction model (see <a href="wbfrictintro_Wellbore_Friction_Option.html#wbfrictintro_wellbore_friction_option"> "Wellbore friction option"</a>) into data sets that use multisegment
+wells. The data for each keyword is identical to that of the <a href="../ecl_rm/WFRICTN.html#WFRICTN">WFRICTN</a> and <a href="../ecl_rm/WFRICTNL.html#WFRICTNL">WFRICTNL</a> keywords, but instead
+of creating a friction well each keyword creates a multisegment well
+with the same branch structure and connection locations. ECLIPSE automatically
+divides the well into segments such that there is one segment per
+grid block connection, plus an additional segment at the well’s
+bottom hole reference point. The segments are distributed so that
+the nodal point of each segment is located at the center of the corresponding
+grid block connection. The segment lengths are set equal to the tubing
+length between adjacent connections. The depths of the segment nodes
+are set equal to the center depths of the connecting grid blocks,
+as there is no depth data in <span class="keyword">WFRICTN</span>(<span class="keyword">WFRICTNL</span>).</p>
+
+<p>The <span class="keyword">WFRICSEG</span> keyword does not offer the flexibility
+of <span class="keyword">WELSEGS</span> and <span class="keyword">COMPSEGS</span> in defining
+multisegment wells, so they are not generally recommended for uses
+other than converting friction well data. The disadvantages of using
+the <span class="keyword">WFRICSEG</span>   keyword are:</p>
+
+<ul>
+<li> There is an enforced one-to-one correspondence between segments
+and grid block connections. This may result in an excessively large
+number of segments.    </li>
+
+<li> The segment nodes have their depths set equal to the center depths
+of the connecting grid blocks. Thus, unless the grid is aligned with
+the well trajectory, a horizontal well may have spurious undulations
+or deviations from its true trajectory.   </li>
+
+<li> Branch junctions defined in  <span class="keyword">WFRICTN</span>  have
+to be located at a grid block connection, so extra connections have
+to be defined at branch junctions; if there is no inflow from the
+formation at these locations the connections should be declared  
+         shut in <a href="../ecl_rm/COMPDAT.html#COMPDAT"> COMPDAT</a>.</li>
+
+<li>When <span class="keyword">WFRICSEG</span> is used to define a multilateral
+well you cannot dictate the branch numbers; ECLIPSE creates the branches
+and numbers them itself. However, ECLIPSE is unable to recognize whether
+the original main stem continues past a branch junction. Instead, <strong>two</strong> new branches are created at each branch junction, one of
+these being the continuation of the main stem. It is important to
+allow for this when setting the maximum number of branches in <a href="../ecl_rm/WSEGDIMS.html#WSEGDIMS">WSEGDIMS</a>. For example, a
+well consisting of a main stem and a single lateral branch will be
+converted to have three branches: the upper part of the main stem,
+the lateral branch and the section of the main stem below the branch
+junction.   </li>
+
+</ul>
+
+<div class="section" id="fricwells_converting_a_dataset_from_using_friction_wells_to_using_multi-segment_wells"><a name="fricwells_converting_a_dataset_from_using_friction_wells_to_using_multi-segment_wells"><!-- --></a><h4 class="sectiontitle">Converting a data set from using friction wells to using multisegment
+wells</h4><ol>
+<li>  Remove the <a href="../ecl_rm/FRICTION.html#FRICTION">FRICTION</a> keyword from the <span class="keyword">RUNSPEC</span> section, replacing
+it with the <a href="../ecl_rm/WSEGDIMS.html#WSEGDIMS">WSEGDIMS</a> keyword.                <ol type="a">
+<li>The maximum number of multisegment wells in the run is the same
+as the maximum number of friction wells.          </li>
+
+<li>The maximum number of segments per well is 1 + the maximum number
+of grid block connections per well.   </li>
+
+<li> The maximum number of branches per well should allow for the
+‘extra branches’ created by ECLIPSE in the main stem below
+lateral branch junctions</li>
+
+</ol>
+</li>
+
+<li>  Change all <a href="../ecl_rm/WFRICTN.html#WFRICTN">WFRICTN</a> keywords to <a href="../ecl_rm/WFRICSEG.html#WFRICSEG">WFRICSEG</a>. In LGR runs, any <a href="../ecl_rm/WFRICTNL.html#WFRICTNL">  WFRICTNL</a> keywords should be changed to <a href="../ecl_rm/WFRICSGL.html#WFRICSGL">WFRICSGL</a>. The keyword data
+should remain unchanged.  </li>
+
+<li> Optionally the <a href="../ecl_rm/SUMMARY.html#SUMMARY">SUMMARY</a> section can include the mnemonics associated with multisegment
+wells (<span class="keyword">SOFR</span> for example)</li>
+
+</ol>
+<p>When ECLIPSE converts a friction well into a multisegment
+well, it prints out its equivalent <span class="keyword">WELSEGS</span> and <span class="keyword">COMPSEGS</span> (or <span class="keyword">COMPSEGL</span>) keyword data
+in the <samp class="codeph">PRINT</samp> file, at the place where <span class="keyword">WFRICTN</span> (or <span class="keyword">WFRICTNL</span>) is read. The generated keyword
+data can be copied and used in subsequent runs in place of the original
+friction well keyword. It is then possible to edit the data, for example
+to renumber the whole of the main stem to be branch 1, to remove spurious
+undulations by adjusting the segment depths to agree with the well
+trajectory, and to reduce the number of segments if desired.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

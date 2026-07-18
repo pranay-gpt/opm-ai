@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WREGROUP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WREGROUP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WREGROUP</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WREGROUP"><a name="WREGROUP"><!-- --></a>
+<h1 class="keyword">WREGROUP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wregroup.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wregroup.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d3030e45">                         x                   
+  </th>
+
+<th valign="top" id="d3030e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d3030e54">                         x                   
+  </th>
+
+<th valign="top" id="d3030e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d3030e45 d3030e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3030e48 d3030e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3030e45 d3030e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3030e48 d3030e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3030e45 d3030e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3030e48 d3030e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3030e45 d3030e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3030e48 d3030e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3030e45 d3030e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3030e48 d3030e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3030e45 d3030e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3030e48 d3030e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3030e45 d3030e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3030e48 d3030e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3030e45 d3030e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d3030e48 d3030e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword can be used to transfer wells automatically from one
+group to another, depending on the value of a chosen quantity such
+as the well’s water cut or oil production rate. Some examples of where
+this may be useful are given below:</p>
+
+<ul>
+<li>There are two separate production streams, one for wells cutting
+significant amounts of water and one for wells with very low water
+cut. Wells are transferred from one stream to the other depending
+on their water cut.</li>
+
+<li>Wells can be classified as either high pressure wells or low pressure
+wells, depending on the calculated values of their tubing head pressure
+when they are flowing at a controlled rate.</li>
+
+<li>In runs using the Network option, wells can be moved from a high
+pressure network node to a low pressure network node to boost their
+production, once their original flow rate falls below a specified
+value.<p>Two limits are provided, an upper one and a lower one, so
+that the transfer between groups can be either one way or reversible.
+The limit values need not be the same for each direction, so that
+a reversible transfer may have a degree of hysteresis. The transfers
+take place at the start of the next timestep after a limit has been
+passed. The transfers take place instantaneously with no loss of production,
+and there is no restriction on the rate at which transfers can be
+performed.</p>
+</li>
+
+</ul>
+
+<p>ECLIPSE 100</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Further wells are not transferred into
+a group if they would exceed the maximum number of open wells in the
+group or a superior group, set in item 9 of keyword <a href="GECON.html#GECON"> GECON</a>.                
+                 </span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If setting the well dimensioning data manually in the <span class="keyword">RUNSPEC</span> section keyword <a href="WELLDIMS.html#WELLDIMS"> WELLDIMS</a>, the value of <samp class="codeph">NWGMAX</samp> (the
+maximum number of wells in any one group) must allow for all possible
+transfers.  </span></div>
+
+<p>The <span class="keyword">WREGROUP</span> keyword is followed by any number
+of records, each containing the following items of data, and each
+terminated with a slash (/).</p>
+
+<p>The records may be terminated at any item after item 1. The remaining
+items will assume their default values. Default values can be specified
+before the slash by a null repeat count of the form n*, where n is
+the number of consecutive items to be defaulted.</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li>Well name, well name template, well list or well list template
+               <p>A template enclosed in quotes can be used to refer
+to multiple wells or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+             </li>
+
+<li>Name of the quantity on which the switching will be decided   
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">WCT</samp> </td>
+
+<td valign="top">Water cut</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">GOR</samp> </td>
+
+<td valign="top"> Gas-oil ratio</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WGR</samp> </td>
+
+<td valign="top"> Water-gas ratio</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">ORAT</samp> </td>
+
+<td valign="top">Oil rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">GRAT</samp> </td>
+
+<td valign="top">Gas rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">THP</samp> </td>
+
+<td valign="top">Tubing head pressure</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">' '</samp> </td>
+
+<td valign="top">No regrouping for this well</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">' '</samp> </p>
+  </li>
+
+<li>Name of the group into which the well should be moved when its
+specified quantity <strong>exceeds</strong> the value in item 4  <p>DEFAULT:
+The group in which the well was placed using the <a href="WELSPECS.html#WELSPECS"> WELSPECS</a> keyword</p>
+  </li>
+
+<li>Value of the quantity specified in item 2 <strong>above</strong> which the
+well is moved into the group specified in item 3<p>The value must
+not be less than the value of item 6</p>
+                <p>DEFAULT:
+Infinity (<samp class="codeph">1.0E20</samp>), which prevents switching on this
+condition</p>
+             </li>
+
+<li>Name of the group into which the well should be moved when its
+specified quantity <strong>falls below</strong> the value in item 6 <p>DEFAULT:
+The group in which the well was placed using the <span class="keyword">WELSPECS</span> keyword</p>
+             </li>
+
+<li>Value of the quantity specified in item 2 <strong>below</strong> which the
+well is moved into the group specified in item 5  <p>The value must
+not be greater than the value of item 4</p>
+                <p>DEFAULT:
+0.0, which prevents switching on this condition</p>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="section" id="wregroup_example"><a name="wregroup_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>In this example
+all wells whose names start with <samp class="codeph">PROD</samp> are moved into
+group WET when their water cut exceeds 0.2, and are moved back to
+their original group if their water cut subsequently falls below 0.1.
+That is except for well PROD3, which stays in the group specified
+in <a href="WELSPECS.html#WELSPECS"> WELSPECS</a> regardless
+of its water cut.</p>
+<pre><code>WREGROUP
+ 'PROD*'  WCT  WET  0.2 1* 0.1 /
+  PROD3  /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

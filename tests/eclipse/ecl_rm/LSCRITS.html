@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="LSCRITS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="LSCRITS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>LSCRITS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="LSCRITS"><a name="LSCRITS"><!-- --></a>
+<h1 class="keyword">LSCRITS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="lscrits.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="lscrits.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1284e45">  </th>
+
+<th valign="top" id="d1284e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1284e54"> x </th>
+
+<th valign="top" id="d1284e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1284e45 d1284e54 ">  </td>
+
+<td valign="top" headers="d1284e48 d1284e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1284e45 d1284e54 ">  </td>
+
+<td valign="top" headers="d1284e48 d1284e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1284e45 d1284e54 ">  </td>
+
+<td valign="top" headers="d1284e48 d1284e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1284e45 d1284e54 ">  </td>
+
+<td valign="top" headers="d1284e48 d1284e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1284e45 d1284e54 ">  </td>
+
+<td valign="top" headers="d1284e48 d1284e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1284e45 d1284e54 ">  </td>
+
+<td valign="top" headers="d1284e48 d1284e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1284e45 d1284e54 ">  </td>
+
+<td valign="top" headers="d1284e48 d1284e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1284e45 d1284e54 "> x </td>
+
+<td valign="top" headers="d1284e48 d1284e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This is an optional keyword which modifies the convergence criteria
+used to control the linear iterations on individual sub-grids within
+the WARP linear solver (activated with keyword <a href="WARP.html#WARP"> WARP</a>). The area covered by a sub-grid can
+best be seen by visualizing the output from the <samp class="codeph">SUBG</samp> mnemonic in the <a href="RPTRST.html#RPTRST"> RPTRST</a> keyword.</p>
+
+<p>The keyword should be followed one or more records. Each record
+is terminated by a slash (/). The set of records must be terminated
+by an empty record with a single slash.</p>
+
+<ol>
+<li> <samp class="codeph">'NAME'</samp> If the name of a local grid is entered,
+the convergence criteria in the following items are applied to all
+sub-grids within this local-grid. <p>If the string <samp class="codeph">'BASE'</samp> is entered, the convergence criteria in the following items are
+applied to all sub-grids within the base grid.</p>
+ <p>If the string
+does not match an LGR name (or <samp class="codeph">'BASE'</samp>), the first
+3 letters of the string are used to identify the group of sub-grids
+to which the convergence criteria are to be applied:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">'--C'</samp> </td>
+
+<td valign="top">The rest of the 8-character string is interpreted as a color
+index. The convergence criteria in the following items are applied
+to all sub-grids with this color. The color of sub-grids is best visualized
+using the output from the <samp class="codeph">COLR</samp> mnemonic in the <span class="keyword">RPTRST</span> keyword.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">'--S'</samp> </td>
+
+<td valign="top">The rest of the 8-character string is interpreted as a sub-grid
+index. The convergence criteria in the following items are applied
+to the sub-grid with this index. The sub-grids within WARP are best
+visualized using the output from the <samp class="codeph">SUBG</samp> mnemonic
+in the <span class="keyword">RPTRST</span> keyword</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ </li>
+
+<li> <samp class="codeph">MXOR</samp> Maximum number of the orthogonal vectors
+used in the GMRES linear solver for this local grid. <p>DEFAULT: 0</p>
+</li>
+
+<li> <samp class="codeph">NIT</samp> Maximum number of linear iterations for this
+sub-grid. <p>DEFAULT: 0</p>
+</li>
+
+<li> <samp class="codeph">TOL</samp> Required improvement in linear solver RMS
+residual for this sub-grid. <p>DEFAULT: 1.0E-3</p>
+</li>
+
+</ol>
+
+<p>See <a href="../ecl_td/sollineq_The_ECLIPSE_300_WARP_linear_solver.html#sollineq_the_eclipse_300_warp_linear_solver">"The ECLIPSE 300
+WARP linear solver"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The index to individual sub-grids will change as a function
+of the number of processors set in the <a href="PARALLEL.html#PARALLEL"> PARALLEL</a> keyword, or the coloring strategy specified
+in the <a href="WCOL.html#WCOL"> WCOL</a> keyword.</span></div>
+
+<div class="section" id="lscrits_example"><a name="lscrits_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <pre><code>LSCRITS
+ BASE 10 10  1.0E-4 / --set base grid
+ --C3  1  1  1.0E-3 / --set color 3
+ --L2  3  3  1.0E-4 / --set level 2 refinement
+ rad01 40 40 1.0E-7 / --set lgr rad01
+ rad02 40 40 1.0E-7 / --set lgr rad02
+ rad01 40 40 1.0E-7 / --set lgr rad01
+ /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

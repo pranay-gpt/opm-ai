@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ROCKSPLV"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ROCKSPLV"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ROCKSPLV</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ROCKSPLV"><a name="ROCKSPLV"><!-- --></a>
+<h1 class="keyword">ROCKSPLV</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="rocksplv.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="rocksplv.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2054e45">  </th>
+
+<th valign="top" id="d2054e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2054e54"> x </th>
+
+<th valign="top" id="d2054e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2054e45 d2054e54 ">  </td>
+
+<td valign="top" headers="d2054e48 d2054e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2054e45 d2054e54 "> x </td>
+
+<td valign="top" headers="d2054e48 d2054e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2054e45 d2054e54 ">  </td>
+
+<td valign="top" headers="d2054e48 d2054e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2054e45 d2054e54 ">  </td>
+
+<td valign="top" headers="d2054e48 d2054e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2054e45 d2054e54 ">  </td>
+
+<td valign="top" headers="d2054e48 d2054e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2054e45 d2054e54 ">  </td>
+
+<td valign="top" headers="d2054e48 d2054e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2054e45 d2054e54 ">  </td>
+
+<td valign="top" headers="d2054e48 d2054e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2054e45 d2054e54 ">  </td>
+
+<td valign="top" headers="d2054e48 d2054e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>If the dual porosity or dual permeability options and the thermal
+option are being used (by specifying the <a href="THERMAL.html#THERMAL"> THERMAL</a> or <a href="TEMP.html#TEMP"> TEMP</a> and <a href="DUALPORO.html#DUALPORO"> DUALPORO</a> or <a href="DUALPERM.html#DUALPERM"> DUALPERM</a> keywords in the <span class="keyword">RUNSPEC</span> section), this keyword
+can be used to specify a multiplier which determines the proportion
+of total rock volume used in each porosity.</p>
+
+<p>The rock volume partitioning using <span class="keyword">ROCKSPLV</span> is
+calculated as follows. The set of cells belonging to a given spatial
+location (that is the same I and J, and all Ks differing by (grid
+height)/(number of porosities)) is defined to have a bulk volume which
+is the average bulk volume of the individual cells, and a pore volume
+which is the total of each of the cell pore volumes. The total rock
+volume <em>R</em> for the set is then the set bulk volume minus the
+set total pore volume. The <span class="keyword">ROCKSPLV</span> values, <em>r</em> <sub>i</sub> for each cell <em>i </em> in the set, are then used
+so that a rock volume of <em>r</em> <sub>i</sub> <em>R </em> is assigned
+to cell <em>i</em>.</p>
+
+<p>It is not required to have the proportions sum to unity, so that
+a multiplier effect can also be achieved. But the total rock volume
+must first have been calculated to have a positive value.</p>
+
+<p>If this keyword is specified, then this proportionality factor
+must be defined for all cells in the grid. There is no default value.</p>
+
+<p>If this keyword is not specified, then the rock proportions will
+be calculated as described for the thermal option in its section on <a href="../ecl_td/features_Dual_porosity.html#features_dual_porosity">"Dual porosity"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<p>UNITS: dimensionless</p>
+
+<div class="section" id="rocksplv_example"><a name="rocksplv_example"><!-- --></a><h4 class="sectiontitle">Example</h4>            
+    <p>This defines all cell values for a grid of size 10 x 10 x 10
+(5 layers in each of 2 porosities.) More rock is put into the matrix
+than into the fracture. For user-specified tuning purposes, only 90%
+of the rock volume is used, for example, for history matching.</p>
+          <pre><code>ROCKSPLV
+500*0.8 500*0.1 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

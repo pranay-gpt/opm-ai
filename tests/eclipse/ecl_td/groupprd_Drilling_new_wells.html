@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Drilling new wells"/>
+<meta name="DC.subject" content="Group production rules, Well, Drilling, Drilling wells, Drilling new wells"/>
+<meta name="keywords" content="Group production rules, Well, Drilling, Drilling wells, Drilling new wells"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="groupprd_drilling_new_wells"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Drilling new wells</title>
+</head>
+<body>
+
+
+<div class="nested0" id="groupprd_drilling_new_wells"><a name="groupprd_drilling_new_wells"><!-- --></a>
+<h1 class="topictitle1">Drilling new wells</h1>
+
+
+ <div>
+<p>A drilling queue must be set up either with keyword <a href="../ecl_rm/QDRILL.html#QDRILL">QDRILL</a> (for a sequential drilling
+queue) or keyword <a href="../ecl_rm/WDRILPRI.html#WDRILPRI">WDRILPRI</a> (for a prioritized drilling queue), containing production
+wells declared as <samp class="codeph">SHUT</samp> in keyword <a href="../ecl_rm/WCONPROD.html#WCONPROD">WCONPROD</a>. In a sequential drilling
+queue, wells are considered for opening in the sequence in which they
+were placed in the queue. In a prioritized drilling queue, wells are
+considered for opening in decreasing order of their drilling priority.
+Well drilling priorities may be set manually in keyword <span class="keyword">WDRILPRI</span> or calculated from their current potentials according to a function
+defined with keyword <a href="../ecl_rm/DRILPRI.html#DRILPRI">DRILPRI</a>. Restrictions on the rate at which wells can be drilled may
+be imposed by declaring the time taken to drill each well (keyword <a href="../ecl_rm/WDRILTIM.html#WDRILTIM">WDRILTIM</a> item 2) and defining
+drilling rigs (keyword <a href="../ecl_rm/GRUPRIG.html#GRUPRIG">GRUPRIG</a>). When a group cannot achieve its target rate of the required
+phase, ECLIPSE scans the drilling queue for a suitable well to open.
+A well is rejected if:</p>
+
+<ul>
+<li>it is not subordinate to the group that is unable to achieve its
+production target</li>
+
+<li>it is subordinate to an intermediate level group that is already
+operating at its target or limiting rate for the required phase, and
+so cannot increase its flow further</li>
+
+<li>it is subordinate to a prioritization group (keyword <a href="../ecl_rm/GCONPRI.html#GCONPRI">GCONPRI</a>). The drilling queue
+logic is not activated under prioritization group control</li>
+
+<li>the well takes a non-zero time to drill (keyword <span class="keyword">WDRILTIM</span> item 2) and all drilling rigs available to its group (keyword <span class="keyword">GRUPRIG</span>) are already occupied for the whole of the current
+timestep</li>
+
+<li>its group, or any superior group in the hierarchy, already has
+its maximum allowed number of open wells (keyword <a href="../ecl_rm/GECON.html#GECON">GECON</a> item 9)</li>
+
+<li>the oil saturation in all its completed grid blocks is below a
+specified minimum value (keyword <a href="../ecl_rm/WELSOMIN.html#WELSOMIN">WELSOMIN</a>)</li>
+
+<li>the well has a connection within a grid block that also contains
+a connection belonging to another open well, and keyword <a href="../ecl_rm/WDRILRES.html#WDRILRES">WDRILRES</a> has been entered to
+prevent more than one well being completed in the same block.</li>
+
+</ul>
+
+<p>The first producer in the drilling queue that survives all the
+above tests is drilled.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

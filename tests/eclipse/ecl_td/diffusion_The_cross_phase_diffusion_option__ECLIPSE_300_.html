@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The cross phase diffusion option (ECLIPSE 300)"/>
+<meta name="DC.subject" content="Formulation and solution of the equations, Diffusion, Molecular cross-phase diffusion"/>
+<meta name="keywords" content="Formulation and solution of the equations, Diffusion, Molecular cross-phase diffusion"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="diffusion_the_cross_phase_diffusion_option__eclipse_300_"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The cross phase diffusion option (ECLIPSE 300)</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="diffusion_the_cross_phase_diffusion_option__eclipse_300_"><a name="diffusion_the_cross_phase_diffusion_option__eclipse_300_"><!-- --></a>
+<h1 class="topictitle1">The cross phase diffusion option (ECLIPSE 300)</h1>
+
+
+ <div>
+<p>As well as diffusion of oil and gas components within the oil and
+gas phases, diffusion of components between the phases may be important.</p>
+
+<p>In ECLIPSE 300 two models are available:</p>
+
+<ul>
+<li> The activity driven diffusion. The diffusion between cells are
+driven by the chemical potential, thus resulting in diffusion over
+phase boundaries. The diffusion coefficients for the cross phase diffusion
+are set by combining the diffusion coefficients given by <a href="../ecl_rm/DIFFAOIL.html#DIFFAOIL"> DIFFAOIL</a> and <a href="../ecl_rm/DIFFAGAS.html#DIFFAGAS">DIFFAGAS</a> so               
+        <math><mrow><msubsup><mrow>
+<mi>D</mi><mi>o</mi><mi>g</mi></mrow><mrow><mi>i</mi>
+</mrow><mrow><mi>a</mi></mrow></msubsup><mo>⁢</mo><mo>=</mo><mtext> </mtext><msqrt><mrow><msubsup><mrow><mi>D</mi><mi>o</mi></mrow><mrow><mi>i</mi></mrow><mrow>
+<mi>a</mi></mrow></msubsup><mo>⁢</mo><mtext> </mtext>
+<mo>×</mo><mtext> </mtext><msubsup><mrow><mi>D</mi>
+<mi>g</mi></mrow><mrow><mi>i</mi></mrow><mrow><mi>a</mi></mrow></msubsup></mrow></msqrt></mrow></math>. The activity driven diffusion option is not compatible with the <a href="../ecl_rm/CO2STORE.html#CO2STORE">CO2STORE</a> option           
+                </li>
+
+<li>The molecular driven diffusion. The cross phase diffusion coefficients
+are set by the keywords <a href="../ecl_rm/DIFFCOG.html#DIFFCOG">DIFFCOG</a> and <a href="../ecl_rm/DIFFCGO.html#DIFFCGO">DIFFCGO</a>. The fluids are mixed on the border of each cell and the
+resulting composition is used to set up the potential for molecular
+diffusion of each component This model can be used by EOS runs and
+the <span class="keyword">CO2STORE</span> option. For <a href="../ecl_rm/GASWAT.html#GASWAT">GASWAT</a> or the <span class="keyword">CO2STORE</span> option the water-gas and gas-water diffusion coefficients are set
+by the keywords <a href="../ecl_rm/DIFFCWG.html#DIFFCWG">DIFFCWG</a> and <a href="../ecl_rm/DIFFCGW.html#DIFFCGW">DIFFCGW</a>. The molecular diffusion option will construct a border composition
+by mixing the composition of neighbor cells. This means that the option
+generally will require more computational time than the activity driven
+diffusion option.</li>
+
+</ul>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The activity driven diffusion option can be used with the <span class="keyword">GASWAT</span> option.   </span></div>
+
+<div class="section" id="diffusion_the_molecular_cross-phase_diffusion_option"><a name="diffusion_the_molecular_cross-phase_diffusion_option"><!-- --></a><h4 class="sectiontitle">The molecular cross-phase diffusion option</h4><p>As an
+example, consider a cell I containing oil and a cell J containing
+gas. An artificial border composition is constructed by          
+      <math><mrow><mover><mrow>
+<msub><mrow><mi>m</mi></mrow><mrow><mi>i</mi></mrow>
+</msub></mrow><mrow><mo>∼</mo></mrow></mover><mo>=</mo>
+<msub><mrow><mo>(</mo><mrow><mi>b</mi><mi>o</mi>
+</mrow><mo>⋅</mo><msub><mrow><mi>x</mi></mrow><mrow>
+<mi>i</mi></mrow></msub><mo>)</mo></mrow><mrow><mi>I</mi></mrow></msub><mo>+</mo><msub><mrow><mo>(</mo>
+<mrow><mi>b</mi><mi>g</mi></mrow><mo>⋅</mo><msub>
+<mrow><mi>y</mi></mrow><mrow><mi>i</mi></mrow></msub>
+<mo>)</mo></mrow><mrow><mi>J</mi></mrow></msub></mrow>
+</math>                      </p>
+<p>where </p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><mi>b</mi>
+<mi>o</mi></mrow></math> </td>
+
+<td valign="top"> is the oil molar density</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>x</mi>
+<mi>i</mi></msub></math> </td>
+
+<td valign="top">is the oil mole fraction of component i,  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><mi>b</mi>
+<mi>g</mi></mrow></math> </td>
+
+<td valign="top">is the gas molar density </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>y</mi>
+<mi>i</mi></msub></math> </td>
+
+<td valign="top"> is the gas mole fraction of component i  </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>The border pressure and temperature is set to         
+       <math><mrow><mover><mrow>
+<mi>P</mi></mrow><mrow><mo>∼</mo></mrow></mover><mo>=</mo><mfrac><mrow><msub><mrow><mi>P</mi></mrow>
+<mrow><mi>I</mi></mrow></msub><mo>+</mo><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>J</mi></mrow></msub></mrow>
+<mrow><mn>2</mn></mrow></mfrac><mo>,</mo><mtext> </mtext>
+<mtext> </mtext><mtext> </mtext><mover><mrow><mi>T</mi>
+</mrow><mrow><mo>∼</mo></mrow></mover><mo>=</mo>
+<mfrac><mrow><msub><mrow><mi>T</mi></mrow><mrow><mi>I</mi></mrow></msub><mo>+</mo><msub><mrow><mi>T</mi>
+</mrow><mrow><mi>J</mi></mrow></msub></mrow><mrow><mn>2</mn></mrow></mfrac></mrow></math>                   
+  </p>
+<p>The corresponding oil and gas mole fractions and densities
+of the artificial border cell is denoted                  <math><mrow><msub><mrow>
+<mover><mrow><mi>x</mi></mrow><mrow><mo>∼</mo></mrow>
+</mover></mrow><mrow><mi>i</mi></mrow></msub></mrow>
+</math>, <math><mrow>
+<msub><mrow><mover><mrow><mi>y</mi></mrow><mrow><mo>∼</mo></mrow></mover></mrow><mrow><mi>i</mi></mrow>
+</msub></mrow></math>, <math><mrow><msub><mrow>
+<mover><mrow><mi>b</mi></mrow><mrow><mo>∼</mo></mrow>
+</mover></mrow><mrow><mi>o</mi></mrow></msub></mrow>
+</math> and  <math>
+<mrow><msub><mrow><mover><mrow><mi>b</mi></mrow><mrow>
+<mo>∼</mo></mrow></mover></mrow><mrow><mi>g</mi>
+</mrow></msub></mrow></math>. The cross phase diffusive flow
+between the oil in cell I and the gas in cell J for component i is
+given by  <math><mrow><mi>F</mi>
+<mi>c</mi><mi>r</mi><mi>o</mi><mi>s</mi><mi>s</mi>
+</mrow><mo>=</mo><mrow><mi>F</mi><msub><mi>X</mi>
+<mrow><mi>o</mi><mi>g</mi></mrow></msub></mrow><mo>+</mo><mrow><mi>F</mi><msub><mi>X</mi><mrow><mi>g</mi><mi>o</mi></mrow></msub></mrow><mo>+</mo><mrow>
+<mi>F</mi><msub><mi>Y</mi><mrow><mi>o</mi><mi>g</mi>
+</mrow></msub></mrow><mo>+</mo><mrow><mi>F</mi><msub>
+<mi>Y</mi><mrow><mi>g</mi><mi>o</mi></mrow></msub>
+</mrow></math>                       </p>
+<p> <math><mrow><mrow><mi>F</mi><msub><mrow><mi>X</mi></mrow><mrow><mi>o</mi>
+<mi>g</mi></mrow></msub></mrow><mo>=</mo><mrow><mi>D</mi><mi>i</mi><mi>f</mi><mi>f</mi><mo>×</mo>
+<mrow><mi>D</mi><mi>o</mi><msub><mrow><mi>g</mi>
+</mrow><mrow><mi>i</mi></mrow></msub><mo>×</mo><mrow>
+<mi>m</mi><mi>i</mi><mi>n</mi><mo>(</mo><mrow><mi>S</mi><msub><mrow><mi>o</mi></mrow><mrow><mi>I</mi>
+</mrow></msub></mrow><mo>,</mo><mrow><mi>S</mi><msub>
+<mrow><mi>g</mi></mrow><mrow><mi>J</mi></mrow></msub>
+</mrow><mo>)</mo><mo>×</mo><mrow><mi>b</mi><mi>o</mi>
+<mo>×</mo><mrow><mi>m</mi><mi>a</mi><mi>x</mi><mo>(</mo><msub><mrow><mi>x</mi></mrow><mrow><mi>i</mi>
+</mrow></msub><mrow><mo>-</mo><mrow><msub><mrow>
+<mover><mrow><mi>x</mi></mrow><mrow><mo>∼</mo></mrow>
+</mover></mrow><mrow><mi>i</mi></mrow></msub><mo>,</mo>
+<mn>0</mn></mrow></mrow><mo>)</mo></mrow></mrow>
+</mrow></mrow></mrow></mrow></math>                 <math><mrow><mrow><mi>F</mi><mi>X</mi><mi>g</mi><mi>o</mi></mrow><mo>=</mo><mrow><mi>D</mi><mi>i</mi><mi>f</mi><mi>f</mi>
+<mo>×</mo><mrow><mi>D</mi><msub><mrow><mi>g</mi><mi>o</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>×</mo>
+<mrow><mi>m</mi><mi>i</mi><mi>n</mi><mo>(</mo><mrow>
+<mi>S</mi><msub><mrow><mi>o</mi></mrow><mrow><mi>I</mi></mrow></msub></mrow><mo>,</mo><mrow><mi>S</mi>
+<msub><mrow><mi>g</mi></mrow><mrow><mi>J</mi></mrow>
+</msub></mrow><mo>)</mo><mo>×</mo><mover><mrow><mi>b</mi></mrow><mrow><mo>∼</mo></mrow></mover><mi>o</mi>
+<mo>×</mo><mrow><mi>m</mi><mi>i</mi><mi>n</mi><mo>(</mo><msub><mrow><mi>x</mi></mrow><mrow><mi>i</mi>
+</mrow></msub><mrow><mo>-</mo><mrow><msub><mrow>
+<mover><mrow><mi>x</mi></mrow><mrow><mo>∼</mo></mrow>
+</mover></mrow><mrow><mi>i</mi></mrow></msub><mo>,</mo>
+<mn>0</mn></mrow></mrow><mo>)</mo></mrow></mrow>
+</mrow></mrow></mrow></math>                <math><mrow><mrow><mi>F</mi><msub><mrow><mi>Y</mi></mrow><mrow><mi>o</mi>
+<mi>g</mi></mrow></msub></mrow><mo>=</mo><mrow><mi>D</mi><mi>i</mi><mi>f</mi><mi>f</mi><mo>×</mo>
+<mrow><mi>D</mi><mi>o</mi><msub><mrow><mi>g</mi>
+</mrow><mrow><mi>i</mi></mrow></msub><mo>×</mo><mrow>
+<mi>m</mi><mi>i</mi><mi>n</mi><mo>(</mo><mrow><mi>S</mi><msub><mrow><mi>o</mi></mrow><mrow><mi>I</mi>
+</mrow></msub></mrow><mo>,</mo><mrow><mi>S</mi><msub>
+<mrow><mi>g</mi></mrow><mrow><mi>J</mi></mrow></msub>
+</mrow><mo>)</mo><mo>×</mo><mover><mrow><mi>b</mi>
+</mrow><mrow><mo>∼</mo></mrow></mover><mi>g</mi><mo>×</mo><mrow><mi>m</mi><mi>a</mi><mi>x</mi><mo>(</mo>
+<msub><mrow><mover><mrow><mi>y</mi></mrow><mrow><mo>∼</mo></mrow></mover></mrow><mrow><mi>i</mi></mrow>
+</msub><mrow><mo>-</mo><mrow><msub><mrow><mi>y</mi>
+</mrow><mrow><mi>i</mi></mrow></msub><mo>,</mo><mn>0</mn></mrow></mrow><mo>)</mo></mrow></mrow></mrow>
+</mrow></mrow></math>                 <math><mrow><mrow><mi>F</mi><mi>Y</mi><mi>g</mi><mi>o</mi></mrow><mo>=</mo><mrow><mi>D</mi><mi>i</mi><mi>f</mi><mi>f</mi>
+<mo>×</mo><mrow><mrow><mi>D</mi><mi>g</mi><msub>
+<mrow><mi>o</mi></mrow><mrow><mi>i</mi></mrow></msub>
+</mrow><mo>×</mo><mi>m</mi><mi>i</mi><mi>n</mi><mo>(</mo><mrow><mi>S</mi><msub><mrow><mi>o</mi></mrow>
+<mrow><mi>I</mi></mrow></msub></mrow><mo>,</mo><mrow>
+<mi>S</mi><msub><mrow><mi>g</mi></mrow><mrow><mi>J</mi></mrow></msub></mrow><mo>)</mo><mo>×</mo><mrow>
+<mi>b</mi><mi>g</mi></mrow><mo>×</mo><mrow><mi>m</mi>
+<mi>i</mi><mi>n</mi><mo>(</mo><msub><mrow><mover>
+<mrow><mi>y</mi></mrow><mrow><mo>∼</mo></mrow></mover>
+</mrow><mrow><mi>i</mi></mrow></msub><mrow><mo>-</mo>
+<mrow><msub><mrow><mi>y</mi></mrow><mrow><mi>i</mi>
+</mrow></msub><mo>,</mo><mn>0</mn></mrow></mrow><mo>)</mo></mrow></mrow></mrow></mrow></math> where      
+   </p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><mi>S</mi>
+<msub><mi>o</mi><mi>I</mi></msub></mrow></math>  and
+ <math><mrow><mi>S</mi>
+<msub><mi>g</mi><mi>J</mi></msub></mrow></math> </td>
+
+<td valign="top">is the oil and gas saturation in cell I and J,  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><mi>D</mi>
+<mi>i</mi><mi>f</mi><mi>f</mi></mrow></math> </td>
+
+<td valign="top">is the diffusivity </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><mi>D</mi>
+<mi>o</mi><msub><mi>g</mi><mi>i</mi></msub></mrow>
+</math>, <math><mrow><mi>D</mi>
+<mi>g</mi><msub><mi>o</mi><mi>i</mi></msub></mrow>
+</math> </td>
+
+<td valign="top">are the cross phase oil-gas and gas-oil diffusion coefficients.
+       </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>It is possible to activate the molecular cross phase diffusion
+option without also specifying phase specific diffusion coefficients.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

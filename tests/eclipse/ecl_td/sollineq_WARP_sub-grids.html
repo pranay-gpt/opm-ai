@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WARP sub-grids"/>
+<meta name="DC.subject" content="Solution of the linear equations, Solution of the linear equations ECLIPSE 300 WARP sub-grids, ECLIPSE 300 WARP sub-grids"/>
+<meta name="keywords" content="Solution of the linear equations, Solution of the linear equations ECLIPSE 300 WARP sub-grids, ECLIPSE 300 WARP sub-grids"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sollineq_warp_sub-grids"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WARP sub-grids</title>
+</head>
+<body>
+
+<div class="nested0" id="sollineq_warp_sub-grids"><a name="sollineq_warp_sub-grids"><!-- --></a><h1 class="topictitle1">WARP sub-grids</h1>
+
+
+ <div><p>The base entities that the WARP solver manipulates are sub-grids.
+These represent a portion of the total cells that are ordered to be
+a contiguous block of matrix.</p>
+<ul><li> Every active cell in the grid is assigned to a sub-grid. In principle
+this association could be arbitrary; however, there are severe efficiency
+implications if there are very many sub-grids, or the sub-grids do
+not mainly contain cells which are only connected to other cells within
+the sub-grid.             </li>
+<li>Sub-grid-to-sub-grid connections are implemented as NNC connections;
+the total generated is reported in the <samp class="codeph">PRT</samp> file.
+Connections internal to sub-grids are, in general, stored as a mixture
+of band and NNC connections.             </li>
+<li>Sub-grids may or may not be related to LGR grids. It is possible
+to have separate sub-grids for LGRs and the base grid. However, it
+is also possible to have sub-grids:                <ul><li>representing an amalgamation of portions of the base grid and
+portions of LGR grids (in this case the LGR planes are ordered first
+within any sub-grid to enhance the efficiency of this approach);</li>
+<li>representing an amalgamation of portions of LGRs in a particular
+level of refinement.</li>
+</ul>
+</li>
+<li> The form of the sub-grids is best observed by visualizing the
+output generated from the ‘ <samp class="codeph">SUBG</samp> ’ mnemonic
+in the <a href="../ecl_rm/RPTRST.html#RPTRST">RPTRST</a> keyword.   </li>
+<li>When visualizing output from
+a run which has sub-grids, note that at sub-grid boundaries certain
+properties such as transmissibility will appear to be zero as the
+value is stored in an NNC connection rather than a neighbor connection.</li>
+<li>The preconditioner applied to each sub-grid is nested factorization
+(using ROWSUM on pressure only).             </li>
+<li>The WARP linear solver performs nested factorization on the block
+matrix, where each block is a sub-grid. As with the sub-grid pre-conditioner,
+this block nesting preserves ROWSUM (on pressure only).          
+  </li>
+<li>When using the parallel option, sub-grids do not span parallel
+partitions; each sub-grid is completely contained with a processor.
+            </li>
+</ul>
+<div class="section" id="sollineq_warp_coloring"><a name="sollineq_warp_coloring"><!-- --></a><h4 class="sectiontitle">WARP coloring</h4><p>Each sub-grid is given a color. The WARP solver introduces extra
+nesting between colors. Sub-grids of the same color can be executed
+in parallel.</p>
+<ul><li> NNCs between colors are preconditioned by extra nesting levels.
+If sub-grids only contain cells of a particular refinement level,
+then this is used by WARP to force a nesting between refinement levels.
+That is all colors on different levels of refinement are treated independently.
+Hence if two levels of refinement exist (because of the presence of
+LGRs), and each level has sub-grids containing two colors, then effectively
+four colors exits. The level of refinement is just used as an ordering
+tool for WARP to ensure that the highest level of refinement is the
+most heavily nested. </li>
+<li> Ideally there should be no NNC connections between sub-grids
+of the same color. Any NNC connections that do exist are not fully
+pre-conditioned, they are just added to the diagonal nesting matrix
+G to preserve rowsum. </li>
+<li> The coloring can be observed by visualizing the output from the <samp class="codeph">COLR</samp> mnemonic in the <a href="../ecl_rm/RPTRST.html#RPTRST">RPTRST</a> keyword. </li>
+<li> There is a limit of 4 levels of nesting between sub-grids, which
+correspond to a maximum of 16 colors. </li>
+</ul>
+</div>
+<div class="section" id="sollineq_warp_parallel_example"><a name="sollineq_warp_parallel_example"><!-- --></a><h4 class="sectiontitle">WARP parallel
+example</h4><p>The WARP solver can be used with the Parallel option.
+Each parallel partition is split into a number of sub-grids, which
+are connected through NNCs. Each sub-grid is colored (using the keyword <a href="../ecl_rm/WCOL.html#WCOL">WCOL</a>), with an aim of having
+no NNCs connecting sub-grids of the same color. The WARP linear solver
+preforms nested factorization on a sub-grid level. Sub-grids of the
+same color can be computed in parallel. The pre-conditioner performed
+on a sub-grid is nested factorization. Note that:</p>
+<ul><li>The generation of NNCs between sub-grids will cause a memory overhead.</li>
+<li>Increasing the number of colors will increase the expense of each
+linear iteration, as extra levels of nesting are required to solve
+the block sub-grid matrix.</li>
+</ul>
+<p>The creation of sub-grids and coloring is controlled by the <span class="keyword">PARALLEL</span> and <span class="keyword">WCOL</span> keywords. The <span class="keyword">PARALLEL</span> keyword controls the division of the original
+problem into partitions. Figure <a href="sollineq_WARP_sub-grids.html#sollineq.XID-00000263">682.1</a>  shows a two-color scheme resulting from a 4-processor run.
+Note that all the LGRs have inherited the color from the base grid.
+The LGR coloring scheme is controlled by the <span class="keyword">WCOL</span> keyword.</p>
+<p> Figure <a href="sollineq_WARP_sub-grids.html#sollineq.XID-00000268">682.2</a>  shows a possible set of 8 sub-grids that may arise from these colors.
+In this case portions of the LGR grids have been amalgamated with
+the base grid, and the WARP solver has no knowledge of refinement
+levels. This type of amalgamation is generated if the 3rd item of
+the <span class="keyword">WCOL</span> keyword is set to 2. By amalgamation of
+LGR and base sub-grids, the load balancing of the parallel run is
+more easily facilitated. For a parallel run all colors must have equal
+work on all processors for a perfect load balance. The more colors
+that are introduced the more difficult this becomes. This amalgamation
+strategy ensures no extra levels of nesting are introduced by adding
+refinement levels. However, for cases where the nested factorization
+is required between refinement levels this strategy may prove to be
+far from ideal.</p>
+<p>Figure <a href="sollineq_WARP_sub-grids.html#sollineq.XID-00000268">682.2</a>  shows a different sub-grid configuration for the same coloring as
+in figure <a href="sollineq_WARP_sub-grids.html#sollineq.XID-00000263">682.1</a>. Here the LGRs
+are not amalgamated with the base grid; instead, all LGRs of the same
+refinement level and the same color are amalgamated together. Hence
+because the base grid has 8 sub-grids, and there is one level of LGR
+refinement spread fairly evenly over the grid, 16 sub-grids have been
+generated. Here WARP has knowledge of the refinement and will utilize
+this by adding nesting between refinement levels. This sub-grid configuration
+was generated by setting the 3rd item of <a href="../ecl_rm/WCOL.html#WCOL">WCOL</a> to 1.</p>
+<div class="fignone" id="sollineq.XID-00000263"><a name="sollineq.XID-00000263"><!-- --></a> <br/><img src="../img/col.png" width="438px"/><br/> <br/><span class="figcap">
+           Figure 682.1  Two color (red-blue) split suitable for a 4-processors parallel
+run</span></div>
+<div class="fignone" id="sollineq.XID-00000268"><a name="sollineq.XID-00000268"><!-- --></a> <br/><img src="../img/isubg.png" width="436px"/><br/> <br/><span class="figcap">
+           Figure 682.2  The sub-grids from the previous figure with amalgamation of
+LGRs and base grid</span></div>
+</div>
+</div>
+</div>
+
+</body>
+</html>

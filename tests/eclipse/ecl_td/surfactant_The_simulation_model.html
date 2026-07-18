@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The simulation model"/>
+<meta name="DC.subject" content="Surfactant model, Surfactant model conservation equation, Surfactant model capillary number, Surfactant, Simulation, Conservation equation"/>
+<meta name="keywords" content="Surfactant model, Surfactant model conservation equation, Surfactant model capillary number, Surfactant, Simulation, Conservation equation"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="surfactant_the_simulation_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The simulation model</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="surfactant_the_simulation_model"><a name="surfactant_the_simulation_model"><!-- --></a>
+<h1 class="topictitle1">The simulation model</h1>
+
+
+ <div>
+<div class="section" id="surfactant_surfactant_conservation_equation"><a name="surfactant_surfactant_conservation_equation"><!-- --></a><h4 class="sectiontitle">Surfactant
+conservation equation</h4><p>ECLIPSE 100
+                   </p>
+<p>In ECLIPSE 100 the
+distribution of injected surfactant is modeled by solving a conservation
+equation for surfactant within the water phase. The surfactant concentrations
+are updated fully-implicitly at the end of each timestep after the
+oil, water and gas flows have been computed. The surfactant is assumed
+to exist only in the water phase, and the input to the reservoir is
+specified as a concentration at a water injector (see the <a href="../ecl_rm/WSURFACT.html#WSURFACT">WSURFACT</a> keyword).</p>
+<p>ECLIPSE 300                      </p>
+<p>In ECLIPSE 300 surfactant is modeled as a water
+component as described in <a href="watercompintro_Water_components.html#watercompintro_water_components"> "Water components"</a>. A water component must be identified as
+a surfactant (see the <a href="../ecl_rm/CWTYPE.html#CWTYPE">CWTYPE</a> keyword) and can be input into the reservoir by defining
+the injection water composition (see the <a href="../ecl_rm/WINJW.html#WINJW">WINJW</a> keyword).</p>
+<p>Surfactant
+can be adsorbed on to the rock. The ECLIPSE 100 keywords are described
+in <a href="surfactant_treatment_of_adsorption.html#surfactant_treatment_of_adsorption"> "Treatment
+of adsorption"</a>. For ECLIPSE 300 a solid component can be used
+to represent adsorbed surfactant, and adsorption and desorption can
+be modeled using a chemical reaction. See <a href="reactionsintro_Chemical_Reactions.html#reactionsintro_chemical_reactions">  "Chemical reactions"</a> and <a href="solidintro_Solid_Phase.html#solidintro_solid_phase">  "Solid phase"</a>.</p>
+</div>
+
+<div class="section" id="surfactant_surfactant_effects"><a name="surfactant_surfactant_effects"><!-- --></a><h4 class="sectiontitle">Surfactant effects</h4><p>The presence of surfactant can affect reservoir performance in
+three different ways:</p>
+<ul>
+<li>The surfactant modifies the oil-water surface tension (see the <a href="../ecl_rm/SURFST.html#SURFST">SURFST</a> keyword or <a href="../ecl_rm/SURFSTES.html#SURFSTES">SURFSTES</a> if the <a href="../ecl_rm/BRINE.html#BRINE">BRINE</a> option is activated).
+This affects the capillary pressure directly as described in <a href="surfactant_capillary_pressure.html#surfactant_capillary_pressure"> "Capillary pressure"</a> and the oil and water relative permeabilities via the capillary
+number as described in the <a href="surfactant_relative_permeability_model.html#surfactant_relative_permeability_model"> "Relative permeability
+model"</a>.</li>
+
+<li>The surfactant can modify the water properties. This is described
+in <a href="surfactant_water_pvt_properties.html#surfactant_water_pvt_properties"> "Water PVT properties"</a> for ECLIPSE 100, or in <a href="watercompintro_Water_component_properties.html#watercompintro_water_component_properties"> "Water component properties"</a> for ECLIPSE 300.</li>
+
+<li>The adsorbed surfactant can affect the wettability of the rock.
+This is described in <a href="surfactant_modeling_the_change_to_wettability.html#surfactant_modeling_the_change_to_wettability"> "Modeling
+the change to wettability"</a> for ECLIPSE 100, or in <a href="solidintro_Solid_wettability_affects.html#solidintro_solid_wettability_affects"> "Solid wettability affects"</a> for ECLIPSE 300.             </li>
+
+</ul>
+</div>
+
+<div class="section" id="surfactant_calculation_of_the_capilliary_number"><a name="surfactant_calculation_of_the_capilliary_number"><!-- --></a><h4 class="sectiontitle">Calculation of the capillary number</h4><p>The capillary number
+is a dimensionless group that measures the ratio of viscous forces
+to capillary forces. The capillary number is given by:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="Calccapno-a"/>
+ <math><mrow><msub>
+<mrow><mi>N</mi></mrow><mrow><mi>c</mi></mrow></msub>
+<mo>⁢</mo><mo>=</mo><mtext> </mtext><mfrac><mrow>
+<msub><mrow><mi>C</mi></mrow><mrow><mi>N</mi></mrow>
+</msub></mrow><mrow><msub><mrow><mi>C</mi></mrow>
+<mrow><mi>D</mi></mrow></msub></mrow></mfrac><mrow>
+<mo>‖</mo><mfrac><mrow><mi>T</mi><mi>Δ</mi><msub><mrow><mi>P</mi></mrow><mrow><mi>o</mi>
+</mrow></msub></mrow><mrow><mi>A</mi></mrow></mfrac>
+<mo>‖</mo></mrow><mfrac><mrow><mn>1</mn></mrow><mrow>
+<msub><mrow><mi>σ</mi></mrow><mrow><mi>o</mi><mi>w</mi></mrow></msub></mrow></mfrac><mo>⁢</mo><mo>=</mo><mtext> </mtext><msub><mrow><mi>C</mi></mrow>
+<mrow><mi>N</mi></mrow></msub><mfrac><mrow><mrow><mo>‖</mo><mi>K</mi><mo>⋅</mo><mo>∇</mo><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>‖</mo></mrow></mrow><mrow><msub><mrow><mi>σ</mi>
+</mrow><mrow><mi>o</mi><mi>w</mi></mrow></msub></mrow>
+</mfrac></mrow></math> 
+</td><td align="right">[Eq. 465.1]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow>
+<mi>T</mi></mrow></math> </td>
+
+<td valign="top"> is the transmissibility number</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>A</mi></mrow></math> </td>
+
+<td valign="top"> is the flow cross-sectional area</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>K</mi></mrow></math> </td>
+
+<td valign="top"> is the permeability</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>P</mi></mrow><mrow><mi>o</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the potential</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>σ</mi></mrow><mrow><mi>o</mi><mi>w</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top"> is the interfacial tension (see <a href="../ecl_rm/SURFST.html#SURFST">SURFST</a> or <a href="../ecl_rm/SURFSTES.html#SURFSTES">SURFSTES</a>)</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>C</mi></mrow><mrow><mi>D</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is the Darcy Constant</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>C</mi></mrow><mrow><mi>N</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is a conversion factor depending on the units used.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

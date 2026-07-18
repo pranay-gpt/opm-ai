@@ -1,0 +1,237 @@
+--
+-- DUAL POROSITY TEST RUN NUMBER 1
+--
+-- THIS IS AN 8 BY 8 QUARTER FIVE SPOT, DIMENSIONED 8 BY 8 BY 2
+-- TO ALLOW FOR THE MATRIX AND FRACTURE BLOCKS
+--
+-- THIS TEST RUN IS FROM KAZEMI ET AL, SPEJ 1976,317
+--
+DEBUG
+ 0 0 0 1 0 0 1 0 0 1 /
+
+RUNSPEC
+TITLE
+                          KAZEMI ET AL TEST1
+
+DIMENS
+    8    8    2  /
+
+DUALPORO
+
+OIL
+
+WATER
+
+FIELD
+
+EQLDIMS
+    1  100    2    1   20 /
+
+TABDIMS
+    2    1   13   13    1    5 /
+
+WELLDIMS
+    2   13    1    2 /
+
+NUPCOL
+    4 /
+
+START
+  26 'JAN' 1983  /
+
+NSTACK
+    4 /
+
+FMTOUT
+
+FMTIN
+
+UNIFOUT
+
+UNIFIN
+
+GRID      ==============================================================
+DPGRID
+EQUALS
+ 'DX'       75    /    PROPERTIES COMMON TO MATRIX AND FRACTURES
+ 'DY'       75    /
+ 'DZ'       30    /
+ 'TOPS'   4000    /
+ 'PERMZ'     0    /
+ 'PORO'   0.19      1  8  1  8  1  1  /  MATRIX PROPERTIES
+ 'PERMX'     1    /
+ 'PERMY'     1    /
+ 'PORO'   0.01      1  8  1  8  2  2  /  FRACTURE PROPERTIES
+ 'PERMX' 50000    /
+ 'PERMY' 50000    /
+/
+
+RPTGRID                                          FIELD   18:07 29 NOV 83
+   -- Report Levels for Grid Section Data
+   -- 
+   'DX' 
+   'DY' 
+   'DZ' 
+   'PERMX' 
+   'PERMY' 
+   'MULTX' 
+   'MULTY' 
+   'PORO' 
+   'TOPS' 
+   'PORV' 
+   'DEPTH' 
+   'TRANX' 
+   'TRANY' 
+   'ALLNNC' 
+    / 
+
+
+--SIGMA FOR 10 BY 10 BY 30 FT BLOCKS
+SIGMA
+ 0.08   /
+
+PROPS     ==============================================================
+
+--TO OBTAIN CASE WITH NO IMBIBITION, SET CAPILLARY PRESSURES TO ZERO
+SWFN
+    .2500  .0000 4.0000
+    .3000  .0200 2.9500
+    .4000  .0550 1.6500
+    .5000  .1000  .8500
+    .6000  .1450  .3000
+    .7000  .2000  .0000
+/
+    .0000  .0000 4.0000
+    .1000  .0500 1.8500
+    .2000  .1100  .9000
+    .2500  .1450  .7250
+    .3000  .1800  .5500
+    .4000  .2600  .4000
+    .5000  .3550  .2900
+    .6000  .4750  .2000
+    .7000  .5850  .1600
+    .8000  .7150  .1100
+    .9000  .8500  .0500
+   1.0000 1.0000  .0000
+/
+
+SOF2
+    .3000  .0000
+    .4000  .1100
+    .5000  .2400
+    .6000  .4200
+    .7000  .7050
+    .7500  .9200
+/
+    .0000  .0000
+    .1000  .0210
+    .2000  .0570
+    .3000  .1020
+    .4000  .1730
+    .5000  .2400
+    .6000  .3300
+    .7000  .4500
+    .7500  .5190
+    .8000  .5870
+    .9000  .7700
+   1.0000 1.0000
+/
+
+PVTW       1 TABLES   13 P NODES    5 R NODES    FIELD   18:05 29 NOV 83
+  .0000000   1.00000    3.03E-06    .50000    0.00E-01 /
+
+PVDO
+  .00000 1.00000 2.00000
+ 8000.00  .92000 2.00000
+/
+
+ROCK
+ 4000.00        .30E-05 /
+
+DENSITY
+ 52.0000  64.0000   .04400 /
+
+RPTPROPS                                         FIELD   15:56 29 NOV 83
+   -- PROPS Reporting Options
+   -- 
+   'PVTO' 'PVDO' 'PVTW' 'PVTG' 'PVDG' 'DENSITY' 'GRAVITY' 'SDENSITY' 'ROCK' 
+   'ROCKTAB' 
+/
+
+REGIONS     ============================================================
+
+EQUALS                                           FIELD   18:09 29 NOV 83
+'SATNUM  ' 1 ,  1,  8  ,  1,  8  ,  1,  1  /
+'SATNUM  ' 2 ,  1,  8  ,  1,  8  ,  2,  2  /
+/
+
+RPTREGS                                          FIELD   18:05 29 NOV 83
+   -- Controls on output from regions section
+   -- 
+   'SATNUM' 
+/
+
+SOLUTION   =============================================================
+
+EQUIL
+
+4000  3959  6000  0   0   0   0   0   0  /
+
+
+RPTSOL
+-- 
+-- Initialisation Print Output
+-- 
+'PRES' 'SOIL' 'SWAT' 'FIP=2' 'EQUIL' /
+
+SUMMARY    ==========================================================
+FPR
+FWCT
+FOPR
+
+WWCT
+/
+
+ALL
+
+-- MSUMLINS
+
+-- MSUMNEWT
+
+SEPARATE
+
+SCHEDULE   ===========================================================
+
+RPTSCHED                                         FIELD   10:17 13 JUN 85
+   'PRES' 'SWAT' 'RESTART=2' 'FIP=2' 'WELLS=2' 'CPU=2' 'NEWTON=2' /
+
+WELSPECS
+'I'  'G'   1  1  4000  'WAT'  /
+'P'  'G'   8  8  4000  'OIL'  /
+/
+
+COMPDAT                                          FIELD   18:10 29 NOV 83
+'I       '   1   1   2   2 'OPEN'   0  .000000  .5000  .00000   .0000 0.000E-01/
+'P       '   8   8   2   2 'OPEN'   0  .000000  .5000  .00000   .0000 0.000E-01/
+/
+
+WCONINJE                                         FIELD   18:10 29 NOV 83
+'I       ','WAT','OPEN','RATE' 200.000000 /
+/
+
+WCONPROD                                         FIELD   18:11 29 NOV 83
+'P       ','OPEN','LRAT'     1.0E20      1.0E20      1.0E20
+ 210.000000      1.0E20   .000000   .000000    0  .00000000/
+/
+
+TSTEP
+ 11*100
+/
+
+RPTSCHED                                         FIELD   10:17 13 JUN 85
+   'PRES' 'SWAT' 'RESTART=2' 'FIP=2' 'WELLS=2' 'CPU=2' 'NEWTON=2' /
+
+TSTEP
+  100.0 /
+
+END

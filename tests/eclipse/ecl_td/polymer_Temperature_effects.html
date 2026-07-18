@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Temperature effects"/>
+<meta name="DC.subject" content="The ECLIPSE 100 polymer flood simulation model temperature effects"/>
+<meta name="keywords" content="The ECLIPSE 100 polymer flood simulation model temperature effects"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="polymer_temperature_effects"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Temperature effects</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="polymer_temperature_effects"><a name="polymer_temperature_effects"><!-- --></a>
+<h1 class="topictitle1">Temperature effects</h1>
+
+
+ <div>
+<p>Various effects of temperature on the polymer flood model are considered.
+First, the viscosity of the polymer solution is now allowed to vary
+with temperature. This is analogous to the variation with salinity
+specified by <a href="../ecl_rm/PLYVISCS.html#PLYVISCS">PLYVISCS</a>, and two new keywords implement this: <a href="../ecl_rm/PLYVISCT.html#PLYVISCT">PLYVISCT</a>, which provides tables
+of temperature variation only as a function of polymer concentration,
+and <a href="../ecl_rm/PLYVSCST.html#PLYVSCST">PLYVSCST</a>, which includes both temperature and salinity variations.
+All these keywords (and <a href="../ecl_rm/PLYVISC.html#PLYVISC">PLYVISC</a>, which just considers the effect of polymer concentration)
+provide a multiplier for the given conditions which modifies the pure
+water viscosity specified in <a href="../ecl_rm/PVTW.html#PVTW">PVTW</a>.</p>
+
+<p>Note that a temperature effect on the pure water viscosity can
+be specified with <a href="../ecl_rm/WATVISCT.html#WATVISCT">WATVISCT</a>, which is not a multiplier but a replacement viscosity value.
+The data input in <span class="keyword">PVTW</span> is used only to provide
+a multiplier for the pressure variation (viscosibility) in this case.
+A warning is given if the new polymer viscosity keywords for temperature
+variation are used with <span class="keyword">WATVISCT</span>, but the cumulative
+effect of both specifications is allowed. You shoulde decide which
+combination of inputs best fits your model.</p>
+
+<p>Second, the polymer can degrade due to thermal effects. This is
+modeled as a half-life of the reduction of polymer concentration,
+and is input as a table of half-life against temperature by the keyword <a href="../ecl_rm/PLYDHFLF.html#PLYDHFLF">PLYDHFLF</a>. The equation <a href="polymer_The_polymer_flood_simulation_model.html#polymer.XID-00000031">434.2</a>  is modified by the addition of the term</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="polymer.equ.01b2"/>
+ <math><mrow><msub><mrow>
+<mi>Q</mi></mrow><mrow><mi>H</mi><mi>L</mi></mrow>
+</msub><mo>=</mo><mrow><mo>-</mo><mrow><mi>α</mi>
+<mo>(</mo><mrow><msub><mrow><msup><mrow><mi>V</mi>
+</mrow><mrow><mo>*</mo></mrow></msup><mi>S</mi></mrow>
+<mrow><mi>w</mi></mrow></msub><msub><mrow><mi>C</mi>
+</mrow><mrow><mi>p</mi></mrow></msub></mrow><mo>+</mo>
+<mrow><mfrac><mrow><mn>1</mn><mrow><mo>-</mo><mi>φ</mi></mrow></mrow><mrow><mi>φ</mi></mrow></mfrac>
+<mi>V</mi><msub><mrow><mi>ρ</mi></mrow><mrow><mi>r</mi></mrow></msub><msubsup><mrow><mi>C</mi></mrow>
+<mrow><mi>p</mi></mrow><mrow><mi>a</mi></mrow>
+</msubsup></mrow><mo>)</mo></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 441.1]
+              </td></tr></tbody></table>
+<p>on the right-hand side, where α is related to the half-life <em>T</em> <sub>H</sub> by α = ln(2)/ <em>T</em> <sub>H</sub>.</p>
+
+<p>Thirdly, the adsorption of the polymer can also be temperature
+dependent. In this case, multiple occurrences of the <a href="../ecl_rm/PLYADS.html#PLYADS">PLYADS</a> or <a href="../ecl_rm/PLYADSS.html#PLYADSS">PLYADSS</a> keywords specifying
+the adsorbed concentration can be used. Each occurrence refers to
+a different temperature, which is specified by the use of the <a href="../ecl_rm/PLYATEMP.html#PLYATEMP">PLYATEMP</a> keyword.</p>
+
+<p>Finally, the residual resistance factor of the adsorbed polymer
+(keywords <a href="../ecl_rm/PLYROCK.html#PLYROCK">PLYROCK</a> and <a href="../ecl_rm/PLYKRRF.html#PLYKRRF">PLYKRRF</a>) can be made temperature dependent using the <a href="../ecl_rm/PLYTRRF.html#PLYTRRF">PLYTRRF</a> keyword.</p>
+
+<p>The temperature model must be activated with the keyword <a href="../ecl_rm/TEMP.html#TEMP">TEMP</a> for these keywords to
+function.</p>
+
+<p>See also <cite><span> <a href="biblio_Bibliography.html#biblio_92281">Clifford and Sorbie (1985)</a> </span></cite>.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

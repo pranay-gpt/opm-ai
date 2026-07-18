@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Temperature-sensitive popping polymer microgels"/>
+<meta name="DC.subject" content="The ECLIPSE 100 polymer flood simulation model temperature-sensitive popping polymer microgels"/>
+<meta name="keywords" content="The ECLIPSE 100 polymer flood simulation model temperature-sensitive popping polymer microgels"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="polymer_temperature-sensitive_popping_polymer_microgels"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Temperature-sensitive popping polymer microgels</title>
+</head>
+<body>
+
+
+<div class="nested0" id="polymer_temperature-sensitive_popping_polymer_microgels"><a name="polymer_temperature-sensitive_popping_polymer_microgels"><!-- --></a>
+<h1 class="topictitle1">Temperature-sensitive popping polymer microgels</h1>
+
+
+ <div>
+<p>Various technologies (such as Bright Water<sup>TM</sup>: see <cite><span> <a href="biblio_Bibliography.html#biblio_69357">Pritchett et
+al (2003)</a> </span></cite> and <cite><span> <a href="biblio_Bibliography.html#biblio_27152">Garmeh et al (2011)</a> </span></cite>) now exist to inject polymer microgels which have low
+impact on viscosity and residual resistance factor at low injection
+temperatures, but, when heated to reservoir temperature, “pop” (expand
+their molecular size considerably) to produce much higher solution
+viscosities and adsorbed material residual resistance factors. This
+allows them to block high permeability streaks (“thief zones”) and
+ensure better sweep efficiency.</p>
+
+<p>In ECLIPSE 100, these two effects are modeled by separate keywords.
+Temperature-dependent polymer solution viscosity is represented by
+the two keywords <a href="../ecl_rm/PLYVISCT.html#PLYVISCT">PLYVISCT</a>, which provides tables of temperature variation only as a
+function of polymer concentration, and <a href="../ecl_rm/PLYVSCST.html#PLYVSCST">PLYVSCST</a>, which includes both
+temperature and salinity variations. To model the temperature sensitivity
+of these microgels, the multipliers in either keyword should increase
+markedly between injection and reservoir temperatures. The temperature
+dependence of the residual resistance factor is represented by the <a href="../ecl_rm/PLYTRRF.html#PLYTRRF">PLYTRRF</a> keyword, which multiplies
+the residual resistance factor of the adsorbed polymer (keywords <a href="../ecl_rm/PLYROCK.html#PLYROCK">PLYROCK</a> and <a href="../ecl_rm/PLYKRRF.html#PLYKRRF">PLYKRRF</a>) by a factor dependent
+on the temperature. Again, the multiplier value should increase markedly
+between injection and reservoir temperatures.</p>
+
+<p>The temperature model must be activated with the keyword <a href="../ecl_rm/TEMP.html#TEMP">TEMP</a> for these keywords to
+function. This model will also allow rock conduction of heat from
+the reservoir rock to the cooler injected fluid and it is important
+that the conductivity (<a href="../ecl_rm/THCONR.html#THCONR">THCONR</a>) is large enough to heat the polymer solution as it passes
+through the formation, for the gel-popping representation to work.</p>
+
+<p>It should be noted that, while the microgel “popping” behavior
+is expected to be irreversible, the current modeling described here
+has more limited irreversibility. The adsorbed polymer should be prevented
+from returning to solution by setting item 4 of keyword <a href="../ecl_rm/PLYROCK.html#PLYROCK">PLYROCK</a> to the value 2. The
+viscosity of the “popped” microgel cannot be prevented from returning
+to its low-temperature value if the solution is later cooled - which
+may happen by mixing with water or other polymer solution injected
+later in the process. It is hoped that the blocking effect of the
+initial viscosity increase will act to decrease such mixing and retain
+the blocking effect to later times.</p>
+
+<p>For the temperature dependence of the residual resistance factor,
+there are additional factors governing how the irreversibility of
+the popping effect is represented. In principle, the cell containing
+the adsorbed polymer can be heated and cooled multiple times. As the
+cell heats, existing adsorbed polymer can expand further according
+to the temperature, as represented by the <span class="keyword">PLYTRRF</span> data. If the cell is re-cooled by further injectant, and more polymer
+is adsorbed, then there will be at least two populations of adsorbate
+in the cell with two different RRF values. ECLIPSE 100 provides two
+approximations to this effect. In the first, the re-cooling effect
+is ignored, and the polymer is assumed to respond to the maximum temperature
+experienced by the cell while polymer is present. This allows for
+initial cooling by the injectant, while minimizing the memory usage
+required to represent adsorbate at multiple RRF values. This option
+uses only the <span class="keyword">PLYTRRF</span> keyword.</p>
+
+<p>The second approximation allows the existence of more than one
+adsorbate RRF state. As an example, in a given grid cell, polymer
+adsorbed at the start of injection, and subsequently heated by the
+reservoir, is assigned the RRF value of the reservoir temperature.
+Polymer injected later and adsorbed in the same cell at a cooler temperature
+is assigned the RRF value of the injection temperature. The total
+RRF value for that cell is a weighted average of the two different
+RRFs, with the amounts of adsorbed polymer providing the weights.
+The temperatures are specified by ranges between the values of the <span class="keyword">PLYTRRF</span> table, and in this case the RRF multipliers are
+assumed constant in a given temperature range rather than being piece-wise
+linear.</p>
+
+<p>This approximation is activated by the <a href="../ecl_rm/PLYTRRFA.html#PLYTRRFA">PLYTRRFA</a> keyword, which also
+specifies the number of temperature intervals used. In this case,
+a separate adsorbed polymer concentration is stored for each cell
+and each interval. More intervals can be specified, to represent partial
+expansion of the microgel, but this will increase the amount of memory
+used. There is a trade-off between any performance degradation due
+to this extra memory compared to the improved representation of the
+polymer history, just as there is a trade-off between using piece-wise
+constant multipliers for the intervals in this option, compared with
+the piecewise linear representation in the previous option.</p>
+
+<p>In this case, the part of the adsorbed polymer whose current RRF
+value corresponds to the nnn<sup>th</sup> temperature interval of
+the <span class="keyword">PLYTRRF</span> table can be viewed using the mnemonic
+CABINnnn, where nnn has a format between 001 and 999 but must not
+exceed the <span class="keyword">PLYTRRFA</span> argument value.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

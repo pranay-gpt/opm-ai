@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Three-phase gas relative permeability models"/>
+<meta name="DC.subject" content="Saturation functions, Saturation functions three-phase gas, Three-phase gas relative permeability models"/>
+<meta name="keywords" content="Saturation functions, Saturation functions three-phase gas, Three-phase gas relative permeability models"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="satfunct_three_phase_gas_relative_permeability_models"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Three-phase gas relative permeability models</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="satfunct_three_phase_gas_relative_permeability_models"><a name="satfunct_three_phase_gas_relative_permeability_models"><!-- --></a>
+<h1 class="topictitle1">Three-phase gas relative permeability models</h1>
+
+
+ <div>
+<p>In ECLIPSE 300, a number of formulae are available for calculating
+the two-dimensional three-phase gas relative permeability at particular
+oil and water saturations, from the input one-dimensional relative
+permeabilities:</p>
+
+<ul>
+<li>Default method</li>
+
+<li>Baker 1 (can also be used for oil and water) </li>
+
+<li>Baker 2 (can also be used for oil and water)</li>
+
+<li>IKU (used for all phases)  </li>
+
+<li><span class="keyword">ODD3P</span> (used for all phases)</li>
+
+</ul>
+
+<p>The formulae are not needed if the <a href="../ecl_rm/SGF32D.html#SGF32D">SGF32D</a> keyword has been used
+to input the three-phase oil relative permeability as a two-dimensional
+table versus oil and gas saturations (see above).</p>
+
+<div class="section" id="threephase.satfunct.default.formula"><a name="threephase.satfunct.default.formula"><!-- --></a><h4 class="sectiontitle">Default formula</h4><p>ECLIPSE 300</p>
+<p>The
+gas relative permeability is given by</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="satfunct.equ.023f"/>
+ <math><msub><mi>k</mi><mrow><mi>r</mi><mi>g</mi></mrow></msub><mo>=</mo><mfrac><mrow><mrow><msub><mi>S</mi><mi>o</mi>
+</msub><msub><mi>k</mi><mrow><mi>r</mi><mi>g</mi>
+<mi>o</mi></mrow></msub></mrow><mo>+</mo><mrow><mo>(</mo><msub><mi>S</mi><mi>w</mi></msub><mrow><mo>-</mo><msub><mi>S</mi><mrow><mi>w</mi><mi>c</mi>
+<mi>o</mi></mrow></msub></mrow><mo>)</mo><msub><mi>k</mi><mrow><mi>r</mi><mi>g</mi><mi>w</mi></mrow>
+</msub></mrow></mrow><mrow><msub><mi>S</mi><mi>o</mi>
+</msub><mo>+</mo><msub><mi>S</mi><mi>w</mi></msub>
+<mrow><mo>-</mo><msub><mi>S</mi><mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow></msub></mrow></mrow></mfrac>
+</math> 
+</td><td align="right">[Eq. 137.1]
+              </td></tr></tbody></table><p>The formula is essentially the same as the default formula
+for oil in <a href="satfunct_Three_phase_oil_relative_permeability_models.html#satfunct_three_phase_oil_relative_permeability_models"> "Three
+phase oil relative permeability models"</a>.</p>
+<p>Here</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub>
+<mi>k</mi><mrow><mi>r</mi><mi>g</mi><mi>o</mi>
+</mrow></msub></math> </td>
+
+<td valign="top">is the gas relative permeability for a system with oil, gas
+and connate water</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub>
+<mi>k</mi><mrow><mi>r</mi><mi>g</mi><mi>w</mi>
+</mrow></msub></math> </td>
+
+<td valign="top">is the gas relative permeability for a system with gas and
+water only</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub>
+<mi>k</mi><mrow><mi>r</mi><mi>g</mi><mi>o</mi>
+</mrow></msub></math> </td>
+
+<td valign="top">  is calculated by lookup of the one-dimensional gas relative
+permeability table. The value is modified if the <a href="../ecl_rm/MISCIBLE.html#MISCIBLE">MISCIBLE</a> option is used. The
+value is further modified if the default <samp class="codeph">HCSCAL</samp> option
+is used. For more information, see <a href="../ecl_rm/FORMOPTS.html#FORMOPTS">FORMOPTS</a>.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>The  <math>
+<msub><mi>k</mi><mrow><mi>r</mi><mi>g</mi><mi>w</mi>
+</mrow></msub></math>  calculation depends on whether the <a href="../ecl_rm/NOMIX.html#NOMIX">NOMIX</a> keyword has been specified.
+If it has, the value is calculated by lookup of the one-dimensional
+gas relative permeability table. If <span class="keyword">NOMIX</span> has not
+been specified, the oil and gas relative permeability tables are interpolated.
+See <a href="satfunct_Near_critical_oil_and_gas_relative_permeabilities.html#satfunct_near_critical_oil_and_gas_relative_permeabilities"> "Near critical oil and gas relative permeabilities"</a> for details.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

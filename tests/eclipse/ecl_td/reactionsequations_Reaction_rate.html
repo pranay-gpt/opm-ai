@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Reaction rate"/>
+<meta name="DC.subject" content="Fluid modeling, Chemical reactions"/>
+<meta name="keywords" content="Fluid modeling, Chemical reactions"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="reactionsequations_reaction_rate"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Reaction rate</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="reactionsequations_reaction_rate"><a name="reactionsequations_reaction_rate"><!-- --></a>
+<h1 class="topictitle1">Reaction rate</h1>
+
+
+ <div>
+<p>The reaction rate                  <math><msub>
+<mi>R</mi><mi>r</mi></msub></math>  for reaction  <math><mi>r</mi></math>  in a grid cell is given by an Arrhenius equation:          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="reactionsequations.equ.arrhenius"/>
+ <math><mrow><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>r</mi></mrow></msub><mo>=</mo><msub><mrow><msub><mrow><mi>V</mi></mrow><mrow>
+<mi>b</mi></mrow></msub><mo>⋅</mo><mi>A</mi></mrow>
+<mrow><mi>r</mi></mrow></msub><mo>⋅</mo><msup><mrow>
+<mi>e</mi></mrow><mrow><mo>(</mo><mrow><mo>-</mo>
+<msub><mrow><mi>E</mi></mrow><mrow><mi>r</mi></mrow>
+</msub><mo>/</mo><mrow><mo>(</mo><mi>R</mi><mi>T</mi>
+<mo>)</mo></mrow></mrow><mo>)</mo></mrow></msup><mo>⋅</mo><mrow><mi>Π</mi><msup><mrow>
+<msub><mrow><mi>c</mi></mrow><mrow><mi>r</mi><mi>i</mi></mrow></msub></mrow><mrow><msub><mrow><mi>n</mi></mrow><mrow><mi>r</mi><mi>i</mi></mrow></msub>
+</mrow></msup></mrow></mrow></math> 
+</td><td align="right">[Eq. 263.1]
+              </td></tr></tbody></table>
+<p>where:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>v</mi></mrow><mrow><mi>b</mi></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">is the bulk volume (rock volume plus pore volume),    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>A</mi>
+<mi>r</mi></msub></math> </td>
+
+<td valign="top">is a reaction rate constant, defined by <a href="../ecl_rm/REACRATE.html#REACRATE">REACRATE</a>,   </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>E</mi>
+<mi>r</mi></msub></math> </td>
+
+<td valign="top"> is the activation molar energy, defined by <a href="../ecl_rm/REACACT.html#REACACT">REACACT</a>,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>R</mi></math> </td>
+
+<td valign="top">is the gas constant,    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>T</mi></math> </td>
+
+<td valign="top"> is the temperature which may be limited using <a href="../ecl_rm/REACLIMS.html#REACLIMS">REACLIMS</a>,    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>n</mi>
+<mrow><mi>r</mi><mi>i</mi></mrow></msub></math> </td>
+
+<td valign="top">is the index or order of the component dependent term, defined
+by <a href="../ecl_rm/REACCORD.html#REACCORD">REACCORD</a>.      </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<div class="section" id="reactionsequations_component_concentration"><a name="reactionsequations_component_concentration"><!-- --></a><h4 class="sectiontitle">Component
+concentration</h4><p>The terms                  <math><msub><mi>c</mi>
+<mrow><mi>r</mi><mi>i</mi></mrow></msub></math>  represent
+the component concentration in the reacting phase (<a href="../ecl_rm/REACPHA.html#REACPHA">REACPHA</a>). If the reactant
+is in the oil phase:          </p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="componentconcentration.equ.oilphase"/>
+ <math><mrow><msub><mrow>
+<mi>c</mi></mrow><mrow><mi>r</mi><mi>i</mi></mrow>
+</msub><mo>=</mo><msub><mrow><mi>θ</mi><mo>⋅</mo>
+<mi>b</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi>
+</mrow></msub><mo>⋅</mo><msub><mrow><mi>x</mi></mrow>
+<mrow><mi>i</mi></mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 263.2]
+              </td></tr></tbody></table><p>If the reactant is in the gas phase:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="componentconcentration.equ.gasphase"/>
+ <math><mrow><msub><mrow>
+<mi>c</mi></mrow><mrow><mi>r</mi><mi>i</mi></mrow>
+</msub><mo>=</mo><msub><mrow><mi>θ</mi><mo>⋅</mo>
+<mi>b</mi></mrow><mrow><mi>g</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi>
+</mrow></msub><mo>⋅</mo><msub><mrow><mi>y</mi></mrow>
+<mrow><mi>i</mi></mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 263.3]
+              </td></tr></tbody></table><p>If the reactant is water in the water phase:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="componentconcentration.equ.waterphase"/>
+ <math><mrow><msub><mrow>
+<mi>c</mi></mrow><mrow><mi>r</mi><mi>i</mi></mrow>
+</msub><mo>=</mo><msub><mrow><mi>θ</mi><mo>⋅</mo>
+<mi>b</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>w</mi>
+</mrow></msub><mo>⋅</mo><msub><mrow><mi>a</mi></mrow>
+<mrow><mi>i</mi></mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 263.4]
+              </td></tr></tbody></table><p>If the reactant is in all phases:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="componentconcentration.equ.allphases"/>
+ <math><mrow><msub><mrow>
+<mi>c</mi></mrow><mrow><mi>r</mi><mi>i</mi></mrow>
+</msub><mo>=</mo><msub><mrow><mi>θ</mi><mo>⋅</mo>
+<mi>m</mi></mrow><mrow><mi>i</mi></mrow></msub></mrow>
+</math> 
+</td><td align="right">[Eq. 263.5]
+              </td></tr></tbody></table><p>Here</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mi>θ</mi></math> </td>
+
+<td valign="top"> is the porosity,     </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>b</mi>
+<mi>o</mi></msub></math>, <math><msub>
+<mi>b</mi><mi>g</mi></msub></math>  and  <math><msub><mi>b</mi>
+<mi>w</mi></msub></math>  </td>
+
+<td valign="top"> are the molar densities of oil, gas and water;   </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>S</mi>
+<mi>o</mi></msub></math>,  <math><msub>
+<mi>S</mi><mi>g</mi></msub></math>  and  <math><msub><mi>S</mi>
+<mi>w</mi></msub></math> </td>
+
+<td valign="top">are the oil, gas and water saturations;      </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>x</mi>
+<mi>i</mi></msub></math>,  <math><msub>
+<mi>y</mi><mi>i</mi></msub></math>,  <math><msub><mi>a</mi>
+<mi>i</mi></msub></math>  and  <math><msub>
+<mi>m</mi><mi>i</mi></msub></math> </td>
+
+<td valign="top">  are the mole fractions in the oil, gas and water phases and
+the molar density of component  <math><mi>i</mi></math>.      </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>For reactants in the gas phase, the reaction rate can be
+made to depend on the partial pressure. Instead of equation <a href="reactionsequations_Reaction_rate.html#componentconcentration.equ.gasphase">263.3</a>:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="componentconcentration.equ.partialpressure"/>
+ <math><mrow><msub><mrow>
+<mi>c</mi></mrow><mrow><mi>r</mi><mi>i</mi></mrow>
+</msub><mo>=</mo><mi>P</mi><mo>⋅</mo><msub><mrow>
+<mi>y</mi></mrow><mrow><mi>i</mi></mrow></msub></mrow>
+</math> 
+</td><td align="right">[Eq. 263.6]
+              </td></tr></tbody></table><p>where <math>
+<mi>P</mi></math> is the pressure and can be limited using the <a href="../ecl_rm/REACLIMS.html#REACLIMS">REACLIMS</a> keyword.</p>
+<p>If
+the reactant is in the solid phase, equation <a href="reactionsequations_Reaction_rate.html#componentconcentration.equ.allphases">263.5</a>  can be used -
+since at present a solid component cannot appear in any other phase.</p>
+</div>
+
+<div class="section" id="reactionsequations_component_concentration_order"><a name="reactionsequations_component_concentration_order"><!-- --></a><h4 class="sectiontitle">Component concentration order</h4><p>The order               
+  <math><msub><mi>n</mi>
+<mrow><mi>r</mi><mi>i</mi></mrow></msub></math>  of
+the component term in equation <a href="reactionsequations_Reaction_rate.html#reactionsequations.equ.arrhenius">263.1</a>  should be non-negative
+for all reactants. The order for a reactant can be set to zero, in
+which case the reaction rate is independent of the concentration of
+that component; however, this is not recommended, unless keyword <a href="../ecl_rm/EQLDREAC.html#EQLDREAC">EQLDREAC</a> is also used. If the
+order of a component dependent term is non-zero, and that component
+is not a reactant, then it acts as a catalyst or inhibitor.      
+   </p>
+<p>To improve stability when simulating zero-order reactions,
+the reaction rate is multiplied by the scaling factor <math><mrow><mi>m</mi>
+<mo>/</mo><mo>(</mo><mi>m</mi><mo>+</mo>
+<mi>s</mi><mo>)</mo></mrow></math> where <math><mrow><mi>m</mi>
+</mrow></math> is the molar density of the reactant and <math><mrow><mi>s</mi>
+</mrow></math> is given by item 4 of keyword <a href="../ecl_rm/REACOPS.html#REACOPS">REACOPS</a>. Please note that the
+default value of <math>
+<mrow><mi>s</mi></mrow></math> (1) is an experimental value
+and may be adjusted to ensure that the scaling factor <math><mrow><mi>m</mi>
+<mo>/</mo><mo>(</mo><mi>m</mi><mo>+</mo>
+<mi>s</mi><mo>)</mo></mrow></math> tends
+to zero with the concentration of the reactant.</p>
+</div>
+
+<div class="section" id="reactionsequations_porosity_order"><a name="reactionsequations_porosity_order"><!-- --></a><h4 class="sectiontitle">Porosity order</h4><p>In equations <a href="reactionsequations_Reaction_rate.html#componentconcentration.equ.oilphase">263.2</a>  - <a href="reactionsequations_Reaction_rate.html#componentconcentration.equ.allphases">263.5</a>, the component terms <math><msub><mi>c</mi>
+<mrow><mi>r</mi><mi>i</mi></mrow></msub></math>  represent
+the concentrations per cell volume. In ECLIPSE it is more natural
+to consider the concentrations per pore volume:          </p>
+<p> 
+                            <math><msub><mrow><mi>c</mi><mi>′</mi></mrow><mrow><mi>r</mi><mi>i</mi>
+</mrow></msub><mo>=</mo><msub><mi>c</mi><mrow><mi>r</mi><mi>i</mi></mrow></msub><mo>/</mo><mi>θ</mi>
+</math> </p>
+ <p>The reaction rate, equation <a href="reactionsequations_Reaction_rate.html#reactionsequations.equ.arrhenius">263.1</a>  can then be rewritten
+as</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="reactionsequations.XID-0000006c"/>
+ <math><mrow><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>r</mi></mrow></msub><mo>=</mo><msub><mrow><msub><mrow><mi>V</mi></mrow><mrow>
+<mi>p</mi></mrow></msub><mo>⋅</mo><msup><mrow><mi>θ</mi></mrow><mrow><msub><mrow><mi>n</mi></mrow>
+<mrow><mi>r</mi><mi>p</mi></mrow></msub></mrow></msup>
+<mo>⋅</mo><mi>A</mi></mrow><mrow><mi>r</mi></mrow>
+</msub><mo>⋅</mo><msup><mrow><mi>e</mi></mrow><mrow>
+<mo>(</mo><mrow><mo>-</mo><msub><mrow><mi>E</mi>
+</mrow><mrow><mi>r</mi></mrow></msub><mo>/</mo><mrow>
+<mo>(</mo><mi>R</mi><mi>T</mi><mo>)</mo></mrow>
+</mrow><mo>)</mo></mrow></msup><mo>⋅</mo><mrow><mi>Π</mi><msup><mrow><msub><mrow><mi>c</mi><mi>′</mi></mrow><mrow><mi>r</mi><mi>i</mi>
+</mrow></msub></mrow><mrow><msub><mrow><mi>n</mi>
+</mrow><mrow><mi>r</mi><mi>i</mi></mrow></msub></mrow>
+</msup></mrow></mrow></math> 
+</td><td align="right">[Eq. 263.7]
+              </td></tr></tbody></table><p>where:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>V</mi>
+<mi>p</mi></msub></math> </td>
+
+<td valign="top">is the pore volume,  <math><mrow><msub><mrow>
+<mi>V</mi></mrow><mrow><mi>p</mi></mrow></msub><mo>=</mo><mi>θ</mi><mo>⋅</mo><msub><mrow><mi>V</mi>
+</mrow><mrow><mi>b</mi></mrow></msub></mrow></math>    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>n</mi>
+<mrow><mi>r</mi><mi>p</mi></mrow></msub></math> </td>
+
+<td valign="top">is the index or order of the porosity term given by  <math><mrow><msub><mrow>
+<mi>n</mi></mrow><mrow><mi>r</mi><mi>p</mi></mrow>
+</msub><mo>=</mo><mrow><munder><mrow><mi>Σ</mi></mrow><mrow><mi>i</mi></mrow>
+</munder><msub><mrow><mtext> </mtext><mtext> </mtext>
+<mi>n</mi></mrow><mrow><mi>r</mi><mi>i</mi></mrow>
+</msub><mo>-</mo><mn>1</mn></mrow><mspace/> </mrow></math>     </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>Here the sum is over all reaction components <strong>except</strong> those where the rate is defined by the partial pressure <a href="reactionsequations_Reaction_rate.html#componentconcentration.equ.partialpressure">263.6</a>. If necessary,
+the porosity order can be modified using the <a href="../ecl_rm/REACPORD.html#REACPORD">REACPORD</a> keyword.</p>
+</div>
+
+<div class="section" id="reactionsequations_waterv"><a name="reactionsequations_waterv"><!-- --></a><h4 class="sectiontitle">Scaling
+chemical reaction speed based on water volumes</h4><p>The default
+formulation for chemical reactions can be expressed as <math><msub><mrow><mi>R</mi></mrow><mrow><mi>r</mi></mrow></msub><mo>=</mo>
+<msub><mrow><mi>V</mi></mrow><mrow><mi>b</mi></mrow>
+</msub><mi>f</mi><mfenced><mrow><msub>
+<mrow><mi>c</mi></mrow><mrow><mi>r</mi><mi>i</mi>
+<mo>,</mo><mi>b</mi></mrow></msub></mrow></mfenced>
+</math> </p>
+<p>where:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>R</mi></mrow><mrow><mi>r</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is the reaction rate in a grid cell</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>V</mi></mrow><mrow><mi>b</mi></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">  is the bulk volume</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub>
+<mrow><mi>c</mi></mrow><mrow><mi>r</mi><mi>i</mi>
+<mo>,</mo><mi>b</mi></mrow></msub><mo>=</mo><mfrac>
+<mrow><msub><mrow><mi>n</mi></mrow><mrow><mi>r</mi>
+<mi>i</mi></mrow></msub></mrow><mrow><msub><mrow><mi>V</mi></mrow><mrow><mi>b</mi></mrow></msub></mrow>
+</mfrac></math> </td>
+
+<td valign="top"> are concentrations expressed as number of moles in a cell
+per cell bulk volume</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>The change of moles in a cell relies on a function using
+concentrations per bulk volume scaled by the cell overall bulk volume.</p>
+<p>Using <span class="keyword">REACPORD</span>, it is possible to reformulate
+the chemical reaction using the following form: <math><msub><mrow><mi>R</mi></mrow><mrow><mi>r</mi></mrow></msub><mo>=</mo>
+<msub><mrow><mi>V</mi></mrow><mrow><mi>p</mi></mrow>
+</msub><mi>f</mi><mfenced><mrow><msub>
+<mrow><mi>c</mi></mrow><mrow><mi>r</mi><mi>i</mi>
+<mo>,</mo><mi>p</mi><mi>v</mi></mrow></msub></mrow>
+</mfenced></math> </p>
+<p>where:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>V</mi></mrow><mrow><mi>p</mi></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">  is the pore volume</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub>
+<mrow><mi>c</mi></mrow><mrow><mi>r</mi><mi>i</mi>
+<mo>,</mo><mi>p</mi><mi>v</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mrow><mi>n</mi></mrow>
+<mrow><mi>r</mi><mi>i</mi></mrow></msub></mrow><mrow>
+<msub><mrow><mi>V</mi></mrow><mrow><mi>p</mi></mrow>
+</msub></mrow></mfrac></math> </td>
+
+<td valign="top"> are concentrations expressed as number of moles in a cell
+per cell pore volume</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>Both formulations have their advantages.</p>
+<p>The chemical
+reaction feature allows us to model many phenomena involving species
+dissolved in water, from low salinity effects to Co2 dissolution and
+acidity, barite deposition, and other water-based chemical reactions.
+For these types of reactions, if <span class="keyword">WATERV</span> is selected
+for item 5 of <span class="keyword">REACOPS</span>, the formulation can be simplified
+to <math><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>r</mi></mrow></msub><mo>=</mo><msub><mrow><mi>V</mi></mrow><mrow><mi>p</mi>
+</mrow></msub><mi>f</mi><mfenced><mrow>
+<msub><mrow><mi>c</mi></mrow><mrow><mi>r</mi><mi>i</mi><mo>,</mo><mi>w</mi></mrow></msub></mrow>
+</mfenced></math> </p>
+<p>where:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>V</mi></mrow><mrow><mi>w</mi></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">  is the cell water reservoir volume</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub>
+<mrow><mi>c</mi></mrow><mrow><mi>r</mi><mi>i</mi>
+<mo>,</mo><mi>w</mi></mrow></msub><mo>=</mo><mfrac>
+<mrow><msub><mrow><mi>n</mi></mrow><mrow><mi>r</mi>
+<mi>i</mi></mrow></msub></mrow><mrow><msub><mrow><mi>V</mi></mrow><mrow><mi>w</mi></mrow></msub></mrow>
+</mfrac></math> </td>
+
+<td valign="top"> are concentrations expressed as number of moles in a cell
+per cell water volume</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>Developed in more detail, the reaction speed can be expressed
+as <math><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>r</mi></mrow></msub><mo>=</mo><msub><mrow><mi>V</mi></mrow><mrow><mi>b</mi>
+</mrow></msub><mi>θ</mi><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>w</mi></mrow></msub><msub><mrow><mi>A</mi>
+</mrow><mrow><mi>r</mi></mrow></msub><msup><mrow><mi>e</mi></mrow><mrow><mfenced><mrow><mo>-</mo><msub><mrow><mi>E</mi></mrow><mrow><mi>r</mi>
+</mrow></msub><mo>/</mo><mfenced><mrow><mi>R</mi><mi>T</mi></mrow></mfenced></mrow></mfenced>
+</mrow></msup><mrow><mo>∏</mo><mrow>
+<msup><mrow><mfenced><mrow><msubsup><mrow>
+<mi>c</mi></mrow><mrow><mi>w</mi><mi>r</mi><mi>i</mi>
+</mrow><mrow><mi>'</mi></mrow></msubsup></mrow>
+</mfenced></mrow><mrow><msub><mrow><mi>n</mi></mrow>
+<mrow><mi>r</mi><mi>i</mi></mrow></msub></mrow></msup>
+</mrow></mrow></math> where <math><msubsup><mrow><mi>c</mi></mrow><mrow><mi>w</mi><mi>r</mi><mi>i</mi>
+</mrow><mrow><mi>'</mi></mrow></msubsup><mo>=</mo>
+<msub><mrow><mi>b</mi></mrow><mrow><mi>w</mi></mrow>
+</msub><msub><mrow><mi>a</mi></mrow><mrow><mi>i</mi>
+</mrow></msub></math> </p>
+<p>The change of reaction speed is
+only applied to reactions involving water components as either reactant
+or products. </p>
+<dl>
+
+<dt class="dlterm">Handling of mixed kinetics reaction</dt>
+
+<dd>The previous formulations imply that the reaction speed depends
+on the water volume in place. Some reactions may involve a mix of
+gas and water components interacting together, leading to a mixed
+kinetic model where speed depends on concentration of both a gas component
+and a water component. If the new model is selected for that kind
+of situation, a mixed approach is used for the reaction speed. The
+mixing of bulk volume concentration and water volume concentration
+is not recommended, but the approach is allowed to offer flexibility.</dd>
+
+
+
+<dt class="dlterm">New model</dt>
+
+<dd><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="reactionsequations_equ_waterv"/>
+ <math><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>r</mi></mrow></msub><mo>=</mo><msub><mrow><mi>V</mi></mrow><mrow><mi>b</mi>
+</mrow></msub><mi>θ</mi><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>w</mi></mrow></msub><msub><mrow><mi>A</mi>
+</mrow><mrow><mi>r</mi></mrow></msub><msup><mrow><mi>e</mi></mrow><mrow><mfenced><mrow><mo>-</mo><msub><mrow><mi>E</mi></mrow><mrow><mi>r</mi>
+</mrow></msub><mo>/</mo><mfenced><mrow><mi>R</mi><mi>T</mi></mrow></mfenced></mrow></mfenced>
+</mrow></msup><mrow><munder><mo>∏</mo>
+<mrow><mi>o</mi><mo>,</mo><mi>g</mi></mrow></munder>
+<mrow><msubsup><mrow><mi>c</mi></mrow><mrow><mi>r</mi>
+<mi>i</mi></mrow><mrow><msub><mrow><mi>n</mi></mrow>
+<mrow><mi>r</mi><mi>i</mi></mrow></msub></mrow>
+</msubsup><mrow><mo>∏</mo><mrow><msup>
+<mrow><mfenced><mrow><msub><mrow><mi>b</mi>
+</mrow><mrow><mi>w</mi></mrow></msub><msub><mrow><mi>a</mi></mrow><mrow><mi>i</mi></mrow></msub></mrow>
+</mfenced></mrow><mrow><msub><mrow><mi>n</mi></mrow>
+<mrow><mi>r</mi><mi>i</mi></mrow></msub></mrow></msup>
+</mrow></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 263.8]
+              </td></tr></tbody></table></dd>
+
+</dl>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

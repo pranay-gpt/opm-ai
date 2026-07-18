@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SURFWNUM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SURFWNUM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SURFWNUM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SURFWNUM"><a name="SURFWNUM"><!-- --></a>
+<h1 class="keyword">SURFWNUM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="surfwnum.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="surfwnum.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2504e45"> x </th>
+
+<th valign="top" id="d2504e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2504e54">  </th>
+
+<th valign="top" id="d2504e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2504e45 d2504e54 ">  </td>
+
+<td valign="top" headers="d2504e48 d2504e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2504e45 d2504e54 ">  </td>
+
+<td valign="top" headers="d2504e48 d2504e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2504e45 d2504e54 ">  </td>
+
+<td valign="top" headers="d2504e48 d2504e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2504e45 d2504e54 ">  </td>
+
+<td valign="top" headers="d2504e48 d2504e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2504e45 d2504e54 "> x </td>
+
+<td valign="top" headers="d2504e48 d2504e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2504e45 d2504e54 ">  </td>
+
+<td valign="top" headers="d2504e48 d2504e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2504e45 d2504e54 ">  </td>
+
+<td valign="top" headers="d2504e48 d2504e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2504e45 d2504e54 ">  </td>
+
+<td valign="top" headers="d2504e48 d2504e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword should be followed by one integer for every grid block
+specifying the (high-salinity) water-wet saturation function region
+to which it belongs. The region number should not be less than 1 or
+greater than <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a> 
+(set in the <span class="keyword">TABDIMS</span> keyword). The data must
+be terminated by a slash (/).</p>
+
+<p>The (high salinity) water-wet saturation function region number
+specifies the saturation table (input using <a href="SWFN.html#SWFN"> SWFN</a>, <a href="SOF3.html#SOF3"> SOF3</a> and related keywords in the <span class="keyword">PROPS</span> section)
+to be used to calculate relative permeabilities and capillary pressures
+in each grid block.</p>
+
+<p>If the <a href="LOWSALT.html#LOWSALT"> LOWSALT</a> option has also been specified, the water-wet curves are computed
+as a weighted average between the low salinity water-wet saturation
+functions (<a href="LSLTWNUM.html#LSLTWNUM"> LSLTWNUM</a> region numbers) and the high salinity water-wet saturation functions
+(<span class="keyword">SURFWNUM</span> region numbers). In this case, the salinity
+weighting factors are taken from the <a href="LSALTFNC.html#LSALTFNC"> LSALTFNC</a> keyword according to the region numbers
+specified by the <a href="LWSLTNUM.html#LWSLTNUM"> LWSLTNUM</a> keyword.</p>
+
+<p>The table number specified here also defines the associated table
+number for the <a href="SURFADDW.html#SURFADDW"> SURFADDW</a> keyword. This specifies the weighting between immiscible
+water-wet and oil-wet saturation functions as a function of adsorbed
+surfactant concentration. The <span class="keyword">SURFWNUM</span> keyword can be used only if
+the <a href="SURFACTW.html#SURFACTW"> SURFACTW</a> keyword
+has been entered in the <span class="keyword">RUNSPEC</span> section.</p>
+
+<p>Grid blocks are ordered with the X-axis index cycling fastest,
+followed by the Y- and Z-axis indices. Repeat counts may be used for
+repeated values (for example 115*2). Note that spaces must not be
+inserted on either side of the asterisk.</p>
+
+<div class="section" id="SURFWNUM.notes"><a name="SURFWNUM.notes"><!-- --></a><h4 class="sectiontitle">Notes</h4>
+<ul>
+<li>The <span class="keyword">SURFWNUM</span> keyword or its alias 
+ <a href="HWSNUM.html#HWSNUM"> HWSNUM</a> 
+must be specified if the <a href="SURFACTW.html#SURFACTW"> SURFACTW</a> option has been specified.</li>
+
+<li>The <a href="LSLTWNUM.html#LSLTWNUM"> LSLTWNUM</a> keyword or
+its alias <a href="LWSNUM.html#LWSNUM"> LWSNUM</a> must be specified if  the <a href="LOWSALT.html#LOWSALT"> LOWSALT</a> and <a href="SURFACTW.html#SURFACTW"> SURFACTW</a> options have been specified.</li>
+
+<li>The <a href="LWSLTNUM.html#LWSLTNUM"> LWSLTNUM</a> keyword or its alias 
+ <a href="LSNUM.html#LSNUM"> LSNUM</a> must be specified
+if the <a href="LOWSALT.html#LOWSALT"> LOWSALT</a> option
+has been specified.</li>
+
+</ul>
+
+</div>
+
+<div class="section" id="surfwnum_example"><a name="surfwnum_example"><!-- --></a><h4 class="sectiontitle">Example</h4> 
+<p>With <samp class="codeph">NTSFUN</samp> = 4 specified in the <span class="keyword">TABDIMS</span> keyword; <samp class="codeph">NDIVIX</samp> = 8, <samp class="codeph">NDIVIY</samp> = 6 and <samp class="codeph">NDIVIZ</samp> = 5 specified in the <span class="keyword">DIMENS</span> keyword; no input <span class="keyword">BOX</span>is set.</p>
+
+<pre><code>SURFWNUM
+ 144*3 96*4 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

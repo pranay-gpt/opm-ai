@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="COORD"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="COORD"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>COORD</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="COORD"><a name="COORD"><!-- --></a>
+<h1 class="keyword">COORD</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="coord.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="coord.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d328e45"> x </th>
+
+<th valign="top" id="d328e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d328e54"> x </th>
+
+<th valign="top" id="d328e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d328e45 d328e54 ">  </td>
+
+<td valign="top" headers="d328e48 d328e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d328e45 d328e54 "> x </td>
+
+<td valign="top" headers="d328e48 d328e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d328e45 d328e54 ">  </td>
+
+<td valign="top" headers="d328e48 d328e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d328e45 d328e54 ">  </td>
+
+<td valign="top" headers="d328e48 d328e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d328e45 d328e54 ">  </td>
+
+<td valign="top" headers="d328e48 d328e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d328e45 d328e54 ">  </td>
+
+<td valign="top" headers="d328e48 d328e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d328e45 d328e54 ">  </td>
+
+<td valign="top" headers="d328e48 d328e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d328e45 d328e54 ">  </td>
+
+<td valign="top" headers="d328e48 d328e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The presence of the <span class="keyword">COORD</span> keyword implies corner
+point geometry and the automatic generation of fault transmissibilities.</p>
+
+<p>A coordinate line defines the possible positions for grid block
+corner points, for each (i,j) cell and for each reservoir in the grid.
+Given the depth of a particular grid block corner, and the associated
+coordinate line, the X and Y coordinates of the corner point can be
+calculated.</p>
+
+<p>A coordinate line is specified by two triplets of X, Y and Z coordinates,
+representing two distinct points on it. If the (X, Y) coordinates
+of the top and bottom points are identical, then the Z coordinates
+of the points are not used.</p>
+
+<p>The amount of data for this keyword can be quite voluminous, so
+it is recommended that a pre-processor (for example Petrel) be used
+to construct it.</p>
+
+<p>If multiple reservoirs are present, this keyword must be preceded
+with keyword <a href="RESVNUM.html#RESVNUM">  RESVNUM</a> specifying the reservoir to which <span class="keyword">COORD</span> data
+applies.</p>
+
+<p>This keyword may not be used with block-centered geometry keywords,
+namely <span class="keyword">DR</span>, <span class="keyword">DRV</span>, <span class="keyword">DTHETA</span>, <span class="keyword">DTHETAV</span>, <span class="keyword">DX</span>, <span class="keyword">DXV</span>, <span class="keyword">DY</span>, <span class="keyword">DYV</span>, <span class="keyword">DZ</span>, <span class="keyword">INRAD</span>, <span class="keyword">TOPS</span>.</p>
+
+<p>The keyword line is followed by <math><mrow>
+<mo>(</mo><mtext>NDIVIX</mtext><mo>+</mo><mn>1</mn>
+<mo>)</mo><mo>(</mo><mtext>NDIVIY</mtext><mo>+</mo>
+<mn>1</mn><mo>)</mo><mtext>NUMRES</mtext></mrow></math> coordinate lines, each specified by two points, each consisting
+of 3 values, namely, the X, Y and Z coordinates. <span class="keyword">NUMRES</span> represents the number of reservoirs (or sets of coordinate lines)
+in the grid, which can be set with keyword <a href="NUMRES.html#NUMRES">  NUMRES</a> in the <span class="keyword">RUNSPEC</span> section. <samp class="codeph">NDIVIX</samp> and <samp class="codeph">NDIVIY</samp> are
+specified in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS">  DIMENS</a>. </p>
+
+<p>The last coordinate line is followed by a slash (/).</p>
+
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>),
+cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Theta values are always in <strong>degrees</strong> for radial runs. </span></div>
+
+<div class="section" id="coord_example"><a name="coord_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>Here <samp class="codeph">NDIVIX=3</samp>, <samp class="codeph">NDIVIY=2</samp> and <samp class="codeph">NDIVIZ=10</samp>, as specified in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS">  DIMENS</a>, and <a href="NUMRES.html#NUMRES">  NUMRES</a> =1:</p>
+<pre><code>COORD
+ 0    0    1000 0    0    1000
+ 1000 0    1000 1000 0    1000
+ 2000 0    1000 2000 0    1000
+ 3000 0    1000 3000 0    1000
+ 0    2000 1000 0    2000 1000
+ 1000 2000 1000 1000 2000 1000
+ 2000 2000 1000 2000 2000 1000
+ 3000 2000 1000 3000 2000 1000
+ 0    4000 1000 0    4000 1000
+ 1000 4000 1000 1000 4000 1000
+ 2000 4000 1000 2000 4000 1000
+ 3000 4000 1000 3000 4000 1000
+/</code></pre></div>
+
+<div class="section" id="coord_combining_multiple_reservoirs"><a name="coord_combining_multiple_reservoirs"><!-- --></a><h4 class="sectiontitle">Combining
+multiple reservoirs</h4><p>Normally the data for the whole grid
+is specified in one <span class="keyword">COORD</span> keyword. However, <span class="keyword">COORD</span> data for individual sections of the grid can be entered
+in conjunction with the <a href="BOX.html#BOX">  BOX</a> keyword and/or the <a href="RESVNUM.html#RESVNUM">  RESVNUM</a> keyword, which is useful if you are combining separate models
+into a larger grid. </p>
+<p>If just the <span class="keyword">BOX</span> keyword
+has been entered (without <span class="keyword">RESVNUM</span>), the program
+expects the following <span class="keyword">COORD</span> keyword to contain
+the coordinate lines for the X-Y region within the box, for all <a href="NUMRES.html#NUMRES">  NUMRES</a> reservoirs. (<samp class="codeph">NDX+ 1</samp>) * (<samp class="codeph">NDY + 1</samp>) * <samp class="codeph">NUMRES</samp> coordinate lines are expected, where <samp class="codeph">NDX</samp>,  <samp class="codeph">NDY</samp> are the dimensions of the current box. </p>
+<p>An easier
+way of combining multiple reservoirs is with the keyword <span class="keyword">RESVNUM</span>, having set <span class="keyword">NUMRES</span> in the <span class="keyword">RUNSPEC</span> section equal to the number of reservoirs. The <span class="keyword">COORD</span> data can be entered separately for each reservoir
+at a time, with the reservoir in question identified by the preceding <span class="keyword">RESVNUM</span> keyword. Regions within each reservoir can be singled
+out with the <span class="keyword">BOX</span> keyword. For a box of dimensions <samp class="codeph">NDX</samp>, <samp class="codeph">NDY</samp>, the number of coordinate lines
+expected is (<samp class="codeph">NDX + 1</samp>) * (<samp class="codeph">NDY + 1</samp>). </p>
+<p>ECLIPSE 100 </p>
+<p>If the separate reservoirs do not communicate with each other (in
+other words, they are coupled only via well group controls), they
+may be solved more efficiently as separate units if they are identified
+with the <a href="ISOLNUM.html#ISOLNUM">  ISOLNUM</a> keyword. Refer to <a href="../ecl_td/independ_Independent_Reservoir_Regions.html#independ_independent_reservoir_regions">"Independent reservoir
+regions"</a> in the <cite>ECLIPSE Technical Description</cite>. </p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

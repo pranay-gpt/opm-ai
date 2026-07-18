@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WHTEMP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WHTEMP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WHTEMP</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WHTEMP"><a name="WHTEMP"><!-- --></a>
+<h1 class="keyword">WHTEMP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="whtemp.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="whtemp.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2960e45"> x </th>
+
+<th valign="top" id="d2960e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2960e54"> x </th>
+
+<th valign="top" id="d2960e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2960e45 d2960e54 ">  </td>
+
+<td valign="top" headers="d2960e48 d2960e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2960e45 d2960e54 ">  </td>
+
+<td valign="top" headers="d2960e48 d2960e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2960e45 d2960e54 ">  </td>
+
+<td valign="top" headers="d2960e48 d2960e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2960e45 d2960e54 ">  </td>
+
+<td valign="top" headers="d2960e48 d2960e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2960e45 d2960e54 ">  </td>
+
+<td valign="top" headers="d2960e48 d2960e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2960e45 d2960e54 ">  </td>
+
+<td valign="top" headers="d2960e48 d2960e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2960e45 d2960e54 ">  </td>
+
+<td valign="top" headers="d2960e48 d2960e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2960e45 d2960e54 "> x </td>
+
+<td valign="top" headers="d2960e48 d2960e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is used to specify the VFP table reference number
+for tubing head temperature calculations or to set the constant tubing
+head temperature value. This option is supported only for production
+wells and not for injection wells. Tubing head temperature values
+for a well may be examined using the summary keyword <span class="keyword">WTHT</span>.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li> Well name, well name template, well list or well list template <p>A template enclosed in quotes can be used to refer to multiple wells
+or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+ <p>The well(s) must previously have been declared as a producer.</p>
+ </li>
+
+<li> Production well VFP table number <p>This number should refer
+to a production VFP table that contains Tubing Head Temperatures in
+the body of the table (see keyword <a href="VFPPROD.html#VFPPROD"> VFPPROD</a>).</p>
+ <p>Each production VFP table must
+have a unique table number irrespective of whether the body of the
+table holds pressures or temperatures.</p>
+<p>A well must have both
+a pressure VFP table and a temperature VFP table specified for a Tubing
+Head Temperature to be calculated from a VFP table.</p>
+ </li>
+
+<li> The constant tubing head temperature <p>UNITS: °C (<samp class="codeph">METRIC</samp>), °F (<samp class="codeph">FIELD</samp>), °C (<samp class="codeph">LAB</samp>), °C (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+</ol>
+
+<p>Either item 2 or item 3 of this keyword should be specified, but
+not both.</p>
+
+<p>End each data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash
+(/).</p>
+
+<div class="section" id="whtemp_example"><a name="whtemp_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WHTEMP
+ PA1  1* 40.0 /
+ PA2  1 /
+ PA3  2 1*/
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

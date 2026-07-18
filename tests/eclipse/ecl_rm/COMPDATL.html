@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="COMPDATL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="COMPDATL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>COMPDATL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="COMPDATL"><a name="COMPDATL"><!-- --></a>
+<h1 class="keyword">COMPDATL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="compdatl.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="compdatl.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d276e45"> x </th>
+
+<th valign="top" id="d276e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d276e54"> x </th>
+
+<th valign="top" id="d276e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d276e45 d276e54 "> </td>
+
+<td valign="top" headers="d276e48 d276e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d276e45 d276e54 "> </td>
+
+<td valign="top" headers="d276e48 d276e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d276e45 d276e54 "> </td>
+
+<td valign="top" headers="d276e48 d276e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d276e45 d276e54 "> </td>
+
+<td valign="top" headers="d276e48 d276e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d276e45 d276e54 "> </td>
+
+<td valign="top" headers="d276e48 d276e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d276e45 d276e54 "> </td>
+
+<td valign="top" headers="d276e48 d276e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d276e45 d276e54 "> </td>
+
+<td valign="top" headers="d276e48 d276e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d276e45 d276e54 "> x </td>
+
+<td valign="top" headers="d276e48 d276e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p><span class="keyword">COMPDATL</span> must be used in place of <a href="COMPDAT.html#COMPDAT">  COMPDAT</a> to specify
+the connection data for wells in local refined grids, after the wells
+have been introduced with keyword <a href="WELSPECL.html#WELSPECL">  WELSPECL</a>. </p>
+
+<p>The keyword data for <span class="keyword">COMPDATL</span> is the same as
+for <span class="keyword">COMPDAT</span>, except for an extra item (item 2)
+which names the local grid containing the connections specified in
+the record. The well may be completed in more than one local grid,
+but in ECLIPSE 100 these local grids must be amalgamated using the
+keyword <a href="AMALGAM.html#AMALGAM">  AMALGAM</a>. </p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">In ECLIPSE 100, the format of this keyword
+was altered in the 2000A release, with the addition of the local grid
+name in item 2. This makes it compatible with the ECLIPSE 300 form
+of the keyword. It is now the same as the <a href="COMPDATM.html#COMPDATM">  COMPDATM</a> keyword in ECLIPSE 100, which
+is treated as an alias for <span class="keyword">COMPDATL</span>. For back compatibility,
+ECLIPSE 100 still recognizes and reads the old form of <span class="keyword">COMPDATL</span> if this is entered. The form of the keyword (as in 2000A and after)
+is distinguished by item 6 being an integer (it must not be defaulted),
+or alternatively item 2 being a character string which is not a pure
+integer, or item 7 being a character string beginning with a letter.
+If any of these conditions is true ECLIPSE 100 recognizes the keyword
+as the new form, otherwise it reads it as an old form of the keyword.
+ </span></div>
+
+<p>The keyword is followed by any number of records, described below,
+each record terminated by a slash (/). A record can be terminated
+early using a slash (/), the remaining items taking default values.
+Defaults can also be specified by a null repeat count of the form
+n*, where n is the number of consecutive items to be defaulted. </p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/). </p>
+
+<ol>
+<li> Well name, well name template, well list or well list template <p>A template enclosed in quotes can be used to refer to multiple wells
+or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST">  WLIST</a>. </p>
+ </li>
+
+<li> Local grid name <p>ECLIPSE 100 </p>
+ <p>The local grids that the well is completed in
+must belong to the same amalgamation (see keyword <span class="keyword">AMALGAM</span>). </p>
+<p class="newcontent">This item can be defaulted
+if the local grid named in item 2 is the same as the well’s local
+grid entered in <a href="WELSPECL.html#WELSPECL">  WELSPECL</a> and the well is not defined in an amalgamated local grid;
+the local grid entered in keyword <span class="keyword">WELSPECL</span> will
+then be used. </p>
+ </li>
+
+<li> I - location of the connecting grid block(s) within the local
+grid  <p>This item can be set to 0 or defaulted if the local grid
+named in item 2 is the same as the well’s local grid entered in <span class="keyword">WELSPECL</span>; the I - location of the well head (entered in
+keyword <span class="keyword">WELSPECL</span>) will then be used. </p>
+ </li>
+
+<li> J - location of the connecting grid block(s) within the local
+grid  This item can be set to 0 or defaulted if the local grid named
+in item 2 is the same as the well’s local grid entered in <span class="keyword">WELSPECL</span>; the J- location of the well head (entered in
+keyword <span class="keyword">WELSPECL</span>) will then be used. </li>
+
+<li> K - location of upper connecting block in this set of data within
+the local grid <p>This item cannot be defaulted. </p>
+ </li>
+
+<li> K - location of lower connecting block in this set of data within
+the local grid <p>This item cannot be defaulted. </p>
+ <p>The following
+data then applies to each layer (or connection) with K - locations
+between the upper and lower values given above. </p>
+ </li>
+
+<li> Open/shut flag of connection
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+ 
+<tbody>
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top"> <samp class="codeph">OPEN</samp> </td>
+
+<td valign="top"> Connection open to flow </td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top"> <samp class="codeph">SHUT</samp> </td>
+
+<td valign="top"> Connection closed off </td>
+
+</tr>
+
+<tr>
+<td valign="top"><p>ECLIPSE 100 </p>
+</td>
+
+<td valign="top"> <samp class="codeph">AUTO</samp> </td>
+
+<td valign="top"> Connection initially closed, but is opened automatically when
+another connection in the well is closed during an automatic workover.
+A connection on <samp class="codeph">AUTO</samp> is opened each time the well
+is worked over, in the order in which the connections are first defined
+in <span class="keyword">COMPDATL</span>. Connections on <samp class="codeph">AUTO</samp> is also opened when necessary to maintain group production rate
+targets if the <samp class="codeph">REPERF</samp> action is selected in keyword <a href="PRORDER.html#PRORDER">  PRORDER</a>. </td>
+
+</tr>
+
+<tr>
+<td valign="top"><p>ECLIPSE 300 Thermal</p>
+</td>
+
+<td valign="top"> <samp class="codeph">HEAT</samp> </td>
+
+<td valign="top">Connection is defined to model heat transfer to the formation
+when using the multisegment well model. Heat connections cannot be
+opened to fluid flow during the simulation. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>ECLIPSE 300 </p>
+<p>In pre-2012.1 releases, any input other than <samp class="codeph">SHUT</samp> would result in an <samp class="codeph">OPEN</samp> connection. This behavior
+has now been changed so that only <samp class="codeph">OPEN</samp>, <samp class="codeph">SHUT</samp> or <samp class="codeph">HEAT</samp> may be input. </p>
+<p>DEFAULT: <samp class="codeph">OPEN</samp> </p>
+ </li>
+
+<li> Saturation table number for connection relative permeabilities <p>If a default, zero or negative value is entered, the relative permeabilities
+are calculated using the same saturation table as the grid block containing
+the connection, selected with keyword <a href="SATNUM.html#SATNUM"> SATNUM</a>. </p>
+ <p>In runs using the hysteresis option
+(keyword <a href="SATOPTS.html#SATOPTS"> SATOPTS</a> in the <span class="keyword">RUNSPEC</span> section), the saturation table
+number entered here will apply to both imbibition and drainage processes.
+If a different table number is required for imbibition, it should
+be set using <a href="COMPIMB.html#COMPIMB">  COMPIMB</a> after the <span class="keyword">COMPDATL</span> keyword. If a default, zero
+or negative value is entered, the respective tables for the grid block
+containing the connection (defined using <span class="keyword">SATNUM</span> for the drainage table and <a href="IMBNUM.html#IMBNUM"> IMBNUM</a> for the imbibition table) will be used. </p>
+<p>ECLIPSE 100 </p>
+<p>In runs
+using the vertical equilibrium option (keyword <a href="VE.html#VE"> VE</a> in the <span class="keyword">RUNSPEC</span> section)
+the end-points of the saturation table are used to calculate the contact
+depths and relative permeabilities at the well connection. </p>
+<p>ECLIPSE 300 </p>
+<p>If the <a href="ODD3P.html#ODD3P"> ODD3P</a> relative permeability
+and capillary pressure hysteresis model has been selected and a non-default
+saturation table number is specified, this will be ignored. </p>
+ </li>
+
+<li> Transmissibility factor for the connection <p>If defaulted or
+set to zero, the connection transmissibility factor are calculated
+using the remaining items of data in this record. See <a href="../ecl_td/wellinfl_Well_Inflow_Performance.html#wellinfl_well_inflow_performance">"Well inflow performance"</a> in the <cite>ECLIPSE Technical Description</cite> for an account
+of the methods used in Cartesian and radial geometries. The well bore
+diameter must be set in item 10. </p>
+ <p>UNITS: cP.rm<sup>3</sup>/day/bars
+(<samp class="codeph">METRIC</samp>), cP.rb/day/psi (<samp class="codeph">FIELD</samp>),
+cP.rcc/hr/atm (<samp class="codeph">LAB</samp>), cP.rm<sup>3</sup>/day/atm (<samp class="codeph">PVT-M</samp>) </p>
+<p>Note the following two points: </p>
+<ul>
+<li> If the well is situated on an edge (or a corner) of a Cartesian
+grid, for example in a sector model or symmetry element, use keyword <a href="WPIMULTL.html#WPIMULTL">  WPIMULTL</a> after <span class="keyword">COMPDATL</span> to scale the resulting connection factors by 0.5
+(or 0.25). </li>
+
+<li> A well connection in an outermost block of a radial grid (I =  <samp class="codeph">NDIVIX</samp>, which is specified in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS"> DIMENS</a>) is assumed to occupy the entire outer boundary of the block for
+the purpose of applying boundary conditions. If you wish to model
+a real well in an outer block of a radial grid, the calculated connection
+factor is much too large. In this case, you should either supply an
+appropriate connection factor value yourself, or add an extra ring
+of inactive cells so that the well is no longer in an outer block. </li>
+
+</ul>
+<p>If a value &gt; 0.0 is entered, the connection transmissibility
+factor is set to this value. The value is also used to calculate either
+the connection's effective Kh or the denominator term ln(r<sub>o</sub>/r<sub>w</sub>) + S according to the following rules: </p>
+<ul>
+<li> If the Kh value in item 11 is defaulted or set negative, and
+the well bore diameter set in item 10, the Kh value is calculated
+from the connection transmissibility factor and the denominator term.
+In this case, however, the Kh is only used for output (if the mnemonic <samp class="codeph">WELSPECS</samp> is entered in <a href="RPTSCHED.html#RPTSCHED">  RPTSCHED</a>). The denominator term is calculated from
+the grid block dimensions, as described in the <a href="../ecl_td/wellinfl_Well_Inflow_Performance.html#wellinfl_well_inflow_performance">"Well inflow performance"</a> in the <cite>ECLIPSE Technical Description</cite>. </li>
+
+<li> If the Kh value is set &gt; 0.0, the denominator term will be calculated
+from the connection transmissibility factor and the given Kh value,
+instead of the well bore radius and the grid block dimensions. </li>
+
+<li> If the Kh value is set = 0.0, it is replaced by the effective
+Kh of the grid block, then used to calculate the denominator term
+in the same way as if it had been set &gt; 0.0. <p>ECLIPSE 100 </p>
+ </li>
+
+<li>The recalculation of Kh or the denominator
+term may be turned off by setting <a href="OPTIONS.html#options.45">item 45</a> of the <span class="keyword">OPTIONS</span> keyword &gt; 0. The
+denominator term is then always be calculated from the grid block
+dimensions and the well bore radius. This option can be used to achieve
+back-compatibility with pre-95A data sets, if required. </li>
+
+</ul>
+<p>The denominator term is used when calculating the well's productivity/injectivity
+index and when calculating the effects of a D-factor (see <a href="../ecl_td/wellinfl_Well_Inflow_Performance.html#wellinfl_well_inflow_performance">"Well inflow performance"</a> in the <cite>ECLIPSE Technical Description</cite>). Thus, when the
+connection factor is set to a positive value, the results of these
+calculations will depend on the setting of the Kh value in item 11. </p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> If a positive value is entered for the connection transmissibility
+factor, this should include the effect of any skin entered in item
+12, but exclude the effect of any D-factor. The effect of a D-factor
+is modeled separately by adjusting the mobility (see <a href="../ecl_td/wellinfl_The_flow-dependent_skin_factor.html#wellinfl_the_flow-dependent_skin_factor">"The flow-dependent
+skin factor"</a> in the <cite>ECLIPSE Technical Description</cite>). </span></div>
+ </li>
+
+<li> Well bore diameter at the connection <p>This quantity is required
+for: </p>
+ <ul>
+<li> Calculating the connection transmissibility factor <p>(If a zero
+or negative value was supplied for item 9) </p>
+ </li>
+
+<li> Calculating the Well’s Productivity/Injectivity Index <p>(If
+a positive value was supplied for the drainage radius in item 8 of
+keyword <span class="keyword">WELSPECL</span>) </p>
+ </li>
+
+<li> Calculating the effects of a D-factor <p>ECLIPSE 100 </p>
+</li>
+
+<li> Calculating the equivalent global well’s
+connection transmissibility factor. </li>
+
+</ul>
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>) </p>
+<p>ECLIPSE 300 </p>
+<p>DEFAULT:
+1 ft = 0.3048 m </p>
+<p>ECLIPSE 100 </p>
+<p>DEFAULT: Undefined. </p>
+ </li>
+
+<li> Effective Kh (permeability x thickness) value of the connection <p>If a default, zero or negative value is entered, the Kh value will
+be calculated from the grid block data. </p>
+ <p>If a positive value
+for the connection transmissibility factor is entered in item 9, the
+calculation of the denominator term depends on whether the Kh value
+is set or defaulted. See item 9. </p>
+<p>This quantity is required
+for calculating the connection transmissibility factor (if a default
+or zero value was supplied for item 9). It is ignored if not required. </p>
+<p>UNITS: mD.m (<samp class="codeph">METRIC</samp>), mD.ft (<samp class="codeph">FIELD</samp>), mD.cm (<samp class="codeph">LAB</samp>), mD.m (<samp class="codeph">PVT-M</samp>) </p>
+<p>DEFAULT: Negative </p>
+ </li>
+
+<li> Skin factor <p>This quantity is used for the same purposes as
+listed for item 10. It will be ignored if not required. </p>
+ <p>Large
+negative skin factors can cause problems if they increase the effective
+wellbore radius to approach the pressure equivalent radius of the
+grid block. Very high values of the connection transmissibility factor
+may result, which could cause convergence problems. In these circumstances,
+it may be preferable to change the grid block data near the well to
+model the physical cause of the negative skin (for example enhance
+the permeability out to a certain distance from the well). If the
+effective wellbore radius is increased beyond the pressure equivalent
+radius, the connection factor becomes negative and an error message
+is issued. </p>
+<p>ECLIPSE 100 </p>
+<p>A warning message is issued if the effective
+wellbore radius increases beyond half the pressure equivalent radius,
+or extends outside the grid block. </p>
+<p>DEFAULT: 0.0 </p>
+ </li>
+
+<li> D-factor, for handling the effects of non-Darcy flow of free
+gas <p>A D-factor measured for the well should preferably be entered
+with keyword <a href="WDFAC.html#WDFAC">  WDFAC</a>, and this item should be left defaulted. But it may be entered here
+instead, for back-compatibility with old ECLIPSE 100 data sets. ECLIPSE
+converts the well D-factor into D-factors for the connections. See
+the <span class="keyword">WDFAC</span> keyword for information on how the conversion
+is performed. Note that the well D-factor must reflect the current
+number of open connections at the time it is specified. </p>
+ <p>If
+you wish to enter the connection’s D-factor directly, you can enter
+it here with a negative sign. A negative sign tells ECLIPSE to regard
+it as the connection’s D-factor rather than the well’s D-factor. ECLIPSE
+simply reverses its sign without applying any conversion. If the D-factor
+is set for one or more connections using the <span class="keyword">COMPDATL</span> keyword, any previous D-factor values specified for the entire well
+via the <span class="keyword">WDFAC</span> keyword will be kept as default for
+the other connections whereas any previous D-factor calculations specified
+for the entire well via the <a href="WDFACCOR.html#WDFACCOR"> WDFACCOR</a> keyword will be deselected. </p>
+<p>UNITS: day/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), day/Mscf (<samp class="codeph">FIELD</samp>), hr/scc
+(<samp class="codeph">LAB</samp>), day/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>) </p>
+<p>DEFAULT: “Keep the current value of the connection’s D-factor” </p>
+ </li>
+
+<li> Direction in which the well penetrates the grid block 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+ 
+<tbody>
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top"> <samp class="codeph">X</samp> </td>
+
+<td valign="top"> the well penetrates the grid block in the X direction </td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top"> <samp class="codeph">Y</samp> </td>
+
+<td valign="top"> the well penetrates the grid block in the Y direction </td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top"> <samp class="codeph">Z</samp> </td>
+
+<td valign="top"> the well penetrates the grid block in the Z direction </td>
+
+</tr>
+
+<tr>
+<td valign="top"><p>ECLIPSE 300 </p>
+</td>
+
+<td valign="top"> <samp class="codeph">FX</samp> </td>
+
+<td valign="top"> the well is completed in a fracture in the X direction </td>
+
+</tr>
+
+<tr>
+<td valign="top"><p>ECLIPSE 300 </p>
+</td>
+
+<td valign="top"> <samp class="codeph">FY</samp> </td>
+
+<td valign="top"> the well is completed in a fracture in the Y direction </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>DEFAULT: <samp class="codeph">Z</samp> </p>
+<p>In radial grids, only
+penetration in the Z direction is allowed. </p>
+<p>ECLIPSE 300 </p>
+<p>For Cartesian grids in ECLIPSE
+300, if a direction other than <samp class="codeph">Z</samp> is specified, the <a href="HWELLS.html#HWELLS">  HWELLS</a> keyword must
+be included in the <span class="keyword">RUNSPEC</span> section. If <samp class="codeph">FX</samp> or <samp class="codeph">FY</samp> is specified, the keyword <a href="FWELLS.html#FWELLS">  FWELLS</a> must be included
+in the <span class="keyword">RUNSPEC</span> section. </p>
+<p>This item is used
+in calculating the transmissibility factor of the connection if it
+was not supplied in item 9. In Cartesian grids the Peaceman formula
+is used, taking the components of permeability and grid block dimensions
+appropriate to the direction of penetration (see <a href="../ecl_td/wellinfl_Well_Inflow_Performance.html#wellinfl_well_inflow_performance">"Well inflow performance"</a> in the <cite>ECLIPSE Technical Description</cite>). Note that the
+formula assumes that the well completely penetrates a rectangular
+block through its center in a direction perpendicular to two of its
+faces. </p>
+<p>This item also influences the way ECLIPSE orders the
+connections in the well (except for friction and multisegment wells)
+if the default <samp class="codeph">TRACK</samp> method is used. See keyword <a href="COMPORD.html#COMPORD">  COMPORD</a> for further
+details. </p>
+ </li>
+
+<li> Pressure equivalent radius, r<sub>o</sub> <p>If a value &gt; 0.0
+is entered, r<sub>o</sub> is set to this value instead of being calculated
+from the grid block dimensions according to Peaceman’s formula (see <a href="../ecl_td/wellinfl_Well_Inflow_Performance.html#wellinfl_well_inflow_performance">"Well inflow performance"</a> in the <cite>ECLIPSE Technical Description</cite>). Note that the
+pressure equivalent radius is not used for connections in the innermost
+or outermost cells of a radial grid or, in ECLIPSE 300, for wells
+completed in fractured cells. </p>
+ <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>) </p>
+<p>DEFAULT: Calculate r<sub>o</sub> from Peaceman’s
+formula </p>
+ </li>
+
+</ol>
+
+<div class="section" id="compdatl_notes"><a name="compdatl_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li><p>ECLIPSE 100</p>
+     <p>The calculated values of the connection transmissibility factor and
+Kh (if defaulted) can be examined by requesting a printout of the <span class="keyword">SCHEDULE</span>   section keyword data (argument <samp class="codeph">WELSPECS</samp> in keyword <a href="RPTSCHED.html#RPTSCHED"> RPTSCHED</a>). The connection transmissibility factor can also be written
+to the <samp class="codeph">SUMMARY</samp> file with the <span class="keyword">SUMMARY</span> section keyword <span class="keyword">LCTFAC</span>.</p>
+</li>
+
+<li>If you wish to prevent inter-block flow (for example due to shale
+breaks or faults), use keywords <a href="MULTZ.html#MULTZ"> MULTZ</a> and <a href="MULTX.html#MULTX">  MULTX</a> for example to set a zero transmissibility multiplier. Do not set
+the rock permeability to zero instead, as it is needed to calculate
+the connection transmissibility factor.             </li>
+
+<li>There is a choice of methods for determining the ordering of the
+connections along the wellbore. See keyword <a href="COMPORD.html#COMPORD"> COMPORD</a> for further details.  </li>
+
+</ul>
+</div>
+
+<div class="section" id="compdatl_example"><a name="compdatl_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>COMPDATL
+ PROD1  CARF1 6 4 1 3 OPEN 0 0.0  0.333 500 3.5 1E-3 Z /
+ PROD2  CARF2 3 5 3 3 OPEN 3 0.0  0.333  /
+ PROD3  CARF3 3 5 2 2 OPEN 0 1*   0.333 3*           X /
+ PROD3  CARF3 4 5 2 3 OPEN 0 1*   0.333 3*           X /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Automatic opening of wells and well connections"/>
+<meta name="DC.subject" content="Well modeling automatic opening of wells and well connections, Well, Opening, Automatic opening, Connection, Drilling, Drilling wells"/>
+<meta name="keywords" content="Well modeling automatic opening of wells and well connections, Well, Opening, Automatic opening, Connection, Drilling, Drilling wells"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wellmode_automatic_opening_of_wells_and_well_connections"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Automatic opening of wells and well connections</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wellmode_automatic_opening_of_wells_and_well_connections"><a name="wellmode_automatic_opening_of_wells_and_well_connections"><!-- --></a>
+<h1 class="topictitle1">Automatic opening of wells and well connections</h1>
+
+
+ <div>
+<p>ECLIPSE 100</p>
+
+<p>An automatic opening facility in ECLIPSE 100
+allows wells to be opened in sequence at the earliest opportunity,
+subject to constraints on the drilling rate and the maximum number
+of open wells allowed in each group. Wells are placed on automatic
+opening by setting their <samp class="codeph">OPEN</samp> / <samp class="codeph">SHUT</samp> status to <span class="keyword">AUTO</span>, in any of the <span class="keyword">WCON...</span> keywords or <a href="../ecl_rm/WELOPEN.html#WELOPEN">WELOPEN</a>. They will be treated as initially <span class="keyword">SHUT</span>, and will be opened in sequence in the order in which they are first
+defined in keyword <a href="../ecl_rm/WELSPECS.html#WELSPECS">WELSPECS</a> (although this order is overridden if some of the wells belong
+to groups that already have their maximum quota of open wells).</p>
+
+<p>Drilling rigs can be allocated to groups with keyword <a href="../ecl_rm/GRUPRIG.html#GRUPRIG">GRUPRIG</a>, and the time taken
+to drill each well may be specified in keyword <a href="../ecl_rm/WDRILTIM.html#WDRILTIM">WDRILTIM</a>. Together these restrict
+the rate at which wells can be opened automatically. Wells can effectively
+be opened midway through a timestep by having their efficiency factors
+temporarily adjusted to allow for the part of the timestep in which
+they were still shut. Thus in order to open a series of wells at 30
+day intervals, say, it is not necessary to restrict the timesteps
+to 30 days.</p>
+
+<p>Each group may be given an upper limit to the number of open wells
+it can contain, using keyword <a href="../ecl_rm/GECON.html#GECON">   GECON</a> (item 9). When a group has its full complement of open wells,
+no more of its wells can be opened automatically until one is shut-in.
+The <samp class="codeph">AUTO</samp> facility can therefore be used to keep a
+group operating with its full complement of wells while some wells
+are being closed after violating their economic limits.</p>
+
+<p>Well connections can also be placed on automatic opening, by setting
+their <samp class="codeph">OPEN</samp> / <samp class="codeph">SHUT</samp> status to <samp class="codeph">AUTO</samp> in keywords <a href="../ecl_rm/COMPDAT.html#COMPDAT">COMPDAT</a> or <a href="../ecl_rm/WELOPEN.html#WELOPEN">WELOPEN</a>. They will remain <samp class="codeph">SHUT</samp> until the well is
+subjected to an automatic workover, as for example is performed when
+a well or group economic water cut limit is exceeded. A connection
+on <samp class="codeph">AUTO</samp> will be opened each time its well is worked
+over. One will also be opened each time the well’s production
+rate falls below its minimum economic limit. Within a given well,
+the connections will be opened in the order in which they are first
+defined in keyword <span class="keyword">COMPDAT</span>.</p>
+
+<p>To prevent wells or connections from being automatically opened
+in areas of the reservoir that have already been depleted, a minimum
+acceptable oil saturation can be declared using the keyword <a href="../ecl_rm/WELSOMIN.html#WELSOMIN">WELSOMIN</a>. A connection will
+not be opened automatically in a workover, or opened when its well
+is opened automatically, if the connecting grid block has an oil saturation
+below this limit. A flag can also be set, using the keyword <a href="../ecl_rm/WDRILRES.html#WDRILRES">WDRILRES</a>, that prevents a well
+on automatic opening from being opened if it is completed in the same
+grid block as a well that is already open.</p>
+
+<p>Wells and individual connections can also be opened automatically
+from a <strong>drilling queue</strong> in response to a group failing to meet
+its production target. This facility is described in <a href="groupprd_Group_Production_Rules.html#groupprd_group_production_rules"> "Group Production Rules"</a>.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

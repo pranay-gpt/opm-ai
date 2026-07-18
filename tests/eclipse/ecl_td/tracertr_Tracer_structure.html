@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Tracer structure"/>
+<meta name="DC.subject" content="Tracer tracking tracer structure"/>
+<meta name="keywords" content="Tracer tracking tracer structure"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="tracertr_tracer_structure"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Tracer structure</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="tracertr_tracer_structure"><a name="tracertr_tracer_structure"><!-- --></a>
+<h1 class="topictitle1">Tracer structure</h1>
+
+
+ <div>
+<p>Internally, the <span class="keyword">TRACK</span> option sets up tracer
+variables. These are called A_n, for component n above the GOC and
+B_n for component n below the GOC. Suppose a tracer is attached to
+the methane. Then a tracer A_1 will be set up, initialized to 1 for
+cells above the GOC and 0 for cells below the GOC. The tracer B_1
+will be conversely initialized to 0 for cells above the GOC and 1
+for cells below the GOC. (Cells which intersect the GOC are given
+appropriate fractional values.)</p>
+
+<p>Although the A_n and B_n tracers are set up automatically, you
+can still display their concentration profiles in the usual way by
+requesting output using <a href="../ecl_rm/RPTRST.html#RPTRST">  RPTRST</a>.</p>
+
+<p>It might be thought that one tracer per component would be sufficient.
+However, the problem is with injection hydrocarbon, which cannot be
+identified with either the ‘above’ or ‘below’ original components,
+so that we cannot assume that components not belonging to one set
+must belong to the other.</p>
+
+<p>For the most accurate solution we should track all of the components
+in the reservoir, as each will generally form a different distribution
+in the reservoir. However, this may be expensive, as  <math><mrow><mn>2</mn>
+<msub><mi>N</mi><mi>c</mi></msub></mrow></math>  tracers
+will be required. An alternative is to track a smaller number and
+interpolate or extrapolate to find the concentrations of the missing
+tracers. At least one light component (generally C1) and one heavier
+component (for example C7) should be tracked. The <span class="keyword">TRACK</span> keyword allows you to select which components are to be tracked,
+or to select <samp class="codeph">ALL</samp> for the full set.</p>
+
+<div class="section" id="tracertr_enhanced_tracking1"><a name="tracertr_enhanced_tracking1"><!-- --></a><h4 class="sectiontitle">Enhanced tracking</h4><p>The naming of the tracers is done in a similar manner. If the
+‘ <samp class="codeph">REGONLY</samp> ’ option is used then the tracer A_ refers
+to region 1, B_ to region 2, and so on. In the ‘ <samp class="codeph">REGONLY</samp> ’ case it is not possible to report quantities from the regions above
+and below the GOC, such as <span class="keyword">FOPRA</span>, <span class="keyword">FOPRB</span>, <span class="keyword">FOIPA</span>, and <span class="keyword">FOIPB</span>, as separate
+tracers have not been defined in these regions. If the ‘ <samp class="codeph">GOC</samp> ’ or ‘ <samp class="codeph">DEPTH</samp> ’ option has been used the A_ and B_
+tracer names are reserved for those, with region 1 tracers being denoted
+with C_, region 2 tracers with D_, and so on. A table is output to
+the print file detailing the names of the tracers and which regions
+they refer to.</p>
+<p>Note that the comments about expense given above
+are multiplied here if a significant number of regions are defined.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

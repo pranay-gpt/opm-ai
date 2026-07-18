@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Velocity concepts"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="velocity_velocity_concepts"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Velocity concepts</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="velocity_velocity_concepts"><a name="velocity_velocity_concepts"><!-- --></a>
+<h1 class="topictitle1">Velocity concepts</h1>
+
+
+ <div>
+<p>Velocities can be determined from flows, which are calculated across
+the cell boundaries. This presents two problems. Firstly flows are
+usually calculated after the fluid properties are calculated (since
+they themselves depend on the fluid properties), and secondly, flows
+depend on the pressure and fluid properties in both the upstream and
+downstream cells. Therefore, unlike other fluid properties, the velocity
+is a function of the solution in a cell and in the neighboring cells.
+For these two reasons, velocity terms are often used explicitly, that
+is they are calculated at the previous timestep, so they can be determined
+before they are used and the derivative terms can be ignored.</p>
+
+<p>The velocity is a vector, with <em>x</em>, <em>y</em> and <em>z</em> components.
+The cell boundary velocities represent the components of the velocity
+in the direction normal to the boundaries. To calculate a single-cell
+velocity it is convenient to assume the cell boundaries are orthogonal
+and to use the resultant velocity (with the local cell direction components
+rather than global Cartesian components):</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="velocity.Xvelocity.equ.003e"/>
+ <math><mrow><mrow><mo>‖</mo><mi>v</mi><mo>‖</mo></mrow><mo>=</mo><msqrt>
+<mrow><msup><mrow><msub><mrow><mi>v</mi></mrow><mrow>
+<mi>x</mi></mrow></msub></mrow><mrow><mn>2</mn></mrow>
+</msup><mo>+</mo><msup><mrow><msub><mrow><mi>v</mi>
+</mrow><mrow><mi>y</mi></mrow></msub></mrow><mrow><mn>2</mn></mrow></msup><mo>+</mo><msup><mrow><msub>
+<mrow><mi>v</mi></mrow><mrow><mi>z</mi></mrow></msub>
+</mrow><mrow><mn>2</mn></mrow></msup></mrow></msqrt>
+</mrow></math> 
+</td><td align="right">[Eq. 736.1]
+              </td></tr></tbody></table>
+<p>where the velocity components are calculated by averaging the flows
+in and out on opposite faces:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="velocity.Xvelocity.equ.0042"/>
+ <math><msub><mi>v</mi>
+<mi>x</mi></msub><mo>=</mo><mo>(</mo><msup><msub>
+<mi>v</mi><mi>x</mi></msub><mtext>+</mtext></msup><mo>+</mo><msup><msub><mi>v</mi><mi>x</mi></msub><mtext>-</mtext></msup><mo>)</mo><mo>/</mo><mn>2</mn></math> 
+</td><td align="right">[Eq. 736.2]
+              </td></tr></tbody></table>
+<p>This method of averaging fails to deal with the case when a cell
+may have more than two neighbors in each direction, for example if
+it is connected to a local grid refinement (LGR) or if there are other
+non-neighbor connections. In this case, an area-weighted average can
+be applied more consistently:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="velocity.XID-00000046"/>
+ <math><mrow><msub>
+<mrow><mi>v</mi></mrow><mrow><mi>x</mi></mrow></msub>
+<mo>=</mo><mo>(</mo><mi>Σ</mi><msub><mrow><mi>A</mi></mrow><mrow><mi>x</mi>
+</mrow></msub><msub><mrow><mi>v</mi></mrow><mrow><mi>x</mi></mrow></msub><mo>)</mo><mo>/</mo>
+<mo>(</mo><mi>Σ</mi>
+<msub><mrow><mi>A</mi></mrow><mrow><mi>x</mi></mrow>
+</msub><mo>)</mo></mrow></math> 
+</td><td align="right">[Eq. 736.3]
+              </td></tr></tbody></table>
+<p>where the sum is over all faces (positive and negative) in the
+same direction. Here the sense of the velocities is in the + <em>x</em> direction, but see below.</p>
+
+<p>If a cell contains a well, then it would be expected that the velocities
+near the well would be much larger than the background flow velocities.
+Well flows are not included in these calculations, and the only way
+at present to capture the well velocity would be to have sufficiently
+small grid cells around the well, so that the velocity into the cell
+represents the velocity close to the well. In these cases equation <a href="velocity_Velocity_concepts.html#velocity.XID-00000046">736.3</a>  can be reinterpreted to represent
+the average inflow velocity into the cell (the sense of          
+       <math><msub><mi>v</mi>
+<mi>x</mi></msub></math>  is into the cell rather than + <em>x</em>), as, with the original interpretation of equation <a href="velocity_Velocity_concepts.html#velocity.XID-00000046">736.3</a>, then if the flow is into the
+well in all directions, the net velocity is zero.          </p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

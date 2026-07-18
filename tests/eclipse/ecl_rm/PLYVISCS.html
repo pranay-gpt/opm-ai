@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PLYVISCS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PLYVISCS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PLYVISCS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="PLYVISCS"><a name="PLYVISCS"><!-- --></a>
+<h1 class="keyword">PLYVISCS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="plyviscs.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="plyviscs.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1848e45"> x </th>
+
+<th valign="top" id="d1848e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1848e54"> x</th>
+
+<th valign="top" id="d1848e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1848e45 d1848e54 ">  </td>
+
+<td valign="top" headers="d1848e48 d1848e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1848e45 d1848e54 ">  </td>
+
+<td valign="top" headers="d1848e48 d1848e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1848e45 d1848e54 ">  </td>
+
+<td valign="top" headers="d1848e48 d1848e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1848e45 d1848e54 "> x </td>
+
+<td valign="top" headers="d1848e48 d1848e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1848e45 d1848e54 ">  </td>
+
+<td valign="top" headers="d1848e48 d1848e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1848e45 d1848e54 ">  </td>
+
+<td valign="top" headers="d1848e48 d1848e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1848e45 d1848e54 ">  </td>
+
+<td valign="top" headers="d1848e48 d1848e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1848e45 d1848e54 "> x </td>
+
+<td valign="top" headers="d1848e48 d1848e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword should only be used for polymer studies when the salt-
+sensitivity option has been activated (in ECLIPSE 100 keyword <a href="BRINE.html#BRINE"> BRINE</a> in the <span class="keyword">RUNSPEC</span> section without <a href="ECLMC.html#ECLMC"> ECLMC</a>, in ECLIPSE 300 the use of this
+keyword will activate the salt-sensitivity option).</p>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTPVT"> NTPVT</a>  (set in the <span class="keyword">TABDIMS</span> keyword)
+tables of polymer viscosity multiplier functions, each terminated
+by a slash (/), describing the effect on the viscosity of pure water
+of increasing the concentration of polymer and salt in the solution.
+Each table contains a maximum of <a href="TABDIMS.html#TABDIMS.NPPVT"> NPPVT</a>  (set in the <span class="keyword">TABDIMS</span> keyword) records terminated by a slash (/) and each record contains
+a maximum of <samp class="codeph">NPPVT</samp> rows of data to allow the specification
+of a full two-dimensional polymer/salt solution viscosity function. </p>
+
+<p>The first row of data in each record contains:</p>
+
+<ol>
+<li> The polymer concentration in the solution. <p>The values should
+increase monotonically down the column.</p>
+ <p>The first entry should
+be 0.0</p>
+ <p>UNITS: kg/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>),
+lb/stb (<samp class="codeph">FIELD</samp>), gm/scc (<samp class="codeph">LAB</samp>)</p>
+ </li>
+
+<li> The corresponding factor by which the water viscosity  (entered
+using the <span class="keyword">PVTW</span> keyword in ECLIPSE 100 or the corresponding <a href="../ecl_td/watercompintro_Converting_PVTW_data_to_water_component_data.html#watercompintro_converting_pvtw_data_to_water_component_data"> "Water components"</a> keywords in ECLIPSE 300) has to be multiplied to give the viscosity
+of a fully mixed solution of polymer/salt at a polymer concentration
+given by item 1 and a salt concentration given by item 1 in the corresponding
+salinity table (<a href="SALTNODE.html#SALTNODE"> SALTNODE</a> keyword in ECLIPSE 100 or <a href="ESPNODE.html#ESPNODE"> ESPNODE</a> keyword in ECLIPSE 300). <p>ECLIPSE 100</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The
+values should be greater than or equal to unity. Activating <a href="OPTIONS.html#options.208">item 208</a> in <span class="keyword">OPTIONS</span> relaxes this constraint by allowing any positive value.</span></div>
+ </li>
+
+</ol>
+
+<p>The other rows in the record - that is rows 2 to <samp class="codeph">NPPVT</samp> - each contain item 2 only. This item defines the corresponding
+factor by which the pure water viscosity has to be multiplied to obtain
+the viscosity of the polymer/salt solution whose polymer concentration
+is given in item 1 above and whose salt concentration in specified
+in the corresponding record in the <a href="SALTNODE.html#SALTNODE"> SALTNODE</a> keyword in ECLIPSE 100 or in the <a href="ESPNODE.html#ESPNODE"> ESPNODE</a> keyword in ECLIPSE
+300.</p>
+
+<p>The data for each table is terminated by a null record (that is
+a record with no data before the terminating slash).</p>
+
+<p>See <a href="../ecl_td/polymer_Polymer_Flood_Model.html#polymer_polymer_flood_model">"Polymer flood model"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.</p>
+
+<div class="section" id="plyviscs_example"><a name="plyviscs_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTPVT</samp> = 1 and <samp class="codeph">NPPVT</samp> = 4:</p>
+  <pre><code>PLYVISCS
+.0000   1.0
+        1.0
+        1.0
+        1.0  /
+ .0100  10.0
+         8.0
+         6.0
+         4.0  /
+.0200   25.0
+        20.0
+        15.0
+        10.0  /
+.0300  50.0
+        30.0
+        20.0
+        12.0  /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

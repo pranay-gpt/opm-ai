@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="HMMLFTAQ"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="HMMLFTAQ"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>HMMLFTAQ</title>
+</head>
+<body>
+
+
+<div class="nested0" id="HMMLFTAQ"><a name="HMMLFTAQ"><!-- --></a>
+<h1 class="keyword">HMMLFTAQ</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="hmmlftaq.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="hmmlftaq.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1020e45"> x </th>
+
+<th valign="top" id="d1020e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1020e54">  </th>
+
+<th valign="top" id="d1020e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1020e45 d1020e54 ">  </td>
+
+<td valign="top" headers="d1020e48 d1020e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1020e45 d1020e54 ">  </td>
+
+<td valign="top" headers="d1020e48 d1020e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1020e45 d1020e54 ">  </td>
+
+<td valign="top" headers="d1020e48 d1020e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1020e45 d1020e54 ">  </td>
+
+<td valign="top" headers="d1020e48 d1020e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1020e45 d1020e54 ">  </td>
+
+<td valign="top" headers="d1020e48 d1020e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1020e45 d1020e54 "> x </td>
+
+<td valign="top" headers="d1020e48 d1020e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1020e45 d1020e54 ">  </td>
+
+<td valign="top" headers="d1020e48 d1020e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1020e45 d1020e54 ">  </td>
+
+<td valign="top" headers="d1020e48 d1020e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword applies multipliers to properties determining the
+performance of the Fetkovich aquifer defined using either keyword <a href="AQUFET.html#AQUFET"> AQUFET</a>, or keywords <a href="AQUFETP.html#AQUFETP"> AQUFETP</a> and <a href="AQUANCON.html#AQUANCON"> AQUANCON</a> or <a href="AQANCONL.html#AQANCONL"> AQANCONL</a>. It is intended
+to be used as a modifier on the base data specified in the <span class="keyword">AQUFET</span> keyword during history matching.</p>
+
+<p>The keyword should be followed by a number of records defining
+the aquifers and multipliers for each aquifer.</p>
+
+<p>The set of records must end with a single line containing only
+a slash (/). The set of records must be terminated with a blank record
+containing just a slash.</p>
+
+<p>Each record refers to a separate Fetkovich aquifer, and contains
+the following items of data:</p>
+
+<ol>
+<li>Aquifer identification number. The identification number is specified
+in <span class="keyword">AQUFETP</span> item 1 or is the number in the list
+if keyword <span class="keyword">AQUFET</span> is used.</li>
+
+<li>Multiplier on initial volume of water in the aquifer. <p>DEFAULT:
+1.0</p>
+</li>
+
+<li>Multiplier on aquifer Productivity Index. <p>DEFAULT: 1.0</p>
+</li>
+
+<li>Multiplier on aquifer depth <p>DEFAULT: 1.0</p>
+</li>
+
+</ol>
+
+<p>See also the <a href="HMAQUFET.html#HMAQUFET"> HMAQUFET</a> keyword.</p>
+
+<div class="section" id="hmmlftaq_example"><a name="hmmlftaq_example"><!-- --></a><h4 class="sectiontitle">Example</h4>            
+    <p>Obtain gradients for one aquifer, on the bottom of a 10 x 10
+x 5 grid</p>
+          <pre><code>AQUFET
+-- Datum  Initial   Wi      Ct       J    Table     I1 I2  J1 J2  K1 K2  Face
+-- depth  pressure                        for PVTW
+   7000   4000     2.0E9   1.0E-5   500.0   1       1  10  1  10  5  5   'K+' /
+/
+HMMLFTAQ
+-- Aquifer        Initial volume     P.I. 
+-- number         multiplier         multiplier 
+   1              2.0                3.0        /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

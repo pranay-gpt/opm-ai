@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GRUPMAST"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GRUPMAST"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GRUPMAST</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GRUPMAST"><a name="GRUPMAST"><!-- --></a>
+<h1 class="keyword">GRUPMAST</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="grupmast.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="grupmast.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d926e45"> x </th>
+
+<th valign="top" id="d926e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d926e54">  </th>
+
+<th valign="top" id="d926e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d926e45 d926e54 ">  </td>
+
+<td valign="top" headers="d926e48 d926e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d926e45 d926e54 ">  </td>
+
+<td valign="top" headers="d926e48 d926e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d926e45 d926e54 ">  </td>
+
+<td valign="top" headers="d926e48 d926e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d926e45 d926e54 ">  </td>
+
+<td valign="top" headers="d926e48 d926e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d926e45 d926e54 ">  </td>
+
+<td valign="top" headers="d926e48 d926e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d926e45 d926e54 ">  </td>
+
+<td valign="top" headers="d926e48 d926e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d926e45 d926e54 ">  </td>
+
+<td valign="top" headers="d926e48 d926e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d926e45 d926e54 "> x </td>
+
+<td valign="top" headers="d926e48 d926e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword must be used in a reservoir coupling master run to
+identify the master groups and to indicate which slaves they are associated
+with (see <a href="../ecl_td/rescouplintro_Reservoir_Coupling.html#rescouplintro_reservoir_coupling">"Reservoir coupling"</a> in the <cite>ECLIPSE Technical Description</cite>).</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).
+The set of records must end with a blank record, containing only a
+slash (/).</p>
+
+<ol>
+<li> The master group’s name or group name root <p>A group name root,
+ending with an asterisk (*), can be used to refer to several groups
+in one record.</p>
+<p>The master groups must previously have been declared
+with the keyword <a href="GRUPTREE.html#GRUPTREE"> GRUPTREE</a>. They must not contain any wells or have subordinate groups.</p>
+</li>
+
+<li> The name of the slave reservoir containing the group’s associated
+slave group <p>The slave reservoir must previously have been declared
+and activated with keyword <a href="SLAVES.html#SLAVES"> SLAVES</a>. The slave reservoir name is entered as item 1 in that keyword.</p>
+<p>Alternatively, if a default (1*) or blank name (' ') is entered,
+the group’s flow rates will be read from the input reservoir coupling
+file instead of being calculated from the slave reservoir simulation.
+In this case, the <a href="USECUPL.html#USECUPL"> USECUPL</a> keyword must be entered to identify the input Reservoir Coupling
+file, and the group’s slave reservoir should not be included in the <span class="keyword">SLAVES</span> keyword.</p>
+</li>
+
+<li> The name of the master group’s associated slave group in the
+slave reservoir <p>The associated slave group may have a different
+name from its master group. For example, the slave group may be the
+top level group in its slave reservoir, and thus must be called <samp class="codeph">FIELD</samp>.</p>
+<p>If a default (1*) or blank name (' ') is entered,
+ECLIPSE assumes the associated slave group has the same name as its
+master group.</p>
+</li>
+
+<li> The limiting fraction by which the group’s flow rate may change
+in a single timestep <p>DEFAULT: infinity</p>
+<p>A value may optionally
+be entered here to limit the fraction by which the group’s flow rate
+(that is the reservoir fluid volume production rate and its phase
+injection rates) can change over a single timestep. ECLIPSE does this
+by restricting the length of the master run’s timestep, based on the
+previous timestep’s flow rate changes. The restriction takes place
+retrospectively, and the timestep is <strong>not</strong> chopped if a sudden
+rate change causes the limit to be exceeded.</p>
+<p>If the slave groups’
+flow rates change significantly over a single timestep of the master
+run, the group flow rate targets imposed in the master reservoir may
+not be accurately obeyed. This is because the flow rate targets are
+apportioned among the master groups according to their slave groups’
+flow capabilities at the <strong>start</strong> of each timestep, while the
+reported flows are those occurring at the <strong>end</strong> of the timestep.
+Reducing the limiting flow change fraction increases the accuracy
+of the group controls. However, it is also advisable to set a minimum
+timestep length that this restriction can impose (see keyword <a href="RCMASTS.html#RCMASTS"> RCMASTS</a>), as the fractional
+flow changes can be large when the flows are small and wells are being
+opened or closed in the slave reservoirs.</p>
+<p>A value entered here
+has no effect if the group’s flows are to be read from the Reservoir
+Coupling file (that is item 2 is defaulted).</p>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="section" id="grupmast.example"><a name="grupmast.example"><!-- --></a><h4 class="sectiontitle">Example</h4> <pre><code>GRUPMAST
+--  master      slave       associated      limiting
+--  group     reservoir       slave        rate change
+--  name        name          group         fraction
+    LOWER-A      LOWER         PL-A            0.1  /
+    LOWER-B      LOWER         PL-B            0.1  /
+    UPPER-A      UPPER         PL-A                 /
+    UPPER-B      UPPER         PL-B                 /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

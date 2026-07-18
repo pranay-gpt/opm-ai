@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Activating a parallel run"/>
+<meta name="DC.subject" content="Parallel option"/>
+<meta name="keywords" content="Parallel option"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="parallel_activating_a_parallel_run"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Activating a parallel run</title>
+</head>
+<body>
+
+
+<div class="nested0" id="parallel_activating_a_parallel_run"><a name="parallel_activating_a_parallel_run"><!-- --></a>
+<h1 class="topictitle1">Activating a parallel run</h1>
+
+
+ <div>
+<p>A parallel run of ECLIPSE 100 or ECLIPSE 300 is activated by using
+the <a href="../ecl_rm/PARALLEL.html#PARALLEL">PARALLEL</a> keyword in the <span class="keyword">RUNSPEC</span> section. Suppose
+the following is used:</p>
+
+<pre><code>PARALLEL 
+16 /</code></pre>
+<p>When the ECLIPSE run is submitted, 16 copies of the executable
+will be spawned. Each of the 16 tasks is then running a copy of the
+simulator, dedicated to its section of the reservoir. A message passing
+system is used to pass boundary flow and well information between
+the tasks and keep them synchronized.</p>
+
+<p>One of the tasks performs file input and output; it is in other
+respects the same as the remaining tasks, dealing with its own section
+of the reservoir.</p>
+
+<p>In most respects, running ECLIPSE 100 and ECLIPSE 300 in parallel
+is the same as running in the standard serial mode. However, there
+will always be some features or combinations of features which are
+not available with the parallel option.</p>
+
+<p>The Parallel option is intended for use on multi-core computers
+or clusters with high performance interconnects. Parallel runs must
+have dedicated resources, which means that the number of ECLIPSE processes
+(the number of domains + the number of serial runs) on any machine
+should not exceed the number of CPUs on that machine. If the machine
+is overloaded the performance degradation may be severe as most message
+passing systems assume a dedicated resource, and processes that are
+waiting for messages from other processes will often consume CPU time
+at the expense of those that are trying to do calculations.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

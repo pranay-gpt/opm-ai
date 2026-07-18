@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WCONINJP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WCONINJP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WCONINJP</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WCONINJP"><a name="WCONINJP"><!-- --></a>
+<h1 class="keyword">WCONINJP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wconinjp.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wconinjp.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2840e45"> x </th>
+
+<th valign="top" id="d2840e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2840e54"> x </th>
+
+<th valign="top" id="d2840e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2840e45 d2840e54 ">  </td>
+
+<td valign="top" headers="d2840e48 d2840e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2840e45 d2840e54 ">  </td>
+
+<td valign="top" headers="d2840e48 d2840e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2840e45 d2840e54 ">  </td>
+
+<td valign="top" headers="d2840e48 d2840e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2840e45 d2840e54 ">  </td>
+
+<td valign="top" headers="d2840e48 d2840e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2840e45 d2840e54 ">  </td>
+
+<td valign="top" headers="d2840e48 d2840e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2840e45 d2840e54 ">  </td>
+
+<td valign="top" headers="d2840e48 d2840e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2840e45 d2840e54 ">  </td>
+
+<td valign="top" headers="d2840e48 d2840e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2840e45 d2840e54 "> x </td>
+
+<td valign="top" headers="d2840e48 d2840e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is used to specify a well that injects at a reservoir
+volume rate defined by the production of the wells that surround it.
+An example of this type of control would be to specify a well that
+injects at a rate equal to the sum of one quarter of the voidage from
+each of the four neighboring producers in a five spot pattern.</p>
+
+<p>The keyword can only be used on one injection well at a time, so
+it must be specified more than once if there is more than one injection
+well under this type of control.</p>
+
+<p>The keyword is followed by a data record that specifies the injection
+well and then a number of data records specifying the production wells
+in the surrounding pattern that each make a contribution to defining
+the injection well’s rate. Each record is terminated with a slash
+(/), and the set of records must end with an additional blank record
+containing just a slash.</p>
+
+<p>The data items in each record are:</p>
+
+<div class="section" id="wconinjp_record_1"><a name="wconinjp_record_1"><!-- --></a><h4 class="sectiontitle">Record 1</h4><p>This record
+defines control data for the injection well. It is similar to the <a href="WCONINJE.html#WCONINJE"> WCONINJE</a> keyword except
+that the injection rate is not specified; this rate is calculated
+at each timestep from the produced voidage of the surrounding pattern
+of wells that are defined in subsequent records of this keyword.</p>
+<p>The record may be terminated early with a slash (/), the remaining
+items taking default values. Default values can be specified before
+the slash by a null repeat count of the form n*, where n is the number
+of consecutive items to be defaulted.</p>
+<ol>
+<li> Name of the pattern flood injection well </li>
+
+<li> Injector type 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+ 
+<tbody>
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top"> <samp class="codeph">WATER</samp> </td>
+
+<td valign="top">Water injector</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top"> <samp class="codeph">GAS</samp> </td>
+
+<td valign="top">Gas injector</td>
+
+</tr>
+
+<tr>
+<td valign="top"><p>ECLIPSE 300</p>
+ </td>
+
+<td valign="top">&nbsp;</td>
+
+<td valign="top">When running in compositional mode, the nature of the injected
+gas must also be specified with keyword <a href="WINJGAS.html#WINJGAS"> WINJGAS</a>.</td>
+
+</tr>
+
+<tr>
+<td valign="top"><p>ECLIPSE 100</p>
+ </td>
+
+<td valign="top"> <samp class="codeph">OIL</samp> </td>
+
+<td valign="top">Oil injector</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top"> <samp class="codeph">MULTI</samp> </td>
+
+<td valign="top">Multiphase injector (oil and/or water and/or gas).</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>This injects the preferred phase of the well (as specified
+with the keyword <a href="WELSPECS.html#WELSPECS"> WELSPECS</a>) plus the other phases for which non-zero surface volume
+proportions are specified in items 9 to 11.</p>
+ </li>
+
+<li> Open/shut flag for the well 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">OPEN</samp> </td>
+
+<td valign="top">Well open for injection.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">STOP</samp> </td>
+
+<td valign="top">Well stopped off above the formation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">SHUT</samp> </td>
+
+<td valign="top">Well completely isolated from the formation</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">OPEN</samp> </p>
+ </li>
+
+<li> BHP upper limit <p>It is recommended that this quantity should
+be set to a value not exceeding the highest pressure in the PVT tables,
+to ensure the tables are not extrapolated in the well. It is best
+not to default this quantity, as its value is used in calculating
+the well potential.</p>
+ <p>UNITS: barsa (<samp class="codeph">METRIC</samp>),
+psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+<p>ECLIPSE 100</p>
+<p>DEFAULT: 6802.72 atma, or 1.0E5 psia, or 6891.16 barsa</p>
+<p>ECLIPSE 300</p>
+<p>DEFAULT:
+1000 atma = 14700 psia = 1013 barsa</p>
+<p>Thermal</p>
+<p>DEFAULT: 200 atma = 2940 psia = 202.6 barsa</p>
+<p>E 300 CO2STORE</p>
+<p>DEFAULT: 592.15 atma=8702
+psia =600 barsa</p>
+<p>User-specified defaults can be provided using
+the <a href="FBHPDEF.html#FBHPDEF">  FBHPDEF</a> keyword.</p>
+ </li>
+
+<li> THP upper limit <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia
+(<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: No limit</p>
+ </li>
+
+<li> Injection well VFP table number <p>(See keyword <a href="VFPINJ.html#VFPINJ"> VFPINJ</a>)</p>
+ <p>Set this
+to zero if no THP calculations are required and the limiting THP value
+has been defaulted.</p>
+<p>DEFAULT: 0</p>
+ <p>ECLIPSE 100</p>
+</li>
+
+<li> Vaporized oil concentration in the injected
+gas, or dissolved gas concentration in the injected oil<p>This item
+is ignored for multiphase injectors.</p>
+<p>UNITS: sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), stb/Mscf for gas injectors (<samp class="codeph">FIELD</samp>), Mscf/stb for oil injectors (<samp class="codeph">FIELD</samp>), scc/scc (<samp class="codeph">LAB</samp>)</p>
+<p>DEFAULT: 0.0</p>
+ </li>
+
+<li> Injection voidage rate target multiplier <p>This multiplies the
+calculated voidage rate target for the pattern flood injector.</p>
+ <p>DEFAULT: 1.0</p>
+ <p>ECLIPSE 100</p>
+</li>
+
+<li> Surface volume proportion of oil in a multiphase
+injector.<p>This must be greater than zero if the preferred phase
+of the multiphase injection well (set in the keyword <a href="WELSPECS.html#WELSPECS"> WELSPECS</a>) is oil.</p>
+<p>UNITS: dimensionless</p>
+<p>DEFAULT: 0.0</p>
+ </li>
+
+<li> Surface volume proportion of water in a multiphase injector. <p>This must be greater than zero if the preferred phase of the multiphase
+injection well (set in the keyword <span class="keyword">WELSPECS</span>) is
+water.</p>
+ <p>UNITS: dimensionless</p>
+<p>DEFAULT: 0.0</p>
+ </li>
+
+<li> Surface volume proportion of gas in a multiphase injector. <p>This must be greater than zero if the preferred phase of the multiphase
+injection well (set in the keyword <span class="keyword">WELSPECS</span>) is
+gas.</p>
+ <p>UNITS: dimensionless</p>
+<p>DEFAULT: 0.0</p>
+ </li>
+
+</ol>
+<p>End data record with a slash (/).</p>
+</div>
+
+<div class="section" id="wconinjp_each_subsequent_record"><a name="wconinjp_each_subsequent_record"><!-- --></a><h4 class="sectiontitle">Each subsequent
+record</h4><p>The subsequent records each define a production well
+and the fraction of its reservoir volume rate that contributes to
+the overall rate for the injection well specified in record 1.</p>
+<ol>
+<li id="wconinjp.XID-000000b1"><a name="wconinjp.XID-000000b1"><!-- --></a>Production well name, well name template,
+well list or well list template <p>A template enclosed in quotes can
+be used to refer to multiple wells or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+ </li>
+
+<li> The production rate fraction for the well(s) in item 1of this
+record <p>This fraction multiplies the well’s reservoir volume rate
+(or part thereof, see item 3 below). This product, when added to those
+from all the other contributing producers, defines the flow rate for
+the injection well specified in record 1.</p>
+ <p>DEFAULT: The fraction
+will be updated at the beginning of each timestep on the basis of
+the number of injectors assigned to replace the voidage of each producer.
+A producer’s fractions will thus change if one of its associated injectors
+is shut (or opened), with the current set of open injectors effectively
+automatically compensating to ensure the producer’s voidage is still
+replaced</p>
+ </li>
+
+<li id="wconinjp.XID-000000bd"><a name="wconinjp.XID-000000bd"><!-- --></a>Fluid-in-place region number <p>If
+this is specified, then the voidage rate contribution from this well
+is restricted to the sum of the voidage flows from connections to
+grid cells that fall within this fluid-in-place region. Note that
+connection voidage rates are calculated at the reference pressures
+of the appropriate fluid-in-place regions; these pressures may differ
+from the reference pressure used to calculate the well’s overall voidage
+rate. (See <a href="OPTIONS3.html#options3.88">item 88</a> in <span class="keyword">OPTIONS3</span> or <a href="OPTIONS.html#options.85">item 85</a> in <span class="keyword">OPTIONS</span>.)</p>
+ <p>DEFAULT:  0</p>
+ </li>
+
+</ol>
+<p>End data record with a slash (/).</p>
+</div>
+
+<div class="section" id="wconinjp_notes"><a name="wconinjp_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li> A pattern flood injection well is automatically set as unavailable
+for higher level group control. </li>
+
+<li> If an injector has previously been defined as a pattern flood
+injector and is then re-specified using this keyword without any associated
+production wells, it will be switched back to being a normal injector.
+This switch may also be achieved by re-specifying the control mode
+of the well using the <a href="WCONINJE.html#WCONINJE"> WCONINJE</a> keyword. </li>
+
+<li> The control mode of a pattern flood injector is reported as ‘PFVR’
+in the print file. </li>
+
+<li> Although there is no limit to the number of producers that may
+contribute to the overall rate of a pattern flood injector, the voidage
+from a particular producer cannot be split between more than ten pattern
+flood injectors. </li>
+
+<li> ECLIPSE 300: In multiphase compositional
+injection, all hydrocarbons are specified as gas regardless of their
+phase, and the actual liquid-vapor composition is determined via a
+flash calculation. Also with this simulator, oil injection is not
+available in black oil models. Hence the preferred phase for a multiphase
+injection well (specified in the <a href="WELSPECS.html#WELSPECS"> WELSPECS</a> keyword) cannot be set to <samp class="codeph">OIL</samp>, and the ‘Surface volume proportion of oil in a multiphase injector’
+(item 9) is ignored. </li>
+
+</ul>
+</div>
+
+<div class="section" id="wconinjp_example_1"><a name="wconinjp_example_1"><!-- --></a><h4 class="sectiontitle">Example</h4><p>The water
+injection well INJW replaces a quarter of the reservoir voidage of
+each of its four surrounding producers. This is effectively its share
+of the production voidage in a repeated five spot pattern.</p>
+<pre><code>WCONINJP
+ INJW WAT 1* 5000 /
+ PRD1 /
+ PRD2 /
+ PRD3 /
+ PRD4 /
+/</code></pre> </div>
+
+<div class="section" id="wconinjp_other"><a name="wconinjp_other"><!-- --></a><h4 class="sectiontitle">Other</h4> <p>See the examples
+in the <a href="WCONINJE.html#WCONINJE"> WCONINJE</a> keyword for an illustration of how to specify the oil, water and
+gas surface volume proportions for multiphase injectors (<span class="keyword">WCONINJP</span> record 1, items 9-11).</p>
+ </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

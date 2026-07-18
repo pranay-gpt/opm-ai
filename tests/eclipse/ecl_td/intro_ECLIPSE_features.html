@@ -1,0 +1,839 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ECLIPSE features"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="intro_eclipse_features"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ECLIPSE features</title>
+</head>
+<body>
+
+
+<div class="nested0" id="intro_eclipse_features"><a name="intro_eclipse_features"><!-- --></a>
+<h1 class="topictitle1">ECLIPSE features</h1>
+
+ <div>
+<div class="section" id="intro_free_format_input"><a name="intro_free_format_input"><!-- --></a><h4 class="sectiontitle">Free format input</h4><p>Input data for ECLIPSE is prepared in free format using a keyword
+system. Any standard editor may be used to prepare the input file.
+Alternatively Petrel or ECLIPSE Office may be used to prepare data
+interactively through panels, and submit runs. Its help facility contains
+most of the ECLIPSE Reference Manual.</p>
+</div>
+
+<div class="section" id="intro_phase_and_fluid_options"><a name="intro_phase_and_fluid_options"><!-- --></a><h4 class="sectiontitle">Phase and Fluid
+options</h4><p>ECLIPSE 100 </p>
+<p>ECLIPSE 100 can be used to simulate one, two
+or three-phase systems. Two phase options (oil/water, oil/gas, gas/water)
+are solved as two component systems saving both computer storage and
+computer time. In addition to gas dissolving in oil (variable bubble
+point pressure or gas/oil ratio), ECLIPSE 100 may also be used to
+model oil vaporizing in gas (variable dew point pressure or oil/gas
+ratio).</p>
+<p>ECLIPSE 300</p>
+<p>ECLIPSE 300 can simulate using a cubic equation
+of state or pressure dependent K-values, as well as the black oil
+model. Four equations of state are available, implemented through
+Martin's generalized equation (<cite><span> <a href="biblio_Bibliography.html#biblio_91436">Martin, 1973</a> </span></cite>). The Redlich-Kwong, Soave-Redlich-Kwong, Peng-Robinson and
+Zudkevitch-Joffe cases of this equation may be used. A volume shift
+parameter may also be used with any equation. Different sets of equation
+of state parameters may be used for the reservoir and surface facilities.
+K-values may be supplied in table form or generated internally. See <a href="equ_state_Equations_of_State.html#equ_state_equations_of_state"> "Equations of State"</a> for further information.</p>
+<p>ECLIPSE 300</p>
+<p>In <a href="../ecl_rm/GASWAT.html#GASWAT">GASWAT</a> mode the solution of
+hydrocarbon components in the water phase is permitted. See <a href="gaswat_GASWAT_Option.html#gaswat_gaswat_option"> "GASWAT Option"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_geometry_options"><a name="intro_geometry_options"><!-- --></a><h4 class="sectiontitle">Geometry options</h4><p>Both corner-point and conventional block-center geometry options
+are available in ECLIPSE. Radial and Cartesian block-center options
+are available in 1, 2 or 3 dimensions. A 3D radial option completes
+the circle allowing flow to take place across the 0/360 degree interface
+(keyword <a href="../ecl_rm/COORDSYS.html#COORDSYS">COORDSYS</a>).</p>
+<p>The ECLIPSE corner-point geometry option allows extremely
+complex geometries to be constructed to give a faithful representation
+of the reservoir geology. PETREL can be used to prepare corner-point
+data for ECLIPSE. PETREL may also be used to display the grid in a
+variety of ways. For example, in a large 3D study, you may request
+a number of XZ cross-sections to be displayed simultaneously. Transparent
+areal overlays of the grid are useful for precise checking against
+geological maps.</p>
+<p>Corner-point geometry is especially useful
+for highly faulted reservoirs. The grid may be distorted areally to
+fit along fault lines and displaced vertically to model complex scissor
+faults. The resulting non-neighbor grid transmissibilities are computed
+automatically by ECLIPSE. Flow across displacement faults is handled
+efficiently by the ECLIPSE solution procedures.</p>
+<p>See <a href="transmiss_Transmissibility_Calculations.html#transmiss_transmissibility_calculations"> "Transmissibility Calculations"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_fully_implicit_technology__black_oil_"><a name="intro_fully_implicit_technology__black_oil_"><!-- --></a><h4 class="sectiontitle">Fully
+implicit technology (Black Oil)</h4><p>ECLIPSE uses the fully-implicit
+method to provide stability over long timesteps. Care is taken to
+ensure that the non-linear fully-implicit equations are solved precisely
+by reducing all residuals to very fine tolerances. Material balance
+errors (residual sums) are extremely small. Newton’s method is used
+to solve the non-linear equations. The Jacobian matrix is fully expanded
+in all variables to ensure quadratic (fast) convergence. Various special
+methods are used to accelerate convergence in highly non-linear problems.
+The linear equations arising at each Newton iteration are solved simultaneously
+by Nested Factorization accelerated by Orthomin.</p>
+<p>Traditionally,
+fully-implicit techniques are reserved for small coning studies, where
+many cell pore volumes of fluid may pass through small cells near
+the well bore during a single timestep. IMPES and semi-implicit techniques
+cannot be used on such problems unless the timesteps are reduced to
+impractically small values. When the fully-implicit method is used
+the resultant linear equations are strongly coupled and can only be
+solved efficiently by simultaneous methods and not by simple sequential
+methods. Small problems of this type can be solved efficiently by
+direct methods such as D4 Gaussian elimination. Iterative methods,
+required for large problems, such as SIP and LSOR, typically fail
+to converge. Thus most simulators cannot apply fully implicit methods
+to large problems. In ECLIPSE, these restrictions are removed by Nested
+Factorization which solves large problems efficiently and reliably.</p>
+<p>See <a href="formulate_Formulation_of_the_Equations.html#formulate_formulation_of_the_equations"> "Formulation of the Equations"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_adaptive_implicit_and_impes__compositional_"><a name="intro_adaptive_implicit_and_impes__compositional_"><!-- --></a><h4 class="sectiontitle">Adaptive Implicit and IMPES (Compositional)</h4><p>ECLIPSE 300 </p>
+<p>In a
+compositional model where the number of components and hence equations
+to be solved is greater than say 5 or 6, the cost of using a fully
+implicit technique can become prohibitive in both memory and CPU time.
+In ECLIPSE 300 this problem is tackled by using an adaptive implicit
+scheme, making cells implicit only where necessary.</p>
+<p>In ECLIPSE
+300 adaptive implicit, fully implicit or IMPES solution techniques
+may be selected. For larger compositional studies, it is likely that
+AIM will be the normal choice. The IMPSAT method may be used if large
+capillary pressures are present. Reservoir molar densities of each
+component are used as solution variables, along with the pressures.
+These yield a system that can be converted into a pressure equation
+and a set of conservation equations.</p>
+<p>See <a href="formulate_Formulation_of_the_Equations.html#formulate_formulation_of_the_equations"> "Formulation of the Equations"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_nested_factorization"><a name="intro_nested_factorization"><!-- --></a><h4 class="sectiontitle">Nested factorization</h4><p>The linear equations arising at each Newton iteration are solved
+using Nested Factorization accelerated by Orthomin. This is a fast
+iterative technique devised for the solution of large sets of sparse
+linear equations. The technique conserves material precisely at each
+iteration. Material balance errors can therefore arise only as a result
+of non-linearities. Off band matrix elements arising from non-neighbor
+connections are included in the factorization procedure and are therefore
+handled with extreme efficiency. Computing costs increase only marginally
+faster than the number of active cells in the reservoir (<samp class="codeph">N</samp> <sup>5/4</sup>) in contrast with direct methods (<samp class="codeph">N</samp> <sup>3</sup>). Nested Factorization is therefore particularly well
+suited to the solution of large problems. Two and three phase problems
+are solved simultaneously. Further details of the method may be found
+in <a href="sollineq_Solution_of_the_Linear_Equations.html#sollineq_solution_of_the_linear_equations"> "Solution of the Linear Equations"</a>.</p>
+<p>At each iteration,
+a new ‘search direction’ (approximate solution) is computed by Nested
+Factorization. The Orthomin procedure, which minimizes the sum of
+the squares of the residuals (errors), requires each new search direction
+to be orthogonalized to the previous search directions. Thus previous
+search directions must be stored, using up valuable computing memory.
+Fortunately it is usually sufficient to store only the last few search
+directions. The number of search directions is called <a href="../ecl_rm/NSTACK.html#NSTACK">NSTACK</a> and you may set this
+in the <a href="../ecl_rm/RUNSPEC.html#RUNSPEC">RUNSPEC</a> data section.</p>
+<p>The solver is highly vectorized due to
+the use of active cell addressing. For example, all the Orthomin calculations
+on the stack are completely vectorized. Matrix multiplications are
+vectorized using the vector run technique. However, the tri-diagonal
+inversion at the heart of Nested Factorization, is inherently recursive
+and cannot be vectorized.</p>
+</div>
+
+<div class="section" id="intro_non-neighbor_connections"><a name="intro_non-neighbor_connections"><!-- --></a><h4 class="sectiontitle">Non-neighbor connections</h4><p>In conventional grid systems each cell has only one neighboring
+cell in each direction (two in each dimension). Thus in 2D grids,
+each cell can have up to four neighbors, and in 3D grids each cell
+can have up to six neighbors. Flow only takes place between neighboring
+cells.</p>
+<p>In ECLIPSE, it is possible to connect selected pairs
+of non-neighboring cells, allowing fluid to flow directly from one
+cell of the pair to the other. Typical applications of non-neighbor
+connections are:</p>
+<ol>
+<li>Completing the circle in 3D radial studies.</li>
+
+<li>Displacement faults allowing flow between different layers across
+the fault.  </li>
+
+<li>Local grid refinement allowing fine definition near wells, including
+the ability to insert radial grids within a Cartesian system.</li>
+
+</ol>
+<p>ECLIPSE generates the non-neighbor connections arising from
+the second application automatically, and calculates their transmissibilities.
+If you are using the Local Grid Refinement option (see <a href="lgrc_Local_grid_refinement.html#lgrc_local_grid_refinement"> "Local grid refinement"</a>), ECLIPSE also handles the non-neighbor connections arising from
+the third application automatically.  For a global radial grid, the <a href="../ecl_rm/COORDSYS.html#COORDSYS">COORDSYS</a> keyword is used to
+determine whether the circle is completed, while for local radial
+grids, the circle is completed automatically. </p>
+<p>Non-neighbor
+connections give rise to off-band elements in the Jacobian matrix
+and these are included in the procedures used to solve the linear
+equations.</p>
+</div>
+
+<div class="section" id="intro_run-time_dimensioning"><a name="intro_run-time_dimensioning"><!-- --></a><h4 class="sectiontitle">Run-time dimensioning</h4><p>All of the internal arrays in ECLIPSE are dimensioned at run time
+to minimize the use of computer memory. For example, each element
+of the Jacobian is a 2×2 matrix in two-phase runs and a 3×3 matrix
+in three phase runs. A two dimensional problem gives rise to a Jacobian
+matrix with 5 bands, while a 3 dimensional problem gives rise to a
+Jacobian matrix with 7 bands. Clearly it would be inefficient to dimension
+the internal arrays to cover the worst possible case. Most of the
+data required for ECLIPSE to compute the size of its internal arrays
+is provided in the <a href="../ecl_rm/RUNSPEC.html#RUNSPEC">RUNSPEC</a> data section. Some additional information (relating to automatically
+generated non-neighbor connections, inactive cells and Vertical Equilibrium
+options for example) is deduced from data provided in the <a href="../ecl_rm/GRID.html#GRID">GRID</a> section. Space is saved
+by not storing unnecessary data for inactive cells.</p>
+</div>
+
+<div class="section" id="intro_vertical_equilibrium"><a name="intro_vertical_equilibrium"><!-- --></a><h4 class="sectiontitle">Vertical equilibrium</h4><p>ECLIPSE 100 </p>
+<p>ECLIPSE 100 contains a unique Vertical Equilibrium option for modeling
+segregated flow in three dimensions. The option may be used with either
+block-center or corner-point geometry. With corner-point geometry,
+it takes account of the shape and orientation of each distorted grid
+block. A mixing parameter enables you to specify the degree of fluid
+segregation. At one extreme, total fluid segregation is assumed, while
+at the other extreme the fluids are assumed to be totally dispersed
+throughout each grid block. The VE facility takes account of hysteresis
+effects arising, for example, when oil invades the water zone and
+retreats, leaving a residual critical oil saturation.</p>
+<p>It is
+also possible, using the Compressed Vertical Equilibrium option, to
+make the assumption that the entire reservoir section is in vertical
+equilibrium. This enables ECLIPSE 100 to collapse each column of grid
+cells into a single cell for calculation purposes. The variation in
+properties with depth is accounted for by using tables of properties
+for the compressed single cells.</p>
+<p>See <a href="ve_Vertical_Equilibrium.html#ve_vertical_equilibrium"> "Vertical
+Equilibrium"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_dual_porosity"><a name="intro_dual_porosity"><!-- --></a><h4 class="sectiontitle">Dual porosity</h4><p>The
+ECLIPSE Dual Porosity/Permeability option is suitable for simulating
+highly fractured reservoirs. Each grid block is represented by a matrix
+cell and a fracture cell. In the Dual Porosity option, flow through
+the reservoir takes place through the fracture cells only. Flow also
+takes place between each matrix cell and its corresponding fracture
+cell. Flow does not take place between neighboring matrix cells. In
+the Dual Porosity/ Permeability option flow may also take place between
+neighboring matrix cells.</p>
+<p>The Dual Porosity option can also
+model the effects of gravity imbibition/drainage, molecular diffusion
+between the matrix and fracture cells.</p>
+<p>ECLIPSE 100</p>
+<p>In addition ECLIPSE 100 can
+also model the viscous displacement of fluid to and from the matrix.</p>
+<p>See <a href="dualporo_Dual_Porosity.html#dualporo_dual_porosity"> "Dual Porosity"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_pvt_and_rock_data"><a name="intro_pvt_and_rock_data"><!-- --></a><h4 class="sectiontitle">PVT and rock data</h4><p>ECLIPSE honors the pressure and saturation function data precisely
+as you specify it. It does not follow the practice, common in the
+industry, of smoothing the data by interpolating to a fixed number
+of equally spaced saturation intervals.</p>
+<p>Different table numbers
+can be used for different parts of the reservoir. Thus, for example,
+separate saturation tables can be entered for each type of rock.</p>
+</div>
+
+<div class="section" id="intro_directional_relative_permeabilities"><a name="intro_directional_relative_permeabilities"><!-- --></a><h4 class="sectiontitle">Directional
+relative permeabilities</h4><p>Relative permeability curves may
+be specified separately for flow in the horizontal and vertical directions.
+You have the option of specifying 3 (X,Y,Z) or 6 (+X,-X,+Y,-Y,+Z,-Z)
+relative permeability curves for each saturation function region,
+rather than the usual single curve. This additional degree of freedom
+enables you to improve the physics of a simulation study in a relatively
+simple manner. For example, most reservoir cells have small vertical
+dimensions and large areal dimensions, and horizontal flow is more
+realistically modeled if the horizontal relative permeability is small
+below the Buckley-Leverett saturation. Directional relative permeabilities
+are also required for the ECLIPSE pseudo option that may be used on
+a three dimensional coarse grid.</p>
+</div>
+
+<div class="section" id="intro_saturation_table_scaling"><a name="intro_saturation_table_scaling"><!-- --></a><h4 class="sectiontitle">Saturation table
+scaling</h4><p>The connate, critical and maximum saturation end
+points of the relative permeability and capillary pressure curves
+may be input separately for each grid cell within the reservoir or,
+alternatively, as a series of depth tables for regions within the
+grid. The scaling option allows you to specify relative permeability
+and capillary pressure data which are functions of a normalized saturation.
+In addition, it allows the modeling of reservoirs where depth variations
+occur in the initial critical or connate fluid saturations. You may
+specify that the saturation table scaling is to be isotropic, distinguish
+between coordinate lines (X,Y,Z) or distinguish between coordinate
+directions (+X,-X,+Y,-Y,+Z,-Z).</p>
+<p>The saturation table scaling
+facility may be used to equilibrate a reservoir model with the correct
+initial quantities of mobile fluid-in-place by means of a special
+correction applied at the fluid contacts.</p>
+<p>See <a href="sattabsc_Saturation_Table_Scaling.html#sattabsc_saturation_table_scaling"> "Saturation Table Scaling"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_hysteresis"><a name="intro_hysteresis"><!-- --></a><h4 class="sectiontitle">Hysteresis</h4><p>Both relative
+permeability and capillary pressure hysteresis effects can be modeled.</p>
+<p> ECLIPSE 100</p>
+<p>In ECLIPSE 100 there is a choice of two models for relative permeability
+hysteresis in the non-wetting phase: Carlson’s model and Killough’s
+model. There is also an option of using Killough’s wetting phase hysteresis
+model.</p>
+<p>ECLIPSE 300</p>
+<p>In ECLIPSE 300 there is a choice of Killough’s model and Jargon’s
+model in the non-wetting phase.</p>
+<p>ECLIPSE
+100</p>
+<p>An alternative three phase hysteresis
+model is available, which is applicable in cases where all three phases
+are present together, for example in a water alternating gas (WAG)
+flood (see <a href="wag_Hysteresis_in_WAG_Floods.html#wag_hysteresis_in_wag_floods"> "Hysteresis in WAG Floods"</a>).</p>
+<p>See <a href="hysteres_Hysteresis.html#hysteres_hysteresis"> "Hysteresis"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_rock_compaction"><a name="intro_rock_compaction"><!-- --></a><h4 class="sectiontitle">Rock compaction</h4><p>The Rock Compaction option models the collapse of pore channels
+as the fluid pressure decreases. The process may be reversible, irreversible
+or hysteretic as required. The facility is particularly useful in
+dual porosity runs.</p>
+<p>ECLIPSE 100</p>
+<p>In addition in ECLIPSE 100 the Water Induced
+Compaction facility enables the mechanical effect of water on some
+rock types (for example chalk) to be taken into account.</p>
+<p>See <a href="rockcomp_Rock_Compaction.html#rockcomp_rock_compaction"> "Rock
+Compaction"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_tracer_tracking"><a name="intro_tracer_tracking"><!-- --></a><h4 class="sectiontitle">Tracer tracking</h4><p>The Tracer Tracking option is a general facility to determine
+the movement of ‘marked’ fluid elements during a simulation run. It
+may be used, for example, to differentiate the movement of water injected
+by different wells and initial aquifer water, or to predict the variation
+in salinity or concentrations of other chemical species.</p>
+<p>ECLIPSE 100 </p>
+<p>Tracers
+may also be defined to exist in a hydrocarbon phase, and used to model
+the exchange of the fluid elements between the free and solution states
+whenever mass transfer takes place in the associated hydrocarbon phase.
+The Tracer option is therefore useful in predicting the movement of
+the initial free and/or solution gas. Initial sulfur content may be
+defined as a function of depth and tracked with the movement of oil.</p>
+<p>ECLIPSE 100 </p>
+<p>An option to control the effects of numerical diffusion on tracer
+interfaces is available.</p>
+<p>See <a href="tracertr_Tracer_Tracking.html#tracertr_tracer_tracking"> "Tracer
+Tracking"</a> for further information</p>
+</div>
+
+<div class="section" id="intro_api_tracking"><a name="intro_api_tracking"><!-- --></a><h4 class="sectiontitle">API tracking</h4><p>ECLIPSE 100 </p>
+<p>Unlike
+the ‘passive’ tracer tracking options described above, API Tracking
+is ‘active’. It takes full account of the mixing of oils with totally
+different PVT properties. This contrasts with the conventional practice
+of assuming that the oil magically assumes the formation volume factor,
+viscosity, density and bubble point of the cell into which it flows.
+Initial API may be defined as a function of depth in each equilibration
+region or independently for each cell. A fourth equation is solved
+at each timestep to update APIs.</p>
+<p>See <a href="apitrack_API_Tracking.html#apitrack_api_tracking"> "API Tracking"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_brine_tracking"><a name="intro_brine_tracking"><!-- --></a><h4 class="sectiontitle">Brine tracking</h4><p>The brine tracking facility is an ‘active’ tracer in the water phase.
+The water properties are tabulated as a function of the salt concentration.
+Hence if injected water has a different salinity from the original
+reservoir water, the different water density and viscosity can be
+accounted for.</p>
+<p>See <a href="brinetra_Brine_Tracking.html#brinetra_brine_tracking"> "Brine
+Tracking"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_temperature_model"><a name="intro_temperature_model"><!-- --></a><h4 class="sectiontitle">Temperature model</h4><p>ECLIPSE 100 </p>
+<p>The Temperature model is designed to model the cooling of the reservoir
+when cold water is injected into a relatively hot reservoir. An energy
+balance equation is solved after the main flow equations at each timestep,
+to determine the temperature in each grid block. Both the oil and
+water viscosities are modified as a function of temperature for the
+subsequent timestep.</p>
+<p>See the <a href="temperat_Temperature_option.html#temperat_temperature_option"> "Temperature option"</a> for further information.</p>
+<p>ECLIPSE 300  </p>
+<p>In
+a compositional simulation the temperature option invokes the thermal
+option, see <a href="thermalintro_Thermal_Option.html#thermalintro_thermal_option"> "Thermal option"</a>, this can result in a number of important
+differences, please see the section <a href="temperat_ECLIPSE_100_and_300_Differences.html#temperat_differences_between_the_temperature_option_in_eclipse_100_and_eclipse_300"> "Differences between the temperature option in ECLIPSE 100 and ECLIPSE
+300"</a> for more information.</p>
+</div>
+
+<div class="section" id="intro_miscibility"><a name="intro_miscibility"><!-- --></a><h4 class="sectiontitle">Miscibility</h4><p>ECLIPSE 100 </p>
+<p>ECLIPSE
+100 has a three-component Miscible Flood model. This is intended for
+the simulation of miscible gas injection processes. The model assumes
+that the reservoir fluids consist of three components: reservoir oil
+(stock tank oil + solution gas), injection gas (solvent) and water.
+The reservoir oil and solvent gas components are assumed to be miscible
+in all proportions. Physical dispersion of the miscible components
+is treated using the Todd- Longstaff technique by means of a mixing
+parameter which is specified on a region basis. The solvent gas gravity
+can differ from that of the solution gas, and the model also allows
+the oil/solvent screening effects at high water saturations to be
+studied. A special numerical diffusion control facility is available
+with the miscible option, and is particularly useful in studies using
+large values of the mixing parameter. See <a href="miscfloo_Miscible_Flood_Modeling.html#miscfloo_miscible_flood_modeling"> "Miscible Flood Modeling"</a> for further information.</p>
+<p>ECLIPSE 300  </p>
+<p>In
+a compositional simulation miscibility is predicted naturally as the
+surface tension between the two hydrocarbon phases drops to zero.
+However the simulator still needs to model the changing relative permeability
+of the miscible fluid. ECLIPSE 300 contains a comprehensive miscibility
+model. See <a href="sur_tension_Miscibility.html#sur_tension_miscibility"> "Surface
+Tension Effects"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_individual_well_controls"><a name="intro_individual_well_controls"><!-- --></a><h4 class="sectiontitle">Individual well
+controls</h4><p>ECLIPSE has a comprehensive set of options for
+controlling individual wells. Producers can operate at a specified
+value of the oil rate, water rate, liquid rate, gas rate, linearly
+combined rate, reservoir fluid voidage rate, bottom hole pressure
+and tubing head pressure. The engineer supplies a target value for
+one of these quantities, and limiting values for any of the remaining
+quantities. The well operates at its specified target as long as none
+of the limits are violated. If a limit is going to be violated, the
+well automatically changes its mode of control to keep operating within
+its allowed limits. Efficiency factors can be applied to take account
+of regular downtime. The flow rates and pressures are calculated for
+the well under normal flowing conditions, but the cumulative flows
+are reduced according to the efficiency factor. Injection wells have
+a similar set of controls. Target or limiting values can be supplied
+for the injection rate at surface conditions, the injection rate at
+reservoir conditions, the bottom hole pressure and the tubing head
+pressure.</p>
+<p>To aid the process of history matching, production
+wells can be placed under an additional type of control. Their observed
+oil, water and gas rates are input, and the well can be made to produce
+at the equivalent liquid or reservoir fluid volume rate. Thus the
+rate of pressure decline should be approximately correct even when
+the water cut and gas-oil ratio are not fully matched. Both the observed
+and calculated flow rates can be written to the <samp class="codeph">SUMMARY</samp> file for graphical comparison.</p>
+<p>Production wells can also be
+subject to an additional class of ‘economic’ constraints. A producer
+is automatically shut-in or re-completed if its oil, gas or liquid
+rate falls below an economic limit. If its water cut, gas-oil ratio
+or water-gas ratio exceeds the specified upper limit, the well is
+worked over or shut-in. The rate of doing workovers can be limited
+by rig availability. Water cut, gas-oil ratio and water-gas ratio
+limits, and minimum economic rate limits, can also be applied to individual
+connections, which is closed if their limits are violated. In addition
+there is an option to limit the water cut, gas-oil ratio or water-gas
+ratio from a well by successively reducing its production rate each
+time the limit is violated. In ECLIPSE 100 wells subject to a minimum
+tubing head pressure limit can have their productivity boosted by
+automatically switching on artificial lift when their oil or liquid
+flow rates fall below a specified limit, subject to constraints on
+the group or field capacity for artificial lift. Individual wells
+can be ‘flagged’ to make the simulation run stop if they are shut-in
+for any reason, or another well can be opened automatically. The run
+can also be made to stop if all the producers in the field, or in
+one or more nominated groups, are shut-in. Wells that are shut-in
+can be tested periodically to see if they can flow economically again.</p>
+<p>See <a href="wellmode_Well_controls_and_limits.html#wellmode_well_controls_and_limits"> "Well controls and limits"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_group_and_field_production_controls"><a name="intro_group_and_field_production_controls"><!-- --></a><h4 class="sectiontitle">Group
+and field production controls</h4><p>The simulator contains facilities
+to control the collective behavior of groups of wells, or the field
+as a whole. The overall production rate of oil, water, gas, liquid
+or reservoir fluid (that is voidage) from one or more groups can be
+made to meet a specified target by one of two methods: prioritization
+or guide rate control.</p>
+<p>With prioritization, wells are ranked
+in order of priority, and are turned on in decreasing order of priority
+until a group rate limit is exceeded. The well that exceeds the group
+rate limit has its rate cut back to meet the limit. The remaining
+lower-priority wells in the group are kept closed until they are needed.
+Well priorities can either be set by you, or calculated at specified
+intervals from a general formula with user-defined coefficients.</p>
+<p>With guide rate control, the group’s target rate is apportioned
+between all its producers in proportion to either their production
+potentials or specified ‘guide rates’, but ensuring that no well violates
+its individual flow rate or pressure limits. When the group no longer
+has enough potential to meet its production target, the production
+rate will decline. However, the simulator can postpone the decline
+by automatically opening new wells from a drilling queue whenever
+extra potential is required, subject to constraints on the drilling
+rate and the maximum number of open wells allowed in each group. In
+ECLIPSE 100 additional actions for maintaining the production rate
+(reperforating, retubing, switching on lift and changing to a lower
+THP limit) can be performed through ‘group production rules’.</p>
+<p>Upper limits can also be applied to groups’ production rates of oil,
+water, gas, liquid and reservoir fluid. There is a choice of actions
+that are taken whenever one of these limits is violated, ranging from
+a work-over of the worst-offending well to the application of group
+control to hold the group’s production rate at the limiting value.
+In addition, a set of ‘economic constraints’ equivalent to those described
+above for individual wells can be applied to the overall production
+behavior of groups.</p>
+<p>The same set of controls and limits can
+also be applied to the overall field production. Under guide rate
+control, a target production rate for the field can either be apportioned
+between the groups in proportion to specified group guide rates, or
+apportioned directly between the wells in proportion to their production
+potentials or guide rates. The field production rate can be controlled
+simultaneously with the production from one or more of its constituent
+groups. The identity of the controlled phase (oil, water, gas, liquid
+or reservoir fluid) need not be the same in each case. For example,
+the field can produce oil at a required rate while one of the groups
+is producing at its maximum gas handling capacity. Thus the field
+produces at its target rate while each group honors its own set of
+constraints, and while each well honors its individual pressure and
+rate constraints.</p>
+<p>See <a href="wellmode_Group_and_field_control_facilities.html#wellmode_group_and_field_control_facilities"> "Group and field control facilities"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_multi-level_grouping_hierarchy"><a name="intro_multi-level_grouping_hierarchy"><!-- --></a><h4 class="sectiontitle">Multi-level
+grouping hierarchy</h4><p>Groups can be arranged into a multi-level
+tree structure of any required depth, by declaring some groups to
+be ‘children’ of higher level groups. All group controls and limits
+can be applied at any level (including the field, which can be regarded
+as a group at level zero at the top of the tree).</p>
+</div>
+
+<div class="section" id="intro_group_injection_controls"><a name="intro_group_injection_controls"><!-- --></a><h4 class="sectiontitle">Group injection
+controls</h4><p>Groups, and the field, can be given targets and
+limits to control their injection rates. The engineer can set target
+or limiting values for any of the following quantities:</p>
+<ul>
+<li>Surface injection rate of a particular phase </li>
+
+<li>Total reservoir volume injection rate of all phases.</li>
+
+<li>Re-injection fraction of a particular phase.</li>
+
+<li> Total voidage replacement fraction by all injected phases. </li>
+
+</ul>
+<p>Thus for example a group can be made to re-inject a set proportion
+of its produced gas, and to inject water to make up an overall reservoir
+volume injection target or voidage replacement fraction.</p>
+<p>A group
+injection target is apportioned between the wells in proportion to
+either their injection potentials or specified guide rates, subject
+to the wells’ individual flow and pressure limits. A target for a
+high level group (or the field) can optionally be apportioned among
+its subordinate groups in proportion to their group guide rates, which
+can be set directly or calculated to equal their production voidage
+rates or voidage replacement needs. If a group (or the field) has
+insufficient injection potential to meet its target, the drilling
+queue is scanned for a suitable injector to open.</p>
+<p>ECLIPSE 300 </p>
+<p>In compositional
+cases an injected gas stream may be specified explicitly, or be defined
+by the production from a well or group. It may also be a mixture of
+several such sources. The injection rate may be limited by the availability
+of gas from the specified source, although advance gas and make-up
+gas streams can be defined to augment the supply.</p>
+<p>See <a href="wellmode_Group_injection_control_options.html#wellmode_group_injection_control_options"> "Group injection control options"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_sales_gas_production_control"><a name="intro_sales_gas_production_control"><!-- --></a><h4 class="sectiontitle">Sales gas
+production control</h4><p>The Sales Gas Production Control facility
+provides a means of controlling the export of associated gas from
+an oil field, which may at the same time have controls on the oil
+production rate. The sales gas production rate of a group or the field
+is defined as its total gas production rate, minus its total gas injection
+rate, minus the gas consumption rate of the group and any subordinate
+groups, plus the rate of gas import (if any) to the group or its subordinates.
+Individual gas consumption and import rates can be set for each group.</p>
+<p>The sales gas production rate is controlled by re-injecting the
+surplus gas not required for sale. Sales gas control can be applied
+independently of any other production controls on the group or field,
+provided that there is enough injection capacity to inject the surplus
+gas. The group or field is automatically placed under gas re-injection
+control, and its target re-injection fraction is determined dynamically
+at each timestep to inject the surplus gas.</p>
+<p>See <a href="wellmode_Sales_gas_production_control.html#wellmode_sales_gas_production_control"> "Sales gas production control"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_crossflow_and_co-mingling_in_wells"><a name="intro_crossflow_and_co-mingling_in_wells"><!-- --></a><h4 class="sectiontitle">Crossflow
+and co-mingling in wells</h4><p>When a well is completed in more
+than one grid block, the flow rate from each grid block is proportional
+to the product of three quantities:</p>
+<ol>
+<li>The transmissibility between the grid block and the well bore. </li>
+
+<li>The mobility of the phase in the grid block at the perforations.</li>
+
+<li>The pressure drawdown between the grid block and the well bore.</li>
+
+</ol>
+<p>ECLIPSE takes full account of all three quantities when apportioning
+a well’s target flow rate between its various grid block connections.
+This is especially important in cases where a well is completed in
+two or more layers of a reservoir with poor vertical communication,
+where the drawdown at each layer can be substantially different.</p>
+<p>In certain situations the drawdown in one layer may have the opposite
+sign to the drawdown in the other completed layers. The simulator
+will then allow crossflow to take place between the reservoir layers
+through the well bore. A material balance constraint is observed within
+the well bore at formation level, so that the mixture of phases flowing
+out of the well bore corresponds to the average phase mixture entering
+the well bore. ECLIPSE can handle crossflow in any type of well operating
+under any mode of control, including the case when the well is plugged
+off above the formation while the completions remain open to the reservoir.</p>
+<p>The crossflow facility can be turned off if the engineer does
+not wish this to occur.</p>
+<p>See <a href="wellinfl_Well_Inflow_Performance.html#wellinfl_well_inflow_performance"> "Well Inflow Performance"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_highly_deviated_and_horizontal_wells"><a name="intro_highly_deviated_and_horizontal_wells"><!-- --></a><h4 class="sectiontitle">Highly
+deviated and horizontal wells</h4><p>There is no restriction on
+the location of the completions within each well. A highly deviated
+well can be completed in a number of grid blocks that do not all belong
+to the same vertical column. In fact a well can be completed in several
+grid blocks within the same layer, enabling the simulator to model
+wells completed in horizontally-adjacent grid blocks. This feature
+is also useful in 3D radial coning studies where the well connects
+with all the innermost, wedge-shaped, blocks in any given layer. Multisegment
+Wells (see <a href="intro_ECLIPSE_Options.html#intro_multi-segment_wells">  "Multisegment
+wells"</a>) may be used to investigate the effects of friction
+pressure losses along the well’s perforated length, which could be
+important for horizontal wells.</p>
+</div>
+
+<div class="section" id="intro_special_facilities_for_gas_wells"><a name="intro_special_facilities_for_gas_wells"><!-- --></a><h4 class="sectiontitle">Special
+facilities for gas wells</h4><p>ECLIPSE has two facilities for
+improving the accuracy of modeling gas inflow. Firstly, the non-Darcy
+component of the pressure drawdown resulting from turbulence near
+the well bore is modeled by a flow-dependent contribution to the skin
+factor. The simulator calculates the turbulence skin factor and the
+gas inflow rate in each completion by a method that ensures that they
+are fully consistent with each other. The calculation is performed
+fully implicitly, to maintain stability over long timesteps. These
+precautions are especially important when the pressure drop due to
+turbulence is a significant proportion of the total drawdown.</p>
+<p>ECLIPSE 100  </p>
+<p>The
+second facility is the option to use a special inflow equation. ECLIPSE
+100 offers the choice of using the Russell-Goodrich equation or the
+gas pseudo-pressure equation in place of the conventional inflow performance
+relationship for free gas flow. Both equations make allowance for
+the variation in the viscosity and the density of the gas over the
+pressure drop between the grid block and the well bore. For the Russell-Goodrich
+equation, these quantities are determined at the average pressure
+between the grid block and the well bore, instead of at the pressure
+of the grid block. For the pseudo-pressure equation, these quantities
+are replaced by an average value integrated between the grid block
+and well bore pressures.</p>
+<p>In gas condensate simulations the Generalized
+Pseudo-Pressure method of Whitson and Fevang can be employed. Here,
+the total hydrocarbon mobility is integrated between the grid block
+pressure and the well bore pressure, taking account of changes in
+relative permeability caused by condensate dropout.</p>
+<p>See <a href="wellinfl_Special_inflow_equations.html#wellinfl_special_inflow_equations"> "Special inflow equations"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_fine_grid_equilibration"><a name="intro_fine_grid_equilibration"><!-- --></a><h4 class="sectiontitle">Fine grid equilibration</h4><p>The initial pressures and saturations in the reservoir grid blocks
+can be calculated by the ‘equilibration’ facility. Each phase in the
+reservoir is given a hydrostatic pressure gradient, dependent on its
+local density. The saturations are determined from the local pressure
+differences between the phases, using the capillary pressure tables.</p>
+<p>A common practice is to set the fluid saturations within each
+grid block equal to the local saturations at the center of the block.
+However, this procedure can produce significant errors in the Fluids-in-Place
+estimation when a large grid block contains a fluid contact or part
+of a transition zone. ECLIPSE has an option to improve the accuracy
+of the Fluids-in-Place calculation in this situation. The fluid saturations
+are determined at a number of levels within the block, and these are
+averaged to obtain the overall fluid saturations within the block.
+The method can also take account of the shape of sloping grid blocks,
+by weighting the fluid saturations at each level within the block
+with the area of the horizontal cross-section of the block at that
+level.</p>
+<p>See <a href="initial_Initializing_the_Study.html#initial_initializing_the_study"> "Initializing the Study"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_aquifers"><a name="intro_aquifers"><!-- --></a><h4 class="sectiontitle">Aquifers</h4><p>Aquifers may
+be represented by a choice of two analytic models, a constant flux
+model, two constant head/pressure models and a numerical model. The
+analytic models are the Fetkovich aquifer and the Carter-Tracy aquifer.
+The constant flux model allows you to specify the flow per unit area
+at any time during the simulation. The constant head/pressure model
+allows you to specify the head or pressure at any time during the
+simulation. The numerical model consists of a sequence of aquifer
+cells connected together in one dimension. The innermost cell of the
+numerical aquifer sequence may be connected to any number of reservoir
+cells. You can specify attributes separately for each aquifer cell,
+for example depth,  dimensions, porosity and permeability, giving
+you complete flexibility  in defining each aquifer.</p>
+<p>See <a href="aquifer_Aquifer_Modeling_Facilities.html#aquifer_aquifer_modeling_facilities"> "Aquifer Modeling Facilities"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_polymer_flood_model"><a name="intro_polymer_flood_model"><!-- --></a><h4 class="sectiontitle">Polymer flood model</h4><p>The polymer flood option uses a fully implicit model to allow
+studying the detailed mechanisms involved in polymer displacement
+processes including sensitivity to salinity. The model accounts for
+the increase in viscosity of the aqueous phase due to the addition
+of the polymer solution. The ECLIPSE 100 model also accounts for the
+viscosity degradation due to non-Newtonian shear effects at high velocity.</p>
+<p>The adsorption of polymer to the rock surfaces and the resulting
+reduction in aqueous phase relative permeability can be treated by
+the model. In Addition, in ECLIPSE 100 the effects of inaccessible
+pore volume on the flow of the polymerized solution are also included.</p>
+<p>See <a href="polymer_Polymer_Flood_Model.html#polymer_polymer_flood_model"> "Polymer flood model"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_surface_networks"><a name="intro_surface_networks"><!-- --></a><h4 class="sectiontitle">Surface networks</h4><p>The network option is designed to provide variable tubing head
+pressure limits to groups of wells, which vary with the groups’ production
+rates according to a set of pipeline pressure loss relationships.</p>
+<p>A simple application would be to model a subsea completion, where
+several wells produce into a single manifold which is connected to
+a separator by a flow line. The pressure in the manifold will depend
+on the total production rate, GOR and water cut of the wells.</p>
+<p>For more complicated applications, a multilevel hierarchical network
+of pipelines can be built up. Each pipeline is given a vertical flow
+performance table (which can be produced by VFP <em>i</em>) to determine
+the pressure losses along it, in the same way that well bore pressure
+losses are calculated.</p>
+<p>A network balancing calculation is performed
+at user-defined intervals to update the pressure at each node in the
+network. Separate networks can also be set up for water and gas injection,
+which can be useful for modeling pump or compressor performance into
+injection manifolds.</p>
+<p>See <a href="networkintro_Network_Option.html#networkintro_network_option"> "Network option"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_flux_boundaries"><a name="intro_flux_boundaries"><!-- --></a><h4 class="sectiontitle">Flux boundaries</h4><p>The Flux boundary option allows runs to be performed on a small
+section of a field. A base run is performed for the full field study
+and time dependent flows across the boundary of the small section
+of the field are written to a flux file. Subsequent runs for the small
+section are performed, reading the flux file to establish boundary
+conditions for consistency with the full field model. This option
+is useful for history matching when only a few wells remain to be
+matched, and reduces the cost of repeated runs when only a small sector
+of the field remains to be resolved.</p>
+<p>ECLIPSE
+100   </p>
+<p>It may also be used in conjunction
+with the drainage region facility (<a href="../ecl_rm/OPTIONS.html#options.25">item 25</a> in the <span class="keyword">OPTIONS</span> keyword)
+to reduce computing costs in sensitivity studies.</p>
+<p>See <a href="fluxintro_Flux_Boundary_Conditions.html#fluxintro_flux_boundary_conditions"> "Flux boundary conditions"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_solvent_model"><a name="intro_solvent_model"><!-- --></a><h4 class="sectiontitle">Solvent model</h4><p>ECLIPSE 100 </p>
+<p>The
+Solvent Model is a four-component extension of the Todd and Longstaff
+empirical miscible flood model. ECLIPSE solves 4 coupled equations
+fully implicitly for oil/water/gas/solvent. The oil/water/gas system
+in the absence of the solvent component reduces to the traditional
+black oil model. A solvent phase can be introduced into the model
+to miscibly displace the reservoir hydrocarbons. You can control the
+degree of miscibility using the Todd-Longstaff parameter, and the
+transition to miscibility with an input table of miscibility versus
+solvent saturation. Most potentially miscible fluids are only miscible
+at high pressure. This pressure effect can be modeled in ECLIPSE by
+defining a table of miscibility versus pressure.</p>
+<p>See <a href="solvent_Solvent_Model.html#solvent_solvent_model"> "Solvent model"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_gi_pseudo-compositional_model"><a name="intro_gi_pseudo-compositional_model"><!-- --></a><h4 class="sectiontitle">Gi pseudo-compositional
+model</h4><p>ECLIPSE 100  </p>
+<p>The Gi pseudo-compositional model is a four-equation
+model which improves the modeling of volatile oil and gas condensate
+systems, without moving to a fully compositional description. The
+Gi parameter is a measure of the amount of dry gas that has contacted
+the original hydrocarbons. The saturated R<sub>s</sub> and R<sub>v</sub> values and the B<sub>o</sub> and B<sub>g</sub> of the oil and gas
+are supplied to ECLIPSE as functions of both pressure and Gi. For
+example the saturated R<sub>v</sub> value of the gas will reduce with
+Gi; thus the gas is able to contain less vaporized oil. This effect
+overcomes one of the problems associated with black oil models, namely
+that of predicting overoptimistic recoveries in gas cycling studies.
+The data required by ECLIPSE can be generated from an equation-of-state
+description of the reservoir fluids using the PVT program.</p>
+<p>See <a href="gipscomp_Gi_pseudo-compositional_model.html#gipscomp"> "Gi pseudo-compositional
+model"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_surfactant_model"><a name="intro_surfactant_model"><!-- --></a><h4 class="sectiontitle">Surfactant model</h4><p>The surfactant model allows modeling of enhanced water floods
+where the added surfactant reduces the capillary pressure between
+the water and oil phases. The reduction in capillary pressure allows
+a greater proportion of the oil to be displaced, thus reducing the
+residual oil saturation. The Surfactant flood option models the reduction
+in the residual saturation and the associated modification of the
+relative permeability curves as a function of the capillary number
+(that is the ratio of viscous to capillary forces). The effect of
+the surfactant concentration on the water viscosity, and the adsorption
+of surfactant onto the rock, can be treated by the model.</p>
+<p>See <a href="surfactant_Surfactant_Model.html#surfactant_surfactant_model"> "Surfactant model"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_environmental_tracer"><a name="intro_environmental_tracer"><!-- --></a><h4 class="sectiontitle">Environmental tracer</h4><p>ECLIPSE 100</p>
+<p>The
+environmental tracer option is a set of extensions of the tracer tracking
+facility that can be used to model environmental problems, for example,
+the transport of a radioactive contaminant in ground water flow. At
+present the extra physical models are tracer adsorption and tracer
+decay. Up to fifty tracers can be tracked independently, each with
+its own adsorption and/or decay model.</p>
+<p>See <a href="enviro_Environmental_Tracers.html#enviro_environmental_tracers"> "Environmental tracers"</a> for further information.</p>
+</div>
+
+<div class="section" id="intro_coal_bed_methane"><a name="intro_coal_bed_methane"><!-- --></a><h4 class="sectiontitle">Coal bed methane</h4><p>The Coal bed methane option allows the modeling
+of gas production (methane) from coal seams. Gas present in the coal
+matrix diffuses into a fracture system and can be produced using traditional
+oil field technology. The option models the diffusion process and
+the flow of water and gas within the fracture system. It is also possible
+to model enhanced recovery mechanisms using a third conservation equation
+to represent an injected gas, typically CO<sub>2</sub>.</p>
+<p>See <a href="coalbed_Introduction.html#coalbed_introduction">  "Coal bed methane model"</a> for
+further information.</p>
+</div>
+
+<div class="section" id="intro_foam_model"><a name="intro_foam_model"><!-- --></a><h4 class="sectiontitle">Foam model</h4><p>The foam model can be used to screen fields for possible foam injection
+projects. It allows modeling the effect of foam on reducing gas mobility,
+this effect can be used to slow the breakthrough of injected gas or
+to reduce the production of the gas cap.</p>
+<p>The ECLIPSE 100 foam model is a simple model of the foam injection
+process. The foam is modeled as a tracer in either the gas or the
+water phase, which reduces the gas mobility. The foam quality can
+degrade due to adsorption and decay, the decay rate being a function
+of both the water and oil saturations. In addition, the effectiveness
+of the gas mobility reduction is a function of pressure and the shear
+rate.</p>
+<p>The ECLIPSE 300 foam
+model allows for greater flexibility and detail for modeling the effects
+of foam in the reservoir. Foam is modeled as a water component, which
+might be injected or generated in situ following surfactant flooding.
+Foam adsorption, decay and generation can be included in the model
+using chemical reactions.</p>
+<p>See <a href="foam_Foam_Model.html#foam_foam_model"> "Foam model"</a> for
+further information.</p>
+</div>
+
+<div class="section" id="intro_gas_calorific_value_control"><a name="intro_gas_calorific_value_control"><!-- --></a><h4 class="sectiontitle">Gas calorific
+value control</h4><p>ECLIPSE 100   </p>
+<p>The gas calorific value control option controls
+the mean calorific value of gas produced from the field, while simultaneously
+controlling the gas production rate. The calorific value of the produced
+gas can either be specified independently for each well, or equated
+to the concentration of a gas phase tracer. A target mean calorific
+value can be set for groups that are operating at a rate target under
+guide rate group control (keyword <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a>). ECLIPSE attempts
+to keep the group operating at both targets simultaneously by dynamically
+adjusting the well guide rates to give an appropriate mixture of high
+and low calorific value gas. The range of well calorific values must
+of course span the group’s target value. An additional option is the
+ability to specify a target energy rate (that is flow rate multiplied
+by calorific value) for the group. The facility is compatible with
+the Gas Field Operations Model, in that a group or field target for
+either gas production rate or energy production rate can be set according
+to the DCQ and the swing or profile factors.</p>
+<p>See <a href="gcalvalintro_Gas_Calorific_Value_Control.html#gcalvalintro_gas_calorific_value_control"> "Gas calorific value control"</a> for further information.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

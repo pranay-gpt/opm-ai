@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GCONSALE"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GCONSALE"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GCONSALE</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GCONSALE"><a name="GCONSALE"><!-- --></a>
+<h1 class="keyword">GCONSALE</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gconsale.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gconsale.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d816e45"> x </th>
+
+<th valign="top" id="d816e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d816e54">  </th>
+
+<th valign="top" id="d816e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d816e45 d816e54 ">  </td>
+
+<td valign="top" headers="d816e48 d816e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d816e45 d816e54 ">  </td>
+
+<td valign="top" headers="d816e48 d816e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d816e45 d816e54 ">  </td>
+
+<td valign="top" headers="d816e48 d816e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d816e45 d816e54 ">  </td>
+
+<td valign="top" headers="d816e48 d816e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d816e45 d816e54 ">  </td>
+
+<td valign="top" headers="d816e48 d816e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d816e45 d816e54 ">  </td>
+
+<td valign="top" headers="d816e48 d816e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d816e45 d816e54 ">  </td>
+
+<td valign="top" headers="d816e48 d816e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d816e45 d816e54 "> x </td>
+
+<td valign="top" headers="d816e48 d816e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword provides a means of controlling the export of associated
+gas from an oil field, which may at the same time have controls on
+the oil production rate. It is not intended for use when simulating
+gas fields, as it relies on gas injection to control the sales gas
+rate.</p>
+
+<p>The sales gas production rate of a group is defined as</p>
+
+<p> (sales gas production rate) = (total gas production rate) - (gas
+injection rate) + (gas import rate to the group and any subordinate
+groups) - (gas consumption rate of the group and any subordinate groups)</p>
+
+<p>The gas consumption and import rates are set with the keyword <a href="GCONSUMP.html#GCONSUMP"> GCONSUMP</a>.</p>
+
+<p>The sales gas production rate is controlled by reinjecting the
+surplus gas not required for sale. Sales gas control can be applied
+independently of any other production controls on the group or field,
+provided that there is enough injection capacity to inject the surplus
+gas. There must be one or more gas injectors subordinate to each group
+with a sales gas target. The group or field is automatically placed
+under gas reinjection control, and its target reinjection fraction
+is determined dynamically at each timestep to inject the surplus gas.
+Other limits on gas injection for the group or field (for example
+maximum surface rate) can be simultaneously applied using the keyword <a href="GCONINJE.html#GCONINJE"> GCONINJE</a>: place the
+group under <samp class="codeph">REIN</samp> control, with any value for the
+reinjection fraction, and supply the values for any other gas injection
+limits. The distribution of the injected gas between any subordinate
+groups can also be controlled by giving these groups upper rate limits
+and guide rates for gas injection, with the keyword <span class="keyword">GCONINJE</span>.</p>
+
+<p>If the group or field is producing more surplus gas than the injectors
+can handle, the drilling queue will be scanned for a new gas injector
+to open. Failing this, a choice of actions can be performed at the
+end of the timestep to reduce the gas production in the next timestep.
+The choice is governed by item 5 in this keyword. If on the other
+hand the group or field is not producing enough gas to fulfil the
+sales requirements, corrective action is taken at the end of the timestep,
+as described under item 4.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data and terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash.</p>
+
+<ol>
+<li> Group name or group name root <p>or <samp class="codeph">FIELD</samp> (for
+field sales gas control data)</p>
+<p>A group name root, enclosed in
+quotes and ending with an asterisk (*), can be used to refer to several
+groups in one record.</p>
+</li>
+
+<li> Sales gas production rate target. User-defined arguments can
+be set with keywords <a href="UDQ.html#UDQ"> UDQ</a> and <a href="UDADIMS.html#UDADIMS"> UDADIMS</a>. <p>A negative value switches off sales gas control (and reinjection)
+for the group. If you wish to continue reinjection, or impose other
+forms of group gas injection control, you must initiate this by subsequent
+use of the keyword <span class="keyword">GCONINJE</span>.</p>
+<p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), Mscf/day (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li> Maximum permitted sales gas production rate. User-defined arguments
+can be set with keywords <span class="keyword">UDQ</span> and <span class="keyword">UDADIMS</span>. <p>This value should be greater than the target rate in item 2.</p>
+<p>If the maximum rate is exceeded, the action requested in item
+5 is taken at the end of the timestep.</p>
+<p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), Mscf/day (<samp class="codeph">FIELD</samp>),
+scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: Infinity (1.0E20)</p>
+</li>
+
+<li> Minimum permitted sales gas production rate. User-defined arguments
+can be set with keywords <a href="UDQ.html#UDQ"> UDQ</a> and <a href="UDADIMS.html#UDADIMS"> UDADIMS</a>. <p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), Mscf/day
+(<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+<p>This value should be less than
+the target rate in item 2.</p>
+<p>If the rate falls below the minimum,
+the corrective action described below is taken at the end of the timestep:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">If</td>
+
+<td valign="top">The group is limited by a maximum gas production rate, increase
+its gas rate limit by the amount necessary to reach the sales gas
+target</td>
+
+</tr>
+
+<tr>
+<td valign="top">Else If</td>
+
+<td valign="top">There is a special gas producer (see keyword <a href="WGASPROD.html#WGASPROD"> WGASPROD</a>) open subordinate
+to the group and able to increase its production rate, increase the
+target gas rate of the special gas producer by its incremental rate
+set in keyword <span class="keyword">WGASPROD</span></td>
+
+</tr>
+
+<tr>
+<td valign="top">Else If</td>
+
+<td valign="top">There are more special gas producers in the drilling queue,
+open the next special gas producer in the drilling queue that is subordinate
+to the group needing more sales gas, and not subordinate to a group
+under gas rate control or a prioritization group, and set the well’s
+initial gas rate target equal to its incremental rate</td>
+
+</tr>
+
+<tr>
+<td valign="top">Else If</td>
+
+<td valign="top">There are no suitable special gas producers in the drilling
+queue, open the next ordinary producer in the drilling queue that
+is subordinate to the group needing more sales gas, and not subordinate
+to a group under gas rate control or a prioritization group.</td>
+
+</tr>
+
+<tr>
+<td valign="top">Else</td>
+
+<td valign="top">No corrective action can be taken. In this case, the sales gas 
+production rate will fall below the minimum permitted value.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: Minus infinity (-1.0E20)</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> Prior to 2007.1,
+the default for this item was 0 (Zero). If a non-positive lower limit
+value was specified, then this was interpreted as “no lower
+limit”. This was changed at 2007.1 in order to allow negative
+lower limit values to be specified. The pre-2007.1 behavior can be
+recovered by setting <a href="OPTIONS.html#options.103"> item 103</a> in <span class="keyword">OPTIONS</span> to a positive value. </span></div>
+</li>
+
+<li> Procedure on exceeding a maximum rate limit 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">NONE</samp> </td>
+
+<td valign="top">Do nothing</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">CON</samp> </td>
+
+<td valign="top"> Shut worst-offending connection in worst-offending well</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">+CON</samp> </td>
+
+<td valign="top"> Shut worst-offending connection and all below it in worst-offending
+well</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WELL</samp> </td>
+
+<td valign="top"> Shut or stop worst-offending well<p>(item 9 in keyword <a href="WELSPECS.html#WELSPECS"> WELSPECS</a>)</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">PLUG</samp> </td>
+
+<td valign="top"> Plug back worst-offending well (see keyword <a href="WPLUG.html#WPLUG"> WPLUG</a>)</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">RATE</samp> </td>
+
+<td valign="top"> Reduce the group’s gas production rate target/limit
+to a value that meets the sales gas target after allowing for any
+consumption and the current rate of reinjection. Place the group on
+gas production rate control.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">MAXR</samp> </td>
+
+<td valign="top"> As <samp class="codeph">RATE</samp>, but maximize the future production
+rate by setting the reinjection fraction limit to 1 so that if the
+injection capacity subsequently increases the gas production target
+increases correspondingly.   <p>In cases with a net sales, import
+and consumption target of zero the  rejection fraction limit is automatically
+and arbitrarily set to 100 to  fully take account of spare injection
+capacity. When the net sales,  import and consumption are no longer
+zero the reinjection fraction limit  will revert to 1. See "Sales
+gas production control" in the <cite>ECLIPSE Technical Description</cite>.</p>
+<p>Pre-2007.1, the reinjection limit was set to 1 instead of
+100 in cases where the net sales, import and consumption was zero.
+This had caused the <samp class="codeph">MAXR</samp> algorithm to stagnate and
+not take advantage of any increases in injection capacity. The old
+behavior can be recovered by setting <a href="OPTIONS.html#options.103"> item 103</a> in <span class="keyword">OPTIONS</span> to a positive value.</p>
+<p>The new “zero net sales, import and consumption” target
+gas reinjection fraction limit value of 100 can be modified by setting <span class="keyword">OPTIONS</span> item 103 to a negative value.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">END</samp> </td>
+
+<td valign="top">Stop the simulation at the end of the report step </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">NONE</samp> </p>
+<p>The ‘worst-offending’
+well or connection here is the one producing the highest ratio of
+gas to the well’s preferred phase (item 6 of keyword <span class="keyword">WELSPECS</span>). See also keywords <a href="COMPLUMP.html#COMPLUMP"> COMPLUMP</a> and <a href="WORKLIM.html#WORKLIM"> WORKLIM</a>.</p>
+<p>The <samp class="codeph">MAX</samp> option overwrites
+the group’s gas production rate limit with a value equal to
+the sales gas target plus the injection rate plus any gas consumption
+minus any import rate, while the group is operating on gas production
+rate control. Any user-defined limit on this quantity is erased.</p>
+<p>The <samp class="codeph">RATE</samp> and <samp class="codeph">MAXR</samp> options are
+not allowed in groups using the prioritization option for production
+rate control (see keywords <a href="GCONPRI.html#GCONPRI"> GCONPRI</a> and <a href="PRIORITY.html#PRIORITY"> PRIORITY</a>).</p>
+</li>
+
+</ol>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

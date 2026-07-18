@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Optimization State Files"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="optstate_optimization_state_files"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Optimization State Files</title>
+</head>
+<body>
+
+
+<div class="nested0" id="optstate_optimization_state_files"><a name="optstate_optimization_state_files"><!-- --></a>
+<h1 class="topictitle1">Optimization State Files</h1>
+
+
+ <div>
+<p>The optimization data specifies the optimization state at each
+iteration during Reservoir Optimization. See the <cite>ECLIPSE Technical
+Description</cite> for more information on Reservoir Optimization.The
+data can be output in separate files, or in a single, unified file.</p>
+
+<ul>
+<li>For separate files, ECLIPSE creates one optimization state file
+for each reservoir optimization iteration. For formatted output the
+file suffix is in the form <samp class="codeph">Knnnn</samp> and for unformatted
+output the suffix is of the form <samp class="codeph">Jnnnn</samp> where <samp class="codeph">nnnn</samp> is between 0000 and 9999.</li>
+
+<li>For unified file output, data for all optimization iterations
+are written to the same file, with a new header for each iteration.
+This file has a suffix <samp class="codeph">FOPT</samp> for formatted output
+and <samp class="codeph">OPT</samp> for unformatted output.</li>
+
+</ul>
+
+<p>The file naming convention is described in <a href="filename_ECLIPSE_File_Names.html#filename_eclipse_file_names"> "ECLIPSE File Names"</a>.</p>
+
+<p>The optimization state file contents for each iteration are as
+follows:</p>
+
+
+<div class="tablenoborder"><a name="optstate.tab.0016"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="optstate.tab.0016" frame="border" border="1" rules="all"><caption>
+           Table 47.1  Optimization state file data</caption>    
+<thead align="left">
+<tr>
+<th valign="top" id="d52e85"> Keyword                                     
+           </th>
+
+<th valign="top" id="d52e88">No. of Items                        </th>
+
+<th valign="top" id="d52e91">Data Type                        </th>
+
+<th valign="top" id="d52e94">Contents                        </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d52e85 "> <samp class="codeph">NOPITS</samp>                      
+                           </td>
+
+<td valign="top" headers="d52e88 ">1  </td>
+
+<td valign="top" headers="d52e91 ">INTE</td>
+
+<td valign="top" headers="d52e94 ">Header defining the start of the data for an iteration
+(and also the iteration number)                        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d52e85 ">  <samp class="codeph">NTOTRS</samp>                    
+                           </td>
+
+<td valign="top" headers="d52e88 ">1                        </td>
+
+<td valign="top" headers="d52e91 ">INTE</td>
+
+<td valign="top" headers="d52e94 ">Number of report steps for this optimization state
+data                        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d52e85 "> <samp class="codeph">SOPP</samp>  </td>
+
+<td valign="top" headers="d52e88 "> <samp class="codeph">NPARS*9</samp>                     
+  </td>
+
+<td valign="top" headers="d52e91 ">DOUB                        </td>
+
+<td valign="top" headers="d52e94 ">This record contains the following items of data
+for each parameter:                           <ol>
+<li>Parameter value for this iteration</li>
+
+<li>Parameter search direction value for this iteration</li>
+
+<li>Change in parameter value for this iteration</li>
+
+<li>Upper limit on the parameter value</li>
+
+<li>Lower limit on the parameter value</li>
+
+<li>  Parameter value associated with the best valid simulation so
+far</li>
+
+<li>Upper limit on the secondary value of the parameter (that is,
+gas in a WAG injection parameter)</li>
+
+<li>Lower limit on the secondary value of the parameter (that is,
+gas in a WAG injection parameter)</li>
+
+<li>Well control target for SCSA (Segment Cross Sectional Area) parameters</li>
+
+</ol>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d52e85 "> <samp class="codeph">IOPP</samp>   </td>
+
+<td valign="top" headers="d52e88 "> <samp class="codeph">NPARS*14</samp>                    
+ </td>
+
+<td valign="top" headers="d52e91 ">INTE</td>
+
+<td valign="top" headers="d52e94 ">This record contains 14 items of data for each
+parameter:                           <ol>
+<li>Parameter type.  <p>For field/group parameters:</p>
+   <ul>
+<li>1 = group oil production target rate</li>
+
+<li>2 = group water production target rate</li>
+
+<li>3 = group gas production target rate</li>
+
+<li>12 = group oil injection target rate</li>
+
+<li>13 = group water injection target rate</li>
+
+<li>14 = group gas injection target rate</li>
+
+</ul>
+<p>For well parameters:</p>
+<ul>
+<li>3 = well oil target rate</li>
+
+<li>4 = well water target rate</li>
+
+<li>5 = well gas target rate</li>
+
+<li>7 = well target bottom hole pressure</li>
+
+</ul>
+<p>For segment parameters:</p>
+<ul>
+<li>15 = segment cross sectional area</li>
+
+</ul>
+ </li>
+
+<li>Parameter status    <ul>
+<li>1 = Inactive</li>
+
+<li>2 = Active</li>
+
+<li>3 = Lower bounded</li>
+
+<li>4 = Upper bounded</li>
+
+</ul>
+</li>
+
+<li>Parameter domain type<ul>
+<li>0 = Constant</li>
+
+<li>1 = Group</li>
+
+<li>2 = Well</li>
+
+<li/>
+
+<li>3 = Segment</li>
+
+</ul>
+</li>
+
+<li>Parameter domain index (position in internal data structures)</li>
+
+<li>Report index for this parameter</li>
+
+<li>Parameter segment index (position in internal data structures)</li>
+
+<li>Calculated index (position in internal data structures)</li>
+
+</ol>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d52e85 ">  <samp class="codeph">IOPP</samp>                      
+                         </td>
+
+<td valign="top" headers="d52e88 ">  <samp class="codeph">NPARS*14</samp>                  
+          </td>
+
+<td valign="top" headers="d52e91 ">INTE</td>
+
+<td valign="top" headers="d52e94 "><ol>
+<li>Secondary calculated index (position in internal data structures)
+— only for WAG injection parameters</li>
+
+<li/>
+
+<li>Required mode index<ul>
+<li>-1 = Not required for segments</li>
+
+<li>1 = Oil rate</li>
+
+<li>2 = Water rate</li>
+
+<li>3 = Gas rate</li>
+
+<li>5 = Well bottom hole pressure</li>
+
+</ul>
+</li>
+
+<li>Secondary required mode index for this parameter — only
+for WAG injection parameters</li>
+
+<li>Fluid type<ul>
+<li>0 = Undefined</li>
+
+<li>1 = Produced phase</li>
+
+<li>2 = Injected phase</li>
+
+</ul>
+ </li>
+
+<li>   Fluid index  <ul>
+<li>0 = Undefined</li>
+
+<li>1 = Oil</li>
+
+<li>2 = Water</li>
+
+<li>3 = Gas</li>
+
+</ul>
+</li>
+
+<li>Previous parameter status</li>
+
+<li>Well control mode — only for segment parameters</li>
+
+</ol>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d52e85 "> <samp class="codeph">ZOPP</samp>    </td>
+
+<td valign="top" headers="d52e88 "> <samp class="codeph">NPARS*2</samp>                     
+  </td>
+
+<td valign="top" headers="d52e91 ">CHAR                        </td>
+
+<td valign="top" headers="d52e94 ">This record contains 2 items of data for each
+parameter:                           <ol>
+<li>Parameter name mnemonic</li>
+
+<li>Parameter domain name</li>
+
+</ol>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d52e85 "> <samp class="codeph">IOPF</samp>    </td>
+
+<td valign="top" headers="d52e88 "> <samp class="codeph">NFUNC*7</samp>                     
+  </td>
+
+<td valign="top" headers="d52e91 ">INTE</td>
+
+<td valign="top" headers="d52e94 ">This record contains 7 items of data for each
+function:                           <ol>
+<li>Function type<ul>
+<li>1 = Objective function</li>
+
+<li>2 = Simple inequality constraint</li>
+
+<li>3 = Complex GOR constraint</li>
+
+<li>4 = Complex WCT constraint</li>
+
+</ul>
+</li>
+
+<li>Function status (0=inactive, 1=active)</li>
+
+<li>Number of sub-functions</li>
+
+<li>First sub-function index</li>
+
+<li>Second sub-function index</li>
+
+<li>Function start time report index</li>
+
+<li>Function end time report index</li>
+
+</ol>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d52e85 "> <samp class="codeph">SOPF</samp> </td>
+
+<td valign="top" headers="d52e88 "> <samp class="codeph">NFUNC*4</samp>                     
+  </td>
+
+<td valign="top" headers="d52e91 ">DOUB</td>
+
+<td valign="top" headers="d52e94 ">This record contains 4 items of data for each
+function:<ol>
+<li>Function value</li>
+
+<li>Previous function value</li>
+
+<li>Function multiplier</li>
+
+<li>Normalizing factor when checking constraint violation</li>
+
+</ol>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d52e85 "> <samp class="codeph">SOPG</samp>  </td>
+
+<td valign="top" headers="d52e88 "> <samp class="codeph">NPARS</samp> or<p> <samp class="codeph">NFUNC *NPARS</samp> based on <span class="keyword">OPTIONS3</span> item 77</p>
+               
+        </td>
+
+<td valign="top" headers="d52e91 ">DOUB</td>
+
+<td valign="top" headers="d52e94 ">This record contains:<p> <samp class="codeph">NPARS</samp> items of data if <span class="keyword">OPTIONS3</span>(77) = 0:</p>
+<p>Gradient
+of the objective function with respect to each parameter</p>
+<p> <samp class="codeph">NFUNC*NPARS</samp> items if <span class="keyword">OPTIONS3</span>(77) &gt; 0:</p>
+<p>Gradient of the objective function and all constraints with respect
+to parameter 1</p>
+<p>Gradient of the objective function and all constraints
+with respect to parameter 2</p>
+<p>..., etc.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d52e85 "> <samp class="codeph">IOPS</samp> </td>
+
+<td valign="top" headers="d52e88 "> <samp class="codeph">NSUBF*11</samp>                   </td>
+
+<td valign="top" headers="d52e91 ">INTE</td>
+
+<td valign="top" headers="d52e94 ">This record contains 11 items of data for each
+sub-function:                           <ol>
+<li>Sub-function type  <ul>
+<li>0 = constant</li>
+
+<li>1 = O(1)...</li>
+
+</ul>
+</li>
+
+<li>Domain type        <ul>
+<li>0 = Constant</li>
+
+<li>1 = Group</li>
+
+<li>2 = Well</li>
+
+<li>3 = Segment</li>
+
+</ul>
+</li>
+
+<li>Sub-function domain index (position in internal data structures)</li>
+
+<li>Sub-function segment index (position in internal data structures)</li>
+
+</ol>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d52e85 ">  <samp class="codeph">IOPS</samp>                      
+    </td>
+
+<td valign="top" headers="d52e88 "> <samp class="codeph">NSUBF*11</samp>                    
+   </td>
+
+<td valign="top" headers="d52e91 ">INTE</td>
+
+<td valign="top" headers="d52e94 "><ol>
+<li>Fluid type<ul>
+<li>0 = Undefined </li>
+
+<li>1 = Produced phase</li>
+
+<li>2 = Injected phase</li>
+
+</ul>
+</li>
+
+<li>Fluid index   <ul>
+<li>0 = Undefined</li>
+
+<li>1 = Oil</li>
+
+<li>2 = Water</li>
+
+<li>3 = Gas</li>
+
+</ul>
+</li>
+
+<li>Calculation index. <p>For field and group domains:</p>
+<ul>
+<li>45 = group water production rate</li>
+
+<li>44 = group oil production rate</li>
+
+<li>46 = group gas production rate</li>
+
+<li>68 = group oil injection rate</li>
+
+<li>69 = group water injection rate</li>
+
+<li>70 = group gas injection rate</li>
+
+</ul>
+<div class="p">For well domains:<ul>
+<li>12 = well actual oil rate</li>
+
+<li>13 = well actual water rate</li>
+
+<li>14 = well actual gas rate</li>
+
+<li>16 = well actual bottom hole pressure</li>
+
+</ul>
+</div>
+<div class="p">For segment domains:<ul>
+<li>15 = segment profile factor coefficient A</li>
+
+</ul>
+</div>
+<div class="p">Discount flag<ul>
+<li>0 = No discounting</li>
+
+<li>1 = Discounting</li>
+
+</ul>
+</div>
+<div class="p">Time integral flag<ul>
+<li>0 = Rate</li>
+
+<li>1 = Total</li>
+
+</ul>
+</div>
+ </li>
+
+<li>Sub-function start time report index</li>
+
+<li>Sub-function end time report index</li>
+
+</ol>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d52e85 "> <samp class="codeph">SOPS</samp>                        </td>
+
+<td valign="top" headers="d52e88 "> <samp class="codeph">NSUBF*2</samp>          </td>
+
+<td valign="top" headers="d52e91 ">DOUB</td>
+
+<td valign="top" headers="d52e94 ">This record contains 2 items of data for each
+sub-function:<ol>
+<li>Sub-function coefficient</li>
+
+<li>Sub-function discount rate</li>
+
+</ol>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d52e85 "> <samp class="codeph">ZOPS</samp>    </td>
+
+<td valign="top" headers="d52e88 "> <samp class="codeph">NSUBF*2</samp>                    
+   </td>
+
+<td valign="top" headers="d52e91 "> CHAR                         </td>
+
+<td valign="top" headers="d52e94 ">This record contains 2 items of data for each
+sub-function:<ol>
+<li>Sub-function mnemonic</li>
+
+<li> Sub-function domain name  </li>
+
+</ol>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d52e85 "> <samp class="codeph">CGGV</samp>        </td>
+
+<td valign="top" headers="d52e88 "> <samp class="codeph">NPARS</samp> </td>
+
+<td valign="top" headers="d52e91 ">DOUB</td>
+
+<td valign="top" headers="d52e94 "> This record contains 1 item of data for each
+parameter:                           <ol>
+<li>Work vector for the conjugate gradient optimizer</li>
+
+</ol>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d52e85 "> <samp class="codeph">CGHV</samp>           </td>
+
+<td valign="top" headers="d52e88 "> <samp class="codeph">NPARS</samp> </td>
+
+<td valign="top" headers="d52e91 ">DOUB</td>
+
+<td valign="top" headers="d52e94 "> This record contains 1 item of data for each
+parameter:                           <ol>
+<li>Work vector for the conjugate gradient optimizer</li>
+
+</ol>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d52e85 ">  <samp class="codeph">END</samp> </td>
+
+<td valign="top" headers="d52e88 "> 1</td>
+
+<td valign="top" headers="d52e91 ">MESS                        </td>
+
+<td valign="top" headers="d52e94 ">This record indicates the end of the optimization
+state file.                        </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

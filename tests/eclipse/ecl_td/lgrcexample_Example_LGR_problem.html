@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Example LGR problem"/>
+<meta name="DC.subject" content="Local grid refinement example problem, Local grid refinement, Example"/>
+<meta name="keywords" content="Local grid refinement example problem, Local grid refinement, Example"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrcexample_example_lgr_problem"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Example LGR problem</title>
+</head>
+<body>
+
+
+<div class="nested0" id="lgrcexample_example_lgr_problem"><a name="lgrcexample_example_lgr_problem"><!-- --></a>
+<h1 class="topictitle1">Example LGR problem</h1>
+
+
+ <div>
+<p>This data set describes the seventh SPE Comparative Solution Project
+(1991) - a horizontal well with friction. The data set describes CASE
+3A, having a 900 ft. horizontal well completed across 3 global cells
+in the x-direction. These 3 cells, plus an additional cell at each
+end (making 5 in all), are refined as follows:</p>
+
+<p>Z-direction: 3 layers with a 2: 1: 2 thickness ratio.</p>
+
+<p>Y-direction: 3 rows with a 2: 1: 2 thickness ratio.</p>
+
+<p>X-direction: The two global cells at each end were refined into
+4, with equal DX values. The central global cell was not refined in
+the x-direction.</p>
+
+<div class="section" id="lgrcexample_runspec"><a name="lgrcexample_runspec"><!-- --></a><h4 class="sectiontitle">RUNSPEC</h4><pre><code>RUNSPEC 
+TITLE
+ 7th SPE Benchmark, Case 3a
+
+DIMENS
+ 9    9    6  /
+
+OIL
+WATER
+GAS
+
+DISGAS
+
+FIELD
+
+TABDIMS
+ 1    1   15   15    1   15  /
+
+WELLDIMS
+ 2    9    1    2 /
+
+LGR
+ 1  150  / 
+
+FRICTION
+ 1 /
+
+START
+ 1 'JAN' 1990  /
+
+NSTACK
+ 25 /
+
+FMTOUT
+FMTIN
+UNIFOUT
+UNIFIN</code></pre></div>
+
+<div class="section" id="lgrcexample_grid"><a name="lgrcexample_grid"><!-- --></a><h4 class="sectiontitle">GRID</h4><pre><code>GRID       =========================================================
+
+DXV
+  9*300  /
+
+DYV
+  620  400  200  100  60  100  200  400  620  /
+
+DZ
+  81*20  81*20  81*20  81*20  81*30  81*50  /
+
+PERMX
+  486*300 /
+
+PERMY
+  486*300 /
+
+PERMZ
+  486*30 /
+
+PORO
+  486*0.2 /
+
+EQUALS
+'TOPS' 3590  1 9  1 9  1 1  /
+/</code></pre><p>Specify the refined local grid. The global cells I=5-9,
+J=5, K=1 are refined into a 9 x 3 x 3 system.</p>
+<pre><code>CARFIN
+-- name  I1-I2  J1-J2  K1-K2  nx ny nz
+  'LGR1' 5  9   5  5   1  1   9  3  3  /</code></pre><p>Specify the x-direction partition of the 5 global cells into 9.
+The cells at either end are partitioned into 4 equal-sized cells.
+The middle cell is not partitioned in the x-direction.</p>
+<pre><code>NXFIN
+ 2  2  1  2  2  /</code></pre><p>Specify the size ratio of the local grid cells in the y-direction.
+The global cells are divided into 3 rows in the y-direction, with
+a 2:1:2 thickness ratio.</p>
+<pre><code>HYFIN
+ 2.0  1.0  2.0  /</code></pre><p>Specify the size ratio of the local grid cells in the z-direction.
+The global cells are divided into 3 layers in the z-direction, with
+a 2:1:2 thickness ratio.</p>
+<pre><code>HZFIN
+ 2.0  1.0  2.0  /</code></pre><p>End of local grid specification.</p>
+<pre><code>ENDFIN</code></pre></div>
+
+<div class="section" id="lgrcexample_props"><a name="lgrcexample_props"><!-- --></a><h4 class="sectiontitle">PROPS</h4><p>Use Stone’s
+method 2 for three-phase oil relative permeability.</p>
+<pre><code>PROPS     ==========================================================
+STONE2
+
+SWOF
+-- Sw    Krw    Krow     Pcow
+  0.22   0.0    1.0000   6.30
+  0.3    0.07   0.4000   3.60
+  0.4    0.15   0.1250   2.70
+  0.5    0.24   0.0649   2.25
+  0.6    0.33   0.0048   1.80
+  0.8    0.65   0.0      0.90
+  0.9    0.83   0.0      0.45
+  1.0    1.0    0.0      0.0    /
+
+SGOF
+-- Sg    Krg    Krog     Pcgo
+  0.0    0.0    1.00     0.0
+  0.04   0.0    0.60     0.2
+  0.1    0.022  0.33     0.5
+  0.2    0.1    0.10     1.0
+  0.3    0.24   0.02     1.5
+  0.4    0.34   0.0      2.0
+  0.5    0.42   0.0      2.5
+  0.6    0.5    0.0      3.0
+  0.7    0.8125 0.0      3.5
+  0.78   1.0    0.0      3.9    /
+
+PVTW
+-- Pref    Bw       Cw       Vw    Viscosibility
+   3600  1.00329   3.0E-6   0.96         0  /
+
+ROCK
+-- Pref     Cr
+   3600    4.0D-6   /
+
+DENSITY
+--  oil   water   gas
+    45.0  62.14   0.0702  /
+
+PVDG
+-- Pgas   Bg   Viscg
+    400  5.9   0.013
+    800  2.95  0.0135
+   1200  1.96  0.014
+   1600  1.47  0.0145
+   2000  1.18  0.015
+   2400  0.98  0.0155
+   2800  0.84  0.016
+   3200  0.74  0.0165
+   3600  0.65  0.017
+   4000  0.59  0.0175
+   4400  0.54  0.018
+   4800  0.49  0.0185 
+   5200  0.45  0.019
+   5600  0.42  0.0195   / 
+
+PVCO
+-- Pbub   Rs     Bo     Visco    Co     CVo
+    400  0.165  1.012   1.17   1.0E-5   0.0 
+    800  0.335  1.0255  1.14     2*
+   1200  0.500  1.038   1.11     2*
+   1600  0.665  1.051   1.08     2*
+   2000  0.828  1.063   1.06     2*
+   2400  0.985  1.075   1.03     2*
+   2800  1.130  1.087   1.00     2*
+   3200  1.270  1.0985  0.98     2*
+   3600  1.390  1.11    0.95     2*
+   4000  1.500  1.12    0.94     2*
+   4400  1.600  1.13    0.92     2*
+   4800  1.676  1.14    0.91     2*
+   5200  1.750  1.148   0.9      2*
+   5600  1.810  1.155   0.89     2*
+  /
+
+PMAX
+ 6000  /</code></pre></div>
+
+<div class="section" id="lgrcexample_solution"><a name="lgrcexample_solution"><!-- --></a><h4 class="sectiontitle">SOLUTION</h4><p>The specified
+initial conditions can be obtained by equilibration.</p>
+<pre><code>SOLUTION  ==========================================================
+EQUIL
+-- Dep   Pres  Dwoc  Pcwoc  Dgoc  Pcgoc  Rsvd  Rvvd  Fipc
+   3600  3600  3700   0.0   3590   0.0    1      0     0  /
+
+RSVD
+-- Dep   Rs
+   3500  1.41
+   3750  1.41  /
+
+RPTSOL
+ 'PRES'  'SOIL'  'SWAT'  'SGAS'  'RS'  / </code></pre></div>
+
+<div class="section" id="lgrcexample_summary"><a name="lgrcexample_summary"><!-- --></a><h4 class="sectiontitle">SUMMARY</h4><pre><code>SUMMARY    =========================================================
+FOPR
+FGPR
+FWPR
+FOPT
+FGPT
+FWPT
+FWCT
+FGOR
+LWBHP
+'LGR1' 'PROD' /
+/
+LCPR
+'LGR1' 'PROD' 3 2 2 /
+/
+FPR
+FWIR
+FWIT
+RUNSUM</code></pre></div>
+
+<div class="section" id="lgrcexample_schedule"><a name="lgrcexample_schedule"><!-- --></a><h4 class="sectiontitle">SCHEDULE</h4><pre><code>SCHEDULE   =========================================================
+RPTSCHED 
+ 'WELLS=2'  'SUMMARY=2'  'WELSPECS'  /</code></pre><p>Specify producer in local grid LGR1:</p>
+<pre><code>WELSPECL  
+-- Name  Group  LGR    I  J  Dbh   Phase
+  'PROD' 'G'   'LGR1'  8  5  3600  'OIL' /
+/</code></pre><p>Specify injector in global grid:</p>
+<pre><code>WELSPECS
+-- Name  Group  I  J  Dbh   Phase
+   'INJ' 'G'    9  5  3725  'WAT' /
+/</code></pre><p>Specify connections of producer in local grid:</p>
+<pre><code>COMPDATL
+-- Name  LOCAL GRID   I  J  K1-K2  Op/Sh  SatTab  ConFact  Diam  KH  S  D  Dirn
+  'PROD'   'LGR1'     3  2  2  2   'OPEN' 2*               0.375   3*      ’X’  /
+  'PROD'   'LGR1'     4  2  2  2   'OPEN' 2*               0.375   3*      ’X’  /
+  'PROD'   'LGR1'     5  2  2  2   'OPEN' 2*               0.375   3*      ’X’  /
+  'PROD'   'LGR1'     6  2  2  2   'OPEN' 2*               0.375   3*      ’X’  /
+  'PROD'   'LGR1'     7  2  2  2   'OPEN' 2*               0.375   3*      ’X’  /
+/</code></pre><p>Specify connections of injector in global grid:</p>
+<pre><code>COMPDAT
+-- Name I  J  K1-K2  Op/Sh  SatTab  ConFact
+  'INJ' 1  5  6  6  'OPEN' 1*       24.34  /
+  'INJ' 2  5  6  6  'OPEN' 1*       24.34  /
+  'INJ' 3  5  6  6  'OPEN' 1*       24.34  /
+  'INJ' 4  5  6  6  'OPEN' 1*       24.34  /
+  'INJ' 5  5  6  6  'OPEN' 1*       24.34  /
+  'INJ' 6  5  6  6  'OPEN' 1*       24.34  /
+  'INJ' 7  5  6  6  'OPEN' 1*       24.34  /
+  'INJ' 8  5  6  6  'OPEN' 1*       24.34  /
+  'INJ' 9  5  6  6  'OPEN' 1*       24.34  /
+/</code></pre><p>Specify the friction data for the producer. The grid
+block locations refer to the local grid.</p>
+<pre><code>WFRICTNL
+-- Name   Diam   Roughness
+  'PROD' 0.375  3.75E-4  /
+-- Local Grid   I J K  Tlen1  Tlen2
+       1*       7 2 2   0.0    150  /
+       1*       6 2 2   150    300  /
+       1*       5 2 2   300    600  /
+       1*       4 2 2   600    750  /
+       1*       3 2 2   750    900  /
+/</code></pre><p>Specify the production well constraints:</p>
+<pre><code>WCONPROD 
+-- Name   Op/Sh  CtlMode  Orat  Wrat  Grat  Lrat  Resv  Bhp
+  'PROD' 'OPEN' 'LRAT'    3*                9000  1*    1500  /
+/</code></pre><p>Specify the injection well constraints:</p>
+<pre><code>WCONINJE
+-- Name Phase Op/Sh  CtlMode  Srat  Resv  Bhp
+  'INJ' 'WAT' 'OPEN' 'BHP'    2*          3700  /
+/</code></pre><p>Specify timesteps and reports:</p>
+<pre><code>TSTEP                 
+ 4*100  /
+RPTSCHED 
+ 'PRES'  'SWAT'  'SGAS'  'FIP'  'WELLS=2'
+ 'SUMMARY=2'  'CPU=2'  'WELSPECS'  /
+TSTEP
+ 100  /
+RPTSCHED 
+ 'WELLS=2'  'SUMMARY=2'  'WELSPECS'  /
+TSTEP                 
+ 4*100  /
+RPTSCHED 
+ 'PRES'  'SWAT'  'SGAS'  'FIP'  'WELLS=2'
+ 'SUMMARY=2'  'CPU=2'  'WELSPECS'  /
+TSTEP
+ 100  /
+RPTSCHED 
+ 'WELLS=2'  'SUMMARY=2'  'WELSPECS'  /
+TSTEP                 
+ 4*100  /
+RPTSCHED 
+ 'PRES'  'SWAT'  'SGAS'  'FIP'  'WELLS=2'
+ 'SUMMARY=2'  'CPU=2'  'WELSPECS'  /
+TSTEP
+ 100  /
+END</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

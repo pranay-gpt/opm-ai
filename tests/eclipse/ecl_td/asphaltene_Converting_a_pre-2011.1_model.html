@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Converting a pre-2011.1 model"/>
+<meta name="DC.subject" content="Fluid model, Asphaltene pre-2011.1 model conversion"/>
+<meta name="keywords" content="Fluid model, Asphaltene pre-2011.1 model conversion"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="asphaltene_converting_a_pre-2011.1_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Converting a pre-2011.1 model</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="asphaltene_converting_a_pre-2011.1_model"><a name="asphaltene_converting_a_pre-2011.1_model"><!-- --></a>
+<h1 class="topictitle1">Converting a pre-2011.1 model</h1>
+
+
+ <div>
+<p>Pre-2011.1 asphaltene data sets can be converted to the three-component
+solid deposition model. Assuming the pre-2011.1 model has only one
+precipitating component, the conversion is straightforward:</p>
+
+<ol>
+<li>Add the <a href="../ecl_rm/SOLID.html#SOLID">SOLID</a> keyword in the <span class="keyword">RUNSPEC</span> section. </li>
+
+<li>Increase the number of components by one in the <a href="../ecl_rm/COMPS.html#COMPS">COMPS</a> keyword. </li>
+
+<li>Add the <a href="../ecl_rm/CVTYPE.html#CVTYPE">CVTYPE</a> keyword in the <span class="keyword">PROPS</span> section and define the new last component as a solid. </li>
+
+<li>Add the <a href="../ecl_rm/CATYPE.html#CATYPE">CATYPE</a> keyword in the <span class="keyword">PROPS</span> section and define the precipitation, flocculation
+and deposition components. The precipitation and flocculation components
+are the same as those defined in the <a href="../ecl_rm/ASPFLOC.html#ASPFLOC">ASPFLOC</a> keyword, and the deposition component
+is the new solid component. Remove the <span class="keyword">ASPFLOC</span> keyword. </li>
+
+<li>Add properties for the new solid component. The fluid properties
+can be copied from the flocculation component, although many of these
+will not be used since the solid component will not be considered
+in the flash. The deposition component molecular weight <a href="../ecl_rm/MW.html#MW">MW</a> should be the same as the flocculation component molecular
+weight if mass is to be conserved. Solid properties for the deposition
+component can be defined using the appropriate keywords. See <a href="solidintro_Solid_keywords.html#solidintro_solid_keywords"> "Solid
+keywords"</a>. The solid component density <a href="../ecl_rm/SDREF.html#SDREF">SDREF</a> is important as it will affect the volume
+balance and hence the cell pressure as asphaltene is deposited.</li>
+
+<li>The two models use different plugging coefficients. The pre-2011.1
+model uses  <math><msub><mi>γ</mi>
+<mn>1</mn></msub></math>, specified by item 2 of the <a href="../ecl_rm/ASPDEPO.html#ASPDEPO">ASPDEPO</a> keyword, while the three-component
+model uses  <math><msub><mi>γ</mi>
+<mn>2</mn></msub></math>, specified by item 5 of the same
+keyword. The coefficient can be converted using  <math><mrow><msub><mrow>
+<mi>γ</mi></mrow><mrow><mn>2</mn></mrow></msub><mo>=</mo><mi>A</mi><mo>⋅</mo><msub><mrow><mi>γ</mi>
+</mrow><mrow><mn>1</mn></mrow></msub></mrow></math> where <math><mi>A</mi></math> is an average cell face area. </li>
+
+<li>The two models use different measures for asphaltene deposit.
+The pre-2011.1 model uses the volume fraction in the cell <math><mi>ε</mi></math>, whereas the solid model uses the solid saturation  <math><msub><mi>S</mi>
+<mi>s</mi></msub></math>, that is the volume fraction in the
+pore  <math><mrow>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>s</mi></mrow>
+</msub><mo>=</mo><mi>ε</mi><mo>/</mo><mi>φ</mi>
+</mrow></math>. The <math><mi>ε</mi></math>  values used in keywords must be converted to solid saturations:<ul>
+<li>replace  <math><msub><mi>ε</mi>
+<mrow><mi>c</mi><mi>r</mi></mrow></msub></math> with
+              <math><msub><mi>S</mi>
+<mrow><mi>c</mi><mi>r</mi></mrow></msub></math> in
+argument 1 of keyword <a href="../ecl_rm/ASPLCRT.html#ASPLCRT">ASPLCRT</a>.</li>
+
+<li>replace  <math><mi>ε</mi></math>  values with  <math><msub><mi>S</mi>
+<mi>s</mi></msub></math>  values in the first column of <a href="../ecl_rm/ASPWETF.html#ASPWETF">ASPWETF</a>, if the keyword is used.</li>
+
+</ul>
+</li>
+
+<li>Replace the <a href="../ecl_rm/ASPKDAM.html#ASPKDAM">ASPKDAM</a> keyword,
+if used, with the <a href="../ecl_rm/SOLIDMMS.html#SOLIDMMS">SOLIDMMS</a> keyword.
+If the <span class="keyword">ASPKDAM</span> data is supplied as a table then
+the same data can be used for <span class="keyword">SOLIDMMS</span>, except
+the first column must be converted from  <math><mi>ε</mi></math>  values to  <math><msub>
+<mi>S</mi><mi>s</mi></msub></math> values. If the <span class="keyword">ASPKDAM</span> data is supplied as an exponent  <math><mi>δ</mi></math>  then an equivalent <span class="keyword">SOLIDMMS</span> table must be created
+with columns  <math><msub><mi>S</mi>
+<mi>s</mi></msub></math> and <math><msup>
+<mrow><mo>(</mo><msub><mrow><mn>1</mn><mrow><mo>-</mo><mi>S</mi></mrow></mrow><mi>s</mi></msub><mo>)</mo></mrow><mi>δ</mi></msup></math>. </li>
+
+<li>Replace the pre-2011.1 summary keywords.  </li>
+
+</ol>
+
+
+<div class="tablenoborder"><a name="asphaltene.tab.0471"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="asphaltene.tab.0471" frame="border" border="1" rules="all"><caption>
+           Table 251.1  Summary keywords</caption>  
+<thead align="left">
+<tr>
+<th valign="top" width="50%" id="d66e329">Pre-2011.1 model</th>
+
+<th valign="top" width="50%" id="d66e332">Three-component model</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" width="50%" headers="d66e329 "><span class="keyword">ASPADS</span>/<span class="keyword">BASPADS</span>                 <span class="keyword">ASPLUG</span>/<span class="keyword">BASPLUG</span>               </td>
+
+<td valign="top" width="50%" headers="d66e332 ">Adsorption and plugging are considered together
+as deposition. The volume fraction of adsorbed and plugging asphaltene
+are not calculated. Instead the rate of deposition can be found from
+the third reaction reported by <span class="keyword">AREAC</span>/<span class="keyword">BAREAC</span>. </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="50%" headers="d66e329 "><span class="keyword">ASPDOT</span>/<span class="keyword">BASPDOT</span>               </td>
+
+<td valign="top" width="50%" headers="d66e332 ">Use the solid keywords to report the amount of
+deposition <span class="keyword">SSOLID</span>/<span class="keyword">BSSOLID</span>. 
+             </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="50%" headers="d66e329 "><span class="keyword">ASPENT </span>/<span class="keyword">BASPENT</span>               </td>
+
+<td valign="top" width="50%" headers="d66e332 ">The volume fraction of entrained asphaltene is
+not calculated. Instead the rate of deposition can be found from the
+fourth reaction reported by <span class="keyword">AREAC</span>/<span class="keyword">BAREAC</span>.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="50%" headers="d66e329 "><span class="keyword">ASPFLO</span>               </td>
+
+<td valign="top" width="50%" headers="d66e332 ">Use keyword <span class="keyword">ASPFLT</span> to report
+the flow rate and <span class="keyword">ASPVEL</span> to report the average
+velocity. In addition the summary vectors <span class="keyword">BASPFLT</span> and <span class="keyword">BASPVEL</span> can be used.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="50%" headers="d66e329 "><span class="keyword">ASPKDM</span>/<span class="keyword">BASPKDM</span>               </td>
+
+<td valign="top" width="50%" headers="d66e332 ">Use the solid keywords to report the change in
+mobility that is due to asphaltene damage: <span class="keyword">SMMULT</span>/<span class="keyword">BSMMULT</span>.               </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

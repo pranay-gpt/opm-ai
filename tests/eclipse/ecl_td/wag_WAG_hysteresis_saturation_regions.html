@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WAG hysteresis saturation regions"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wag_wag_hysteresis_saturation_regions"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WAG hysteresis saturation regions</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wag_wag_hysteresis_saturation_regions"><a name="wag_wag_hysteresis_saturation_regions"><!-- --></a>
+<h1 class="topictitle1">WAG hysteresis saturation regions</h1>
+
+
+ <div>
+<p>For various reservoir modeling strategies, simulations may involve
+comparisons between conventional and WAG hysteresis. When changing
+from conventional to WAG hysteresis or vice versa, the use of the
+drainage (<span class="keyword">SATNUM</span>) and imbibition (<span class="keyword">IMBNUM</span>) saturation tables for both conventional and WAG hysteresis requires
+that the water relative permeability data associated with the imbibition
+saturation tables and possibly also the drainage saturation tables
+are changed. Alternatively separate sets of tables can be maintained
+such that only the drainage and saturation table indices are changed.
+In order to facilitate the process of changing between conventional
+and WAG hysteresis, two additional saturation region numbers have
+been introduced for representing separately the WAG hysteresis saturation
+functions. The keywords <a href="../ecl_rm/WH2NUM.html#WH2NUM"> WH2NUM</a> and <a href="../ecl_rm/WH3NUM.html#WH3NUM"> WH3NUM</a> can be used to specify the table numbers for the WAG hysteresis
+two-phase and three-phase water relative permeability functions respectively.
+This provides a mechanism for the coexistence of both conventional
+two-phase and WAG hysteresis saturation functions.</p>
+
+<p>The <span class="keyword">WH2NUM</span> and <span class="keyword">WH3NUM</span> keywords
+are optional; if these are not specified, the region numbers associated
+with these keywords will default to those defined for the <a href="../ecl_rm/SATNUM.html#SATNUM"> SATNUM</a> and <a href="../ecl_rm/IMBNUM.html#IMBNUM"> IMBNUM</a> keywords respectively.
+For the saturation tables associated with the <span class="keyword">WH2NUM</span> and <span class="keyword">WH3NUM</span> keywords, only the water relative
+permeability functions are utilized and the remaining data may be
+defaulted. In cases where the conventional two-phase water relative
+permeability data are considered suitable for use as the WAG-hysteresis
+two-phase relative permeability functions, the <span class="keyword">WH2NUM</span> keyword can be omitted.</p>
+
+<p>Where the <span class="keyword">WH2NUM</span> or <span class="keyword">WH3NUM</span> keywords have been specified, the minimum, critical and maximum
+water saturations should be equal for the corresponding <span class="keyword">SATNUM</span> and <span class="keyword">WH2NUM</span> table indices and for the corresponding <span class="keyword">IMBNUM</span> and <span class="keyword">WH3NUM</span> table indices. If
+one or more of these conditions are not satisfied, warning messages
+will be issued. Irrespective of whether or not the <span class="keyword">WH2NUM</span> or <span class="keyword">WH3NUM</span> keywords have been specified, warning
+messages will also be issued for grid blocks where the WAG hysteresis
+designated three-phase water relative permeability function is greater
+than the WAG hysteresis designated two-phase water relative permeability
+function at one or more table saturation nodes.</p>
+
+<p>These additional optional water relative permeability functions
+can be considered essentially as additional columns of the associated <span class="keyword">SATNUM</span> and <span class="keyword">IMBNUM</span> saturation tables.
+If the end-point scaling option has been specified, the conventional
+and WAG hysteresis relative permeability will both be subject to the
+same horizontal (saturation) scaling using the keywords <a href="../ecl_rm/swl_SWL_ISWL.html#swl_swl_iswl"> SWL</a>, <a href="../ecl_rm/SWCR.html#SWCR"> SWCR</a> etc. for the drainage and two-phase curves and using the
+keywords <a href="../ecl_rm/isxxxx_ISGL-OWCR.html#isxxxx_isgl-owcr"> ISWL</a>, <a href="../ecl_rm/isxxxx_ISGL-OWCR.html#isxxxx_isgl-owcr"> ISWCR</a> etc. for the imbibition and three-phase curves. However,
+the vertical (relative permeability) scaling for the two-phase and
+three-phase water relative permeability data is applied separately
+via the additional keywords <a href="../ecl_rm/krwx_KRW-IKRWR.html#krwx_krw-ikrwr"> KRWH</a>, <a href="../ecl_rm/krwx_KRW-IKRWR.html#krwx_krw-ikrwr"> KRWRH</a> and <a href="../ecl_rm/krwx_KRW-IKRWR.html#krwx_krw-ikrwr"> IKRWH</a>, <a href="../ecl_rm/krwx_KRW-IKRWR.html#krwx_krw-ikrwr"> IKRWHR</a> respectively.</p>
+
+<p>If the <span class="keyword">WH2NUM</span> or <span class="keyword">WH3NUM</span> keywords
+have been specified and the saturation table numbers differ from those
+specified via the corresponding <span class="keyword">SATNUM</span> and <span class="keyword">IMBNUM</span> keywords respectively, the two-phase and three-phase
+water relative permeability data will be used instead of the drainage
+and imbibition relative permeability data for all water relative permeability
+calculations in those saturation regions for which WAG hysteresis
+has been applied to the water phase. This is specified via item 5
+of the <a href="../ecl_rm/WAGHYSTR.html#WAGHYSTR"> WAGHYSTR</a> keyword on a per saturation region basis.</p>
+
+<p>For grid blocks for which the saturation table numbers specified
+by the <span class="keyword">SATNUM</span> and <span class="keyword">WH2NUM</span> keywords
+are the same, if end-point scaling has been specified, the values
+of <span class="keyword">KRWH</span> and <span class="keyword">KRWRH</span> will be ignored
+if specified. If these saturation table numbers are not the same,
+the values of <span class="keyword">KRWH</span> and <span class="keyword">KRWRH</span> will apply to the water relative permeability table values specified
+via <span class="keyword">WH2NUM</span>. Similarly, for grid blocks for which
+the saturation table numbers specified by the <span class="keyword">IMBNUM</span> and <span class="keyword">WH3NUM</span> keywords are the same, if end-point
+scaling has been specified, the values of <span class="keyword">IKRWH</span> and <span class="keyword">IKRWRH</span> will be ignored if specified. If these
+saturation table numbers are not the same, the values of <span class="keyword">IKRWH</span> and <span class="keyword">IKRWRH</span> will apply to the water
+relative permeability table values specified using <span class="keyword">WH3NUM</span>.</p>
+
+<p>A simple example of the use of the <span class="keyword">WH2NUM</span> and <span class="keyword">WH3NUM</span> keywords is shown below for the family II set of
+saturation functions. The gas and oil saturation functions associated
+with the <span class="keyword">WH2NUM</span> and <span class="keyword">WH3NUM</span> keywords
+are not used and can be defaulted in their entirety. For the water
+saturation functions only the saturation and water relative permeability
+columns are used and the remaining data may be defaulted subject to
+the specification of the minimum number of entries required for valid
+table entry. A similar approach may also be employed for the Family
+I set of saturation tables.</p>
+
+<pre><code>TITLE
+Example using WH2NUM and WH3NUM with Family II Saturation Functions
+
+DIMENS
+10 1 1 /
+...
+SATOPTS
+HYSTER
+/
+TABDIMS
+4 ...
+/
+PROPS
+...
+EHYSTR
+1* 2
+/
+...
+WAGHYSTR
+4* YES /
+/
+/
+/
+SGFN
+... / -- Table 1 drainage   (conventional hysteresis)
+... / -- Table 2 imbibition (conventional hysteresis)
+/     -- Table 3 unused
+/     -- Table 4 unused
+SOF3
+... / -- Table 1 drainage   (conventional hysteresis)
+... / -- Table 2 imbibition (conventional hysteresis)
+/     -- Table 3 unused
+/     -- Table 4 unused
+SWFN
+... / -- Table 1 drainage   (conventional hysteresis)
+... / -- Table 2 imbibition (conventional hysteresis)
+... / -- Table 3 two-phase krw only used for WAG hysteresis
+... / -- Table 4 three-phase krw only used for WAG hysteresis
+
+REGIONS
+...
+SATNUM
+10*1 /
+IMBNUM
+10*2 /
+WH2NUM
+10*3 /
+WH3NUM
+10*4 /
+...</code></pre>
+<p>A more complex example of the use of <a href="../ecl_rm/WH2NUM.html#WH2NUM"> WH2NUM</a> and <a href="../ecl_rm/WH3NUM.html#WH3NUM"> WH3NUM</a> is shown below for
+a model consisting of five layers each containing three grid blocks.
+End-point scaling has been specified and WAG hysteresis has been applied
+to the water phase in <span class="keyword">SATNUM</span> regions (and hence
+layers for this model) 1, 2, 3 and 4 but not 5. The <a href="../ecl_rm/WAGHYSTR.html#WAGHYSTR"> WAGHYSTR</a> keyword single row
+table numbers 6 to 20 are ignored because there are no <span class="keyword">SATNUM</span> regions associated with these table numbers. The usage of <span class="keyword">WH2NUM</span> and <span class="keyword">WH3NUM</span> for each layer and
+their associated vertical scaling end-points is summarized below:</p>
+
+<ol>
+<li> <span class="keyword">WH2NUM</span> is equal to <span class="keyword">SATNUM</span> and <span class="keyword">WH3NUM</span> is equal to <span class="keyword">IMBNUM</span> for this layer and hence the two-phase and three-phase water relative
+permeability data used for WAG hysteresis will be taken from <span class="keyword">SATNUM</span> and <span class="keyword">IMBNUM</span> respectively. If <span class="keyword">KRWH</span>, <span class="keyword">KRWRH</span>, <span class="keyword">IKRWH</span> or <span class="keyword">IKRWRH</span> have been specified, they will be ignored
+when applying water relative permeability vertical scaling because
+the arrays <span class="keyword">KRW</span>, <span class="keyword">KRWR</span>, <span class="keyword">IKRW</span> or <span class="keyword">IKRWR</span> will be used if specified. </li>
+
+<li> <span class="keyword">WH2NUM</span> is not equal to <span class="keyword">SATNUM</span> and <span class="keyword">WH3NUM</span> is not equal to <span class="keyword">IMBNUM</span> for this layer and hence the two-phase and three-phase water relative
+permeability data used for WAG hysteresis will be taken from <span class="keyword">WH2NUM</span> and <span class="keyword">WH3NUM</span> respectively. If <span class="keyword">KRWH</span>, <span class="keyword">KRWRH</span>, <span class="keyword">IKRWH</span> or <span class="keyword">IKRWRH</span> have been specified, their values will
+be used when applying water relative permeability vertical scaling
+and the values of <span class="keyword">KRW</span>, <span class="keyword">KRWR</span>, <span class="keyword">IKRW</span> and <span class="keyword">IKRWR</span> will be ignored
+if specified. </li>
+
+<li> <span class="keyword">WH2NUM</span> is equal to <span class="keyword">SATNUM</span> but <span class="keyword">WH3NUM</span> is not equal to <span class="keyword">IMBNUM</span> for this layer and hence the two-phase and three-phase water relative
+permeability data used for WAG hysteresis will be taken from <span class="keyword">SATNUM</span> and <span class="keyword">WH3NUM</span> respectively. If specified, <span class="keyword">KRW</span> and <span class="keyword">KRWR</span> will be used for the two-phase
+water relative permeability vertical scaling but <span class="keyword">IKRWH</span> and <span class="keyword">IKRWRH</span> will be used for the three-phase water
+relative permeability vertical scaling. </li>
+
+<li> <span class="keyword">WH2NUM</span> is not equal to <span class="keyword">SATNUM</span> but <span class="keyword">WH3NUM</span> is equal to <span class="keyword">IMBNUM</span> for this layer and hence the two-phase and three-phase water relative
+permeability data used for WAG hysteresis will be taken from <span class="keyword">WH2NUM</span> and <span class="keyword">IMBNUM</span> respectively. If specified, <span class="keyword">KRWH</span> and <span class="keyword">KRWRH</span> will be used for the
+two-phase water relative permeability vertical scaling but <span class="keyword">IKRW</span> and <span class="keyword">IKRWR</span> will be used for the
+three-phase water relative permeability vertical scaling. </li>
+
+<li> <span class="keyword">WH2NUM</span> is not equal to <span class="keyword">SATNUM</span> and <span class="keyword">WH3NUM</span> is not equal to <span class="keyword">IMBNUM</span> for this layer. However, WAG hysteresis has not been applied to
+the water phase for this layer and hence this layer will be subject
+to conventional hysteresis according to the items specified via the <a href="../ecl_rm/EHYSTR.html#EHYSTR"> EHYSTR</a> keyword and <span class="keyword">WH2NUM</span>, <span class="keyword">WH3NUM</span>, <span class="keyword">KRWH</span>, <span class="keyword">IKRWRH</span> and <span class="keyword">IKRW</span> will be
+ignored. <pre><code>TITLE
+Example using WH2NUM and WH3NUM with EPSDEBUG
+
+DIMENS
+3 1 5 /
+ENDSCALE
+/
+SATOPTS
+HYSTER
+/
+TABDIMS
+20...
+/
+PROPS
+...
+EHYSTR
+1* 2
+/
+EPSDEBUG
+1 3 1 1 1 4
+/
+WAGHYSTR
+4* YES /
+4* YES /
+4* YES /
+4* YES /
+4* NO  /
+/ Table 6
+...
+/ Table 20
+...
+REGIONS
+...
+SATNUM
+3*1 3*2  3*3  3*4  3*5 /
+IMBNUM
+3*6 3*7  3*8  3*9  3*10 /
+WH2NUM
+3*1 3*12 3*3  3*14 3*15 /
+WH3NUM
+3*6 3*17 3*18 3*9  3*20 /
+...</code></pre> <p>If end-point scaling has been specified, the reporting
+of the scaled tables via the <a href="../ecl_rm/EPSDEBUG.html#EPSDEBUG"> EPSDEBUG</a> or <a href="../ecl_rm/EPSDBGS.html#EPSDBGS"> EPSDBGS</a> keyword will reflect the use of <span class="keyword">WH2NUM</span> and <span class="keyword">WH3NUM</span> for the grid blocks selected for reporting
+in the manner described above. Specifically, if WAG hysteresis has
+been applied to the water phase:</p>
+ </li>
+
+<li> If <span class="keyword">WH2NUM</span> is not equal to <span class="keyword">SATNUM</span>, the drainage report will indicate not only the drainage table
+number but also the two-phase table number from which the water relative
+permeability data will be taken in place of the drainage table water
+relative permeability data. In addition, <span class="keyword">KRWH</span> and <span class="keyword">KRWRH</span> will be used instead of <span class="keyword">KRW</span> and <span class="keyword">KRWR</span>. </li>
+
+<li> If <span class="keyword">WH3NUM</span> is not equal to <span class="keyword">IMBNUM</span>, the imbibition report will indicate not only the imbibition table
+number but also the three-phase table number from which the water
+relative permeability data will be taken in place of the imbibition
+table water relative permeability. In addition, <span class="keyword">IKRWH</span> and <span class="keyword">IKRWRH</span> will be used instead of <span class="keyword">IKRW</span> and <span class="keyword">IKRWR</span>. </li>
+
+</ol>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

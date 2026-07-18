@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="TUNINGDP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="TUNINGDP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>TUNINGDP</title>
+</head>
+<body>
+
+
+<div class="nested0" id="TUNINGDP"><a name="TUNINGDP"><!-- --></a>
+<h1 class="keyword">TUNINGDP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="tuningdp.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="tuningdp.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2682e45"> x </th>
+
+<th valign="top" id="d2682e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2682e54">  </th>
+
+<th valign="top" id="d2682e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2682e45 d2682e54 ">  </td>
+
+<td valign="top" headers="d2682e48 d2682e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2682e45 d2682e54 ">  </td>
+
+<td valign="top" headers="d2682e48 d2682e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2682e45 d2682e54 ">  </td>
+
+<td valign="top" headers="d2682e48 d2682e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2682e45 d2682e54 ">  </td>
+
+<td valign="top" headers="d2682e48 d2682e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2682e45 d2682e54 ">  </td>
+
+<td valign="top" headers="d2682e48 d2682e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2682e45 d2682e54 ">  </td>
+
+<td valign="top" headers="d2682e48 d2682e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2682e45 d2682e54 ">  </td>
+
+<td valign="top" headers="d2682e48 d2682e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2682e45 d2682e54 "> x </td>
+
+<td valign="top" headers="d2682e48 d2682e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">TUNINGDP</span> keyword, like the <span class="keyword">TUNING</span> keyword, should be used with great care. Using the keyword followed
+by just a slash (/) modifies the simulator convergence parameters,
+since the default parameters with the keyword present are not the
+same as the defaults with the keyword absent.</p>
+
+<p>The convergence parameters set in this keyword have been found
+to be suitable in a number of high throughput cases, typically dual
+porosity runs. The keyword has two effects: firstly the linear equations
+are solved to a tighter tolerance and secondly the non-linear equations
+are assumed to be converged when the change in solution over a Newton
+iteration falls below a critical value, irrespective of the non-linear
+convergence error. Essentially, convergence is assumed when <strong>either</strong> the residual is small <strong>or</strong> the solution change is small. The
+convergence criterion on the material balance error is unaffected,
+and must still be satisfied to achieve convergence.</p>
+
+<p>The convergence criterion on the solution change (items 3 and 4)
+can override the criterion on the residual, and thus has the potential
+to allow a poorly converged solution to be accepted with a higher
+than normal residual.</p>
+
+<p>Note that the <samp class="codeph">TRGLCV</samp> and <samp class="codeph">XXXLCV</samp> parameters are also set in the <span class="keyword">TUNING</span> keyword
+and are reset by keywords <a href="IMPES.html#IMPES">  IMPES</a> and <a href="IMPLICIT.html#IMPLICIT">  IMPLICIT</a>.</p>
+
+<div class="p">The <span class="keyword">TUNINGDP</span> keyword should be followed by some
+or all of the following items of data terminated by a slash (/). If
+a slash is encountered before the end of the record, the remaining
+items assume their default values given below.<ol>
+<li> <samp class="codeph">TRGLCV</samp> Target linear convergence error<p>DEFAULT:
+0.00001 (if <span class="keyword">TUNINGDP</span> is present)</p>
+<p>DEFAULT:
+0.0001 (if <span class="keyword">TUNINGDP</span> is not present)</p>
+</li>
+
+<li> <samp class="codeph">XXXLCV</samp>  Maximum linear convergence error<p>DEFAULT:
+0.0001 (if <span class="keyword">TUNINGDP</span> is present)</p>
+<p>DEFAULT:
+0.001 (if <span class="keyword">TUNINGDP</span> is not present)</p>
+</li>
+
+<li> <samp class="codeph">TRGDDP</samp>  Maximum pressure change during a Newton
+iteration, allowing convergence when the residual is still above its
+convergence criterion.<p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi
+(<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>)</p>
+<p>DEFAULT:
+1.0 (if <span class="keyword">TUNINGDP</span> is present) (all unit sets)</p>
+<p>DEFAULT: 0.0 (if <span class="keyword">TUNINGDP</span> is not present) (all
+unit sets)</p>
+</li>
+
+<li> <samp class="codeph">TRGDDS</samp>   Maximum saturation change during a Newton
+iteration allowing convergence when the residual is still above its
+convergence criterion<p>DEFAULT: 0.01 (if <span class="keyword">TUNINGDP</span> is present)</p>
+<p>DEFAULT: 0.0 (if <span class="keyword">TUNINGDP</span> is
+not present)</p>
+</li>
+
+</ol>
+</div>
+
+<p>See also keyword <a href="TUNING.html#TUNING">  TUNING</a>.</p>
+
+<div class="section" id="tuningdp_example"><a name="tuningdp_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>Use the <span class="keyword">TUNINGDP</span> defaults for a high throughput case:</p>
+<pre><code>TUNINGDP
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

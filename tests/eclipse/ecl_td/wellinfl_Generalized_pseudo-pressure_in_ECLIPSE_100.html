@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Generalized pseudo-pressure in ECLIPSE 100"/>
+<meta name="DC.subject" content="Well inflow performance generalized pseudo-pressure in ECLIPSE 100"/>
+<meta name="keywords" content="Well inflow performance generalized pseudo-pressure in ECLIPSE 100"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wellinfl_generalized_pseudo-pressure_in_eclipse_100"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Generalized pseudo-pressure in ECLIPSE 100</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="wellinfl_generalized_pseudo-pressure_in_eclipse_100"><a name="wellinfl_generalized_pseudo-pressure_in_eclipse_100"><!-- --></a>
+<h1 class="topictitle1">Generalized pseudo-pressure in ECLIPSE 100</h1>
+
+
+ <div>
+<p>The generalized pseudo-pressure method is intended for use by gas
+condensate producers. It provides a means of taking account of condensate
+dropout, as well as compressibility, in the calculation of the mobility
+integral. It is based on the method described by <cite><span> <a href="biblio_Bibliography.html#biblio_41530">Whitson and Fevang (1997)</a> </span></cite>.</p>
+
+<p>At the beginning of each timestep the integral of the total oil
+and gas mobility is evaluated between the grid block pressure and
+the well bore pressure at the connection. This is compared with the
+total oil and gas mobility at grid block conditions multiplied by
+the drawdown, and the ratio of the two quantities is stored as a “blocking
+factor” for each grid block connection in the well,</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.XID-00000171"/>
+ <math><mrow><msub><mrow>
+<mi>β</mi></mrow><mrow><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><msubsup><mrow><mo>∫</mo></mrow><mrow><mo>(</mo><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>+</mo><msub><mrow><mi>H</mi></mrow><mrow><mi>w</mi>
+<mi>j</mi></mrow></msub><mo>)</mo></mrow><mrow><msub>
+<mrow><mi>P</mi></mrow><mrow><mi>j</mi></mrow></msub>
+</mrow></msubsup><mrow><mo>(</mo><msub><mrow><mi>M</mi>
+</mrow><mrow><mi>g</mi></mrow></msub><mo>+</mo><msub>
+<mrow><mi>M</mi></mrow><mrow><mi>o</mi></mrow></msub>
+<mo>)</mo><mi>d</mi><mi>p</mi></mrow></mrow><mrow>
+<mo>(</mo><msub><mrow><mi>M</mi></mrow><mrow><mi>g</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>+</mo>
+<msub><mrow><mi>M</mi></mrow><mrow><mi>o</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>)</mo><mo>(</mo>
+<msub><mrow><mi>P</mi></mrow><mrow><mi>j</mi></mrow>
+</msub><mrow><mo>-</mo><mo>(</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>+</mo>
+<msub><mrow><mi>H</mi></mrow><mrow><mi>w</mi><mi>j</mi></mrow></msub><mo>)</mo></mrow><mo>)</mo>
+</mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 521.1]
+              </td></tr></tbody></table>
+<p>The integrand is fundamentally a function of two independent variables:
+the pressure                  <math><mi>P</mi></math>  and the gas saturation  <math><msub>
+<mi>S</mi><mi>g</mi></msub></math>. (The oil saturation
+is equal to  <math><mn>1</mn><mrow>
+<mo>-</mo><mo>(</mo><msub><mi>S</mi><mi>g</mi>
+</msub><mo>+</mo><msub><mi>S</mi><mi>w</mi></msub>
+<mo>)</mo></mrow></math>  and  <math><msub>
+<mi>S</mi><mi>w</mi></msub></math>  is regarded as fixed
+at the grid block value.) However,  <math><msub>
+<mi>S</mi><mi>g</mi></msub></math>  is eliminated as an
+independent variable, making it a function of  <math><mi>P</mi></math>  at pressures below the dew point by requiring
+that the local total mobility ratio should be the same as the total
+mobility ratio at grid block conditions:          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.XID-0000017b"/>
+ <math><msub><mi>M</mi>
+<mi>o</mi></msub><mo>/</mo><msub><mi>M</mi><mi>g</mi>
+</msub><mo>=</mo><msub><mi>M</mi><mrow><mi>o</mi>
+<mo>,</mo><mi>j</mi></mrow></msub><mo>/</mo><msub>
+<mi>M</mi><mrow><mi>g</mi><mo>,</mo><mi>j</mi>
+</mrow></msub></math> 
+</td><td align="right">[Eq. 521.2]
+              </td></tr></tbody></table>
+<p>This requirement assumes that within the grid block the flows are
+in steady state. Only the mobile oil is included when calculating
+this ratio. Immobile dropped-out oil is not included because the oil
+relative permeability will be zero until the oil saturation exceeds
+the critical oil saturation.</p>
+
+<p>The integral in equation <a href="wellinfl_Generalized_pseudo-pressure_in_ECLIPSE_100.html#wellinfl.XID-00000171">521.1</a>  is evaluated by applying the trapezium rule to a set of pressure
+values between the grid block and connection pressures. You can control
+the distribution of these pressure values, and hence the accuracy
+of the integration, using keyword <a href="../ecl_rm/PICOND.html#PICOND">PICOND</a>. At each pressure value
+below the dew point, the gas saturation is determined by solving equation <a href="wellinfl_Generalized_pseudo-pressure_in_ECLIPSE_100.html#wellinfl.XID-0000017b">521.2</a>  using Newton’s method.</p>
+
+<p>The blocking factor is then used to multiply both the oil and gas
+mobilities in the inflow performance relationship, equation <a href="wellinfl_Inflow_performance_relationship_in_ECLIPSE_100.html#wellinfl.XID-00000024">513.1</a>. Note that the free oil mobility is modified by this treatment,
+whereas the Russell-Goodrich and dry gas pseudo-pressure treatments
+leave this unchanged. At present this calculation is not performed
+in injecting connections; the blocking factor is set equal to 1.0.
+The value of the blocking factor can be written to the Summary file
+by using the <a href="../ecl_rm/SUMMARY.html#SUMMARY">SUMMARY</a> section keyword <span class="keyword">CDBF</span>.</p>
+
+<p>The blocking factor for each connection is retained for the duration
+of the timestep, and recalculated at the beginning of each subsequent
+timestep. In case this degree of explicitness should cause oscillations,
+these may be damped by averaging the calculated blocking factor with
+its value at the previous timestep,</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.equ.018b"/>
+ <math><mrow><msub><mrow>
+<mi>β</mi></mrow><mrow><mtext>used</mtext></mrow></msub>
+<mo>=</mo><mrow><mi>f</mi><msub><mrow><mi>β</mi>
+</mrow><mrow><mtext>new</mtext></mrow></msub></mrow><mo>+</mo><mrow><mo>(</mo><mn>1</mn><mrow>
+<mo>-</mo><mi>f</mi></mrow><mo>)</mo>
+<msub><mrow><mi>β</mi></mrow><mrow><mtext>previous</mtext>
+</mrow></msub></mrow></mrow></math> 
+</td><td align="right">[Eq. 521.3]
+              </td></tr></tbody></table>
+<p>where the weighting factor                  <math><mi>f</mi></math>  is specified in the <span class="keyword">PICOND</span> keyword.
+         </p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

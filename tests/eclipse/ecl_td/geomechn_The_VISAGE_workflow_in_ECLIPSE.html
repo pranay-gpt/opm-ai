@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using Petrel RG with VISAGE with ECLIPSE"/>
+<meta name="DC.subject" content="Petrel reservoir geomechanics"/>
+<meta name="keywords" content="Petrel reservoir geomechanics"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="geomechn_the_visage_workflow_in_eclipse"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using Petrel RG with VISAGE with ECLIPSE</title>
+</head>
+<body>
+
+
+<div class="nested0" id="geomechn_the_visage_workflow_in_eclipse"><a name="geomechn_the_visage_workflow_in_eclipse"><!-- --></a>
+<h1 class="topictitle1">Using Petrel RG with VISAGE with ECLIPSE</h1>
+
+
+ <div>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> The interactions between the VISAGE and ECLIPSE simulators
+are controlled using the Petrel Reservoir Geomechanics (Petrel RG)
+workflow. The interactions described in this section are not visible
+during the simulation and are provided for reference only. The Petrel
+RG simulation logs contain records of the keyword data written into
+the ECLIPSE files during the geomechanics simulation. </span></div>
+
+<p>During the workflow, Petrel RG writes keywords into the ECLIPSE
+files to control the interaction of the simulators:</p>
+
+<ul>
+<li><span class="keyword">VISOPTS</span> in the <span class="keyword">RUNSPEC</span> section
+to activate the workflow </li>
+
+<li><span class="keyword">VISDATES</span> and <span class="keyword">VISOPTS</span> in
+the <span class="keyword">SOLUTION</span> section to specify the coupled timesteps
+dates and the simulation options.</li>
+
+</ul>
+
+<p>You do not have to set any of these keywords by hand, or edit any
+simulation files as these interactions occur according to settings
+you specify in the Petrel RG workflow. This section provides an overview
+of the simulator interactions.</p>
+
+<ol>
+<li>Petrel RG activates the coupling of simulators with the <span class="keyword">VISAGE</span> keyword.</li>
+
+<li>Petrel RG specifies the list of report dates at which geomechanics
+calculations are required using the <span class="keyword">VISDATES</span> keyword. <p>To request the available report dates from an ECLIPSE simulation
+run, Petrel RG runs in initialization mode by setting item 1 of the <span class="keyword">VISOPTS</span> keyword to <samp class="codeph">YES</samp>. In initialization
+mode,  ECLIPSE writes out a file containing information about all
+report steps that would be performed in the simulation (the model
+is run as though <span class="keyword">NOSIM</span> is present). This file has
+the same root name as the simulation, but with an <samp class="codeph">EDESC</samp> extension (for example, when running a simulation model <samp class="codeph">NAME.DATA</samp>, this file will be <samp class="codeph">NAME.EDESC</samp>). Also in initialization mode, all requests for couple timesteps
+are ignored; and <samp class="codeph">GRID</samp>, <samp class="codeph">INIT</samp> and
+time zero restart files are output.</p>
+ </li>
+
+<li>Petrel RG can set ECLIPSE to exit at a coupled timestep (once
+the restart files have been written) by setting item 2 of the <span class="keyword">VISOPTS</span> keyword to <samp class="codeph">YES</samp>. This feature is
+turned off by default but Petrel RG turns it on for explicit or implicit
+coupling in the geomechanics workflow. </li>
+
+<li>When the field pressure at a report time has changed by more than
+the relative tolerance (specified in item 4 of the <span class="keyword">VISOPTS</span> keyword) since the last coupled timestep, an additional step will
+be performed at a timestep called a dynamic stress step. Note that
+this feature must be turned off when repeating the calculations over
+a stress step interval in the implicit coupling, and any dynamic stress
+steps which have been performed must be added to the <span class="keyword">VISDATES</span> list. The dynamic stress step mechanism is turned off by default,
+but Petrel RG can turn it on by setting item 3 of the <span class="keyword">VISOPTS</span> keyword to <samp class="codeph">YES</samp>. <div class="note"><span class="notetitle">Note:</span> <span class="notebody">Petrel RG can handle a maximum
+of 9999 stress steps in its workflow. If you request more than 9999
+stress steps in the <span class="keyword">VISDATES</span> keyword, or if a dynamic
+stress step would be triggered after 9999 stress steps have already
+occurred, then ECLIPSE will exit with an error. </span></div>
+          
+  </li>
+
+<li>In order to guarantee that restart files are generated at all
+of the coupled timesteps, any <samp class="codeph">FREQ</samp> mnemonic specification
+in the <span class="keyword">RPTRST</span> keyword is ignored and <samp class="codeph">FREQ=1</samp> (that is, output a restart file at every report step) is enforced
+by default. If you want a smaller amount of data is required in the
+restart files, you can reduce the frequency of output by:        
+       <ol type="a">
+<li>specifying the <samp class="codeph">RPTRST BASIC</samp> mnemonic as 3, 4
+or 5,</li>
+
+<li>setting the <samp class="codeph">FREQ</samp> mnemonic to the desired output
+frequency and</li>
+
+<li>setting item 6 of the <span class="keyword">VISOPTS</span> keyword to <samp class="codeph">YES</samp>.  </li>
+
+</ol>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">When modifying the restart output frequency, you must ensure
+that there will still be restart information available at all required
+stress step dates.</span></div>
+</li>
+
+<li> In the geomechanics workflow, the minimum requirement for restart
+file content is that it can be used to restart the run. For this reason,
+the <samp class="codeph">RPTRST BASIC=2</samp> mnemonic is enforced when the <span class="keyword">VISAGE</span> keyword is present. In addition, the <samp class="codeph">RPTRST
+ROCKC</samp> mnemonic is enforced so that the modified pore volume
+and transmissibility multiplier are present in the restart files.
+By default, any other property requests will be ignored. If additional
+properties are required in the restart file, these must be specified
+in the <span class="keyword">RPTRST</span> keyword, and item 1 of the <span class="keyword">VISOPTS</span> keyword must be set to <samp class="codeph">YES</samp>.   </li>
+
+<li>Whenever a new coupled timestep is encountered, ECLIPSE writes
+a list of all coupled timesteps to a small file with the same root
+name as the simulation, but with a VDESC extension (for example, when
+running a simulation model <samp class="codeph">NAME.DATA</samp>, this file will
+be <samp class="codeph">NAME.VDESC</samp>). This information allows Petrel RG
+to know which of the requested copuled timesteps have been performed,
+and also whether any dynamic coupled timesteps have been performed. <p>At the beginning of the workflow, this VDESC file needs to be emptied
+(if it already exists from a previous run). ECLIPSE is instructed
+to empty this file during Petrel RG initialization, which Petrel RG
+requests by setting item 1 of the <span class="keyword">VISOPTS</span> keyword
+to <samp class="codeph">YES</samp>.  </p>
+ </li>
+
+</ol>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

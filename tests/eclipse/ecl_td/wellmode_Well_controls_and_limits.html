@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Well controls and limits"/>
+<meta name="DC.subject" content="Well modeling controls and limits, Well modeling facilities, Well controls, Limits, Well, Control, Limit"/>
+<meta name="keywords" content="Well modeling controls and limits, Well modeling facilities, Well controls, Limits, Well, Control, Limit"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wellmode_well_controls_and_limits"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Well controls and limits</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wellmode_well_controls_and_limits"><a name="wellmode_well_controls_and_limits"><!-- --></a>
+<h1 class="topictitle1">Well controls and limits</h1>
+
+
+ <div>
+<p>Individual wells can operate at a target value of any of the following
+quantities:</p>
+
+<ul>
+<li>Oil flow rate</li>
+
+<li>Water flow rate</li>
+
+<li>Gas flow rate</li>
+
+<li>Liquid flow rate (oil and water)</li>
+
+<li>Linearly combined rate (user-specified linear combination of oil,
+water and gas)</li>
+
+<li>Reservoir fluid volume (or voidage) rate<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Voidage rate is
+the reservoir volume that the produced or injected fluids would occupy
+at reservoir conditions. The associated reservoir pressure is usually
+the average hydrocarbon pressure in the field. However, this may be
+set to be the average pressure in a nominated fluid in place region
+using argument 13 in keyword <a href="../ecl_rm/WELSPECS.html#WELSPECS">WELSPECS</a>. By obtaining voidage rates at a single pressure for all
+wells we avoid the effects of higher pressures at injectors and lower
+pressures at producers; setting equal injection and production voidage
+rates will then yield approximate pressure maintenance.</span></div>
+</li>
+
+<li>Bottom hole pressure</li>
+
+<li>Tubing head pressure<p>ECLIPSE 300     
+                            </p>
+  </li>
+
+<li>Wet gas rate (which is the volume that the
+hydrocarbon mixture would occupy at standard conditions if it were
+an ideal gas)<p>ECLIPSE 300 </p>
+  </li>
+
+<li>   Total molar rate<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The total molar
+rate includes the molar rate of water.</span></div>
+<p>ECLIPSE 300</p>
+</li>
+
+<li>Calorific value rate.</li>
+
+</ul>
+
+<p>One of these quantities is selected as the main control target,
+while limiting values can be supplied for any of the remaining quantities.
+The limiting flow rates are treated as upper limits, while the pressure
+limits are treated as lower limits in production wells and upper limits
+in injectors. The well will automatically change its mode of control
+whenever the existing control mode would violate one of these limits.
+The target quantity in the old control mode will then become a limit
+in the new control mode.</p>
+
+<p>For example, consider a production well operating at a target oil
+flow rate of 1000 stb/day, with a lower limit of 3000 psia on the
+bottom hole pressure. The well will produce 1000 stb/day of oil until
+the bottom hole pressure falls below 3000 psia. The well’s control
+mode will then change automatically to maintain a constant bottom
+hole pressure of 3000 psia, and the oil production rate will decline.
+If subsequently the oil production rate were ever to exceed 1000 stb/day
+(resulting for example from stimulation of the well, or the opening
+of an extra connection), then the control mode will automatically
+switch back to the original target oil production rate.</p>
+
+<p>It is possible to set separate customized default values for BHP
+limits for production and injection wells, which will replace the
+standard default value whenever the BHP limit is defaulted when setting
+up the well control data. This is done using the <a href="../ecl_rm/FBHPDEF.html#FBHPDEF">FBHPDEF</a> keyword.</p>
+
+<p>In addition to the control quantities listed above, a maximum allowable
+drawdown can be specified for each production well, using the keyword <a href="../ecl_rm/WELDRAW.html#WELDRAW">WELDRAW</a>. This is converted
+into a maximum liquid or gas production rate at each timestep (depending
+on the well’s preferred phase), using the current value of the liquid
+or gas mobility in the well’s connections. Thus the liquid or gas
+rate limit is used to apply constraints on the drawdown.</p>
+
+<p>An alternative method of control can be applied to wells during
+the history matching process, when their observed oil, water and gas
+production rates are known. The observed rates are entered with the <a href="../ecl_rm/WCONHIST.html#WCONHIST">WCONHIST</a> keyword. A well can
+be made to produce at a rate which matches one of the phases, or at
+the equivalent liquid or reservoir volume rate of the observed production.
+The latter option is useful for making the well produce the correct
+amount of total fluid from the reservoir before the mobility ratios
+are fully matched. Thus the rate of pressure decline should be approximately
+correct. The observed rates and production ratios can be written to
+the summary file, for graphical comparison with the calculated rates.
+Observed rates for injection wells may be entered with the <a href="../ecl_rm/WCONINJH.html#WCONINJH">WCONINJH</a> keyword</p>
+
+<p>ECLIPSE 100</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If a well's control mode is changed in
+a keyword other than <span class="keyword">WELSPECS</span>, the well's preferred
+mode will also be changed to the new control mode. To match the default
+ECLIPSE 300 behavior, set <a href="../ecl_rm/OPTIONS.html#options.227">item 227</a>  of the <span class="keyword">OPTIONS</span> keyword to 1.</span></div>
+
+<p>ECLIPSE 300</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If a well's control mode is changed in
+a keyword other than <span class="keyword">WELSPECS</span>, the well's preferred
+mode will not be changed to the new control mode. To match the default
+ECLIPSE 100 behavior, set <a href="../ecl_rm/OPTIONS3.html#options3.318">item 318</a>  of the <span class="keyword">OPTIONS3</span> keyword to 1.</span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

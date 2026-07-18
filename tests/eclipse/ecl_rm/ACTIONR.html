@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ACTIONR"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ACTIONR"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ACTIONR</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ACTIONR"><a name="ACTIONR"><!-- --></a>
+<h1 class="keyword">ACTIONR</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="actionr.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="actionr.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d16e45">x</th>
+
+<th valign="top" id="d16e48">ECLIPSE 100</th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d16e54">x</th>
+
+<th valign="top" id="d16e57">ECLIPSE 300</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d16e45 d16e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d16e48 d16e57 ">RUNSPEC</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d16e45 d16e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d16e48 d16e57 ">GRID</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d16e45 d16e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d16e48 d16e57 ">EDIT</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d16e45 d16e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d16e48 d16e57 ">PROPS</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d16e45 d16e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d16e48 d16e57 ">REGIONS</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d16e45 d16e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d16e48 d16e57 ">SOLUTION</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d16e45 d16e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d16e48 d16e57 ">SUMMARY</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d16e45 d16e54 ">x</td>
+
+<td valign="top" headers="d16e48 d16e57 ">SCHEDULE</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">ACTIONR</span> keyword is one of a group of keywords
+that trigger actions in the simulation when certain conditions are
+met. While the <span class="keyword">ACTIONR</span> keyword will work as documented
+in simulation data sets, it is recommended that you use the <a href="ACTIONX.html#ACTIONX"> ACTIONX</a> keyword for new
+or updated data sets as it offers the greatest functionality and flexibility. </p>
+
+<p>The <span class="keyword">ACTIONR</span> keyword marks the start of a set
+of <span class="keyword">SCHEDULE</span> section keywords that are to be stored
+for later processing when a nominated <strong>fluid-in-place region</strong> satisfies a specified condition. The set of keywords may be indented
+with one or more blank spaces for clarity and must be terminated with
+the <a href="ENDACTIO.html#ENDACTIO"> ENDACTIO</a> keyword.
+The keywords between the <span class="keyword">ACTIONR</span> and <span class="keyword">ENDACTIO</span> keywords are processed at the end of the timestep when the condition
+defined in the <span class="keyword">ACTIONR</span> keyword is satisfied by
+a region identified in items 2 and 3. You can choose whether the action
+is to be performed only once, or repeatedly each timestep while the
+triggering condition is satisfied.</p>
+
+<p>In ECLIPSE 100, practically any <span class="keyword">SCHEDULE</span> section keyword may be placed between <span class="keyword">ACTIONR</span> and <span class="keyword">ENDACTIO</span>, with the exception of timestepping
+keywords (for example <a href="TIME.html#TIME"> TIME</a>, <a href="TSTEP.html#TSTEP"> TSTEP</a>, <a href="DATES.html#DATES"> DATES</a> and <a href="GASYEAR.html#GASYEAR"> GASYEAR</a>), the global
+keywords and the <a href="INCLUDE.html#INCLUDE"> INCLUDE</a> keyword. The <a href="RPTRST.html#RPTRST"> RPTRST</a> keyword can be used but any changes to the frequency of output
+will not the implemented until the report step following the satisfaction
+of the triggering condition.</p>
+
+<p>In ECLIPSE 300 any keyword specifying data
+for wells, groups or separators may be placed between <span class="keyword">ACTIONR</span> and <span class="keyword">ENDACTIO</span>. The <span class="keyword">RPTRST</span> keyword
+can also be used but any changes to the frequency of output will not
+the implemented until the report step following the satisfaction of
+the triggering condition.</p>
+
+<p>The amount of storage space reserved for these keywords is controlled
+by the <span class="keyword">RUNSPEC</span> section keyword <a href="ACTDIMS.html#ACTDIMS"> ACTDIMS</a>. The number of
+lines between an <span class="keyword">ACTIONR</span> keyword and its corresponding <span class="keyword">ENDACTIO</span> keyword (including the <span class="keyword">ENDACTIO</span> keyword itself) is limited to <span class="keyword">MNLPAC</span> in <span class="keyword">ACTDIMS</span> item 2. The length of each line is limited to <span class="keyword">NCPLIN</span> in <span class="keyword">ACTDIMS</span> item 3.</p>
+
+<p>Any number of action keyword sets may be declared, each with its
+own triggering condition; the maximum number being limited to <span class="keyword">MAXACT</span> in <span class="keyword">ACTDIMS</span> item 1. Each action
+keyword set must be bracketed by a pair of <span class="keyword">ACTION</span> (<span class="keyword">ACTIONG</span>, <span class="keyword">ACTIONR</span>, <span class="keyword">ACTIONW</span>, <span class="keyword">ACTIONS</span>) and <span class="keyword">ENDACTIO</span> keywords, and is distinguished by its action name defined in item
+1. This name must be unique across all the action keyword family,
+including <a href="DELAYACT.html#DELAYACT"> DELAYACT</a>. If any <span class="keyword">ACTION</span> family keyword is reentered with
+the same action name as a previously declared action, the previously
+declared action is deleted and replaced with the new action.</p>
+
+<p>The <span class="keyword">ACTIONR</span> keyword contains the following items
+of data, terminated with a slash (/)</p>
+
+<ol>
+<li>The action name.  <p>A name of up to 8 characters, to distinguish
+this action from any others.</p>
+<p>If an action with this name has
+already been declared in any of the action keyword family <span class="keyword">ACTION</span> (<span class="keyword">ACTIONG</span>, <span class="keyword">ACTIONR</span>, <span class="keyword">ACTIONW</span>, <span class="keyword">ACTIONS</span>), it is
+overwritten with the action data specified below.</p>
+         </li>
+
+<li>Fluid-in-place region number, whose conditions trigger this action.
+          <p>This should be an integer between 0 and <samp class="codeph">NTFIP</samp> (see keyword <a href="REGDIMS.html#REGDIMS"> REGDIMS</a> in the <span class="keyword">RUNSPEC</span> section). </p>
+<p>ECLIPSE 100</p>
+<p>Region
+0 refers to the whole field.</p>
+           <p>Fluid-in-place regions
+are defined with the keyword <a href="FIPNUM.html#FIPNUM"> FIPNUM</a> in the <span class="keyword">REGIONS</span> section (or, for ECLIPSE
+100, the keyword <a href="FIP.html#FIP"> FIP</a> if a different family of regions is requested in item 3).</p>
+  
+      </li>
+
+<li> The fluid-in-place region family, to which the specified region
+belongs.     <p>The family name should be up to 5 characters long.</p>
+           <p>A default (1*) or blank (' ') entry refers to the standard
+set of fluid-in-place regions defined with the keyword <span class="keyword">FIPNUM</span>.</p>
+<p>Additional families of fluid-in-place regions may optionally
+be defined, using the keyword <span class="keyword">FIP</span>. The family name
+is string of up to 5 characters that makes up the second part of the
+keyword name (characters 4 - 8). Each family can divide up the field
+in different ways. Thus, for example, the standard <a href="FIPNUM.html#FIPNUM"> FIPNUM</a> family may divide
+the field into layers, and an additional family can be defined to
+divide the field into areal sectors.</p>
+         </li>
+
+<li>The quantity to which the triggering condition applies.   <p>This
+must be one of:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all"> 
+  
+<tbody>
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">RPR</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Region pressure</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">ROSAT</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Region oil saturation average value</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">RWSAT</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Region water saturation average value</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">RGSAT</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Region gas saturation average value</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">ROIP</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Region oil in place</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">RWIP</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Region water in place</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">RGIP</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Region gas in place (in liquid and gas phases)</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">RGIPG</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Region gas in place (in gas phase only)</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">RUxxx</samp> </td>
+
+<td valign="top" width="33.33333333333333%">User-defined region quantity</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+   </li>
+
+<li>The operator for the triggering condition.   <p>This must be one
+of: </p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">'&gt;' </td>
+
+<td valign="top">Greater than</td>
+
+</tr>
+
+<tr>
+<td valign="top">'&lt;' </td>
+
+<td valign="top">Less than</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</li>
+
+<li> The value of the triggering condition.  <p>The units depend upon
+the quantity selected in item 4.</p>
+         </li>
+
+<li>Number of times this action can be triggered.  <p>The action is
+performed once at the end of each timestep while the triggering condition
+is satisfied, until it has been performed the specified number of
+times. A number of 10,000 or greater is interpreted as ‘infinity’.</p>
+             <p>DEFAULT: 1</p>
+</li>
+
+<li>Increment to the triggering condition.  <p>After each time the
+action is performed, the specified increment is added to the triggering
+condition value (initialized in item 6). The increment may be negative,
+if desired.</p>
+                  <p>DEFAULT: 0.0</p>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/)       </p>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> It is possible to nest actions by including the
+definition of the inner action within the keyword set of the outer
+action (that is before its <a href="ENDACTIO.html#ENDACTIO"> ENDACTIO</a> keyword). This offers great flexibility, but care should
+be exercised and the consequences of the nested actions should be
+thought through. For example: suppose that in the <a href="ACTDIMS.html#ACTDIMS"> ACTDIMS</a> keyword you have
+set <samp class="codeph">MAXACT=1</samp> and have then defined an action <samp class="codeph">ACT1</samp>. Suppose also that as part of this action you have
+defined another action, <samp class="codeph">ACT2</samp>. ECLIPSE only issues
+an error when <samp class="codeph">ACT1</samp> is actually implemented which
+may, of course, be well into the run. Alternatively you may call the
+inner action by the same name as the outer action, <samp class="codeph">ACT1</samp>. This is perfectly allowable, but it must be remembered that each
+time an action of a given name is defined it overwrites the properties
+that the action may previously have had. Suppose that you have an
+outer action that can be repeated a number of times. Within this action
+is an inner one that can also be repeated and that also increments
+its triggering condition each time. No matter how many times the inner
+action has been called when the outer action is invoked again the
+inner action is redefined to its original specification.</div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Full checking of the keywords entered with an action keyword
+cannot be performed until the action is actually implemented, since
+it is possible to use wildcards in many of the keywords. However,
+before a simulation run is attempted the data can be run in <a href="NOSIM.html#NOSIM"> NOSIM</a> mode. This then does
+whatever checks it can on the keywords within any action keyword blocks
+that have been defined. All the most common types of 'grammatical'
+and typographical errors will be found, but errors resulting from
+wildcards feeding inappropriate well/group names to keywords are not
+found.</span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">To replicate the ECLIPSE 100 functionality of region 0 representing
+the whole field with ECLIPSE 300, use <span class="keyword">ACTIONX</span> and
+the corresponding field quantity.</span></div>
+
+<div class="section" id="actionr_example"><a name="actionr_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>This shows
+two action keyword sets. The first action (named <samp class="codeph">ACT6</samp>) opens water injection well <samp class="codeph">WINJNEW</samp> when the average
+pressure in the field (region 0) falls below 4000. The second action
+(named <samp class="codeph">ACT7</samp>) reduces the oil rate target of well <samp class="codeph">PROD3</samp> by 20% whenever the average gas saturation in region
+3 of the family <samp class="codeph">WELRG</samp> exceeds 0.05.</p>
+<pre><code>ACTIONR
+ ACT6 0 1* RPR &lt; 4000.0 /
+WELOPEN
+ WINJNEW OPEN /
+ /
+ENDACTIO
+ACTIONR
+ ACT7 3 WELRG RGSAT &gt; 0.05 10000 /
+WTMULT
+ PROD3 ORAT 0.8 /
+ /
+ENDACTIO</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

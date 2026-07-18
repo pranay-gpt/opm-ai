@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The master reservoir"/>
+<meta name="DC.subject" content="Reservoir coupling, Master reservoir"/>
+<meta name="keywords" content="Reservoir coupling, Master reservoir"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="rescouplusing_the_master_reservoir"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The master reservoir</title>
+</head>
+<body>
+
+
+<div class="nested0" id="rescouplusing_the_master_reservoir"><a name="rescouplusing_the_master_reservoir"><!-- --></a>
+<h1 class="topictitle1">The master reservoir</h1>
+
+
+ <div>
+<p>The master reservoir is represented by a standard ECLIPSE data
+file. It may, if required, be a restart from a previous run. It must
+have as active phases all the phases that are active in any of the
+slave runs. It must contain the group hierarchy down to the master
+groups that couple it to the slaves, and of course the hierarchy must
+include its own well groups if it has any. The group hierarchy is
+defined in the usual way with keyword <a href="../ecl_rm/GRUPTREE.html#GRUPTREE">   GRUPTREE</a>.</p>
+
+<p>The master does not necessarily have to represent a real reservoir.
+It may just be a “dummy reservoir” whose purpose is to
+couple the slave reservoirs through its production and injection constraints
+(and optionally a pipeline network). In this case, the data file should
+still contain enough information to run ECLIPSE. At least one grid
+block is necessary. Fluid properties should be provided as required
+for its active phases. No wells should be defined, but the group hierarchy
+must be defined down to the master groups.</p>
+
+<p>The <a href="../ecl_rm/SLAVES.html#SLAVES">SLAVES</a> keyword must be used in the <span class="keyword">SCHEDULE</span> section
+to activate the coupled slave runs. The keyword data specifies the
+machine on which each slave process is to be run, and the directory
+where their data files are located. For example, for figure <a href="rescouplintro_Reservoir_Coupling.html#rescouplintro.XID-00000027">616.1</a>:</p>
+
+<pre><code>SLAVES
+    'RES-R2'  'base'      'rios'        '/usr/models/res2' /
+    'RES-R3'  'base'      'sg-indigo'   '/usr/models/res3' /
+/</code></pre>
+<p>If you wish the master run to create a Reservoir Coupling file
+containing the rates and constraints of all the master groups, enter
+the keyword <a href="../ecl_rm/DUMPCUPL.html#DUMPCUPL">DUMPCUPL</a>:</p>
+
+<pre><code>DUMPCUPL
+  'U'  /</code></pre>
+<p>After the group hierarchy has been set up with keyword <a href="../ecl_rm/GRUPTREE.html#GRUPTREE">GRUPTREE</a>, the master groups
+must be identified with keyword <a href="../ecl_rm/GRUPMAST.html#GRUPMAST">GRUPMAST</a>. The keyword also
+specifies the slaves to which the master groups are coupled, and sets
+a limiting fraction for flow rate change in a single timestep. For
+example, for figure <a href="rescouplintro_Reservoir_Coupling.html#rescouplintro.XID-00000027">616.1</a>:</p>
+
+<pre><code>GRUPMAST
+   'R2'       'RES-R2'       'FIELD'           0.1  /
+   'R3-A'     'RES-R3'         1*              0.1  /
+   'R3-B'     'RES-R3'         1*              0.1  /
+/</code></pre>
+<p>If limiting rate change fractions have been set for the master
+groups, it is advisable to set a minimum length to which the timestep
+can be reduced by this mechanism, using keyword <a href="../ecl_rm/RCMASTS.html#RCMASTS">RCMASTS</a>:</p>
+
+<pre><code>RCMASTS
+ 10.0  /
+
+</code></pre>
+<p>Set the global production rate targets and limits with keyword <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a>, with action '<samp class="codeph">RATE</samp>' selected to activate group control if limits are exceeded.
+Other actions, for example '<samp class="codeph">WELL</samp>' or '<samp class="codeph">CON</samp>' will not work with master groups, because the master run cannot
+request workovers and shut-ins for wells in the slaves. For similar
+reasons, prioritization group control (keyword <a href="../ecl_rm/GCONPRI.html#GCONPRI">GCONPRI</a>) cannot be used for
+master groups and any of their superior groups. The master groups
+must have their production guide rates set, so that higher level rate
+targets can be apportioned among these groups (rather than their wells).
+The group guide rates can either be set to a fixed value, or calculated
+as a function of their production potentials (see keyword <span class="keyword">GCONPROD</span> items 9 and 10).</p>
+
+<pre><code>GCONPROD
+  'FIELD' 'ORAT' 4.E5  / 
+  'PLAT*' 'NONE' 3*                3.E5  'RATE' /
+  'R1-*'  'FLD'  6*                                     100   'LIQ' /
+  'R3-*'  'FLD'  6*                                     100   'LIQ' /
+  'R2'    'FLD'  6*                                     200   'LIQ' /
+/</code></pre>
+<p>If there are any global injection targets or limits to be applied
+to the coupled system, set them with keyword <a href="../ecl_rm/GCONINJE.html#GCONINJE">GCONINJE</a> in the usual way.
+Any master group subordinate to a group with an injection target or
+limit must be given an injection guide rate for that phase, so that
+the higher level target can be apportioned down to it. The guide rate
+can optionally be set equal to the group’s voidage replacement
+requirements (<span class="keyword">GCONINJE</span> item 10). If reinjection
+or voidage replacement is to be performed independently in each slave,
+and there are no global injection constraints, the targets will be
+met more accurately if they are specified in the slave data files
+rather than the master, because of the “drift” caused
+by flow rate changes over the master timestep.</p>
+
+<pre><code>GCONINJE
+  'PLAT*' 'WAT' 'REIN'  2*          1.0  /
+  'R*'    'WAT' 'FLD'   6*                                  'VOID'  /
+/ </code></pre>
+<p>If there is a pipeline network coupling the reservoirs, specify
+it in the usual way with keyword <a href="../ecl_rm/GRUPNET.html#GRUPNET">GRUPNET</a> (or <a href="../ecl_rm/BRANPROP.html#BRANPROP">BRANPROP</a> and <a href="../ecl_rm/NODEPROP.html#NODEPROP">NODEPROP</a> for an Extended Network),
+defining it down to the master groups. If the Extended Network model
+is used, the master groups must coincide with source nodes in the
+network; for each master group there must be a corresponding network
+source node with the same name. If using keyword <a href="../ecl_rm/NETBALAN.html#NETBALAN">NETBALAN</a>, ensure it is set
+up to balance the network at every timestep (which is the default).</p>
+
+<p>If you wish the master run to stop when a slave run finishes for
+any reason, set its master group’s end-run flag in item 8 of
+keyword <a href="../ecl_rm/GECON.html#GECON">GECON</a>. Do <strong>not</strong> set any of the other <span class="keyword">GECON</span> limits, as the master groups effectively contain no wells, and the
+master run cannot control workovers in the slaves. Economic limits
+can, of course, be set in the slave data files.</p>
+
+<p>Set the report times or dates in the usual way. For easier synchronization
+it is best to use <a href="../ecl_rm/DATES.html#DATES">DATES</a>, especially if the slave runs start on different dates. If
+this is the case, it is also advisable to use the <a href="../ecl_rm/DATE.html#DATE">DATE</a> keyword in the <span class="keyword">SUMMARY</span> section. Aim to set common report dates in each
+coupled simulation. This is especially important for restarts, as
+the coupled simulations can only be restarted correctly from <samp class="codeph">RESTART</samp> files written on the same date.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

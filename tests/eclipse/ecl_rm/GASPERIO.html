@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GASPERIO"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GASPERIO"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GASPERIO</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GASPERIO"><a name="GASPERIO"><!-- --></a>
+<h1 class="keyword">GASPERIO</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gasperio.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gasperio.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d790e45"> x </th>
+
+<th valign="top" id="d790e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d790e54"> x </th>
+
+<th valign="top" id="d790e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d790e45 d790e54 ">  </td>
+
+<td valign="top" headers="d790e48 d790e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d790e45 d790e54 ">  </td>
+
+<td valign="top" headers="d790e48 d790e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d790e45 d790e54 ">  </td>
+
+<td valign="top" headers="d790e48 d790e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d790e45 d790e54 ">  </td>
+
+<td valign="top" headers="d790e48 d790e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d790e45 d790e54 ">  </td>
+
+<td valign="top" headers="d790e48 d790e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d790e45 d790e54 ">  </td>
+
+<td valign="top" headers="d790e48 d790e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d790e45 d790e54 ">  </td>
+
+<td valign="top" headers="d790e48 d790e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d790e45 d790e54 "> x </td>
+
+<td valign="top" headers="d790e48 d790e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">GASPERIO</span> keyword can be used instead of <a href="DATES.html#DATES"> DATES</a>, <a href="TIME.html#TIME"> TIME</a> or <a href="TSTEP.html#TSTEP"> TSTEP</a> to advance the simulation over an integral
+number of contract periods, when running the gas field operations
+model (see <a href="../ecl_td/gasfieldintro_Gas_Field_Operations_Model.html#gasfieldintro_gas_field_operations_model">"Gas field operations
+model"</a> in the <cite>ECLIPSE Technical Description</cite>).
+The contract period is the time over which the DCQ must remain fixed
+until the next review; it may be a year, or any number of months that
+is a factor of 12 (that is 1, 2, 3, 4 or 6). The keyword <a href="GASYEAR.html#GASYEAR"> GASYEAR</a> may be used instead
+of <span class="keyword">GASPERIO</span> if the contract period is a year.</p>
+
+<p>The <span class="keyword">GASPERIO</span> keyword activates two features
+of the model:</p>
+
+<ul>
+<li> Generation of the annual production profile from the profile
+factors set in keyword <a href="SWINGFAC.html#SWINGFAC"> SWINGFAC</a> or <a href="GSWINGF.html#GSWINGF"> GSWINGF</a>. </li>
+
+<li> Automatic reduction of the DCQ when necessary to obey the swing
+factor requirement, using the swing factors set in keyword <span class="keyword">SWINGFAC</span> or <span class="keyword">GSWINGF</span>. </li>
+
+</ul>
+
+<p>The <span class="keyword">SWINGFAC</span> or <span class="keyword">GSWINGF</span> keyword
+must have been entered previously to activate the gas field operations
+model.</p>
+
+<p>The keyword should be followed by some or all of these data items,
+terminated with a slash (/):</p>
+
+<ol>
+<li> Number of contract periods to simulate. <p>The contract period
+begins at the current date when the <span class="keyword">GASPERIO</span> keyword
+is read. An error will be flagged if this is not the first day of
+a month. At the end of each contract period, ECLIPSE writes an output
+report and dumps a Restart file if required.</p>
+</li>
+
+<li> Number of months in a contract period. <p>This must be 1, 2,
+3, 4, 6 or 12.</p>
+<p>DEFAULT: 12</p>
+</li>
+
+<li> The initial DCQ (Daily Contracted Quantity). <p>When there is
+a single gas supply contract on the FIELD (keyword <span class="keyword">SWINGFAC</span>), the initial DCQ must be specified in the first entry of the <span class="keyword">GASPERIO</span> keyword. It should be defaulted in subsequent
+entries, unless you wish to reset its value.</p>
+<p>When there are
+separate gas supply contracts on different groups (that is keyword <span class="keyword">GSWINGF</span> has been used to activate the multiple contract
+group facility; see <a href="../ecl_td/gasfieldintro_Applying_separate_gas_supply_contracts_to_individual_groups.html#gasfieldintro_applying_separate_gas_supply_contracts_to_individual_groups">"Applying separate
+gas supply contracts to individual groups"</a> in the <cite>ECLIPSE
+Technical Description</cite>), this item should be defaulted. Any
+value entered here is ignored. Instead, the initial DCQs of the contract
+groups must be set with keyword <a href="GDCQ.html#GDCQ"> GDCQ</a> before the <span class="keyword">GASPERIO</span> keyword is read.</p>
+<p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), Mscf/day
+(<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+<p>ECLIPSE
+100</p>
+<p>If item 1 of <a href="DCQDEFN.html#DCQDEFN"> DCQDEFN</a> is set to <samp class="codeph">‘ENERGY’</samp>:</p>
+<p>UNITS: kJ/day (<samp class="codeph">METRIC</samp>), Btu/day (<samp class="codeph">FIELD</samp>), J/hr (<samp class="codeph">LAB</samp>),
+kJ/day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: Current value of DCQ</p>
+</li>
+
+<li> Swing requirement for automatic reduction of the DCQ <p> <samp class="codeph">PER</samp> or <samp class="codeph">YES</samp> The field (or each contract group)
+must be able to produce at the DCQ multiplied by the monthly swing
+factor, for the whole contract period.</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">PRO</samp> </td>
+
+<td valign="top">The field (or contract group) must be able to raise its production
+rate from DCQ × profile to DCQ × swing for an instant at any time
+in the contract period.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">PCQ</samp> </td>
+
+<td valign="top">The field (or contract group) must be able to produce at the
+DCQ multiplied by the monthly swing factor continuously until it has
+produced its contracted quantity (= no. of days in period × DCQ).</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top">The swing requirement is not tested. The DCQ remains at its
+current value, even if the field (or contract group) cannot produce
+at its target rate.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>Items 5 - 8 of this keyword are ignored.</p>
+<p>DEFAULT: <samp class="codeph">PER</samp> </p>
+<p>If any option except <samp class="codeph">NO</samp> is requested,
+each contract period is solved twice. The first pass is a test calculation,
+which has the purpose of deciding how much the DCQ needs to be reduced
+in order to obey the swing requirement for the current contract period.
+The second pass simulates the actual performance of the field, with
+the sales gas rate target set each month to the new value of the DCQ
+multiplied by the monthly profile factor.</p>
+<p> <samp class="codeph">PER</samp> is a suitable option for cases where the monthly swing factors are
+the same as the profile factors, as it ensures the production profile
+fits underneath the delivery capacity decline curve. But for cases
+where the swing factors exceed the profile factors, the <samp class="codeph">PRO</samp> or <samp class="codeph">PCQ</samp> options may be more suitable. For more discussion
+of these options, see <a href="../ecl_td/gasfieldintro_Interpretations_of_the_swing_requirement.html#gasfieldintro_interpretations_of_the_swing_requirement">"Interpretations
+of the swing requirement"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+<p>When using the multiple contract groups facility (initiated
+with keyword <a href="GSWINGF.html#GSWINGF"> GSWINGF</a>), only the options <samp class="codeph">PER</samp> and <samp class="codeph">NO</samp> are
+allowed if there is more than one variable-DCQ contract group (see
+keyword <span class="keyword">GDCQ</span>). If all contract groups except one
+have fixed DCQs, all the above options are allowed.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> If the <span class="keyword">GASPERIO</span> keyword is used with the <samp class="codeph">PCQ</samp> option
+and a 12 month contract period, the results may be marginally different
+to those obtained using the <samp class="codeph">ACQ</samp> option in the <a href="GASYEAR.html#GASYEAR"> GASYEAR</a> keyword. This
+is because a 12 month contract period has either 365 or 366 days as
+opposed to the average 365.25 days used with the <span class="keyword">GASYEAR</span> keyword. </span></div>
+</li>
+
+<li> Should the timesteps be limited so that each month starts with
+a new timestep? - <samp class="codeph">YES</samp> or <samp class="codeph">NO</samp> <p>(The
+word may be abbreviated, only the first character is significant)</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top"> ECLIPSE automatically limits each timestep so that it does
+not go beyond the end of the current month. This ensures that there
+is at least one Summary file entry per month, and that the network
+(if using the Network option) is balanced at least once per month.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top"> ECLIPSE only limits the timestep to the end of the month if
+the production rate target changes, or if there is an operation on
+the Annual Scheduling file. All other means of limiting the timestep
+(see keyword <a href="TUNING.html#TUNING"> TUNING</a>) still remain in force.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">YES</samp> </p>
+</li>
+
+<li> Limiting DCQ reduction factor, FLIM, allowed in a single iteration
+of the first pass of the contract year. <p>This restricts the amount
+by which the DCQ can be reduced in a single iteration of the first
+pass of the contract period. If the DCQ needs to be reduced to a fraction
+less than the value specified here, it is reduced only to this specified
+fraction (DCQ × FLIM) and the first pass of the contract period is
+solved again, subject to the upper limit in item 7 on the number of
+iterations.</p>
+<p>If you are using the accelerated iteration scheme
+(this is always the case for ECLIPSE 300 and controlled by item 2
+of <span class="keyword">RUNSPEC</span> section keyword <a href="GASFIELD.html#GASFIELD"> GASFIELD</a> for ECLIPSE 100), it is not necessary
+to have a limiting reduction factor. Although a small value (for example
+0.1) could be useful when the field or a contract group is getting
+close to the end of its life. This would stop the iteration immediately
+jumping to a DCQ of zero when it may still be able to operate with
+a small value of the DCQ.</p>
+<p>ECLIPSE 100</p>
+<p>If you are <strong>not</strong> using the accelerated
+iteration scheme, the DCQ reduction must be limited more strictly
+to obtain accurate results, to prevent it from substantially overshooting
+the correct value (it will not increase again). The nearer the reduction
+factor is to 1.0 the more accurate will be the result, but at the
+expense of requiring more iterations of the first pass to converge
+it.</p>
+<p>RANGE: 0.0 to 0.99</p>
+<p>DEFAULT: 0.0 (Allowing unlimited
+reduction)</p>
+<p>See <a href="../ecl_td/gasfieldintro_Calculating_the_DCQ_value.html#gasfieldintro_calculating_the_dcq_value">"Calculating the
+DCQ value"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+</li>
+
+<li> Anticipated annual DCQ reduction factor. <p>Once the DCQ has
+been reduced automatically below the specified initial value, the
+DCQ is multiplied by the anticipated reduction factor at the start
+of each contract period.</p>
+<p>If you are using the accelerated iteration
+scheme (this is always the case for ECLIPSE 300 and controlled by
+item 2 of <span class="keyword">RUNSPEC</span> section keyword <span class="keyword">GASFIELD</span> for ECLIPSE 100), it is not necessary to have an anticipated reduction
+factor, as the scheme chooses a starting value based on the previous
+period's reduction in DCQ. This item should therefore be defaulted
+in general. If a value is specified here then it is used instead of
+the value calculated by ECLIPSE.</p>
+<p>ECLIPSE
+100</p>
+<p>If you are <strong>not</strong> using the accelerated
+iteration scheme, an anticipated reduction factor could help reduce
+the number of iterations required to converge the DCQ by bringing
+the starting value nearer to the final value. For example, during
+the first pass of the contract period ECLIPSE calculates that the
+DCQ must be reduced to a value DCQ2. The second pass is solved with
+the DCQ at this value. If an anticipated reduction factor, FANT, has
+been set, ECLIPSE starts the first pass of the next contract period
+with an initial DCQ = DCQ2 × FANT.</p>
+<p>RANGE: 0.01 to 1.0</p>
+<p>DEFAULT: 1.0 (Giving no anticipated reduction)</p>
+<p>See <a href="../ecl_td/gasfieldintro_Calculating_the_DCQ_value.html#gasfieldintro_calculating_the_dcq_value">"Calculating the
+DCQ value"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+</li>
+
+<li> Maximum allowed number of iterations of the first pass of each
+contract period to calculate the DCQ. <p>This takes effect if you
+are using the accelerated iteration scheme (this is always the case
+for ECLIPSE 300 and controlled by item 2 of <span class="keyword">RUNSPEC</span> section keyword <samp class="codeph">GASFIELD</samp> for ECLIPSE 100) or if
+there is a limiting DCQ reduction factor defined in item 5. A warning
+will be issued if the DCQ has not converged within the maximum number
+of iterations.</p>
+<p>ECLIPSE 100</p>
+<p>If you
+are <strong>not</strong> using the accelerated iteration scheme, and there is
+no limiting DCQ reduction factor, the first pass is only performed
+once to calculate the DCQ. The resulting value of the DCQ will be
+pessimistic if there has been a significant reduction.</p>
+<p>DEFAULT:
+3</p>
+</li>
+
+<li> Convergence tolerance for the DCQ calculation when using the
+accelerated iteration scheme. <p>The value must lie between 0.0 and
+1.0. A value of 0.1, for example, accepts the DCQ as converged when
+its change in value over an iteration is 10% or less. The minimum
+of the two DCQ values is chosen, so that the DCQ is on the safe side
+of the true result. A warning is issued if the DCQ has not converged
+after the maximum number of iterations specified in item 7.</p>
+<p>This item is ignored if you are not using the accelerated iteration
+scheme.</p>
+<p>RANGE: 0.0 to 1.0</p>
+<p>DEFAULT: 0.1</p>
+</li>
+
+</ol>
+
+<p>End the data with a slash (/)</p>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> If an Annual Scheduling file (<samp class="codeph">ASF</samp>) is being used with contract periods of varying length some caution
+must be exercised. It is allowable, for example, to perform a 6 month
+contract period followed by 3 quarterly contract periods. The first
+two quarters take the <samp class="codeph">ASF</samp> to the end of its year
+and it then starts again for the third quarter. However, it is not
+allowable to do 3 quarterly contract periods followed by a half year
+contract period; the <samp class="codeph">ASF</samp> does not wrap around within
+a contract period. Essentially, the end of an <samp class="codeph">ASF</samp> year <strong>must</strong> coincide with the end of a contract period. To
+achieve the second scenario it would be necessary to redefine the <samp class="codeph">ASF</samp> starting at the appropriate month before the second
+use of <span class="keyword">GASPERIO</span>.</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

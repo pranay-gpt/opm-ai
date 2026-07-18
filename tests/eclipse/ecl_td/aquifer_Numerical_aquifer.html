@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Numerical aquifer"/>
+<meta name="DC.subject" content="Grid model, Reservoir model, Numerical aquifers, Aquifer, Numerical"/>
+<meta name="keywords" content="Grid model, Reservoir model, Numerical aquifers, Aquifer, Numerical"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="aquifer_numerical_aquifer"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Numerical aquifer</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="aquifer_numerical_aquifer"><a name="aquifer_numerical_aquifer"><!-- --></a>
+<h1 class="topictitle1">Numerical aquifer</h1>
+
+
+ <div>
+<p>A numerical aquifer is modeled by a one-dimensional row of cells.
+A set of cells in the simulation grid is nominated to represent the
+aquifer, which may then connect to specified faces of the reservoir
+(using the <a href="../ecl_rm/AQUCON.html#AQUCON">AQUCON</a> keyword).</p>
+
+<p>The properties of the aquifer grid blocks (length, cross-sectional
+area, porosity, permeability, initial pressure, depth, and PVT and
+saturation table numbers) may be specified explicitly using keyword <a href="../ecl_rm/AQUNUM.html#AQUNUM">AQUNUM</a> in the <span class="keyword">GRID</span> section, or if the properties of the aquifer cells are defaulted,
+they are taken from the grid block values using data entered in the <span class="keyword">GRID</span> and <span class="keyword">EDIT</span> sections. This enables
+the aquifer properties to be independent of its actual position within
+the grid. The only information concerning the shape of the numerical
+aquifer is given by the cross-sectional area, length and depth.</p>
+
+<p>The aquifer should be connected to a face of the reservoir using
+the keyword <span class="keyword">AQUCON</span>. The first cell of the aquifer
+declared in the keyword <span class="keyword">AQUNUM</span> connects to the
+specified faces of the reservoir by non-neighbor connections. The
+set of cells defining the aquifer are connected together (possibly
+by non-neighbor connections) in the order specified in <span class="keyword">AQUNUM</span>. The aquifer cells are isolated from the grid except for these connections.
+In dual porosity runs, the aquifer should be placed in the lower half
+(that is the fracture part) of the grid.</p>
+
+<p>The aquifer <strong>pore volume</strong>, for simulation grid cell      
+           <math><mi>i</mi></math>, is initially calculated from the data entered in the <span class="keyword">AQUNUM</span> keyword using the equation:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="aquifer.equ.003f"/>
+ <math><mrow><msub><mrow>
+<mtext>PORV</mtext></mrow><mrow><mi>i</mi></mrow></msub>
+<mo>=</mo><msub><mrow><mi>C</mi><mo>⋅</mo><mtext>PORO</mtext></mrow><mrow><mi>i</mi></mrow></msub><mo>⋅</mo><msub><mrow><mtext>LENGTH</mtext></mrow><mrow>
+<mi>i</mi></mrow></msub><mo>⋅</mo><msub><mrow><mtext>AREA</mtext></mrow><mrow><mi>i</mi></mrow></msub>
+</mrow></math> 
+</td><td align="right">[Eq. 67.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mtext>PORV</mtext>
+<mi>i</mi></msub></math> </td>
+
+<td valign="top">is the pore volume of the aquifer cell  <math><mi>i</mi></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mtext>PORO</mtext>
+<mi>i</mi></msub></math> </td>
+
+<td valign="top"> is the porosity of the aquifer cell  <math><mi>i</mi></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mtext>LENGTH</mtext>
+<mi>i</mi></msub></math> </td>
+
+<td valign="top">is the length of the aquifer cell  <math><mi>i</mi></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mtext>AREA</mtext>
+<mi>i</mi></msub></math> </td>
+
+<td valign="top"> is the cross-sectional area of the aquifer cell  <math><mi>i</mi></math> as input in item 5 of <span class="keyword">AQUNUM</span>.  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>C</mi></mrow></math> </td>
+
+<td valign="top">Only used to convert between barrels and cubic feet in the <span class="keyword">FIELD</span> unit system.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The porosity of the aquifer cell is taken from the grid block if
+it is defaulted in the <span class="keyword">AQUNUM</span> keyword. Any values
+of <a href="../ecl_rm/MULTPV.html#MULTPV">MULTPV</a> entered in the <span class="keyword">GRID</span> or <span class="keyword">EDIT</span> sections will not apply to the numerical aquifer cells, and any
+edits to <a href="../ecl_rm/PORV.html#PORV">PORV</a> in the <span class="keyword">EDIT</span> section for numerical aquifer
+cells are ignored.</p>
+
+<p>The <strong>transmissibility</strong> between two aquifer cells is given
+by:</p>
+
+<p>After initialization numerical aquifer cells are subject to rock
+compression during the simulation as other cells so the pore volume
+may subsequently change.</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="aquifer.equ.0058"/>
+ <math><mtext>TR</mtext><mo>=</mo><mfrac><mrow><mtext>CDARCY</mtext></mrow><mrow>
+<mn>1</mn><mo>/</mo><msub><mi>T</mi><mi>i</mi>
+</msub><mo>+</mo><mn>1</mn><mo>/</mo><msub><mi>T</mi>
+<mi>j</mi></msub></mrow></mfrac></math> 
+</td><td align="right">[Eq. 67.2]
+              </td></tr></tbody></table>
+<p>with</p>
+
+<p> <math><mrow><msub><mrow>
+<mi>T</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>=</mo><mfrac><mrow><mn>2</mn><mo>⋅</mo><msub><mrow>
+<mtext>PERMX</mtext></mrow><mrow><mi>i</mi></mrow>
+</msub><mo>⋅</mo><msub><mrow><mtext>XSECT</mtext></mrow>
+<mrow><mi>i</mi></mrow></msub></mrow><mrow><msub>
+<mrow><mtext>LENGTH</mtext></mrow><mrow><mi>i</mi>
+</mrow></msub></mrow></mfrac></mrow></math> </p>
+
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mtext>PERMX</mtext>
+<mi>i</mi></msub></math> </td>
+
+<td valign="top">is the permeability of aquifer cell  <math><mi>i</mi></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mtext>XSECT</mtext>
+<mi>i</mi></msub></math> </td>
+
+<td valign="top"> is the cross-sectional area</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mtext>LENGTH</mtext>
+<mi>i</mi></msub></math> </td>
+
+<td valign="top">is the length of the aquifer cell  <math><mi>i</mi></math>.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This expression is used for transmissibilities between aquifer
+cells in both radial and Cartesian geometries. However, in connecting
+the first aquifer cell to a grid block, the appropriate radial or
+Cartesian transmissibility from the block edge to the center is used
+(see the <a href="../ecl_rm/AQUCON.html#AQUCON">AQUCON</a> keyword).</p>
+
+<p>No multiplier is applied to the transmissibility of the inter-block
+connections within the one-dimensional aquifer. The values of the
+transmissibility multipliers for the simulation grid entered in the <span class="keyword">GRID</span> section (<a href="../ecl_rm/MULTX.html#MULTX">MULTX</a> and related keywords) do not apply to any numerical aquifer
+connections.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>If required, a transmissibility multiplier
+may be applied to the calculated transmissibility between the first
+aquifer block and the nominated connecting face of the reservoir,
+using keyword <span class="keyword">AQUCON</span>. The use of a multiplier may
+be considered in order to aid history matching, for instance.</p>
+
+<p>ECLIPSE 100 </p>
+
+<p>Transmissibility values are calculated using
+the <a href="../ecl_rm/OLDTRAN.html#OLDTRAN">OLDTRAN</a> block centered method (see <a href="transmiss_Transmissibility_Calculations.html#transmiss_transmissibility_calculations"> "Transmissibility calculations"</a>).</p>
+
+<p>ECLIPSE 100 </p>
+
+<p>If the initial aquifer pressure is not entered
+in keyword <span class="keyword">AQUNUM</span>, then the initial pressure is
+calculated to be in equilibrium with the reservoir by using the initial
+pressures for the underlying grid blocks obtained by equilibration.
+Note that, when initializing the solution in numerical aquifer blocks,
+ECLIPSE sets the water saturation to unity, so the initial state is
+not then quiescent if the representative cells do not lie completely
+in the water zone.</p>
+
+<p>ECLIPSE 300 </p>
+
+<p>For the <span class="keyword">AQUNUM</span> keyword,
+if the initial aquifer pressure is not entered (by choosing the default
+value) or even if a negative value is specified, then the initial
+pressure will be calculated to place the aquifer as near as possible
+in equilibrium with the reservoir.</p>
+
+<p>Summary quantities for a numerical aquifer may be obtained by defining
+each aquifer as a fluid-in-place region. It is then possible to examine
+the aquifer inflow performance and pressure support supplied to the
+reservoir.</p>
+
+<p>In order to use the facility, the maximum number of numerical aquifer
+blocks and the maximum number of lines of connection data in <span class="keyword">AQUCON</span> should be set using the <a href="../ecl_rm/AQUDIMS.html#AQUDIMS">AQUDIMS</a> keyword in the <span class="keyword">RUNSPEC</span> section.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

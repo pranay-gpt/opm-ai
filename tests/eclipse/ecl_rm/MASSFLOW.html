@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="MASSFLOW"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="MASSFLOW"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>MASSFLOW</title>
+</head>
+<body>
+
+
+<div class="nested0" id="MASSFLOW"><a name="MASSFLOW"><!-- --></a>
+<h1 class="keyword">MASSFLOW</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="massflow.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="massflow.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1354e45"> x </th>
+
+<th valign="top" id="d1354e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1354e54">  </th>
+
+<th valign="top" id="d1354e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1354e45 d1354e54 ">  </td>
+
+<td valign="top" headers="d1354e48 d1354e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1354e45 d1354e54 ">  </td>
+
+<td valign="top" headers="d1354e48 d1354e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1354e45 d1354e54 ">  </td>
+
+<td valign="top" headers="d1354e48 d1354e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1354e45 d1354e54 "> x </td>
+
+<td valign="top" headers="d1354e48 d1354e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1354e45 d1354e54 ">  </td>
+
+<td valign="top" headers="d1354e48 d1354e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1354e45 d1354e54 ">  </td>
+
+<td valign="top" headers="d1354e48 d1354e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1354e45 d1354e54 ">  </td>
+
+<td valign="top" headers="d1354e48 d1354e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1354e45 d1354e54 ">  </td>
+
+<td valign="top" headers="d1354e48 d1354e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is used to define the upstream massflow boundary condition
+of a river as a function of the time.</p>
+
+<p>The keyword is followed by <samp class="codeph">NMMAST</samp> tables with
+a maximum of <samp class="codeph">MXMAST</samp> entries in each. These numbers
+are set with the <a href="RIVRDIMS.html#RIVRDIMS"> RIVRDIMS</a> keyword. Each table is terminated with a slash (/).</p>
+
+<p>Each table consists of 5 columns of data:</p>
+
+<ol>
+<li> Day </li>
+
+<li> The name of the month abbreviated to three characters <p> <samp class="codeph">JAN</samp>,  <samp class="codeph">FEB</samp>,  <samp class="codeph">MAR</samp>,  <samp class="codeph">APR</samp>,  <samp class="codeph">MAY</samp>,  <samp class="codeph">JUN</samp>,  <samp class="codeph">JLY</samp>,  <samp class="codeph">AUG</samp>,  <samp class="codeph">SEP</samp>,  <samp class="codeph">OCT</samp>,  <samp class="codeph">NOV</samp>  or  <samp class="codeph">DEC</samp>.</p>
+ <p> <samp class="codeph">JUL</samp> is an acceptable alternative to <samp class="codeph">JLY</samp>.</p>
+ </li>
+
+<li> Year input should be a 4 digit integer. </li>
+
+<li> Time of observation in 24 hour clock format, hh:mm <p>Do not
+use 24:00; use 00:00 of the following day.</p>
+ </li>
+
+<li> Massflow at this time <p>UNITS: m<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), ft<sup>3</sup>/day (<samp class="codeph">FIELD</samp>), cc/hr (<samp class="codeph">LAB</samp>)</p>
+ </li>
+
+</ol>
+
+<p>There is a minimum of two rows of data per table. End the table
+with a slash (/). After the first tables subsequent tables may be
+defaulted to the previous table by just entering a slash.</p>
+
+<p>The times, items 1-3 considered as a whole, must be monotonically
+increasing down the table.</p>
+
+<div class="section" id="massflow_example"><a name="massflow_example"><!-- --></a><h4 class="sectiontitle">Example</h4>            
+    <pre><code>MASSFLOW
+1  JAN 1995 00:00 1589.0
+8  FEB 1995 2:45  2010.0
+15 SEP 1995 12:00 307.0
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

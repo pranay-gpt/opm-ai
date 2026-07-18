@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using CO2SOL"/>
+<meta name="DC.subject" content="Enhanced oil recovery, CO2 injection, CO2SOL keywords, Brine tracking, Tracking, Brine"/>
+<meta name="keywords" content="Enhanced oil recovery, CO2 injection, CO2SOL keywords, Brine tracking, Tracking, Brine"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="co2inj_using_co2sol"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using CO2SOL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="co2inj_using_co2sol"><a name="co2inj_using_co2sol"><!-- --></a>
+<h1 class="topictitle1">Using CO2SOL</h1>
+
+
+ <div>
+<div class="section" id="co2inj_runspec_section1"><a name="co2inj_runspec_section1"><!-- --></a><h4 class="sectiontitle">RUNSPEC section</h4><p>This option is switched on using the <a href="../ecl_rm/CO2SOL.html#CO2SOL">CO2SOL</a> keyword. Unlike in the <a href="../ecl_rm/CO2STORE.html#CO2STORE">CO2STORE</a> option, water is not
+defined as a component in <a href="../ecl_rm/COMPS.html#COMPS">COMPS</a> and <a href="../ecl_rm/CNAMES.html#CNAMES">CNAMES</a>, as it is absent in the oil and gas phase.</p>
+<p>The <a href="../ecl_rm/DIFFUSE.html#DIFFUSE">DIFFUSE</a> option allows for the
+molecular diffusion of gases. See also <a href="gaswat_GASWAT_Option.html#gaswat_gaswat_option"> "GASWAT Option"</a>.</p>
+<p>The brine tracking option is activated by the <a href="../ecl_rm/BRINE.html#BRINE">BRINE</a> keyword.</p>
+</div>
+
+<div class="section" id="co2inj_props_section1"><a name="co2inj_props_section1"><!-- --></a><h4 class="sectiontitle">PROPS section</h4><p>The gas relative permeability and oil-gas capillary pressure are
+input using the <a href="../ecl_rm/SGFN.html#SGFN">SGFN</a> keyword, while the water relative permeability and the gas-water
+capillary pressure are entered using the <a href="../ecl_rm/SWFN.html#SWFN">SWFN</a> keyword. Oil relative
+permeabilities are defined with the <a href="../ecl_rm/SOF3.html#SOF3">SOF3</a> keyword.</p>
+<p>Fluid component properties can be generated
+from the PVT <em>i</em> database. The component 'CO2' must be present
+in <a href="../ecl_rm/CNAMES.html#CNAMES">CNAMES</a>.</p>
+<p>The initial dissolved CO<sub>2</sub> may be specified
+as a function of depth using the <a href="../ecl_rm/RSWVD.html#RSWVD">RSWVD</a> keyword.</p>
+<p>The <a href="../ecl_rm/SOLUBILI.html#SOLUBILI">SOLUBILI</a> keyword allows you to enter a solubility data set as a function
+of reservoir pressure. The <a href="../ecl_rm/SOLUBILT.html#SOLUBILT">SOLUBILT</a> keyword is similar to <span class="keyword">SOLUBILI</span> but allows
+you to enter a temperature dependent table. For both keywords, the
+table will be automatically corrected for the salinity effect following <cite><span> <a href="biblio_Bibliography.html#biblio_55659">Chang et al
+(1996)</a> </span></cite> if either the <a href="../ecl_rm/SALINITY.html#SALINITY">SALINITY</a> or <a href="../ecl_rm/SALINITR.html#SALINITR">SALINITR</a> keyword has been used.
+In this case, the temperature used in that correction will be taken
+from the <a href="../ecl_rm/RTEMP.html#RTEMP">RTEMP</a> keyword in the case of <span class="keyword">SOLUBILI</span> and from
+table itself for <span class="keyword">SOLUBILT</span>. The density of water
+at surface condition can be adjusted using the <a href="../ecl_rm/DENSITY.html#DENSITY">DENSITY</a> or <a href="../ecl_rm/GRAVITY.html#GRAVITY">GRAVITY</a> keywords.</p>
+<p>The <a href="../ecl_rm/SOLUBILS.html#SOLUBILS">SOLUBILS</a> keyword is similar
+to <span class="keyword">SOLUBILI</span> but you enter a salt concentration
+dependent table. If the Brine option is active, <span class="keyword">SOLUBILS</span> supersedes <a href="../ecl_rm/PVTWSALT.html#PVTWSALT">PVTWSALT</a> and <a href="../ecl_rm/BDENSITY.html#BDENSITY">BDENSITY</a> and the salt concentration is taken from the brine tracer.</p>
+<p>If none of the <span class="keyword">SOLUBILI</span>, <span class="keyword">SOLUBILS</span> or <span class="keyword">SOLUBILT</span> keywords are used the solubility
+data is defaulted as detailed in the description of <span class="keyword">SOLUBILI</span>.</p>
+<p>The coefficients for molecular diffusion must be set with <a href="../ecl_rm/DIFFCGAS.html#DIFFCGAS">DIFFCGAS</a> if the <a href="../ecl_rm/DIFFUSE.html#DIFFUSE">DIFFUSE</a> option is used.</p>
+<p>If CO<sub>2</sub> appears as liquid, it will be labelled as oil
+phase. In such a case, make sure that the <a href="../ecl_rm/SOF3.html#SOF3">SOF3</a> keyword (relative permeability
+for CO<sub>2</sub> liquid) is appropriate.</p>
+<dl>
+
+<dt class="dlterm">Initial state constructed by equilibration</dt>
+
+<dd><p>If an initial oil-gas contact exists within the reservoir you
+may specify either the vapor or the liquid phase composition at the
+contact, either <a href="../ecl_rm/ZMFVD.html#ZMFVD">ZMFVD</a> or <a href="../ecl_rm/COMPVD.html#COMPVD">COMPVD</a> can be used.</p>
+<p>If only a single phase is present the
+composition may be entered using <a href="../ecl_rm/ZI.html#ZI">ZI</a> or with respect to depth using <span class="keyword">ZMFVD</span>.</p>
+</dd>
+
+</dl>
+</div>
+
+<div class="section" id="co2inj_solution_section1"><a name="co2inj_solution_section1"><!-- --></a><h4 class="sectiontitle">SOLUTION section</h4><p>The <a href="../ecl_rm/EQUIL.html#EQUIL">EQUIL</a> keyword is used for equilibration.</p>
+<ul>
+<li>Initial state set by enumeration</li>
+
+<li>The oil phase composition is set with <a href="../ecl_rm/XMF.html#XMF">XMF</a>, the gas phase composition with <a href="../ecl_rm/YMF.html#YMF">YMF</a>, water composition with <a href="../ecl_rm/AMF.html#AMF">AMF</a> and the total oil and gas composition
+with <a href="../ecl_rm/ZMF.html#ZMF">ZMF</a>. Water content in CO<sub>2</sub> can be defined by <a href="../ecl_rm/RSW.html#RSW">RSW</a> or <a href="../ecl_rm/RSWVD.html#RSWVD">RSWVD</a>.               </li>
+
+</ul>
+</div>
+
+<div class="section" id="co2inj_schedule_section1"><a name="co2inj_schedule_section1"><!-- --></a><h4 class="sectiontitle">SCHEDULE section</h4><p>The composition of the injected gas can be specified using the
+keyword <a href="../ecl_rm/WINJGAS.html#WINJGAS">WINJGAS</a>.</p>
+<p>The aqueous mole fractions a CO<sub>2</sub> and a
+H<sub>2</sub>O can be output by adding the argument <span class="keyword">AMF</span> in <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a>.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

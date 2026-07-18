@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ROCKCONL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ROCKCONL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ROCKCONL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ROCKCONL"><a name="ROCKCONL"><!-- --></a>
+<h1 class="keyword">ROCKCONL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="rockconl.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="rockconl.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2034e45">                                             
+ </th>
+
+<th valign="top" id="d2034e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2034e54">                         x                   
+  </th>
+
+<th valign="top" id="d2034e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2034e45 d2034e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2034e48 d2034e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2034e45 d2034e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d2034e48 d2034e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2034e45 d2034e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2034e48 d2034e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2034e45 d2034e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2034e48 d2034e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2034e45 d2034e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2034e48 d2034e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2034e45 d2034e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2034e48 d2034e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2034e45 d2034e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2034e48 d2034e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2034e45 d2034e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2034e48 d2034e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword can only be used with the THERMAL option (keyword
+ <a href="THERMAL.html#THERMAL"> THERMAL</a> in the
+ <span class="keyword">RUNSPEC</span> section).</p>
+
+<p><span class="keyword">ROCKCONL</span> connects cap and base rocks (declared
+using  <a href="ROCKPROP.html#ROCKPROP"> ROCKPROP</a>) to one or more reservoir cells.</p>
+
+<p>The connection to the reservoir is set up by an arbitrary box defined
+with lower and upper I, J and K indices within the local grid refinement
+(refer to items 3-8 below). For each active grid block within the
+box, a rock connection is made to the face specified in item 9 if
+either of the following conditions are met:</p>
+
+<ul>
+<li>The face is on the outside of the reservoir, or</li>
+
+<li>The face adjoins an inactive cell.  </li>
+
+</ul>
+
+<p>Any number of records may be entered, each terminated with a slash
+(/). The set of records must be terminated with a blank record containing
+just a slash (/).</p>
+
+<p>The items in each record are:</p>
+
+<ol>
+<li>Rock type identification number  <p>This should be a number between
+1 and the maximum number of rocks, entered using <a href="ROCKDIMS.html#ROCKDIMS">  ROCKDIMS</a> in the <span class="keyword">RUNSPEC</span> section.</p>
+</li>
+
+<li>Local grid refinement name (up to 8 characters).</li>
+
+<li>Lower I-location of connecting grid blocks.</li>
+
+<li>Upper I-location of connecting grid blocks.</li>
+
+<li>Lower J-location of connecting grid blocks.</li>
+
+<li>Upper J-location of connecting grid blocks.</li>
+
+<li>Lower K-location of connecting grid blocks.</li>
+
+<li>Upper K-location of connecting grid blocks.</li>
+
+<li>Descriptor defining the face of the reservoir to which the rock
+connects (where <samp class="codeph">NDIVIX</samp>, <samp class="codeph">NDIVIY</samp> and
+ <samp class="codeph">NDIVIZ</samp> are specified in <span class="keyword">RUNSPEC</span> keyword  <a href="DIMENS.html#DIMENS"> DIMENS</a>): 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">I-  I</td>
+
+<td valign="top">= 1 of LGR face</td>
+
+</tr>
+
+<tr>
+<td valign="top">I+   I </td>
+
+<td valign="top">= NDIVIX of LGR face</td>
+
+</tr>
+
+<tr>
+<td valign="top">J-   J </td>
+
+<td valign="top">= 1 of LGR face</td>
+
+</tr>
+
+<tr>
+<td valign="top">J+   J </td>
+
+<td valign="top">= NDIVIY of LGR face</td>
+
+</tr>
+
+<tr>
+<td valign="top">K-   K </td>
+
+<td valign="top">= 1 of LGR face (top)</td>
+
+</tr>
+
+<tr>
+<td valign="top">K+   K</td>
+
+<td valign="top">= NDIVIZ of LGR face (bottom) </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ </li>
+
+<li>The rock influx coefficient.  <p>This is a transmissibility multiplier
+for the connection between the rock and grid.</p>
+ <p>DEFAULT: 1.0</p>
+   <p>The effect of the multiplier is cumulative. If the same block
+is specified twice with coefficients of 0.5, the final coefficient
+is 0.25.</p>
+ </li>
+
+</ol>
+
+<p>The rock connections to local grid refinements can be listed by
+specifying the  <samp class="codeph">ROCKCON</samp> mnemonic in the <a href="RPTSOL.html#RPTSOL">   RPTSOL</a> keyword.</p>
+
+<p>An array with the name <samp class="codeph">ROCKCONA</samp> is written to
+the <a href="INIT.html#INIT"> INIT</a> file to illustrate
+which cells are connected to each rock. If a cell is connected to
+rock N then the number   2<sup>(N–1)</sup>  appears in the <samp class="codeph">ROCKCONA</samp> array. If a cell is connected to multiple rocks
+then the appropriate output numbers are summed.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Each unique rock can only be connected to one grid. In other
+words, a rock can only be connected to either the global grid or to
+a single local grid refinement. </span></div>
+
+<p>See <a href="../ecl_td/thermalintro_Thermal_Option.html#thermalintro_thermal_option">"Thermal option"</a>  in the <cite>ECLIPSE Technical Description</cite> for further information
+on this option.</p>
+
+<div class="section" id="rockconl_example"><a name="rockconl_example"><!-- --></a><h4 class="sectiontitle">Example</h4>            
+    <p>Two rock types, connected to the top and bottom of a 10 x 10
+x 2 local grid refinement (called LGRROCK), with no rock influx coefficient.</p>
+          <pre><code>ROCKCONL
+1 LGRROCK 1 10  1 10  1 1  'K-' /
+2 LGRROCK 1 10  1 10  2 2  'K+' /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

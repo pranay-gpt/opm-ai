@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="FOAMFSC"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="FOAMFSC"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>FOAMFSC</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="FOAMFSC"><a name="FOAMFSC"><!-- --></a>
+<h1 class="keyword">FOAMFSC</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="foamfsc.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="foamfsc.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d728e45"> x </th>
+
+<th valign="top" id="d728e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d728e54"> x </th>
+
+<th valign="top" id="d728e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d728e45 d728e54 ">  </td>
+
+<td valign="top" headers="d728e48 d728e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d728e45 d728e54 ">  </td>
+
+<td valign="top" headers="d728e48 d728e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d728e45 d728e54 ">  </td>
+
+<td valign="top" headers="d728e48 d728e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d728e45 d728e54 "> x </td>
+
+<td valign="top" headers="d728e48 d728e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d728e45 d728e54 ">  </td>
+
+<td valign="top" headers="d728e48 d728e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d728e45 d728e54 ">  </td>
+
+<td valign="top" headers="d728e48 d728e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d728e45 d728e54 ">  </td>
+
+<td valign="top" headers="d728e48 d728e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d728e45 d728e54 ">  </td>
+
+<td valign="top" headers="d728e48 d728e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a>  (set in the <span class="keyword">TABDIMS</span> keyword)
+tables defining the parameters which control the gas mobility reduction
+as a function of foam surfactant concentration. Each table consists
+of one row of data and should be terminated with a slash(/):</p>
+
+<ol>
+<li> The reference foam surfactant concentration above which a strong
+foam can form. <p>UNITS: kg/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), lb/stb (<samp class="codeph">FIELD</samp>), gm/scc (<samp class="codeph">LAB</samp>)</p>
+ </li>
+
+<li> An exponent controlling the steepness in the change of mobility
+reduction due to surfactant concentration. <p>DEFAULT: 1.0</p>
+ </li>
+
+<li> The minimum surfactant concentration for which gas mobility reduction
+due to the presence of foam will be calculated. <p>UNITS: kg/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), lb/stb (<samp class="codeph">FIELD</samp>), gm/scc (<samp class="codeph">LAB</samp>)</p>
+<p>DEFAULT: 10<sup>-20</sup></p>
+ </li>
+
+<li><p>ECLIPSE 300</p>
+<p>The minimum water saturation below which foam has no effect.</p>
+<p>DEFAULT: 10<sup>-6</sup></p>
+</li>
+
+</ol>
+
+<p>The first item in the first table must be specified.
+The second and third items may be defaulted. If the first item in
+the second or subsequent tables is defaulted, the associated parameters
+will be copied from the previous table.</p>
+
+<p>The fourth term is only used in ECLIPSE 300.
+It is intended to prevent small numerical errors from causing convergence
+problems: when the water saturation is very low, a small amount of
+foam surfactant will lead to a large surfactant concentration, which
+could have a spuriously large effect on the gas mobility.</p>
+
+<p>If the second or subsequent tables are completely defaulted, the
+associated parameters will be copied from the previous table.</p>
+
+<p>This keyword is only relevant if the foam model is used with the
+functional gas mobility reduction model.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>In ECLIPSE 100 this requires the <a href="FOAM.html#FOAM"> FOAM</a> option to be specified
+in the <span class="keyword">RUNSPEC</span> section and <samp class="codeph">FUNC</samp> to be set for item 2 of the <a href="FOAMOPTS.html#FOAMOPTS"> FOAMOPTS</a> keyword.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>In ECLIPSE 300 the foam model is activated
+by using an additional water component <a href="COMPW.html#COMPW"> COMPW</a> to represent the foam surfactant. The <a href="CWTYPE.html#CWTYPE"> CWTYPE</a> keyword is used
+to identify which water component(s) acts as the foam surfactant (<samp class="codeph">SURFF</samp>). ECLIPSE 300 supports the functional form of the
+gas mobility model, so this need not be specified.</p>
+
+<p>See <a href="../ecl_td/foam_Foam_Model.html#foam_foam_model">"Foam model"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.</p>
+
+<p>For the functional model of gas mobility reduction, the mobility
+reduction factor <math><msub><mi>M</mi>
+<mrow><mi>r</mi><mi>f</mi></mrow></msub></math>  is
+expressed in the form: </p>
+
+<p> <math><mrow><msub><mrow>
+<mi>M</mi></mrow><mrow><mi>r</mi><mi>f</mi></mrow>
+</msub><mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow>
+<mn>1</mn><mo>+</mo><mo>(</mo><msub><mrow><mi>M</mi>
+</mrow><mrow><mi>r</mi></mrow></msub><mo>⋅</mo><msub>
+<mrow><mi>F</mi></mrow><mrow><mi>s</mi></mrow></msub>
+<mo>⋅</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi>F</mi>
+</mrow><mrow><mi>o</mi></mrow></msub><mo>⋅</mo><msub>
+<mrow><mi>F</mi></mrow><mrow><mi>c</mi></mrow></msub>
+<mo>)</mo></mrow></mfrac></mrow></math> </p>
+
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>M</mi>
+<mi>r</mi></msub></math> </td>
+
+<td valign="top">   is the reference mobility reduction factor (<a href="FOAMFRM.html#FOAMFRM"> FOAMFRM</a> keyword). </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mi>s</mi></msub></math> </td>
+
+<td valign="top">   is the mobility reduction factor dependence upon surfactant
+concentration (this keyword). </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mi>w</mi></msub></math> </td>
+
+<td valign="top">   is the mobility reduction factor dependence upon water saturation
+(<a href="FOAMFSW.html#FOAMFSW"> FOAMFSW</a> keyword). </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mi>o</mi></msub></math> </td>
+
+<td valign="top">   is the mobility reduction factor dependence upon oil saturation
+(<a href="FOAMFSO.html#FOAMFSO"> FOAMFSO</a> keyword). </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mi>c</mi></msub></math> </td>
+
+<td valign="top">   is the mobility reduction factor dependence upon capillary
+number (<a href="FOAMFCN.html#FOAMFCN"> FOAMFCN</a> keyword). </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The mobility reduction factor dependence upon surfactant concentration <math><msub><mi>F</mi>
+<mi>s</mi></msub></math>  is expressed in the form: </p>
+
+<p> <math><msub><mi>F</mi>
+<mi>s</mi></msub><mo>=</mo><msup><mrow><mo>(</mo>
+<mfrac><mrow><msub><mi>C</mi><mi>s</mi></msub></mrow>
+<mrow><msup><mrow><msub><mi>C</mi><mi>s</mi></msub>
+</mrow><mrow><mi>r</mi></mrow></msup></mrow></mfrac>
+<mo>)</mo></mrow><msub><mi>e</mi><mi>s</mi></msub>
+</msup></math> </p>
+
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>C</mi>
+<mi>s</mi></msub></math> </td>
+
+<td valign="top">  is the surfactant concentration. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msup><mrow><msub>
+<mi>C</mi><mi>s</mi></msub></mrow><mrow><mi>r</mi>
+</mrow></msup></math> </td>
+
+<td valign="top">  is the reference surfactant concentration such that  <math><msub><mi>C</mi>
+<mi>s</mi></msub><mo>&lt;</mo><msup><mrow><msub><mi>C</mi><mi>s</mi></msub></mrow><mrow><mi>r</mi></mrow>
+</msup></math>  denotes a weak foam and  <math><msub>
+<mi>C</mi><mi>s</mi></msub><mo>&gt;</mo><msup><mrow>
+<msub><mi>C</mi><mi>s</mi></msub></mrow><mrow><mi>r</mi></mrow></msup></math>  denotes a strong foam. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>e</mi>
+<mi>s</mi></msub></math> </td>
+
+<td valign="top">is an exponent which controls the steepness of the transition
+about the point where  <math><msub><mi>C</mi>
+<mi>s</mi></msub><mo>=</mo><msup><mrow><msub><mi>C</mi><mi>s</mi></msub></mrow><mrow><mi>r</mi></mrow>
+</msup></math>.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The contribution of this component to the overall gas mobility
+reduction is determined by the reference surfactant concentration,
+above which the presence of surfactant becomes significant in the
+creation of foam, and the value of the exponent which controls how
+quickly this factor changes about the transition point <math><msub><mi>C</mi>
+<mi>s</mi></msub><mo>=</mo><msup><mrow><msub><mi>C</mi><mi>s</mi></msub></mrow><mrow><mi>r</mi></mrow>
+</msup></math>. In addition, gas mobility reduction due to the
+presence of foam will only be calculated for grid blocks in which
+the foam concentration is greater than or equal to the specified minimum
+value. </p>
+
+<p>It is important to note that if <math><msub>
+<mi>e</mi><mi>s</mi></msub><mo>&lt;</mo><mn>1</mn>
+</math>, the slope of  <math><msub><mi>F</mi>
+<mi>s</mi></msub></math>  will be infinite at  <math><msub><mi>C</mi>
+<mi>s</mi></msub><mo>=</mo><mn>0</mn></math>. In this
+case, small surfactant concentrations may have a significant effect
+on the mobility, particularly if the reference concentration  <math><msup><mrow><msub>
+<mi>C</mi><mi>s</mi></msub></mrow><mrow><mi>r</mi>
+</mrow></msup></math>  is also small. Therefore it may be necessary
+to use item 3 of this keyword to set a minimum surfactant concentration
+to prevent “noise” in the form of small numerical errors
+from affecting the simulation. </p>
+
+<p>This keyword is mandatory if the functional model of gas mobility
+reduction due to foam has been specified. See also the <a href="FOAMFCN.html#FOAMFCN"> FOAMFCN</a>, <a href="FOAMFRM.html#FOAMFRM"> FOAMFRM</a>, <a href="FOAMFSO.html#FOAMFSO"> FOAMFSO</a> and <a href="FOAMFSW.html#FOAMFSW"> FOAMFSW</a> keywords.</p>
+
+<div class="section" id="foamfsc.example"><a name="foamfsc.example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NTSFUN</samp> = 5:</p>
+<pre><code>FOAMFSC
+0.001 / 
+0.002 1.01 /
+/
+0.001 0.9 /
+0.002 1.02 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

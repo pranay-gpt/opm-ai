@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="HBNUM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="HBNUM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>HBNUM</title>
+</head>
+<body>
+
+<div class="nested0" id="HBNUM"><a name="HBNUM"><!-- --></a><h1 class="keyword">HBNUM</h1>
+
+ <div>
+<div class="tablenoborder"><a name="hbnum.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="hbnum.tab.0005" class="flagtable" frame="border" border="1" rules="all">  <thead align="left"><tr><th valign="top" id="d976e35"> x </th>
+<th valign="top" id="d976e37"> ECLIPSE 100 </th>
+</tr>
+<tr><th valign="top" id="d976e40">  </th>
+<th valign="top" id="d976e42"> ECLIPSE 300 </th>
+</tr>
+</thead>
+<tbody><tr><td valign="top" headers="d976e35 d976e40 ">  </td>
+<td valign="top" headers="d976e37 d976e42 "> RUNSPEC </td>
+</tr>
+<tr><td valign="top" headers="d976e35 d976e40 ">  </td>
+<td valign="top" headers="d976e37 d976e42 "> GRID </td>
+</tr>
+<tr><td valign="top" headers="d976e35 d976e40 ">  </td>
+<td valign="top" headers="d976e37 d976e42 "> EDIT </td>
+</tr>
+<tr><td valign="top" headers="d976e35 d976e40 ">  </td>
+<td valign="top" headers="d976e37 d976e42 "> PROPS </td>
+</tr>
+<tr><td valign="top" headers="d976e35 d976e40 "> x </td>
+<td valign="top" headers="d976e37 d976e42 "> REGIONS </td>
+</tr>
+<tr><td valign="top" headers="d976e35 d976e40 ">  </td>
+<td valign="top" headers="d976e37 d976e42 "> SOLUTION </td>
+</tr>
+<tr><td valign="top" headers="d976e35 d976e40 ">  </td>
+<td valign="top" headers="d976e37 d976e42 "> SUMMARY </td>
+</tr>
+<tr><td valign="top" headers="d976e35 d976e40 ">  </td>
+<td valign="top" headers="d976e37 d976e42 "> SCHEDULE </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This keyword provides information
+that is used to modify the partially mixed water viscosity in the
+Polymer Flood. Therefore this keyword has to be used in conjunction
+with the polymer flood option (refer to the <a href="POLYMER.html#POLYMER"> POLYMER</a> keyword).</p>
+<p>The keyword should be followed
+by one integer for every grid block in the current input box specifying
+the Herschel-Bulkley region to which it belongs. The region number
+should not be less than 1 or greater than <samp class="codeph">NTHRBL</samp> (item
+1 in keyword <a href="NNEWTF.html#NNEWTF"> NNEWTF</a>). The data must be terminated by a slash (/).</p>
+<p>The Herschel-Bulkley region
+number specifies which Herschel-Bulkley table (input using <a href="FHERCHBL.html#FHERCHBL"> FHERCHBL</a> in the <span class="keyword">PROPS</span> section) should be used to calculate Non-Newtonian
+fluid properties of fluids in each grid block. For more details please
+refer to the <a href="../ecl_td/non-newtonian_Non-Newtonian_fluid_flows.html#non-newtonian_non-newtonian_fluid_flows">"Non-Newtonian fluid
+flows"</a> option in the <cite>ECLIPSE Technical Description</cite> for further details.</p>
+<p>If a <a href="REGIONS.html#REGIONS"> REGIONS</a> section is present in the datafile
+and the <span class="keyword">NNEWTF</span> keyword has been used to set to
+a value of <samp class="codeph">NTHRBL</samp> other than <samp class="codeph">NTPVT</samp> (item 2 of the <a href="TABDIMS.html#TABDIMS"> TABDIMS </a> keyword) then the <span class="keyword">HBNUM</span> keyword is compulsory.
+If <samp class="codeph">NTHRBL</samp> is set to <samp class="codeph">NTPVT</samp> and <span class="keyword">HBNUM</span> is not entered then <a href="PVTNUM.html#PVTNUM"> PVTNUM</a> will be used to determine which Herschel-Bulkley
+table will be used. If no <span class="keyword">REGIONS</span> section is present
+then <span class="keyword">HBNUM</span> will be set to one in all grid blocks.</p>
+<p>Grid blocks are ordered with
+the X axis index cycling fastest, followed by the Y and Z axis indices.
+Repeat counts may be used for repeated values (for example 115*2).
+Note that spaces must not be inserted on either side of the asterisk.</p>
+<div class="section" id="hbnum_example"><a name="hbnum_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NTHRBL=4</samp> specified
+in keyword <a href="NNEWTF.html#NNEWTF"> NNEWTF</a>; <samp class="codeph">NDIVIX=8</samp>, <samp class="codeph">NDIVIY=6</samp> and <samp class="codeph">NDIVIZ=5</samp> specified in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS"> DIMENS</a>; and no input <span class="keyword">BOX</span> set:</p>
+<pre><code>HBNUM
+ 8*1 16*2 8*3 16*4
+ 8*1 16*2 8*3 16*4
+ 8*1 16*2 8*3 16*4
+ 8*1 16*2 8*3 16*4
+ 8*1 16*2 8*3 16*4 /</code></pre></div>
+</div>
+</div>
+
+</body>
+</html>

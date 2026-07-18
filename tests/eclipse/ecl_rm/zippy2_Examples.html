@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Examples"/>
+<meta name="DC.subject" content="ZIPPY2"/>
+<meta name="keywords" content="ZIPPY2"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="zippy2_examples"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Examples</title>
+</head>
+<body>
+
+
+<div class="nested0" id="zippy2_examples"><a name="zippy2_examples"><!-- --></a>
+<h1 class="topictitle1">Examples</h1>
+
+
+ <div>
+<div class="section" id="zippy2.example1"><a name="zippy2.example1"><!-- --></a><h4 class="sectiontitle">Example 1</h4>           <pre><code>ZIPPY2
+'SIM=3.1' 'MINSTEP=0.000001' /</code></pre><pre><code>ZIPPY2
+'SIM=6.1' 'MINSTEP=0.000001' 'AGGRESSIVE=YES' /</code></pre><p>It is
+strongly recommended that the <a href="ZIPP2OFF.html#ZIPP2OFF"> ZIPP2OFF</a> keyword is used once the problem period is over, otherwise
+there may be a significant loss of efficiency.</p>
+<p>The very small
+value of <samp class="codeph">MINSTEP</samp> entered is only to ensure that the
+simulator does not accept un-converged timesteps due to being unable
+to take smaller timesteps; the simulator will not take timesteps as
+small as this unless it really needs to. (In ECLIPSE 100, setting <samp class="codeph">MINCHOP</samp> to a small value is also a good safety precaution.)</p>
+<p>The value of 3.1 Newtons is a little conservative and, in most
+cases, will not be the most efficient. A more efficient value is probably
+between 4 and 5, but every case is different and it is impossible
+to generalize with any great success. Integer values should be avoided.</p>
+<p>One strategy is to use <span class="keyword">ZIPPY2</span> to find what
+timestep values are appropriate. This information can then be used
+to guide the choice of where to place the <a href="TUNING.html#TUNING"> TUNING</a> keywords and what maximum timesteps
+can be reasonably set.</p>
+<p>ECLIPSE 100</p>
+<p>When the '<samp class="codeph">SIM</samp>' option is
+not being used the rest of the options attempt to represent the cost
+per simulated day as a function of the timestep taken. This function
+is then minimized to give the most efficient timestep.</p>
+</div>
+
+<div class="section" id="zippy2.example2"><a name="zippy2.example2"><!-- --></a><h4 class="sectiontitle">Example 2</h4>           
+      <p>It is strongly recommended that the <a href="ZIPP2OFF.html#ZIPP2OFF"> ZIPP2OFF</a> keyword is used once the problem
+period is over. There may otherwise be a significant loss of efficiency.</p>
+<dl>
+
+<dt class="dlterm">To improve efficiency</dt>
+
+<dd>ECLIPSE chops the timestep for one reason: because it failed to
+converge within the given number of Newton iterations. However, there
+are two reasons why this happens.<ul>
+<li>The first case is when the Newton iteration may be diverging;
+in this case increasing the maximum number of Newtons means that more
+time is wasted.</li>
+
+<li>The second case is when the Newton iterations are converging,
+but do not make the set tolerances before the maximum Newton limit
+is reached. </li>
+
+</ul>
+<p>It is sometimes possible to distinguish which might be the
+case by comparing the length of timestep with the number of Newtons
+needed. If the ratio of timesteps is roughly equal to the ratio of
+Newtons used then the case is probably the latter. If a small increase
+in timestep leads to an unexpectedly large growth in the number of
+Newtons then there may well be divergence.</p>
+</dd>
+
+</dl>
+</div>
+
+<div class="section" id="zippy2.example3"><a name="zippy2.example3"><!-- --></a><h4 class="sectiontitle">Example 3 - Diverging
+Iterations</h4>         <p>In this case it is best to start with the simple
+device of:</p>
+<pre><code>ZIPPY2
+'SIM=3.1' /</code></pre>          <p>However, this choice can be very
+inefficient for converging problems.</p>
+       </div>
+
+<div class="section" id="zippy2.example4"><a name="zippy2.example4"><!-- --></a><h4 class="sectiontitle">Example 4 – Converging
+Iterations or uncertainty</h4>         <p>ECLIPSE
+100</p>
+<p>Whilst every case is different, one
+of the most robust choices for this simulator seems to be:</p>
+<pre><code>ZIPPY2
+'CPU' 'NPTS=15' 'SPRING=3.1,2' 'BEZIER=5' /</code></pre>          <p>If it is important to be able to repeat the timestepping
+then replace 'CPU' with something like 'SOLVER=4,1'.</p>
+<p>The SPRING option is included to penalize high
+numbers of iterations. In a converging case the requirement is that
+the simulator does not predict a timestep, no matter how efficient
+it is predicted to be, if it is going to take even one more Newton
+than is allowed; hence the inclusion of this artificial penalty function.</p>
+<p>Clearly the number of possible combinations is endless. One could
+soon waste as much time with them as with trying to get the maximum
+timestep right with the <a href="TUNING.html#TUNING"> TUNING</a> keyword. The combinations most worthy of trying are:</p>
+ 
+        <ul>
+<li>Adding '<samp class="codeph">NEWTON=20</samp>', for example.   <p>In the
+converging case this may allow larger timesteps to be taken if they
+are predicted to be more efficient. Beware, though, that when the
+code chops--none of these options guarantees no chopping--then with
+a higher maximum number of Newtons more time is wasted.</p>
+      
+      </li>
+
+<li>   Using '<samp class="codeph">BEZIER2=5</samp>'   <p>Sometimes, more usually
+in the diverging iteration case, '<samp class="codeph">BEZIER2=5</samp>' is better
+than '<samp class="codeph">BEZIER=5</samp>'.</p>
+             </li>
+
+</ul>
+       </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

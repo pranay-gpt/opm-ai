@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Syntax for specifying particular elements"/>
+<meta name="DC.subject" content="UDQ"/>
+<meta name="keywords" content="UDQ"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="udq_syntax_for_specifying_particular_elements"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Syntax for specifying particular elements</title>
+</head>
+<body>
+
+
+<div class="nested0" id="udq_syntax_for_specifying_particular_elements"><a name="udq_syntax_for_specifying_particular_elements"><!-- --></a>
+<h1 class="topictitle1">Syntax for specifying particular elements</h1>
+
+
+ <div>
+<p>An  		  <samp class="codeph">ASSIGN</samp> record can target a subset of the
+elements in a 		  UDQ set. Similarly, whilst a  		  <samp class="codeph">DEFINE</samp> record applies to a quantity as a whole, a 		  subset of elements
+can be supplied as an argument to the functions introduced 		  below.
+When a unique element of a UDQ set is specified as an argument in
+a 		  quantity definition, the argument is treated as a scalar. When
+a subset of a 		  UDQ set is supplied as an argument in a quantity
+definition the remaining 		  elements in the UDQ set remain undefined.
+ 		</p>
+
+<p>The following syntax should be used.  		</p>
+
+<dl>
+
+<dt class="dlterm">Connection quantities  			 </dt>
+
+<dd>  				
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">COFR</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">COFR</samp> for all connections for all 							 wells.
+Treated as a UDQ set.  						  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">COFR P1</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">COFR</samp> for all connections belonging 							
+to well ‘P1’. Treated as a UDQ set.  						  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">COFR P1 1 2 3</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">COFR</samp> for the connection in block 							 (1,2,3)
+belonging to well P1. Specifies a single element and will be treated
+as 							 a scalar argument.  						  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">COFR 'P*' '-1' '-1' 3</samp> 							  						  </td>
+
+<td valign="top">  							 <samp class="codeph">COFR</samp> for all connections belonging
+to 							 wells with names beginning with ‘P’ in layer 3. Treated
+as a UDQ set regardless 							 of the number of matching connections.
+ 						  </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+  			 </dd>
+
+
+<dt class="dlterm">Field quantities  			 </dt>
+
+<dd> <samp class="codeph">FOPR</samp>. Field quantities are always scalar 				arguments.
+ 			 </dd>
+
+
+<dt class="dlterm">Group quantities  			 </dt>
+
+<dd>  				
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">GOPR</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">GOPR</samp> for all groups. Treated as a 							
+UDQ set.  						  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">GOPR G1</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">GOPR</samp> for group ‘G1’. Specifies a 							 single
+element and will be treated as a scalar argument.  						  </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+  				<p>ECLIPSE 100  				</p>
+  				<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> In extended network modeling cases (see  				
+ <a href="../ecl_td/extended_The_extended_network_model.html#extended_the_extended_network_model">"The extended network
+					 model"</a> in the  				  <cite>ECLIPSE Technical Description</cite>), group UDQs will 				  inherit their type (group or network group)
+from the right hand side of their 				  definition. In the case of
+scalar assignments these UDQs are of standard group 				  type unless
+previously defined as network group type.  				</span></div>
+  			 </dd>
+
+
+
+<dt class="dlterm">Region quantities  			 </dt>
+
+<dd>Inter-region quantities such as  				 <samp class="codeph">ROFT</samp> are
+not permitted within user-defined 				quantities.  				
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">ROIP</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">ROIP</samp> for all regions and all  							 <a href="FIP.html#FIP"> FIP  							</a> sets, including
+the  							 <a href="FIPNUM.html#FIPNUM"> FIPNUM  							</a> set. Treated as a UDQ set.  						  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">ROIP_NUM</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">ROIP</samp> for all regions in the  							 <span class="keyword">FIPNUM</span> set. Treated as a UDQ set.  						  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">ROIP_ONE</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">ROIP</samp> for all regions in the  							 <span class="keyword">FIP</span> set ‘ONE’. Treated as a UDQ set.  						  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">ROIP_ONE 1</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">ROIP</samp> for region 1 in the  							 <span class="keyword">FIP</span> set ‘ONE’. Specifies a single 							 element and will
+be treated as a scalar argument. A  							 <span class="keyword">FIP</span> set name must be given if a region 							 index is specified. Use
+ 							 <samp class="codeph">NUM</samp> for the  							 <span class="keyword">FIPNUM</span> set.  						  </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+  				<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> If a non-default region set is required, the
+name of the 				  region set must be specified in the last three characters
+of the UDQ name, just 				  as it would for the SUMMARY vector. So
+for a UDQ based on quantities in  				  <span class="keyword">FIP</span> set
+‘ONE’, a suitable name would be  				  <samp class="codeph">RUXXXONE</samp>.
+Region quantities from more than one  				  <span class="keyword">FIP</span> set cannot be used in the same UDQ.  				</span></div>
+  			 </dd>
+
+
+<dt class="dlterm">Segment quantities  			 </dt>
+
+<dd>  				
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">SOFR</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">SOFR</samp> for all segments belonging to 							
+all multisegment wells. Treated as a UDQ set.  						  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">SOFR 'P*'</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">SOFR</samp> for all segments belonging to 							
+all multisegment wells with names beginning with ‘P’. Treated as a
+UDQ set.  						  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">SOFR 'P*' 1</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">SOFR</samp> for segment 1 belonging to all 							
+multisegment wells with names beginning with ‘P’. Treated as a UDQ
+set 							 regardless of the number of matching segments.  						
+ </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">SOFR P1 1</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">SOFR</samp> for segment 1 belonging to the 							
+multisegment well ‘P1’. Specifies a single element and will be treated
+as a 							 scalar argument.  						  </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+  			 </dd>
+
+
+<dt class="dlterm">Well quantities  			 </dt>
+
+<dd>  				
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">WOPR</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">WOPR</samp> for all wells. Treated as a 							 UDQ
+set  						  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WOPRP1</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">WOPR</samp> for well 'P1'. Specifies a 							 single
+element and will be treated as a scalar argument.  						  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WOPR 'P*'</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">WOPR</samp> for all wells with names 							 beginning
+with 'P'. Treated as a UDQ set regardless of the number of matching
+							 wells.  						  </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+  				<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Completion properties beginning with 'W' (for
+example  				  <samp class="codeph">WOPRL</samp>) are input in the same manner
+as well 				  quantities except that the completion number should
+be appended directly to the 				  end of the mnemonic (for example
+ 				  <samp class="codeph">WOPRL5</samp>)  				</span></div>
+  			 </dd>
+
+
+<dt class="dlterm">Aquifer quantities  			 </dt>
+
+<dd>  				
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">AAQR</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">AAQR</samp> for all aquifers. Treated as a 							
+UDQ set  						  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">AAQR X</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">AAQR</samp> for aquifer number X. 							 Specifies
+a single element and will be treated as a scalar argument.  						
+ </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+  			 </dd>
+
+
+<dt class="dlterm">Block quantities  			 </dt>
+
+<dd>  				
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">BOSAT</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">BOSAT</samp> for all active blocks. 							 Treated
+as a UDQ set  						  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">BOSAT X Y Z</samp>  						  </td>
+
+<td valign="top"> <samp class="codeph">BOSAT</samp> for block coordinates X Y Z. 							
+Specifies a single element and will be treated as a scalar argument.
+ 						  </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+  			 </dd>
+
+</dl>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Well and group names containing template characters should be
+		  enclosed in quotes.  		</span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Local  		  <span class="keyword">SUMMARY</span> keywords beginning with
+LB, LC or LW are not 		  available for use in quantity definitions.
+ 		</span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Keywords which take a component index are available for use. 
+The mnemonic name as written to the summary file should be used, for example
+ <samp class="codeph">WCGPR_3</samp> for the gas production rate of component 3. 
+ See <a href="summary_Format_of_SUMMARY_keywords_with_a_component_index.html#summary_format_of_summary_keywords_with_a_component_index"> "Format of SUMMARY keywords with a component index"</a>.</span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

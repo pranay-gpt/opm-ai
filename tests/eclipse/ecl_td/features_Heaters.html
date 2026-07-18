@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Heaters"/>
+<meta name="DC.subject" content="Thermal heater features"/>
+<meta name="keywords" content="Thermal heater features"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="features_heaters"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Heaters</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="features_heaters"><a name="features_heaters"><!-- --></a>
+<h1 class="topictitle1">Heaters</h1>
+
+
+ <div>
+<p>Heaters can be placed in any grid cell using the <a href="../ecl_rm/HEATER.html#HEATER">HEATER</a> keyword, or in an LGR
+cell using the <a href="../ecl_rm/HEATERL.html#HEATERL">HEATERL</a> keyword. These keywords specify the maximum rate of heating
+                 <math><msub><mi>H</mi>
+<mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub>
+</math>  and a maximum temperature at which the heater should operate
+ <math><msub><mi>T</mi>
+<mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub>
+</math>. The number of heaters allowed is controlled by the <a href="../ecl_rm/HEATDIMS.html#HEATDIMS">HEATDIMS</a> keyword.          </p>
+
+<p>Depending on the arguments in the <span class="keyword">HEATER</span> keyword
+the heater rate is given either by</p>
+
+<p>                              <math><mi>H</mi><mo>=</mo><mrow><mi>m</mi><mi>i</mi><mi>n</mi>
+<mo>[</mo><mo>(</mo><msub><mi>T</mi><mrow><mi>m</mi>
+<mi>a</mi><mi>x</mi></mrow></msub><mrow><mo>-</mo>
+<msub><mi>T</mi><mi>c</mi></msub></mrow><mo>)</mo>
+<mo>×</mo><mi>R</mi><mo>,</mo><msub><mi>H</mi><mrow>
+<mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>]</mo></mrow></math>                       </p>
+
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>T</mi>
+<mi>c</mi></msub></math> </td>
+
+<td valign="top">is the cell temperature and   </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>R</mi></math> </td>
+
+<td valign="top">the temperature-dependent heat injection rate, </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>or</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="features.XID-000000b7"/>
+ <math><mrow><mi>H</mi>
+<mo>=</mo><mrow><mi>m</mi><mi>i</mi><mi>n</mi><mo>(</mo><msub><mrow><mi>H</mi></mrow><mrow><mi>m</mi>
+<mi>a</mi><mi>x</mi><mo>⁢</mo><mtext> </mtext></mrow>
+</msub><mo>,</mo><mi>V</mi><mo>⋅</mo><mfrac><mrow>
+<mi>Δ</mi><mi>E</mi></mrow><mrow><mi>Δ</mi><mi>t</mi>
+</mrow></mfrac><mo>)</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 354.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mi>V</mi></math> </td>
+
+<td valign="top"> is the cell volume,  <math><mrow><mi>Δ</mi>
+<mi>t</mi></mrow></math>  is the timestep, and </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>the estimated change in energy density                  <math><mrow><mi>Δ</mi>
+<mi>E</mi></mrow></math>  is given by          </p>
+
+<p>                              <math><mrow>
+<mi>Δ</mi><mi>E</mi></mrow><mo>=</mo><mrow><msub>
+<mi>e</mi><mi>t</mi></msub><mo>(</mo><msub><mi>T</mi>
+<mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub>
+<mo>)</mo><mo>-</mo><msub><mi>e</mi><mrow><mi>t</mi>
+<mrow><mo>-</mo><mrow><mi>Δ</mi><mi>t</mi></mrow>
+</mrow></mrow></msub></mrow></math>                    
+  </p>
+
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><msub><mi>e</mi><mi>t</mi></msub><mo>(</mo><msub><mi>T</mi>
+<mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub>
+<mo>)</mo></mrow></math> </td>
+
+<td valign="top">is the cell energy density when the cell temperature is  <math><msub><mi>T</mi>
+<mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub>
+</math>  and    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>e</mi>
+<mrow><mi>t</mi><mrow><mo>-</mo><mrow><mi>Δ</mi><mi>t</mi></mrow></mrow></mrow></msub></math> </td>
+
+<td valign="top">Is the cell energy density at the previous timestep.   </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>In conditions where there is no heat flow from a cell, a heater
+governed by equation <a href="features_Heaters.html#features.XID-000000b7">354.1</a>  will
+heat the connection cell at a constant rate                  <math><msub><mi>H</mi>
+<mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub>
+</math>  until the cell reaches a temperature  <math><msub><mi>T</mi>
+<mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub>
+</math>. However, if there is energy flow into or out of the cell,
+then equation <a href="features_Heaters.html#features.XID-000000b7">354.1</a>  is only approximate.
+In this case the heater rate may be less than  <math><msub>
+<mi>H</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow></msub></math>  for temperatures near  <math><msub><mi>T</mi>
+<mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub>
+</math>, or the cell temperature may exceed  <math><msub><mi>T</mi>
+<mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub>
+</math>  slightly; the discrepancies depend on the size of the heat
+flow and the size of the timestep.          </p>
+
+<p>Output of heater performance data to the print file can be controlled
+by using item 14 of the <a href="../ecl_rm/RPTPRINT.html#RPTPRINT">RPTPRINT</a> keyword.</p>
+
+<p><span class="keyword">SUMMARY</span> keywords <span class="keyword">WHTR</span> and <span class="keyword">WHTT</span> 
+contain the energy rate and energy total for individual heaters
+and require a list of heater names. Vectors <span class="keyword">FHTR</span> and <span class="keyword">FHTT</span> contain the energy rate and energy total
+for all heaters.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

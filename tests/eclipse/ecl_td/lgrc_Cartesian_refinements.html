@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Cartesian refinements"/>
+<meta name="DC.subject" content="Local grid refinement, Amalgamation, Cartesian LGRs, Cartesian, Horizontal well, Well, Horizontal"/>
+<meta name="keywords" content="Local grid refinement, Amalgamation, Cartesian LGRs, Cartesian, Horizontal well, Well, Horizontal"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrc_cartesian_refinements"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Cartesian refinements</title>
+</head>
+<body>
+
+
+<div class="nested0" id="lgrc_cartesian_refinements"><a name="lgrc_cartesian_refinements"><!-- --></a>
+<h1 class="topictitle1">Cartesian refinements</h1>
+
+
+ <div>
+<p>Cartesian refinements are specified by keyword <a href="../ecl_rm/CARFIN.html#CARFIN"> CARFIN</a>. For example, to replace
+layers 3 and 4 in column (2,3) of the global model with a 5*5*8 Cartesian
+refinement with new porosities and permeabilities:</p>
+
+<pre><code>CARFIN
+ -- NAME   I1-I2 J1-J2 K1-K2 NX NY NZ NWMAX--
+  'LGR1'  2  2  3  3  3  4  5  5  8  5      /
+PORO
+ 200*0.2 /
+EQUALS
+ 'PERMX' 500 / 'PERMY' 500 / 'PERMZ' 50 /
+ /
+ENDFIN</code></pre>
+<p>This creates a refinement that looks like the following figure
+(in the areal direction).</p>
+
+<div class="fignone" id="lgrc.XID-000000c8"><a name="lgrc.XID-000000c8"><!-- --></a>
+
+ <br/><img src="../img/lgr5.png" width="204px"/><br/> 
+<br/><span class="figcap">
+           Figure 32.1  Cartesian grid refinement</span></div>
+
+<p>It is recommended that you insert <a href="../ecl_rm/ENDFIN.html#ENDFIN"> ENDFIN</a> between successive <a href="../ecl_rm/RADFIN.html#RADFIN"> RADFIN</a>, <a href="../ecl_rm/RADFIN4.html#RADFIN4"> RADFIN4</a> and <span class="keyword">CARFIN</span> keywords. The primary purpose of <span class="keyword">ENDFIN</span> is to
+revert ECLIPSE to reading data for the global grid system.</p>
+
+<p>Note that the <span class="keyword">CARFIN</span> keyword is designed to
+refine a general box, rather than just a single column of cells as
+in <span class="keyword">RADFIN</span> or a box of four columns of as in <span class="keyword">RADFIN4</span>. The maximum number of wells within the Cartesian
+refinement is specified by <samp class="codeph">NWMAX</samp> (=5 in the example
+above).</p>
+
+<p>To place wells in a Cartesian refined grid, follow the same procedure
+as described above for radial grids. For example, to place a horizontal
+well that fully penetrates the refined grid from the x-direction,
+use the following procedure to complete the well in five horizontally-adjacent
+cells in the refined grid:</p>
+
+<pre><code>WELSPECL
+ --   WELL  --  GROUP -- LOCAL GRID -- LOCATION --  BHP  -- PREF
+ --   NAME  --  NAME  --    NAME    --   I  J   -- DEPTH -- PHASE
+     'HORIZ'    'G'        'LGR1'        1  3       8060    'OIL'  / 
+/
+COMPDATL
+ -- WELL -- LOCAL --   LOCATION  --- OPEN - SAT - CONN - WELL - KH - S - D - PEN
+ -- NAME -- GRID  --  IX JY K1 K2 -- SHUT - TAB - FACT - DIAM -    -   -   - DRN 
+'HORIZ'   'LGR1'    1  3  3  3   'OPEN'   0     -1     0.4   3*           'X' /
+'HORIZ'   'LGR1'    2  3  3  3   'OPEN'   0     -1     0.4   3*           'X' / 
+'HORIZ'   'LGR1'    3  3  3  3   'OPEN'   0     -1     0.4   3*           'X' / 
+'HORIZ'   'LGR1'    4  3  3  3   'OPEN'   0     -1     0.4   3*           'X' / 
+'HORIZ'   'LGR1'    5  3  3  3   'OPEN'   0     -1     0.4   3*           'X' / 
+/</code></pre>
+</div>
+
+</div>
+
+
+</body>
+</html>

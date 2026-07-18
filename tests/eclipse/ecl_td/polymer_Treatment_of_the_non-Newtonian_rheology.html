@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Treatment of the non-Newtonian rheology"/>
+<meta name="DC.subject" content="The ECLIPSE 100 polymer flood simulation model treatment of non-Newtonian rheology, Shear, Thinning"/>
+<meta name="keywords" content="The ECLIPSE 100 polymer flood simulation model treatment of non-Newtonian rheology, Shear, Thinning"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="polymer_treatment_of_the_non-newtonian_rheology"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Treatment of the non-Newtonian rheology</title>
+</head>
+<body>
+
+
+<div class="nested0" id="polymer_treatment_of_the_non-newtonian_rheology"><a name="polymer_treatment_of_the_non-newtonian_rheology"><!-- --></a>
+<h1 class="topictitle1">Treatment of the non-Newtonian rheology</h1>
+
+
+ <div>
+<p>You can choose from three models to take into account some of the
+non-Newtonian rheological behavior reported for polymer solutions.
+Non-Newtonian rheology of the polymer solution is represented by modifying
+the solution's viscosity (for models 1 and 3) or effective transmissibility
+(model 2). </p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">These modified properties are applied to the flows between cells,
+and are based on the flow magnitude (velocity, flow rate or shear
+rate) through the face and cell properties based on both cells, or
+on the upstream cell. In contrast, the unmodified fluid viscosity
+is calculated based on the properties of one cell and applied at the
+cell center. For this reason, although the modified properties are
+always displayed in the cell with the lower cell address relative
+to the face (that is it is always an I+, J+ or K+ face property displayed
+at the cell (I,J,K)), the actual fluid properties influencing the
+modified viscosity or transmissibility may come from the cell on the
+other side of the face if that cell is the upstream cell.</span></div>
+
+<dl>
+
+<dt class="dlterm"><a name="polymer_model_1"><!-- --></a>Model 1</dt>
+
+<dd>This model targets the shear thinning or thickening of polymer
+that has the effect of changing the polymer viscosity at higher flow
+rates. It assumes that shear rate is proportional to the flow velocity.
+This assumption is not valid in general, as for example, a given flow
+in a low permeability rock will have to pass through smaller pore
+throats than the same flow in a high permeability rock, and consequently
+the shear rate will be higher in the low permeability rock. However,
+under the consideration of a single type of reservoir rock, this assumption
+can be reasonable.<p>This model is activated by the <a href="../ecl_rm/PLYSHEAR.html#PLYSHEAR">PLYSHEAR</a> keyword. Note that
+shear thinning can cause runaway positive feedback due to the loop:
+increased speed causes decreased viscosity causes increased speed.
+It may be easier to control the shear-thinning effect by using Model
+3 below. Shear thickening may exacerbate convergence problems in wells
+where crossflow is disallowed. Please refer to the keyword description
+for more details. Note that crossflow in wells is now allowed with
+polymer.</p>
+</dd>
+
+
+<dt class="dlterm"><a name="polymer_model_2"><!-- --></a>Model 2</dt>
+
+<dd>The second model is the Herschel-Bulkley model that can be used
+to model shear thinning and thickening as well as yield stress, dependent
+on polymer concentration. Refer to <a href="non-newtonian_Non-Newtonian_fluid_flows.html#non-newtonian_non-newtonian_fluid_flows"> "Non-Newtonian fluid flows"</a> for more details.</dd>
+
+
+<dt class="dlterm"><a name="polymer_model_3"><!-- --></a>Model 3</dt>
+
+<dd>The third model is similar to Model 1 but instead uses a logarithmic
+look-up calculation in order to update the water phase and polymer
+flow properties in the presence of shear thinning/thickening. This
+model is activated by the <a href="../ecl_rm/PLYSHLOG.html#PLYSHLOG">PLYSHLOG</a> keyword. The shear multipliers can be specified either as
+a function of water phase/polymer flow velocity or as function of
+water phase/polymer flow shear rate; keyword <a href="../ecl_rm/SHRATE.html#SHRATE">SHRATE</a> is required for the
+latter.</dd>
+
+</dl>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

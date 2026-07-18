@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WLIFT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WLIFT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WLIFT</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WLIFT"><a name="WLIFT"><!-- --></a>
+<h1 class="keyword">WLIFT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wlift.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wlift.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2982e45">                         x                   
+  </th>
+
+<th valign="top" id="d2982e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2982e54">                                             
+ </th>
+
+<th valign="top" id="d2982e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2982e45 d2982e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2982e48 d2982e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2982e45 d2982e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2982e48 d2982e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2982e45 d2982e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2982e48 d2982e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2982e45 d2982e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2982e48 d2982e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2982e45 d2982e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2982e48 d2982e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2982e45 d2982e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2982e48 d2982e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2982e45 d2982e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2982e48 d2982e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2982e45 d2982e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d2982e48 d2982e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword supplies data for the automatic retubing and THP or
+lift switching option. If a well's production rate falls below the
+value set in item 2, or if its water cut exceeds the value set in
+item 7, or if its gas-liquid ratio exceeds the value set in item 9,
+or if the well dies under THP control, then one of three operations
+is performed:</p>
+
+<ul>
+<li>If a THP value has been set in item 8, the well switches to this
+new THP limit in decrements defined by item 11. This can be regarded
+as switching the well into a lower pressure separator to increase
+its productivity. Obviously, to have the desired effect, the new THP
+limit must be lower than the well's original THP limit. If a decrement
+is set in item 11 the THP switching is performed in stages; each time
+THP switching is triggered the THP is reduced by the specified decrement,
+until the final THP value set in item 8 is reached.             </li>
+
+<li>If a VFP table number has been set in item 4, the well switches
+to this table. This can be regarded as a retubing operation, if the
+new table has been calculated with a different tubing diameter from
+the original table.</li>
+
+<li>If an artificial lift quantity has been set in item 5, the well
+uses this new lift quantity to interpolate the VFP table. The new
+ALQ will be reached in increments defined in item 10. This can be
+regarded as switching on (or uprating) artificial lift in the well.
+If an increment is set in item 10 the lift switching is performed
+in stages; each time lift switching is triggered the ALQ will be increased
+by the specified increment, until the final ALQ value set in item
+5 is reached. If an efficiency factor has been set in item 6, the
+well uses this new value in place of its original value when the lift
+switching (or its first increment) has taken place, to allow for an
+increase in downtime resulting from the lift system. The switching
+of artificial lift can be made subject to constraints on the number
+of wells using lift, and the sum of their ALQs, by using the keyword <a href="GLIFTLIM.html#GLIFTLIM"> GLIFTLIM</a>. (Alternatively,
+the new ALQ value in item 5 could be lower than the well’s original
+value, as long as it is still above 0.0, if artificial lift is to
+be reduced when the well’s formation GLR increases beyond the limit
+set in item 9.)</li>
+
+<li>If positive values are specified for two or more of items 8, 4
+and 5, a multistage process will result. A switching operation is
+performed each time the well's production rate, water cut or GLR violates
+a limit set in item 2, 7 or 9. The operations are performed in the
+following order:<ul>
+<li>Switch to the lower THP limit (for example change to a lower pressure
+separator)</li>
+
+<li>Switch to the second VFP table (for example perform a retubing
+operation)</li>
+
+<li>Switch to the new artificial lift quantity (for example turn on
+lift).</li>
+
+</ul>
+</li>
+
+</ul>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The order of the above actions can be overridden if the <a href="PRORDER.html#PRORDER">  PRORDER</a> keyword is used.
+By setting item 2 in record 2 of keyword <span class="keyword">PRORDER</span> to '<samp class="codeph">YES</samp>', the order given above is replaced by
+the order given in the first record of <span class="keyword">PRORDER</span>.
+ </span></div>
+
+<p>The switching operations are performed at the end of the timestep
+in which the minimum rate or maximum water cut or GLR limit is violated.
+But if a limit tolerance fraction has been set with keyword <a href="WLIMTOL.html#WLIMTOL">  WLIMTOL</a>, the timestep
+is recalculated if the limit is violated by more than this fraction.</p>
+
+<p>The <span class="keyword">WLIFT</span> keyword may also be used to enter
+secondary values of the THP, the VFP table number and the ALQ to be
+activated by the group production rules (see actions <samp class="codeph">THP</samp>, <samp class="codeph">RETUBE</samp> and <samp class="codeph">LIFT</samp> in the <a href="PRORDER.html#PRORDER"> PRORDER</a> keyword, and <a href="../ecl_td/groupprd_Group_Production_Rules.html#groupprd_group_production_rules">"Group production
+rules"</a> in the <cite>ECLIPSE Technical Description</cite>).
+Switching is performed when required to keep the well’s group (or
+a superior group) producing at its target rate set in keyword <a href="GCONPROD.html#GCONPROD"> GCONPROD</a>. THP or lift
+switching is performed in stages if increments are set in items 11
+or 10. The order in which the different switching operations occur
+in these circumstances depends upon the order in which the actions
+are listed in the <span class="keyword">PRORDER</span> keyword. If you wish
+the switching process to be activated only by the Group Production
+Rules or if the well dies under THP control, and not by the rate,
+water cut or GLR of the well itself, then you must default the rate,
+water cut and GLR limits in items 2, 7 and 9 of this keyword.</p>
+
+<p>The <span class="keyword">WLIFT</span> keyword is followed by any number
+of records, each containing the following items of data, and each
+terminated with a slash (/).</p>
+
+<p>The records may be terminated at any item after item 1. The remaining
+items assume their default values. Default values can be specified
+before the slash by a null repeat count of the form n*, where n is
+the number of consecutive items to be defaulted.</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li>Well name, well name template, well list or well list template
+    <p>A template enclosed in quotes can be used to refer to multiple
+wells or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+             </li>
+
+<li>Well production rate below which the switching operations are
+triggered <p>A zero or negative value implies that the switching operations
+are not triggered by a low well production rate. Default this item
+if you require the switching operations to be triggered only by the
+group production rules (keyword <span class="keyword">PRORDER</span>) or if
+the well dies under THP control.</p>
+                <p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), stb/day for <samp class="codeph">OIL</samp> or <samp class="codeph">LIQUID</samp>, or Mscf/day for <samp class="codeph">GAS</samp> (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.0</p>
+</li>
+
+<li>Phase to which the production rate limit in item 2 refers <p> <samp class="codeph">OIL</samp>, <samp class="codeph">LIQUID</samp>, or <samp class="codeph">GAS</samp>  
+             </p>
+                <p>(The word may be abbreviated;
+only the first character is significant)</p>
+<p>DEFAULT: <samp class="codeph">OIL</samp> </p>
+</li>
+
+<li>New VFP table number for retubing                <p>When retubing
+is performed this will replace the table number previously specified
+with keyword <a href="WCONPROD.html#WCONPROD"> WCONPROD</a>.</p>
+                <p>DEFAULT: 0</p>
+<p>No retubing operation
+is performed if a default, zero or negative value is entered.</p>
+ 
+           </li>
+
+<li>New artificial lift quantity for lift switching   <p>When lift
+switching is performed this replaces the artificial lift quantity
+previously specified with keyword <span class="keyword">WCONPROD</span> or <a href="WELTARG.html#WELTARG"> WELTARG</a>. The lift switching
+is be performed in stages if an incremental value is set in item 10.</p>
+                <p>UNITS: These depend on what the ALQ was meant
+to represent when the table was created. Refer to section <a href="vfpprod_Record_6_ALQ_values.html#vfpprod_record_6_alq_values">  "Record 6:ALQ values"</a> in the description of keyword <span class="keyword">VFPPROD</span>.</p>
+<p>DEFAULT: 0.0</p>
+<p>No lift switching operation
+is performed if a default, zero or negative value is entered.</p>
+</li>
+
+<li>New well efficiency factor after lift switching              
+ <p>When lift switching is performed this will replace the efficiency
+factor previously specified with keyword <a href="WEFAC.html#WEFAC"> WEFAC</a>, for example to account for any increase in
+downtime resulting from the lift system. If lift switching is performed
+in stages, the new efficiency factor takes effect when the first ALQ
+increment is applied.</p>
+                <p>DEFAULT: 0.0</p>
+<p>A zero
+or negative value leaves the original efficiency factor unchanged.</p>
+             </li>
+
+<li>Well water cut value above which the switching operations are
+triggered   <p>A zero or negative value implies that the switching
+operations are not triggered by a high well water cut. Default this
+item if you require the switching operations to be triggered only
+by the group production rules (keyword <a href="PRORDER.html#PRORDER"> PRORDER</a>) or if the well dies under THP control.</p>
+                <p>UNITS: sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), stb/stb (<samp class="codeph">FIELD</samp>), scc/scc (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.0</p>
+</li>
+
+<li>New THP limit<p>When THP switching is performed, this replaces
+the THP limit previously specified with keyword <a href="WCONPROD.html#WCONPROD"> WCONPROD</a> or <a href="WELTARG.html#WELTARG"> WELTARG</a>. The THP switching is performed in stages
+if an incremental value is set in item 11.</p>
+                <p>UNITS:
+barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma
+(<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT:
+0.0</p>
+<p>No THP switching operation is performed if a default or
+zero value is entered.</p>
+                <div class="note"><span class="notetitle">Note:</span> <span class="notebody">Switching to a lower
+THP limit has no effect if the well’s group is part of a network (see <a href="../ecl_td/networkintro_Network_Option.html#networkintro_network_option">"Network option"</a> in the <cite>ECLIPSE Technical Description</cite>), as the wells’
+THP limits are set by their group's nodal pressure in the network. </span></div>
+             </li>
+
+<li>Well gas-liquid ratio value above which the switching operations
+are triggered <p>A zero or negative value implies that the switching
+operations are not triggered by a high GLR. Default this item if you
+require the switching operations to be triggered only by the group
+production rules (keyword <span class="keyword">PRORDER</span>) or if the well
+dies under THP control.</p>
+<p>UNITS: sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), Mscf/stb (<samp class="codeph">FIELD</samp>), scc/scc
+(<samp class="codeph">LAB</samp>), sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.0</p>
+</li>
+
+<li>Increment to be added to (or subtracted from) the well’s ALQ value
+at each lift switching event  <p>Each time lift switching is triggered
+for the well, its ALQ is changed by the specified increment, until
+the final ALQ value set in item 5 is reached.</p>
+                <p>UNITS: These depend on what the ALQ was meant to represent when the
+table was created. Refer to section <a href="vfpprod_Record_6_ALQ_values.html#vfpprod_record_6_alq_values">  "Record 6:ALQ values"</a> in the description of keyword <span class="keyword">VFPPROD</span>.</p>
+<p>DEFAULT: 1.0E20 (infinity, that is ECLIPSE
+will switch to the secondary value in item 5 in a single operation.)</p>
+</li>
+
+<li>Decrement to be subtracted from the well’s THP value at each THP
+switching event (entered as a positive number) <p>Each time THP switching
+is triggered for the well, its THP is decreased by subtracting the
+specified decrement, until the final THP value set in item 8 is reached.</p>
+                <p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 1.0E20 (infinity, that is ECLIPSE will switch to
+the secondary value in item 8 in a single operation.)</p>
+   </li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<p>Switching operations will not be performed on a well whose rate
+target is currently cut back under prioritization, to prevent these
+happening prematurely while the well is temporarily flowing with a
+small rate target.</p>
+
+<p>See also keywords <a href="GLIFTLIM.html#GLIFTLIM"> GLIFTLIM</a>, <a href="WLIMTOL.html#WLIMTOL"> WLIMTOL</a> and <a href="PRORDER.html#PRORDER"> PRORDER</a>.</p>
+
+<div class="section" id="wlift_example"><a name="wlift_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>Well <samp class="codeph">PROD1</samp> is given an artificial lift quantity of 5.0 and an
+efficiency factor of 0.8 when its water cut first exceeds 0.5.</p>
+<p>Well <samp class="codeph">PROD2</samp> has its VFP table number changed to
+3 the first time its liquid production rate falls below 500, and on
+the second time it is given artificial lift as <samp class="codeph">PROD1</samp>.</p>
+<p>Well <samp class="codeph">PROD3</samp> has its THP limit reduced to
+60, in steps of 20, whenever its liquid production rate falls below
+500. When the THP limit has been reduced to 60, its VFP table number
+is changed to 4 the next time its liquid rate falls below 500.</p>
+<pre><code>WLIFT
+--well   min  flow   new VFP  new  new     max  new  max  ALQ  THP
+--name  flow  phase  tab no   ALQ  efffac  WCT  THP  GLR  incr decr
+  PROD1  1*    1*      0      5.0   0.8    0.5      /
+  PROD2  500   LIQ     3      5.0   0.8             /
+  PROD3  500   LIQ     4      1*    1*     1*   60   1*   1*   20/
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

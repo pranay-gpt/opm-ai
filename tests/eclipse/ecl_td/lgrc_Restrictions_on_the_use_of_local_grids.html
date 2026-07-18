@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Restrictions on the use of local grids"/>
+<meta name="DC.subject" content="Local grid refinement restrictions, Local grid refinement, Restrictions"/>
+<meta name="keywords" content="Local grid refinement restrictions, Local grid refinement, Restrictions"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrc_restrictions_on_the_use_of_local_grids"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Restrictions on the use of local grids</title>
+</head>
+<body>
+
+
+<div class="nested0" id="lgrc_restrictions_on_the_use_of_local_grids"><a name="lgrc_restrictions_on_the_use_of_local_grids"><!-- --></a>
+<h1 class="topictitle1">Restrictions on the use of local grids</h1>
+
+
+ <div>
+<ul>
+<li><p> ECLIPSE 100 </p>
+                <p>Separate local grid refinements must not be placed
+in adjacent cells of the global grid, unless the refinements belong
+to the same amalgamation.</p>
+</li>
+
+<li>Partially overlapping LGRs are not allowed.  </li>
+
+<li> Keyword <a href="../ecl_rm/NINENUM.html#NINENUM">NINENUM</a> is not compatible with the local grid refinement option. <p>ECLIPSE 100</p>
+</li>
+
+<li>It is possible to define a refinement within another local grid
+(nested refinements), provided the parent grid is a Cartesian local
+grid. Nested refinements can only be solved “in place”
+and do not work with the parallel option. They are also not allowed
+if there are amalgamated local grids in the data set or with the vertical
+equilibrium option.</li>
+
+<li> It is not currently possible to coarsen within a local grid. <p>ECLIPSE 100 </p>
+</li>
+
+<li>Radial local grids may not be amalgamated.
+Radial LGRs need to be separated by a minimum of non-LGR containing
+global cell.<p>ECLIPSE 300 </p>
+</li>
+
+<li>Adjoining radial LGRs are allowed.</li>
+
+<li> Each local cell must be identified with a single global cell.
+It cannot be split between two global cells. The number of local cells
+in the X, Y or Z direction must be an integral multiplier of the global
+grid dimensions, unless sufficient local data are provided to allocate
+local cells to host cells according to size (for example: <span class="keyword">DX</span>, <span class="keyword">COORD</span>) or to define how the host
+cells are split up (for example: <span class="keyword">NZFIN</span>, <span class="keyword">HZFIN</span>). </li>
+
+<li>Local grids may not straddle different reservoirs (if the number
+of reservoirs is set &gt; 1 in <span class="keyword">RUNSPEC</span> keyword <a href="../ecl_rm/NUMRES.html#NUMRES">NUMRES</a>). To achieve this, separate
+local grids can be stacked vertically, one in each reservoir, and
+then amalgamated using the <a href="../ecl_rm/AMALGAM.html#AMALGAM">AMALGAM</a> keyword.             </li>
+
+<li>Local grids may not straddle different flux regions (specified
+by keyword <a href="../ecl_rm/FLUXNUM.html#FLUXNUM">FLUXNUM</a> for the ECLIPSE Flux Boundary facility). In dual porosity
+runs, local grids may not straddle the boundary between single porosity
+and dual porosity regions (specified using keyword <a href="../ecl_rm/DPNUM.html#DPNUM">DPNUM</a>).             </li>
+
+<li>Numerical aquifers cannot be attached to local grids.</li>
+
+<li>The diffusion options (molecular diffusion and environmental tracers)
+cannot be combined in local grid runs.</li>
+
+<li>The <a href="../ecl_rm/NNC.html#NNC">NNC</a> or <a href="../ecl_rm/EDITNNC.html#EDITNNC">EDITNNC</a> keywords for the global grid should not refer to non-neighbor
+connections connecting refined cells in the global grid.</li>
+
+<li>It is not possible to use the grid coarsening option when restarting
+a run.</li>
+
+<li>Local grids cannot be added to a radial global grid.</li>
+
+</ul>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

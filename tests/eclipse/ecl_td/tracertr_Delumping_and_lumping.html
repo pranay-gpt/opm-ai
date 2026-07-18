@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Delumping and lumping"/>
+<meta name="DC.subject" content="Tracer tracking delumping and lumping, Tracer tracking, Delumping, Lumping"/>
+<meta name="keywords" content="Tracer tracking delumping and lumping, Tracer tracking, Delumping, Lumping"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="tracertr_delumping_and_lumping"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Delumping and lumping</title>
+</head>
+<body>
+
+
+<div class="nested0" id="tracertr_delumping_and_lumping"><a name="tracertr_delumping_and_lumping"><!-- --></a>
+<h1 class="topictitle1">Delumping and lumping</h1>
+
+
+ <div>
+<p>This feature, which is available in ECLIPSE 300, is a straightforward
+implementation of paper SPE 49068 by <cite><span> <a href="biblio_Bibliography.html#biblio_29594">Leibovici et al (1998)</a> </span></cite>. The basic idea is to do a full simulation with as small
+a number of components as possible and then to use multiple tracers
+carried on each of these ‘lumped’ components to represent the detailed
+composition of that component. The rationale and details of the approach
+are explained in the above paper; here we will concentrate on how
+to apply this procedure.</p>
+
+<p>The facility is switched on with the <a href="../ecl_rm/LUMPDIMS.html#LUMPDIMS">LUMPDIMS</a> keyword in the <span class="keyword">RUNSPEC</span> section. This gives the number of lumped components
+(not necessarily as many as the number of components in the ‘lumped’
+simulation) and a maximum for the number of detailed components.</p>
+
+<p>The detailed composition of the fluid is described in the <span class="keyword">PROPS</span> section. The <a href="../ecl_rm/LUMPING.html#LUMPING">LUMPING</a> keyword assigns the number of detailed components to each
+lumped hydrocarbon component and also allows names to be attached
+to them. <strong>The order in which the detailed components are entered
+is important as it will be assumed by later keywords. </strong> The initial
+detailed state of the reservoir is specified with the <a href="../ecl_rm/DETAILMF.html#DETAILMF">DETAILMF</a> or <a href="../ecl_rm/DETAILVD.html#DETAILVD">DETAILVD</a> keyword, which determines
+the proportion of the detailed components making up the lumped components.
+This can vary with depth. A table is entered for each tracer region
+(if more than one), defined with keyword <a href="../ecl_rm/TNUM.html#TNUM">TNUM</a>.</p>
+
+<p>Various physical properties of the detailed components can also
+be specified in the <span class="keyword">PROPS</span> section with the <a href="../ecl_rm/ACFDET.html#ACFDET">ACFDET</a>, <a href="../ecl_rm/MWDETAIL.html#MWDETAIL">MWDETAIL</a>, <a href="../ecl_rm/TCRITDET.html#TCRITDET">TCRITDET</a>, <a href="../ecl_rm/PCRITDET.html#PCRITDET">PCRITDET</a>, <a href="../ecl_rm/OMEGAADE.html#OMEGAADE">OMEGAADE</a>, and <a href="../ecl_rm/OMEGABDE.html#OMEGABDE">OMEGABDE</a> keywords. These are
+identical in nature to their ‘normal’ simulation counterparts, though
+as in a normal simulation, not all the *<span class="keyword">CRITDET</span> keywords are needed in a given simulation.</p>
+
+<p>The detailed composition of an injected fluid is given by using
+the <a href="../ecl_rm/WINJEDET.html#WINJEDET">WINJEDET</a> keyword in the <span class="keyword">SCHEDULE</span> section. This
+must be given for each injection well. For a given well the make-up
+of the detailed fluid is described in an analogous way to the <span class="keyword">DETAILVD</span> keyword.</p>
+
+<p>Output relies on the standard tracer output with the well, group
+and field tracer concentration (summary keywords <span class="keyword">WTPC</span>, <span class="keyword">GTPC</span> and <span class="keyword">FTPC</span>) now representing
+the mole fraction of that detailed component within the overall fluid
+from that well, with the names of the tracers being those given in
+the <span class="keyword">LUMPING</span> keyword. No other summary output is
+available; in particular the “Traced Mole Fraction” summary keywords; <span class="keyword">FTMF</span>, <span class="keyword">GTMF</span> and <span class="keyword">WTMF</span> will not report useful quantities as these are the product of the
+tracer concentration with the carrier molar rate.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="CPR"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="CPR"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>CPR</title>
+</head>
+<body>
+
+<div class="nested0" id="CPR"><a name="CPR"><!-- --></a><h1 class="keyword">CPR</h1>
+ <div>
+<div class="tablenoborder"><a name="cpr.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="cpr.tab.0005" class="flagtable" frame="border" border="1" rules="all">  <thead align="left"><tr><th valign="top" id="d344e32"> x </th>
+<th valign="top" id="d344e34"> ECLIPSE 100 </th>
+</tr>
+<tr><th valign="top" id="d344e37"> x </th>
+<th valign="top" id="d344e39"> ECLIPSE 300 </th>
+</tr>
+</thead>
+<tbody><tr><td valign="top" headers="d344e32 d344e37 "> x </td>
+<td valign="top" headers="d344e34 d344e39 "> RUNSPEC </td>
+</tr>
+<tr><td valign="top" headers="d344e32 d344e37 "> </td>
+<td valign="top" headers="d344e34 d344e39 "> GRID </td>
+</tr>
+<tr><td valign="top" headers="d344e32 d344e37 "> </td>
+<td valign="top" headers="d344e34 d344e39 "> EDIT </td>
+</tr>
+<tr><td valign="top" headers="d344e32 d344e37 "> </td>
+<td valign="top" headers="d344e34 d344e39 "> PROPS </td>
+</tr>
+<tr><td valign="top" headers="d344e32 d344e37 "> </td>
+<td valign="top" headers="d344e34 d344e39 "> REGIONS </td>
+</tr>
+<tr><td valign="top" headers="d344e32 d344e37 "> </td>
+<td valign="top" headers="d344e34 d344e39 "> SOLUTION </td>
+</tr>
+<tr><td valign="top" headers="d344e32 d344e37 "> </td>
+<td valign="top" headers="d344e34 d344e39 "> SUMMARY </td>
+</tr>
+<tr><td valign="top" headers="d344e32 d344e37 "> </td>
+<td valign="top" headers="d344e34 d344e39 "> SCHEDULE </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This keyword activates the CPR linear solver. This alternative
+linear solver can often reduce simulation times for difficult problems,
+and is most likely to improve performance when the linear equations
+frequently fail to converge with the default linear solver. This situation
+can be identified from repeated linear convergence warnings output
+from the  simulation. In these cases the CPR linear solver  should
+be considered.</p>
+<p>The CPR linear solver employs the constrained pressure residual
+(CPR) preconditioner, which provides a more robust  method for solving
+the linear equations. For further details please refer to <a href="../ecl_td/sollineq_CPR_Preconditioner.html#sollineq_CPR_Preconditioner">"The Constrained
+Pressure Residual (CPR) Preconditioner"</a> in the <cite>ECLIPSE
+Technical Description</cite>.</p>
+<p>The maximum number of linear iterations allowed for the outer iterations
+can be controlled with the <a href="TUNING.html#TUNING"> TUNING</a> keyword. By default, the maximum number of linear iterations
+allowed, in a Newton iteration, is 25 for ECLIPSE 100 and 20 for ECLIPSE
+300. </p>
+<p>ECLIPSE 300</p>
+<p>For ECLIPSE 300 the keyword does not contain any data items,  and
+must be terminated by a slash (/). </p>
+<p>ECLIPSE 100</p>
+<p>For ECLIPSE 100  the keyword contains one item, which may be defaulted.
+The keyword must be terminated  by a slash (/). </p>
+<ol><li>CPR linear solver mode
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  <tbody><tr><td valign="top"><p> <samp class="codeph">ORIGINAL</samp> </p>
+</td>
+<td valign="top"><p>The CPR preconditioner
+is applied throughout the simulation. This was the default method
+in  versions of ECLIPSE before 2016.1.</p>
+</td>
+</tr>
+<tr><td valign="top"><p> <samp class="codeph">ADAPTIVE</samp> </p>
+</td>
+<td valign="top"><p>The CPR preconditioner
+will only be applied during difficult parts of the simulation, or
+in difficult problems that are likely to benefit. This can improve
+the overall performance, by applying the  computationally more expensive
+CPR preconditioner only when it is required. This method is described
+further in the <a href="../ecl_td/sollineq_adaptive_CPR.html#sollineq_adaptive_CPR">"Adaptive CPR"</a> section of the <cite>ECLIPSE Technical Description</cite>. Note:
+Whilst  this option generally performs better than or comparable to
+ORIGINAL CPR, there will be some cases where the default linear solver
+performs better. </p>
+</td>
+</tr>
+<tr><td valign="top"><p>DEFAULT:</p>
+</td>
+<td valign="top"><p> <samp class="codeph">ADAPTIVE</samp> </p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+ </li>
+</ol>
+<p>In ECLIPSE 100, the CPR linear solver is compatible
+with the <a href="../ecl_td/rescouplintro_coupling_and_synchronization.html#rescouplintro_coupling_and_synchronization">"Reservoir Coupling"</a> option. However, inserting the  <span class="keyword">CPR</span> keyword in
+the master data file will not activate the CPR linear solver in any
+of the slave reservoirs. To activate the CPR linear solver in a particular
+slave reservoir, the <span class="keyword">CPR</span> keyword must be used in
+the corresponding slave data file. </p>
+<p>In ECLIPSE 100, there are some options that
+cannot be used with the CPR linear solver. These include <a href="IMPES.html#IMPES"> IMPES</a>, the multiple independent
+reservoirs option, the Russian Doll option, the friction well option,
+triple porosity,  nested local grid refinements, single phase simulations,
+ item 1 of keyword <a href="WSEGSOLV.html#WSEGSOLV"> WSEGSOLV</a>, <a href="BTOBALFA.html#BTOBALFA"> BTOBALFA</a>, <a href="BTOBALFV.html#BTOBALFV"> BTOBALFV</a> and
+the rivers option. The use of  <a href="PINCHXY.html#PINCHXY"> PINCHXY</a>  with the <a href="PARALLEL.html#PARALLEL"> PARALLEL</a> option may result in an error, if there are horizontal pinchout
+connections that cross domain boundaries.</p>
+<p>In ECLIPSE 300, it is currently not possible
+to use the CPR linear solver for the thermal option, the multiple
+(including triple) porosity option, in a dual porosity (or dual permeability)
+run containing local grid refinements and the <span class="keyword">IMPES</span> option. </p>
+<p>In ECLIPSE 300, the CPR linear solver generally
+performs best when the simulation is fully implicit. For simulations
+that use the  adaptive implicit (<a href="AIM.html#AIM"> AIM</a>) scheme, the performance may  deteriorate if the fraction
+of fully implicit cells is small.</p>
+<div class="section" id="cpr_notes"><a name="cpr_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul><li>Each linear iteration of the CPR linear solver takes more time,
+when compared to the default  linear solver. If the CPR preconditioner
+is unable to reduce the total number of linear iterations significantly,
+ this may cause the overall simulation time to increase when the CPR
+linear solver is used. For this reason, the  CPR linear solver is
+best suited to cases which experience linear convergence problems
+with the default linear  solver.</li>
+<li>The CPR linear solver cannot be expected to improve performance
+if the simulation is  experiencing convergence problems due to highly
+non-linear behavior, which  requires short timesteps to resolve. In
+these cases the input data and  existing convergence criteria should
+be  checked, to ensure that the behavior is intended.</li>
+
+<li>The convergence criteria can be controlled with keyword <a href="TUNING.html#TUNING"> TUNING</a> in ECLIPSE 100,
+or with keyword <a href="CVCRIT.html#CVCRIT"> CVCRIT</a> in ECLIPSE 300. The default values are generally suitable for most types of simulation. It 
+is not recommended to relax the convergence criteria of the CPR linear 
+solver as this may reduce the accuracy of the simulation results. A warning will be output 
+from the simulator if the convergence criteria have been relaxed.</li>
+</ul>
+</div>
+<div class="section" id="cpr_example"><a name="cpr_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>CPR
+/</code></pre></div>
+</div>
+</div>
+
+</body>
+</html>

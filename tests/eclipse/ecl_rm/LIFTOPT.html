@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="LIFTOPT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="LIFTOPT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>LIFTOPT</title>
+</head>
+<body>
+
+
+<div class="nested0" id="LIFTOPT"><a name="LIFTOPT"><!-- --></a>
+<h1 class="keyword">LIFTOPT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="liftopt.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="liftopt.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1254e45"> x </th>
+
+<th valign="top" id="d1254e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1254e54"> x </th>
+
+<th valign="top" id="d1254e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1254e45 d1254e54 ">  </td>
+
+<td valign="top" headers="d1254e48 d1254e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1254e45 d1254e54 ">  </td>
+
+<td valign="top" headers="d1254e48 d1254e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1254e45 d1254e54 ">  </td>
+
+<td valign="top" headers="d1254e48 d1254e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1254e45 d1254e54 ">  </td>
+
+<td valign="top" headers="d1254e48 d1254e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1254e45 d1254e54 ">  </td>
+
+<td valign="top" headers="d1254e48 d1254e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1254e45 d1254e54 ">  </td>
+
+<td valign="top" headers="d1254e48 d1254e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1254e45 d1254e54 ">  </td>
+
+<td valign="top" headers="d1254e48 d1254e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1254e45 d1254e54 "> x </td>
+
+<td valign="top" headers="d1254e48 d1254e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">LIFTOPT</span> keyword activates the gas lift optimization
+facility (see <a href="../ecl_td/gasliftintro_Introduction.html#gasliftintro_gas_lift_optimization">"Gas lift optimization"</a> of the <cite>ECLIPSE Technical Description</cite>), and sets parameters
+governing the lift gas increment size, the minimum economic gradient,
+and the frequency of optimization calculations. This keyword must
+be entered before any of the other keywords associated with the facility,
+namely <a href="GLIFTOPT.html#GLIFTOPT">  GLIFTOPT</a> and <a href="WLIFTOPT.html#WLIFTOPT">  WLIFTOPT</a>.</p>
+
+<p>The keyword is followed by a line containing between two and four
+items, ending with a slash (/).</p>
+
+<ol>
+<li> Increment size for lift gas injection rate <p>Lift gas is allocated
+to individual wells in whole numbers of the increment size.</p>
+ <p>If gas lift optimization is no longer required, it can be turned
+off by entering a zero or negative number.</p>
+ <p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), Mscf/day (<samp class="codeph">FIELD</samp>),
+scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+<li> Minimum economic gradient of improvement in oil production rate
+per unit increase in lift gas injection rate <p>Further lift gas increments
+will not be allocated to a well if the resulting increase in oil production
+rate, multiplied by the well’s weighting factor, divided by the lift
+gas increment size, is less than the minimum economic gradient.</p>
+ <p>UNITS: sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), stb/Mscf (<samp class="codeph">FIELD</samp>), scc/scc (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+<li> Minimum interval between gas lift optimizations <p>This item
+determines the frequency at which subsequent gas lift optimizations
+are performed. The distribution of lift gas is optimized at each timestep
+that starts after the specified interval has elapsed since the previous
+optimization.</p>
+ <p>ECLIPSE 100</p>
+ <p>If there is a production network, gas lift can
+only be optimized when the network is being balanced. The minimum
+interval between network balances is set in item 1 of keyword <a href="NETBALAN.html#NETBALAN"> NETBALAN</a>.</p>
+ <p>UNITS:
+day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 0.0 (which
+will cause an optimization to be performed every timestep)</p>
+ </li>
+
+<li> Optimize gas lift during each of the first <a href="NUPCOL.html#NUPCOL"> NUPCOL</a> iterations of the timestep? 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top"> The lift gas distribution is optimized during each of the
+first NUPCOL Newton iterations of the timestep. This enables flow
+targets and limits to be observed more accurately. (The value of <span class="keyword">NUPCOL</span> can be set using keyword <span class="keyword">NUPCOL</span> or <a href="GCONTOL.html#GCONTOL"> GCONTOL</a>).
+During any remaining iterations, the lift gas allocation will remain
+constant so as not to hinder their convergence.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top"> Optimization is only performed in the first Newton iteration
+of the timestep. This takes less time than the <samp class="codeph">YES</samp> option, but if reservoir conditions change appreciably over the
+timestep then rate targets and limits may not be obeyed accurately.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>ECLIPSE 100</p>
+ <p>If there is a production network (see <a href="../ecl_td/networkintro_Network_Option.html#networkintro_network_option">"Network option"</a> in the <cite>ECLIPSE Technical Description</cite>), optimization
+can only be performed when the network is being balanced. Thus, the <samp class="codeph">YES</samp> option to optimize in each of the first <span class="keyword">NUPCOL</span> Newton iterations can only be used if the network is also being
+balanced with this frequency. (Setting a negative balancing interval
+in item 1 of keyword <a href="NETBALAN.html#NETBALAN"> NETBALAN</a> causes the network to be balanced in each of the first <span class="keyword">NUPCOL</span> Newton iterations.) If the network is balanced only
+in the first iteration, the <samp class="codeph">NO</samp> option is used regardless
+of the entry here.</p>
+<p>DEFAULT: <samp class="codeph">YES</samp> </p>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<div class="section" id="liftopt_example"><a name="liftopt_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <pre><code>LIFTOPT
+-- increment   minimum    optimization    opt in 1st
+-- size        gradient   interval        NUPCOL its?
+-- SM3/DAY     SM3/SM3    DAYS
+   4E4         5E-3       0.0             YES        /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

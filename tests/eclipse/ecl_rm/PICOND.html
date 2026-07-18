@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PICOND"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PICOND"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PICOND</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+<div class="nested0" id="PICOND"><a name="PICOND"><!-- --></a><h1 class="keyword">PICOND</h1>
+
+ <div>
+<div class="tablenoborder"><a name="picond.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="picond.tab.0005" class="flagtable" frame="border" border="1" rules="all">  <thead align="left"><tr><th valign="top" id="d1794e35"> x </th>
+<th valign="top" id="d1794e37"> ECLIPSE 100 </th>
+</tr>
+<tr><th valign="top" id="d1794e40"> x </th>
+<th valign="top" id="d1794e42"> ECLIPSE 300 </th>
+</tr>
+</thead>
+<tbody><tr><td valign="top" headers="d1794e35 d1794e40 ">  </td>
+<td valign="top" headers="d1794e37 d1794e42 "> RUNSPEC </td>
+</tr>
+<tr><td valign="top" headers="d1794e35 d1794e40 ">  </td>
+<td valign="top" headers="d1794e37 d1794e42 "> GRID </td>
+</tr>
+<tr><td valign="top" headers="d1794e35 d1794e40 ">  </td>
+<td valign="top" headers="d1794e37 d1794e42 "> EDIT </td>
+</tr>
+<tr><td valign="top" headers="d1794e35 d1794e40 ">  </td>
+<td valign="top" headers="d1794e37 d1794e42 "> PROPS </td>
+</tr>
+<tr><td valign="top" headers="d1794e35 d1794e40 ">  </td>
+<td valign="top" headers="d1794e37 d1794e42 "> REGIONS </td>
+</tr>
+<tr><td valign="top" headers="d1794e35 d1794e40 ">  </td>
+<td valign="top" headers="d1794e37 d1794e42 "> SOLUTION </td>
+</tr>
+<tr><td valign="top" headers="d1794e35 d1794e40 ">  </td>
+<td valign="top" headers="d1794e37 d1794e42 "> SUMMARY </td>
+</tr>
+<tr><td valign="top" headers="d1794e35 d1794e40 "> x </td>
+<td valign="top" headers="d1794e37 d1794e42 "> SCHEDULE </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This keyword controls the calculation of the generalized pseudo-pressure
+option for modeling the effects of condensate drop-out on the fluid
+mobilities at producing well connections (see <a href="../ecl_td/wellinfl_Special_inflow_equations.html#wellinfl_special_inflow_equations">"Special inflow
+equations"</a> in the <cite>ECLIPSE Technical Description</cite>). The <span class="keyword">PICOND</span> keyword is optional; if this is
+not specified, the default values specified below are applied in its
+absence.</p>
+<p>The GPP option can be activated for individual wells by entering <samp class="codeph">GPP</samp> in item 8 of the <a href="WELSPECS.html#WELSPECS"> WELSPECS</a> keyword or item 9 of the <a href="WELSPECL.html#WELSPECL"> WELSPECL</a> keyword. In
+ECLIPSE 300, the option may also be activated for all wells by entering
+the <a href="PSEUPRES.html#PSEUPRES"> PSEUPRES</a> keyword.
+Alternatively the <a href="WPICOND.html#WPICOND"> WPICOND</a> keyword can be used to combine the functions of the <span class="keyword">PICOND</span> and <span class="keyword">PSEUPRES</span> keywords and to
+provide control over the GPP calculation on a per well basis.</p>
+<p>The keyword should be followed by some or all of the following
+data items, terminated with a slash (/).</p>
+<ol><li id="picond.1"><a name="picond.1"><!-- --></a>The maximum interval between pressure quadrature
+points below the dew point pressure to be used in the construction
+of the generalized pseudo-pressure integral table. <p>UNITS: bars
+(<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 4 x atmospheric
+pressure.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The interval size used in the construction of the
+table may differ slightly from the value specified here in order to
+ensure a set of equally spaced points. </span></div>
+</li>
+<li id="picond.2"><a name="picond.2"><!-- --></a> The maximum interval between pressure quadrature
+points above the dew point pressureto be used in the construction
+of the generalized pseudo-pressure integral table. <p>ECLIPSE 100</p>
+ <p>If a
+zero or negative quantity is entered, the quadrature points are the
+same as the pressure points input in the <a href="PVTG.html#PVTG"> PVTG</a> table.</p>
+ <p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm
+(<samp class="codeph">PVT-M</samp>)</p>
+ <p>ECLIPSE 100</p>
+ <p>DEFAULT: 0.0</p>
+ <p>ECLIPSE 300</p>
+ <p>DEFAULT: 10 x atmospheric
+pressure</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The interval size used in the construction of the
+table may differ slightly from the value specified here in order to
+ensure a set of equally spaced points. </span></div>
+</li>
+<li id="picond.3"><a name="picond.3"><!-- --></a> Blocking factor damping coefficient <math><msub><mi>D</mi><mi>f</mi></msub></math>. <p>This value must lie between 0.0
+and 1.0 and provides a means of damping any oscillations that may
+result from the explicit calculation of the blocking factor <math><mi>β</mi></math> by averaging it with its value from the previous timestep according
+to the formula <math><mrow><msub><mrow><mi>β</mi></mrow><mrow><mtext>used</mtext></mrow></msub><mo>=</mo><mrow><msub><mrow><mi>D</mi></mrow><mrow><mi>f</mi></mrow></msub><msub><mrow><mi>β</mi></mrow><mrow><mi>c</mi><mi>u</mi><mi>r</mi><mi>r</mi><mi>r</mi><mi>e</mi><mi>n</mi><mi>t</mi></mrow></msub></mrow><mo>+</mo><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>D</mi></mrow><mrow><mi>f</mi></mrow></msub></mrow><mo>)</mo><msub><mrow><mi>β</mi></mrow><mrow><mtext>previous</mtext></mrow></msub></mrow></mrow></math>.</p>
+ <p>DEFAULT: 1.0</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If a value
+of zero is specified for the damping coefficient, this will  result
+in the blocking factors remaining constant at the previously calculated
+values for all well connections. If this keyword is specified at the
+start of the simulation prior to any calculation of the blocking factors,
+the blocking factors will be calculated once and these values will
+be used as the constant values. </span></div>
+<p>ECLIPSE
+300</p>
+</li>
+<li id="picond.4"><a name="picond.4"><!-- --></a> Include velocity dependent
+relative permeability (VDRP) and Forchheimer effects in the pseudo-pressure
+calculation. <p> Either <samp class="codeph">YES</samp> or <samp class="codeph">NO</samp>.</p>
+ <p>DEFAULT: <samp class="codeph">NO</samp> </p>
+<p>If this data item is
+set to <samp class="codeph">YES</samp>, capillary number VDRP and Forchheimer
+effects will be included in the pseudo-pressure calculation according
+to the VDRP options selected via the <a href="VELDEP.html#VELDEP"> VELDEP</a> keyword. The properties of the capillary
+number and Forchheimer models are specified via the keywords <a href="VDKRO.html#VDKRO"> VDKRO</a>, <a href="VDKRG.html#VDKRG"> VDKRG</a> and <a href="VDKRGC.html#VDKRGC"> VDKRGC</a>.</p>
+<p>ECLIPSE 300</p>
+</li>
+<li id="picond.5"><a name="picond.5"><!-- --></a> The multiplicative factor <math><msub><mi>F</mi><mi>l</mi></msub></math> which determines the lower pressure
+bound <math><msub><mi>P</mi><mi>l</mi></msub></math> to be used in construction of the
+generalized pseudo-pressure integral table. <p>This is expressed as
+a multiplier upon the current pressure <math><msub><mi>P</mi><mi>b</mi></msub></math> of the grid block containing
+the well connection, that is, <math><mrow><msub><mrow><mi>P</mi></mrow><mrow><mi>l</mi></mrow></msub><mo>=</mo><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>l</mi></mrow></msub><msub><mrow><mi>P</mi></mrow><mrow><mi>b</mi></mrow></msub></mrow></mrow></math>.</p>
+ <p>This lower bound is the base pressure described
+in <a href="../ecl_td/wellinfl_Generalized_pseudo-pressure_in_ECLIPSE_300.html#wellinfl_generalized_pseudo-pressure_in_eclipse_300">"Generalized pseudo-pressure
+in ECLIPSE 300"</a> in the <cite>ECLIPSE Technical Description</cite>. The lower bound should be chosen such that the required range of
+cell and well pressures will be covered by the pseudo-pressure integral
+table.</p>
+<p>This is a dimensionless value which must lie between
+0.0 and 0.95. This lower limit used will be constrained to the minimum
+of the value specified and the saturation pressure.</p>
+<p>DEFAULT:
+0.0</p>
+<p>ECLIPSE 300</p>
+</li>
+<li id="picond.6"><a name="picond.6"><!-- --></a>The multiplicative factor <math><msub><mi>F</mi><mi>u</mi></msub></math> which determines the upper pressure
+bound <math><msub><mi>P</mi><mi>u</mi></msub></math> to be used in construction  generalized
+pseudo-pressure integral table. <p>This is expressed as a multiplier
+upon the current pressure <math><msub><mi>P</mi><mi>b</mi></msub></math> of the grid block containing the
+well connection, that is, <math><mrow><msub><mrow><mi>P</mi></mrow><mrow><mi>u</mi></mrow></msub><mo>=</mo><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>u</mi></mrow></msub><msub><mrow><mi>P</mi></mrow><mrow><mi>b</mi></mrow></msub></mrow></mrow></math>. </p>
+<p>This upper bound should be chosen such that the required
+range of cell and well pressures will be covered by the pseudo-pressure
+integral table. </p>
+<p>This is a dimensionless value which must lie
+between 1.05 and 2.0.</p>
+<p>DEFAULT: 1.1</p>
+<p>ECLIPSE 300</p>
+</li>
+<li id="picond.7"><a name="picond.7"><!-- --></a>Change in water saturation
+in the grid block containing the well connection which will result
+in a recalculation of the generalized pseudo-pressure integral table. <p>By default this change is treated as the magnitude of the difference
+between the current value and the value when the table was previously
+calculated. This change may alternatively be treated as a fractional
+value, that is, the magnitude of the difference between the current
+and previous values normalized by the previous value, if <a href="OPTIONS3.html#options3.330">item 330</a> of the <span class="keyword">OPTIONS3</span> keyword is set to 2. In addition, this recalculation control may
+be disabled by specifying a negative value.</p>
+<p>DEFAULT values:</p>
+<ul><li><p>DEFAULT (with <span class="keyword">OPTIONS3</span> item 330 =
+0): 0.01 </p>
+<p>The test is applied to the magnitude of the difference
+between the current and previous values.</p>
+</li>
+<li>DEFAULT (with <span class="keyword">OPTIONS3</span> item 330 = 1): 0.1<p> For the pre-2015.1 version, the test is applied to the magnitude
+of difference between the current and previous values normalized by
+the previous value.</p>
+</li>
+<li><p>DEFAULT (with <span class="keyword">OPTIONS3</span> item 330 =
+2): 0.1</p>
+<p> The test is applied to magnitude of difference between
+current and previous values normalized by the previous value.</p>
+</li>
+</ul>
+<p>ECLIPSE 300</p>
+</li>
+<li id="picond.8"><a name="picond.8"><!-- --></a>Change in saturation or grid
+block pressure in the grid block containing the well connection which
+will result in a recalculation of the generalized pseudo-pressure
+integral table. <p>By default, this change is treated as the magnitude
+of the difference between the current value and the value when the
+table was previously calculated is applied to both decreasing and
+increasing pressures. This change may alternatively be treated as
+a fractional value, that is, the magnitude of the difference between
+the current and previous values normalized by the previous value,
+if <a href="OPTIONS3.html#options3.330">item 330</a> of the <span class="keyword">OPTIONS3</span> keyword is set to 2. In addition, this recalculation
+control may be disabled by specifying a negative value.</p>
+<p>DEFAULT
+values:</p>
+<ul><li>DEFAULT (with <span class="keyword">OPTIONS3</span> item 330 = 0): 1.0 x atmospheric pressure.<p> The test is applied
+to the magnitude of the difference between the current and previous
+values for increasing and decreasing pressures. </p>
+<p>UNITS: bars
+(<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+<li>DEFAULT (with <span class="keyword">OPTIONS3</span> item 330 = 1): 0.1<p> For the pre-2015.1 version, the test is applied to the difference
+between the current and previous values normalized by previous value
+for decreasing pressures. An increasing pressure will trigger a recalculation.</p>
+</li>
+<li>DEFAULT (with <span class="keyword">OPTIONS3</span> item 330 = 2): 0.1<p> The test is applied to the magnitude of the
+difference between the current and previous values normalized by the
+previous value for increasing and decreasing pressures.</p>
+</li>
+</ul>
+<p>ECLIPSE 300</p>
+</li>
+<li id="picond.9"><a name="picond.9"><!-- --></a>Fractional change in composition
+(of any component) in the grid block containing the well connection
+which will result in a recalculation of the generalized pseudo-pressure
+integral table, that is, for any component, the difference between
+the current value and the value when the table was previously calculated
+normalized by the previous value. <p>This recalculation control may be disabled by specifying a negative
+value. </p>
+<p>DEFAULT: 0.01</p>
+<p>ECLIPSE 300</p>
+</li>
+<li id="picond.10"><a name="picond.10"><!-- --></a>Maximum simulation time change
+between recalculation of generalized pseudo-pressure integral table. <p>This recalculation control may be disabled by specifying a negative
+value.</p>
+<p>UNITS: day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: -1 (that is, no maximum simulation time change limit imposed)</p>
+<p>ECLIPSE 300</p>
+</li>
+<li id="picond.11"><a name="picond.11"><!-- --></a>Adaptive ordinate control.
+ <p>A positive value specifies that a set of adaptively spaced ordinates
+is to be included in the vicinity of the dew-point pressure where
+the change in mobility with pressure is potentially non-linear. The
+number of additional ordinates and their spacing in pressure are determined
+automatically subject to the minimum step size specified in item 12
+below.</p>
+<p>For the pre-2015.1 version of the GPP option, when calculating
+the generalized pseudo-pressure integral table, if this value is positive
+more ordinates are placed where the change in mobility with pressure
+is potentially non-linear, and fewer ordinates are placed where the
+mobility is linear. This item determines how many ordinates are used.
+If the area defined by three ordinates is different from the area
+defined by the outer two by more than this fraction, an extra ordinate
+will be added between the first two ordinates. A reasonable value
+for this item would be between 0.001 and 0.05. </p>
+<p>DEFAULT: -1
+(that is, use regularly spaced pressure ordinates only when constructing
+table)</p>
+<p>ECLIPSE 300</p>
+</li>
+<li id="picond.12"><a name="picond.12"><!-- --></a>Adaptive ordinate minimum
+spacing. <p>This is the minimum possible distance between any pair
+of ordinates when the adaptive ordinate spacing scheme is active.</p>
+<p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.1 x atmospheric pressure.</p>
+</li>
+</ol>
+<p>End the data record with a slash (/).</p>
+<div class="section" id="picond_notes"><a name="picond_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><p>ECLIPSE 300</p>
+<ul><li>The lower and upper bound factors (items
+5 and 6) can be used to adjust the size of the pressure range covered
+by the generalized pseudo-pressure integral. In conjunction with the
+intervals below and above the dew-point pressure (items 1 and 2),
+these can be used to increase the accuracy of the integration without
+having to use too many quadrature points (which can be computationally
+expensive). Unfortunately there is no good rule for selecting these
+bounds so the defaults should be used unless long calculation times
+are experienced. <p>ECLIPSE 300</p>
+</li>
+<li>The generalized pseudo-pressure integration
+table recalculation criteria (items 7, 8, 9 and 10) may be used to
+control the frequency at which the tables are recalculated. If anomalous
+behavior is observed, for example, unexpectedly high blocking factors,
+the frequency of recalculation can be increased by reducing the sizes
+of one or more of the recalculation controls. In addition, if any
+of items 7, 8, 9 or 10 is set to 0.0, a recalculation will be enforced
+at each timestep. The overall computation time will increase with
+the frequency of recalculation. In general, some experimentation may
+be necessary to find an acceptable compromise between recalculation
+frequency and calculation accuracy. (If items 7, 8, 9 or 10 are set
+to a negative value, the associated recalculation control will be
+disabled.)</li>
+<li>In some circumstances, a rapidly changing blocking factor may
+be encountered. Significant damping of the blocking factor, that is,
+too small a value for item 3 the damping coefficient, can lead to
+inaccurate results (for example, a sudden change in the well BHP).
+If this problem is encountered, the damping coefficient should be
+increased to a value close to 1.0. If this does not resolve the problem,
+setting the well to be a single-segment multisegment well (see <a href="OPTIONS3.html#options3.63">item 62</a> in <span class="keyword">OPTIONS3</span>) may fix the problem. </li>
+<li>The values specified above
+will apply to all wells in the simulation. The <a href="WPICOND.html#WPICOND"> WPICOND</a> keyword can be used to specify
+these values individually on a per well basis. </li>
+<li>Item 14 of the <a href="WELLDIMS.html#WELLDIMS"> WELLDIMS</a> keyword can be used to specify the maximum number of points
+available in the pseudo-pressure integral table. (This is not available
+for the pre-2015.1 version of the GPP model, <span class="keyword">that is, if
+item 330 of the OPTIONS3</span> keyword is set to 1.)</li>
+</ul>
+</div>
+<div class="section" id="picond_example"><a name="picond_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>PICOND
+ 30.0   0.0   0.5 /</code></pre></div>
+</div>
+</div>
+
+</body>
+</html>

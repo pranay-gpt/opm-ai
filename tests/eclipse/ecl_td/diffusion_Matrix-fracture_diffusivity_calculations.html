@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Matrix-fracture diffusivity calculations"/>
+<meta name="DC.subject" content="Formulation and solution of the equations, Diffusion, Azimuthal diffusivity"/>
+<meta name="keywords" content="Formulation and solution of the equations, Diffusion, Azimuthal diffusivity"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="diffusion_matrix-fracture_diffusivity_calculations"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Matrix-fracture diffusivity calculations</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="diffusion_matrix-fracture_diffusivity_calculations"><a name="diffusion_matrix-fracture_diffusivity_calculations"><!-- --></a>
+<h1 class="topictitle1">Matrix-fracture diffusivity calculations</h1>
+
+
+ <div>
+<p>The matrix-fracture coupling diffusivities are proportional to
+the overall cell volume and to the matrix cell bulk volume:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="diffusion.equ.03b4"/>
+ <math><mrow><msub><mrow>
+<mi>T</mi></mrow><mrow><mi>D</mi></mrow></msub><mo>=</mo><mtext>DIFFMMF</mtext><mo>⋅</mo><msub><mrow><mi>φ</mi></mrow><mrow><mi>m</mi></mrow></msub><mo>⋅</mo>
+<mi>V</mi><mo>⋅</mo><mi>σ</mi></mrow></math> 
+</td><td align="right">[Eq. 725.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>φ</mi>
+<mi>m</mi></msub></math> </td>
+
+<td valign="top">is the matrix cell porosity</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>V</mi></math> </td>
+
+<td valign="top">is the matrix cell bulk volume   </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>σ</mi></math> </td>
+
+<td valign="top">is a factor to account for the matrix-fracture interface area
+per unit bulk volume.   </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Kazemi (<cite><span> <a href="biblio_Bibliography.html#biblio_20886">Kazemi et al, 1976</a> </span></cite>) has proposed the following
+form for                  <math><mi>σ</mi></math>:          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="diffusion.equ.03c1"/>
+ <math><mrow><mi>σ</mi>
+<mo>=</mo><mrow><mn>4</mn><mo>(</mo><mfrac><mrow>
+<mn>1</mn></mrow><mrow><msubsup><mrow><mi>l</mi>
+</mrow><mrow><mi>x</mi></mrow><mrow><mn>2</mn></mrow>
+</msubsup></mrow></mfrac><mo>+</mo><mfrac><mrow><mn>1</mn></mrow><mrow><msubsup><mrow><mi>l</mi></mrow>
+<mrow><mi>y</mi></mrow><mrow><mn>2</mn></mrow>
+</msubsup></mrow></mfrac><mo>+</mo><mfrac><mrow><mn>1</mn></mrow><mrow><msubsup><mrow><mi>l</mi></mrow>
+<mrow><mi>z</mi></mrow><mrow><mn>2</mn></mrow>
+</msubsup></mrow></mfrac><mo>)</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 725.2]
+              </td></tr></tbody></table>
+<p>where                  <math><msub><mi>l</mi>
+<mi>x</mi></msub></math>,  <math><msub>
+<mi>l</mi><mi>y</mi></msub></math>  and  <math><msub><mi>l</mi>
+<mi>z</mi></msub></math>  are typical X,Y and Z dimensions
+of the blocks of material making up the matrix volume.          </p>
+
+<p>In the above equation,                  <math><msub>
+<mi>l</mi><mi>x</mi></msub></math>,  <math><msub><mi>l</mi>
+<mi>y</mi></msub></math>  and  <math><msub>
+<mi>l</mi><mi>z</mi></msub></math>  are thus not related
+to the simulation grid dimensions. Alternatively, as  <math><mi>σ</mi></math>  acts as a multiplier on the matrix-fracture coupling, it may simply
+be treated as a history matching parameter.          </p>
+
+<p> <math><mi>σ</mi></math>  can be specified as a single value for the whole field, or on a
+cell by cell basis using the keyword <a href="../ecl_rm/SIGMAV.html#SIGMAV">SIGMAV</a>. If  <math><mi>σ</mi></math>  is defined on a cell by cell basis, the values corresponding to
+the first <samp class="codeph">NDIVIZ</samp> /2 layers are used.          </p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

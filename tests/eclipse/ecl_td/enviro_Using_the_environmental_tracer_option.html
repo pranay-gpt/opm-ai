@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using the environmental tracer option"/>
+<meta name="DC.subject" content="Fluid modeling, Environmental tracer restrictions, Environmental tracers, Using, Restrictions, Adsorption, Decay, Diffusion"/>
+<meta name="keywords" content="Fluid modeling, Environmental tracer restrictions, Environmental tracers, Using, Restrictions, Adsorption, Decay, Diffusion"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="enviro_using_the_environmental_tracer_option"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using the environmental tracer option</title>
+</head>
+<body>
+
+
+<div class="nested0" id="enviro_using_the_environmental_tracer_option"><a name="enviro_using_the_environmental_tracer_option"><!-- --></a>
+<h1 class="topictitle1">Using the environmental tracer option</h1>
+
+
+ <div>
+<p>A passive tracer is set up in the normal manner using the following
+ECLIPSE 100 keywords to specify the tracer data:</p>
+
+
+<div class="tablenoborder"><a name="enviro.tab.00ca"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="enviro.tab.00ca" frame="border" border="1" rules="all"><caption>
+           Table 709.1  Keywords used to specify environmental tracer data</caption>   
+<thead align="left">
+<tr>
+<th valign="top" width="33.33333333333333%" id="d384e82">Section</th>
+
+<th valign="top" width="33.33333333333333%" id="d384e85">ECLIPSE 100 keyword</th>
+
+<th valign="top" width="33.33333333333333%" id="d384e88">Description</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d384e82 "><span class="keyword">RUNSPEC</span></td>
+
+<td valign="top" width="33.33333333333333%" headers="d384e85 "> <a href="../ecl_rm/TRACERS.html#TRACERS"> TRACERS</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d384e88 ">Specify the number of tracers in each phase (<samp class="codeph">NOTRAC</samp>, <samp class="codeph">NWTRAC</samp>, <samp class="codeph">NGTRAC</samp>) and the number of environmental tracers (<samp class="codeph">NETRAC</samp>).</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d384e82 "><span class="keyword">PROPS</span></td>
+
+<td valign="top" width="33.33333333333333%" headers="d384e85 "> <a href="../ecl_rm/TRACER.html#TRACER">TRACER</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d384e88 ">Specify the host phase of each tracer.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d384e82 "><span class="keyword">REGION</span></td>
+
+<td valign="top" width="33.33333333333333%" headers="d384e85 "> <a href="../ecl_rm/TNUM.html#TNUM">TNUM</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d384e88 ">Specify the region numbers to be used for initializing
+the concentration of tracer in each grid block and specify link cells
+to tables of initial tracer concentration with respect to depth.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d384e82 "><span class="keyword">SOLUTION</span></td>
+
+<td valign="top" width="33.33333333333333%" headers="d384e85 "> <a href="../ecl_rm/TBLK.html#TBLK">TBLK</a> or <a href="../ecl_rm/TVDP.html#TVDP">TVDP</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d384e88 ">Specify the initial tracer concentration as either
+the numerical value or as tables of depth versus tracer concentration.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d384e82 "><span class="keyword">SCHEDULE</span></td>
+
+<td valign="top" width="33.33333333333333%" headers="d384e85 "> <a href="../ecl_rm/WTRACER.html#WTRACER">WTRACER</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d384e88 ">Inject tracer through wells.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d384e82 "><span class="keyword">SCHEDULE</span></td>
+
+<td valign="top" width="33.33333333333333%" headers="d384e85 "> <a href="../ecl_rm/RIVTRACE.html#RIVTRACE"> RIVTRACE</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d384e88 ">Inject tracer in rivers.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>To activate the environmental tracer option, the parameter <samp class="codeph">NETRAC</samp> in keyword <span class="keyword">TRACERS</span> in the <span class="keyword">RUNSPEC</span> section should be set greater than zero. <samp class="codeph">NETRAC</samp> should be set equal to (or greater than) the number
+of tracers within the model that either adsorb, decay or diffuse;
+it need not be set equal to the total number of tracers in the model,
+if not all of them adsorb, decay or diffuse.</p>
+
+<p>To activate the partitioned tracer option the keyword <a href="../ecl_rm/PARTTRAC.html#PARTTRAC">PARTTRAC</a> must be entered in <span class="keyword">RUNSPEC</span> section.</p>
+
+<p>The adsorption, decay and diffusion data is supplied with the keywords <a href="../ecl_rm/TRADS.html#TRADS">TRADS</a>, <a href="../ecl_rm/TRDCY.html#TRDCY">TRDCY</a> and <a href="../ecl_rm/TRDIF.html#TRDIF">TRDIF</a> respectively. These keywords
+require the tracer name to be appended to the keyword to indicate
+which tracer the data applies to. For adsorption, the <a href="../ecl_rm/ADSORP.html#ADSORP">ADSORP</a> keyword may be used,
+with the tracer name specified as an argument, as an alternative to <span class="keyword">TRADS</span>. The <span class="keyword">ADSORP</span> keyword supplies coefficients
+for a generalized Langmuir isotherm with permeability dependence.
+For standard partitioned tracers, the data entered in <span class="keyword">TRDIF</span> and <span class="keyword">TRDCY</span> apply to diffusion and decay in the
+solution phase. For multi-partitioned tracers, data specific to each
+phase can be entered in <span class="keyword">TRDIF</span> and <span class="keyword">TRDCY</span>.</p>
+
+<p>If the adsorption model is required, the rock mass density needs
+to be specified by using the <a href="../ecl_rm/TRROCK.html#TRROCK">TRROCK</a> keyword. The grid block masses can be output by using the
+'<samp class="codeph">ROCKMASS</samp>' mnemonic in the <a href="../ecl_rm/RPTSOL.html#RPTSOL">RPTSOL</a> keyword. The <span class="keyword">TRROCK</span> keyword is also used to specify the adsorption model
+and the initial distribution of adsorbed tracer. For multi-partitioned
+tracers the concentration to be used in adsorption calculations can
+be specified by the sixth item of the <span class="keyword">TRACER</span> keyword.</p>
+
+<p>A passive tracer can be thought of as a dimensionless marker of
+the host fluid. However, in the environmental tracer case it may be
+convenient to ascribe a unit to the tracer. A general unit name can
+be given to a tracer using the third item in the <span class="keyword">TRACER</span> keyword. Note that the adsorption data (<span class="keyword">TRADS</span> or <span class="keyword">ADSORP</span> keyword) should be based on this unit.</p>
+
+<p>The diffusivity values can be output by setting mnemonics '<samp class="codeph">DIFFX</samp>', '<samp class="codeph">DIFFY</samp>' and '<samp class="codeph">DIFFZ</samp>' in the <a href="../ecl_rm/RPTGRID.html#RPTGRID">RPTGRID</a> keyword. Note that the diffusivity associated with non-neighbor
+connections can be found in the non-neighbor connection list generated
+by the <span class="keyword">RPTGRID</span> mnemonic '<samp class="codeph">ALLNNC</samp>'.</p>
+
+<p>The tables of tracer adsorption functions, tracer decay and tracer
+rock properties can be output to the print file by setting the mnemonics
+'<samp class="codeph">TRADS</samp>', '<samp class="codeph">TRDCY</samp>' and '<samp class="codeph">TRROCK</samp>' in the <a href="../ecl_rm/RPTPROPS.html#RPTPROPS">RPTPROPS</a> keyword.</p>
+
+<p>The quantity of the tracer that has decayed or been adsorbed can
+be output to the print file by setting either of the mnemonics '<samp class="codeph">TRADS</samp>' or '<samp class="codeph">TRDCY</samp>' in the <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a> keyword. Two families
+of <span class="keyword">SUMMARY</span> keywords are available to output the
+adsorption and decay: <span class="keyword">FTADS</span>, <span class="keyword">RTADS</span>, <span class="keyword">BTADS</span> and <span class="keyword">FTDCY</span>, <span class="keyword">RTDCY</span>, <span class="keyword">BTDCY</span>. As with other tracer <span class="keyword">SUMMARY</span> section keywords, the tracer name should be appended
+on to the keyword.</p>
+
+<p>Tracer in place reports can be output to the print file by specifying
+the '<samp class="codeph">FIPTR</samp>' mnemonic in <span class="keyword">RPTSCHED</span>. For a standard partitioned tracer the amount of the tracer in the
+free and solution phases will be reported. For a multi-partitioned
+tracer the amount reported in the 'solution' phase is the sum over
+all solution phases.</p>
+
+<div class="section" id="enviro_restrictions"><a name="enviro_restrictions"><!-- --></a><h4 class="sectiontitle">Restrictions</h4><p>At
+present the adsorption, decay and diffusion options are only available
+for single phase and partitioned tracers. It is not possible to model
+adsorption, decay or diffusion for tracers existing in a phase that
+can dissolve in another phase. For example, it is not possible to
+model a decaying tracer in the gas phase of a model in which the gas
+can dissolve in the oil.</p>
+<p>Single phase environmental tracers
+employing adsorption and decay can use either the standard tracer
+solver method or the “cascade” or TVD algorithms, which
+limit numerical diffusion (for the latter two, specify '<samp class="codeph">DIFF</samp>' in item 5 of the <span class="keyword">RUNSPEC</span> section keyword <a href="../ecl_rm/TRACERS.html#TRACERS"> TRACERS</a> and for the TVD algorithm
+use the <a href="../ecl_rm/TRACTVD.html#TRACTVD"> TRACTVD</a> keyword). However, if a tracer uses the diffusion model
+it cannot use the cascade algorithm. Hence, even if '<samp class="codeph">DIFF</samp>' is set in <span class="keyword">TRACERS</span>, the default solution method
+is employed for any tracers with the diffusion option active. <span class="keyword">TRACTVD</span> can be used with diffusion (and dispersion), but
+not when LGRs are present.</p>
+<p>All partitioned tracers are solved
+using the standard tracer solver.</p>
+<p>If the adsorption option is
+active, the tracer equations are non-linear. Because of this non-linearity,
+it is likely that the cascade method is faster than the default method,
+providing, of course the tracer does not employ the diffusion option
+as well.</p>
+<p>Environmental tracers cannot be introduced in a restart
+run.</p>
+<p>If a cell is defined with zero pore volume in the <span class="keyword">GRID</span> section, then making it active by changing the pore
+volume in the <span class="keyword">EDIT</span> section using <a href="../ecl_rm/PORV.html#PORV"> PORV</a>, is not allowed with
+the environmental tracer option.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

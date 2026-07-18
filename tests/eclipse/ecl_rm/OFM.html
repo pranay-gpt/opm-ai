@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="OFM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="OFM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>OFM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="OFM"><a name="OFM"><!-- --></a>
+<h1 class="keyword">OFM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="ofm.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="ofm.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1620e45"> x </th>
+
+<th valign="top" id="d1620e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1620e54"> x </th>
+
+<th valign="top" id="d1620e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1620e45 d1620e54 ">  </td>
+
+<td valign="top" headers="d1620e48 d1620e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1620e45 d1620e54 ">  </td>
+
+<td valign="top" headers="d1620e48 d1620e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1620e45 d1620e54 ">  </td>
+
+<td valign="top" headers="d1620e48 d1620e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1620e45 d1620e54 ">  </td>
+
+<td valign="top" headers="d1620e48 d1620e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1620e45 d1620e54 ">  </td>
+
+<td valign="top" headers="d1620e48 d1620e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1620e45 d1620e54 ">  </td>
+
+<td valign="top" headers="d1620e48 d1620e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1620e45 d1620e54 "> x </td>
+
+<td valign="top" headers="d1620e48 d1620e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1620e45 d1620e54 ">  </td>
+
+<td valign="top" headers="d1620e48 d1620e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword requests post-processing of the <samp class="codeph">SUMMARY</samp> output into a form that can conveniently be input into the <samp class="codeph">OFM</samp> program. The process is analogous to the generation
+of run summaries (<a href="RUNSUM.html#RUNSUM"> RUNSUM</a> keyword), in that the <samp class="codeph">SUMMARY</samp> files are
+post-processed at the end of the run to convert the <span class="keyword">SUMMARY</span> output into a new format.</p>
+
+<p>If the <samp class="codeph">OFM</samp> keyword is present then either 3 or
+4 new files will be generated:</p>
+
+<p> <samp class="codeph">ROOT_OFM.DEF</samp> Defines the tables in the <samp class="codeph">OFM</samp> data model</p>
+
+<p> <samp class="codeph">ROOT_OFM.XY</samp> defines the areal (XY) location of
+either the well or completion</p>
+
+<p> <samp class="codeph">ROOT_OFM_WELL.PRD</samp> Well data</p>
+
+<p> <samp class="codeph">ROOT_OFM_COMP.PRD</samp> Completion data</p>
+
+<p>The output is generated for a set of unique identifiers based on
+connection data if available, and on well data if not. In the case
+of connections the <span class="keyword">COFR</span> mnemonic is the controlling
+mnemonic (if no <span class="keyword">COFR</span> is present then <span class="keyword">CGFR</span> and <span class="keyword">CWFR</span> are alternatives). The unique identifiers
+take the form <samp class="codeph">WELL:AA_BB_CC</samp> where <samp class="codeph">AA,BB,CC</samp> are the X,Y,Z location of the connection.</p>
+
+<p>It is assumed that if completion data is available, then the well
+aggregates, etc., will be calculated in <samp class="codeph">OFM</samp>. This
+prevents the possibility of multiple data items carrying the same
+information once input into the <samp class="codeph">OFM</samp> database.</p>
+
+<p>If the controlling connection mnemonic is not present for a given
+well then the controlling mnemonic for well level data is the <samp class="codeph">WOPR</samp> (and if this keyword is not present, then <span class="keyword">WGPR</span> and <span class="keyword">WWPR</span> are alternatives). In
+the case of well data the unique identifier is simply the well name.</p>
+
+<p>For all completions with <span class="keyword">COFR</span> data the output
+consists of the superset of all completion mnemonics (<span class="keyword">C*</span> keywords) present in the <span class="keyword">SUMMARY</span> section. If
+no <span class="keyword">COFR</span> keyword is present and <span class="keyword">WOFR</span> is present for a given well, the data consists of the superset of
+all well mnemonics (<span class="keyword">W*</span> keywords). Note that it is
+possible to produce very large files in cases where the superset of
+mnemonics used is large combined with large numbers of connections
+and timesteps.</p>
+
+<p>The following conversions of mnemonic names are carried over automatically
+to the standard OFM name:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"><span class="keyword">COFR</span></td>
+
+<td valign="top">*OIL</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">CWFR</span></td>
+
+<td valign="top">*WATER</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">CGFR</span></td>
+
+<td valign="top">*GAS</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">CPR</span></td>
+
+<td valign="top">*PRESSURE</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">WOPR</span></td>
+
+<td valign="top">*OIL</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">WWPR</span></td>
+
+<td valign="top">*WATER</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">WGPR</span></td>
+
+<td valign="top">*GAS</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">WBHP</span></td>
+
+<td valign="top">*PRESSURE</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>All other mnemonics retain their keyword names.</p>
+
+<p>Once the ECLIPSE run has completed and the OFM-ready files have
+been produced, these files can easily be imported into OFM by creating
+a new project and then loading data from ASCII flat files. In the
+load panel visible after a new project has been created, select then
+load the four <samp class="codeph">OFM</samp> files from a run. The project will
+then be populated.</p>
+
+<p>The X,Y location of the well will normally be referenced relative
+to the grid. However, if the <a href="MAPAXES.html#MAPAXES"> MAPAXES</a> keyword is present in the data set, then an effective transform
+to the new MAPAXES origin is performed.</p>
+
+<p>The <span class="keyword">OFM</span> keyword has no associated data.</p>
+
+<p>See also the keyword <a href="RUNSUM.html#RUNSUM"> RUNSUM</a>.</p>
+
+<div class="section" id="ofm_example"><a name="ofm_example"><!-- --></a><h4 class="sectiontitle">Example</h4>                 <pre><code>OFM</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

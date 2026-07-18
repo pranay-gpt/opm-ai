@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Discretization"/>
+<meta name="DC.subject" content="Tensor permeability discretization, Tensor permeability, Discretization"/>
+<meta name="keywords" content="Tensor permeability discretization, Tensor permeability, Discretization"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="tensors_discretization"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Discretization</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="tensors_discretization"><a name="tensors_discretization"><!-- --></a>
+<h1 class="topictitle1">Discretization</h1>
+
+
+ <div>
+<div class="fignone" id="tensors.XID-0000005b"><a name="tensors.XID-0000005b"><!-- --></a>
+
+ <br/><img src="../img/tensors1.png" width="355px"/><br/> 
+<br/><span class="figcap">
+           Figure 24.1  Stencil for MPFA flow in 2D between cells (i, j) and (i + 1,
+j)</span></div>
+
+<p>Referring to <a href="formulate_Formulation_of_the_Equations.html#formulate_formulation_of_the_equations"> "Formulation of the equations"</a>, the standard two-point flow
+between cells A = (i, j) and B = (i + 1, j) for the corner point grid
+in figure <a href="tensors_Discretization.html#tensors.XID-0000005b">24.1</a>  can be written
+for a component  <math><mi>c</mi></math>  embedded in a phase  <math><mi>p</mi></math> (p = o, w, g) as</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="tensors.equ.0064"/>
+ <math><mrow><msubsup><mrow>
+<mi>F</mi></mrow><mrow><mi>p</mi><mi>A</mi><mi>B</mi>
+</mrow><mrow><mi>c</mi></mrow></msubsup><mo>⁢</mo><mo>=</mo><mtext> </mtext><msub><mrow><mi>T</mi></mrow>
+<mrow><mi>A</mi><mi>B</mi></mrow></msub><msubsup>
+<mrow><mi>M</mi></mrow><mrow><mi>p</mi><mi>A</mi>
+<mi>B</mi></mrow><mrow><mi>c</mi></mrow></msubsup><mi>d</mi><msub><mrow><mi>P</mi></mrow><mrow><mi>p</mi>
+<mi>A</mi><mi>B</mi></mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 24.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>T</mi>
+<mrow><mi>A</mi><mi>B</mi></mrow></msub></math> </td>
+
+<td valign="top">is the two-point transmissibility between cells A and B</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msubsup><mrow><mi>M</mi></mrow><mrow><mi>p</mi><mi>A</mi><mi>B</mi></mrow><mrow><mi>c</mi></mrow>
+</msubsup></mrow></math> </td>
+
+<td valign="top"> is the generalized mobility of component  <math><mi>c</mi></math>  in phase  <math><mi>p</mi></math>, and is given by equation <a href="formulate_ECLIPSE_300_Compositional1.html#formulate.XID-000001be">667.2</a>         </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><mi>d</mi>
+<msub><mi>P</mi><mrow><mi>p</mi><mi>A</mi><mi>B</mi>
+</mrow></msub></mrow></math> </td>
+
+<td valign="top"> is the potential difference of phase  <math><mi>p</mi></math>  between cells A and B, given by</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="tensors.equ.0072"/>
+ <math><mrow><mrow><mi>d</mi><msub><mrow><mi>P</mi></mrow><mrow><mi>p</mi>
+<mi>A</mi><mi>B</mi></mrow></msub></mrow><mo>=</mo>
+<msub><mrow><mi>P</mi></mrow><mrow><mi>A</mi></mrow>
+</msub><mrow><mo>-</mo><msub><mrow><mi>P</mi></mrow>
+<mrow><mi>B</mi></mrow></msub></mrow><mo>+</mo><msub>
+<mrow><mi>P</mi></mrow><mrow><mi>c</mi><mi>p</mi>
+<mi>A</mi></mrow></msub><mrow><mo>-</mo><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>p</mi><mi>B</mi>
+</mrow></msub><mo>-</mo><mrow><msub><mrow><mi>ρ</mi>
+</mrow><mrow><mi>p</mi><mi>A</mi><mi>B</mi></mrow>
+</msub><mi>g</mi><mo>(</mo><msub><mrow><mi>D</mi>
+</mrow><mrow><mi>A</mi></mrow></msub><mrow><mo>-</mo>
+<msub><mrow><mi>D</mi></mrow><mrow><mi>B</mi></mrow>
+</msub></mrow><mo>)</mo></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 24.2]
+              </td></tr></tbody></table>
+<p>and where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>p</mi></mrow></msub></math> </td>
+
+<td valign="top"> is the capillary pressure for phase  <math><mi>p</mi></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>ρ</mi>
+<mi>p</mi></msub></math> </td>
+
+<td valign="top">is the mass density of phase  <math><mi>p</mi></math>    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><mi>g</mi>
+</mrow></math> </td>
+
+<td valign="top">is the acceleration due to gravity</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>D</mi></math> </td>
+
+<td valign="top"> is the cell center depth.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Alternatively, the MPFA constructs the flow  <math><mrow><msubsup><mrow>
+<mi>F</mi></mrow><mrow><mi>p</mi><mi>A</mi><mi>B</mi>
+</mrow><mrow><mi>c</mi></mrow></msubsup></mrow></math> which depends on steering terms from the neighboring cells C, D,
+E and F in figure <a href="tensors_Discretization.html#tensors.XID-0000005b">24.1</a>  as</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="tensors.XID-00000083"/>
+ <math><mrow><msubsup><mrow>
+<mi>F</mi></mrow><mrow><mi>p</mi><mi>A</mi><mi>B</mi>
+</mrow><mrow><mi>c</mi></mrow></msubsup><mo>=</mo>
+<mrow><msubsup><mrow><mi>M</mi></mrow><mrow><mi>p</mi>
+<mi>A</mi><mi>B</mi></mrow><mrow><mi>c</mi></mrow>
+</msubsup><mrow><mo>(</mo><mrow><msub><mrow><mi>T</mi>
+</mrow><mrow><mi>A</mi><mi>B</mi></mrow></msub><mo>⁢</mo><mtext> </mtext><mi>d</mi><msub><mrow><mi>P</mi>
+</mrow><mrow><mi>p</mi><mi>A</mi><mi>B</mi></mrow>
+</msub></mrow><mo>+</mo><mrow><mrow><munder><mrow><mi>Σ</mi></mrow><mrow><mi>S</mi></mrow>
+</munder><msub><mrow><mi>T</mi></mrow><mrow><mi>A</mi>
+<mi>S</mi></mrow></msub><mo>⁢</mo><mtext> </mtext>
+</mrow><mi>d</mi><msub><mrow><mi>P</mi></mrow><mrow>
+<mi>A</mi><mi>S</mi></mrow></msub></mrow><mo>)</mo>
+</mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 24.3]
+              </td></tr></tbody></table>
+<p>where the summation is over <em>steering</em> transmissibilities
+S between cells AC, AD, AE and SF.</p>
+
+<p>The mobility  <math><mrow><msubsup><mrow>
+<mi>M</mi></mrow><mrow><mi>p</mi><mi>A</mi><mi>B</mi>
+</mrow><mrow><mi>c</mi></mrow></msubsup></mrow></math> is evaluated in the upstream cell (A or B) according to the direction
+of flow in equation <a href="tensors_Discretization.html#tensors.XID-00000083">24.3</a>.</p>
+
+<p>The steering potential differences  <math><mrow>
+<mi>d</mi><msub><mi>P</mi><mrow><mi>A</mi><mi>S</mi>
+</mrow></msub></mrow></math>  are evaluated using pressures
+and capillary pressures for cells A and S but using the density term
+ <math><msub><mi>ρ</mi>
+<mrow><mi>A</mi><mi>B</mi></mrow></msub></math>  for
+the primary flow coefficient obtained from equation <a href="formulate_Reservoir_densities.html#formulate.equ.024d">670.2.2</a>, so that</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="tensors.equ.008f"/>
+ <math><mrow><mrow><mi>d</mi><msub><mrow><mi>P</mi></mrow><mrow><mi>p</mi>
+<mi>A</mi><mi>S</mi></mrow></msub></mrow><mo>=</mo>
+<msub><mrow><mi>P</mi></mrow><mrow><mi>A</mi></mrow>
+</msub><mrow><mo>-</mo><msub><mrow><mi>P</mi></mrow>
+<mrow><mi>S</mi></mrow></msub></mrow><mo>+</mo><msub>
+<mrow><mi>P</mi></mrow><mrow><mi>c</mi><mi>p</mi>
+<mi>A</mi></mrow></msub><mrow><mo>-</mo><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>p</mi><mi>S</mi>
+</mrow></msub><mo>-</mo><mrow><msub><mrow><mi>ρ</mi>
+</mrow><mrow><mi>p</mi><mi>A</mi><mi>B</mi></mrow>
+</msub><mi>G</mi><mrow><mo>(</mo><msub><mrow><mi>D</mi></mrow><mrow><mi>A</mi></mrow></msub><mrow><mo>-</mo><msub><mrow><mi>D</mi></mrow><mrow><mi>S</mi>
+</mrow></msub></mrow><mo>)</mo></mrow></mrow></mrow>
+</mrow></math> 
+</td><td align="right">[Eq. 24.4]
+              </td></tr></tbody></table>
+<p>The transmissibilities  <math><msub><mi>T</mi>
+<mrow><mi>A</mi><mi>B</mi></mrow></msub></math>  and
+ <math><msub><mi>T</mi>
+<mrow><mi>A</mi><mi>S</mi></mrow></msub></math>  are
+calculated following the procedure described in <cite><span> <a href="biblio_Bibliography.html#biblio_54414">Aavatsmark et al (1997)</a> </span></cite> when the permeability  <math><mrow><munder><mrow>
+<mi>K</mi></mrow><mo>̲</mo></munder></mrow></math> is a full tensor.</p>
+
+<p>Note that the flows between adjacent cells depend on steering terms
+from adjacent cells, but there are no flows created between cells
+which are diagonal neighbors as in the <a href="../ecl_rm/NINEPOIN.html#NINEPOIN">NINEPOIN</a> scheme (see <a href="ninepoint_Nine-point_Schemes.html#ninepoint_nine-point_schemes"> "Nine-point schemes"</a>).</p>
+
+<p>Similarly in 3D, the flow between any two cells may depend on up
+to 16 steering transmissibilities and this leads to a 19 or 27 point
+scheme.</p>
+
+<p>In the present version of ECLIPSE 300, the MPFA transmissibilities
+are not calculated across faults, but the two-point connections given
+by the <a href="../ecl_rm/NEWTRAN.html#NEWTRAN">NEWTRAN</a> transmissibility calculation are used instead (see <a href="transmiss_Transmissibility_Calculations.html#transmiss_transmissibility_calculations"> "Transmissibility calculations"</a>).</p>
+
+<p>If the <a href="../ecl_rm/MPFA.html#MPFA">MPFA</a> keyword is used without supplying off diagonal tensor permeabilities <span class="keyword">PERMXY</span>, <span class="keyword">PERMYZ</span> and <span class="keyword">PERMZX</span>, these terms are taken to be zero and the MPFA scheme is applied
+with the diagonal tensor  <math><mrow><munder><mrow>
+<mi>K</mi></mrow><mo>̲</mo></munder></mrow></math> =diag (<span class="keyword">PERMX</span>, <span class="keyword">PERMY</span>, <span class="keyword">PERMZ</span>) in the specified basis.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Saturation table scaling"/>
+<meta name="DC.subject" content="End-point scaling, Saturation table scaling"/>
+<meta name="keywords" content="End-point scaling, Saturation table scaling"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sattabsc_saturation_table_scaling"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Saturation table scaling</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="sattabsc_saturation_table_scaling"><a name="sattabsc_saturation_table_scaling"><!-- --></a>
+<h1 class="keyword">Saturation table scaling</h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="sattabsc.tab.0009"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="sattabsc.tab.0009" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">                         x                   
+  </td>
+
+<td valign="top">                         ECLIPSE 100         
+            </td>
+
+</tr>
+
+<tr>
+<td valign="top">                         x                   
+  </td>
+
+<td valign="top">                         ECLIPSE 300         
+            </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The ECLIPSE saturation table end-point scaling option provides
+a mechanism for redefining values for the connate, critical and maximum
+saturations in the saturation tables describing the flow of the reservoir
+fluids. The scaling facility is useful for modeling reservoirs which
+contain an initial depth variation of either the connate or critical
+saturations for one or more of the phases present. It has applications
+in the use of pseudo functions and in general cases where the saturation
+function data for the reservoir fluids depend on a normalized saturation
+variable.</p>
+
+<p>The end-point scaling option is enabled by the <a href="../ecl_rm/ENDSCALE.html#ENDSCALE">ENDSCALE</a> keyword in the <span class="keyword">RUNSPEC</span> section. Rescaling is applied separately to the
+relative permeability and capillary pressure curves. In general, rescaling
+consists of a <strong>two-point</strong> transformation, where two saturation
+values in the tables are moved to new positions. There is also an
+option to apply a <strong>three-point</strong> rescaling to the relative permeability
+curves only.</p>
+
+<p>In a three-phase model, there are usually eight, and in some cases
+ten, saturation table end-points which may be identified:</p>
+
+
+<div class="tablenoborder"><a name="sattabsc.tab.0025"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="sattabsc.tab.0025" frame="border" border="1" rules="all"><caption>
+           Table 159.2  Saturation table end points</caption>  
+<thead align="left">
+<tr>
+<th valign="top" id="d1400e99">Keyword       </th>
+
+<th valign="top" id="d1400e102">Description    </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1400e99 "> <a href="../ecl_rm/swl_SWL_ISWL.html#swl_swl_iswl">SWL</a>                       </td>
+
+<td valign="top" headers="d1400e102 ">The connate water saturation. This is the smallest
+water saturation entry in a water saturation table.              
+          </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1400e99 ">   <a href="../ecl_rm/SWCR.html#SWCR">SWCR</a>                      </td>
+
+<td valign="top" headers="d1400e102 ">The critical water saturation. This is the highest
+water saturation for which the water is immobile.  </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1400e99 ">  <a href="../ecl_rm/swu_SWU_ISWU.html#swu_swu_iswu">SWU</a>  </td>
+
+<td valign="top" headers="d1400e102 ">The maximum water saturation. This is the largest
+water saturation entry in a water saturation table.     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1400e99 "> <a href="../ecl_rm/sgl_SGL_ISGL.html#sgl_sgl_isgl">SGL</a>                      </td>
+
+<td valign="top" headers="d1400e102 ">The connate gas saturation. In ECLIPSE 100 this
+is the smallest gas saturation entry in a gas saturation table. In
+ECLIPSE 300 this is set to zero by default irrespective of the values
+specified in the saturation functions; if <a href="../ecl_rm/OPTIONS3.html#options3.103">item 103</a> of the <span class="keyword">OPTIONS3</span> keyword is set to a non-zero value, non-zero connate
+gas saturations are permitted.</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1400e99 "> <a href="../ecl_rm/SGCR.html#SGCR">SGCR</a>                       </td>
+
+<td valign="top" headers="d1400e102 ">The critical gas saturation. This is the highest
+gas saturation for which the gas is immobile.                    
+    </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1400e99 "> <a href="../ecl_rm/sgu_SGU_ISGU.html#sgu_sgu_isgu">SGU</a>                      </td>
+
+<td valign="top" headers="d1400e102 ">The maximum gas saturation. This is the largest
+gas saturation entry in a gas saturation table.                  
+    </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1400e99 "> <a href="../ecl_rm/SOWCR.html#SOWCR">SOWCR</a>                     </td>
+
+<td valign="top" headers="d1400e102 ">The critical oil-in-water saturation. This is
+the highest oil saturation for which the oil is immobile in an oil-water
+system.                         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1400e99 "> <a href="../ecl_rm/SOGCR.html#SOGCR">SOGCR</a>   </td>
+
+<td valign="top" headers="d1400e102 ">The critical oil-in-gas saturation. This is the
+highest oil saturation for which the oil is immobile in an oil-gas-connate
+water system.</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1400e99 "> <a href="../ecl_rm/SGWCR.html#SGWCR">SGWCR</a>                      </td>
+
+<td valign="top" headers="d1400e102 ">The scaled critical gas-in-water saturation. This
+is the highest gas saturation for which the gas is immobile in a gas-water
+system.</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1400e99 "> <a href="../ecl_rm/SWGCR.html#SWGCR">SWGCR</a> </td>
+
+<td valign="top" headers="d1400e102 ">The scaled critical water-in-gas saturation. This
+is the highest water saturation for which the water is immobile in
+a water-gas system.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>ECLIPSE 300</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The <span class="keyword">SGWCR</span> and the <span class="keyword">SWGCR</span> saturation table end-points are only available in ECLIPSE 300. They
+are only used by the <a href="../ecl_rm/IKU3P.html#IKU3P">IKU3P</a> three-phase relative permeability model and by the <a href="../ecl_rm/BAKER1.html#BAKER1">BAKER1</a> and the <a href="../ecl_rm/BAKER2.html#BAKER2">BAKER2</a> three-phase relative
+permeability models where the Baker gas model (<span class="keyword">SGWCR</span>) or water model (<span class="keyword">SWGCR</span>) has been specified. </span></div>
+
+<p>The saturation end-points taken from the saturation tables in the
+input data file are referred to as the unscaled saturation end points.</p>
+
+<p>The end-point scaling option enables new values to be defined for
+any of the above saturation end points for each grid cell, subject
+to maintaining a consistent set of saturation tables within each grid
+cell. The appropriate subset of the above set of end-points is applicable
+in two phase runs. The new values defined using the end-point scaling
+option are referred to as the scaled end-points. When relative permeability
+and capillary pressure values need to be computed at a particular
+saturation, a linear transformation is used to determine the equivalent
+saturation to be used for look-up in the unscaled table.</p>
+
+<p>For example, in a grid cell whose water saturation is  <math><mrow><mi>S</mi>
+<mi>W</mi></mrow></math>, scaled connate water saturation
+is  <math><mrow><mi>S</mi>
+<mi>W</mi><mi>C</mi><mi>O</mi></mrow></math>, scaled
+maximum water saturation is  <math><mrow><mi>S</mi>
+<mi>W</mi><mi>U</mi></mrow></math>, which belongs to a
+saturation region whose unscaled connate water is  <math><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow></msub>
+</math>  and whose unscaled maximum water saturation is  <math><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow></msub></math>, the water capillary pressure  <math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>o</mi><mi>w</mi></mrow></msub>
+</math> is evaluated in the saturation table at the saturation,
+ <math><mrow><msub><mi>S</mi><mi>w</mi></msub><mi>′</mi></mrow></math>, where</p>
+
+<p> <math><msub><mi>S</mi>
+<mi>w</mi></msub><mi>'</mi><mo>=</mo><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow></msub>
+<mo>+</mo><mfrac><mrow><mrow><mo>(</mo><mrow><mi>S</mi><mi>W</mi><mo>-</mo><mrow><mi>S</mi><mi>W</mi>
+<mi>C</mi><mi>O</mi></mrow></mrow><mo>)</mo><mo>(</mo><msub><mi>S</mi><mrow><mi>w</mi><mi>m</mi>
+<mi>a</mi><mi>x</mi></mrow></msub><mrow><mo>-</mo>
+<msub><mi>S</mi><mrow><mi>w</mi><mi>c</mi><mi>o</mi>
+</mrow></msub></mrow><mo>)</mo></mrow></mrow><mrow>
+<mrow><mi>S</mi><mi>W</mi><mi>U</mi><mo>-</mo><mrow>
+<mi>S</mi><mi>W</mi><mi>C</mi><mi>O</mi></mrow>
+</mrow></mrow></mfrac></math>             </p>
+
+<p>so that  <math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>o</mi><mi>w</mi></mrow></msub>
+</math>  is evaluated by lookup in the input capillary pressure
+table using</p>
+
+<p> <math><mrow><mrow><msub>
+<mrow><mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi>
+<mi>w</mi></mrow></msub><mo>(</mo><mrow><mi>S</mi>
+<mi>W</mi></mrow><mo>)</mo></mrow><mo>=</mo><mrow>
+<msub><mrow><mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi></mrow></msub><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub><mi>'</mi><mo>)</mo><mo>(</mo><mtext>table</mtext><mo>)</mo></mrow></mrow></math>             </p>
+
+<p>In addition it is possible to scale the relative permeability and
+capillary pressure values using the keywords <a href="../ecl_rm/krwx.html#krwx">KRW</a> and <a href="../ecl_rm/pcw_PCW_IPCW.html#pcw_pcw_ipcw">PCW</a> for example.</p>
+
+<p>If the hysteresis option is active, the above set of keywords is
+used to scale the drainage relative permeability curves. The imbibition
+curves can be scaled by using an analogous family of keywords:</p>
+
+<ul>
+<li> <a href="../ecl_rm/isxxxx_ISGL-OWCR.html#isxxxx_isgl-owcr"> ISWL</a>, <a href="../ecl_rm/isxxxx_ISGL-OWCR.html#isxxxx_isgl-owcr">ISWCR</a>, <a href="../ecl_rm/isxxxx_ISGL-OWCR.html#isxxxx_isgl-owcr">ISWU</a> </li>
+
+<li> <a href="../ecl_rm/isxxxx_ISGL-OWCR.html#isxxxx_isgl-owcr">ISGL</a>, <a href="../ecl_rm/isxxxx_ISGL-OWCR.html#isxxxx_isgl-owcr">ISGCR</a>, <a href="../ecl_rm/isxxxx_ISGL-OWCR.html#isxxxx_isgl-owcr">ISGU</a> </li>
+
+<li> <a href="../ecl_rm/isxxxx_ISGL-OWCR.html#isxxxx_isgl-owcr">ISOWCR</a>, <a href="../ecl_rm/isxxxx_ISGL-OWCR.html#isxxxx_isgl-owcr">ISOGCR</a> </li>
+
+</ul>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"><p>If one or more end-point scaling arrays are not specified,
+the values are inferred from their associated table values. For <a href="../ecl_rm/sgu_SGU_ISGU.html#sgu_sgu_isgu">  SGU</a> this can lead to differences between ECLIPSE 100 and ECLIPSE
+300 in cases where the maximum gas saturation table entry is less
+than  <math><mrow><mo>(</mo>
+<mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow>
+</msub><mo>-</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>o</mi><mi>g</mi><mi>c</mi><mi>o</mi></mrow>
+</msub></mrow><mo>)</mo></mrow></math>. This is because
+ECLIPSE 100 uses the maximum gas saturation table entry value whereas
+ECLIPSE 300 calculates the maximum gas saturation according to  <math><mrow><mo>(</mo>
+<mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow>
+</msub><mo>-</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>o</mi><mi>g</mi><mi>c</mi><mi>o</mi></mrow>
+</msub></mrow><mo>)</mo></mrow></math>. The ECLIPSE 100 
+behaviour, however, can be replicated in ECLIPSE 300 by setting <a href="../ecl_rm/OPTIONS3.html#options3.357">item 357</a> of the 
+<span class="keyword">OPTIONS3</span> keyword to 1.</p>
+</span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

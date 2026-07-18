@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The IMPES and AIM methods"/>
+<meta name="DC.subject" content="Formulation and solution of the equations, Formulation of equations, IMPES method, AIM method"/>
+<meta name="keywords" content="Formulation and solution of the equations, Formulation of equations, IMPES method, AIM method"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="formulate_the_impes_and_aim_methods"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The IMPES and AIM methods</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="formulate_the_impes_and_aim_methods"><a name="formulate_the_impes_and_aim_methods"><!-- --></a>
+<h1 class="topictitle1">The IMPES and AIM methods</h1>
+
+
+ <div>
+<p>The IMPES (IMplicit Pressures Explicit Saturations) residual is
+similar to the fully implicit residual except that all flow and well
+terms are computed using saturations (or R<sub>s</sub>, R<sub>v</sub>) in a black oil run; or molar densities in a compositional run at
+the beginning of each timestep.</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="formulate.equ.00f0"/>
+ <math><mrow><mi>R</mi>
+<mo>=</mo><mfrac><mrow><msub><mrow><mi>M</mi></mrow>
+<mrow><mi>t</mi><mo>+</mo><mi>d</mi><mi>t</mi>
+</mrow></msub><mrow><mtext> </mtext><mo>-</mo><mtext> </mtext><msub><mrow><mi>M</mi></mrow><mrow><mi>t</mi>
+</mrow></msub></mrow></mrow><mrow><mi>d</mi><mi>t</mi>
+</mrow></mfrac><mo>+</mo><mrow><mrow><mi>F</mi></mrow>
+<mo>⁡</mo><mrow><mrow><mrow><mo>(</mo><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>t</mi><mo>+</mo><mi>d</mi>
+<mi>t</mi><mrow><mtext> </mtext></mrow></mrow>
+</msub><mo>,</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>t</mi><mtext> </mtext></mrow></msub><mo>)</mo>
+</mrow></mrow></mrow></mrow><mo>+</mo><mrow><mrow><mi>Q</mi></mrow><mo>⁡</mo><mrow><mrow><mrow><mo>(</mo>
+<msub><mrow><mi>P</mi></mrow><mrow><mi>t</mi><mo>+</mo><mi>d</mi><mi>t</mi></mrow></msub><mo>,</mo>
+<msub><mrow><mtext> </mtext><mi>S</mi></mrow><mrow>
+<mi>t</mi><mtext> </mtext></mrow></msub><mo>)</mo>
+</mrow></mrow></mrow></mrow><mtext> </mtext></mrow>
+</math> 
+</td><td align="right">[Eq. 659.1]
+              </td></tr></tbody></table>
+<p>The mass terms  <math><mrow><msub><mrow>
+<mi>M</mi></mrow><mrow><mi>t</mi><mo>+</mo><mi>d</mi>
+<mi>t</mi></mrow></msub></mrow></math> are evaluated using
+both pressures and saturations at the end of the timestep. This makes
+the non-linear residual equation, R = 0 much easier to solve because
+there are now no non-linearities arising from relative permeabilities
+that remain fixed throughout the timestep. However, to solve the IMPES
+equations correctly it is still necessary to iterate until all residuals
+have been reduced to a sufficiently small value.</p>
+
+<p>The linear equations arising from Newton’s method are also
+much easier to solve in the IMPES case because derivatives of flows
+with respect to saturations are zero. The linear equations are solved
+sequentially, first for pressure and subsequently for saturation changes.
+This contrasts with the fully implicit method where the linear equations
+must be solved simultaneously.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>Timesteps are chosen automatically to limit
+saturation changes to 5%. However a converged timestep is accepted
+if the largest saturation change is less than 10% and if the largest
+pressure change is less than 200 psi. These values may be altered
+using keyword <a href="../ecl_rm/DIMPES.html#DIMPES">DIMPES</a>.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>Timesteps are chosen automatically to limit
+saturation changes to 5%. The default timestep selection may be modified
+using the <a href="../ecl_rm/TSCRIT.html#TSCRIT">TSCRIT</a> keyword.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>In ECLIPSE 300, the IMPES formulation is strictly
+an IMPEM (IMplicit Pressure Explicit Mobility) method. The mass terms
+ <math><mrow><msub><mrow>
+<mi>M</mi></mrow><mrow><mi>t</mi><mo>+</mo><mi>d</mi>
+<mi>t</mi></mrow></msub></mrow></math> are evaluated using
+both pressures and molar densities at the end of the timestep. The
+flow terms between cells are evaluated assuming the saturations, generalized
+mobilities and reservoir density terms are all fixed at the previous
+timestep.</p>
+
+<div class="section" id="formulate_aim"><a name="formulate_aim"><!-- --></a><h4 class="sectiontitle">AIM</h4><p>ECLIPSE 300</p>
+<p>The Adaptive IMplicit method
+(<a href="../ecl_rm/AIM.html#AIM">AIM</a>) is a compromise between
+the fully implicit and IMPES procedures. Cells with a high throughput
+ratio are chosen to be implicit for stability and to obtain large
+timesteps, while the majority of cells can still be treated as IMPES
+where the solution may be changing little. All completions are treated
+implicitly. The target fraction of implicit cells in a compositional
+run is 1%, but this can be altered by the <a href="../ecl_rm/AIMFRAC.html#AIMFRAC">AIMFRAC</a> keyword.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

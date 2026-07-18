@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Calculating flow targets for wells under group control"/>
+<meta name="DC.subject" content="Well modeling flow targets for wells under group control"/>
+<meta name="keywords" content="Well modeling flow targets for wells under group control"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wellmode_calculating_flow_targets_for_wells_under_group_control"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Calculating flow targets for wells under group control</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wellmode_calculating_flow_targets_for_wells_under_group_control"><a name="wellmode_calculating_flow_targets_for_wells_under_group_control"><!-- --></a>
+<h1 class="topictitle1">Calculating flow targets for wells under group control</h1>
+
+
+ <div>
+<p>When any form of group control option is being used (keywords <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a>, <a href="../ecl_rm/GCONPRI.html#GCONPRI">GCONPRI</a>, <a href="../ecl_rm/GCONINJE.html#GCONINJE">GCONINJE</a> and <a href="../ecl_rm/GCONSALE.html#GCONSALE">GCONSALE</a>), the flow targets
+of certain wells are directly influenced by the behavior of other
+wells in the field. For example, the target rates of producers under
+group control must allow for the production from wells that are under
+other modes of control within the group. Also injection wells performing
+reinjection or voidage replacement have flow targets that depend on
+the behavior of the production wells.</p>
+
+<p>For the group targets to be met exactly, the flow targets of the
+wells under group control must be recalculated at every Newton iteration.
+But when the well flow targets change at each iteration, the convergence
+rate of the iterations is reduced. This is because the Jacobian matrix
+calculation does not include the terms representing the mutual dependency
+of the well rates.</p>
+
+<p>As a compromise, the well flow targets are updated in the first <span class="keyword">NUPCOL</span> Newton iterations of each timestep, and are kept
+constant for any subsequent iterations. (<span class="keyword">NUPCOL</span>’s value is initialized by keyword <a href="../ecl_rm/NUPCOL.html#NUPCOL">NUPCOL</a> in the <span class="keyword">RUNSPEC</span> section, and can be reset at any time in the simulation with keyword <span class="keyword">NUPCOL</span> or <a href="../ecl_rm/GCONTOL.html#GCONTOL">GCONTOL</a> in the <span class="keyword">SCHEDULE</span> section.) Thus the group/field
+flow targets will be met exactly if the timestep converges within <span class="keyword">NUPCOL</span> iterations. Any changes in the solution after the
+first <span class="keyword">NUPCOL</span> iterations may cause the group/field
+flow rates to drift slightly away from their targets. In general,
+larger values of <span class="keyword">NUPCOL</span> will result in the group/field
+flow targets being met more accurately, but perhaps at the expense
+of requiring more Newton iterations to achieve convergence.</p>
+
+<p>ECLIPSE 100                    </p>
+
+<p>The discrepancy between a group/field flow
+target and its actual flow rate can be limited to within a specified
+tolerance fraction by using the keyword <span class="keyword">GCONTOL</span>. If a flow target is not met to within this tolerance, when there
+is sufficient capacity to meet the target, the well flow rates are
+recalculated to meet that target regardless of the value of <span class="keyword">NUPCOL</span>.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

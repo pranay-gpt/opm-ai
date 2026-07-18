@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="MEMSAVE"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="MEMSAVE"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>MEMSAVE</title>
+</head>
+<body>
+
+
+<div class="nested0" id="MEMSAVE"><a name="MEMSAVE"><!-- --></a>
+<h1 class="keyword">MEMSAVE</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="memsave.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="memsave.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1364e45">                                             
+ </th>
+
+<th valign="top" id="d1364e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1364e54">                         x                   
+  </th>
+
+<th valign="top" id="d1364e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1364e45 d1364e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d1364e48 d1364e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1364e45 d1364e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1364e48 d1364e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1364e45 d1364e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1364e48 d1364e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1364e45 d1364e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1364e48 d1364e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1364e45 d1364e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1364e48 d1364e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1364e45 d1364e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1364e48 d1364e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1364e45 d1364e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1364e48 d1364e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1364e45 d1364e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1364e48 d1364e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The up-front memory option can only be used if you already know
+the active cell information when building a data set.</p>
+
+<div class="p">There are 2 different ways this option may be used:<ol>
+<li>The <a href="ACTNUM.html#ACTNUM"> ACTNUM</a> keyword
+and its data must be supplied at the very top of the <span class="keyword">GRID</span> section before the grid properties have been specified.</li>
+
+<li>Use the <a href="GDFILE.html#GDFILE"> GDFILE</a> keyword to import an extensible grid file. Only . <samp class="codeph">EGRID</samp> files can be imported as this grid file contains the necessary active
+cell information required to use this option. The <samp class="codeph">GDFILE</samp> keyword, together with the imported filename, must be specified
+at the very top of the <span class="keyword">GRID</span> section.</li>
+
+</ol>
+</div>
+
+<p>Local grid refinement option. If a deck contains local grid refinements,
+it is important that the LGR data, including any <span class="keyword">ACTNUM</span> information, be specified very early on in the <span class="keyword">GRID</span> section, otherwise grid property arrays will not be set up properly.</p>
+
+<p>To compute grid properties, such as pore volume and transmissibility,
+ECLIPSE will focus on the active cells only. This is especially important
+for large models that have difficulty processing the <span class="keyword">GRID</span> section, and reaching the <span class="keyword">PROPS</span> section.</p>
+
+<p><span class="keyword">MEMSAVE</span> contains no items.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Not all runs will benefit from using this keyword. For instance,
+simulation runs that could benefit are data sets with a low ratio of
+active cells to total number of grid cells; decks using <a href="EQUALS.html#EQUALS"> EQUALS</a> / <a href="ADD.html#ADD"> ADD</a> / <a href="MULTIPLY.html#MULTIPLY"> MULTIPLY</a> / <a href="COPY.html#COPY"> COPY</a> to define grid properties like <a href="PORO.html#PORO"> PORO</a>, <a href="PERMX.html#PERMX"> PERMX</a>, for example.</span></div>
+
+<div class="section" id="memsave_current_restrictions"><a name="memsave_current_restrictions"><!-- --></a><h4 class="sectiontitle">Current restrictions</h4> <p>If any of the following keywords are present in a data set, then
+the simulator will turn the up-front memory option off: <a href="AQUDIMS.html#AQUDIMS"> AQUDIMS</a>, <a href="CONDFLTS.html#CONDFLTS"> CONDFLTS</a>, <a href="COAL.html#COAL"> COAL</a>, <a href="COARSEN.html#COARSEN"> COARSEN</a>, <a href="DUALPORO.html#DUALPORO"> DUALPORO</a>, <a href="EXTFIN.html#EXTFIN"> EXTFIN</a>, <a href="FLUXNUM.html#FLUXNUM"> FLUXNUM</a>, <a href="HMDIMS.html#HMDIMS"> HMDIMS</a>, <a href="MPFA.html#MPFA"> MPFA</a>, <a href="NINEPOIN.html#NINEPOIN"> NINEPOIN</a>, <a href="PARALLEL.html#PARALLEL"> PARALLEL</a>, <a href="PEBI.html#PEBI"> PEBI</a>, <a href="SOLVDIMS.html#SOLVDIMS"> SOLVDIMS</a>, <a href="THERMAL.html#THERMAL"> THERMAL</a>, <a href="USEFLUX.html#USEFLUX"> USEFLUX</a>, <a href="VDFLOW.html#VDFLOW"> VDFLOW</a>, <a href="VDKRO.html#VDKRO"> VDKRO</a>, <a href="VDKRG.html#VDKRG"> VDKRG</a> </p>
+<p>For any of the above options,
+a warning message will be output, and the run will continue as normal.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

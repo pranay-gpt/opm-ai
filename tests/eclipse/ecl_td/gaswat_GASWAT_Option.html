@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GASWAT option"/>
+<meta name="DC.subject" content="Salinity, GASWAT, GASWAT option"/>
+<meta name="keywords" content="Salinity, GASWAT, GASWAT option"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gaswat_gaswat_option"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GASWAT option</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gaswat_gaswat_option"><a name="gaswat_gaswat_option"><!-- --></a>
+<h1 class="keyword">GASWAT option</h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gaswat.tab.0009"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gaswat.tab.0009" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> </td>
+
+<td valign="top">                         ECLIPSE 100         
+            </td>
+
+</tr>
+
+<tr>
+<td valign="top">                         x                   
+  </td>
+
+<td valign="top">                         ECLIPSE 300         
+            </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">GASWAT</span> option in ECLIPSE 300 provides a
+method of modeling gas phase/aqueous phase equilibria using an equation
+of state. The Peng Robinson equation of state is modified following
+the suggestions of <cite><span> <a href="biblio_Bibliography.html#biblio_69506">Soreide and Whitson (1992)</a> </span></cite> to obtain accurate gas solubilities in the aqueous phase.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The <span class="keyword">GASWAT</span> option is two-phase only. By using
+it, the gas and water phases are implicitly requested. It is not possible
+to model the oil phase while using this option. If the <a href="../ecl_rm/GASWAT.html#GASWAT">GASWAT</a> keyword is present,
+then the <a href="../ecl_rm/OIL.html#OIL">OIL</a>, <a href="../ecl_rm/WATER.html#WATER">WATER</a> and <a href="../ecl_rm/GAS.html#GAS">GAS</a> keywords are not necessary and will be ignored. </span></div>
+
+<p>The temperature of the reservoir may vary with depth, and this
+is reflected in the equation of state treatment, in which temperature
+coefficients are stored to be combined with the temperature of each
+cell. A global salinity value may be entered to correct the default
+equation of state modifications for brine concentration. You can override
+equation of state coefficients.</p>
+
+<p>The <span class="keyword">GASWAT</span> option also allows molar calorific
+values to be entered under the <a href="../ecl_rm/CALVAL.html#CALVAL">CALVAL</a> or <a href="../ecl_rm/CALVALR.html#CALVALR">CALVALR</a> keywords. Gas qualities, calorific production rates and calorific
+production totals for wells and groups are calculated and reported.
+A group can be given a quality target using the <a href="../ecl_rm/GQUALITY.html#GQUALITY">GQUALITY</a> keyword - quality
+is here defined as calorific value per mole of gas. The group control
+algorithm will attempt to meet this quality target by distributing
+production between wells of better and worse quality.</p>
+
+<p>The reservoir may be equilibrated with a single phase present or
+with an initial gas-water contact. In the latter case the condition
+that the two phases are in equilibrium at the contact is honored -
+you specify the composition of one of the phases and the program obtains
+the composition of the other from the equilibrium condition.</p>
+
+<p>A number of new summary items have been added so that calorific
+production rates, calorific production totals and quality values may
+be obtained for wells, groups and the field.</p>
+
+<p>The water analytic aquifers are dealt with in the same way as in
+the CO2STORE option. Refer to <a href="co2seq_The_CO2STORE_option.html#co2seq_analytic_water_aquifers"> "Analytic water aquifers"</a>.</p>
+
+<p>The determination of single phase as gas or water use a simplified
+criteria. If the temperature is less than the pseudo critical temperature,
+as computed by the Li criteria, see keyword <a href="../ecl_rm/FACTLI.html#FACTLI">FACTLI</a>, and the phase contains
+mostly H<sub>2</sub>O, the phase is labeled water otherwise gas. It
+is possible to activate the pre-2008.1 behavior by setting <a href="../ecl_rm/OPTIONS3.html#options3.146">item 146</a> to 6
+in the <span class="keyword">OPTIONS3</span> keyword. Also the flash will treat
+H<sub>2</sub>O as the heaviest component unless <a href="../ecl_rm/OPTIONS3.html#options3.125">item 125</a> in <span class="keyword">OPTIONS3</span> is set to -1.</p>
+
+<p>Note that the default density and viscosity calculations for water
+with solutes may be replaced by Ezrokhi’s method, the latter also
+used in conjunction with <a href="../ecl_rm/CO2STORE.html#CO2STORE">CO2STORE</a> and <a href="../ecl_rm/GASSOL.html#GASSOL">GASSOL</a>. This is done by adding the keywords <a href="../ecl_rm/DENAQA.html#DENAQA">DENAQA</a> and <a href="../ecl_rm/VISCAQA.html#VISCAQA">VISCAQA</a> respectively for density
+and viscosity, and specifying the Ezrokhi temperature coefficients
+for each component.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

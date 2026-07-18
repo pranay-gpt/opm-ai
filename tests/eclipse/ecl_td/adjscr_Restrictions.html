@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Restrictions"/>
+<meta name="DC.subject" content="Optimization, Adjoint gradient restrictions"/>
+<meta name="keywords" content="Optimization, Adjoint gradient restrictions"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="adjscr_restrictions"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Restrictions</title>
+</head>
+<body>
+
+
+<div class="nested0" id="adjscr_restrictions"><a name="adjscr_restrictions"><!-- --></a>
+<h1 class="topictitle1">Restrictions</h1>
+
+
+ <div>
+<p>This section lists the current restrictions and known limitations
+of the option.</p>
+
+<ul>
+<li> This option is only available in ECLIPSE 300. </li>
+
+<li> This option cannot be used with the <a href="../ecl_rm/PARALLEL.html#PARALLEL"> PARALLEL</a> option. </li>
+
+<li> This option is not compatible with <a href="../ecl_rm/IMPES.html#IMPES"> IMPES</a>, <a href="../ecl_rm/IMPSAT.html#IMPSAT"> IMPSAT</a> or <a href="../ecl_rm/AIM.html#AIM"> AIM</a> solution methods. The <a href="../ecl_rm/FULLIMP.html#FULLIMP"> FULLIMP</a> solution method must be used. </li>
+
+<li> This option cannot be used with reservoir optimization (see the <a href="../ecl_rm/RESOPT.html#RESOPT"> RESOPT</a> keyword). </li>
+
+<li> The current version requires multiple restart files format (see
+the <a href="../ecl_rm/MULTOUT.html#MULTOUT"> MULTOUT</a> keyword). Also, restart information must be saved at every
+report step using the <samp class="codeph">BASIC=2</samp> or <samp class="codeph">BASIC=6</samp> options in <a href="../ecl_rm/RPTRST.html#RPTRST"> RPTRST</a> keyword. </li>
+
+<li> In order for visualization of adjoint gradient properties to
+be available in post-processing programs such as ECLIPSE Office Results
+Viewer, FloViz or Petrel, the current version of ECLIPSE 300 requires
+that a restart index file (which has an <samp class="codeph">RSSPEC</samp> extension)
+is <strong>not</strong> written out. For this reason, the presence of the <a href="../ecl_rm/AJGRADNT.html#AJGRADNT"> AJGRADNT</a> keyword automatically turns on <a href="../ecl_rm/NORSSPEC.html#NORSSPEC"> NORSSPEC</a>. </li>
+
+<li> The option does not allow adjoint gradient calculations for wells
+under reservoir voidage rate or THP control, or wells under active
+group control (see the <a href="../ecl_rm/WCONPROD.html#WCONPROD"> WCONPROD</a> keyword). </li>
+
+<li> Simulation grids with non-neighbor connections cannot be used
+(for instance, simulation models containing faults, numerical aquifers,
+local refinement or coarsening, and dual-porosity). It is advisable to
+explicitly use <a href="../ecl_rm/NONNC.html#NONNC">NONNC</a> keyword in the <span class="keyword">RUNSPEC</span> section. </li>
+
+<li> Any well used for objective function definition must be on a
+surface rate or bottom-hole pressure control during the entire simulation
+run. When a requested dynamic parameter is used as well control, or
+the well is shut or stopped, the derivative is set to zero. </li>
+
+</ul>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

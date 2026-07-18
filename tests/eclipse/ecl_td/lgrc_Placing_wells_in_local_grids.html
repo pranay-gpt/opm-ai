@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Placing wells in local grids"/>
+<meta name="DC.subject" content="Local grid refinement"/>
+<meta name="keywords" content="Local grid refinement"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrc_placing_wells_in_local_grids"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Placing wells in local grids</title>
+</head>
+<body>
+
+
+<div class="nested0" id="lgrc_placing_wells_in_local_grids"><a name="lgrc_placing_wells_in_local_grids"><!-- --></a>
+<h1 class="topictitle1">Placing wells in local grids</h1>
+
+
+ <div>
+<p>To place a well in a local grid, use keywords <a href="../ecl_rm/WELSPECL.html#WELSPECL">WELSPECL</a> and <a href="../ecl_rm/COMPDATL.html#COMPDATL">COMPDATL</a> instead of <a href="../ecl_rm/WELSPECS.html#WELSPECS">WELSPECS</a> and <a href="../ecl_rm/COMPDAT.html#COMPDAT">COMPDAT</a>. <span class="keyword">WELSPECL</span> is similar to <span class="keyword">WELSPECS</span> except that there is an
+additional item - the name of the local grid - between the group name
+and the I-J location. <span class="keyword">COMPDATL</span> has exactly the
+same items as <span class="keyword">COMPDAT</span>. In these keywords the I,
+J and K locations of the wellhead and the connecting cells refer to
+the cell coordinates in the local grid system. The I and J locations
+of the connecting cells must be entered explicitly in <span class="keyword">COMPDATL</span>, and should not be defaulted as they can be in <span class="keyword">COMPDAT</span>.</p>
+
+<p>To complete well <samp class="codeph">PRODUCER</samp> in layers 9 to 11 of
+the refined grid named <samp class="codeph">'SOUTH'</samp>, in all four theta
+sections of the innermost block:</p>
+
+<pre><code>WELSPECL
+ --   WELL   -- GROUP -- LOCAL GRID -- LOCATION --  BHP  --  PREF
+ --   NAME   -- NAME  --    NAME    --  I   J   -- DEPTH --  PHASE
+  'PRODUCER'    'G'       'SOUTH'       1    1      8060     'OIL'  /
+ /
+COMPDATL
+ --   WELL   --   LOCAL  --   LOCATION   --  OPEN  -- SAT -- CONN -- WELL
+ --   NAME   --   GRID      IX JY  K1 K2 --  SHUT  -- TAB -- FACT -- DIAM
+  'PRODUCER'      'SOUTH'   1  1   9  11    'OPEN'     0      -1     0.4  /
+  'PRODUCER'      'SOUTH'   1  2   9  11    'OPEN'     0      -1     0.4  /
+  'PRODUCER'      'SOUTH'   1  3   9  11    'OPEN'     0      -1     0.4  /
+  'PRODUCER'      'SOUTH'   1  4   9  11    'OPEN'     0      -1     0.4  /
+ /</code></pre>
+<p>ECLIPSE 300 allows wells to be completed in any combination of
+local grids. With ECLIPSE 100 a well cannot be completed in a cell
+outside its local grid. However, it is possible to complete a single
+well in two or more Cartesian local grids by amalgamating these grids
+into a single entity (see <a href="lgrc_amalgamating_cartesian_local_grids__eclipse__100_.html#lgrc_amalgamating_cartesian_local_grids__eclipse__100_"> "Amalgamating Cartesian local grids (ECLIPSE 100)"</a>).</p>
+
+<p>Wells not completed in local grid systems should have their specification
+and connection data set with the keywords <span class="keyword">WELSPECS</span> and <span class="keyword">COMPDAT</span> as normal. ECLIPSE checks that these
+wells are not completed in a cell that is host to a refined grid system.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

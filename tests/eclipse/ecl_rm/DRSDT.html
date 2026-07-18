@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="DRSDT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="DRSDT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>DRSDT</title>
+</head>
+<body>
+
+
+<div class="nested0" id="DRSDT"><a name="DRSDT"><!-- --></a>
+<h1 class="keyword">DRSDT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="drsdt.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="drsdt.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d514e45">                         x                   
+  </th>
+
+<th valign="top" id="d514e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d514e54">                                             
+ </th>
+
+<th valign="top" id="d514e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d514e45 d514e54 ">                                             
+ </td>
+
+<td valign="top" headers="d514e48 d514e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d514e45 d514e54 ">                                             
+ </td>
+
+<td valign="top" headers="d514e48 d514e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d514e45 d514e54 ">                                             
+ </td>
+
+<td valign="top" headers="d514e48 d514e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d514e45 d514e54 ">                                             
+ </td>
+
+<td valign="top" headers="d514e48 d514e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d514e45 d514e54 ">                                             
+ </td>
+
+<td valign="top" headers="d514e48 d514e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d514e45 d514e54 ">                                             
+ </td>
+
+<td valign="top" headers="d514e48 d514e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d514e45 d514e54 ">                                             
+ </td>
+
+<td valign="top" headers="d514e48 d514e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d514e45 d514e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d514e48 d514e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword controls the rate at which the solution gas-oil ratio
+is allowed to rise. The keyword should be followed by some or all
+of the following items data terminated by a slash (/):</p>
+
+<ol>
+<li> <samp class="codeph">DRSDT</samp> Represents the maximum rate at which the
+solution gas-oil ratio in any grid block (R<sub>s</sub>) is allowed
+to increase.<p>UNITS: sm<sup>3</sup>/sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), Mscf/stb/day (<samp class="codeph">FIELD</samp>), scc/scc/hr (<samp class="codeph">LAB</samp>)</p>
+</li>
+
+<li>Option flag
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">ALL</samp> </td>
+
+<td valign="top">Apply the <span class="keyword">DRSDT</span> limit to all cells</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">FREE</samp> </td>
+
+<td valign="top">Apply the <span class="keyword">DRSDT</span> limit only to cells containing
+free gas</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: '<samp class="codeph">ALL</samp>'</p>
+</li>
+
+</ol>
+
+<p>This keyword controls the way in which free gas and undersaturated
+oil coexist within a grid block. For example, if <span class="keyword">DRSDT</span> is set to 0, R<sub>s</sub> cannot rise and free gas does not dissolve
+in undersaturated oil (no re-solution). At the other extreme, if <span class="keyword">DRSDT</span> is very large, R<sub>s</sub> rises very quickly until
+either the oil is saturated or no free gas remains (total re-solution).</p>
+
+<p>If the keyword is not used, the resolution rate is unrestricted
+(equivalent to a resolution rate limit of infinity).</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">This keyword has no effect on reductions in R<sub>s</sub> (for
+example during pressure decline). Moreover increases in R<sub>s</sub> are constrained by the availability of free gas and the oil saturation
+limit (R<sub>ssat</sub>).          </span></div>
+
+<p>If this keyword is used in a system containing both dissolved gas
+and vaporized oil, the application of the <span class="keyword">DRSDT</span> limit will be disabled by the subsequent use of the <a href="VAPPARS.html#VAPPARS"> VAPPARS</a> keyword. Similarly,
+the constraints imposed by the <span class="keyword">VAPPARS</span> keyword
+will be disabled by the subsequent specification of the <span class="keyword">DRSDT</span> keyword.</p>
+
+<p>If <span class="keyword">DRSDT</span> = 0 and the model contains undersaturated
+oil with a variation of R<sub>s</sub> values, then non-physical behavior
+can occur when high R<sub>s</sub> oil moves in to a cell containing
+a lower R<sub>s</sub>. The <span class="keyword">DRSDT</span> limit prevents
+the R<sub>s</sub> increasing, and free gas develops, even though the
+oil is undersaturated. This behavior can be prevented by setting the
+option flag in item 2 to '<samp class="codeph">FREE</samp>'. The <span class="keyword">DRSDT</span> limit then only applies to the two-phase regions. (Note that in
+this case gas flowing from a two-phase cell into an undersaturated
+cell will dissolve in the destination cell, as the R<sub>s</sub> is
+allowed to rise.)</p>
+
+<div class="section" id="drsdt_example"><a name="drsdt_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>DRSDT
+ 0.0003 /   (in Mscf/stb/day)</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Radial refinement in a single column"/>
+<meta name="DC.subject" content="Local grid refinement, Radial"/>
+<meta name="keywords" content="Local grid refinement, Radial"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrc_radial_refinement_in_a_single_column"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Radial refinement in a single column</title>
+</head>
+<body>
+
+
+<div class="nested0" id="lgrc_radial_refinement_in_a_single_column"><a name="lgrc_radial_refinement_in_a_single_column"><!-- --></a>
+<h1 class="topictitle1">Radial refinement in a single column</h1>
+
+
+ <div>
+<p>To refine column (I=7, J=8) in layers 3 to 5 inclusive with a 3D
+radial grid with 6 radial segments, 4 angular segments and 18 vertical
+segments use:</p>
+
+<pre><code>RADFIN
+-- NAME    I J K1 K2 NR NTHETA NZ  NWMAX
+ 'SOUTH'   7 8  3  5  6   4    18 /
+INRAD 
+ 0.2 /
+ENDFIN</code></pre>
+<p>in the <span class="keyword">GRID</span> section. This inserts a local grid
+with 6*4*18 = 432 cells. The <a href="../ecl_rm/INRAD.html#INRAD">INRAD</a> keyword specifies the inner radius of the innermost block
+of the radial refinement.</p>
+
+<p>This creates a refinement that looks like the following figure.</p>
+
+<div class="fignone" id="lgrc.XID-0000003a"><a name="lgrc.XID-0000003a"><!-- --></a>
+
+ <br/><img src="../img/lgr1.png" width="177px"/><br/> 
+<br/><span class="figcap">
+           Figure 29.1  Single column radial grid refinement</span></div>
+
+<p>Alternatively it is possible to use a two-dimensional model with <samp class="codeph">NTHETA</samp> =1 that looks like the following figure.</p>
+
+<div class="fignone" id="lgrc.XID-00000042"><a name="lgrc.XID-00000042"><!-- --></a>
+
+ <br/><img src="../img/lgr2.png" width="188px"/><br/> 
+<br/><span class="figcap">
+           Figure 29.2  Single column radial grid refinement with NTHETA=1</span></div>
+
+<p>By default, non-neighbor connections are generated automatically
+within the local grid to complete the circle connecting angular segment <samp class="codeph">ITHETA</samp> =1 to <samp class="codeph">ITHETA</samp> =4, unless circle completion
+is specifically disallowed by specifying ‘ <samp class="codeph">INCOMP</samp>'
+in item 3 of the <a href="../ecl_rm/COORDSYS.html#COORDSYS">COORDSYS</a> keyword entered between the <a href="../ecl_rm/RADFIN.html#RADFIN">RADFIN</a> and <a href="../ecl_rm/ENDFIN.html#ENDFIN">ENDFIN</a> keywords. The <span class="keyword">ENDFIN</span> keyword tells ECLIPSE to finish reading <span class="keyword">GRID</span> data for the local grid and to continue reading <span class="keyword">GRID</span> data for the global grid. The permitted values of <samp class="codeph">NTHETA</samp> (the number of angular segments) are 1 for 2D radial
+refinements and 4 for 3D radial refinements. <samp class="codeph">NWMAX</samp> is the maximum number of wells in the refinement. If <samp class="codeph">NWMAX</samp> is not specified it is defaulted to 1, which is the normal value
+in a radial refinement.</p>
+
+<p>To reserve memory for the refinement, set <samp class="codeph">MAXLGR=1</samp> and <samp class="codeph">MAXCLS=432</samp> in the keyword <a href="../ecl_rm/LGR.html#LGR">LGR</a> in the <span class="keyword">RUNSPEC</span> section,
+for example:</p>
+
+<pre><code>LGR
+ --MAXLGR  MAXCLS
+      4      432 /</code></pre>
+<p>where <samp class="codeph">MAXLGR</samp> is the maximum number of local grid
+refinements and <samp class="codeph">MAXCLS</samp> is the maximum number of cells
+in any local grid.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

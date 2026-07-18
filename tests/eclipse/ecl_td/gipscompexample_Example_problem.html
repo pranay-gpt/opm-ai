@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Example problem"/>
+<meta name="DC.subject" content="GI pseudo-compositional, Example"/>
+<meta name="keywords" content="GI pseudo-compositional, Example"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gipscompexample_example_problem"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Example problem</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gipscompexample_example_problem"><a name="gipscompexample_example_problem"><!-- --></a>
+<h1 class="topictitle1">Example problem</h1>
+
+
+ <div>
+<p>This problem illustrates the use of the option. The grid is one
+dimensional and the initial fluids consist of connate water and a
+volatile undersaturated oil. Injection of dry gas begins at t=0 in
+grid cell (1,1). The production well completed in cell (15,1) operates
+at constant BHP.</p>
+
+<div class="section" id="gipscompexample_runspec"><a name="gipscompexample_runspec"><!-- --></a><h4 class="sectiontitle">RUNSPEC</h4><pre><code>RUNSPEC
+TITLE
+ 1D Test Case - Volatile Oil Model - Gi Model Activated 
+
+DIMENS
+ 15    1    1  /
+
+NONNC
+OIL
+WATER
+GAS
+DISGAS
+VAPOIL
+GIMODEL
+METRIC
+
+EQLDIMS
+ 1  100   20    1    1 /
+
+ENDSCALE
+ 'NODIR'    'REVERS'       1    1  / 
+
+TABDIMS
+ 1    1   20   30    1   40 /
+
+WELLDIMS
+2    4    1    2 / 
+
+START
+ 1 'JAN' 1987  /</code></pre></div>
+
+<div class="section" id="gipscompexample_grid"><a name="gipscompexample_grid"><!-- --></a><h4 class="sectiontitle">GRID</h4><pre><code>GRID  ==============================================================
+NOGGF
+
+EQUALS                      
+ 'DX' 100.0  /                                                            
+ 'DY' 100.0  /                                                            
+ 'DZ' 10.0   /                                                            
+ 'TOPS' 3995.0 /
+ 'PORO' 0.25   / 
+ 'PERMX' 200.0  / 
+/
+
+RPTGRID 
+ 'DX'  'DY'  'DZ'  'PERMX'  'PERMY'  'PERMZ'  'MULTX'
+ 'MULTY'  'MULTZ'  'PORO'  'NTG'  'TOPS'  'PORV'
+ 'DEPTH'  'TRANX'  'TRANY'  'TRANZ'  'COORDSYS'  /</code></pre></div>
+
+<div class="section" id="gipscompexample_props"><a name="gipscompexample_props"><!-- --></a><h4 class="sectiontitle">PROPS</h4><pre><code>PROPS   ============================================================
+PVTW 
+ 408.70000   1.05200   5.00E-5   0.26000   0.00E+00 /</code></pre><p>The following <a href="../ecl_rm/PVTG.html#PVTG">PVTG</a> table describes the wet gas properties corresponding to
+Gi=0. The saturated gas properties depend only on pressure in the
+usual way.</p>
+<pre><code>PVTG                                                               
+     11.40   0.00057098   0.134826   0.01316 / 
+     49.20   0.00018704   0.028395   0.01534 / 
+    107.50   0.00015314   0.012619   0.01765 / 
+    154.00   0.00018098   0.008819   0.01994 / 
+    207.30   0.00024415   0.006699   0.02343 / 
+    248.00   0.00031469   0.005778   0.02685 / 
+    275.00   0.00037429   0.005357   0.02957 / 
+    304.30   0.00045362   0.005019   0.03306 / 
+    330.00   0.00053982   0.004806   0.03675 / 
+    344.09   0.00058662   0.004713   0.03890 / 
+    358.09   0.00062914   0.004632   0.04096 / 
+    371.27   0.00067040   0.004566   0.04301 / 
+
+    383.69   0.00071060   0.004514   0.04507 / 
+    395.41   0.00075159   0.004472   0.04717 /
+    406.48   0.00079051   0.004439   0.04925 /
+    416.96   0.00082863   0.004413   0.05134 /
+    426.88   0.00086703   0.004393   0.05348 /
+    436.29   0.00090351   0.004378   0.05560 /
+    445.21   0.00093977   0.004366   0.05775 /
+    453.68   0.00097372   0.004358   0.05986
+             0.00064914   0.004119   0.04974
+             0.00032457   0.003904   0.04034
+             0.00000000   0.003718   0.03230 /
+/</code></pre><p>The following <a href="../ecl_rm/PVTO.html#PVTO">PVTO</a> table describes the live oil properties corresponding to
+Gi=0. The saturated oil properties depend only on pressure in the
+usual way.</p>
+<pre><code>PVTO
+    3.02    11.40   1.095   0.71545  /
+   24.84    49.20   1.179   0.57933  /
+   56.57   107.50   1.284   0.44463  /
+   83.57   154.00   1.367   0.36695  /
+  120.00   207.30   1.476   0.29689  /
+  153.30   248.00   1.575   0.25293  /
+  179.05   275.00   1.652   0.22707  /
+  211.49   304.30   1.749   0.20134  /
+  245.23   330.00   1.850   0.18027  /
+  266.64   344.09   1.915   0.16908
+           445.41   1.840   0.18829
+           546.74   1.785   0.2062   /
+  284.74   358.09   1.966   0.16218  /
+  302.84   371.27   2.017   0.15597  /
+  320.95   383.69   2.068   0.15036  /
+  339.05   395.41   2.119   0.14527  /
+  357.15   406.48   2.170   0.14063  /
+  375.25   416.96   2.220   0.13638  /
+  393.35   426.88   2.271   0.13248  /
+  411.45   436.29   2.322   0.12888  /
+  429.55   445.21   2.373   0.12555  /
+  447.65   453.68   2.423   0.12246
+           555.01   2.322   0.13498
+           656.33   2.246   0.14656  /
+/</code></pre><p>The Gi node values to be used in the specifying the
+data points in the <a href="../ecl_rm/RSGI.html#RSGI">RSGI</a>, <a href="../ecl_rm/RVGI.html#RVGI">RVGI</a>, <a href="../ecl_rm/BOGI.html#BOGI">BOGI</a> and <a href="../ecl_rm/BGGI.html#BGGI">BGGI</a> keywords are defined using the <a href="../ecl_rm/GINODE.html#GINODE">GINODE</a> keyword</p>
+<pre><code>GINODE
+    0.0
+   10.0
+   20.0
+   40.0
+  120.0
+  200.0
+  300.0
+  500.0
+  800.0
+/</code></pre><p><span class="keyword">RVGI</span>    defines the variation of
+saturated oil-gas values with pressure and Gi. Note that the entries
+in this table represent multiplier values for the pressure dependent
+saturated OGR data entered in the <span class="keyword">PVTG</span> table.</p>
+<pre><code>RVGI
+ 248.0  1.0
+        0.95
+        0.90
+        0.85
+        0.80
+        0.72
+        0.60
+        0.50
+        0.40
+        0.30  /
+ 416.96 1.0
+        0.95
+        0.90
+        0.85
+        0.80
+        0.72
+        0.60
+        0.50
+        0.40
+        0.30  /
+/</code></pre><p><span class="keyword">RSGI</span> defines the variation of saturated
+gas-oil values with pressure and Gi. Note that the entries in this
+table represent multiplier values for the pressure dependent saturated
+GOR data entered in the <span class="keyword">PVTO</span> table.</p>
+<pre><code>RSGI
+ 248.0  1.0
+        0.98
+        0.95
+        0.91
+        0.86
+        0.82 
+        0.78
+        0.75
+        0.72
+        0.70  /
+ 416.96 1.0
+        0.98
+        0.95
+        0.91
+        0.86
+        0.82
+        0.78
+        0.75
+        0.72
+        0.70  /
+/</code></pre><p><span class="keyword">BGGI</span> defines the variation of saturated
+gas FVF values with pressure and Gi. Note that the entries in this
+table represent multiplier values for the pressure dependent saturated
+FVF data entered in the <span class="keyword">PVTG</span> table.</p>
+<pre><code>BGGI
+ 248.0  1.0
+        0.998
+        0.996
+        0.994
+        0.992
+        0.990
+        0.988
+        0.986
+        0.984
+        0.982 /
+ 416.96 1.0
+        1.0 
+        1.0 
+        1.0 
+        1.0 
+        1.0 
+        1.0 
+        1.0 
+        1.0 
+        1.0   /
+/</code></pre><p><span class="keyword">BOGI</span> defines the variation of saturated
+oil FVF values with pressure and Gi. Note that the entries in this
+table represent multiplier values for the pressure dependent saturated
+FVF data entered in the <span class="keyword">PVTO</span> table.</p>
+<pre><code>BOGI
+ 248.0  1.0
+        0.995
+        0.990
+        0.985
+        0.980
+        0.975
+        0.970
+        0.965
+        0.960
+        0.955 /
+
+ 416.96 1.0
+        0.99
+        0.98
+        0.96
+        0.94
+        0.92
+        0.90
+        0.88
+        0.86
+        0.84  /
+/
+
+DENSITY
+ 732.000  1000.05  1.10900 /
+
+SGFN
+  0.00    0.0000   0.0
+  0.03    0.0000   0.0
+  0.110   0.0246   0.0
+  0.307   0.1212   0.0
+  0.435   0.2684   0.0
+  0.491   0.3701   0.0
+/
+
+SWFN
+  0.221   0.00    0.0
+  0.25    0.010   0.0
+  0.400   0.070   0.0
+  0.547   0.163   0.0
+  0.582   0.179   0.0
+  0.670   0.260   0.0
+  0.731   0.360   0.0
+/
+
+SOF3
+  0.269   0.000000   0.000000
+  0.288   0.000038   0.000000
+  0.294   0.000050   0.000380
+  0.300   0.000065   0.000740
+  0.320   0.000170   0.001400
+  0.500   0.035000   0.034000
+  0.750   0.470000   0.760000
+  0.779   1.000000   1.000000
+/
+
+ROCK
+ 407.800   7.00E-5 /
+
+RPTPROPS
+ 'GINODE'  /</code></pre></div>
+
+<div class="section" id="gipscompexample_solution"><a name="gipscompexample_solution"><!-- --></a><h4 class="sectiontitle">SOLUTION</h4><pre><code>SOLUTION ==========================================================
+PRESSURE
+ 15*370.0 /
+
+SWAT
+ 15*0.2 /
+
+SGAS
+ 15*0.0 /
+
+RS
+ 15*266.64 /
+
+RV
+ 15*0.0006 / 
+
+RPTSOL
+ 'PRES'  'SOIL'  'SWAT'  'SGAS'  'RS'  'RV'  'FIP' 
+ 'EQUIL'  'RSVD'  'GI'  /</code></pre></div>
+
+<div class="section" id="gipscompexample_schedule"><a name="gipscompexample_schedule"><!-- --></a><h4 class="sectiontitle">SCHEDULE</h4><pre><code>SCHEDULE  ==========================================================
+WELSPECS          
+ 'GINJ' 'G' 1   1 4000.00 'GAS' 1*  'NO' 'SHUT' 'YES' 1* 'SEG' /
+ 'PROD' 'G' 15  1 4000.00 'OIL' 0.0 'NO' 'SHUT' 'YES' 1* 'SEG' /
+/ 
+
+COMPDAT           
+ 'GINJ' 1  1 1 1 'OPEN' 0 1* 0.4 /
+ 'PROD' 15 1 1 1 'OPEN' 0 1* 0.4 /
+/
+
+WCONPROD
+ 'PROD' 'OPEN' 'BHP' 1*  1*  1*  1*  1*  370.0  /
+/
+
+WCONINJE
+'GINJ' 'GAS' 'OPEN' 'RATE' 150000.0  /
+/
+
+RPTSCHED
+ 'PRES'  'SOIL'  'SWAT'  'SGAS'  'RS'  'RV'  'RESTART=2'
+ 'FIP'   'WELLS=2'  'SUMMARY=2'  'CPU=2'
+ 'NEWTON=2'  /
+
+TSTEP
+ 10*20.0  /
+
+END</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

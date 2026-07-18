@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="REACOPS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="REACOPS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>REACOPS</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="REACOPS"><a name="REACOPS"><!-- --></a>
+<h1 class="keyword">REACOPS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="reacops.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="reacops.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1970e45">  </th>
+
+<th valign="top" id="d1970e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1970e54"> x </th>
+
+<th valign="top" id="d1970e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1970e45 d1970e54 ">  </td>
+
+<td valign="top" headers="d1970e48 d1970e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1970e45 d1970e54 ">  </td>
+
+<td valign="top" headers="d1970e48 d1970e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1970e45 d1970e54 ">  </td>
+
+<td valign="top" headers="d1970e48 d1970e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1970e45 d1970e54 "> x </td>
+
+<td valign="top" headers="d1970e48 d1970e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1970e45 d1970e54 ">  </td>
+
+<td valign="top" headers="d1970e48 d1970e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1970e45 d1970e54 ">  </td>
+
+<td valign="top" headers="d1970e48 d1970e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1970e45 d1970e54 ">  </td>
+
+<td valign="top" headers="d1970e48 d1970e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1970e45 d1970e54 ">  </td>
+
+<td valign="top" headers="d1970e48 d1970e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">REACOPS</span> keywords specifies options used
+in the chemical reactions model, see <a href="../ecl_td/reactionsintro_Chemical_Reactions.html#reactionsintro_chemical_reactions">"Chemical reactions"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<p>The keyword is followed by five items of data and terminated with
+a slash (/).</p>
+
+<ol>
+<li> Convergence criteria for the sum of the non-linear residual.
+The timestep will only be accepted if the non-linear residual is less
+than this value. The sum of the non-linear residual can be output
+in the <span class="keyword">SUMMARY</span> section by including the <span class="keyword">NLRESSUM</span> keyword. This constraint ensures conservation
+between reacting components. The constraint can be disabled by specifying
+a negative value. <p>DEFAULT: 1e-4</p>
+ </li>
+
+<li> Convergence criteria for the maximum element of the non-linear
+residual. The timestep will only be accepted if the maximum element
+of the non-linear residual is less than this value. The sum of the
+non-linear residual can be output in the <span class="keyword">SUMMARY</span> section by including the <span class="keyword">NLRESMAX</span> keyword. In
+a similar manner to the first item, this constraint ensures conservation
+between reacting components. The constraint can be disabled by specifying
+a negative value. <p>DEFAULT: Disabled</p>
+ </li>
+
+<li> Limit the reaction rates such that only reactants present at
+the start of the timestep can be consumed within the timestep. Note
+with this simplification a component produced by one reaction cannot
+be consumed by another until the next timestep. Similarly a reactant
+flowing into a block cannot be consumed until the next timestep. <p> <samp class="codeph">YES</samp> or <samp class="codeph">NO</samp> </p>
+ <p>DEFAULT: <samp class="codeph">NO</samp> </p>
+ </li>
+
+<li>Scaling factor to ensure that the reaction rate of zero-order
+reactants tends to zero as the reactant disappears. In equilibrium
+deviation reactions (see the <a href="EQLDREAC.html#EQLDREAC">  EQLDREAC</a> keyword) if a reaction rate is independent of the concentration
+of a reactant, then the rate is multiplied by a factor <math><mrow><mi>m</mi>
+<mo>/</mo><mo>(</mo><mi>m</mi><mo>+</mo>
+<mi>s</mi><mo>)</mo></mrow></math> where <math><mrow><mi>m</mi>
+</mrow></math> is the molar density of the reactant and <math><mrow><mi>s</mi>
+</mrow></math> is given by this item. Please note that the default
+value is an experimental value and may be adjusted to ensure that
+the scaling factor <math>
+<mrow><mi>m</mi><mo>/</mo><mo>(</mo>
+<mi>m</mi><mo>+</mo><mi>s</mi><mo>)</mo>
+</mrow></math> tends to zero with the concentration of the reactant. <p>DEFAULT: 1.0</p>
+</li>
+
+<li>Choice of model for reaction rate in the water phase.
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">STANDARD</samp> </td>
+
+<td valign="top">The standard chemical reaction model where speed of reaction
+is scaled on a cell per cell basis based on bulk or pore volume is
+applied.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WATERV</samp> </td>
+
+<td valign="top">The reaction speed is scaled by the volume of water within
+the cell for reactions involving water components, as defined in <a href="../ecl_td/reactionsequations_reaction_rate.html#reactionsequations_waterv">"Scaling chemical
+reaction speed based on water volumes"</a> in the <cite>ECLIPSE
+Technical Description</cite></td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">STANDARD</samp> </p>
+</li>
+
+</ol>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Prior to 2008.1 the convergence criteria on the non-linear residual
+was not applied. To obtain back compatibility the first item of <span class="keyword">REACOPS</span> should be set negative.</span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Simulations containing chemical reactions can be very sensitive.
+Modifying the items in the <span class="keyword">REACOPS</span>  keyword is
+likely to modify the results of the simulation.</span></div>
+
+<div class="section" id="reacops_example"><a name="reacops_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>Tighten the
+tolerance on the sum of the non-linear residual.</p>
+          <pre><code>REACOPS
+  1e-5 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

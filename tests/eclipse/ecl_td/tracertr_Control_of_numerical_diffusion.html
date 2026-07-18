@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Control of numerical diffusion (ECLIPSE 100)"/>
+<meta name="DC.subject" content="Tracer tracking control of numerical diffusion (ECLIPSE 100), Tracer tracking, Numerical diffusion"/>
+<meta name="keywords" content="Tracer tracking control of numerical diffusion (ECLIPSE 100), Tracer tracking, Numerical diffusion"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="tracertr_control_of_numerical_diffusion"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Control of numerical diffusion (ECLIPSE 100)</title>
+</head>
+<body>
+
+
+<div class="nested0" id="tracertr_control_of_numerical_diffusion"><a name="tracertr_control_of_numerical_diffusion"><!-- --></a>
+<h1 class="topictitle1">Control of numerical diffusion (ECLIPSE 100)</h1>
+
+
+ <div>
+<p>The differential equations governing the evolution of the concentration
+of tracer species within each grid cell are a series of linear convection
+equations. ECLIPSE solves the tracer transport equations at each timestep
+using a fully implicit time discretization. Such a system of difference
+equations is particularly prone to exhibiting the effects of numerical
+diffusion errors, particularly in regions of the grid where tracer
+concentrations vary most rapidly. The smearing of tracer interfaces
+tends to be most apparent in single phase regions (for example gas
+injection into a gas cap, water injection into aquifers).</p>
+
+<p>There are two options in ECLIPSE 100 to reduce the effects of numerical
+diffusion:</p>
+
+<div class="section" id="tracertr_cascade_algorithm"><a name="tracertr_cascade_algorithm"><!-- --></a><h4 class="sectiontitle">Cascade algorithm </h4><p>This option is invoked by setting item 5 to '<samp class="codeph">DIFF</samp>' in keyword <a href="../ecl_rm/TRACERS.html#TRACERS">TRACERS</a> in the <span class="keyword">RUNSPEC</span> section. At present this
+option applies to tracers embedded in phases where no mass transfer
+effects can take place.</p>
+<p>The tracer concentrations are calculated
+in flow order (the cascade). In cells in which the phase throughput
+ratio is less than one, the explicit tracer concentrations are used.
+However, if the throughput ratio exceeds one, the tracer concentration
+cascades on to the downstream cells. Hence the algorithm is stable
+for all timestep sizes.</p>
+<p>In a serial run, the cascade algorithm
+is always used for <strong>active</strong> tracers whenever no mass transfer
+is associated with these tracers, whether or not ‘ <samp class="codeph">DIFF</samp> ’ is enabled in the <span class="keyword">RUNSPEC</span> section keyword <span class="keyword">TRACERS</span>. It is possible to stop the cascade algorithm being
+used by employing the <a href="../ecl_rm/NOCASC.html#NOCASC">NOCASC</a> keyword in the <span class="keyword">RUNSPEC</span> section. This forces
+the linear solver algorithm to be used for solving all single phase
+tracers.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The cascade algorithm is not available for parallel
+runs. Thus, switching to parallel in a model containing active tracers
+automatically forces the linear solver algorithm to be used. Consequently,
+small changes in results can be expected. To avoid these changes between
+serial and parallel runs the <span class="keyword">NOCASC</span> keyword should
+be used in the serial run.                      </span></div>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Brine
+is also an active tracer and prior to the 2004A release was also solved
+automatically with the cascade method. Since the 2004A release, a
+brine tracer has been solved with the user-selected method. The cascade
+solver cannot be used for the Multi-component brine option.      
+               </span></div>
+</div>
+
+<div class="section" id="tracertr_flux_limiting_scheme"><a name="tracertr_flux_limiting_scheme"><!-- --></a><h4 class="sectiontitle">Flux limiting scheme</h4><p>The explicit flux limiting scheme is invoked by setting item 5
+to '<samp class="codeph">DIFF</samp>' in keyword <span class="keyword">TRACERS</span> in
+the <span class="keyword">RUNSPEC</span> section, and in addition specifying
+the <a href="../ecl_rm/TRACTVD.html#TRACTVD">TRACTVD</a> keyword in the <span class="keyword">PROPS</span> section. The implicit
+flux limiting scheme is invoked by specifying the <a href="../ecl_rm/TRACITVD.html#TRACITVD">TRACITVD</a> keyword in the <span class="keyword">PROPS</span> section. These options only apply to tracers embedded
+in phases where no mass transfer effects can take place.</p>
+<p>The
+scheme is second order in smoothly varying regions, but uses a limiting
+function to prevent unphysical oscillations near sharp fronts.</p>
+<p>For the explicit flux limiting scheme, tracer concentrations are
+updated explicitly using a mini timestep to prevent instability. As
+the tracer equation is linear, these explicit timesteps are very cheap,
+and hence the method can be applied to most problems (<cite><span> <a href="biblio_Bibliography.html#biblio_29727">Rubin and Blunt, 
+1991</a> </span></cite>).</p>
+<p>For the implicit flux limiting scheme,
+the tracer concentration is computed using the same timestepping control
+as the standard fully implicit solver.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

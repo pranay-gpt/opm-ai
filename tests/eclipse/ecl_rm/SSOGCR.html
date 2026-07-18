@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SSOGCR"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SSOGCR"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SSOGCR</title>
+</head>
+<body>
+
+<div class="nested0" id="SSOGCR"><a name="SSOGCR"><!-- --></a><h1 class="keyword">SSOGCR</h1>
+
+ <div>
+<div class="tablenoborder"><a name="ssogcr.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="ssogcr.tab.0005" class="flagtable" frame="border" border="1" rules="all">  <thead align="left"><tr><th valign="top" id="d2428e35"> x </th>
+<th valign="top" id="d2428e37"> ECLIPSE 100 </th>
+</tr>
+<tr><th valign="top" id="d2428e40">   </th>
+<th valign="top" id="d2428e42"> ECLIPSE 300 </th>
+</tr>
+</thead>
+<tbody><tr><td valign="top" headers="d2428e35 d2428e40 ">  </td>
+<td valign="top" headers="d2428e37 d2428e42 "> RUNSPEC </td>
+</tr>
+<tr><td valign="top" headers="d2428e35 d2428e40 ">  </td>
+<td valign="top" headers="d2428e37 d2428e42 "> GRID </td>
+</tr>
+<tr><td valign="top" headers="d2428e35 d2428e40 ">  </td>
+<td valign="top" headers="d2428e37 d2428e42 "> EDIT </td>
+</tr>
+<tr><td valign="top" headers="d2428e35 d2428e40 "> x </td>
+<td valign="top" headers="d2428e37 d2428e42 "> PROPS </td>
+</tr>
+<tr><td valign="top" headers="d2428e35 d2428e40 ">  </td>
+<td valign="top" headers="d2428e37 d2428e42 "> REGIONS </td>
+</tr>
+<tr><td valign="top" headers="d2428e35 d2428e40 ">  </td>
+<td valign="top" headers="d2428e37 d2428e42 "> SOLUTION </td>
+</tr>
+<tr><td valign="top" headers="d2428e35 d2428e40 ">  </td>
+<td valign="top" headers="d2428e37 d2428e42 "> SUMMARY </td>
+</tr>
+<tr><td valign="top" headers="d2428e35 d2428e40 ">  </td>
+<td valign="top" headers="d2428e37 d2428e42 "> SCHEDULE </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The <span class="keyword">SSOGCR</span> keyword specifies the critical oil in gas saturation (that is, the
+largest oil saturation for which the oil  relative permeability to
+gas is zero) within each grid block for scaling the surfactant oil
+relative permeability to gas.</p>
+<p>The tabulated oil relative permeability
+to gas functions are scaled between the critical oil in gas saturation
+defined by the <span class="keyword">SSOGCR</span> keyword and the maximum oil
+saturation defined in terms of the minimum water and gas saturations
+using the <a href="SSWL.html#SSWL"> SSWL</a> and <a href="SSGL.html#SSGL"> SSGL</a> keywords respectively.</p>
+<p>The <span class="keyword">SSOGCR</span> keyword should only be used if gas is present in the model and if
+both the end-point scaling and the surfactant options have been selected
+via the <span class="keyword">RUNSPEC</span> keywords <a href="ENDSCALE.html#ENDSCALE"> ENDSCALE</a> and <a href="SURFACT.html#SURFACT"> SURFACT</a> respectively.</p>
+<p>The <span class="keyword">SSOGCR</span> keyword should be followed by one real number for each grid block
+in the current input box specifying the critical oil in gas saturation.
+The saturation should be in the range 0.0 to 1.0 inclusive. The data
+must be terminated by a slash (/).</p>
+<p>Grid blocks are ordered with
+the X-axis index cycling fastest followed by the Y-axis and Z-axis
+indices. Repeat counts may be used for repeated values (for example
+10*0.21). Note that spaces must not be inserted on either side of
+the asterisk.</p>
+<p>If the keyword <span class="keyword">SSOGCR</span> is omitted for some or all of the grid blocks in a model where it
+could be specified, the critical oil in gas saturations for the surfactant
+oil relative permeability to gas calculations will default to the
+values defined in the appropriate relative permeability tables via
+the <a href="SURFNUM.html#SURFNUM"> SURFNUM</a> keyword.</p>
+<p>See <a href="../ecl_td/sattabsc_Saturation_Table_Scaling.html#sattabsc_saturation_table_scaling">"Saturation table
+scaling"</a> in the <cite>ECLIPSE Technical Description</cite> for
+details of the end-point scaling procedure.</p>
+<div class="section" id="ssogcr_example"><a name="ssogcr_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>----RUNSPEC section
+DIMENS
+ 1 7 3 /
+ENDSCALE
+ /
+----PROPS section
+-------- IX1-IX2 JY1-JY2 KZ1-KZ2
+BOX
+           1   1   2   7   1   3
+SSOGCR
+  5*0.24 10*0.21 3*0.20 /</code></pre></div>
+</div>
+</div>
+
+</body>
+</html>

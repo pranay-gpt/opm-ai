@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Example data set"/>
+<meta name="DC.subject" content="GRID section example dataset"/>
+<meta name="keywords" content="GRID section example dataset"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="grid_example_data_set"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Example data set</title>
+</head>
+<body>
+
+
+<div class="nested0" id="grid_example_data_set"><a name="grid_example_data_set"><!-- --></a>
+<h1 class="topictitle1">Example data set</h1>
+
+
+ <div>
+<pre><code>RUNSPEC
+TITLE
+ Example of simple 5x3x2 block centered Cartesian model
+DIMENS
+-- NX     NY    NZ
+    5      3     2  /
+-- remainder of RUNSPEC should follow
+GRID
+DXV
+ 1500 3*1000 2000 /      X dimensions of blocks only varies in X direction
+DYV
+ 3*2000 / 
+-- Set constant values
+EQUALS
+ DZ      50  1 5 1 3 1 1 /  layer 1 DZ
+ PERMX  100              /  layer 1 PERMX box unchanged
+ DZ      75  1 5 1 3 2 2 /  layer 2 DZ box now I=1-5, J=1-3, K=2
+ PERMX   80              /
+ PORO   0.3              /
+/                          End Equals keyword
+-- Set individual values for Porosity and Tops for layer 1
+BOX
+  1 5 1 3 1 1 /  defines box I=1-5, J=1-3, K=1
+PORO                        individual values for 15 blocks in the box
+   0.2  0.21 0.22 0.23 0.24
+   0.21 0.22 0.23 0.26 0.28
+   0.19 0.27 0.28 0.25 0.24 /
+TOPS
+   5*7000 5*7100 5*7200 /
+ENDBOX
+--     Box no longer defined; defaults to full grid I=1-5, J=1-3, K=1-2 
+COPY
+   PERMX PERMY /      Copy all 30 Permx values to Permy
+   PERMX PERMZ /
+   /
+MULTIPLY
+  PERMZ 0.07 /        Multiply all 30 Permz values by 0.07
+/
+-- Grid file will be output by default
+-- Init file containing block properties for input to Petrel
+INIT
+RPTGRID 
+'TRANX' 'TRANY' 'TRANZ' /  requests output of transmissibilities
+PROPS   Next section header ends current section</code></pre>
+</div>
+
+</div>
+
+
+</body>
+</html>

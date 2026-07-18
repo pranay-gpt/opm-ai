@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Multilateral wells"/>
+<meta name="DC.subject" content="Wellbore friction multilateral wells"/>
+<meta name="keywords" content="Wellbore friction multilateral wells"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wbfrictusing_multi-lateral_wells"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Multilateral wells</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wbfrictusing_multi-lateral_wells"><a name="wbfrictusing_multi-lateral_wells"><!-- --></a>
+<h1 class="topictitle1">Multilateral wells</h1>
+
+
+ <div>
+<p>Wells with branches emanating from the main stem can also be modeled
+with the wellbore friction option. The data structure is general enough
+even to allow for the case where a branch itself may have branches.</p>
+
+<p>To reserve memory for multilateral wells it is necessary to set
+the second item of the <a href="../ecl_rm/FRICTION.html#FRICTION">FRICTION</a> keyword in the <span class="keyword">RUNSPEC</span> section. This item
+is the maximum number of branches (and for this purpose the main stem
+counts as a branch) which emanate from any one grid block connection.
+For a standard well that consists of only a main stem, we could enter</p>
+
+<pre><code>FRICTION
+ 1  1 /</code></pre>
+<p>as there is a maximum of 1 branch (that is the main stem itself)
+that emanates from any one connection. Item 2 is set equal to 1 by
+default. For a “trunk and branch” well as shown in figure <a href="wbfrictusing_Multi-lateral_wells.html#wbfrictusing.XID-00000028">581.1</a>, we would enter</p>
+
+<pre><code>FRICTION
+ 1  2   /</code></pre>
+<div class="fignone" id="wbfrictusing.XID-00000028"><a name="wbfrictusing.XID-00000028"><!-- --></a>
+
+ <br/><img src="../img/heeltoe.png" width="230px"/><br/> 
+<br/><span class="figcap">
+           Figure 581.1  A trunk and branch multilateral well</span></div>
+
+<p>For the “bird's foot” type well shown in figure <a href="wbfrictusing_Multi-lateral_wells.html#wbfrictusing.XID-00000037">581.2</a>, we would enter</p>
+
+<pre><code>FRICTION
+ 1  3   /</code></pre>
+<div class="fignone" id="wbfrictusing.XID-00000037"><a name="wbfrictusing.XID-00000037"><!-- --></a>
+
+ <br/><img src="../img/heeltoe2.png" width="367px"/><br/> 
+<br/><span class="figcap">
+           Figure 581.2  A bird’s foot multilateral well</span></div>
+
+<p>For a problem that involved all three of these wells then the maximum
+overall value should be used for the second argument,</p>
+
+<pre><code>FRICTION
+ 3  3  /</code></pre>
+<p>The geometry of a multilateral well is defined by the order in
+which the connections are entered in the keyword <a href="../ecl_rm/WFRICTN.html#WFRICTN">WFRICTN</a> or <a href="../ecl_rm/WFRICTNL.html#WFRICTNL">WFRICTNL</a>. <span class="keyword">WFRICTNL</span> only differs from <span class="keyword">WFRICTN</span> in that a local grid
+name is required in addition to the grid block coordinates to define
+each connection.</p>
+
+<p>The first record of <span class="keyword">WFRICTN</span> identifies the well,
+and sets the default tubing diameter, the roughness and the flow scaling
+factor.</p>
+
+<p>The subsequent records deal with the connections making up the
+well, and have two purposes. The first is to define certain properties
+associated with the connections, including the tubing length from
+the well's bottom hole reference point to the start of the perforations
+in the grid block, and similarly the tubing length to the end of the
+perforations. It is possible to give the connection a different tubing
+diameter to the default value specified in the first record. Connections
+may be defined singly or in ranges. (A range is a contiguous row or
+column of grid blocks that are fully penetrated by the well.) Further
+details can be obtained from the keyword documentation.</p>
+
+<p>The geometry of the well is defined by the order in which the connections
+are entered. A connection entered for the first time is assumed to
+be situated upstream (that is further from the heel of the well) of
+the previously entered connection. So, for a single branched well
+the connections should simply be ordered from the heel towards the
+toe.</p>
+
+<p>If a connection is referenced again in <span class="keyword">WFRICTN</span> after its first entry, either singly or as the <strong>first</strong> connection
+of a range, then it is taken to indicate that the subsequent connections
+form a branch that joins the well at this location. The connections
+in this branch should be ordered from the join out towards its toe.
+Thus whenever a connection is referenced for a second or subsequent
+time in <span class="keyword">WFRICTN</span>, its entry is essentially a “pointer”
+to where the next connection joins the well. As its properties have
+already been defined in its first entry, it is only necessary to supply
+items 1-3 (or items 1-4 when using <span class="keyword">WFRICTNL</span>) when
+a connection is entered again as a pointer. If the remaining items
+in the record are specified (as they must be if the pointer is the
+first connection in a range describing a new branch), then they will
+only be applied to the connections being entered for the first time,
+and will not overwrite the properties of the pointer connection.</p>
+
+<p>Note that there must therefore be a connection defined at each
+branch point. However, if the well is not actually perforated within
+these grid blocks the connection should be declared as <samp class="codeph">SHUT</samp> in keyword <a href="../ecl_rm/COMPDAT.html#COMPDAT">COMPDAT</a>.</p>
+
+<p>As an example of how multilateral well geometry is defined, consider
+the well shown in figure <a href="wbfrictusing_Multi-lateral_wells.html#wbfrictusing.XID-00000058">581.3</a>. We assume that k = 1 for all the connections. The order of defining
+this well is by no means unique, but one way is shown as follows:</p>
+
+<div class="fignone" id="wbfrictusing.XID-00000058"><a name="wbfrictusing.XID-00000058"><!-- --></a>
+
+ <br/><img src="../img/heel.png" width="353px"/><br/> 
+<br/><span class="figcap">
+           Figure 581.3  Defining multilateral well geometry</span></div>
+
+<pre><code> WFRICTN
+-- well name   tubing diam      Roughness     Scale Fac
+   'HORIZ'        0.25            1.0E-3         1.0    /
+-- I  J  K   Tlen1   Tlen2  Direction  RangeEnd  Tubing diam
+--Define the main stem
+   6  2  1    2*              'Y'        3        1*    /
+   6  5  1    400     500      3*                       /
+   6  6  1    2*              'Y'        7        1*    /
+--Pointer back to where first branch leaves main stem.
+--(This connection was first entered as part of the range (6, 2-3, 1)
+   6  3  1                                              /
+--Define this branch
+   5  3  1    2*              'X'        4        0.17  /
+   2  3  1    700     900      2*                 0.17  /
+--Pointer back to where second branch leaves the main stem
+   6  5  1                                              /
+--Define this branch
+   9  5  1    600     800      2*                 0.18  /
+/</code></pre>
+<p>Remember that each of these connections must previously have been
+defined in keyword <a href="../ecl_rm/COMPDAT.html#COMPDAT">COMPDAT</a> (or <a href="../ecl_rm/COMPDATL.html#COMPDATL"> COMPDATL</a> in a local grid). Note that connections must be defined at
+the branch points, blocks (6,3,1) and (6,5,1) in this example. If
+these are not perforated they should be declared as <samp class="codeph">SHUT</samp>.</p>
+
+<p>This method of defining multilateral well geometry is flexible
+enough to allow branches to have sub-branches. As a second example,
+consider the well shown in the following figure.</p>
+
+<div class="fignone" id="wbfrictusing.XID-0000007d"><a name="wbfrictusing.XID-0000007d"><!-- --></a>
+
+ <br/><img src="../img/heel2.png" width="397px"/><br/> 
+<br/><span class="figcap">
+           Figure 581.4  A multilateral well with sub-branches</span></div>
+
+<p>We again assume that k = 1 for all the connections, and we will
+also assume that the well is completed in every grid block. One way
+of defining the connections in <a href="../ecl_rm/WFRICTN.html#WFRICTN">WFRICTN</a> is shown as follows:</p>
+
+<pre><code> WFRICTN
+-- well name   tubing diam      Roughness     Scale Fac
+   'HORIZ2'       0.25            1.0E-3         1.0    /
+-- I  J  K   Tlen1   Tlen2  Direction  RangeEnd  Tubing diam
+--Define the main stem (9, 1-8, 1)
+   9  1  1    2*               'J'         8        1*  /
+--Pointer to lower branch point on main stem
+   9  7  1                                              /
+--Define connections in the left branch (8-6, 7, 1)
+   8  7  1    2*               'I'         6        1*  /
+--and the same for the right branch (10-12, 7, 1)
+   9  7  1                                              /
+  10  7  1    2*               'I'        12        1*  /
+--Pointer to the upper branch point on the main stem
+   9  3  1                                              /
+--Define the right branch (10-13, 3, 1)
+  10  3  1    2*               'I'        13        1*  /
+--and the same for the left branch (8-2, 3, 1)
+   9  3  1                                              /
+   8  3  1    2*               'I'         2        1*  /
+--Pointer to the branch point off this branch
+   3  3  1                                              /
+--Define the single connection in this sub-branch
+   3  2  1    1000    1020      3*                      /
+/</code></pre>
+<p>This definition of the well can be shortened by incorporating the
+pointers into the range of connections:</p>
+
+<pre><code> WFRICTN
+-- well name   tubing diam      Roughness     Scale Fac
+   'HORIZ2'       0.25            1.0E-3         1.0    /
+-- I  J  K   Tlen1   Tlen2  Direction  RangeEnd  Tubing diam
+--Define the main stem (9, 1-8, 1)
+   9  1  1    2*               'J'         8        1*  /
+--Define the lower left branch (9-6, 7, 1)
+   9  7  1    2*               'I'         6        1*  /
+--and the same for the lower right branch (9-12, 7, 1)
+   9  7  1    2*               'I'        12        1*  /
+--Define the upper right branch (9-13, 3, 1)
+   9  3  1    2*               'I'        13        1*  /
+--and the same for the upper left branch (9-2, 3, 1)
+   9  3  1    2*               'I'         2        1*  /
+--Pointer to the branch point off this branch
+   3  3  1                                              /
+--Define the single connection in this sub-branch
+   3  2  1    1000    1020      3*                      /
+/</code></pre>
+<p>Occasionally when opening a friction well, and in particular a
+multilateral friction well, the well solution may have difficulty
+in converging. This is because the initial “guess” of
+the pressures used to start off the Newton iteration may be poor.
+This can often be solved by just allowing the well to take more iterations,
+that is, increasing <samp class="codeph">MXWSIT</samp> in the third record of
+the <a href="../ecl_rm/TUNING.html#TUNING">TUNING</a> keyword. However, this may not be effective in all cases,
+and when this is so the <span class="keyword">OPTIONS</span> keyword <a href="../ecl_rm/OPTIONS.html#options.55">item 55</a> may be tried. This damps the Newton iteration,
+improving its convergence properties. It should be noted that after
+the problem has been solved, that is at the next timestep, it is very
+unlikely that the Newton method will need damping. Now the use of
+item 55 in <span class="keyword">OPTIONS</span> will hinder convergence rather
+than help it. Hence the switch should be set to zero as soon as possible
+after the well has been successfully opened.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

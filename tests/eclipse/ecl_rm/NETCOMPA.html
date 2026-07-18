@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="NETCOMPA"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="NETCOMPA"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>NETCOMPA</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="NETCOMPA"><a name="NETCOMPA"><!-- --></a>
+<h1 class="keyword">NETCOMPA</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="netcompa.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="netcompa.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1514e45">                         x </th>
+
+<th valign="top" id="d1514e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1514e54"> </th>
+
+<th valign="top" id="d1514e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1514e45 d1514e54 "> </td>
+
+<td valign="top" headers="d1514e48 d1514e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1514e45 d1514e54 "> </td>
+
+<td valign="top" headers="d1514e48 d1514e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1514e45 d1514e54 "> </td>
+
+<td valign="top" headers="d1514e48 d1514e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1514e45 d1514e54 "> </td>
+
+<td valign="top" headers="d1514e48 d1514e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1514e45 d1514e54 "> </td>
+
+<td valign="top" headers="d1514e48 d1514e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1514e45 d1514e54 "> </td>
+
+<td valign="top" headers="d1514e48 d1514e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1514e45 d1514e54 "> </td>
+
+<td valign="top" headers="d1514e48 d1514e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1514e45 d1514e54 ">                         x </td>
+
+<td valign="top" headers="d1514e48 d1514e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword defines automatic compressors or pumps in the production
+network when the extended network model is employed (keyword <a href="NETWORK.html#NETWORK"> NETWORK</a> entered in the <span class="keyword">RUNSPEC</span> section). Each compressor/pump occupies a branch
+of the network, and its operation is modeled by changing the VFP table
+number or ALQ value of the branch.</p>
+
+<p>See <a href="../ecl_td/extended_Automatic_compressors.html#extended_automatic_compressors">"Automatic compressors"</a> in the <cite>ECLIPSE Technical Description</cite> for further details.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li>Inlet node name of the branch where the compressor is located. </li>
+
+<li>Outlet node name of the branch where the compressor is located.</li>
+
+<li>Name of group whose production rate this compressor will respond
+to.   <p>The compressor will be activated whenever this group fails
+to meet its target production rate set for the phase in item 4. If
+the group does not have a target set, but has a guide rate defined
+in <a href="GCONPROD.html#GCONPROD">  GCONPROD</a> and
+is under <samp class="codeph">FLD</samp> control from a higher level group, then
+the compressor is activated when the group cannot make its share of
+the higher level group's production target.</p>
+ <p>If other actions
+to increase the group's production rate may also be performed (for
+example opening a new well from the drilling queue), the order in
+which the possible actions are performed can be defined with the <a href="PRORDER.html#PRORDER"> PRORDER</a> keyword.</p>
+<p>DEFAULT: ' ' implies the compressor is permanently off</p>
+ </li>
+
+<li> Phase whose production rate this compressor responds to.    
+  <p> <samp class="codeph">OIL</samp> or <samp class="codeph">GAS</samp> </p>
+           <p>DEFAULT: <samp class="codeph">GAS</samp>  </p>
+         </li>
+
+<li>VFP table number for the branch when the compressor is on. <p>When the compressor is switched on this replaces the table number
+previously specified in keyword <a href="BRANPROP.html#BRANPROP"> BRANPROP</a>, which is applied whenever the compressor
+is off.</p>
+             <p>Zero will leave the original VFP table
+number unchanged.</p>
+             <p>DEFAULT: 0</p>
+              
+     </li>
+
+<li>Artificial Lift Quantity to be applied when the compressor is
+fully on. <p>When the compressor is fully on this replaces the ALQ
+value previously specified in keyword <span class="keyword">BRANPROP</span>,
+which is applied whenever the compressor is off. Multilevel compressors
+operating at an intermediate level has an intermediate value of the
+ALQ (see items 9, 10 and 11).</p>
+ <p>The artificial lift quantity
+may be regarded as the compressor or pump power, according to the
+definition used when the table was calculated (for example with VFP <em>i</em>).</p>
+           <p>UNITS: These depend on what the ALQ was
+meant to represent when the table was created. Refer to section <a href="vfpprod_Record_6_ALQ_values.html#vfpprod_record_6_alq_values"> "Record 6:ALQ values"</a> in the description of keyword <span class="keyword">VFPPROD</span>.</p>
+           <p>DEFAULT: 0.0</p>
+         </li>
+
+<li>Rate of gas consumption by the compressor when fully on. <p>When
+the compressor is fully on this is extracted from the inlet node (item
+1) to account for the gas required to power the compressor. Multilevel
+compressors operating at an intermediate level have an intermediate
+value of gas consumption (see items 9, 10 and 11). The consumption
+rate is applied in addition to any consumption specified for the node
+with keyword <a href="NCONSUMP.html#NCONSUMP">  NCONSUMP</a> or <a href="GCONSUMP.html#GCONSUMP"> GCONSUMP</a>.           </p>
+           <p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), Mscf/day (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+  
+        <p>DEFAULT: 0.0</p>
+           <div class="note"><span class="notetitle">Note:</span> <span class="notebody">If you wish the consumed
+gas to be removed from the outlet node of the branch, reverse the
+order of the inlet and outlet nodes in items 1 and 2.</span></div>
+ </li>
+
+<li>Name of the group from which the compressor's gas consumption
+(item 7) should also be extracted. <p>Gas consumption from the group
+hierarchy is taken into account for group reinjection control and
+sales gas control, and also by the Gas Field Operations Model. (See
+keyword <span class="keyword">GCONSUMP</span>.)</p>
+           <p>DEFAULT: <samp class="codeph">' '</samp> the gas is only extracted from the network, and not
+the group hierarchy</p>
+ <div class="note"><span class="notetitle">Note:</span> <span class="notebody">The group defined here replaces any
+group previously defined for the same purpose using this keyword or
+item 3 of keyword <span class="keyword">NCONSUMP</span>.</span></div>
+            
+ </li>
+
+<li> Compressor type.
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">PERM</samp> </td>
+
+<td valign="top"> Will remain on permanently after being turned on.<p>Keyword <a href="COMPOFF.html#COMPOFF">  COMPOFF</a> has no effect.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">TEMP</samp> </td>
+
+<td valign="top">Can be turned off manually at any time with the <span class="keyword">COMPOFF</span> keyword (for example whenever the target production rate is reduced).
+It is turned on automatically again as soon as it is needed.<p>If
+the gas field operations model is in use, the compressor is turned
+off automatically whenever the contract group's target rate decreases.
+It is turned on automatically again as soon as it is needed.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">MULT</samp> </td>
+
+<td valign="top">As <samp class="codeph">TEMP</samp>, but with multiple compression levels.<p>Compression is increased one level at a time until the group's target
+rate is met.</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</li>
+
+<li>The number of compression levels in a multilevel compressor <p>(an integer &gt; 0)</p>
+                    <p>This item must be set
+only if item 9 is set to <span class="keyword">MULT</span>. Otherwise it must
+be defaulted.</p>
+             <p>Any number of levels may be requested,
+but having a large number of levels slows the run down as each level
+must be tried in turn.</p>
+                       <p>If there are <math><mi>N</mi></math>  levels, the ALQ and consumption rate at level <math><mi>i</mi></math>  are:</p>
+           <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="netcompa.equ.009c"/>
+ <math><mrow><msub>
+<mrow><mtext>ALQ</mtext></mrow><mrow><mi>i</mi></mrow>
+</msub><mo>=</mo><msub><mrow><mtext>ALQ</mtext></mrow>
+<mrow><mn>1</mn></mrow></msub><mo>+</mo><mrow><mrow>
+<mo>(</mo><msub><mrow><mtext>ALQ</mtext></mrow><mrow>
+<mi>N</mi></mrow></msub><mrow><mo>-</mo><msub><mrow>
+<mtext>ALQ</mtext></mrow><mrow><mn>1</mn></mrow></msub>
+</mrow><mo>)</mo></mrow><mo>(</mo><mfrac><mrow><mi>i</mi><mrow><mo>-</mo><mn>1</mn></mrow></mrow><mrow>
+<mi>N</mi><mrow><mo>-</mo><mn>1</mn></mrow></mrow>
+</mfrac><mo>)</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table>           <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="netcompa.equ.00a0"/>
+ <math><mrow><msub>
+<mrow><mtext>CONS</mtext></mrow><mrow><mi>i</mi></mrow>
+</msub><mo>=</mo><msub><mrow><mtext>CONS</mtext></mrow>
+<mrow><mi>N</mi></mrow></msub><mo>⋅</mo><mfrac><mrow>
+<mi>i</mi></mrow><mrow><mi>N</mi></mrow></mfrac>
+</mrow></math> 
+</td><td align="right">[Eq. 247.2]
+              </td></tr></tbody></table>                 <p>where <math><msub><mtext>ALQ</mtext>
+<mi>N</mi></msub></math>  is defined in item 6,  <math><msub><mtext>CONS</mtext>
+<mi>N</mi></msub></math>  is defined in item 7 and  <math><msub><mtext>ALQ</mtext>
+<mn>1</mn></msub></math>  is defined in item 11. </p>
+    
+      <p>The VFP table number will be the value set in item 5 when
+the compressor is operating at its first level and above.</p>
+    
+    </li>
+
+<li>Artificial lift quantity at level 1 of multi-level compressor,
+ALQ<sub>1</sub>.           <p>This item must be set only if item 9
+is set to '<span class="keyword">MULT</span>'. Otherwise it must be defaulted.</p>
+             <p>UNITS: These depend on what the ALQ was meant to
+represent when the table was created. Refer to section <a href="vfpprod_Record_6_ALQ_values.html#vfpprod_record_6_alq_values"> "Record 6:ALQ values"</a> in the description of keyword <span class="keyword">VFPPROD</span>.</p>
+         </li>
+
+<li>Compressor switching sequence number.    <p>This prescribes the
+order in which compressors are turned on if there are two or more
+compressors responding to the same group (item 3). When a group fails
+to meet its rate target, the compressor with the lowest sequence number
+that responds to the group is activated. If the group still cannot
+meet its target when this is fully on, but has other compressors that
+respond to it, these other compressors are turned on in increasing
+order of their sequence number.</p>
+          <p>If two compressors
+anywhere in the network share the same sequence number, they are both
+turned on at the same time, even if they respond to different groups.
+In this way it is possible to turn on all compressors simultaneously
+whenever compression is needed anywhere in the field. All multi-level
+compressors with the same sequence number have their levels incremented
+simultaneously.</p>
+                    <p>DEFAULT: a value 1 larger
+than the previous maximum sequence number.</p>
+ </li>
+
+</ol>
+
+<p>End data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<p>See also keywords <a href="PRORDER.html#PRORDER"> PRORDER</a> and <a href="COMPOFF.html#COMPOFF">  COMPOFF</a>.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">An automatic compressor cannot be present if the branch's ALQ
+is made equivalent to the oil or gas surface density in item 5 of
+keyword <a href="BRANPROP.html#BRANPROP"> BRANPROP</a>.</span></div>
+
+<div class="section" id="netcompa_example"><a name="netcompa_example"><!-- --></a><h4 class="sectiontitle">Example</h4>            
+    <p>The following example defines two compressors responding to
+the gas production rate of groups 'PL-A' and 'PL-B' respectively.
+The second one has three compression levels, and consumes gas from
+the network and from group 'G-B3' in the <a href="GRUPTREE.html#GRUPTREE"> GRUPTREE</a> hierarchy.</p>
+  
+       <pre><code>NETCOMPA
+-- Inlet Outlet  Target  Phase  VFP   ALQ  Cons  Cons   Type   Num   ALQ  Seq
+-- node   node   group          tab        rate  group         lev  lev 1 num
+    N4     N3     PL-A    GAS    1*   50.0   1*   1*    TEMP                  /
+    N6     N5     PL-B    GAS    1*  100.0 1000  G-B3   MULT    3   40.0      /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WCYCLE"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WCYCLE"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WCYCLE</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="WCYCLE"><a name="WCYCLE"><!-- --></a>
+<h1 class="keyword">WCYCLE</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wcycle.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wcycle.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2848e45">                         x </th>
+
+<th valign="top" id="d2848e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2848e54"> </th>
+
+<th valign="top" id="d2848e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2848e45 d2848e54 "> </td>
+
+<td valign="top" headers="d2848e48 d2848e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2848e45 d2848e54 "> </td>
+
+<td valign="top" headers="d2848e48 d2848e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2848e45 d2848e54 "> </td>
+
+<td valign="top" headers="d2848e48 d2848e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2848e45 d2848e54 "> </td>
+
+<td valign="top" headers="d2848e48 d2848e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2848e45 d2848e54 "> </td>
+
+<td valign="top" headers="d2848e48 d2848e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2848e45 d2848e54 "> </td>
+
+<td valign="top" headers="d2848e48 d2848e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2848e45 d2848e54 "> </td>
+
+<td valign="top" headers="d2848e48 d2848e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2848e45 d2848e54 ">                         x </td>
+
+<td valign="top" headers="d2848e48 d2848e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword provides a means of automatically cycling wells on
+and off for specified intervals of time. The facility can be used,
+for example, to simulate a WAG process, where the injection well is
+represented by separate water and gas injectors that are cycled on
+and off alternately.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li>Well name, well name template, well list or well list template. <p>A template enclosed in quotes can be used to refer to multiple wells
+or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+             </li>
+
+<li>On-period - The well is turned off at the beginning of the first
+timestep that starts after the specified on-period has elapsed since
+it was last turned on. <p>A zero or negative value prevents the well
+being turned on again by automatic cycling.</p>
+                <p>UNITS: day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.0</p>
+</li>
+
+<li>Off-period - If the well was turned off by automatic cycling,
+it is turned on again at the beginning of the first timestep that
+starts after the specified off-period has elapsed since it was turned
+off.   <p>If the well was closed for any other reason (for example
+manually or due to an economic limit), it remains closed until action
+is taken to open it again. Once opened again, it resumes cycling.</p>
+                <p>A zero or negative value prevents the well being
+turned off again by automatic cycling.</p>
+<p>UNITS: day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.0</p>
+</li>
+
+<li>Start-up time - The well’s efficiency factor is steadily ramped
+up over the specified start-up time when it is turned on by automatic
+cycling. During each timestep after reopening, its efficiency factor
+is multiplied by the quantity <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wcycle.equ.0060"/>
+ <math><mrow><mo>(</mo><mi>T</mi><mrow><mo>-</mo><msub><mrow><mi>T</mi></mrow><mrow><mi>o</mi></mrow></msub></mrow>
+<mo>)</mo><mo>/</mo><mtext>Start-up Time</mtext></mrow>
+</math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table><p>where</p>
+      
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">T </td>
+
+<td valign="top"> is the time at the end of the timestep</td>
+
+</tr>
+
+<tr>
+<td valign="top">T<sub>o</sub></td>
+
+<td valign="top"> is the time the well was turned on for as long as <math><mrow><mi>T</mi>
+<mrow><mo>-</mo><msub><mrow><mi>T</mi></mrow><mrow>
+<mi>o</mi></mrow></msub></mrow><mo>&lt;</mo><mtext>Start-up Time</mtext></mrow></math>.             </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+                         <p>Thus if the start-up time is large
+compared to the timestep size, the well will be brought on gradually,
+avoiding the timestep convergence difficulties sometimes observed
+when a high-rate well is suddenly opened.</p>
+<p>The start-up time
+also applies to wells turned on by periodic testing (see keyword <a href="WTEST.html#WTEST"> WTEST</a>).</p>
+<p>UNITS: day
+(<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.0, which
+gives an instantaneous start-up.</p>
+</li>
+
+<li>Maximum length of the timestep in which the well is turned on
+by automatic cycling. The value specified here overrides the normal
+maximum step length (see keyword <a href="TUNING.html#TUNING"> TUNING</a>) during the timestep in which the well is
+turned on by automatic cycling. This provides a means of cutting back
+the timestep when a well is turned on, to avoid the convergence difficulties
+sometimes observed when a high-rate well is suddenly opened.  <p>A
+zero or negative value applies no restriction on the timestep size,
+other than the normal maximum step length.</p>
+                <p>UNITS:
+day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.0 (no
+timestep restriction on start-up)</p>
+</li>
+
+<li>Should the timesteps be controlled to coincide exactly with the
+on/off cycling times of this well?   
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top">The timesteps coincide with this well’s on/off cycling times,
+and the well therefore cycles with exactly the specified periods.
+(If there are several wells cycling on and off at different times,
+this could slow the run down by imposing small timesteps.)</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top">The timesteps does not automatically coincide with this well’s
+on/off cycling times. The well cycles at the beginning of the next
+timestep that starts after the specified period has elapsed. The well’s
+on/off periods may therefore be longer than the values specified,
+unless they coincide with reporting times.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">NO</samp> </p>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record containing just a slash.</p>
+
+<div class="section" id="wcycle_example"><a name="wcycle_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>To initiate
+a WAG injection scheme, injecting water for 60 day periods and gas
+for 40 day periods, starting with water, with a 10 day maximum timestep
+at each changeover:</p>
+<p>Set the cycle periods:</p>
+<pre><code>WCYCLE
+-- well   on      off     startup  max t/s      control
+-- name   period  period  time     on startup   timesteps?
+   INJW   60.0    40.0    1*       10.0          YES       /
+   INJG   40.0    60.0    1*       10.0          YES       /
+/</code></pre><p>Start with the water injector open and the gas injector
+shut:</p>
+<pre><code>WELOPEN
+  INJW   OPEN  /
+  INJG   SHUT  /
+/</code></pre><p>Advance to the start of the first gas injection period
+and open the gas injector. It will start cycling:</p>
+<pre><code>TSTEP
+ 60.0 /
+WELOPEN
+  INJG   OPEN  /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

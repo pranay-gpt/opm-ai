@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="HMROCK"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="HMROCK"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>HMROCK</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="HMROCK"><a name="HMROCK"><!-- --></a>
+<h1 class="keyword">HMROCK</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="hmrock.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="hmrock.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1038e45"> x </th>
+
+<th valign="top" id="d1038e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1038e54">  </th>
+
+<th valign="top" id="d1038e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1038e45 d1038e54 ">  </td>
+
+<td valign="top" headers="d1038e48 d1038e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1038e45 d1038e54 ">  </td>
+
+<td valign="top" headers="d1038e48 d1038e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1038e45 d1038e54 ">  </td>
+
+<td valign="top" headers="d1038e48 d1038e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1038e45 d1038e54 "> x </td>
+
+<td valign="top" headers="d1038e48 d1038e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1038e45 d1038e54 ">  </td>
+
+<td valign="top" headers="d1038e48 d1038e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1038e45 d1038e54 ">  </td>
+
+<td valign="top" headers="d1038e48 d1038e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1038e45 d1038e54 ">  </td>
+
+<td valign="top" headers="d1038e48 d1038e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1038e45 d1038e54 ">  </td>
+
+<td valign="top" headers="d1038e48 d1038e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword can be used to obtain gradients of the solution with
+respect to multipliers on the rock compressibility entered via keyword <a href="ROCK.html#ROCK"> ROCK</a> in each PVT or
+saturation region. See <a href="../ecl_td/gradientintro_Gradient.html#gradientintro_gradient_option">"Gradient option"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.</p>
+
+<p>If the <span class="keyword">ROCK</span> data refers to <span class="keyword">PVTNUM</span> regions (see item 3 in keyword <a href="ROCKOPTS.html#ROCKOPTS"> ROCKOPTS</a>) then the keyword should be followed
+by up to <a href="TABDIMS.html#TABDIMS.NTPVT"> NTPVT</a> 
+(set in the <span class="keyword">TABDIMS</span> keyword) records defining the gradient calculations
+for each PVT region.</p>
+
+<p>If the <span class="keyword">ROCK</span> data refers to <span class="keyword">SATNUM</span> regions then the keyword should be followed by up to <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a> (set in the <span class="keyword">TABDIMS</span> keyword) defining the gradient
+calculations for each saturation region.</p>
+
+<p>The total number of rock gradient parameters specified using either
+the <span class="keyword">HMROCK</span> or <a href="HMROCKT.html#HMROCKT"> HMROCKT</a> keywords must not exceed the maximum
+specified by item 8 of the <a href="HMDIMS.html#HMDIMS"> HMDIMS</a> keyword.</p>
+
+<p>Each record must be terminated by a slash (/). The set of records
+must end with a single line containing only a slash (/).</p>
+
+<p>Each record consists of two items:</p>
+
+<ol>
+<li> PVT or saturation table number <p>This should be in the range
+1 to <span class="keyword">NTPVT</span> if <span class="keyword">PVTNUM</span> regions
+are referenced, or in the range 1 to <span class="keyword">NTSFUN</span> if <span class="keyword">SATNUM</span> regions are referenced.</p>
+ </li>
+
+<li> Calculate gradients with respect to the multiplier on the rock
+compressibility 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">1</td>
+
+<td valign="top">calculate</td>
+
+</tr>
+
+<tr>
+<td valign="top">0</td>
+
+<td valign="top">do not calculate</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: 0</p>
+ </li>
+
+</ol>
+
+<p>The pore volume is calculated as</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="hmrock.equ.0064"/>
+ <math><mrow><mi>P</mi><mi>V</mi></mrow><mo>=</mo><mrow><mi>P</mi>
+<msub><mi>V</mi><mrow><mi>r</mi><mi>e</mi><mi>f</mi>
+</mrow></msub><mo>(</mo><mn>1</mn><mo>+</mo><mi>X</mi><mo>+</mo><msup><mi>X</mi><mn>2</mn></msup>
+<mo>)</mo></mrow></math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table>
+<p>with</p>
+
+<p> <math><mi>X</mi>
+<mo>=</mo><mrow><mi>C</mi><mo>(</mo><mi>p</mi><mrow>
+<mo>-</mo><msub><mi>p</mi><mrow><mi>r</mi><mi>e</mi>
+<mi>f</mi></mrow></msub></mrow><mo>)</mo></mrow>
+</math> </p>
+
+<p>where <math><mi>C</mi></math> and  <math><msub><mi>p</mi>
+<mrow><mi>r</mi><mi>e</mi><mi>f</mi></mrow></msub>
+</math> are the rock compressibility and reference pressure entered
+in the <span class="keyword">ROCK</span> keyword. </p>
+
+<p>ECLIPSE calculates derivatives with respect to <math><mi>λ</mi></math>, a multiplier on  <math>
+<mi>C</mi></math>  (at  <math><mi>λ</mi><mo>=</mo>
+<mn>1.0</mn></math>), so that </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="hmrock.equ.0072"/>
+ <math><mi>X</mi>
+<mo>=</mo><mrow><mi>λ</mi><mi>C</mi><mo>(</mo><mi>p</mi><mrow><mo>-</mo><msub><mi>p</mi><mrow><mi>r</mi><mi>e</mi><mi>f</mi></mrow></msub></mrow><mo>)</mo></mrow></math> 
+</td><td align="right">[Eq. 247.2]
+              </td></tr></tbody></table>
+<div class="section" id="hmrock_example"><a name="hmrock_example"><!-- --></a><h4 class="sectiontitle">Example</h4>              
+  <pre><code>HMROCK 
+ 1 1 /
+ 2 1 /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

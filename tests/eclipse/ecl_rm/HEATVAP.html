@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="HEATVAP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="HEATVAP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>HEATVAP</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="HEATVAP"><a name="HEATVAP"><!-- --></a>
+<h1 class="keyword">HEATVAP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="heatvap.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="heatvap.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1000e45">  </th>
+
+<th valign="top" id="d1000e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1000e54"> x </th>
+
+<th valign="top" id="d1000e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1000e45 d1000e54 ">  </td>
+
+<td valign="top" headers="d1000e48 d1000e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1000e45 d1000e54 ">  </td>
+
+<td valign="top" headers="d1000e48 d1000e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1000e45 d1000e54 ">  </td>
+
+<td valign="top" headers="d1000e48 d1000e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1000e45 d1000e54 "> x </td>
+
+<td valign="top" headers="d1000e48 d1000e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1000e45 d1000e54 ">  </td>
+
+<td valign="top" headers="d1000e48 d1000e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1000e45 d1000e54 ">  </td>
+
+<td valign="top" headers="d1000e48 d1000e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1000e45 d1000e54 ">  </td>
+
+<td valign="top" headers="d1000e48 d1000e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1000e45 d1000e54 ">  </td>
+
+<td valign="top" headers="d1000e48 d1000e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword can only be used with the <a href="THERMAL.html#THERMAL">  THERMAL</a> option.</p>
+
+<p> <span class="keyword">HEATVAP</span> specifies the constant part of the
+heat of vaporization of each oil component. This keyword should only
+be used for thermal runs with volatile oils; it should not be used
+with <a href="DEADOIL.html#DEADOIL">  DEADOIL</a>.</p>
+
+<p>The data record contains one value for each component:</p>
+
+<p>UNITS: kJ/kg (<samp class="codeph">METRIC</samp>), Btu/lb (<samp class="codeph">FIELD</samp>), J/gm (<samp class="codeph">LAB</samp>), kJ/kg (<samp class="codeph">PVT-M</samp>)</p>
+
+<p>DEFAULT: 0.0</p>
+
+<p>If multiple equations of state are being used, a set of data should
+be entered for each reservoir EoS. The number of reservoir equation
+of state regions is entered as <a href="TABDIMS.html#TABDIMS.NMEOSR">
+ NMEOSR</a> in keyword <span class="keyword">TABDIMS</span>. 
+The use of multiple EoS regions is discussed in <a href="../ecl_td/eos_regions_Equations_of_State_Regions.html#eos_regions_equations_of_state_regions">"Equations of state
+regions"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<p>The enthalpy of a gaseous oil component may be calculated by first
+determining the enthalpy of the component in its liquid state, then
+adding a heat of vaporization of the form</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="heatvap.equ.0056"/>
+ <math><mrow><mrow><mi>Δ</mi><mi>H</mi></mrow><mo>=</mo><mi>A</mi><mo>⋅</mo><msup><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><mi>T</mi><mo>/</mo><msub><mrow><mi>T</mi>
+</mrow><mrow><mi>c</mi><mi>r</mi><mi>i</mi><mi>t</mi>
+</mrow></msub></mrow><mo>)</mo></mrow><mrow><mi>B</mi>
+</mrow></msup></mrow></math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+<p>  <math><mi>A</mi></math>  Constant part of  <math><mrow><mi>Δ</mi>
+<mi>H</mi></mrow></math>  entered with this keyword </p>
+
+<p>  <math><mi>B</mi></math>  Exponent entered with keyword <a href="HEATVAPE.html#HEATVAPE">  HEATVAPE</a> (normally default) </p>
+
+<p>  <math><mi>T</mi></math>  Temperature </p>
+
+<p>  <math><msub><mi>T</mi>
+<mrow><mi>c</mi><mi>r</mi><mi>i</mi><mi>t</mi>
+</mrow></msub></math>  Critical temperature of the component,
+keyword <a href="TCRIT.html#TCRIT">  TCRIT</a>. </p>
+
+<p>Heats of vaporization are often obtained at the normal boiling
+point. Hence the constant <math><mi>A</mi></math>  above would be entered as </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="heatvap.equ.0067"/>
+ <math><mi>A</mi><mo>=</mo>
+<mfrac><mrow><msub><mrow><mi>Δ</mi><mi>H</mi></mrow>
+<mrow><mi>n</mi><mi>b</mi></mrow></msub></mrow><mrow>
+<msup><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mi>T</mi><mrow><mi>n</mi><mi>b</mi></mrow>
+</msub><mo>/</mo><msub><mi>T</mi><mrow><mi>c</mi>
+<mi>r</mi><mi>i</mi><mi>t</mi></mrow></msub></mrow>
+<mo>)</mo></mrow><mi>B</mi></msup></mrow></mfrac>
+</math> 
+</td><td align="right">[Eq. 247.2]
+              </td></tr></tbody></table>
+<p>where <math><msub><mrow><mi>Δ</mi><mi>H</mi></mrow><mrow><mi>n</mi><mi>b</mi>
+</mrow></msub></math>  is the heat of vaporization at the normal
+boiling point, and  <math><msub><mi>T</mi>
+<mrow><mi>n</mi><mi>b</mi></mrow></msub></math>  is
+the normal boiling point. The exponent  <math><mi>B</mi></math>, entered with keyword <span class="keyword">HEATVAPE</span>, is usually defaulted to 0.38. </p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Only two of the three keywords <a href="SPECHG.html#SPECHG">  SPECHG</a>, <a href="SPECHA.html#SPECHA">  SPECHA</a> and <span class="keyword">HEATVAP</span> should be specified. For further
+information please see <a href="../ecl_td/props_Enthalpy.html#props_enthalpy">"Enthalpy"</a> in the <cite>ECLIPSE Technical Description</cite>.</span></div>
+
+<div class="section" id="heatvap_example"><a name="heatvap_example"><!-- --></a><h4 class="sectiontitle">Example</h4>             
+    <p>For 4 components of molecular weight 16, 134, 394, 539</p>
+ 
+        <pre><code>FIELD
+HEATVAP
+355 185 98 73/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

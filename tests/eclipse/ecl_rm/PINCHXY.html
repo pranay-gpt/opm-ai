@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PINCHXY"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PINCHXY"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PINCHXY</title>
+</head>
+<body>
+
+<div class="nested0" id="PINCHXY"><a name="PINCHXY"><!-- --></a><h1 class="keyword">PINCHXY</h1>
+
+ <div>
+<div class="tablenoborder"><a name="pinchxy.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="pinchxy.tab.0005" class="flagtable" frame="border" border="1" rules="all">  <thead align="left"><tr><th valign="top" id="d1808e35"> x </th>
+<th valign="top" id="d1808e37"> ECLIPSE 100 </th>
+</tr>
+<tr><th valign="top" id="d1808e40"> x </th>
+<th valign="top" id="d1808e42"> ECLIPSE 300 </th>
+</tr>
+</thead>
+<tbody><tr><td valign="top" headers="d1808e35 d1808e40 ">  </td>
+<td valign="top" headers="d1808e37 d1808e42 "> RUNSPEC </td>
+</tr>
+<tr><td valign="top" headers="d1808e35 d1808e40 "> x </td>
+<td valign="top" headers="d1808e37 d1808e42 "> GRID </td>
+</tr>
+<tr><td valign="top" headers="d1808e35 d1808e40 ">  </td>
+<td valign="top" headers="d1808e37 d1808e42 "> EDIT </td>
+</tr>
+<tr><td valign="top" headers="d1808e35 d1808e40 ">  </td>
+<td valign="top" headers="d1808e37 d1808e42 "> PROPS </td>
+</tr>
+<tr><td valign="top" headers="d1808e35 d1808e40 ">  </td>
+<td valign="top" headers="d1808e37 d1808e42 "> REGIONS </td>
+</tr>
+<tr><td valign="top" headers="d1808e35 d1808e40 ">  </td>
+<td valign="top" headers="d1808e37 d1808e42 "> SOLUTION </td>
+</tr>
+<tr><td valign="top" headers="d1808e35 d1808e40 ">  </td>
+<td valign="top" headers="d1808e37 d1808e42 "> SUMMARY </td>
+</tr>
+<tr><td valign="top" headers="d1808e35 d1808e40 ">  </td>
+<td valign="top" headers="d1808e37 d1808e42 "> SCHEDULE </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The keyword should be followed by up to two real numbers, which
+define the X-direction and Y-direction pinchout threshold widths.
+The data record should be terminated by a slash (/).</p>
+<ol><li> Threshold width in the X or R direction for horizontal pinchouts <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>),
+cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT:
+0.001 (all unit sets)</p>
+ </li>
+<li> Threshold width in the Y or THETA direction for horizontal pinchouts <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>),
+cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT:
+0.001 (all unit sets)</p>
+ </li>
+</ol>
+<p>Columns which are pinched-out in the X (or Y) direction are represented
+in the grid as columns of inactive cells of zero width in the X (or
+Y) direction. The presence of such a column of inactive cells would
+normally prevent flow from crossing it in the X (or Y) direction,
+between the active cells on either side of it.</p>
+<p>If the keyword <span class="keyword">PINCHXY</span> is entered, ECLIPSE automatically
+generates X (or Y) direction horizontal non-neighbor connections
+between the active cells on either side of the pinched-out column(s),
+allowing fluid to flow through it in the X (or Y) direction.
+Columns are deemed to be pinched-out in the X (or Y) direction
+if their overall cell width in the X (or Y) direction is less
+than the specified threshold value.</p>
+<p> The X (or Y) direction pinch-out connection reflects the
+X (or Y) direction transmissibility multiplier (<a href="MULTX.html#MULTX"> MULTX</a> or <a href="MULTY.html#MULTY"> MULTY</a>) specified in the
+left most (or backmost) of the two connected cells.</p>
+<div class="section" id="pinchxy_notes"><a name="pinchxy_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul><li> Non-neighbor connections are not generated if the keyword <a href="NONNC.html#NONNC"> NONNC</a> has been entered
+in the <span class="keyword">RUNSPEC</span> section. </li>
+<li> Pinchout connections are only formed across inactive cells, whatever
+the value set for the threshold thickness. </li>
+<li><p>ECLIPSE 300</p>
+<p>Only horizontal pinchouts in the global grid will be generated. Currently,
+no local grid <span class="keyword">PINCHXY</span> connections will be calculated.</p>
+</li>
+<li>For complex geometry, for instance
+where pinchouts are needed across faults or where layers are extremely
+slanted or twisted, the most appropriate active cell to connect to
+can be ambiguous. Setting to <a href="OPTIONS.html#options.266">item 266</a> of keyword <span class="keyword">OPTIONS</span> to 1 activates
+an alternative algorithm for choosing this active cell which may be
+useful in cases where the default algorithm behaves poorly. However,
+it may be better to use a specialist gridding package to generate
+these NNCs.</li>
+</ul>
+</div>
+<div class="section" id="pinchxy_example"><a name="pinchxy_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>PINCHXY
+ 1* 0.1 /</code></pre></div>
+</div>
+</div>
+
+</body>
+</html>

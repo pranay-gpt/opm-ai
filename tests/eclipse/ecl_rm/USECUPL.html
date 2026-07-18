@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="USECUPL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="USECUPL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>USECUPL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="USECUPL"><a name="USECUPL"><!-- --></a>
+<h1 class="keyword">USECUPL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="usecupl.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="usecupl.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2716e45"> x </th>
+
+<th valign="top" id="d2716e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2716e54">  </th>
+
+<th valign="top" id="d2716e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2716e45 d2716e54 ">  </td>
+
+<td valign="top" headers="d2716e48 d2716e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2716e45 d2716e54 ">  </td>
+
+<td valign="top" headers="d2716e48 d2716e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2716e45 d2716e54 ">  </td>
+
+<td valign="top" headers="d2716e48 d2716e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2716e45 d2716e54 ">  </td>
+
+<td valign="top" headers="d2716e48 d2716e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2716e45 d2716e54 ">  </td>
+
+<td valign="top" headers="d2716e48 d2716e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2716e45 d2716e54 ">  </td>
+
+<td valign="top" headers="d2716e48 d2716e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2716e45 d2716e54 ">  </td>
+
+<td valign="top" headers="d2716e48 d2716e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2716e45 d2716e54 "> x </td>
+
+<td valign="top" headers="d2716e48 d2716e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">USECUPL</span> keyword may be used in either the
+master run or a slave run if you wish it to read group flows or constraints
+from a reservoir coupling file (see <a href="../ecl_td/rescouplintro_Reservoir_coupling_files.html#rescouplintro_reservoir_coupling_files">"Reservoir coupling
+files"</a> in the <cite>ECLIPSE Technical Description</cite>).</p>
+
+<p>The file may be used for two purposes:</p>
+
+<ul>
+<li> In the master run, it can take the place of one or more of the
+slave reservoirs. Their slave runs are not activated, that is not
+specified in the <a href="SLAVES.html#SLAVES">  SLAVES</a> keyword. Instead the associated master groups are instructed
+in keyword <a href="GRUPMAST.html#GRUPMAST">  GRUPMAST</a> to take their production and injection rates from the reservoir
+coupling file. </li>
+
+<li> A slave run may be performed on its own, instead of being activated
+by the master run. It reads from this file the constraints that the
+master run originally applied to its slave groups over the course
+of the simulation, and apply them again in the same sequence. It expected
+to find the applied constraints of all its slave groups (identified
+with the <a href="GRUPSLAV.html#GRUPSLAV">  GRUPSLAV</a> keyword) on this file. </li>
+
+</ul>
+
+<p>The file must previously have been written by the master run when
+it was controlling each of the slave reservoirs. Keyword <a href="DUMPCUPL.html#DUMPCUPL">  DUMPCUPL</a> instructs
+the Master Run to write a Reservoir Coupling file.</p>
+
+<p>The <span class="keyword">USECUPL</span> keyword is followed by a record
+containing two items of data, terminated with a slash (/). The data
+items are:</p>
+
+<ol>
+<li> The root name of the reservoir coupling file to be read <p>If
+the original coupled runs were performed over a series of restarts,
+there should be a sequence of reservoir coupling files, each having
+the root name of the data file of the master run that wrote it. In
+this case, you should enter the name of the <strong>last</strong> file in the
+sequence. Each file has a header that contains the root name of the
+data file from which it was restarted. Thus ECLIPSE is able to establish
+the chain of Reservoir Coupling files to be used, provided that they
+are all present. The chain can contain up to 20 restarts. ECLIPSE
+must be re-dimensioned if more are required.</p>
+ </li>
+
+<li> The formatted/unformatted status of the input Reservoir Coupling
+file (a single character) 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+<td valign="top"> ECLIPSE looks for an unformatted file (<samp class="codeph">.CPL</samp>)</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">F</samp> </td>
+
+<td valign="top">ECLIPSE looks for a formatted file (<samp class="codeph">.FCP</samp>)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>Note that the formatted/unformatted status of the input
+Reservoir Coupling file can be chosen independently of keyword <a href="FMTIN.html#FMTIN">  FMTIN</a> in
+the <span class="keyword">RUNSPEC</span> section.</p>
+            </li>
+
+</ol>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The <span class="keyword">USECUPL</span> instruction is <strong>not</strong> carried
+over on the Restart file. If you wish to restart the run and continue
+reading the reservoir coupling file, you must include the <span class="keyword">USECUPL</span> keyword in the restart run’s <span class="keyword">SCHEDULE</span> section. A suitable place for the keyword is at the beginning of
+the <span class="keyword">SCHEDULE</span> section. </span></div>
+
+<div class="section" id="usecupl_example"><a name="usecupl_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <pre><code>USECUPL
+ restart2  U /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

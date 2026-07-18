@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="NXFIN"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="NXFIN"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>NXFIN</title>
+</head>
+<body>
+
+
+<div class="nested0" id="NXFIN"><a name="NXFIN"><!-- --></a>
+<h1 class="keyword">NXFIN</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="nxfin.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="nxfin.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1612e45"> x </th>
+
+<th valign="top" id="d1612e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1612e54"> x </th>
+
+<th valign="top" id="d1612e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1612e45 d1612e54 ">  </td>
+
+<td valign="top" headers="d1612e48 d1612e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1612e45 d1612e54 "> x </td>
+
+<td valign="top" headers="d1612e48 d1612e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1612e45 d1612e54 ">  </td>
+
+<td valign="top" headers="d1612e48 d1612e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1612e45 d1612e54 ">  </td>
+
+<td valign="top" headers="d1612e48 d1612e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1612e45 d1612e54 ">  </td>
+
+<td valign="top" headers="d1612e48 d1612e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1612e45 d1612e54 ">  </td>
+
+<td valign="top" headers="d1612e48 d1612e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1612e45 d1612e54 ">  </td>
+
+<td valign="top" headers="d1612e48 d1612e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1612e45 d1612e54 ">  </td>
+
+<td valign="top" headers="d1612e48 d1612e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>If a local grid refinement covers more than one global cell in
+the x-direction, <span class="keyword">NXFIN</span> can be used to dictate how
+many local cells each of the global cells is divided into. The keyword
+should be placed after the keyword <a href="CARFIN.html#CARFIN"> CARFIN</a> introducing the local grid, and before the
+local grid data is terminated with <a href="ENDFIN.html#ENDFIN"> ENDFIN</a>. <span class="keyword">NXFIN</span> does not apply
+to radial refinements introduced with <a href="RADFIN.html#RADFIN"> RADFIN</a>.</p>
+
+<p><span class="keyword">NXFIN</span> should be followed by I2-I1+1 values terminated
+with a slash (/), where I1 and I2 are the I-coordinates defining the
+box of global grid cells to be refined (items 2 and 3 in keyword <span class="keyword">CARFIN</span>). The number of values is thus the number of global
+cells of the refinement counted along the X-direction. The values
+represent the number of local cell divisions, counted along the X-direction,
+in each of the global cells. The sum of the values must, of course,
+be equal to NX set in item 8 of <span class="keyword">CARFIN</span>.</p>
+
+<p>In the absence of this keyword, the global cells are refined to
+contain equal numbers of local cells in the x-direction.</p>
+
+<p>Local grid refinement is described in <a href="../ecl_td/lgrc_Local_Grid_Refinement_and_Coarsening.html#lgrc_local_grid_refinement_and_coarsening">"Local grid refinement
+and coarsening"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<div class="section" id="nxfin_example"><a name="nxfin_example"><!-- --></a><h4 class="sectiontitle">Example</h4>               
+ <pre><code>CARFIN
+-- NAME   I1 I2  J1 J2 K1 K2 NX NY NZ
+   LGR2   3  4   1  2  5  6  4  2  4 /
+--Two global cells in x-direction to become 4 local cells
+--with three local cells in first global, 1 in second
+NXFIN
+3 1 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

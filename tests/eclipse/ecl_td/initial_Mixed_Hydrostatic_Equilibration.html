@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Mixed hydrostatic equilibration"/>
+<meta name="DC.subject" content="Initial conditions"/>
+<meta name="keywords" content="Initial conditions"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="initial_mixed_hydrostatic_equilibration"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Mixed hydrostatic equilibration</title>
+</head>
+<body>
+
+
+<div class="nested0" id="initial_mixed_hydrostatic_equilibration"><a name="initial_mixed_hydrostatic_equilibration"><!-- --></a>
+<h1 class="topictitle1">Mixed hydrostatic equilibration</h1>
+
+
+ <div>
+<p>Thermal    </p>
+
+<p>An additional initialization method has been added for Thermal
+simulations. This option should be triggered using items 1 and 2 of
+the <a href="../ecl_rm/EQUIL.html#EQUIL">EQUIL</a> keyword, together with saturation arrays (<a href="../ecl_rm/SOIL.html#SOIL">SOIL</a>, for instance) and the <a href="../ecl_rm/NEI.html#NEI">NEI</a> keyword.</p>
+
+<p>For each equilibration region, the datum depths and the pressure
+at a given datum depth are specified in order to determine the initial
+pressure map for the simulation model. The number of depth points
+in this table is set using the keyword <a href="../ecl_rm/EQLDIMS.html#EQLDIMS">EQLDIMS</a> in the <span class="keyword">RUNSPEC</span> section. The depth points are spaced equally throughout the region.
+The software algorithm sets up an internal table of pressures against
+depths. Between each pair of depth points in the table, the pressure
+gradient is calculated iteratively using a density (assuming an oil
+phase) consistent with the average pressure within the depth step.
+The pressure values are calculated by stepping from the datum depth
+up to the top and down to the bottom of the equilibration region.
+The pressure and temperatures are then determined in each grid block,
+in the equilibration region, when the internal table is interpolated
+to obtain these values at the grid block center depth.</p>
+
+<p>The <span class="keyword">NEI</span> keyword provides a sample hydrocarbon
+composition for each equilibration region which is needed to determine
+non-equilibrium initialization composition tables internally by generating
+consistent oil and gas compositions for each cell. This is achieved
+by flashing to the cell pressure - effectively a constant composition
+expansion. The simulator tries to match the oil, water and gas saturations
+in each equilibration region, and if the specified compositions cannot
+match the phase saturations, then the components that have the highest
+gas phase mole fraction have their compositions adjusted.</p>
+
+<p>If the <span class="keyword">NEI</span> sample provided is only for an oil
+composition, then the pressure calculated for any gas phase present
+will not be defined efficiently. An alternative method is to use the <a href="../ecl_rm/XMFVP.html#XMFVP"> XMFVP</a> / <a href="../ecl_rm/YMFVP.html#YMFVP">YMFVP</a> or <a href="../ecl_rm/XMF.html#XMF">XMF</a> / <a href="../ecl_rm/YMF.html#YMF">YMF</a> keywords.</p>
+
+<p>A table of depth values against initial pressure and temperature
+values will be automatically output to the PRINT file under the header <samp class="codeph">“MH_EQUIL” (Pressure with depth (Mixed Hydrostatic Equilibration))</samp>.</p>
+
+<p>This initialization method should not be mixed with the standard
+equilibration method, otherwise an error message will be issued.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Limitations to the use of flux boundary conditions with CEOR agents and tracers (ECLIPSE 100)"/>
+<meta name="DC.subject" content="Running the simulator"/>
+<meta name="keywords" content="Running the simulator"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="fluxintro_Using_flux_boundary_conditions_with_EORTracers_quantities"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title> Limitations to the use of flux boundary conditions with CEOR
+agents and tracers (ECLIPSE 100)</title>
+</head>
+<body>
+
+<div class="nested0" id="fluxintro_Using_flux_boundary_conditions_with_EORTracers_quantities"><a name="fluxintro_Using_flux_boundary_conditions_with_EORTracers_quantities"><!-- --></a><h1 class="topictitle1"> Limitations to the use of flux boundary conditions with CEOR
+agents and tracers (ECLIPSE 100)</h1>
+ <div><p>All CEOR agents and tracers are supported in reduced
+runs with pressure boundary conditions (<span class="keyword">FLUXTYPE</span> <span class="keyword">‘PRESSURE’</span>) with some constraints
+on flow into  the flux region as explained below. Support with flow
+boundary conditions (<span class="keyword">FLUXTYPE</span> <span class="keyword">‘FLUX’</span>) is more limited.   Temperature (<a href="../ecl_rm/TEMP.html#TEMP">TEMP</a>)  and is not supported in reduced runs of either type. </p>
+<p> ECLIPSE outputs an error if unsupported quantities
+are used in a reduced run. The error can be suppressed by using  <a href="../ecl_rm/OPTIONS.html#options.232">item 232</a> of the <span class="keyword">OPTIONS</span> keyword.
+  This option may be useful when it is known that the flow of these
+quantities across flux boundaries does not occur. </p>
+<p> Pressure boundary conditions
+are compatible with <a href="../ecl_rm/TRACER.html#TRACER">TRACER</a>, <a href="../ecl_rm/POLYMER.html#POLYMER">POLYMER</a>,  <a href="../ecl_rm/SOLVENT.html#SOLVENT">SOLVENT</a>, <a href="../ecl_rm/SURFACT.html#SURFACT"> SURFACT</a>, <a href="../ecl_rm/BRINE.html#BRINE">BRINE</a> (used by itself) and <span class="keyword">BRINE</span> when used together
+ with <span class="keyword">POLYMER</span>.  If outflow of CEOR agents or tracers
+across sector boundaries  is available in a reduced run but inflow
+across sector boundaries is not, you need to ensure that all the EOR/Tracer
+activity occurs within the sector.</p>
+<p>The following table summarizes the compatibility of
+all of the options. </p>
+
+<div class="tablenoborder"><a name="flux_boundary_limits_ceor_E100"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="flux_boundary_limits_ceor_E100" frame="border" border="1" rules="all"><caption>
+           Table 746.1  Support for CEOR agents and tracers in reduced runs.</caption>     <thead align="left"><tr><th valign="top" id="d504e96">EOR agent or tracer</th>
+<th valign="top" id="d504e98">Outflow across pressure boundary</th>
+<th valign="top" id="d504e100">Inflow across pressure boundary</th>
+<th valign="top" id="d504e102">Outflow across flow boundary</th>
+<th valign="top" id="d504e104">Inflow across flow boundary</th>
+</tr>
+</thead>
+<tbody><tr><td valign="top" headers="d504e96 "> <a href="../ecl_rm/POLYMER.html#POLYMER">POLYMER</a> </td>
+<td valign="top" headers="d504e98 ">Y</td>
+<td valign="top" headers="d504e100 ">Y</td>
+<td valign="top" headers="d504e102 "><p>N</p>
+</td>
+<td valign="top" headers="d504e104 ">N</td>
+</tr>
+<tr><td valign="top" headers="d504e96 "> <a href="../ecl_rm/BRINE.html#BRINE">BRINE</a> when used with <a href="../ecl_rm/POLYMER.html#POLYMER">POLYMER</a> </td>
+<td valign="top" headers="d504e98 ">Y</td>
+<td valign="top" headers="d504e100 ">Y</td>
+<td valign="top" headers="d504e102 ">N</td>
+<td valign="top" headers="d504e104 ">N</td>
+</tr>
+<tr><td valign="top" headers="d504e96 "> <a href="../ecl_rm/BRINE.html#BRINE">BRINE</a> </td>
+<td valign="top" headers="d504e98 ">Y</td>
+<td valign="top" headers="d504e100 "><p>Y</p>
+</td>
+<td valign="top" headers="d504e102 "><p>Y</p>
+</td>
+<td valign="top" headers="d504e104 "><p>Y</p>
+</td>
+</tr>
+<tr><td valign="top" headers="d504e96 "> <a href="../ecl_rm/SURFACT.html#SURFACT">SURFACT</a> </td>
+<td valign="top" headers="d504e98 ">Y</td>
+<td valign="top" headers="d504e100 "><p>Y</p>
+</td>
+<td valign="top" headers="d504e102 ">Y</td>
+<td valign="top" headers="d504e104 ">N</td>
+</tr>
+<tr><td valign="top" headers="d504e96 "> <a href="../ecl_rm/SOLVENT.html#SOLVENT">SOLVENT</a> </td>
+<td valign="top" headers="d504e98 ">Y</td>
+<td valign="top" headers="d504e100 ">Y</td>
+<td valign="top" headers="d504e102 ">N</td>
+<td valign="top" headers="d504e104 ">N</td>
+</tr>
+<tr><td valign="top" headers="d504e96 "> <a href="../ecl_rm/ALKALINE.html#ALKALINE">ALKALINE</a> </td>
+<td valign="top" headers="d504e98 ">Y</td>
+<td valign="top" headers="d504e100 ">N</td>
+<td valign="top" headers="d504e102 ">N</td>
+<td valign="top" headers="d504e104 ">N</td>
+</tr>
+<tr><td valign="top" headers="d504e96 ">Passive tracers (<a href="../ecl_rm/TRACER.html#TRACER">TRACER</a>) in oil, water, gas </td>
+<td valign="top" headers="d504e98 "><p>Y</p>
+</td>
+<td valign="top" headers="d504e100 "><p>Y</p>
+</td>
+<td valign="top" headers="d504e102 "><p>Y</p>
+</td>
+<td valign="top" headers="d504e104 "><p>Y</p>
+</td>
+</tr>
+<tr><td valign="top" headers="d504e96 ">Partitioned tracer <a href="../ecl_rm/PARTTRAC.html#PARTTRAC">PARTTRAC</a>               </td>
+<td valign="top" headers="d504e98 ">Y</td>
+<td valign="top" headers="d504e100 ">N</td>
+<td valign="top" headers="d504e102 ">N</td>
+<td valign="top" headers="d504e104 ">N</td>
+</tr>
+<tr><td valign="top" headers="d504e96 "> <a href="../ecl_rm/API.html#API">API</a> </td>
+<td valign="top" headers="d504e98 "><p>Y</p>
+</td>
+<td valign="top" headers="d504e100 "><p>Y</p>
+</td>
+<td valign="top" headers="d504e102 ">N</td>
+<td valign="top" headers="d504e104 ">N</td>
+</tr>
+<tr><td valign="top" headers="d504e96 "> <a href="../ecl_rm/TEMP.html#TEMP">TEMP</a> </td>
+<td valign="top" headers="d504e98 ">N</td>
+<td valign="top" headers="d504e100 ">N</td>
+<td valign="top" headers="d504e102 ">N</td>
+<td valign="top" headers="d504e104 ">N</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+</body>
+</html>

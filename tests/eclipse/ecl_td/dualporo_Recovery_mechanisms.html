@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Recovery mechanisms"/>
+<meta name="DC.subject" content="Grid and reservoir modeling, Dual porosity, Recovery mechanisms"/>
+<meta name="keywords" content="Grid and reservoir modeling, Dual porosity, Recovery mechanisms"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="dualporo_recovery_mechanisms"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Recovery mechanisms</title>
+</head>
+<body>
+
+
+<div class="nested0" id="dualporo_recovery_mechanisms"><a name="dualporo_recovery_mechanisms"><!-- --></a>
+<h1 class="topictitle1">Recovery mechanisms</h1>
+
+
+ <div>
+<p>In a dual porosity system the majority of the oil is contained
+in the matrix system, but the production of oil to the wells is through
+the high permeability fracture system. In such a system an injected
+fluid does not sweep out oil from the matrix block. Production from
+the matrix blocks can be associated with various physical mechanisms
+including:</p>
+
+<ul>
+<li>Oil expansion</li>
+
+<li>Imbibition</li>
+
+<li>Gravity imbibition/drainage</li>
+
+<li>Diffusion</li>
+
+<li>Viscous displacement.</li>
+
+</ul>
+
+<div class="section" id="dualporo_oil_expansion"><a name="dualporo_oil_expansion"><!-- --></a><h4 class="sectiontitle">Oil expansion</h4><p>As the pressure drops in the fracture system, oil flows from the
+matrix to equilibrate the matrix pressure with the surrounding fracture
+pressure. This production mechanism can be thought of as expansion
+of the oil within the matrix block, either above the bubble point
+or by solution gas drive below the bubble point.</p>
+</div>
+
+<div class="section" id="dualporo_imbibition"><a name="dualporo_imbibition"><!-- --></a><h4 class="sectiontitle">Imbibition</h4><p>In a
+typical water wet system the matrix rock has a positive water-oil
+capillary pressure. If water is introduced into the fracture, the
+water flows under capillary forces into the matrix system, displacing
+oil. Note that if the gravity drainage model (see below) is not active,
+then the production continues until the oil saturation in the matrix
+has reached residual oil.</p>
+<p>The water imbibition process is modeled
+in ECLIPSE by specifying different saturation table numbers for the
+matrix and fracture cells respectively. The matrix cells typically
+have a water-oil capillary pressure, while the fracture cells usually
+have zero capillary pressure.</p>
+<p>In gas-oil systems the oil is
+the wetting phase and tends to imbibe into the matrix. In practice
+this means that if the gravity drainage model is not active then no
+oil production occurs from a matrix block when the associated fracture
+block is full of gas.</p>
+</div>
+
+<div class="section" id="dualporo_gravity_imbibition_drainage"><a name="dualporo_gravity_imbibition_drainage"><!-- --></a><h4 class="sectiontitle">Gravity
+imbibition/drainage</h4><p>Fluid exchange between the fracture
+and matrix due to gravity is modeled in one of two ways. One method
+is to consider each of the matrix and fracture cells as separately
+in vertical equilibrium, and then to calculate additional potential
+due to differences in contact heights between the matrix and fracture.
+There are two options for this, which are activated by including either
+of the keywords <a href="../ecl_rm/GRAVDR.html#GRAVDR">GRAVDR</a> or <a href="../ecl_rm/GRAVDRM.html#GRAVDRM">GRAVDRM</a> (described in the next two sections) in the <span class="keyword">RUNSPEC</span> section. This method leaves the number of porosities in the grid
+as 2.</p>
+<p>The other method (described in the section following)
+uses a modification of the Discrete Matrix model (ECLIPSE 100) or
+multi porosity model (ECLIPSE 300), and uses <em>N</em> matrix porosities,
+where <em>N</em> is user-defined, to create a vertical stack of finely
+spaced matrix cells which describe the distribution of properties
+within a single block of matrix material (with height as defined by
+the <a href="../ecl_rm/DZMTRX.html#DZMTRX">DZMTRX</a> keyword). This option is not available with dual permeability
+runs, which should use a more detailed discretization of the whole
+grid; the advantage of discretizing only the matrix is that its equations
+can be eliminated from the solution before the linear solution is
+performed, so that no additional time is spent in that part of the
+code.</p>
+<p>The <span class="keyword">DZMTRX</span> keyword is also required
+for the <span class="keyword">GRAVDR</span> or <a href="../ecl_rm/GRAVDRM.html#GRAVDRM">GRAVDRM</a> models, and a non-zero
+value should be given for it in the <span class="keyword">GRID</span> section
+in all gravity drainage cases.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

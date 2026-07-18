@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Gi pseudo-compositional model"/>
+<meta name="DC.subject" content="GI pseudo-compositional"/>
+<meta name="keywords" content="GI pseudo-compositional"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gipscomp"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Gi pseudo-compositional model</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="gipscomp"><a name="gipscomp"><!-- --></a>
+<h1 class="keyword">Gi pseudo-compositional model</h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gipscompintro.tab.0009"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gipscompintro.tab.0009" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">x</td>
+
+<td valign="top">ECLIPSE 100</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+ 
+<td valign="top">ECLIPSE 300</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This chapter is concerned with the Gi pseudo-compositional model
+for gas condensate/volatile oil systems in ECLIPSE 100.</p>
+
+<p>The scope and accuracy of gas condensate modeling using black oil
+reservoir simulators such as ECLIPSE is now established. Both depletion
+and gas cycling above the dew point can be modeled and yield an adequate
+match with the results from multi-component compositional simulators.
+The main inadequacy with the existing ECLIPSE approach lies with the
+treatment of gas injection below the dew point where the primary compositional
+effect - the stripping of liquid components in inverse proportion
+to their molecular weights - is completely ignored.</p>
+
+<p>The standard black oil model assumes that the saturated hydrocarbon
+fluid properties are functions of pressure only and disregards any
+compositional dependence in the saturated fluid PVT properties. As
+a consequence, when dry gas is injected into a condensate below its
+dew point the gas continues to re-vaporize liquid at a rate governed
+only by the ambient pressure. The vapor saturates over a zone whose
+thickness is of the order of one grid block - in particular all the
+liquid in the vicinity of the injectors evaporates rapidly. Results
+obtained with fully compositional simulation models suggest that liquid
+saturation profiles would vary more slowly with increasing distance
+from gas injectors.</p>
+
+<p>The simulation of low pressure gas injection into gas condensate
+reservoirs can be improved in one of two ways. One is to use a multi-component
+compositional model to track the movement of the individual hydrocarbon
+components through the grid mesh. At each timestep the thermodynamic
+equilibrium between all the components present in each grid block
+is computed using an equation-of-state flash calculation or K-value
+correlations which define the vapor- liquid mole fraction ratios for
+each component over a wide range of conditions in the simulation.</p>
+
+<p>An alternative approach to modeling low pressure gas injection
+is to extend the black oil, two pseudo-component model to take account
+of fluid property changes occurring during gas injection. A number
+of extensions of the black oil model to treat compositional effects
+arising during gas injection have been reported in the literature,
+and all methods hinge on extending the fluid property treatment so
+that the saturated fluid properties depend not only on pressure but
+also on an additional parameter which characterizes compositional
+changes in the reservoir liquid and vapor phases at constant pressure.</p>
+
+<p>The model described here is based on the method proposed by <cite><span> <a href="biblio_Bibliography.html#biblio_53933">Cook et al
+(1974)</a> </span></cite>. The extra parameter introduced into the
+model to represent the light-end stripping effects is a cumulative
+injection gas flow parameter (Gi) and is analogous to tracking the
+flow of the dry injection gas around the reservoir grid.</p>
+
+<div class="section" id="gipscompintro_Description_of_the_model"><a name="gipscompintro_Description_of_the_model"><!-- --></a><h4 class="sectiontitle">Description
+of the model</h4><p>The model requires an extra parameter to be
+introduced in order to characterize the compositional changes taking
+place in the reservoir fluids due to gas injection - this is cumulative
+volume of injection gas which has passed over the reservoir liquid
+in each grid cell.</p>
+<p>A simple active gas tracking calculation
+is performed to determine the cumulative amount of dry injection gas
+(Gi), which has contacted the oil in each grid cell. Gi can then be
+used as the correlating parameter for determining the fluid property
+changes at constant pressure. An extra variable Gi has therefore to
+be stored in each grid cell.</p>
+<p>The tracking calculation is performed
+in a novel way. If <math>
+<mrow><msub><mrow><mi>f</mi></mrow><mrow><mi>d</mi>
+<mi>r</mi></mrow></msub></mrow></math> denotes the fraction
+of invading gas (with R<sub>v</sub>=R<sub>v, inj</sub>), then the
+effective R<sub>v</sub>of the invading gas is:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gipscompintro0.00a"/>
+ <math><mrow><msub>
+<mrow><mi>R</mi></mrow><mrow><mi>v</mi><mo>,</mo>
+<mtext> </mtext><mstyle><mi>i</mi><mi>n</mi><mi>v</mi></mstyle><mo>⁢</mo></mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext><msub><mrow><mi>f</mi>
+</mrow><mrow><mi>d</mi><mi>r</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi>R</mi></mrow><mrow><mi>v</mi>
+<mo>,</mo><mtext> </mtext><mstyle><mi>i</mi><mi>n</mi><mi>j</mi></mstyle></mrow></msub><mo>⁢</mo><mo>+</mo><mtext> </mtext><mrow><mo>(</mo><mn>1</mn><mo>⁢</mo><mo>−</mo><mtext> </mtext><msub>
+<mrow><mi>f</mi></mrow><mrow><mi>d</mi><mi>r</mi>
+</mrow></msub><mo>)</mo><msub><mrow><mi>R</mi></mrow>
+<mrow><mi>v</mi><mo>,</mo><mtext> </mtext><mstyle><mi>c</mi><mi>e</mi><mi>l</mi><mi>l</mi></mstyle></mrow></msub></mrow></mrow></math> 
+</td><td align="right">[Eq. 209.1]
+              </td></tr></tbody></table><p>which yields the following expression for the fractional
+injection gas flux into each grid cell:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gipscompintro0.00b"/>
+ <math><mrow><msub>
+<mrow><mi>f</mi></mrow><mrow><mi>d</mi><mi>r</mi>
+</mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext>
+<mfrac><mrow><msub><mrow><mi>R</mi></mrow><mrow><mi>v</mi><mo>,</mo><mtext> </mtext><mstyle>
+<mi>i</mi><mi>n</mi><mi>v</mi></mstyle></mrow></msub>
+<mo>⁢</mo><mo>−</mo><mtext> </mtext><msub><mrow><mi>R</mi></mrow><mrow><mi>v</mi><mo>,</mo><mtext> </mtext>
+<mstyle><mi>c</mi><mi>e</mi><mi>l</mi>
+<mi>l</mi></mstyle></mrow></msub></mrow><mrow><msub>
+<mrow><mi>R</mi></mrow><mrow><mi>v</mi><mo>,</mo>
+<mtext> </mtext><mstyle><mi>i</mi><mi>n</mi><mi>j</mi></mstyle></mrow></msub><mo>⁢</mo><mo>−</mo><mtext> </mtext><msub><mrow><mi>R</mi></mrow>
+<mrow><mi>v</mi><mo>,</mo><mtext> </mtext><mstyle><mi>c</mi><mi>e</mi><mi>l</mi><mi>l</mi></mstyle></mrow></msub></mrow></mfrac></mrow>
+</math> 
+</td><td align="right">[Eq. 209.2]
+              </td></tr></tbody></table><p>If the well injects dry gas (<math><mrow><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>v</mi><mo>,</mo><mtext> </mtext><mstyle><mi>i</mi><mi>n</mi>
+<mi>j</mi></mstyle></mrow></msub><mo>⁢</mo><mo>=</mo>
+<mtext> </mtext><mn>0</mn></mrow></math>), this expression
+reduces to <math><mrow>
+<msub><mrow><mi>f</mi></mrow><mrow><mi>d</mi><mi>r</mi></mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext>
+<mn>1</mn><mo>⁢</mo><mo>−</mo><mtext> </mtext><msub>
+<mrow><mi>R</mi></mrow><mrow><mi>v</mi><mo>,</mo>
+<mtext> </mtext><mstyle><mi>i</mi><mi>n</mi><mi>v</mi></mstyle></mrow></msub><mo>/</mo>
+<msub><mrow><mi>R</mi></mrow><mrow><mi>v</mi><mo>,</mo><mtext> </mtext><mstyle><mi>c</mi><mi>e</mi><mi>l</mi><mi>l</mi></mstyle></mrow>
+</msub></mrow></math>.</p>
+<p>The cumulative injection gas flowing
+into each grid cell (gi) can then be defined as:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gipscompintro0.00c"/>
+ <math><mrow><mstyle><mrow><mi>G</mi><mi>i</mi></mrow>
+</mstyle><mo>⁢</mo><mo>=</mo><mtext> </mtext><mrow>
+<mo>∫</mo><mrow><mfrac><mrow><msub><mrow><mi>f</mi>
+</mrow><mrow><mi>d</mi><mi>r</mi></mrow></msub><msub>
+<mrow><mi>F</mi></mrow><mrow><mi>g</mi></mrow></msub>
+</mrow><mrow><mi>H</mi><mi>C</mi><mi>P</mi><mi>V</mi>
+</mrow></mfrac></mrow><mi>d</mi><mi>t</mi></mrow>
+</mrow></math> 
+</td><td align="right">[Eq. 209.3]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>F</mi></mrow><mrow><mi>g</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the surface flow rate of gas,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>H</mi><mi>C</mi><mi>P</mi><mi>V</mi></mrow>
+</math> </td>
+
+<td valign="top">is the hydrocarbon pore volume of the cell.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>The saturated PVT properties (principally <math><mrow><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>s</mi></mrow></msub><mo>,</mo><mtext> </mtext><msub><mrow><mi>R</mi></mrow>
+<mrow><mi>v</mi></mrow></msub><mo>,</mo><mtext> </mtext>
+<msub><mrow><mi>B</mi></mrow><mrow><mi>o</mi></mrow>
+</msub><mo>,</mo></mrow></math> and <math><mrow><msub><mrow>
+<mi>B</mi></mrow><mrow><mi>g</mi></mrow></msub></mrow>
+</math>) should now contain a dependence on both P<sub>o</sub> and
+Gi. In practice it is usually the variation of <math><mrow><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>v</mi><mo>,</mo><mtext> </mtext><mstyle><mi>s</mi><mi>a</mi>
+<mi>t</mi></mstyle></mrow></msub></mrow></math> and <math><mrow><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>s</mi><mo>,</mo><mtext> </mtext><mstyle><mi>s</mi><mi>a</mi>
+<mi>t</mi></mstyle></mrow></msub></mrow></math> with
+Gi that is the most significant and should be ignored. For example
+it is likely that <math>
+<mrow><msub><mrow><mi>R</mi></mrow><mrow><mi>v</mi>
+<mo>,</mo><mtext> </mtext><mstyle><mi>s</mi><mi>a</mi><mi>t</mi></mstyle></mrow></msub>
+</mrow></math> could be reduced by an order of magnitude before
+complete vaporization of the liquid in a cell finally occurred. More
+significantly, the difference in the fluid property variations with
+Gi from cell to cell in a one dimensional compositional case is usually
+found to be small – this tends to suggest that Gi is a good correlating
+parameter for the purposes of modeling gas injection effects.</p>
+<p>The differential equation to be solved for Gi can be easily derived.
+The gas entering each grid cell can be regarded as being composed
+of two components. Firstly, a component which has the same oil-gas
+ratio as the gas already present in the cell; this component is regarded
+as being in equilibrium with the gas already present in the cell.
+The second component in the gas is dry (R<sub>v</sub> = 0) and can
+cause liquid vaporization.</p>
+<p>The inflow of the free gas which
+is dry is then:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gipscompintro0.00d"/>
+ <math><mrow><msub>
+<mrow><mi>f</mi></mrow><mrow><mi>d</mi><mi>r</mi>
+</mrow></msub><mo>⋅</mo><msub><mrow><mi>F</mi></mrow>
+<mrow><mi>g</mi></mrow></msub><mo>⁢</mo><mo>=</mo>
+<mtext> </mtext><mrow><mo>(</mo><mn>1</mn><mo>⁢</mo>
+<mo>−</mo><mtext> </mtext><mfrac><mrow><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>v</mi><mo>,</mo><mtext> </mtext><mstyle><mi>i</mi><mi>n</mi>
+<mi>v</mi></mstyle></mrow></msub></mrow><mrow><msub>
+<mrow><mi>R</mi></mrow><mrow><mi>v</mi><mo>,</mo>
+<mtext> </mtext><mstyle><mi>c</mi><mi>e</mi><mi>l</mi><mi>l</mi></mstyle></mrow></msub>
+</mrow></mfrac><mo>)</mo><msub><mrow><mi>F</mi></mrow>
+<mrow><mi>g</mi></mrow></msub></mrow></mrow></math> 
+</td><td align="right">[Eq. 209.4]
+              </td></tr></tbody></table><p>If the grid cell contains a well completion injecting
+dry gas, there is an additional term to represent the dry gas inflow
+from the well:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gipscompintro0.00e"/>
+ <math><mrow><msub>
+<mrow><mi>f</mi></mrow><mrow><mi>d</mi><mi>r</mi>
+<mi>w</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi>Q</mi></mrow><mrow><mi>g</mi></mrow></msub><mo>⁢</mo>
+<mo>=</mo><mtext> </mtext><mrow><mo>(</mo><mn>1</mn>
+<mo>⁢</mo><mo>−</mo><mtext> </mtext><mfrac><mrow>
+<msub><mrow><mi>R</mi></mrow><mrow><mi>v</mi><mo>,</mo><mtext> </mtext><mstyle><mrow>
+<mi>i</mi><mi>n</mi><mi>j</mi></mrow></mstyle></mrow>
+</msub></mrow><mrow><msub><mrow><mi>R</mi></mrow>
+<mrow><mi>v</mi><mo>,</mo><mtext> </mtext><mstyle><mrow><mi>c</mi><mi>e</mi><mi>l</mi>
+<mi>l</mi></mrow></mstyle></mrow></msub></mrow></mfrac>
+<mo>)</mo><msub><mrow><mi>Q</mi></mrow><mrow><mi>g</mi></mrow></msub></mrow></mrow></math> 
+</td><td align="right">[Eq. 209.5]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>f</mi></mrow><mrow><mi>d</mi><mi>r</mi><mi>w</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top"> is the dry gas fraction of the well flow,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>Q</mi></mrow><mrow><mi>g</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is the well gas flow rate.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>Now the change in Gi from the definition is:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gipscompintro0.00f"/>
+ <math><mrow><mi>δ</mi><mstyle><mi>G</mi><mi>i</mi>
+</mstyle><mo>⁢</mo><mo>=</mo><mtext> </mtext><mfrac>
+<mrow><msub><mrow><mi>f</mi></mrow><mrow><mi>d</mi>
+<mi>r</mi></mrow></msub><msub><mrow><mi>F</mi></mrow>
+<mrow><mi>g</mi></mrow></msub><mo>⁢</mo><mo>+</mo>
+<mtext> </mtext><msub><mrow><mi>f</mi></mrow><mrow>
+<mi>d</mi><mi>r</mi><mi>w</mi></mrow></msub><msub>
+<mrow><mi>Q</mi></mrow><mrow><mi>g</mi></mrow></msub>
+</mrow><mrow><mi>H</mi><mi>C</mi><mi>P</mi><mi>V</mi>
+</mrow></mfrac><mi>δ</mi><mi>t</mi></mrow></math> 
+</td><td align="right">[Eq. 209.6]
+              </td></tr></tbody></table><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gipscompintro0.00f1"/>
+ <math><mrow><mi>δ</mi><mstyle><mi>G</mi><mi>i</mi>
+</mstyle><mo>⁢</mo><mo>=</mo><mtext> </mtext><mfrac>
+<mrow><mrow><mo>(</mo><msub><mrow><mi>R</mi></mrow>
+<mrow><mi>v</mi></mrow></msub><mo>−</mo><mtext> </mtext>
+<msub><mrow><mi>R</mi></mrow><mrow><mi>v</mi><mo>,</mo><mtext> </mtext><mstyle><mi>u</mi><mi>p</mi></mstyle></mrow></msub><mo>)</mo>
+<msub><mrow><mi>F</mi></mrow><mrow><mi>g</mi></mrow>
+</msub><mi>δ</mi><mi>t</mi></mrow></mrow><mrow><msub>
+<mrow><mi>R</mi></mrow><mrow><mi>v</mi></mrow></msub>
+<mo>⋅</mo><mi>φ</mi><mo>⋅</mo><mi>V</mi><mo>⋅</mo>
+<mrow><mo>(</mo><mn>1</mn><mo>⁢</mo><mo>−</mo>
+<mtext> </mtext><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>w</mi></mrow></msub><mo>)</mo></mrow></mrow>
+</mfrac><mo>⁢</mo><mo>+</mo><mfrac><mrow><mrow><mo>(</mo><msub><mrow><mi>R</mi></mrow><mrow><mi>v</mi>
+</mrow></msub><mo>−</mo><mtext> </mtext><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>v</mi><mo>,</mo><mtext> </mtext><mstyle><mrow><mi>i</mi><mi>n</mi><mi>j</mi></mrow></mstyle></mrow></msub><mo>)</mo><msub><mrow><mi>Q</mi></mrow><mrow><mi>g</mi>
+</mrow></msub><mi>δ</mi><mi>t</mi></mrow></mrow><mrow>
+<msub><mrow><mi>R</mi></mrow><mrow><mi>v</mi></mrow>
+</msub><mo>⋅</mo><mi>φ</mi><mo>⋅</mo><mi>V</mi><mo>⋅</mo><mrow><mo>(</mo><mn>1</mn><mo>⁢</mo><mo>−</mo>
+<mtext> </mtext><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>w</mi></mrow></msub><mo>)</mo></mrow></mrow>
+</mfrac><mtext> </mtext></mrow></math> 
+</td><td align="right">[Eq. 209.7]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>R</mi></mrow><mrow><mi>v</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is the vaporized oil-gas ratio,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>R</mi></mrow><mrow><mi>v</mi><mo>,</mo><mtext> </mtext><mstyle><mi>u</mi><mi>p</mi></mstyle></mrow></msub></mrow></math> </td>
+
+<td valign="top"> is the R<sub>v</sub>in the upstream cell,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>R</mi></mrow><mrow><mi>v</mi><mo>,</mo><mtext> </mtext><mstyle><mi>i</mi><mi>n</mi><mi>j</mi></mstyle></mrow></msub>
+</mrow></math> </td>
+
+<td valign="top"> is the R<sub>v</sub> of the injection fluid,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>V</mi></mrow></math> </td>
+
+<td valign="top"> is the cell volume</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>φ</mi></mrow></math> </td>
+
+<td valign="top"> is the cell porosity</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>w</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is the water saturation.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>In the continuum limit <math><mstyle><mrow><mi>V</mi><mi>O</mi><mi>L</mi>
+<mo>→</mo><mn>0</mn><mo>,</mo><mtext> </mtext><mi>δ</mi><mi>t</mi><mo>⁢</mo><mo>→</mo><mn>0</mn>
+</mrow></mstyle></math> the differential equation for Gi in
+one dimension becomes:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gipscompintro0.00g"/>
+ <math><mrow><mfrac>
+<mrow><mi>d</mi></mrow><mrow><mi>d</mi><mi>t</mi>
+</mrow></mfrac><mstyle><mrow><mi>G</mi>
+<mi>i</mi></mrow></mstyle><mo>⁢</mo><mo>=</mo><mtext> </mtext><mfrac><mrow><msub><mrow><mi>F</mi></mrow>
+<mrow><mi>g</mi></mrow></msub></mrow><mrow><mi>φ</mi>
+<mo>⋅</mo><msub><mrow><mi>R</mi></mrow><mrow><mi>v</mi></mrow></msub><mo>⋅</mo><mi>A</mi><mo>⁢</mo>
+<mrow><mo>⋅</mo><mo>(</mo><mn>1</mn><mo>⁢</mo><mo>−</mo><mtext> </mtext><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow></mrow>
+</mfrac><mfrac><mrow><mi>d</mi><msub><mrow><mi>R</mi>
+</mrow><mrow><mi>v</mi></mrow></msub></mrow><mrow><mi>d</mi><mi>x</mi></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 209.8]
+              </td></tr></tbody></table><p>where</p>
+<p> <math><mrow><mi>A</mi>
+</mrow></math> is the flow area.</p>
+</div>
+
+<div class="section" id="gipscompintro_Data_generation_procedure"><a name="gipscompintro_Data_generation_procedure"><!-- --></a><h4 class="sectiontitle">Data
+generation procedure</h4><p>The model requires two-dimensional
+tables (P, Gi) to be entered for the saturated <math><mrow><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>s</mi></mrow></msub><mo>,</mo><mtext> </mtext><msub><mrow><mi>R</mi></mrow>
+<mrow><mi>v</mi></mrow></msub><mo>,</mo><mtext> </mtext>
+<msub><mrow><mi>B</mi></mrow><mrow><mi>o</mi></mrow>
+</msub></mrow></math> and <math><mrow><msub><mrow>
+<mi>B</mi></mrow><mrow><mi>g</mi></mrow></msub></mrow>
+</math> data tables spanning the range of pressures and Gi parameter
+values encountered in the simulation. Dependence of the phase viscosities
+on Gi is assumed to be negligible. Variations of the surface oil and
+gas gravities with Gi are also ignored.</p>
+<p>The new PVT tables are
+generated by an extension to the standard constant volume depletion
+procedure usually used to produce black oil PVT data. Instead of simply
+generating black oil tables by depleting the PVT cell, the simulator
+needs to deplete the PVT cell to a pressure below the dew point and
+then inject dry gas into the cell in a series of steps. At each step
+the mixture is flashed to thermodynamic equilibrium and the excess
+gas withdrawn until the mixture occupies the same volume before the
+gas injection step. The new values for <math><mrow><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>v</mi></mrow></msub><mo>,</mo><mtext> </mtext><msub><mrow><mi>R</mi></mrow>
+<mrow><mi>s</mi></mrow></msub><mo>,</mo><msub><mrow>
+<mi>B</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>,</mo><mtext> </mtext><mstyle><mi>a</mi><mi>n</mi><mi>d</mi></mstyle><mo>⁢</mo><mtext> </mtext><msub><mrow><mi>B</mi></mrow><mrow><mi>g</mi>
+</mrow></msub></mrow></math> are calculated to correspond
+with the updated value of Gi. The procedure is repeated injecting
+gas at a lower pressure — in each case the liquid should completely
+evaporate to yield the full saturated PVT curves.</p>
+<p>It is assumed
+in the model that the data generated by the above method is sufficiently
+path independent to adequately represent the compositional effects
+occurring during gas injection (that is, no matter how a given point
+is reached in (P, Gi) space, the <math><mrow><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>v</mi></mrow></msub><mo>,</mo><mtext> </mtext><msub><mrow><mi>R</mi></mrow>
+<mrow><mi>s</mi></mrow></msub><mo>,</mo><msub><mrow>
+<mi>B</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>,</mo><mtext> </mtext><mstyle><mi>a</mi><mi>n</mi><mi>d</mi></mstyle><mo>⁢</mo><mtext> </mtext><msub><mrow><mi>B</mi></mrow><mrow><mi>g</mi>
+</mrow></msub></mrow></math> values will be the same as that
+used in the generating procedure).</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The Gi model with Gi=0
+will not always behave as a black oil model without the GI option
+in it. According to [EQ 31.3], in a Gi Model, there will be a finite
+amount of Gi generation whenever there exists the combination of a
+finite fractional gas flux into a grid cell and a finite gas flow
+rate in the grid cell. Furthermore, Gi accumulates over time. In a
+black oil model without GI option, this does not happen.</span></div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

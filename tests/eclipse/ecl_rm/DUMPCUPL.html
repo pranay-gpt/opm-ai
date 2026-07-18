@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="DUMPCUPL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="DUMPCUPL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>DUMPCUPL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="DUMPCUPL"><a name="DUMPCUPL"><!-- --></a>
+<h1 class="keyword">DUMPCUPL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="dumpcupl.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="dumpcupl.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d534e45">                         x                   
+  </th>
+
+<th valign="top" id="d534e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d534e54">                                             
+ </th>
+
+<th valign="top" id="d534e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d534e45 d534e54 ">                                             
+ </td>
+
+<td valign="top" headers="d534e48 d534e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d534e45 d534e54 ">                                             
+ </td>
+
+<td valign="top" headers="d534e48 d534e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d534e45 d534e54 ">                                             
+ </td>
+
+<td valign="top" headers="d534e48 d534e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d534e45 d534e54 ">                                             
+ </td>
+
+<td valign="top" headers="d534e48 d534e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d534e45 d534e54 ">                                             
+ </td>
+
+<td valign="top" headers="d534e48 d534e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d534e45 d534e54 ">                                             
+ </td>
+
+<td valign="top" headers="d534e48 d534e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d534e45 d534e54 ">                                             
+ </td>
+
+<td valign="top" headers="d534e48 d534e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d534e45 d534e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d534e48 d534e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">DUMPCUPL</span> keyword may be used in a Reservoir
+Coupling master run if you wish it to write the flows and applied
+constraints of the master groups to the output Reservoir Coupling
+file (see <a href="../ecl_td/rescouplintro_Reservoir_coupling_files.html#rescouplintro_reservoir_coupling_files">"Reservoir coupling
+files"</a> in the <cite>ECLIPSE Technical Description</cite>).</p>
+
+<p>The file may then be used for two purposes:</p>
+
+<ul>
+<li>In the master run, it can take the place of one or more of the
+slave reservoirs. Their slave runs are not activated, and instead
+the associated master groups take their production and injection rates
+from this file.</li>
+
+<li>A slave run may be performed on its own, instead of being activated
+by the master run. It will read from this file the constraints that
+the master run originally applied to its slave groups over the course
+of the simulation, and apply them again in the same sequence.</li>
+
+</ul>
+
+<p>Runs using the Reservoir Coupling file must have the keyword <a href="USECUPL.html#USECUPL"> USECUPL</a> entered.</p>
+
+<p>The <span class="keyword">DUMPCUPL</span> keyword is followed by a record
+containing a single character, terminated with a slash (/). The character
+dictates the type of file to be written. The choices are:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">U</samp> </td>
+
+<td valign="top"> Write an unformatted file</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">F</samp> </td>
+
+<td valign="top"> Write a formatted file.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Formatted files occupy much more disk space than unformatted files,
+but should be chosen if the Reservoir Coupling file is going to be
+used on a system that does not have binary compatibility with the
+one on which it was created. Note that the formatted/unformatted status
+of the Reservoir Coupling file can be chosen independently of keyword <a href="FMTOUT.html#FMTOUT"> FMTOUT</a> in the <span class="keyword">RUNSPEC</span> section.</p>
+
+<p>The Reservoir Coupling file created has the same root name as the
+Master Run’s data file. The filename’s extension is <samp class="codeph">.CPL</samp> for an unformatted file, and <samp class="codeph">.FCP</samp> for
+a formatted file.</p>
+
+<p>Note that the <span class="keyword">DUMPCUPL</span> instruction is <strong>not</strong> carried over on the Restart file. If you wish to restart the Master
+Run and continue writing a Reservoir Coupling file (which is a new
+file having the restart run’s root name), you must include the <span class="keyword">DUMPCUPL</span> keyword in the restart run’s <span class="keyword">SCHEDULE</span> section. A suitable place for the keyword is at the beginning of
+the <span class="keyword">SCHEDULE</span> section, or next to the <a href="SLAVES.html#SLAVES"> SLAVES</a> keyword.</p>
+
+<div class="section" id="dumpcupl_example"><a name="dumpcupl_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>DUMPCUPL
+ U /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

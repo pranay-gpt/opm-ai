@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Well and group efficiency factors"/>
+<meta name="DC.subject" content="Network, Efficiency factors"/>
+<meta name="keywords" content="Network, Efficiency factors"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="extended_well_and_group_efficiency_factors"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Well and group efficiency factors</title>
+</head>
+<body>
+
+
+<div class="nested0" id="extended_well_and_group_efficiency_factors"><a name="extended_well_and_group_efficiency_factors"><!-- --></a>
+<h1 class="topictitle1">Well and group efficiency factors</h1>
+
+
+ <div>
+<p>When wells have efficiency factors set in keyword <a href="../ecl_rm/WEFAC.html#WEFAC">WEFAC</a>, by default each well
+contributes its ‘time-average’ production rate to the
+network flows, that is its flow rate multiplied by its efficiency
+factor. The network branch pressure losses are thus calculated from
+the time-average rate sums of the subordinate wells. This is equivalent
+to the way in which the group production rates are summed, and is
+most appropriate when the wells go down individually for short ‘random’
+periods.</p>
+
+<p>But if you wish to model the ‘peak’ pressure losses
+in the network, when all the wells are flowing at the same time, then
+it is possible to specify that the network branch flows should reflect
+the full flow rates of each well. By setting Item 3 of keyword <span class="keyword">WEFAC</span>, it is possible to specify for each well individually
+whether its production rate should or should not be multiplied by
+its efficiency factor when adding its contribution to the network
+flows. The <strong>group</strong> flow rates, however, are still the time-average
+sum of the well flows.</p>
+
+<p>ECLIPSE 100             </p>
+
+<p>If all the wells in a group have their downtimes
+synchronized, so that the group either flows with its full rate or
+not at all, it is more appropriate to apply an efficiency factor to
+the group (with keyword <a href="../ecl_rm/GEFAC.html#GEFAC">GEFAC</a>) rather than the individual wells. If there is a network
+node with the same name as this group, by default the group’s
+efficiency factor is applied to this node and its flow rate is multiplied
+by the efficiency factor when adding the node’s flow rate to
+the flow in its parent node. The pressure drop in a node’s outlet
+branch is calculated from the node’s flow rate. Thus the node’s
+outlet branch and the branches upstream of the node reflect the full
+flow rates, while the branches downstream of its parent node reflect
+the time-average flows. (This is equivalent to the Standard Network
+model’s treatment of group efficiency factors.) However, by
+setting item 3 of keyword <span class="keyword">GEFAC</span> it is possible
+to specify that the group’s full flow rates should be used for
+calculating all downstream pressure losses, by not assigning the group’s
+efficiency factor to the corresponding network node. If there is no
+network node with the same name as the group, it is possible to apply
+an efficiency factor to another appropriate network node using keyword <a href="../ecl_rm/NEFAC.html#NEFAC">NEFAC</a>.</p>
+
+<p>This flexibility is only available when using the Extended Network
+model, since network node and branch flows are accounted separately
+from the group flows. In the Standard Network option the branch flows
+are always the same as the reported group flow rates.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

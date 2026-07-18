@@ -1,0 +1,1250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Restart data"/>
+<meta name="DC.subject" content="Restart files"/>
+<meta name="keywords" content="Restart files"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="restart_restart_data"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Restart data</title>
+</head>
+<body>
+
+
+<div class="H1" id="restart_restart_data"><a name="restart_restart_data"><!-- --></a>
+<h1 class="topictitle1">Restart data</h1>
+
+
+ <div>
+<p>Restart data can be output in separate files, or in a single, unified
+file.</p>
+
+<ul>
+<li>For separate restart files, ECLIPSE creates a file at each report
+step with a suffix such as <samp class="codeph">Xnnnn</samp>, where <samp class="codeph">nnnn</samp> lies between 0000 and 9999. </li>
+
+<li>For unified file output, data for all report steps are written
+to the same file, with a new header for each step. The precise contents
+of the restart file depend on the simulator in use and the output
+requested.</li>
+
+</ul>
+
+<p>The file naming convention is described in <a href="filename_ECLIPSE_File_Names.html#filename_eclipse_file_names"> "ECLIPSE File Names"</a>.</p>
+
+<ol>
+<li>For each report step, the restart file data include:         
+          <ol type="a">
+<li> <samp class="codeph">SEQNUM</samp> keyword, defining the report step number
+(in unified files).</li>
+
+<li>Global header data (<samp class="codeph">INTEHEAD</samp>, <samp class="codeph">LOGIHEAD</samp>, <samp class="codeph">DOUBHEAD</samp> arrays)</li>
+
+<li>Global wells, group and completion data</li>
+
+<li>Global solution arrays (for example <samp class="codeph">SWAT</samp>, <samp class="codeph">PRESSURE</samp>)</li>
+
+<li>Global NNC solution arrays</li>
+
+<li> <samp class="codeph">LGRNAMES</samp> array (list of local grids)</li>
+
+<li> <samp class="codeph">NMATRING</samp> output (additional values for multi-porosity
+models)</li>
+
+</ol>
+ </li>
+
+<li>For each local grid: <ol type="a">
+<li> <samp class="codeph">LGR</samp> keyword, defining grid name</li>
+
+<li>LGR header data (<samp class="codeph">LGRHEADI</samp>, <samp class="codeph">LGRHEADQ</samp>, <samp class="codeph">LGRHEADD</samp>).</li>
+
+<li>Restart header arrays for this LGR (<samp class="codeph">INTEHEAD</samp>, <samp class="codeph">LOGIHEAD</samp>, <samp class="codeph">DOUBHEAD</samp>)</li>
+
+<li>Local wells, group and completion data for this LGR </li>
+
+<li>Local solution arrays for this LGR </li>
+
+<li>Local NNC solution arrays for this LGR</li>
+
+<li>Local to global NNC solution arrays for this LGR</li>
+
+<li>NNC flows from this LGR to all those amalgamated with it </li>
+
+<li> <samp class="codeph">NMATRING</samp> output (additional values for multi-porosity
+models) </li>
+
+<li>An <samp class="codeph">ENDLGR</samp> keyword (optional)</li>
+
+</ol>
+         </li>
+
+</ol>
+
+<p>The restart file header arrays and LGR header data are used for
+internal ECLIPSE data. For restart files created from other simulation
+packages, items in these arrays may be set to dummy values, unless
+they are defined in this document.</p>
+
+<p>The data contents of the arrays for each LGR are defined as for
+global arrays.</p>
+
+<p>Keywords which are recognized by Petrel are described on the following
+pages. Note that other keywords may be present for restart purposes,
+which are not required for post-processing. The policy is to check
+the number of elements in an array with a non-standard keyword, and
+treat it as a solution array if it matches the number of active cells
+in the grid. The <samp class="codeph">HIDDEN</samp> keyword can be used to name
+solution arrays which are not to be processed.</p>
+
+
+<div class="tablenoborder"><a name="restart.tab.004c"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="restart.tab.004c" frame="border" border="1" rules="all"><caption>
+           Table 32.1  Restart keywords </caption>   
+ 
+<thead align="left">
+<tr>
+<th valign="top" width="25%" id="d78e202">Keyword               </th>
+
+<th valign="top" width="24.75%" id="d78e205">No. of Items               </th>
+
+<th valign="top" width="25.25%" id="d78e208">Data Type               </th>
+
+<th valign="top" width="25%" id="d78e211">Contents               </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">SEQNUM</samp>                      
+                                       </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">1                </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Sequence number (unified restart files only),
+set equal to the current report step number.               </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">INTEHEAD</samp>                   
+                                       </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">Specified in header</td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer header array                 <p>The following
+items are significant and must be present:</p>
+<p>Item 1 - ISNUM =
+an encoded integer corresponding to the time the file was created.
+For files not originating from ECLIPSE, this value may be set to zero.</p>
+<p>Item 3 - units type: 1 - METRIC, 2 - FIELD, 3 - LAB, 4 - PVT-M</p>
+<p>Items 9,10,11 - grid dimensions NX, NY and NZ</p>
+<p>Item 12 -
+NACTIV = number of active cells</p>
+<p>Item 15 - IPHS = phase indicator:</p>
+<ul>
+<li>1 - oil, 2 - water, 3 - oil/water, 4 - gas, 5 - oil/gas, 6 - gas/water,
+7 - oil/water/gas (ECLIPSE output only)</li>
+
+</ul>
+<p>Item 17 - NWELLS = number of wells</p>
+<p>Item 18 - NCWMAX
+= maximum number of completions per well</p>
+<p>Item 20 - NWGMAX =
+maximum number of wells in any well group</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 ">                </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">&nbsp;</td>
+ 
+<td valign="top" width="25.25%" headers="d78e208 ">&nbsp;</td>
+ 
+<td valign="top" width="25%" headers="d78e211 ">Item 21 - NGMAXZ = maximum number of groups in
+field                                  <p>Item 25 - NIWELZ = number
+of data elements per well in IWEL array</p>
+<p>Item 26 - NSWELZ = number
+of data elements per well in SWEL array</p>
+<p>Item 27 - NXWELZ = number
+of data elements per well in XWEL array</p>
+<p>Item 28 - NZWELZ = number
+of 8-character words per well in ZWEL array</p>
+<p>Item 33 - NICONZ
+= number of data elements per completion in ICON array</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 ">&nbsp;</td>
+ 
+<td valign="top" width="24.75%" headers="d78e205 ">&nbsp;</td>
+ 
+<td valign="top" width="25.25%" headers="d78e208 ">&nbsp;</td>
+ 
+<td valign="top" width="25%" headers="d78e211 ">Item 34 - NSCONZ = number of data elements per
+completion in SCON array                 <p>Item 35 - NXCONZ = number
+of data elements per completion in XCON array</p>
+<p>Item 37 - NIGRPZ
+= number of data elements per group in IGRP array</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 ">&nbsp;</td>
+ 
+<td valign="top" width="24.75%" headers="d78e205 ">&nbsp;</td>
+ 
+<td valign="top" width="25.25%" headers="d78e208 ">&nbsp;</td>
+ 
+<td valign="top" width="25%" headers="d78e211 ">Item 38 - NSGRPZ = number of data elements per
+group in SGRP array                    <p>Item 39 - NXGRPZ = number
+of data elements per group in XGRP array</p>
+<p>Item 40 - NZGRPZ =
+number of data elements per group in ZGRP array</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">INTEHEAD</samp> <p>(continued)</p>
+ 
+             </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">Specified in header               </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Item 42 - NCAMAX = maximum number of analytic
+aquifer connections                     <p>Item 43 - NIAAQZ = number
+of data elements per aquifer in IAAQ array</p>
+<p>Item 44 - NSAAQZ
+= number of data elements per aquifer in SAAQ array</p>
+<p>Item 45
+- NXAAQZ = number of data elements per aquifer in XAAQ array</p>
+<p>Item 46 - NICAQZ= number of data elements per aquifer connection
+in ICAQ array</p>
+<p>Item 47 - NSCAQZ= number of data elements per
+aquifer connection in SCAQ array</p>
+<p>Item 48 - NACAQZ= number of
+data elements per aquifer connection in ACAQ array</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 ">&nbsp;</td>
+ 
+<td valign="top" width="24.75%" headers="d78e205 ">&nbsp;</td>
+ 
+<td valign="top" width="25.25%" headers="d78e208 ">&nbsp;</td>
+ 
+<td valign="top" width="25%" headers="d78e211 "> Item 65 - IDAY = calendar day at this report
+time (1-31)                              <p>Item 66 - IMON = calendar
+month at this report time (1-12)</p>
+<p>Item 67 - IYEAR = calendar
+year at this report time (as four digits, for example 1952)</p>
+<p>Item 95 - IPROG = simulation program identifier:</p>
+<ul>
+<li>100 - ECLIPSE 100</li>
+
+<li>300 - ECLIPSE 300</li>
+
+<li>500 - ECLIPSE 300 (thermal option)</li>
+
+<li>700 - INTERSECT</li>
+
+<li>800 - FrontSim</li>
+
+<li>negative - Other simulator</li>
+
+</ul>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 ">&nbsp;</td>
+ 
+<td valign="top" width="24.75%" headers="d78e205 ">&nbsp;</td>
+ 
+<td valign="top" width="25.25%" headers="d78e208 ">&nbsp;</td>
+ 
+<td valign="top" width="25%" headers="d78e211 ">Item 132 - NODMAX = maximum number of nodes in
+extended network option   <p>Item 133 - NBRMAX = maximum number of
+branches in extended network option</p>
+<p>Item 134 - NIBRAN = number
+of entries per branch in the IBRAN array</p>
+<p>Item 134 - NRBRAN =
+number of entries per branch in the RBRAN array</p>
+<p>Item 136 - NINODE
+= number of entries per node in the INODE array</p>
+<p>Item 137 - NRNODE
+= number of entries per node in the RNODE array</p>
+<p>Item 138 - NZNODE
+= number of entries per node in the ZNODE array</p>
+<p>Item 139 - NINOBR
+= size of the INOBR array</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">INTEHEAD</samp> <p>(continued)</p>
+ 
+             </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">Specified in header               </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Item 163 - NGCAUS = maximum number of aquifer
+connections actually used.  <p>Item 176 - NSWLMX = maximum number
+of segmented wells</p>
+<p>Item 177 - NSEGMX = maximum number of segments
+per well</p>
+<p>Item 178 - NLBRMX = maximum number of lateral branches
+per well</p>
+<p>Item 179 - NISEGZ = number of entries per segment in
+ISEG array</p>
+<p>Item 180 - NRSEGZ = number of entries per segment
+in RSEG array</p>
+<p>Item 181 - NILBRZ = number of entries per segment
+in ILBR array</p>
+<p>Item 207 - IHOURZ = current simulation time HH:MM:SS
+- number of hours (HH) (0-23).</p>
+<p>Item 208 - IMINTS = current simulation
+time HH:MM:SS - number of minutes (MM) (0-59).</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 ">&nbsp;</td>
+ 
+<td valign="top" width="24.75%" headers="d78e205 ">&nbsp;</td>
+ 
+<td valign="top" width="25.25%" headers="d78e208 ">&nbsp;</td>
+ 
+<td valign="top" width="25%" headers="d78e211 ">Item 224 - NIIAQN = number of lines of integer
+AQUNUM data.                            <p>Item 225 - NIRAQN = number
+of lines of real AQUNUM data.</p>
+<p>Item 227 - NUMAQN = number of
+lines of AQUNUM data entered.</p>
+<p>Item 235 - NICOTZ = number of
+entries in the ICOT array</p>
+<p>Item 236 - NXCOTZ = number of entries
+in the XCOT array</p>
+<p>Item 237 - NIWETZ = number of entries in the
+IWET array</p>
+<p>Item 238 - NXWETZ = number of entries in the XWET
+array</p>
+<p>Item 239 - NIGRTZ = number of entries in the IGRT array</p>
+<p>Item 240 - NXGRTZ = number of entries in the XGRT array</p>
+<p>Item 241 - NSTRA2 = number of tracers + 2</p>
+<p>Item 253 - MAAQID
+= maximum number of analytic aquifers</p>
+<p>Item 271 - NCRDMX = maximum
+number of chord segment links per well</p>
+<p>Item 411- ISECND = current
+simulation time HH:MM:SS - number of seconds (SS), reported in microseconds
+(0-59,999,999)</p>
+<p>Undefined items in this array may be set to zero.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">LOGIHEAD</samp>    </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">Specified in header               </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">LOGI               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Logical header array                 <p>The following
+items must be present:</p>
+<p>Item 4 - Flag set to FALSE for a non-radial
+model, TRUE for a radial model (ECLIPSE 300 and other simulators)</p>
+<p>Item 5 - Flag set to FALSE for a non-radial model, TRUE for a
+radial model (ECLIPSE 100)</p>
+<p>Item 15 - Flag for dual porosity
+model</p>
+<p>Item 31 - Flag for coalbed methane (ECLIPSE 100)</p>
+<p>Item 128 - Flag for coalbed methane (ECLIPSE 300)</p>
+<p>Undefined
+items in this array may be set to FALSE.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">DOUBHEAD</samp>                   
+                        </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">Specified in header               </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">DOUB               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Double precision header array                 <p>Item 1 - The time in days (or hours in LAB units), of this report
+step, since the start of the simulation.</p>
+<p>Item 161 - The simulation
+start time in days (or hours in LAB units).</p>
+<p>Item 162 - The current
+simulation time in days (or hours in LAB units). This is the sum of
+item 1 and item 161.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">IGRP</samp>                      </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">   <samp class="codeph">NIGRPZ*NGMAXZ</samp>            
+                         </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer group data array <samp class="codeph">IGRP(NIGRPZ,NGMAXZ)</samp> with dimensions in <samp class="codeph">INTEHEAD</samp>.                  
+                            <p>The following items are required for
+each group:</p>
+<p>Items from 1 to <samp class="codeph">NWGMAX</samp> indicate
+the index of each well in the group, if this is a well group, or the
+index of each child group in this group if it is a node group</p>
+<p>Item (<samp class="codeph">NWGMAX</samp> + 1) indicates the number of wells
+or child groups belonging to this group</p>
+<p>Item (<samp class="codeph">NWGMAX</samp> + 27) is the group type:</p>
+<ul>
+<li>0 = well group, 1 = node group, 2 = satellite group, 3 = slave
+group</li>
+
+</ul>
+<p>Item (<samp class="codeph">NWGMAX</samp> + 28) is the group level (0
+= the field)</p>
+<p>Item (<samp class="codeph">NWGMAX</samp> + 29) is the index
+of the parent group</p>
+<p>Undefined items in this array may be set
+to zero.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">SGRP</samp>                        
+       </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NSGRPZ*NGMAXZ</samp>              
+                                      </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">  REAL                  </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Real group data array <samp class="codeph">SGRP</samp> (<samp class="codeph">NSGRPZ</samp>, <samp class="codeph">NGMAXZ</samp>) with dimensions in <samp class="codeph">INTEHEAD</samp>.  </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">XGRP</samp>                        
+      </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NSGRPZ*NGMAXZ</samp> </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">DOUB               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Double precision group data array <samp class="codeph">XGRP(NXGRPZ,NGMAXZ)</samp> with dimensions in <samp class="codeph">INTEHEAD</samp>.                  
+               </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">ZGRP</samp>                       
+      </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NSGRPZ*NGMAXZ</samp> </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">CHAR               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Character group data array <samp class="codeph">ZGRP(NZGRPZ,NGMAXZ)</samp> with dimensions in <samp class="codeph">INTEHEAD</samp>.                  
+                          </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">ISEG</samp>     <p>In ECLIPSE 300, this
+keyword is called <samp class="codeph">IRSEG</samp> </p>
+                     
+     </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NISEGZ*NSEGMX*NSWLMX</samp>   <p>(Max
+&gt;18 items per well)</p>
+                                 </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer multisegment well data array <samp class="codeph">ISEG</samp> (<samp class="codeph">NISEGZ</samp>, <samp class="codeph">NSEGMX</samp>, <samp class="codeph">NSWLMX</samp>) with dimensions in <samp class="codeph">INTEHEAD</samp>.                 
+           <p>The following items are used by post-processing software:</p>
+<ul>
+<li>Item 2 - Outlet segment number (=0 for segment nearest wellhead)</li>
+
+<li>Item 4 = Branch for this segment (=1 for main stem, 0 if not active
+segment)</li>
+
+</ul>
+<p>More details on use of the multisegment well arrays will be
+added in future versions of this document.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">RSEG</samp>     <p>In ECLIPSE 300, this
+keyword is called <samp class="codeph">SRSEG</samp> </p>
+                     
+    </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NISEGZ*NSEGMX*NSWLMX</samp>        
+                             </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">DOUB               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Double precision multisegment well data array <samp class="codeph">RSEG(NRSEGZ,NSEGMX,NSWLMX)</samp> with dimensions in <samp class="codeph">INTEHEAD</samp>.                           </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 ">  <samp class="codeph">ILBS</samp>        <p>In ECLIPSE 300,
+this keyword is called <samp class="codeph">IRLBS</samp> </p>
+                
+    </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NLBRMX*NSWLMX</samp>               
+                                      </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer multisegment well data array for lateral
+branches <samp class="codeph">ILBS(NLBRMX,NSWLMX)</samp> with dimensions in <samp class="codeph">INTEHEAD</samp>                          </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 ">   <samp class="codeph">ILBR</samp>    <p>In ECLIPSE 300,
+this keyword is called <samp class="codeph">IRLBR</samp> </p>
+</td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NILBRZ*NLBRMX*NSWLMX</samp>       
+                              </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer multisegment well data array for lateral
+branches <samp class="codeph">ILBR</samp> (<samp class="codeph">NILBRZ</samp>, <samp class="codeph">NLBRMX</samp>, <samp class="codeph">NSWLMX</samp>) with dimensions in <samp class="codeph">INTEHEAD</samp>.               </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">ICRD</samp>   <p>In ECLIPSE 300, this
+keyword is called <samp class="codeph">IRCRD</samp> </p>
+</td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">2*NCRDMX*NSWLMX</samp>             
+                                        </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer multisegment well data array for chord
+segment links for looped flow paths <samp class="codeph">ICRD(2,NCRDMX,NSWLMX)</samp> with dimensions in <samp class="codeph">INTEHEAD</samp>.                  
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">IWEL</samp>         </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">   <samp class="codeph">NIWELZ*NWELLS</samp>     <p>(Max
+&gt;110 items per well)</p>
+                                </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer well data array                 <p> <samp class="codeph">IWEL(NIWELZ,NWELLS)</samp> with dimensions defined in <samp class="codeph">INTEHEAD</samp>. These are required for each well.</p>
+<p>Item 1 - Grid cell I-coordinate
+for wellhead (&lt;= 0 for a well which is completed in current LGR
+but has wellhead in another LGR)</p>
+<p>Item 2 - Grid cell J-coordinate
+for wellhead (&lt;= 0 for a well which is completed in current LGR
+but has wellhead in another LGR)</p>
+<p>Item 3 - Grid cell K-coordinate
+for wellhead</p>
+<p>Item 5 - Number of completion connections for this
+well (that is the total number of grid blocks in which the well is
+connected). For wells in amalgamated LGRs, this is the total over
+all LGRs</p>
+<p>Item 6 - Group index</p>
+<p>Item 7 - Well type:</p>
+<ul>
+<li>1 = producer, 2 = oil injection, 3 = water injection, 4 = gas
+injection</li>
+
+</ul>
+<p>Item 11 - Well status:</p>
+<ul>
+<li>&gt; 0 open, &lt;= 0 shut</li>
+
+</ul>
+<p>Item 43 - LGR index for a well with local completions</p>
+<p>Item 49 - Friction well flag, non-zero for horizontal well</p>
+<p>Item 71 - Segmented well number (=0 for ordinary wells)</p>
+<p>Undefined
+items in this array may be set to zero</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">SWEL</samp>                        
+      </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NSWELZ*NWELLS</samp> </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">REAL               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Real well data array                 <p> <samp class="codeph">SWEL(NSWELZ,NWELLS)</samp> with dimensions defined in <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 ">  <samp class="codeph">XWEL</samp>               </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NXWELZ*NWELLS</samp> </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">DOUB               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Double precision well data array             
+   <p> <samp class="codeph">XWEL</samp> (<samp class="codeph">NXWELZ</samp>, <samp class="codeph">NWELLS</samp>) with dimensions defined in <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">ZWEL</samp>  </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NZWELZ*NWELLS</samp> </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">CHAR               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">All entries are 8 characters:<p>The first entry
+is the well name</p>
+<p>The second is the well list to which the well
+has been allocated and will be blank otherwise</p>
+<p>The third is
+the last action triggered by the well this timestep</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 ">  <samp class="codeph">ICON</samp> </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">   <samp class="codeph">NICONZ*NCWMAX*NWELLS</samp> <p>(Max
+&gt;19 items per connection)</p>
+                           </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer completion data array                 <p> <samp class="codeph">ICON</samp> (<samp class="codeph">NICONZ</samp>, <samp class="codeph">NCWMAX</samp>, <samp class="codeph">NWELLS</samp>) with dimensions defined by <samp class="codeph">INTEHEAD</samp>. The following items are required for each completion in each well:</p>
+<p>Item 1 - Well connection index ICON(1,IC,IWELL) = IC (set to -IC
+if connection is not in current LGR)</p>
+<p>Item 2 - I-coordinate (&lt;=
+0 if not in this LGR)</p>
+<p>Item 3 - J-coordinate (&lt;= 0 if not
+in this LGR)</p>
+<p>Item 4 - K-coordinate (&lt;= 0 if not in this LGR)</p>
+<p>Item 6 - Connection status &gt; 0 open, &lt;= 0 shut</p>
+<p>Item 14
+- Penetration direction (1=x, 2=y, 3=z, 4=fractured in x-direction,
+5=fractured in y-direction) If undefined or zero, assume Z</p>
+<p>Item
+15 - Segment number containing connection (for multisegment wells,
+=0 for ordinary wells)</p>
+<p>Undefined items in this array may be
+set to zero.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 ">  <samp class="codeph">SCON</samp>  </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">  <samp class="codeph">NSCONZ*NCWMAX*NWELLS</samp>      
+                                             </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">REAL               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Real completion data array                 <p> <samp class="codeph">SCON</samp> (<samp class="codeph">NSCONZ</samp>, <samp class="codeph">NCWMAX</samp>, <samp class="codeph">NWELLS</samp>) with dimensions defined by <samp class="codeph">INTEHEAD</samp>. The following items are required for each completion in each well:</p>
+<p>Item 1 - Connection factor SCON(1,IC,IWELL)</p>
+<p>Item 4 - Effective
+Kh of connection SCON(4,IC,IWELL)</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">SCONSM</samp> </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NSCONZ</samp> *sum(item 5 of <samp class="codeph">IWEL</samp>, for all wells)</td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">REAL</td>
+
+<td valign="top" width="25%" headers="d78e211 ">As <samp class="codeph">SCON</samp>, except that the second dimension
+is the actual number of connections for each well rather than the
+maximum possible number of connections.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">XCON</samp>            </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NXCONZ*NCWMAX*NWELLS</samp>        
+                                </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">DOUB               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Double precision completion data array       
+                                       <p> <samp class="codeph">XCON</samp> (<samp class="codeph">NXCONZ</samp>, <samp class="codeph">NCWMAX</samp>, <samp class="codeph">NWELLS</samp>)
+with dimensions defined by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">XCONSM</samp> </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NXCONZ</samp> *sum(item 5 of <samp class="codeph">IWEL</samp>, for all wells)</td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">DOUB</td>
+
+<td valign="top" width="25%" headers="d78e211 ">As <samp class="codeph">XCON</samp>, except that the second dimension
+is the actual number of connections for each well rather than the
+maximum possible number of connections.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 ">  <samp class="codeph">HIDDEN</samp>                    
+                           </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">  <samp class="codeph">NHID</samp>    </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">CHAR               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">'Hidden' solution names, used internally in ECLIPSE
+for restart purposes, to be ignored by the post-processor        
+                                   </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">ZTRACER</samp>   </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">1 or 2      </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">CHAR               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Item 1 - Tracer name (ECLIPSE 100 output). Must
+be followed by the solution data for the tracer concentration values,
+with solution mnemonic corresponding to the tracer name.         
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">ICOT</samp>  </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NICOTZ*NSTRA2*NCWMAX*NWMAXZ</samp> 
+                                                </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer tracer completion data array         
+                                        <p> <samp class="codeph">ICOT</samp> (<samp class="codeph">NICOTZ</samp>, <samp class="codeph">NSTRA2</samp>, <samp class="codeph">NCWMAX</samp>, <samp class="codeph">NWMAXZ</samp>) with dimensions defined by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 ">   <samp class="codeph">XCOT</samp>                     
+         </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NXCOTZ*NSTRA2*NCWMAX*NWMAXZ</samp> 
+                                     </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">DOUB               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Double precision tracer completion data array
+                                       <p> <samp class="codeph">XCOT</samp> (<samp class="codeph">NXCOTZ</samp>, <samp class="codeph">NSTRA2</samp>, <samp class="codeph">NCWMAX</samp>, <samp class="codeph">NWMAXZ</samp>) with dimensions defined by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 ">   <samp class="codeph">IWET</samp>                     
+      </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">   <samp class="codeph">NIWETZ*NSTRA2*NWMAXZ</samp>     
+                                              </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer tracer well data array               
+ <p> <samp class="codeph">IWET</samp> (<samp class="codeph">NIWETZ</samp>, <samp class="codeph">NSTRA2</samp>, <samp class="codeph">NWMAXZ</samp>) with dimensions defined by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">XWET</samp>                </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NXWETZ*NSTRA2*NWMAXZ</samp>        
+                             </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">DOUB               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Double precision tracer well data array      
+                                       <p> <samp class="codeph">XWET</samp> (<samp class="codeph">NXWETZ</samp>, <samp class="codeph">NSTRA2</samp>, <samp class="codeph">NWMAXZ</samp>)
+with dimensions defined by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 ">   <samp class="codeph">IGRT</samp>                     
+      </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NIGRTZ*NSTRA2*NCWMAX*NWMAXZ</samp> 
+                                             </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer tracer group data array              
+  <p> <samp class="codeph">IGRT</samp> (<samp class="codeph">NIGRTZ</samp>, <samp class="codeph">NSTRA2</samp>, <samp class="codeph">NCWMAX</samp>, <samp class="codeph">NWMAXZ</samp>) with dimensions
+defined by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 ">   <samp class="codeph">XGRT</samp>                     
+      </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NXGRTZ*NSTRA2*NCWMAX*NWMAXZ</samp> 
+                                               </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">DOUB               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Double precision tracer group data array     
+                                       <p> <samp class="codeph">XGRT</samp> (<samp class="codeph">NXGRTZ</samp>, <samp class="codeph">NSTRA2</samp>, <samp class="codeph">NCWMAX</samp>, <samp class="codeph">NWMAXZ</samp>) with dimensions defined by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">INODE</samp>               </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NINODE*NODMAX</samp>              
+  </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer data for network node                 <p> <samp class="codeph">INODE</samp> (<samp class="codeph">NINODE</samp>, <samp class="codeph">NODMAX</samp>) with dimensions defined by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">IBRAN</samp>               </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">  <samp class="codeph">NIBRAN*NBRMAX</samp>             
+ </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer data for network branches            
+    <p> <samp class="codeph">IBRAN</samp> (<samp class="codeph">NIBRAN</samp>, <samp class="codeph">NBRMAX</samp>) with dimensions defined by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">INOBR</samp>               </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NINOBR</samp>               </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer data for network node-branch array   
+                                        <p> <samp class="codeph">INOBR</samp> (<samp class="codeph">NINOBR</samp>) with dimensions defined by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">RNODE</samp>               </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NRNODE*NODMAX</samp>               
+               </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">DOUB</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Double precision data for network nodes      
+                                       <p> <samp class="codeph">RNODE</samp> (<samp class="codeph">NRNODE</samp>, <samp class="codeph">NODMAX</samp>) with dimensions defined
+by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">RBRAN</samp>               </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">  <samp class="codeph">NRBRAN*NBRMAX</samp>             
+ </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">DOUB</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Double precision data for network branches   
+                                       <p> <samp class="codeph">RBRAN</samp> (<samp class="codeph">NRBRAN</samp>, <samp class="codeph">NBRMAX</samp>) with dimensions defined
+by <samp class="codeph">INTEHEAD</samp>.</p>
+                   </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">ZNODE</samp>               </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">  <samp class="codeph">NZNODE*NODMAX</samp>             
+               </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">CHAR               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Character data for network nodes             
+   <p> <samp class="codeph">ZNODE</samp> (<samp class="codeph">NZNODE</samp>, <samp class="codeph">NODMAX</samp>) with dimensions defined by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">IAAQ</samp>               </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">   <samp class="codeph">NIAAQZ*MAAQID</samp>            
+               </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer data for analytic aquifers           
+                                        <p> <samp class="codeph">IAAQ</samp> (<samp class="codeph">NIAAQZ</samp>, <samp class="codeph">MAAQID</samp>) with dimensions defined
+by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">SAAQ</samp>               </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NSAAQZ*MAAQID</samp>               </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">REAL               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Real data for analytic aquifers              
+  <p> <samp class="codeph">SAAQ</samp> (<samp class="codeph">NSAAQZ</samp>, <samp class="codeph">MAAQID</samp>) with dimensions defined by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">XAAQ</samp>               </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NXAAQZ*MAAQID</samp>              </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">DOUB               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Double precision data for analytic aquifers  
+                                       <p> <samp class="codeph">XAAQ</samp> (<samp class="codeph">NXAAQZ</samp>, <samp class="codeph">MAAQID</samp>) with dimensions defined
+by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">IAQL</samp>               </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NIAQLX*MXNALI*MXAAQL</samp>     </td>
+
+<td valign="top" width="25.25%" headers="d78e208 "> INTE               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer data for analytic aquifer lists      
+                                        <p> <samp class="codeph">IAQL</samp> (<samp class="codeph">NIAQLX</samp>, <samp class="codeph">MXNALI</samp>, <samp class="codeph">MXAAQL</samp>) with dimensions defined by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">ZAQL</samp>               </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NZAQLX*MXNALI</samp>              </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">CHAR               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Character data for analytic aquifer lists    
+                                          <p> <samp class="codeph">ZAQL</samp> (<samp class="codeph">NZAQLX</samp>, <samp class="codeph">MXNALI</samp>) with dimensions
+defined by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">IAQN</samp>               </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NIIAQN*NUMAQN</samp>              </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer data for numerical aquifers          
+                                        <p> <samp class="codeph">IAQN</samp> (<samp class="codeph">NIIAQN</samp>, <samp class="codeph">NUMAQN</samp>) with dimensions defined
+by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">RAQN</samp>               </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NIRAQN*NUMAQN</samp>              </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">DOUB               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Double precision data for numerical aquifers 
+                                       <p> <samp class="codeph">RAQN</samp> (<samp class="codeph">NIRAQN</samp>, <samp class="codeph">NUMAQN</samp>) with dimensions defined
+by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">ICAQ</samp>               </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NICAQZ*NGCAUS*MAAQID</samp>        
+     </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer data for analytic aquifer connections
+                                        <p> <samp class="codeph">MAAQID</samp> arrays, each of size <samp class="codeph">ICAQ</samp> (<samp class="codeph">NICAQZ</samp>, <samp class="codeph">NGCAUS</samp>) with dimensions defined by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">SCAQ</samp>               </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NSCAQZ*NGCAUS*MAAQID</samp>        
+     </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">REAL</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Real data for analytic aquifer connections   
+                                          <p> <samp class="codeph">MAAQID</samp> arrays, each of size <samp class="codeph">SCAQ</samp> (<samp class="codeph">NSCAQZ</samp>, <samp class="codeph">NGCAUS</samp> with dimensions defined by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">ACAQ</samp>               </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NACAQZ*NGCAUS*MAAQID</samp>        
+ </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">DOUB</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Double precision data for analytic aquifer connections
+                              <p> <samp class="codeph">MAAQID</samp> arrays, each
+of size <samp class="codeph">ACAQ</samp> (<samp class="codeph">NACAQZ</samp>, <samp class="codeph">NGCAUS</samp>) with dimensions defined by <samp class="codeph">INTEHEAD</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 ">Solution name                               </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NACTIV</samp> <p>or</p>
+<p> <samp class="codeph">NX*NY*NZ</samp> </p>
+               </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">REAL</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Solution data in compressed natural order (that
+is natural order with inactive cells removed, so there are <samp class="codeph">NACTIV</samp> values) or solution data for all cells in the grid
+(<samp class="codeph">NX*NY*NZ</samp> values)                               
+ <p>For a multi-porosity model, the first half of the array corresponds
+to the matrix blocks and the second half to the fracture cells. Selected
+values for the additional porosities are output separately using <samp class="codeph">NMATRING</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 ">  <samp class="codeph">NMATRING</samp>                  
+                                       </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">1</td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">The ring number for the multi-porosity data which
+follows. Note that this following data will have matrix blocks only,
+so the number of elements will be half that of the main solution arrays.
+                <p>Only a subset of properties is output for additional
+porosities.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">ENDRING</samp>                    
+                                       </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">0                </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">MESS               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Indicates the end of multi-porosity data for this
+grid (LGR or global)                </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">LGRNAMES</samp>                   
+                                       </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> <samp class="codeph">NLGR</samp> </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">CHAR</td>
+
+<td valign="top" width="25%" headers="d78e211 ">List of LGR names (after end of global data) 
+                                      </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">LGR</samp>                        
+     </td>
+
+<td valign="top" width="24.75%" headers="d78e205 "> 1                </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">CHAR</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Name of local grid for which following data are
+defined.                            </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">LGRHEADI</samp>                    
+                       </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">45               </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Integer data for LGR, in which item 2 indicates
+if refinement is active (set &lt;0 if not in use, positive otherwise)
+                                   </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">LGRHEADQ</samp>   </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">5</td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">LOGI               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Logical data for LGR               </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">LGRHEADD</samp>                   
+                        </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">5                </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">DOUB               </td>
+
+<td valign="top" width="25%" headers="d78e211 ">Double precision data for LGR               </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">LGRJOIN</samp> </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">2                </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">CHAR</td>
+
+<td valign="top" width="25%" headers="d78e211 ">Header listing LGR names for connected LGRS, appears
+just before a FLOOILA+, FLOWATA+ or FLOGASA+ keyword:<ul>
+<li>Item 1 - ZLOC1 = name of first LGR</li>
+
+<li>Item 2 - ZLOC2 = name of second LGR</li>
+
+</ul>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="25%" headers="d78e202 "> <samp class="codeph">ENDLGR</samp>                      
+                       </td>
+
+<td valign="top" width="24.75%" headers="d78e205 ">1                </td>
+
+<td valign="top" width="25.25%" headers="d78e208 ">INTE</td>
+
+<td valign="top" width="25%" headers="d78e211 ">A record indicating the end of the arrays for
+a particular LGR. The item in the array is the index of the LGR. This
+record is optional.               </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="AITS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="AITS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>AITS</title>
+</head>
+<body>
+
+<div class="KeywordH1" id="AITS"><a name="AITS"><!-- --></a><h1 class="keyword">AITS</h1>
+ <div>
+<div class="tablenoborder"><a name="aits.flagtable"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="aits.flagtable" class="flagtable" frame="border" border="1" rules="all">  <thead align="left"><tr><th valign="top" id="d46e32">x</th>
+<th valign="top" id="d46e34">ECLIPSE 100</th>
+</tr>
+<tr><th valign="top" id="d46e37">x</th>
+<th valign="top" id="d46e39">ECLIPSE 300</th>
+</tr>
+</thead>
+<tbody><tr><td valign="top" headers="d46e32 d46e37 ">x</td>
+<td valign="top" headers="d46e34 d46e39 ">RUNSPEC</td>
+</tr>
+<tr><td valign="top" headers="d46e32 d46e37 ">&nbsp;</td>
+ <td valign="top" headers="d46e34 d46e39 ">GRID</td>
+</tr>
+<tr><td valign="top" headers="d46e32 d46e37 ">&nbsp;</td>
+ <td valign="top" headers="d46e34 d46e39 ">EDIT</td>
+</tr>
+<tr><td valign="top" headers="d46e32 d46e37 ">&nbsp;</td>
+ <td valign="top" headers="d46e34 d46e39 ">PROPS</td>
+</tr>
+<tr><td valign="top" headers="d46e32 d46e37 ">&nbsp;</td>
+ <td valign="top" headers="d46e34 d46e39 ">REGIONS</td>
+</tr>
+<tr><td valign="top" headers="d46e32 d46e37 ">&nbsp;</td>
+ <td valign="top" headers="d46e34 d46e39 ">SOLUTION</td>
+</tr>
+<tr><td valign="top" headers="d46e32 d46e37 ">&nbsp;</td>
+ <td valign="top" headers="d46e34 d46e39 ">SUMMARY</td>
+</tr>
+<tr><td valign="top" headers="d46e32 d46e37 ">x</td>
+<td valign="top" headers="d46e34 d46e39 ">SCHEDULE</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Turns on the Intelligent Timestepping algorithm.</p>
+<p>The use of this keyword invokes an algorithm that
+works alongside the standard ECLIPSE timestepping algorithm to automatically
+adjust parameters in an effort to achieve more efficient timestepping
+for the simulators. It learns how to adjust the parameters by judging
+how well, or badly, the simulator is currently performing. It only
+attempts to change the timestepping in fully implicit runs but this
+doesn't include thermal runs in ECLIPSE 300. If the algorithm does
+not think it can improve on the default settings it will do nothing.</p>
+<p>Specifically the algorithm does <strong>not</strong> affect
+the linear and non-linear convergence criteria or the minimum and
+maximum allowable timesteps.</p>
+<p>The <span class="keyword">AITS</span> keyword may not be suitable for <a href="../ecl_td/rescouplintro_coupling_and_synchronization.html#rescouplintro_coupling_and_synchronization">"Reservoir Coupling"</a> models (both master and slave reservoirs), because of the additional complexity involved in synchronizing multiple reservoirs.  </p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Whilst this algorithm does speed up the majority
+of cases it is not guaranteed to do so. There are cases where even
+the seemingly more sensible timestep choices of this algorithm actually
+lead to an increase in CPU time due to the non-linearity of the problem
+and the taking of a different path to the end of the simulation. The
+use of different timestepping can lead to different results. This
+is not the fault of the algorithm as such, but shows the sensitivity
+of the underlying problem to the timestepping taken.</span></div>
+<div class="section" id="aits.example"><a name="aits.example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>Turn on Intelligent Timestepping.</p>
+<pre><code>AITS</code></pre></div>
+</div>
+</div>
+
+</body>
+</html>

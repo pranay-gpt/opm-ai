@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Calculating the DCQ value"/>
+<meta name="DC.subject" content="DCQ"/>
+<meta name="keywords" content="DCQ"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gasfieldintro_calculating_the_dcq_value"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Calculating the DCQ value</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gasfieldintro_calculating_the_dcq_value"><a name="gasfieldintro_calculating_the_dcq_value"><!-- --></a>
+<h1 class="topictitle1">Calculating the DCQ value</h1>
+
+
+
+
+
+ <div>
+<p>The DCQ value is calculated in the first pass of each contract
+period. As the field depletes, the DCQ must be reduced each period
+in order to obey the swing requirement. Several iterations of the
+first pass of the contract period may be needed to provide an accurate
+value for the largest DCQ able to meet the swing requirement, if the
+DCQ reduces substantially from the previous period. The reason is
+as follows. If the initial estimate of the DCQ is too high, too much
+gas is extracted during the first pass, making the delivery capacity
+decline faster than it should. The calculated value of the DCQ that
+can fit under this steeper decline curve is therefore an underestimate.
+Further iterations of the first pass are needed to obtain a more accurate
+answer.</p>
+
+<p>An "accelerated iteration scheme" is available for
+converging the DCQ to a desired accuracy. An initial guess is obtained,
+based on the previous period's DCQ reduction. The first pass
+of the contract period is simulated and a new DCQ is calculated. Successive
+iterations of the first pass are performed until the change in DCQ
+over an iteration lies within a user-defined tolerance. The convergence
+is accelerated with a secant method. A maximum number of iterations
+can be imposed (item 7 in keyword <a href="../ecl_rm/GASYEAR.html#GASYEAR">GASYEAR</a> or item 8 in <a href="../ecl_rm/GASPERIO.html#GASPERIO">GASPERIO</a>), and a warning is
+issued if the DCQ has not converged by then. The accelerated iteration
+scheme is the only scheme available in ECLIPSE 300. For ECLIPSE 100
+however, it must be enabled by setting the 2nd item of the <span class="keyword">RUNSPEC</span> section keyword <a href="../ecl_rm/GASFIELD.html#GASFIELD">GASFIELD</a> to '<samp class="codeph">YES</samp>'. This is the recommended method, although to keep back-compatibility
+with pre-96A ECLIPSE 100 simulation runs by default the accelerated
+scheme is not enabled.</p>
+
+<p>ECLIPSE 100          </p>
+
+<p>If the accelerated iteration scheme is <strong>not</strong> selected, the pre-96A scheme is employed. In this scheme,
+the DCQ can only decrease from one iteration to the next, and underestimates
+cannot be corrected. Thus, to obtain an accurate answer, the amount
+by which the DCQ can decrease from one iteration to the next should
+be constrained. You can supply a limiting reduction factor (item 5
+in keyword <span class="keyword">GASYEAR</span>, item 6 in <span class="keyword">GASPERIO</span>). If at the end of the first pass the DCQ has to be reduced to a
+fraction that is smaller than the limiting reduction factor, it is
+reduced only by the limiting reduction factor and the first pass is
+repeated again. The process continues until either the DCQ reduction
+lies within the limiting factor, or the maximum number of iterations
+has been reached (<span class="keyword">GASYEAR</span> item 7, <span class="keyword">GASPERIO</span> item 8) at which the DCQ reduction is no longer restricted. The
+nearer the reduction factor is to 1.0 the more accurate is the result,
+but at the expense of requiring more iterations of the first pass
+to converge it. Supplying an "anticipated reduction factor"
+(<span class="keyword">GASYEAR</span> item 6, <span class="keyword">GASPERIO</span> item
+7) could help reduce the number of iterations required to converge
+the DCQ, by bringing the starting value nearer to the final value.
+Before the decline from plateau has begun, this factor is ignored.
+But once the DCQ has been reduced automatically below its initial
+value, the anticipated reduction factor is applied to the DCQ at the
+start of each contract period. Of course, you ought to have a reasonable
+idea of the rate of DCQ reduction before using this option. An anticipated
+reduction that is too fast results in unduly pessimistic DCQs, since
+ECLIPSE does not increase the DCQ automatically. A warning message
+is printed if the DCQ has not been reduced by more than the anticipated
+rate at the end of a contract period, as this would imply that the
+anticipated rate is too fast.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

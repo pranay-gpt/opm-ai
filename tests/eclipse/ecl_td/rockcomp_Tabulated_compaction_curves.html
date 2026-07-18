@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Tabulated compaction curves"/>
+<meta name="DC.subject" content="Rock compaction, Rock compaction tabulated compaction curves transmissibility modification, Rock compaction tabulated compaction curves overburden pressure, Rock compaction tabulated compaction curves reservoir pore volumes, Rock compaction tabulated compaction curves transmissibility as a function of porosity, Tabulated compaction curves"/>
+<meta name="keywords" content="Rock compaction, Rock compaction tabulated compaction curves transmissibility modification, Rock compaction tabulated compaction curves overburden pressure, Rock compaction tabulated compaction curves reservoir pore volumes, Rock compaction tabulated compaction curves transmissibility as a function of porosity, Tabulated compaction curves"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="rockcomp_tabulated_compaction_curves"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Tabulated compaction curves</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="rockcomp_tabulated_compaction_curves"><a name="rockcomp_tabulated_compaction_curves"><!-- --></a>
+<h1 class="topictitle1">Tabulated compaction curves</h1>
+
+
+ <div>
+<p>The compaction of the rock can be modeled as a general function
+of pressure using the <a href="../ecl_rm/ROCKTAB.html#ROCKTAB">ROCKTAB</a> keyword. In the case where a grid block pressure increases,
+the compaction can either be assumed to be reversible or irreversible.</p>
+
+<p>In some cases these two reflation options (fully reversible or
+irreversible) may be too crude a description. A hysteretic option
+is available by using the <a href="../ecl_rm/ROCKTABH.html#ROCKTABH">ROCKTABH</a> keyword. In this case a set of reflation curves can be input
+to describe the reversible reflation behavior from each starting pressure.
+For pressures below the starting pressure, the behavior is only partially
+reversible, given by the deflation curve.</p>
+
+<div class="fignone" id="rockcompaction.tabulated.curves.1"><a name="rockcompaction.tabulated.curves.1"><!-- --></a>
+
+ <br/><img src="../img/rockcomp1.png" width="408px"/><br/> 
+<br/><span class="figcap">
+           Figure 197.1  Rock Compaction: Hysteresis option</span></div>
+
+<p>A second hysteretic option can be used to model cyclic dilation
+and recompaction. This model is based on <cite><span> <a href="biblio_Bibliography.html#biblio.beattie">Beattie et al (1991)</a> </span></cite>. The <span class="keyword">ROCKTABH</span> keyword is again used
+to input curves that describe the reversible (or elastic) behavior.
+The reversible region is bounded at low pressures by the deflation
+(or compaction) curve and at high pressures by a dilation curve which
+describes partially reversible expansion. This option can be selected
+using the <a href="../ecl_rm/ROCKCOMP.html#ROCKCOMP">ROCKCOMP</a> keyword.</p>
+
+<div class="fignone" id="rockcompaction.tabulated.curves.2"><a name="rockcompaction.tabulated.curves.2"><!-- --></a>
+
+ <br/><img src="../img/rockcomp2.png" width="412px"/><br/> 
+<br/><span class="figcap">
+           Figure 197.2  Rock Compaction: Boberg Hysteresis option</span></div>
+
+<p>Initially it is assumed the reservoir rock is fully compacted.
+The initial pore volume and transmissibility multipliers will be set
+to the deflation curve value at the cell pressure. In general these
+multipliers will not be equal to one, so the initial pore volume and
+transmissibility will differ from the values entered in the data file.
+Alternatively, the rock compaction multipliers can be tabulated as
+functions of pressure change (<math><mrow>
+<mi>Δ</mi><mi>P</mi></mrow></math>), and the <a href="../ecl_rm/ROCKOPTS.html#ROCKOPTS">ROCKOPTS</a> keyword can be used
+to store the initial pressure (see below). The initial multipliers
+will then be set to the deflation curve values at  <math><mrow><mi>Δ</mi>
+<mi>P</mi><mo>=</mo><mn>0</mn></mrow></math>, which
+can be set to 1.</p>
+
+<p>If the initial reservoir rock is not fully compacted, pore volume
+and transmissibility values can be set by finding an elastic curve
+with pore volume multiplier equal to one at the initial cell pressure.
+In this case the pore volume will be the same as the value entered
+in the data file, although the transmissibility may still differ.
+This option can be selected using the <span class="keyword">ROCKOPTS</span> keyword.</p>
+
+<div class="fignone" id="rockcompaction.tabulated.curves.3"><a name="rockcompaction.tabulated.curves.3"><!-- --></a>
+
+ <br/><img src="../img/rockcomp3.png" width="428px"/><br/> 
+<br/><span class="figcap">
+           Figure 197.3  Initial multipliers</span></div>
+
+<div class="section" id="rockcomp_transmissibility_modification"><a name="rockcomp_transmissibility_modification"><!-- --></a><h4 class="sectiontitle">Transmissibility
+modification</h4><p>In addition to the compaction (the reduction
+in the pore volume), it is possible to modify the transmissibility
+as a function of pressure.</p>
+<p>ECLIPSE 100
+           </p>
+<p>At present the transmissibility
+modification is treated explicitly, that is the modification due to
+a change in pressure only affects the subsequent timestep.</p>
+<p>If
+a transmissibility multiplier is specified with the <a href="../ecl_rm/ROCKTAB.html#ROCKTAB">ROCKTAB</a> or <a href="../ecl_rm/ROCKTABH.html#ROCKTABH">ROCKTABH</a> keywords, the well
+connection transmissibility factor, grid block transmissibilities
+and NNCs are modified accordingly.</p>
+<p>ECLIPSE
+300            </p>
+<p>The generalized mobility
+terms are updated for grid cells and well connections. Similar functionality,
+but based on the corresponding changes in porosity, is also available
+by specifying the keywords <a href="../ecl_rm/ROCKTRMX.html#ROCKTRMX">ROCKTRMX</a>, <a href="../ecl_rm/ROCKTRMY.html#ROCKTRMY">ROCKTRMY</a> and <a href="../ecl_rm/ROCKTRMZ.html#ROCKTRMZ">ROCKTRMZ</a>.</p>
+<p>In dual porosity runs, it is also possible to specify
+pressure tables of the sigma multiplier in order to modify the matrix-fracture
+coupling as a result of rock compaction. Keywords <a href="../ecl_rm/ROCKTSIG.html#ROCKTSIG">ROCKTSIG</a> or <a href="../ecl_rm/ROCKTHSG.html#ROCKTHSG">ROCKTHSG</a> provide the input
+of irreversible/reversible and hysteretic tables, respectively.</p>
+</div>
+
+<div class="section" id="rockcomp_overburden_pressure"><a name="rockcomp_overburden_pressure"><!-- --></a><h4 class="sectiontitle">Overburden pressure</h4><p>A reservoir simulator typically works in terms of pressure, as
+pressure is the natural variable when considering the flow. However,
+it is often better to consider the compaction as a function of the
+effective stress on the rock, which is the overburden pressure minus
+the fluid pressure. The <span class="keyword">ROCKTAB</span>, <span class="keyword">ROCKTABH</span> or <a href="../ecl_rm/ROCK2D.html#ROCK2D">ROCK2D</a> and <a href="../ecl_rm/ROCK2DTR.html#ROCK2DTR">ROCK2DTR</a> keywords tabulate the compaction multipliers against the
+effective fluid pressure instead  <math><msub>
+<mi>P</mi><mrow><mrow><mi>e</mi><mi>f</mi><mi>f</mi>
+<mtext> </mtext></mrow><mrow><mi>f</mi><mi>l</mi>
+</mrow></mrow></msub><mo>=</mo><msub><mi>P</mi><mrow>
+<mi>f</mi><mi>l</mi><mi>u</mi><mi>i</mi><mi>d</mi>
+</mrow></msub><mrow><mo>-</mo><mtext>Overburden</mtext>
+</mrow></math>.</p>
+<p>The overburden pressure can be input into
+ECLIPSE as a function of depth. Note that the overburden is assumed
+to remain constant through time.</p>
+<p>Typically the overburden pressure
+will be greater than the fluid pressure. In this case it is convenient
+to tabulate the compaction against the effective stress rather than
+the pressure. This can be achieved by using the <a href="../ecl_rm/ROCKOPTS.html#ROCKOPTS">ROCKOPTS</a> keyword. In this case
+the pore volume and transmissibility multipliers are tabulated against
+the effective overburden pressure,  <math><msub>
+<mi>P</mi><mrow><mrow><mi>e</mi><mi>f</mi><mi>f</mi>
+<mtext> </mtext></mrow><mrow><mi>o</mi><mi>v</mi>
+</mrow></mrow></msub><mo>=</mo><mtext>Overburden</mtext>
+<mrow><mo>-</mo><msub><mi>P</mi><mrow><mi>f</mi><mi>l</mi><mi>u</mi><mi>i</mi><mi>d</mi></mrow></msub>
+</mrow></math>, which is  <math><mrow>
+<mo>-</mo><msub><mi>P</mi><mrow><mrow><mi>e</mi><mi>f</mi><mi>f</mi><mtext> </mtext></mrow><mrow><mi>f</mi><mi>l</mi></mrow></mrow></msub></mrow></math>.</p>
+</div>
+
+<div class="section" id="rockcomp_reservoir_pore_volumes"><a name="rockcomp_reservoir_pore_volumes"><!-- --></a><h4 class="sectiontitle">Reservoir pore
+volumes</h4><p>There is scope for confusion when supplying porosities
+or pore volumes to ECLIPSE. These could either be at reference conditions
+(derived from core data); or at reservoir conditions (derived from
+log data).</p>
+<p>ECLIPSE treats the input porosities (<span class="keyword">PORO</span>) and pore volumes (<span class="keyword">PORV</span>) as at reference conditions.
+With the rock compressibility model activated by the <a href="../ecl_rm/ROCK.html#ROCK">ROCK</a> keyword, the pore volumes
+are then referenced at the reference pressure in the <span class="keyword">ROCK</span> keyword. It should be borne in mind that other simulators will assume
+the geometric <span class="keyword">PORV</span> represents reservoir pore volumes.
+The input <span class="keyword">PORV</span> can be made equivalence to the initial
+reservoir pore volume in ECLIPSE by setting the second item of the <span class="keyword">ROCKOPTS</span> keyword to ‘ <samp class="codeph">STORE</samp> ’.</p>
+<p>With
+the rock compaction model (keywords <span class="keyword">ROCKTAB</span>, <span class="keyword">ROCKTABH</span>), setting the second item in <span class="keyword">ROCKOPTS</span> to ‘ <samp class="codeph">STORE</samp> ’ and tabulating the <span class="keyword">ROCKTAB</span> and <span class="keyword">ROCKTABH</span> tables against effective pressure
+(which is zero at equilibrated conditions) treats the initial <span class="keyword">PORO</span> and <span class="keyword">PORV</span> as reservoir conditions.</p>
+</div>
+
+<div class="section" id="rockcomp_transmissibility_as_a_function_of_porosity"><a name="rockcomp_transmissibility_as_a_function_of_porosity"><!-- --></a><h4 class="sectiontitle">Transmissibility as a function of porosity</h4><p>In order
+to define a model which can be used to specify the dependence of transmissibility
+on porosity, refer to items 4 and 5 of the <a href="../ecl_rm/ROCKCOMP.html#ROCKCOMP">ROCKCOMP</a> keyword. There are
+two different options which can be used:</p>
+<ul>
+<li> <samp class="codeph">EXP</samp> Transmissibility is as exponential function
+of porosity:                <p> <math><mrow>
+<mfrac><mrow><mi>κ</mi></mrow><mrow><msub><mrow><mi>κ</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow>
+</mfrac><mo>=</mo><mrow><msup><mrow><mi>e</mi></mrow>
+<mrow><mo>[</mo><mrow><msub><mrow><mi>κ</mi></mrow>
+<mrow><mtext>mult</mtext></mrow></msub><mo>(</mo><mfrac>
+<mrow><mi>φ</mi><mrow><mo>-</mo><msub><mrow><mi>φ</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow>
+</mrow><mrow><mn>1</mn><mrow><mo>-</mo><msub><mrow>
+<mi>φ</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow>
+</mrow></mfrac><mo>)</mo></mrow><mo>]</mo></mrow>
+</msup></mrow></mrow></math> </p>
+                <p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>κ</mi>
+<mn>0</mn></msub></math> </td>
+
+<td valign="top">is the initial transmissibility,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>φ</mi>
+<mn>0</mn></msub></math> </td>
+
+<td valign="top"> is the initial porosity and</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>κ</mi>
+<mtext>mult</mtext></msub></math> </td>
+
+<td valign="top">is the user-defined multiplier factor defined by keywords, <a href="../ecl_rm/ROCKTRMX.html#ROCKTRMX">ROCKTRMX</a>, <a href="../ecl_rm/ROCKTRMY.html#ROCKTRMY">ROCKTRMY</a> and <a href="../ecl_rm/ROCKTRMZ.html#ROCKTRMZ">ROCKTRMZ</a> for a particular direction.
+This model is based on the general approach as described by <cite><span> <a href="biblio_Bibliography.html#biblio_79383">Pierre Lebel
+(2002)</a> </span></cite>.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</li>
+
+<li> <samp class="codeph">CZ</samp> Transmissibility is a function of porosity
+via the Carmen-Kozeny type formula:                <p> <math><mrow><mfrac><mrow>
+<mi>κ</mi></mrow><mrow><msub><mrow><mi>κ</mi></mrow>
+<mrow><mn>0</mn></mrow></msub></mrow></mfrac><mo>=</mo>
+<msup><mrow><mfrac><mrow><mi>φ</mi></mrow><mrow><msub>
+<mrow><mi>φ</mi></mrow><mrow><mn>0</mn></mrow></msub>
+</mrow></mfrac></mrow><mrow><mi>τ</mi><mo>[</mo><mo>(</mo><mfrac><mrow><mn>1</mn><mrow><mo>-</mo><msub>
+<mrow><mi>φ</mi></mrow><mrow><mn>0</mn></mrow></msub>
+</mrow></mrow><mrow><mn>1</mn><mrow><mo>-</mo><mi>φ</mi></mrow></mrow></mfrac><mo>)</mo><mo>]</mo>
+</mrow></msup></mrow></math> </p>
+                <p>where  <math><mi>τ</mi></math>  is an integer defined in item 5 of the <span class="keyword">ROCKCOMP</span> keyword.</p>
+</li>
+
+</ul>
+<p>Items 4 and 5 of the <span class="keyword">ROCKCOMP</span> keyword are
+available for use with the <a href="../ecl_rm/ROCKTAB.html#ROCKTAB">ROCKTAB</a> and <a href="../ecl_rm/ROCKTABH.html#ROCKTABH">ROCKTABH</a> keywords. They are currently not available for use with the <span class="keyword">ROCK</span> keyword.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

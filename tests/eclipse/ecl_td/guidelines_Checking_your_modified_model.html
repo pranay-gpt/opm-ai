@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Checking your modified model"/>
+<meta name="DC.subject" content="Reservoir optimization checking your modified model"/>
+<meta name="keywords" content="Reservoir optimization checking your modified model"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="guidelines_checking_your_modified_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Checking your modified model</title>
+</head>
+<body>
+
+
+<div class="nested0" id="guidelines_checking_your_modified_model"><a name="guidelines_checking_your_modified_model"><!-- --></a>
+<h1 class="topictitle1">Checking your modified model</h1>
+
+
+ <div>
+<p>Now that you have specified the Reservoir Optimization problem
+in the model, and you have indicated that you just want one gradient
+calculation performed and no optimization (using the <a href="../ecl_rm/OPTDIMS.html#OPTDIMS">OPTDIMS</a> keyword), you should
+run the model in ECLIPSE 300 and examine the content of the PRT file.</p>
+
+<ol>
+<li> Look for general errors and warnings, in ECLIPSE 300 these always
+start with the strings “ <samp class="codeph">@--Error</samp> ” and
+“ <samp class="codeph">@--Warning</samp> ”. There should be no errors
+introduced if the steps above have all been followed.       <ul>
+<li>This should tell you if any constraints are violated at your starting
+point. If this is the case, you will get the message:         <pre><code>@--Error   at   150.0000 Days  4 May 1988
+@ Optimization initial point is infeasible</code></pre><p>The optimizer
+must stay within the feasible parameter space at all times (except
+when backtracking from a constraint). If you are violating any constraints,
+then you either have to change your starting point to make it feasible
+or you have to change your constraint.</p>
+</li>
+
+<li>This will also tell you if you initial parameter values are outside
+their lower and upper bounds. If this is the case, you will get a
+message similar to:<pre><code>@--Error   at   150.0000 Days  4 May 1988
+@ Optimization Parameter     5 is out of range
+@ Parameter Name  : WBHP
+@ Parameter Domain: P1
+@ Restart Index   :    5
+@ Current parameter value is   250.000
+@ Lower limit =0.100000E+03, Upper Limit =0.200000E+03
+@ Change parameter range using the OPTPARS keyword</code></pre><p>If you have initial parameter values that are outside their lower
+and upper bounds, then you must either change your initial parameter
+values, or you must change your parameter bounds.</p>
+</li>
+
+</ul>
+</li>
+
+<li>Look at the sensitivity of your objective to the parameter values.
+This is indicated by the magnitude of the search direction reported
+for the parameters. These are reported in a table immediately after
+the text:       <pre><code>=Optimization Parameter Update====================================</code></pre><p>You need to decide whether there is a reasonable response of the
+objective function to the parameters you specified. (The definition
+of a reasonable response is largely problem dependent, the expected
+parameter changes should not all be too close to zero.) If there is
+not a reasonable response, then you should reconsider your parameter
+choice as the optimizer will not be able to make much progress with
+ineffective parameters.</p>
+                                      
+    </li>
+
+</ol>
+
+<p>If you need to change the parameters or constraints for any of
+the reasons given in this section, then you will need to run the Reservoir
+Optimization again to check the new optimization problem you have
+specified.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

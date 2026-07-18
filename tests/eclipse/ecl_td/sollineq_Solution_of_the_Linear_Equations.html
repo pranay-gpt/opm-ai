@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Solution of the linear equations"/>
+<meta name="DC.subject" content="Solution of the linear equations"/>
+<meta name="keywords" content="Solution of the linear equations"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sollineq_solution_of_the_linear_equations"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Solution of the linear equations</title>
+</head>
+<body>
+
+
+<div class="nested0" id="sollineq_solution_of_the_linear_equations"><a name="sollineq_solution_of_the_linear_equations"><!-- --></a>
+<h1 class="keyword">Solution of the linear equations</h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="sollineq.tab.0009"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="sollineq.tab.0009" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> x </td>
+
+<td valign="top"> ECLIPSE 100 </td>
+
+</tr>
+
+<tr>
+<td valign="top">x </td>
+
+<td valign="top"> ECLIPSE 300 </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The linear equations in ECLIPSE 100 are solved iteratively using
+Orthomin (<cite><span> <a href="biblio_Bibliography.html#biblio_63590">Vinsome, 1976</a> </span></cite>). The default preconditioner for
+the ORTHOMIN iterations is Nested Factorization. Alternatively, if
+the <a href="../ecl_rm/CPR.html#CPR">CPR</a> keyword is entered, the
+Constrained  Pressure Residual (CPR) preconditioner can be used instead.
+At each iteration,  Orthomin minimizes the sum of the squares of the
+residuals by orthogonalizing each new search direction to the existing
+search directions. To carry out these orthogonalizations, each search
+direction must be stored. Usually, only the last few search directions
+are significant and memory is saved if the number of stored search
+directions is restricted. This is done in ECLIPSE through the <a href="../ecl_rm/NSTACK.html#NSTACK">NSTACK</a> keyword of the <span class="keyword">RUNSPEC</span> data section. The method for solving the linear
+equations in ECLIPSE 300 is similar to ECLIPSE 100, except that the
+GMRES (<cite><span> <a href="biblio_Bibliography.html#biblio_16837">Saad, 1996</a> </span></cite>) algorithm is employed  instead of
+ORTHOMIN. In ECLIPSE 300 the GMRES iterations can be preconditioned
+by  nested factorization, which is the default, or by the CPR preconditioner.</p>
+
+<p>The default <samp class="codeph">NSTACK</samp> is 10 in ECLIPSE 100 and 40
+in ECLIPSE 300. <samp class="codeph">NSTACK</samp> should always be less than
+or equal to the maximum number of linear iterations (<samp class="codeph">LITMAX </samp>), which may be altered using keyword <a href="../ecl_rm/TUNING.html#TUNING">TUNING</a> (ECLIPSE 100) or <a href="../ecl_rm/CVCRIT.html#CVCRIT">CVCRIT</a> (ECLIPSE 300) in the <span class="keyword">SCHEDULE</span> section.</p>
+
+<p>Each search direction consists of pressures, saturations and residuals
+for each cell in an ECLIPSE 100 black oil run, which is six double
+precision numbers per cell in a three-phase black oil run. In ECLIPSE
+300, each search direction consists of pressures for each cell and
+also molar densities for any implicit cells.</p>
+
+<p>It should rarely be necessary to alter the default settings of <samp class="codeph">NSTACK</samp> and <samp class="codeph">LITMAX</samp>. However, for very difficult
+problems, they may have to be increased to ensure that the linear
+equations are solved correctly. Warning messages are printed by ECLIPSE
+when the linear equations are not fully converged. The total memory
+required for each run is printed out by ECLIPSE as soon as the required
+data has been read in and analyzed.</p>
+
+<p>The progress of the linear solver may be monitored by setting the
+seventh argument of the <a href="../ecl_rm/DEBUG.html#DEBUG">DEBUG</a> keyword to 1 in ECLIPSE 100 and by setting the ninth argument
+of the <a href="../ecl_rm/DEBUG3.html#DEBUG3">DEBUG3</a> keyword to 1 in ECLIPSE 300.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

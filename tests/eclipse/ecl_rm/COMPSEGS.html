@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="COMPSEGS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="COMPSEGS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>COMPSEGS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="COMPSEGS"><a name="COMPSEGS"><!-- --></a>
+<h1 class="keyword">COMPSEGS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="compsegs.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="compsegs.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d312e45"> x </th>
+
+<th valign="top" id="d312e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d312e54"> x </th>
+
+<th valign="top" id="d312e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d312e45 d312e54 "> </td>
+
+<td valign="top" headers="d312e48 d312e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d312e45 d312e54 "> </td>
+
+<td valign="top" headers="d312e48 d312e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d312e45 d312e54 "> </td>
+
+<td valign="top" headers="d312e48 d312e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d312e45 d312e54 "> </td>
+
+<td valign="top" headers="d312e48 d312e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d312e45 d312e54 "> </td>
+
+<td valign="top" headers="d312e48 d312e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d312e45 d312e54 "> </td>
+
+<td valign="top" headers="d312e48 d312e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d312e45 d312e54 "> </td>
+
+<td valign="top" headers="d312e48 d312e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d312e45 d312e54 "> x </td>
+
+<td valign="top" headers="d312e48 d312e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword defines the location of the completions in a multisegment
+well (see <a href="../ecl_td/multisegintro_Multi-segment_Wells.html#multisegintro_multi-segment_wells">"Multisegment wells"</a> in the <cite>ECLIPSE Technical Description</cite>), and instructs
+ECLIPSE to allocate each completion to a well segment. The well’s
+segment structure must previously have been defined with the <a href="WELSEGS.html#WELSEGS">  WELSEGS</a> keyword. The
+location of the well connection to each completed grid block is defined
+within the well by the branch number and the length down the tubing
+to the start and end of the connection. This information must be supplied
+for <strong>all</strong> the well’s connections that have been specified with
+the <a href="COMPDAT.html#COMPDAT">  COMPDAT</a> (or <a href="COMPDATL.html#COMPDATL">  COMPDATL</a>) keyword.
+ECLIPSE allocates each grid block connection to the segment whose
+nodal point lies nearest to the center of the connection (unless explicitly
+overridden by a user-specified segment). A segment (or to be more
+precise, its node) can accept flow from any number of grid-block connections.
+However, it is not possible to allocate a single grid-block connection
+to more than one segment. If a grid-block connection is allocated
+to more than one user-specified segment, all except the last one will
+be ignored. </p>
+
+<p>The keyword can only be used on one well at a time, thus it must
+be specified more than once if there is more than one multisegment
+well. </p>
+
+<p>ECLIPSE 100 </p>
+
+<p>If the well is completed in one or more local
+grids that have been amalgamated, the keyword <a href="COMPSEGL.html#COMPSEGL">  COMPSEGL</a> must be used instead of <span class="keyword">COMPSEGS</span>. Either keyword may be used for wells completed
+in single unamalgamated local grids </p>
+
+<p>ECLIPSE 300 </p>
+
+<p>If the well is completed in a local grid,
+the keyword <span class="keyword">COMPSEGL</span> must be used instead of <span class="keyword">COMPSEGS</span>. </p>
+
+<p>The keyword is followed by a number of data records to define the
+location of all the grid block connections in the well. Each record
+is terminated with a slash (/), and the set of records must end with
+an additional blank record containing just a slash. </p>
+
+<p>The data items in each record are: </p>
+
+<div class="section" id="compsegs_record_1"><a name="compsegs_record_1"><!-- --></a><h4 class="sectiontitle">Record 1</h4><p>The first
+record consists of a single item of data that identifies the well. </p>
+<ol>
+<li> Name of the well </li>
+
+</ol>
+<p>End the data record with a slash (/). </p>
+</div>
+
+<div class="section" id="compsegs_each_subsequent_record"><a name="compsegs_each_subsequent_record"><!-- --></a><h4 class="sectiontitle">Each subsequent
+record</h4><p>The subsequent records set the start and end of each
+connection’s perforations in terms of distance along the tubing from
+the well’s zero tubing length reference point, and the branch number.
+The zero tubing length reference point is defined relative to the
+nodal point of the top segment by item 3 of the first record of keyword <span class="keyword">WELSEGS</span>. The connections must previously have been defined
+with keyword <span class="keyword">COMPDAT</span> (or <span class="keyword">COMPDATL</span> as required). </p>
+<p>The connections may either be specified individually,
+or in one or more “ranges”. A “range” is a contiguous row or column
+of grid blocks that are fully penetrated by the same branch of the
+well. The well is assumed to penetrate a “range” perpendicularly through
+the center of each grid block in the specified direction. The distance
+along the tubing to the start and end of each connection in the range
+is determined by summing the DX, DY or DZ thicknesses of the grid
+blocks in the range. <strong>All</strong> connections in the well must have
+their tubing distances set, either individually or within a range,
+working outwards along the main stem and each branch towards its “toe”. </p>
+<ol>
+<li> I - location of the individual connection, or the connection
+at the <strong>start</strong> of the range (nearest the tubing head) </li>
+
+<li> J - location of the individual connection, or the connection
+at the <strong>start</strong> of the range (nearest the tubing head). </li>
+
+<li> K - location of the individual connection, or the connection
+at the <strong>start</strong> of the range (nearest the tubing head) </li>
+
+<li> Branch number on which this connection (or range of connections)
+is located </li>
+
+<li> Distance down the tubing from the well’s zero tubing length reference
+point to the <strong>start</strong> of the connection in <strong>this grid block.</strong> <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>) </p>
+ <p>DEFAULT: Zero, for the first of these records, or the distance to
+the end of the previous connection or range, for subsequent records </p>
+ </li>
+
+<li> Distance down the tubing from the well’s zero tubing length reference
+point to the <strong>end</strong> of the connection in <strong>this grid block.</strong> <p>This item, if set, must be greater than item 5. </p>
+ <p>UNITS:
+m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>) </p>
+ <p>DEFAULT: Value
+of item 5 + thickness of the grid block in the direction of penetration </p>
+ </li>
+
+<li> Direction of penetration through the grid block or the range 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">X or I</td>
+
+<td valign="top">for horizontal penetration in the x-direction </td>
+
+</tr>
+
+<tr>
+<td valign="top">Y or J </td>
+
+<td valign="top">for horizontal penetration in the y-direction </td>
+
+</tr>
+
+<tr>
+<td valign="top">Z or K</td>
+
+<td valign="top">for vertical penetration </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>This item is used for calculating the distance to the end
+of the perforations in the connection (or the connections in the range),
+where it defines which component of the grid block size to add (<span class="keyword">DX</span>, <span class="keyword">DY</span> or <span class="keyword">DZ</span>). The
+item must be set if item 6 is defaulted, or if a range is specified
+in item 8. Otherwise it may be defaulted as it is not required. </p>
+ </li>
+
+<li> <p>Grid block I, J, or K coordinate at the <strong>end</strong> of the
+range, depending on the direction of penetration set in item 7. (For
+example the I-coordinate of the grid block at the end of the range,
+if the branch penetrates in the I-direction.) </p>
+ <p>This may be
+greater than, or less than, the corresponding grid block coordinate
+in item 1, 2 or 3, depending on whether the branch penetrates out
+towards the positive or negative I, J or K direction. </p>
+ <p>If this
+item is set, the tubing lengths are calculated for all the well’s
+connections that lie within the range. Should the range pass through
+an inactive grid block ECLIPSE prints a warning message and assume
+a zero thickness for that cell. If this is not appropriate, the range
+should be split and the thickness of the inactive grid block accounted
+for by explicitly defining the tubing lengths in items 5 and 6. </p>
+ <p>If this item is defaulted, this record sets the tubing lengths
+for the single connection identified by items 1, 2 and 3. </p>
+ </li>
+
+<li> Depth of the well connections within the range, that is the depth
+of the center of the perforations within each grid block in the range. <p>If a default (or zero) value is entered, connection depths are calculated
+by linear interpolation from the segment data, according to the depths
+of the beginning and end of the segment and the position of the perforations
+within it. </p>
+ <p>If a negative value is entered, the connection
+depths remain at their original values, which are set equal to the
+center depths of the corresponding grid blocks when the connections
+are first defined with keyword <a href="COMPDAT.html#COMPDAT">  COMPDAT</a>. </p>
+ <p>ECLIPSE calculates the pressure
+difference between the connection and its corresponding segment from
+the fluid density within the segment, and adjusts the grid block pressure
+to the depth of the connection by adding a hydrostatic correction
+based on an average of the mobile fluid densities within the block
+(see <a href="../ecl_td/multiseg_Inflow_performance.html#multiseg_inflow_performance">"Inflow performance"</a> in the <cite>ECLIPSE Technical Description</cite>). </p>
+ <p>ECLIPSE 100 </p>
+ <p>See
+also <a href="OPTIONS.html#options.63">item 63</a> of the <span class="keyword">OPTIONS</span> keyword. </p>
+ <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>) </p>
+ <p>DEFAULT: Zero, so that the depths are calculated
+from the segment data. </p>
+ <p>ECLIPSE 300 Thermal</p>
+ </li>
+
+<li>Thermal contact length, that is, the length of the well in the
+completion cell. <p>This length is used with the specific thermal
+resistance, defined in <a href="WSEGHEAT.html#WSEGHEAT">  WSEGHEAT</a>, to calculate the conductive heat transfer between the well
+and the reservoir. </p>
+  <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft
+(<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>) </p>
+ <p>DEFAULT: The thickness of the grid block in the direction
+of penetration. </p>
+ </li>
+
+<li> Segment number to allocate to all connections within the range. <p>If this record is negative or defaulted, then ECLIPSE allocates each
+grid block connection to the segment whose nodal point lies nearest
+to the center of the connection. If a segment number is provided then
+it is used instead - regardless of the physical tubing length positions
+of the segment and the connection. </p>
+ <p>DEFAULT: 0 (that is let
+ECLIPSE allocate the segment) </p>
+ </li>
+
+</ol>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If the segment number is specified using this item then
+the use of defaulting for the depth of the well connections (item
+9 of this keyword) should be avoided. This is particularly true if
+the distance down the tubing to the middle of the connection does
+not lie within the tubing range of the specified segment (as the ECLIPSE
+calculation may then result in connections depths outside the reservoir). </span></div>
+<p>End the data record with a slash (/). </p>
+<p>End the set of data
+records with a slash. </p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If all of item 5, item 6, and item
+9 are defaulted, then the length down the tubing (and therefore the
+depth) is determined purely by the grid block sizes in the specified
+penetration directions and any error will be cumulative. Unless the
+well path is closely aligned with the axes, these sizes may be significantly
+less than the geometrical length of the path and the calculated depths
+may not be representative.</span></div>
+</div>
+
+<div class="section" id="compsegs_notes"><a name="compsegs_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><p>Multilateral well
+data can be complicated to enter. It is advisable to check your data
+by examining the output generated in the Print file. </p>
+<p>ECLIPSE 100 </p>
+<p>The
+output is generated by setting <a href="RPTSCHED.html#RPTSCHED"> RPTSCHED</a> keyword switch 14 (mnemonic <samp class="codeph">WELSPECS</samp>). </p>
+<p>ECLIPSE 300 </p>
+<p>The output is generated by the <a href="RPTPRINT.html#RPTPRINT"> RPTPRINT</a> keyword switches 6 and 7. These activate
+the <samp class="codeph">WELL</samp> and <samp class="codeph">COMPLETION</samp> summaries.
+A new segment summary is given under the <samp class="codeph">WELL</samp> report
+in addition to a multisegment well report, and a new completion summary
+is given when a <samp class="codeph">COMPLETION</samp> report is specified. </p>
+</div>
+
+<div class="section" id="compsegs_example"><a name="compsegs_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>A multilateral
+well with connections in three horizontal lateral branches.</p>
+<pre><code>COMPSEGS
+-- Name 
+    PROD   /
+-- I   J   K   Brn   Start    End      Dirn    End     Connection
+--             No    Length   Length   Penet   Range   Depth
+-- Top Branch
+   2   5   2   2     30       1*        X      6    /
+-- Middle Branch
+   2   5   5   3     170      1*        X      6    /
+-- Bottom Branch
+   2   5   8   4     230      1*        X      6    /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

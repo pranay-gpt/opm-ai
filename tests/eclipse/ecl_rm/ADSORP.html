@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ADSORP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ADSORP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ADSORP</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="ADSORP"><a name="ADSORP"><!-- --></a>
+<h1 class="keyword">ADSORP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="adsorp.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="adsorp.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d36e45">                         x </th>
+
+<th valign="top" id="d36e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d36e54"> </th>
+
+<th valign="top" id="d36e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d36e45 d36e54 "> </td>
+
+<td valign="top" headers="d36e48 d36e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d36e45 d36e54 "> </td>
+
+<td valign="top" headers="d36e48 d36e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d36e45 d36e54 "> </td>
+
+<td valign="top" headers="d36e48 d36e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d36e45 d36e54 ">                         x </td>
+
+<td valign="top" headers="d36e48 d36e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d36e45 d36e54 "> </td>
+
+<td valign="top" headers="d36e48 d36e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d36e45 d36e54 "> </td>
+
+<td valign="top" headers="d36e48 d36e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d36e45 d36e54 "> </td>
+
+<td valign="top" headers="d36e48 d36e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d36e45 d36e54 "> </td>
+
+<td valign="top" headers="d36e48 d36e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword supplies coefficients for analytical adsorption functions
+which can be used together with the polymer, surfactant, alkaline,
+foam and environmental tracer options (see the <span class="keyword">RUNSPEC</span> keywords <a href="POLYMER.html#POLYMER"> POLYMER</a>, <a href="SURFACT.html#SURFACT"> SURFACT</a>, <a href="ALKALINE.html#ALKALINE"> ALKALINE</a>, <a href="FOAM.html#FOAM"> FOAM</a> and <a href="TRACERS.html#TRACERS"> TRACERS</a>). The keyword
+can be used in place of <a href="PLYADS.html#PLYADS"> PLYADS</a>, <a href="PLYADSS.html#PLYADSS"> PLYADSS</a>, <a href="SURFADS.html#SURFADS"> SURFADS</a>, <a href="ALKADS.html#ALKADS"> ALKADS</a>, <a href="FOAMADS.html#FOAMADS"> FOAMADS</a> and <a href="TRADS.html#TRADS"> TRADS</a>. The analytical adsorption
+function allows for dependencies of adsorption on rock permeability
+as well as brine salinity in the case of polymer and surfactant (see <a href="../ecl_td/brinetra_Brine_Tracking.html#brinetra_brine_tracking">"Brine tracking"</a> in the <cite>ECLIPSE Technical Description</cite> for information
+on the calculation of standard and <strong>effective</strong> salinities for
+polymer and surfactant).</p>
+
+<p>Currently a generalized Langmuir adsorption function is available
+in the <span class="keyword">ADSORP</span> keyword:</p>
+
+<p>                              <math><mrow>
+<mtable><mtr><mtd><msub><mrow><mi>C</mi></mrow><mrow>
+<mi>a</mi><mi>d</mi><mi>s</mi></mrow></msub><mo>=</mo><mfrac><mrow><mi>a</mi><msup><mrow><mi>C</mi>
+</mrow><mrow><mi>m</mi></mrow></msup></mrow><mrow><mn>1</mn><mo>+</mo><mrow><mi>b</mi><mi>C</mi></mrow>
+</mrow></mfrac></mtd><mtd><mrow><mi>a</mi><mo>=</mo>
+<mo>(</mo><mtable><mtr><mtd><msub><mrow><mi>a</mi>
+</mrow><mrow><mn>1</mn></mrow></msub></mtd></mtr>
+</mtable><mo>+</mo><msub><mrow><mi>a</mi></mrow><mrow>
+<mn>2</mn></mrow></msub><msub><mrow><mi>C</mi></mrow>
+<mrow><mi>S</mi><mi>E</mi></mrow></msub><mo>)</mo>
+</mrow><msup><mrow><mo>(</mo><mfrac><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>r</mi><mi>e</mi><mi>f</mi>
+</mrow></msub></mrow><mrow><mi>K</mi></mrow></mfrac>
+<mo>)</mo></mrow><mrow><mi>n</mi></mrow></msup></mtd>
+</mtr></mtable></mrow></math>,          </p>
+
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>C</mi>
+<mrow><mi>a</mi><mi>d</mi><mi>s</mi></mrow></msub>
+</math> </td>
+
+<td valign="top">denotes the rock adsorped concentration </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>C</mi></math> </td>
+
+<td valign="top">denotes the concentration in the solution surrounding the rock </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>m</mi></math> </td>
+
+<td valign="top">denotes an exponent for concentration dependence</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>C</mi>
+<mrow><mi>S</mi><mi>E</mi></mrow></msub></math> </td>
+
+<td valign="top">denotes the (effective) salinity for polymer/surfactant</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>K</mi></math> </td>
+
+<td valign="top">denotes the grid block permeability  <math><mrow><mi>K</mi>
+<mo>=</mo><mroot><mrow><msub><mrow><mi>K</mi></mrow>
+<mrow><mi>x</mi></mrow></msub><msub><mrow><mi>K</mi>
+</mrow><mrow><mi>y</mi></mrow></msub><msub><mrow><mi>K</mi></mrow><mrow><mi>z</mi></mrow></msub></mrow>
+<mrow><mn>3</mn></mrow></mroot></mrow></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>K</mi>
+<mrow><mi>r</mi><mi>e</mi><mi>f</mi></mrow></msub>
+</math> </td>
+
+<td valign="top">denotes the reference permeability </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>a</mi>
+<mn>1</mn></msub></math> </td>
+
+<td valign="top">denotes an adsorption coefficient   </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>a</mi>
+<mn>2</mn></msub></math> </td>
+
+<td valign="top">denotes an adsorption coefficient for salinity dependence </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>b</mi></math> </td>
+
+<td valign="top">denotes an adsorption coefficient  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>n</mi></math> </td>
+
+<td valign="top">denotes an exponent for permeability dependence</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a>+1 (set in the <span class="keyword">TABDIMS</span> keyword)
+records of data, each terminated by a slash (/).</p>
+
+<div class="section" id="adsorp_first_record"><a name="adsorp_first_record"><!-- --></a><h4 class="sectiontitle">First record</h4><p>The
+first record holds the name of the adsorbing component. Valid options
+are: <a href="POLYMER.html#POLYMER"> POLYMER</a>, <a href="SURFACT.html#SURFACT"> SURFACT</a>, <a href="ALKALINE.html#ALKALINE"> ALKALINE</a>, <a href="FOAM.html#FOAM"> FOAM</a> or the three-character
+name of an environmental tracer.</p>
+</div>
+
+<div class="section" id="adsorp_remaining_records"><a name="adsorp_remaining_records"><!-- --></a><h4 class="sectiontitle">Remaining records</h4><p>The following <samp class="codeph">NTSFUN</samp> records hold adsorption
+coefficients for each region:</p>
+<ol>
+<li>Name of adsorption isotherm. This item must be set to <span class="keyword">LANGMUIR</span> which is currently the only adsorption function
+available.<p>DEFAULT: <span class="keyword">LANGMUIR</span>.</p>
+</li>
+
+<li> Adsorption coefficient                  <math><msub><mi>a</mi>
+<mn>1</mn></msub></math>.       <p>DEFAULT: no default.</p>
+<p>UNITS: (sm<sup>3</sup>/kg)<sup>m</sup> (<samp class="codeph">METRIC</samp>), (stb/lb)<sup>m</sup> (<samp class="codeph">FIELD</samp>), (scc/gm)<sup>m</sup> (<samp class="codeph">LAB</samp>)</p>
+<p>If <span class="keyword">ADSORP</span> is used
+with an environmental tracer and a unit has been specified for this
+tracer in keyword <a href="TRACER.html#TRACER">     TRACER</a>, the units employed here are:</p>
+<p>UNITS: (sm<sup>3</sup>)<sup>m</sup>/(TR<sup>m-1</sup> kg) (<samp class="codeph">METRIC</samp>), (stb)<sup>m</sup>/(TR<sup>m-1</sup> lb) (<samp class="codeph">FIELD</samp>), (scc)<sup>m</sup>/(TR<sup>m-1</sup> gm) (<samp class="codeph">LAB</samp>)</p>
+<p>where
+TR is the unit supplied for the tracer.</p>
+ </li>
+
+<li>Adsorption coefficient for salinity dependence <math><msub><mi>a</mi>
+<mn>2</mn></msub></math>. This item is only relevant when
+the <span class="keyword">ADSORP</span> keyword is used in conjunction with
+the polymer or surfactant option. In all other cases the item is ignored. <p>For surfactant the effective salinity for surfactant is applied in
+the adsorption calculation (see keyword <a href="SURFESAL.html#SURFESAL"> SURFESAL</a> as well as the <a href="../ecl_td/brinetra_Brine_Tracking.html#brinetra_brine_tracking">"Brine tracking"</a> section in the <cite>ECLIPSE Technical Description</cite>). For
+polymer the salinity applied in the adsorption calculation depends
+on the type of brine model. When used with the Multi-Component Brine
+model the effective salinity for polymer (see keyword <a href="PLYESAL.html#PLYESAL">  PLYESAL</a>) will be used.
+Otherwise the standard brine concentration will be applied. Surfactant
+adsorption only allows a dependence on the effective salinity for
+surfactant, as activated by the <span class="keyword">SURFESAL</span> keyword,
+and not the standard salinity.</p>
+<p>DEFAULT: 0.0</p>
+<p>When used
+with an effective salinity, as measured in moles equivalent per unit
+standard volume, the units of                  <math><msub>
+<mi>a</mi><mn>2</mn></msub></math>  are          </p>
+<p>UNITS: (sm<sup>3</sup>)<sup>m+1</sup>/(kg<sup>m</sup> kg-M) (<samp class="codeph">METRIC</samp>), (stb<sup>m+1</sup>)/(lb<sup>m</sup> lb-M) (<samp class="codeph">FIELD</samp>), (scc)<sup>m+1</sup>/(gm<sup>m</sup> gm-M) (<samp class="codeph">LAB</samp>)</p>
+<p>When used with the standard brine concentration,
+as measured in mass per unit standard volume, the units of       
+          <math><msub><mi>a</mi>
+<mn>2</mn></msub></math>  are          </p>
+<p>UNITS: (sm<sup>3</sup>/kg)<sup>m+1</sup> (<samp class="codeph">METRIC</samp>), (stb/lb)<sup>m+1</sup> (<samp class="codeph">FIELD</samp>), (scc/gm)<sup>m+1</sup> (<samp class="codeph">LAB</samp>)</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Adsorption is always reversible with salinity,
+even when it is irreversible in concentration.</span></div>
+</li>
+
+<li>Adsorption coefficient                     <math><mi>b</mi></math>.    <p>DEFAULT: no default</p>
+<p>UNITS: sm<sup>3</sup>/kg (<samp class="codeph">METRIC</samp>), stb/lb (<samp class="codeph">FIELD</samp>), scc/gm (<samp class="codeph">LAB</samp>)</p>
+ <p>If <span class="keyword">ADSORP</span> is used with an environmental tracer and a unit has been specified
+for this tracer in keyword <span class="keyword">TRACER</span>, the units employed
+here are:</p>
+<p>UNITS: sm<sup>3</sup>/TR (<samp class="codeph">METRIC</samp>),
+stb/TR (<samp class="codeph">FIELD</samp>), scc/TR (<samp class="codeph">LAB</samp>)</p>
+<p>where TR is the unit supplied for the tracer.</p>
+</li>
+
+<li> Exponent,  <math><mi>m</mi></math>, for concentration dependence.     <p>DEFAULT: 1</p>
+<p>UNITS: dimensionless</p>
+     </li>
+
+<li>Exponent, <math><mi>n</mi></math>, for permeability dependence.  <p>DEFAULT: 0.5</p>
+<p>UNITS: dimensionless</p>
+     </li>
+
+<li> Reference permeability                     <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>e</mi><mi>f</mi></mrow></msub>
+</math>. This is the permeability at which the adsorption coefficients
+are specified. Permeability dependencies can be ignored by setting
+item 6 to 0.  <p>DEFAULT: no default</p>
+<p>UNITS: mD (<samp class="codeph">METRIC</samp>), mD (<samp class="codeph">FIELD</samp>), mD (<samp class="codeph">LAB</samp>)</p>
+  </li>
+
+</ol>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The adsorption function relates the solution concentration
+of a component per unit volume of host phase to the rock adsorped
+concentration per unit mass of rock. The rock mass density as well
+as the adsorption index must be supplied in the respective rock keyword,
+that is <a href="PLYROCK.html#PLYROCK"> PLYROCK</a> for polymer adsorption and <a href="TRROCK.html#TRROCK"> TRROCK</a> for tracer adsorption for example.          </span></div>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The <span class="keyword">ADSORP</span> keyword with <span class="keyword">POLYMER</span> as an item and the <a href="PLYADS.html#PLYADS"> PLYADS</a> keyword are mutually exclusive and similarly for <span class="keyword">ADSORP</span> with <span class="keyword">SURFACT</span>, <span class="keyword">ALKALINE</span>, <span class="keyword">FOAM</span> or an environmental tracer as an item and
+the <a href="SURFADS.html#SURFADS">  SURFADS</a>, <a href="ALKADS.html#ALKADS"> ALKADS</a>, <a href="FOAMADS.html#FOAMADS">  FOAMADS</a> and <a href="TRADS.html#TRADS"> TRADS</a> keywords. </span></div>
+</div>
+
+<div class="section" id="adsorp_example"><a name="adsorp_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>Surfactant/polymer
+run with one environmental tracer <samp class="codeph">ET1</samp> and <samp class="codeph">NTSFUN</samp> = 2:</p>
+<pre><code>ADSORP
+POLYMER /
+-- isotherm    a1    a2    b    m   n   k_ref
+   LANGMUIR  0.0012  0.7  0.4  1.1  0.5  100 /
+   LANGMUIR  0.0009  0.5  0.1  1.2  0.3  50  /
+
+ADSORP
+SURFACT /
+-- isotherm    a1    a2    b    m   n   k_ref
+   LANGMUIR  0.0012  0.7  0.4   1*  0.5  100 /
+/ -- default second table to first table
+
+ADSORP
+ET1 /
+-- isotherm    a1    a2    b    m   n   k_ref
+   LANGMUIR  0.001   1*   0.2  1*  0.5  250 /
+   LANGMUIR  0.005   1*   1.1  1*  0.0  50  /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

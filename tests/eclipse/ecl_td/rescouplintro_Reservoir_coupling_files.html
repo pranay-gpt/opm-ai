@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Reservoir coupling files"/>
+<meta name="DC.subject" content="Reservoir coupling, Files"/>
+<meta name="keywords" content="Reservoir coupling, Files"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="rescouplintro_reservoir_coupling_files"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Reservoir coupling files</title>
+</head>
+<body>
+
+
+<div class="nested0" id="rescouplintro_reservoir_coupling_files"><a name="rescouplintro_reservoir_coupling_files"><!-- --></a>
+<h1 class="topictitle1">Reservoir coupling files</h1>
+
+
+ <div>
+<p>During the simulation of the coupled system, the master run can
+be made to write the flow rates and coupling constraints of the master
+groups to a <strong>reservoir coupling file</strong>. At each timestep of the
+master run, the following information is written to this file for
+each master group:</p>
+
+<ol>
+<li>The group’s coupling constraints. These include the rate
+target applied to the group by the master run. Other rate limits are
+included, to prevent the group increasing its flow sufficiently to
+violate any rate limits imposed on higher level groups, assuming the
+flows of all other groups remain constant. If the group is part of
+a pipeline network, its network nodal pressure is also included.</li>
+
+<li>The group’s potential flow rates. These are the flow rates
+that the coupled slave group’s subordinate wells would achieve,
+at the current grid block conditions, if all rate limits were ignored
+and only their THP and BHP limits were observed. The potentials may
+be used to determine guide rates for group control.</li>
+
+<li>The group’s production and injection rates. These are the
+rates that the coupled slave groups have achieved, averaged over the
+length of the master run’s current timestep. These rates are
+reported in the master run.</li>
+
+</ol>
+
+<p>The reservoir coupling file will be written by the master run if
+the keyword <a href="../ecl_rm/DUMPCUPL.html#DUMPCUPL">DUMPCUPL</a> is present in its data file. There is a choice to make this
+either a formatted or an unformatted file. Formatted files occupy
+much more disk space than unformatted files, but should be chosen
+if the reservoir coupling file is going to be used on a system that
+does not have binary compatibility with the one on which it was created.</p>
+
+<p>The reservoir coupling file may subsequently be used for either
+of two purposes:</p>
+
+<ul>
+<li>  To substitute for one or more of the slave reservoirs in the
+master run. The flow rates of the slave groups will be read from the
+file and incorporated into the master groups’ flows.<p>This
+would allow the master to be run with a reduced number of coupled
+slaves. In fact, if all the slaves were replaced by the data on the
+Reservoir Coupling file, the master could be run on its own without
+requiring MPI to activate the slave runs.</p>
+                    
+ <p>Obviously, the slave group flows read from the file cannot be
+influenced by any changes made to the coupled system. So be careful
+about making changes that would have significant repercussions on
+the slave reservoirs. Use of the reservoir coupling file for this
+purpose has similarities with the flux boundary conditions option.</p>
+</li>
+
+<li>To drive a slave reservoir simulation on its own, supplying the
+rate (and perhaps network pressure) constraints that were originally
+dictated by the master. MPI is not required for this task.   <p>At
+a time corresponding to the start of each timestep of the original
+master run, the rate (and network pressure) constraints of the reservoir’s
+slave groups are read from the file. These are applied to the groups
+until the next master timestep. For additional flexibility, you can
+choose to ignore limits for particular produced or injected phases.
+For each produced and injected phase, there is an option to take the
+rate constraints as specified in the slave’s data file, or to
+take the rate constraints from the Reservoir Coupling file, or to
+take the minimum of the two constraints. (See keyword <a href="../ecl_rm/GRUPSLAV.html#GRUPSLAV">GRUPSLAV</a>.)</p>
+<p>A set of <span class="keyword">SUMMARY</span> section keywords is provided to output the rate
+limits the master groups are subject to, as a function of time. This
+offers a useful way of displaying the rate limits imposed by the reservoir
+coupling file.</p>
+</li>
+
+</ul>
+
+<p>When a Reservoir Coupling file is used for either of the two purposes
+described above, the timesteps of the simulation are limited so as
+not to overshoot the timesteps of the original master run that produced
+the file. At these times the flow rates and the constraints on the
+file may change. Timesteps limited in this way are identified by the
+timestep control mnemonic <samp class="codeph">MAST</samp> in the timestep summary
+written to the print file.</p>
+
+<p>If the original coupled runs were performed over a series of restarts,
+there should be a sequence of reservoir coupling files, each having
+the root name of the data file of the master run that wrote it. Each
+file has a header that contains the root name of the data file from
+which it was restarted. Thus ECLIPSE is able to establish the chain
+of reservoir coupling files to be used, provided that they are all
+present.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

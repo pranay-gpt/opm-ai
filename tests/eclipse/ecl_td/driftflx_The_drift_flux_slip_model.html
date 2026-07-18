@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The drift flux slip model"/>
+<meta name="DC.subject" content="Multisegment wells the drift flux slip model, Multisegment wells, Drift flux slip model"/>
+<meta name="keywords" content="Multisegment wells the drift flux slip model, Multisegment wells, Drift flux slip model"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="driftflx_the_drift_flux_slip_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The drift flux slip model</title>
+</head>
+<body>
+
+
+<div class="nested0" id="driftflx_the_drift_flux_slip_model"><a name="driftflx_the_drift_flux_slip_model"><!-- --></a>
+<h1 class="topictitle1">The drift flux slip model</h1>
+
+
+ <div>
+<p>A slip model enables the phases to flow with different velocities.
+In general, in all but downward flow, the gas phase will flow with
+a greater velocity than the liquid phase. Slip thus increases the
+liquid holdup fraction for a given flowing gas-liquid ratio, thereby
+increasing the hydrostatic head component.</p>
+
+<p>The program VFP <em>i</em> contains several one-dimensional slip correlations
+which it uses to compute pressure losses in the tubing. These, however,
+are not suitable for implementing directly in ECLIPSE. A model suitable
+for use in multisegment wells ought to have the following attributes:</p>
+
+<dl>
+
+<dt class="dlterm">Simplicity   </dt>
+
+<dd>The calculation has to be done many times in each segment at every
+timestep and so this requires a model that offers rapid and efficient
+calculation.</dd>
+
+
+<dt class="dlterm">Continuity  </dt>
+
+<dd>The model must cover the complete range of flowing conditions
+without any first order discontinuities. Any such discontinuities
+would prevent the iterations of the well solution from converging.
+This requirement rules out methods involving flow regime maps, because
+the calculated pressure gradient changes discontinuously from one
+flow regime to another, unless some form of smoothing is applied.</dd>
+
+
+
+<dt class="dlterm">Differentiability </dt>
+
+<dd>The fully implicit solution of the multisegment Well Model requires
+the calculation of derivatives of the phase flow rates and the pressure
+drop for the Jacobian matrix. Ideally these derivatives should be
+calculated analytically, as calculating numerical derivatives with
+respect to each main variable would be costly in CPU time.<p>In addition
+to these requirements, it would be useful for the model to work in
+the countercurrent flow regime, allowing the heavy and light phases
+to flow in opposite directions when the overall flow velocity is small.
+This would enable ECLIPSE to model the separation of phases within
+the well bore that occurs when a well is shut-in at the surface, and
+also the accumulation of water in undulating sections of a horizontal
+well.</p>
+</dd>
+
+</dl>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

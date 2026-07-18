@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="COMPLMPL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="COMPLMPL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>COMPLMPL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="COMPLMPL"><a name="COMPLMPL"><!-- --></a>
+<h1 class="keyword">COMPLMPL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="complmpl.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="complmpl.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d290e45">x</th>
+
+<th valign="top" id="d290e48">ECLIPSE 100</th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d290e54">x</th>
+
+<th valign="top" id="d290e57">ECLIPSE 300</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d290e45 d290e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d290e48 d290e57 ">RUNSPEC</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d290e45 d290e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d290e48 d290e57 ">GRID</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d290e45 d290e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d290e48 d290e57 ">EDIT</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d290e45 d290e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d290e48 d290e57 ">PROPS</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d290e45 d290e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d290e48 d290e57 ">REGIONS</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d290e45 d290e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d290e48 d290e57 ">SOLUTION</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d290e45 d290e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d290e48 d290e57 ">SUMMARY</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d290e45 d290e54 ">x</td>
+
+<td valign="top" headers="d290e48 d290e57 ">SCHEDULE</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p><span class="keyword">COMPLMPL</span> is used to lump well connections together
+into completions for simultaneous closure in automatic workovers,
+when the connections are located in local grid refinements. The  
+connections must first have been defined with the keyword <a href="COMPDATL.html#COMPDATL"> COMPDATL</a>. <span class="keyword">COMPLMPL</span> performs the same role as <a href="COMPLUMP.html#COMPLUMP"> COMPLUMP</a> does, but the name of the local grid containing the connections
+specified in the record should be entered in item 2 of <span class="keyword">COMPLMPL</span>. </p>
+
+<p>Wells may be worked over after violating limits set in keywords <a href="WECON.html#WECON"> WECON</a>, <a href="CECON.html#CECON"> CECON</a>, <a href="GECON.html#GECON"> GECON</a>, <a href="GCONPROD.html#GCONPROD"> GCONPROD</a>, <a href="GCONPRI.html#GCONPRI"> GCONPRI</a> and, for ECLIPSE 100, <a href="GCONSALE.html#GCONSALE"> GCONSALE</a>, when for example the worst offending connection will be
+shut. If the connections have been lumped into completions, then the
+worst-offending completion will be identified (by summing the production
+rates of its connections) and all the connections belonging to it
+will be shut together. The connection economic limits in keyword  <span class="keyword">CECON</span> will also be applied to completions, that is a whole
+completion will be closed if its total water cut, GOR or WGR exceeds
+the limit set for its connections. </p>
+
+<p>ECLIPSE 100</p>
+
+<p>If a worked-over well has any connections
+left in the <samp class="codeph">AUTO</samp> queue for automatic opening (see
+keyword <a href="COMPDATL.html#COMPDATL"> COMPDATL</a>. <span class="keyword">COMPDATM</span> is just an alias for <span class="keyword">COMPDATL</span>.), then the completions  are examined in increasing order of their
+completion number, and the first one found with connections in the <samp class="codeph">AUTO</samp> queue will have all its connections opened together. </p>
+
+<p>When a connection is first defined with keyword <span class="keyword">COMPDATL</span>, it is given a completion number equal to its order of introduction
+in the well. For example, the third connection defined in the well
+ is put in completion number three. When several connections are defined
+in one record (items 4 and 5 define the upper and lower layers), the
+connections are introduced in layer order from top to bottom. So if
+the keyword <span class="keyword">COMPLMPL</span> is not used, each connection
+is in its own separate completion, and the terms completion and connection
+are equivalent. </p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">When the <span class="keyword">COMPLMPL</span> keyword is used, the named
+connections will be added to any existing connections in the completion
+specified. For this reason, it is advisable that the completion numbers
+of all connections in the well are re-specified at the same time. </span></div>
+
+<p>ECLIPSE 100</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If a well is completed in several amalgamated
+local grids, then connections in different local grids may <strong>not</strong> be lumped together. Only connections within the same local grid
+may be lumped. </span></div>
+
+<p>Completion numbers can also be used in the <a href="WELOPENL.html#WELOPENL"> WELOPENL</a>, <a href="WPIMULTL.html#WPIMULTL"> WPIMULTL</a> and <a href="WSCCLENL.html#WSCCLENL"> WSCCLENL</a> keywords to refer to a range of connections.
+Also, they can be used in the <a href="SUMMARY.html#SUMMARY"> SUMMARY</a> section with the keywords beginning with the letter W and
+ending with  the letter L to output completion quantities. Keywords
+beginning with the letters LC and ending with the letter L output
+the corresponding connection quantity totaled over all the connections
+that belong to the same completion located in local grid refinements.
+Any connection within the completion can be specified to define the
+completion. For example, <span class="keyword">WOFRL</span> and  <span class="keyword">LCOFRL</span> give the oil flow rate for the entire completion, though note that,
+in the  latter case, the completion is identified by specifying a
+connection within the completion and not by specifying the completion
+number itself. See the <span class="keyword">SUMMARY</span> section documentation
+for a full list of completion keywords. </p>
+
+<p><span class="keyword">COMPLMPL</span> is followed by any number of records,
+described below, each record terminated by a slash (/). The set of
+ records must end with a blank record, containing only a slash. </p>
+
+<p>Each record contains the following items</p>
+
+<ol>
+<li>Well name, well name template, well list or well list template
+ <p>A template enclosed in quotes can be used to refer to multiple
+wells or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>. </p>
+</li>
+
+<li>Name of local grid containing the completions to be lumped <p>If this item is defaulted or set to a blank string, the local grid
+name defaults to the well’s local grid named in keyword <a href="WELSPECL.html#WELSPECL"> WELSPECL</a>. </p>
+<p>ECLIPSE 100</p>
+<p>This
+item may not be defaulted, however, if the local grid containing the
+well is amalgamated (using keyword <a href="AMALGAM.html#AMALGAM"> AMALGAM</a>). </p>
+<p>The connection locations in items
+3 - 6 refer to their coordinates within this local grid. </p>
+</li>
+
+<li>I - location of connecting grid block(s) <p>DEFAULT: 0 (allows
+any I-value)</p>
+</li>
+
+<li>J - location of connecting grid block(s) <p>DEFAULT: 0 (allows
+any J-value)</p>
+</li>
+
+<li>K - location of upper connecting block in this completion <p>DEFAULT:
+0 (corresponds to top connection of the well in the local grid specified
+in item 2)</p>
+</li>
+
+<li>K - location of lower connecting block in this completion<p>DEFAULT:
+0 (corresponds to bottom connection of the well in the local grid
+specified in item 2)</p>
+</li>
+
+<li>Completion number of the connections <p>This must lie between
+1 and <samp class="codeph">NCWMAX</samp> (set by item 2 of keyword <a href="WELLDIMS.html#WELLDIMS"> WELLDIMS</a> in <span class="keyword">RUNSPEC</span>). </p>
+</li>
+
+</ol>
+
+<p>The set of connections in the well which match the location indices
+specified in items 3 to 6 will be given the completion number specified
+in item 7. All connections having the same completion number are treated
+as belonging to the same completion, and will be closed together in
+an automatic workover. </p>
+
+<p>If a location index is defaulted to zero, it plays no part in selecting
+the set of connections. Thus if the I and J location indices are defaulted
+to zero, all connections in the well that are located between layers
+K1 and K2 specified in items 5 and 6 will be given the completion
+number specified in item 7. If all four location indices are defaulted,
+all the well’s connections will be given this completion number. </p>
+
+<p>ECLIPSE 100</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">
+For wells completed in a single, unamalgamated local grid, either of the
+ <a href="COMPLUMP.html#COMPLUMP"> COMPLUMP</a> or
+<span class="keyword">COMPLMPL</span> keywords can be used.
+</span></div>
+
+<div class="section" id="complmpl_example"><a name="complmpl_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>COMPLMPL
+-- Connections in layers 1 and 2 for local grid CARF1
+-- are in completion 1 for well PROD1
+  PROD1   CARF1  2*   1  2    1 / 
+-- Connections in layers 3 and 4 for local grid CARF2
+-- are in completion 2 for well PROD1
+  PROD1   CARF2  2*   3  4    2 / 
+-- Connections in layer 5 for local grid CARF3
+-- are in completion 3 for well PROD2
+  PROD2   CARF3  2*   5  5    3 /
+/ </code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

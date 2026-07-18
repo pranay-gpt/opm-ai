@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SWATINIT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SWATINIT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SWATINIT</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="SWATINIT"><a name="SWATINIT"><!-- --></a>
+<h1 class="keyword">SWATINIT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="swatinit.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="swatinit.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2508e45"> x </th>
+
+<th valign="top" id="d2508e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2508e54"> x </th>
+
+<th valign="top" id="d2508e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2508e45 d2508e54 ">  </td>
+
+<td valign="top" headers="d2508e48 d2508e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2508e45 d2508e54 ">  </td>
+
+<td valign="top" headers="d2508e48 d2508e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2508e45 d2508e54 ">  </td>
+
+<td valign="top" headers="d2508e48 d2508e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2508e45 d2508e54 "> x </td>
+
+<td valign="top" headers="d2508e48 d2508e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2508e45 d2508e54 ">  </td>
+
+<td valign="top" headers="d2508e48 d2508e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2508e45 d2508e54 ">  </td>
+
+<td valign="top" headers="d2508e48 d2508e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2508e45 d2508e54 ">  </td>
+
+<td valign="top" headers="d2508e48 d2508e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2508e45 d2508e54 ">  </td>
+
+<td valign="top" headers="d2508e48 d2508e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword allows you to input a water distribution and to scale
+the water-oil capillary pressure curves such that this water distribution
+is honored in the equilibrated initial solution. Note that any water
+saturation value that cannot be honored because it is below the water
+contact is reset to the maximum water saturation in the subsequent
+equilibration calculation.</p>
+
+<p>The scaled maximum water capillary pressures (<samp class="codeph">PPCW</samp>) can be output to the print file. This can be used to check for
+unphysically high maximum capillary pressures, which can be limited
+by using the <a href="PPCWMAX.html#PPCWMAX"> PPCWMAX</a> keyword.</p>
+
+<p>In ECLIPSE 100, to output <samp class="codeph">PPCW</samp> data, use the mnemonic <samp class="codeph">SWATINIT</samp> in the <a href="RPTSOL.html#RPTSOL"> RPTSOL</a> keyword.</p>
+
+<p>In ECLIPSE 300, to output <samp class="codeph">PPCW</samp> data, use the mnemonic <samp class="codeph">PPCW</samp> in the <span class="keyword">RPTSOL</span> keyword.</p>
+
+<p>The <span class="keyword">SWATINIT</span> keyword may only be used if the
+end point scaling option is active (keyword <a href="ENDSCALE.html#ENDSCALE"> ENDSCALE</a> in the <span class="keyword">RUNSPEC</span> section).</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If the <span class="keyword">ENDSCALE</span> keyword
+is not present in the <span class="keyword">RUNSPEC</span> section, ECLIPSE
+100 will assume that it is, and use the <span class="keyword">ENDSCALE</span> defaults.</span></div>
+
+<p>The keyword should be followed by one real number for every grid
+block in the current input box, specifying the required water saturation.
+The data field should be terminated by a slash (/).</p>
+
+<p>Grid blocks are ordered with the X-axis index cycling fastest (from
+1 to <samp class="codeph">NDIVIX</samp>), followed by the Y-axis index (from
+1 to <samp class="codeph">NDIVIY</samp>), and finally the Z-axis index (from
+1 to <samp class="codeph">NDIVIZ</samp>). <samp class="codeph">NDIVIX</samp>, <samp class="codeph">NDIVIY</samp> and <samp class="codeph">NDIVIZ</samp> are specified in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS"> DIMENS</a>. Repeat counts may be used for repeated values (for example 115*0.22).
+Note that spaces must not be inserted on either side of the asterisk
+(*).</p>
+
+<p>See also the <a href="pcw_PCW_IPCW.html#pcw_pcw_ipcw"> PCW</a> and <span class="keyword">PPCWMAX</span> keywords in the <span class="keyword">PROPS</span> section and the <a href="EQUIL.html#EQUIL"> EQUIL</a> keyword in the <span class="keyword">SOLUTION</span> section.</p>
+
+<p>Further information can be found in <a href="../ecl_td/sattabsc_Matching_initial_water_distribution.html#sattabsc_matching_initial_water_distribution">"Matching initial
+water distribution"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<div class="section" id="swatinit_notes"><a name="swatinit_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><p>If a grid block
+is given a water saturation less than 1.0 below the oil water contact
+(where P<sub>c</sub>=0), then the <span class="keyword">SWATINIT</span> saturation
+is not honored. The <span class="keyword">SWATINIT</span> saturation below the
+oil water contact will be honored under <a href="OPTIONS.html#options.74">item 74</a> in <span class="keyword">OPTIONS</span> and <a href="OPTIONS3.html#options3.143">item 143</a> in <span class="keyword">OPTIONS3</span> for a different scaling. The capillary pressure
+is given by:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="swatinit.equ.0076"/>
+ <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi></mrow></msub><mo>=</mo><mrow><mrow><mrow><mo>(</mo><mi>P</mi><mi>C</mi><mi>W</mi><mo>-</mo><msub><mrow><mi>P</mi>
+</mrow><mrow><mi>c</mi><mi>m</mi><mi>i</mi><mi>n</mi>
+</mrow></msub><mo>)</mo></mrow></mrow><mo>(</mo>
+<mfrac><mrow><msub><mrow><mi>P</mi></mrow><mrow><mi>c</mi><mi>t</mi></mrow></msub><mrow><mo>-</mo><msub>
+<mrow><mi>P</mi></mrow><mrow><mi>c</mi><mi>m</mi>
+<mi>i</mi><mi>n</mi></mrow></msub></mrow></mrow><mrow>
+<msub><mrow><mi>P</mi></mrow><mrow><mi>c</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mrow><mo>-</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>c</mi>
+<mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub></mrow>
+</mrow></mfrac><mo>)</mo></mrow><mo>+</mo><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>m</mi><mi>i</mi>
+<mi>n</mi></mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table><p> for switch equal 5.</p>
+<p>and</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="swatinit.equ.007a"/>
+ <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi></mrow></msub><mo>=</mo><mrow><mrow><mo>(</mo><msub><mrow><mi>P</mi>
+</mrow><mrow><mi>c</mi><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow></msub><mrow><mo>-</mo><mrow><mi>P</mi><mi>C</mi><mi>W</mi></mrow></mrow><mo>)</mo></mrow><mo>(</mo><mfrac><mrow><msub><mrow><mi>P</mi></mrow>
+<mrow><mi>c</mi><mi>t</mi></mrow></msub><mrow><mo>-</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>c</mi>
+<mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub></mrow>
+</mrow><mrow><msub><mrow><mi>P</mi></mrow><mrow><mi>c</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub>
+<mrow><mo>-</mo><msub><mrow><mi>P</mi></mrow><mrow>
+<mi>c</mi><mi>m</mi><mi>i</mi><mi>n</mi></mrow>
+</msub></mrow></mrow></mfrac><mo>)</mo></mrow><mo>+</mo><mrow><mi>P</mi><mi>C</mi><mi>W</mi></mrow>
+</mrow></math> 
+</td><td align="right">[Eq. 247.2]
+              </td></tr></tbody></table><p> for switch equal 7. </p>
+<p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>t</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">  Capillary pressure from the table </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>m</mi><mi>a</mi>
+<mi>x</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">  Maximum P<sub>c</sub> in the table </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>m</mi><mi>i</mi>
+<mi>n</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">  Minimum P<sub>c</sub> in the table </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><mtext>PCW</mtext>
+</mrow></math> </td>
+
+<td valign="top">  Maximum / Minimum P<sub>c</sub> from the <span class="keyword">PCW</span> data. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<ul>
+<li> If a cell is given saturation corresponding to a zero capillary
+pressure (typically 1.0) above the contact, then the P<sub>c</sub> curve cannot be scaled to honor the saturation, hence the P<sub>c</sub> curve is left unscaled. </li>
+
+<li> If the <span class="keyword">SWATINIT</span> saturation is less than the
+connate water saturation for a cell, the initial water saturation
+will be reset to the connate saturation and the capillary pressure
+will be scaled according to this value. </li>
+
+<li> The <span class="keyword">SWATINIT</span> saturation may not be exactly
+honored if the fine grid block equilibration option is used in the <span class="keyword">EQUIL</span> keyword. </li>
+
+<li> If the <span class="keyword">PCW</span> and/or <span class="keyword">IPCW</span> keywords
+ have been used, then this is ignored in regions where <span class="keyword">SWATINIT</span> is set. </li>
+
+<li> If the Leverett J-function calculation for the water-oil capillary
+pressure has been activated through the <a href="JFUNC.html#JFUNC"> JFUNC</a> keyword, then J-function calculation is ignored
+in regions where <span class="keyword">SWATINIT</span> is set. </li>
+
+<li> The <span class="keyword">SWATINIT</span> saturation is not honored if
+the capillary pressure curve is a constant. The input capillary pressure
+curve needs to be monotonically decreasing with increasing water saturation. </li>
+
+<li> If capillary pressure hysteresis is enabled, both drainage and
+imbibition capillary  pressure saturation curves are scaled as the
+result of <span class="keyword">SWATINIT</span>  application to ensure that
+they intersect at the connate  water saturation value.  </li>
+
+</ul>
+ </div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">When outputting the capillary pressure to the INIT file (as <span class="keyword">PCW</span>), ECLIPSE 100 outputs the <u>scaled</u> value but ECLIPSE
+300 outputs the <u>unscaled</u> value. Therefore, applications that
+use this INIT file data, such as the simulation table probe in Petrel,
+will show different behavior for output from the two simulators. Both
+simulators output the scaled value to the restart file (as <span class="keyword">PPCW</span>).</span></div>
+
+<div class="section" id="swatinit_example"><a name="swatinit_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NDIVIX=20</samp>, <samp class="codeph">NDIVIY=6</samp> and <samp class="codeph">NDIVIZ=5</samp> specified in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS"> DIMENS</a>:</p>
+<pre><code>SWATINIT
+ 120*0
+ 120*0.1
+ 120*0.5
+ 120*0.7
+ 120*1      /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

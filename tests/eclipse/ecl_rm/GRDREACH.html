@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GRDREACH"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GRDREACH"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GRDREACH</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GRDREACH"><a name="GRDREACH"><!-- --></a>
+<h1 class="keyword">GRDREACH</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="grdreach.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="grdreach.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d904e45"> x </th>
+
+<th valign="top" id="d904e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d904e54">  </th>
+
+<th valign="top" id="d904e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d904e45 d904e54 ">  </td>
+
+<td valign="top" headers="d904e48 d904e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d904e45 d904e54 ">  </td>
+
+<td valign="top" headers="d904e48 d904e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d904e45 d904e54 ">  </td>
+
+<td valign="top" headers="d904e48 d904e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d904e45 d904e54 ">  </td>
+
+<td valign="top" headers="d904e48 d904e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d904e45 d904e54 ">  </td>
+
+<td valign="top" headers="d904e48 d904e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d904e45 d904e54 ">  </td>
+
+<td valign="top" headers="d904e48 d904e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d904e45 d904e54 ">  </td>
+
+<td valign="top" headers="d904e48 d904e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d904e45 d904e54 "> x </td>
+
+<td valign="top" headers="d904e48 d904e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword defines the location of the grid blocks connecting
+to a river and instructs ECLIPSE to allocate each ‘completion’ to
+a river reach. The river’s reach structure must previously have been
+defined with the <a href="REACHES.html#REACHES">  REACHES</a> keyword. The location of each connected grid block is defined
+within the river by the branch name and the distance down the river
+to the start and end of the grid-block. This information must be supplied
+for <strong>all</strong> the grid-blocks connecting to the river that have been
+specified with the <a href="COMPRIV.html#COMPRIV">  COMPRIV</a> keyword. ECLIPSE allocates each grid block connection to
+the reach whose nodal point lies nearest to the center of the grid
+block. It is also possible to specify which reach a grid block belongs
+to.</p>
+
+<p>The keyword can only be used on one river at a time, thus it must
+be specified more than once if there is more than one river.</p>
+
+<p>The keyword is followed by a number of data records to define the
+location of all the grid block connections in the river. Each record
+is terminated with a slash (/), and the set of records must end with
+an additional blank record containing just a slash.</p>
+
+<p>The data items in each record are:</p>
+
+<div class="section" id="grdreach_record_1"><a name="grdreach_record_1"><!-- --></a><h4 class="sectiontitle">Record 1</h4><p>The first
+record consists of a single item of data that identifies the river.</p>
+<ol>
+<li>Name of the river </li>
+
+</ol>
+<p>End the data record with a slash (/).</p>
+</div>
+
+<div class="section" id="grdreach_each_subsequent_record"><a name="grdreach_each_subsequent_record"><!-- --></a><h4 class="sectiontitle">Each subsequent
+record</h4><p>The subsequent records set the start and end of each
+grid block in terms of distance along the river from the river’s zero
+reference point, and the branch number. The zero length reference
+point is defined relative to item 5 of the first record of keyword <a href="REACHES.html#REACHES">  REACHES</a>. The grid blocks
+must previously have been defined with keyword <a href="COMPRIV.html#COMPRIV">  COMPRIV</a>.</p>
+<p>The grid blocks may either
+be specified individually, or in one or more “ranges”. A “range” is
+a contiguous row or column of grid blocks that are connected to the
+same branch of the river. The river is assumed to go through each
+grid block in the specified direction. The distance along the river
+to the start and end of each grid block in the range is determined
+by summing the DX, DY or DZ thicknesses of the grid blocks in the
+range. <strong>All</strong> grid blocks in the river must have their distances
+set, either individually or within a range, working outwards along
+the main stem and each branch towards its source.</p>
+<ol>
+<li id="grdreach.XID-00000055"><a name="grdreach.XID-00000055"><!-- --></a> I - location of the individual grid
+block, or the grid block at the <strong>start</strong> of the range (nearest
+the river mouth) </li>
+
+<li id="grdreach.XID-00000058"><a name="grdreach.XID-00000058"><!-- --></a>J – location of the individual grid
+block, or the grid block at the <strong>start</strong> of the range (nearest
+the river mouth). </li>
+
+<li id="grdreach.XID-0000005b"><a name="grdreach.XID-0000005b"><!-- --></a> K - location of the individual grid
+block, or the grid block at the <strong>start</strong> of the range (nearest
+the mouth). This item will usually be 1. </li>
+
+<li> Branch name on which this grid block (or range of grid blocks)
+is located. </li>
+
+<li id="grdreach.XID-00000060"><a name="grdreach.XID-00000060"><!-- --></a> Distance down the river from the river’s
+zero reference point to the <strong>start</strong> of <strong>this</strong> grid block <strong>.</strong> <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>)</p>
+ <p>DEFAULT: Zero, for the first
+of these records, or the distance to the end of the previous grid
+block or range, for subsequent records</p>
+ </li>
+
+<li id="grdreach.XID-0000006a"><a name="grdreach.XID-0000006a"><!-- --></a> Distance down the river from the river’s
+zero reference point to the <strong>end</strong> of <strong>this</strong> grid block <strong>.</strong> <p>This item, if set, must be greater than item 5.</p>
+ <p>UNITS:
+m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>)</p>
+<p>DEFAULT: Value of item <a href="GRDREACH.html#grdreach.XID-00000060">5</a> + thickness of the grid block
+in the direction of penetration</p>
+ </li>
+
+<li> Reach number the grid blocks connect to <p>Optional: If entered
+this value will override any value calculated by ECLIPSE. It is a
+particularly good idea to use this keywords if the grid blocks are
+dead grid blocks.</p>
+ </li>
+
+<li> Direction of penetration through the grid block or the range. 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">X or I </td>
+
+<td valign="top">for horizontal penetration in the x-direction</td>
+
+</tr>
+
+<tr>
+<td valign="top">Y or J</td>
+
+<td valign="top">for horizontal penetration in the y-direction</td>
+
+</tr>
+
+<tr>
+<td valign="top">Z or K</td>
+
+<td valign="top">for vertical penetration</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>This item is used for calculating the distance to the end
+of the grid block (or the grid blocks in the range), where it defines
+which component of the grid block size to add (<samp class="codeph">DX</samp>, <samp class="codeph">DY</samp> or <samp class="codeph">DZ</samp>). The item must be set
+if item <a href="GRDREACH.html#grdreach.XID-0000006a">6</a> is defaulted,
+or if a range is specified in item <a href="GRDREACH.html#grdreach.XID-00000084">9</a>. Otherwise it may be defaulted as it is not required.</p>
+ </li>
+
+<li id="grdreach.XID-00000084"><a name="grdreach.XID-00000084"><!-- --></a> Grid block I, J, or K coordinate at
+the <strong>end</strong> of the range, depending on the direction of penetration
+set in item 7. (For example the I-coordinate of the grid block at
+the end of the range, if the branch penetrates in the I-direction.) <p>This may be greater than, or less than, the corresponding grid block
+coordinate in item <a href="GRDREACH.html#grdreach.XID-00000055">1</a>, <a href="GRDREACH.html#grdreach.XID-00000058">2</a> or <a href="GRDREACH.html#grdreach.XID-0000005b">3</a>, depending on whether the branch
+penetrates out towards the positive or negative I, J or K direction.</p>
+ <p>If this item is set, the lengths are calculated for all the river’s
+grid blocks that lie within the range. Should the range pass through
+an inactive grid block ECLIPSE prints a warning message and a thickness
+must be set.</p>
+<p>If this item is defaulted, this record sets the
+data for the single grid block identified by items <a href="GRDREACH.html#grdreach.XID-00000055">1</a>, <a href="GRDREACH.html#grdreach.XID-00000058">2</a> and <a href="GRDREACH.html#grdreach.XID-0000005b">3</a>.</p>
+ </li>
+
+<li id="grdreach.XID-00000090"><a name="grdreach.XID-00000090"><!-- --></a> Contact area of this grid block with
+the river (See item <a href="GRDREACH.html#grdreach.XID-000000b6">17</a>) <p>UNITS: m<sup>2</sup> (<samp class="codeph">METRIC</samp>), ft<sup>2</sup> (<samp class="codeph">FIELD</samp>), cm<sup>2</sup> (<samp class="codeph">LAB</samp>)</p>
+ </li>
+
+<li> Table number describing contact areas as a function of the depth
+of water in the river. (See <a href="RBEDCONT.html#RBEDCONT">  RBEDCONT</a>) <p>One of items <a href="GRDREACH.html#grdreach.XID-00000090">10</a> or 11 must not be defaulted. If both are entered the table number
+will be ignored.</p>
+ </li>
+
+<li id="grdreach.XID-0000009f"><a name="grdreach.XID-0000009f"><!-- --></a> Productivity index of grid block with
+river (See item <a href="GRDREACH.html#grdreach.XID-000000b6">17</a>) <p>UNITS: m/day/bars (<samp class="codeph">METRIC</samp>), ft/day/psi (<samp class="codeph">FIELD</samp>), cm/hr/atm (<samp class="codeph">LAB</samp>)</p>
+<p>DEFAULT:
+0.0</p>
+ </li>
+
+<li> The length of a dead grid block in the penetration direction <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>),
+cm (<samp class="codeph">LAB</samp>)</p>
+ </li>
+
+<li> Option to connect a REACH either to the cell center (default)
+or to cell top. A value of 1 connects this REACH to cell top, and
+a value of 0 connects this REACH to cell center. <p>DEFAULT: 0</p>
+ </li>
+
+<li> Adjustment of REACH connection elevation with positive value
+pointing upward. This item allows a REACH to connect anywhere within
+a cell by introducing a shift to the connection point. <p>DEFAULT:
+0</p>
+ </li>
+
+<li> Remove capillary pressure from inflow equation? ‘YES’ or ‘NO’ <p>DEFAULT:‘NO’</p>
+ </li>
+
+<li id="grdreach.XID-000000b6"><a name="grdreach.XID-000000b6"><!-- --></a> Choice of infiltration equation? The
+choice of infiltration equation should either be zero or one depending
+on the choice of model. If the default is used you must enter items <a href="GRDREACH.html#grdreach.XID-00000090">10</a> and <a href="GRDREACH.html#grdreach.XID-0000009f">12</a>, otherwise items <a href="GRDREACH.html#grdreach.XID-000000bf">18</a> and <a href="GRDREACH.html#grdreach.XID-000000c7">19</a> must be entered. See <a href="../ecl_td/Rivers.html#Rivers">"Rivers"</a> in the <cite>ECLIPSE Technical Description</cite> for more details on the river infiltration equations. <p>DEFAULT:
+0</p>
+ </li>
+
+<li id="grdreach.XID-000000bf"><a name="grdreach.XID-000000bf"><!-- --></a> Hydraulic conductivity (See item <a href="GRDREACH.html#grdreach.XID-000000b6">17</a>) <p>UNITS: m/day (<samp class="codeph">METRIC</samp>), ft/day (<samp class="codeph">FIELD</samp>), cm/hr (<samp class="codeph">LAB</samp>)</p>
+<p>DEFAULT: 0.0</p>
+ </li>
+
+<li id="grdreach.XID-000000c7"><a name="grdreach.XID-000000c7"><!-- --></a> Thickness of river bed (See item <a href="GRDREACH.html#grdreach.XID-000000b6">17</a>) <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>)</p>
+<p>DEFAULT:
+0.0</p>
+ </li>
+
+</ol>
+<p>End the data record with a slash (/).</p>
+<p>End the set of
+data records with a slash.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> River data can be complicated
+to enter. It is advisable to check your data by examining the output
+generated in the Print file. The output is generated by setting <a href="RPTSCHED.html#RPTSCHED">  RPTSCHED</a> mnemonic <samp class="codeph">WELSPECS</samp>. </span></div>
+</div>
+
+<div class="section" id="grdreach_example"><a name="grdreach_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>GRDREACH
+MYRIVER /
+35 1 1 MYRIVER 2* 1 2*  100 0 0.01  200 2*/
+35 2 1 MYRIVER 2* 2 2*  100 0 0.01  200 2*/
+35 3 1 MYRIVER 2* 3 2*  100 0 0.01  200 2*/
+35 4 1 MYRIVER 2* 4 2*  100 0 0.01  200 2*/
+35 5 1 MYRIVER 2* 5 2*  100 0 0.01  200 2*/
+35 6 1 MYRIVER 1000 1* 1* 'J' 8  100 0 0.01  200 2*/
+35 9 1 MYTRIB  2* 1* 'J' 13 120 0 0.02 1 -0.5/
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

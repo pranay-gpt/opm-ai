@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Radial Grids"/>
+<meta name="DC.subject" content="Corner point grids"/>
+<meta name="keywords" content="Corner point grids"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="egrid_radial_grids"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Radial Grids</title>
+</head>
+<body>
+
+
+<div class="nested0" id="egrid_radial_grids"><a name="egrid_radial_grids"><!-- --></a>
+<h1 class="topictitle1">Radial Grids</h1>
+
+
+
+ <div>
+<p>Radial coordinates are stored in R, Theta, Z units, where Theta is the azimuthal angle measured clockwise in degrees.</p>
+
+<p>Global radial domains are numbered clockwise from vertical. Note that, for global radial domains <samp class="codeph">NY = NTHETA &gt;= 1</samp>.</p>
+
+<p>The following figure shows the numbering convention used for local radial grids contained in a single column of host cells:</p>
+
+<div class="fignone"> <br/><img src="../img/loc_rad_grid_single_col.png" width="282px"/><br/> <br/><span class="figcap">
+           Figure 25.1  Numbering convention used for local radial grids contained in a single column of host cells</span></div>
+
+<p>The radial cells are numbered so that Theta increases in an anti-clockwise direction.</p>
+
+<p>For post processing displays, the LGR center should be calculated using the x, y coordinates of the geometric center of the top host cell face. Also note that the outer nodes of the radial grid are stored with the R-coordinate set to the outer equivalent radius of the LGR. These coordinates may need to be adjusted to fit the outer radial cells into the host cells.</p>
+
+<p>The following numbering convention is used for local radial grids contained in a box of 4 host columns:</p>
+
+<div class="fignone"> <br/><img src="../img/loc_rad_grid_four_cols.png" width="284px"/><br/> <br/><span class="figcap">
+           Figure 25.2  Numbering convention used for local radial grids contained in a box of four host columns</span></div>
+
+<p>The LGR center is taken as the coordinate line at the center of the box of host cells.</p>
+
+<p>For a single-column radial refinement, the number of cells in the Theta-direction must be set to 1 or 4. A radial refinement in 4 host columns must be specified with 4 or 8 sectors.</p>
+
+<p>Note that if a radial LGR is constructed in a corner-point host grid, ECLIPSE may fill in the maximum number of coordinates to fully define the local grid. For a single theta refinement in a single host cell column <span class="keyword">NY</span> may be 1 or 4. For a 4 theta refinement in 4 host columns <span class="keyword">NY</span> is 8. The correct value for <span class="keyword">NTHETA</span> will be written to the <span class="keyword">GRIDHEAD</span> array. <span class="keyword">COORD</span> and <span class="keyword">ZCORN</span> are dimensioned with <span class="keyword">NY</span> but all other arrays (for example <span class="keyword">ACTNUM</span>, <span class="keyword">CORSNUM</span>, <span class="keyword">HOSTNUM</span>) and the corresponding solution data arrays will be dimensioned according to <span class="keyword">NTHETA</span>.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

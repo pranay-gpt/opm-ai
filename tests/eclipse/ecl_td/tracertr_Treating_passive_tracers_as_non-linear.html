@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Treating passive tracers as non-linear"/>
+<meta name="DC.subject" content="Tracer tracking passive tracers as non-linear"/>
+<meta name="keywords" content="Tracer tracking passive tracers as non-linear"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="tracertr_treating_passive_tracers_as_non-linear"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Treating passive tracers as non-linear</title>
+</head>
+<body>
+
+
+<div class="nested0" id="tracertr_treating_passive_tracers_as_non-linear"><a name="tracertr_treating_passive_tracers_as_non-linear"><!-- --></a>
+<h1 class="topictitle1">Treating passive tracers as non-linear</h1>
+
+
+ <div>
+<p>ECLIPSE 100</p>
+
+<p>Sometimes problems can occur with passive tracers, which show as
+solutions values unacceptably below the minimum, or above the maximum,
+value input. Whilst the simulator should solve the passive tracer
+problem exactly (which in some sense it does do) minute mass balance
+errors in the underlying reservoir simulation get massively magnified
+in the tracer calculation leading to obviously incorrect results.
+Two-phase tracers seems particularly sensitive. The only way to overcome
+this problem is to solve the underlying reservoir simulation to a
+greater accuracy; usually well beyond where it appears to have any
+effect on the reservoir simulation. This unavoidably leads to large,
+often very large, increases in CPU times. The idea of treating passive
+tracers as if they were non-linear is an attempt to try to automate
+the process of adjusting the convergence tolerances for the simulation.</p>
+
+<div class="tip"><span class="tiptitle">Tip:</span> It would always be better to use <a href="../ecl_rm/TUNING.html#TUNING">TUNING</a> to tighten the tolerances
+before the tracers notice any difficulty. It is always possible that
+it is too late by the time the tracers fail to converge.</div>
+
+<p>Having chosen to treat a passive tracer as a non-linear tracer,
+with item 8 of the <a href="../ecl_rm/TRACERS.html#TRACERS">TRACERS</a> keyword, ECLIPSE 100 then performs checks on the convergence
+of the tracer. If it notices a problem the timestep is chopped and
+the whole solution (including the underlying reservoir simulation)
+is repeated with the new timestep. The first time this occurs <a href="../ecl_rm/MATCORR.html#MATCORR">MATCORR</a> is switched on (if
+it is not already on). Also the linear and non-linear convergence
+tolerances are tightened by the one-off application of the factors
+in items 9 and 10.</p>
+
+<div class="tip"><span class="tiptitle">Tip:</span> We suggest the choice of a factor of 0.01-0.001 for
+item 9 and leaving item 10 defaulted. This is because increasing the
+linear iterations has a direct effect on material balance and is relatively
+cheap. For items 11 and 12 values of 0.1-0.3 and 3-4 seem reasonable.</div>
+
+<div class="tip"><span class="tiptitle">Tip:</span> It is important not to allow the tolerances to be
+tightened too much as the simulator will reach a point where the tolerances
+are below the rounding error and it becomes impossible to satisfy
+the conditions.  </div>
+
+<p>ECLIPSE 300</p>
+
+<p>In ECLIPSE 300 it is not possible to treat the tracer equations
+as non-linear. Instead it may be necessary to ensure small residuals
+of the reservoir equations, for example keyword <a href="../ecl_rm/CVCRIT.html#CVCRIT">CVCRIT</a> can be used to control
+the size of the residuals (items 41 or 42) or to increase the number
+of non-linear iterations (item 9). When solving the tracer equations
+ ECLIPSE 300 uses the latest solution and updates the inter-block
+flows. However, it uses lagged NNC flows, calculated before the solution
+was updated. In cases where NNC flows are important, such as dual
+porosity, a more accurate solution may be obtained by updating the
+NNC flows prior to the tracer solves. This can be done using item
+391 of keyword <a href="../ecl_rm/OPTIONS3.html#OPTIONS3">OPTIONS3.</a> </p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

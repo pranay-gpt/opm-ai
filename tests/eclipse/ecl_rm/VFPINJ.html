@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="VFPINJ"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="VFPINJ"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>VFPINJ</title>
+</head>
+<body>
+
+
+<div class="nested0" id="VFPINJ"><a name="VFPINJ"><!-- --></a>
+<h1 class="keyword">VFPINJ</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="vfpinj.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="vfpinj.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2772e45"> x </th>
+
+<th valign="top" id="d2772e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2772e54"> x </th>
+
+<th valign="top" id="d2772e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2772e45 d2772e54 ">  </td>
+
+<td valign="top" headers="d2772e48 d2772e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2772e45 d2772e54 ">  </td>
+
+<td valign="top" headers="d2772e48 d2772e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2772e45 d2772e54 ">  </td>
+
+<td valign="top" headers="d2772e48 d2772e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2772e45 d2772e54 ">  </td>
+
+<td valign="top" headers="d2772e48 d2772e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2772e45 d2772e54 ">  </td>
+
+<td valign="top" headers="d2772e48 d2772e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2772e45 d2772e54 ">  </td>
+
+<td valign="top" headers="d2772e48 d2772e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2772e45 d2772e54 ">  </td>
+
+<td valign="top" headers="d2772e48 d2772e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2772e45 d2772e54 "> x </td>
+
+<td valign="top" headers="d2772e48 d2772e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This is a table of BHP versus FLO and versus THP.</p>
+
+<p>At least one table is needed if any of the injection wells require
+THP calculations. The <span class="keyword">VFPINJ</span> keyword can only enter
+one table at a time, so if there is more than one table, each table
+must be entered under a separate <span class="keyword">VFPINJ</span> keyword.</p>
+
+<p>See also keyword <a href="WVFPDP.html#WVFPDP"> WVFPDP</a>.</p>
+
+<p>The maximum dimensions of the tables must be set in the <span class="keyword">RUNSPEC</span> section keyword <span class="keyword">VFPIDIMS</span>.</p>
+
+<p>The table consists of the following records of data, each record
+terminated with a slash (/).</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If the actual simulation conditions fall outside the range given
+in this table, linear extrapolation is used. This can produce unrealistic
+results and should be avoided (by ensuring that the VFP table covers
+all conditions that will arise during the simulation). </span></div>
+
+<div class="section" id="vfpinj_record_1__basic_data_for_table"><a name="vfpinj_record_1__basic_data_for_table"><!-- --></a><h4 class="sectiontitle">Record
+1: Basic data for table</h4><p>The last three items may be defaulted,
+for back-compatibility with earlier versions.</p>
+<ol>
+<li> Table number <p>In integer between 1 and <samp class="codeph">NMSVFT</samp>, the maximum number of injection well VFP tables, which is the third
+item in <a href="VFPIDIMS.html#VFPIDIMS">  VFPIDIMS</a>.</p>
+ </li>
+
+<li> Bottom hole datum depth for table. <p>Any difference between
+the bottom hole datum depth of the VFP table and the bottom hole datum
+depth of the wells that use the table is taken into account by a simple
+hydrostatic correction.</p>
+ <p>This item is ignored if the table is
+used to determine branch pressure drops in the Network option</p>
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>),
+cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+<li> Definition of the flow rate variable FLO.
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">   
+<tbody>
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">OIL</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> oil injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">WAT</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> water injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GAS</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> gas injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 300</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">WG</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> hydrocarbon wet gas rate </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 300</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">TM</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> total molar rate</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+The <samp class="codeph">OIL</samp> option is not available for compositional simulation.</li>
+
+<li> Definition of the fixed pressure values given in <a href="vfpinj.html#vfpinj_record_3_thp_values"> "Record 3:THP values"</a>. <p>ECLIPSE 300</p>
+<p> <samp class="codeph">THP</samp> tubing head pressure</p>
+<p>This is interpreted
+as the inlet pressure if the table is used to determine injection
+network branch pressure drops in the Network option.</p>
+<p>ECLIPSE
+does not accept anything other than <samp class="codeph">THP</samp>.</p>
+<p>DEFAULT:    <samp class="codeph">THP</samp> </p>
+ </li>
+
+<li> Unit convention of the VFP table. <p> <samp class="codeph">METRIC</samp>, <samp class="codeph">FIELD</samp>, <samp class="codeph">LAB</samp> or <samp class="codeph"> PVT-M</samp>.</p>
+ <p>If this item is present, ECLIPSE checks that the VFP table
+has the same unit convention as the run and issues an error message
+if they are not the same.</p>
+ <p>DEFAULT:   The same unit convention
+as the ECLIPSE run.</p>
+ </li>
+
+<li> Definition of the tabulated quantity in the body of the table,
+records 4 onwards. <p> <samp class="codeph">BHP</samp> Bottom hole pressure</p>
+ <p>This is interpreted as the outlet pressure if the table is used
+to determine injection network branch pressure drops in the Network
+option.</p>
+<p>ECLIPSE will not accept anything other than BHP.</p>
+<p>DEFAULT:    <samp class="codeph">BHP</samp> </p>
+ </li>
+
+</ol>
+</div>
+
+<div class="section" id="vfpinj_record_2_flo__flow_rate__values"><a name="vfpinj_record_2_flo__flow_rate__values"><!-- --></a><h4 class="sectiontitle">Record
+2:FLO (flow rate) values</h4><p>Enter in ascending order, terminated
+with a slash (/).</p>
+<p>The number of values, <samp class="codeph">NFLO</samp>, must be between 2 and <samp class="codeph">MXSFLO</samp>, which is the first
+item in <a href="VFPIDIMS.html#VFPIDIMS"> VFPIDIMS</a>.</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">   
+<tbody>
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%">Volume rate:</td>
+
+<td valign="top" width="33.33333333333333%">UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), stb/day
+for oil or liquid (<samp class="codeph">FIELD</samp>), Mscf/day for gas (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day
+(<samp class="codeph">PVT-M</samp>)</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 300</p>
+</td>
+
+<td valign="top" width="33.33333333333333%">Molar rate:</td>
+
+<td valign="top" width="33.33333333333333%">UNITS: kg-M/day (<samp class="codeph">METRIC</samp>), lb-M/day (<samp class="codeph">FIELD</samp>), gm-M/hr (<samp class="codeph">LAB</samp>), kg-M/day (<samp class="codeph">PVT-M</samp>)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+<div class="section" id="vfpinj_record_3_thp_values"><a name="vfpinj_record_3_thp_values"><!-- --></a><h4 class="sectiontitle">Record 3:THP values</h4><p>Enter in ascending order, terminated with a slash (/).</p>
+<p>The
+number of values, <samp class="codeph">NTHP</samp>, must be between 1 and <samp class="codeph">MXSTHP</samp>, which is the second item in <span class="keyword">VFPIDIMS</span>. If only one value is entered, the derivative of the BHP with respect
+to the THP is treated as unity.</p>
+<p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma
+(<samp class="codeph">PVT-M</samp>)</p>
+</div>
+
+<div class="section" id="vfpinj_records_4_to_nthp_3"><a name="vfpinj_records_4_to_nthp_3"><!-- --></a><h4 class="sectiontitle">Records 4 to NTHP+3</h4><p> <samp class="codeph">NTHP</samp> successive records each containing the
+following items, and each terminated with a slash (/).</p>
+
+<div class="tablenoborder"><a name="vfpinj_records_4_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="vfpinj_records_4_table" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">1.</td>
+
+<td valign="top">NT (THP value number).</td>
+
+</tr>
+
+<tr>
+<td valign="top">2.</td>
+
+<td valign="top">BHP at 1<sup>st</sup> FLO value and NT<sup>th</sup> THP value.</td>
+
+</tr>
+
+<tr>
+<td valign="top">3.</td>
+
+<td valign="top">BHP at 2<sup>nd</sup> FLO value and NT<sup>th</sup> THP value.</td>
+
+</tr>
+
+<tr>
+<td valign="top">....</td>
+
+<td valign="top">...</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NFLO</samp> +1</td>
+
+<td valign="top">BHP at last FLO value and NT<sup>th</sup> THP value.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>All combinations of NF = 1 to NFLO and NT = 1 to NTHP must
+be covered.</p>
+<p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

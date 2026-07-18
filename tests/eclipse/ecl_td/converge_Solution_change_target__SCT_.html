@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Solution change target (SCT)"/>
+<meta name="DC.subject" content="Reporting and diagnostics, Convergence reports ECLIPSE 300, Solution change target"/>
+<meta name="keywords" content="Reporting and diagnostics, Convergence reports ECLIPSE 300, Solution change target"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="converge_solution_change_target__sct_"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Solution change target (SCT)</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="converge_solution_change_target__sct_"><a name="converge_solution_change_target__sct_"><!-- --></a>
+<h1 class="topictitle1">Solution change target (SCT)</h1>
+
+
+ <div>
+<p>Since the primary solution variables are molar densities, it is
+natural to use these to control the convergence. However, large saturation
+changes may occur for very small changes in composition, due to the
+problems of near critical states mentioned in <a href="satfunct_Saturation_Functions.html#satfunct_saturation_functions"> "Saturation functions"</a>, so the use of an effective saturation
+is preferred. Consider the expression:</p>
+
+<p><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="converge.equ.0236"/>
+ <math><mrow><mi>Δ</mi><msup><mrow><mi>S</mi></mrow>
+<mrow><mi>′</mi></mrow></msup><mo>=</mo><mfrac><mrow>
+<mi>d</mi><msup><mrow><mi>U</mi></mrow><mrow><mi>T</mi></mrow></msup></mrow><mrow><mi>d</mi><msub>
+<mrow><mi>m</mi></mrow><mrow><mi>c</mi></mrow></msub>
+</mrow></mfrac><mo>⋅</mo><mi>Δ</mi>
+<msub><mrow><mi>m</mi></mrow><mrow><mi>c</mi></mrow>
+</msub></mrow></math> 
+</td><td align="right">[Eq. 788.1]
+              </td></tr></tbody></table></p>
+
+<p>where <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="converge.equ.023a"/>
+ <math><mrow><msup>
+<mrow><mi>u</mi></mrow><mrow><mi>T</mi></mrow></msup>
+<mo>=</mo><mfrac><mrow><msub><mrow><mi>m</mi></mrow>
+<mrow><mi>t</mi></mrow></msub><mi>L</mi></mrow><mrow>
+<msubsup><mrow><mi>b</mi></mrow><mrow><mi>o</mi>
+</mrow><mrow><mi>m</mi></mrow></msubsup></mrow></mfrac>
+<mo>+</mo><mfrac><mrow><msub><mrow><mi>m</mi></mrow>
+<mrow><mi>t</mi></mrow></msub><mi>V</mi></mrow><mrow>
+<msubsup><mrow><mi>b</mi></mrow><mrow><mi>g</mi>
+</mrow><mrow><mi>m</mi></mrow></msubsup></mrow></mfrac>
+<mo>+</mo><mfrac><mrow><msub><mrow><mi>m</mi></mrow>
+<mrow><mi>w</mi></mrow></msub></mrow><mrow><msubsup>
+<mrow><mi>b</mi></mrow><mrow><mi>w</mi></mrow><mrow>
+<mi>m</mi></mrow></msubsup></mrow></mfrac><mspace/> </mrow></math> 
+</td><td align="right">[Eq. 788.2]
+              </td></tr></tbody></table></p>
+
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msup>
+<mrow><mi>u</mi></mrow><mrow><mi>T</mi></mrow></msup>
+</math> </td>
+
+<td valign="top">  is the fluid volume per unit pore volume</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>Δ</mi><msup><mrow><mi>S</mi>
+</mrow><mrow><mi>′</mi></mrow></msup></mrow></math> </td>
+
+<td valign="top"> is thus the change in fluid volume per unit pore volume for
+a given molar density change, that is the effective saturation change
+for the molar density change.          </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>In all cases the maximum solution change over a timestep is monitored
+and compared with the specified target. In the <samp class="codeph">IMPES</samp> and <samp class="codeph">AIM</samp> cases this is applied in addition to the
+throughput targets. The simulator will attempt to increase the timestep
+as long as it is within its current targets, up to the maximum timestep
+allowed. All these elements of the timestepping algorithm can be modified
+using the <a href="../ecl_rm/TSCRIT.html#TSCRIT">TSCRIT</a> keyword, and some can be modified using the <a href="../ecl_rm/TUNING.html#TUNING">TUNING</a> keyword.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

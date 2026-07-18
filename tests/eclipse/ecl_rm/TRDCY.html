@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="TRDCY"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="TRDCY"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>TRDCY</title>
+</head>
+<body>
+
+
+<div class="nested0" id="TRDCY"><a name="TRDCY"><!-- --></a>
+<h1 class="keyword">TRDCY</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="trdcy.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="trdcy.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2654e45"> x </th>
+
+<th valign="top" id="d2654e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2654e54">  </th>
+
+<th valign="top" id="d2654e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2654e45 d2654e54 ">  </td>
+
+<td valign="top" headers="d2654e48 d2654e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2654e45 d2654e54 ">  </td>
+
+<td valign="top" headers="d2654e48 d2654e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2654e45 d2654e54 ">  </td>
+
+<td valign="top" headers="d2654e48 d2654e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2654e45 d2654e54 "> x </td>
+
+<td valign="top" headers="d2654e48 d2654e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2654e45 d2654e54 ">  </td>
+
+<td valign="top" headers="d2654e48 d2654e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2654e45 d2654e54 ">  </td>
+
+<td valign="top" headers="d2654e48 d2654e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2654e45 d2654e54 ">  </td>
+
+<td valign="top" headers="d2654e48 d2654e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2654e45 d2654e54 ">  </td>
+
+<td valign="top" headers="d2654e48 d2654e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword should only be used when the environmental tracer
+option is active (see item 4 in the <a href="TRACERS.html#TRACERS">  TRACERS</a> keyword). The <span class="keyword">TRDCY</span> keyword inputs data describing the decay of a tracer. The keyword
+should be concatenated with the tracer name. For example:</p>
+
+<p> <span class="keyword">TRDCYXXX</span> is the keyword required to input decay
+data for tracer XXX, as specified in the <a href="TRACER.html#TRACER">  TRACER</a> keyword.</p>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTPVT"> NTPVT</a> 
+(set in the <span class="keyword">TABDIMS</span> keyword) tables of
+tracer decay data, each terminated by a slash (/). Each table applies
+to its corresponding PVT region, defined by keyword <a href="PVTNUM.html#PVTNUM">  PVTNUM</a> (if <samp class="codeph">NTPVT</samp> &gt; 1).</p>
+
+<p>Each table consists of one item of data for each phase that the
+tracer exists in.</p>
+
+<ol>
+<li> The tracer decay half-life. The specified value should be greater
+than zero. <p>UNITS: day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>)</p>
+ <p>DEFAULT: 1E20 days (<samp class="codeph">METRIC</samp>), 1E20 days (<samp class="codeph">FIELD</samp>), 1E20 hrs (<samp class="codeph">LAB</samp>)</p>
+</li>
+
+</ol>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">When used with the partitioned tracer option, decay applies
+to the tracer in the solution phase. when used with the generalized,
+multi-partitioned tracer option (that is a tracer with <samp class="codeph">MULT</samp> specified in item 4 of the <span class="keyword">TRACER</span> keyword)
+independent decay half-lives can be entered for each phase that the
+tracer exists in.</span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If decay is activated for a tracer together with adsorption,
+the amount of the tracer adsorped on the rock will also decay according
+to the half-life specified in <span class="keyword">TRDCY</span>. For a multi-partitioned
+tracer with individual, phase specific decay parameters a separate
+decay half-life can be entered for the amount of adsorped tracer.
+The decay half-life for adsorped tracer is entered after the parameters
+for each phase.</span></div>
+
+<p>See <a href="../ecl_td/enviro_Environmental_Tracers.html#enviro_environmental_tracers">"Environmental tracers"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.</p>
+
+<div class="section" id="trdcy_example"><a name="trdcy_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NTPVT</samp> = 2 for single phase tracers WT1 and WT2 and partitioned
+tracers PT1, PT2 and PT3:</p>
+<pre><code>TRACER
+  WT1  WAT /
+  WT2  WAT /
+  PT1  OIL  1*  WAT  / -- two-phase standard partitioned tracer
+  PT2  OIL  1*  MULT / -- two-phase multi-partitioned tracer
+  PT3  WAT  1*  MULT / -- two-phase multi-partitioned tracer
+/
+...
+TRDCYWT1
+ 10.0 /
+ 10.0 /
+TRDCYWT2
+ 40.0 /
+ 40.0 /
+TRDCYPT1     -- decay parameters apply to solution phase
+ 30 /
+ 30 /
+TRDCYPT2     -- separate decay parameters for each phase
+ 30  10 /    -- no decay of adsorped tracer
+ 30  10 /
+TRDCYPT3     -- separate decay parameters for each phase
+ 30  10  5 / -- separate decay parameter for adsorped tracer
+ 30  10  5 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

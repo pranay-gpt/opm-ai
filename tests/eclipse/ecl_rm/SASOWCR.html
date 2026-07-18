@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SASOWCR"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SASOWCR"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SASOWCR</title>
+</head>
+<body>
+
+<div class="nested0" id="SASOWCR"><a name="SASOWCR"><!-- --></a><h1 class="keyword">SASOWCR</h1>
+ <div>
+<div class="tablenoborder"><a name="sasowcr.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="sasowcr.tab.0005" class="flagtable" frame="border" border="1" rules="all">  <thead align="left"><tr><th valign="top" id="d2188e32"> </th>
+<th valign="top" id="d2188e34"> ECLIPSE 100 </th>
+</tr>
+<tr><th valign="top" id="d2188e37"> x</th>
+<th valign="top" id="d2188e39"> ECLIPSE 300 </th>
+</tr>
+</thead>
+<tbody><tr><td valign="top" headers="d2188e32 d2188e37 ">  </td>
+<td valign="top" headers="d2188e34 d2188e39 "> RUNSPEC </td>
+</tr>
+<tr><td valign="top" headers="d2188e32 d2188e37 ">  </td>
+<td valign="top" headers="d2188e34 d2188e39 "> GRID </td>
+</tr>
+<tr><td valign="top" headers="d2188e32 d2188e37 ">  </td>
+<td valign="top" headers="d2188e34 d2188e39 "> EDIT </td>
+</tr>
+<tr><td valign="top" headers="d2188e32 d2188e37 "> x </td>
+<td valign="top" headers="d2188e34 d2188e39 "> PROPS </td>
+</tr>
+<tr><td valign="top" headers="d2188e32 d2188e37 ">  </td>
+<td valign="top" headers="d2188e34 d2188e39 "> REGIONS </td>
+</tr>
+<tr><td valign="top" headers="d2188e32 d2188e37 ">  </td>
+<td valign="top" headers="d2188e34 d2188e39 "> SOLUTION </td>
+</tr>
+<tr><td valign="top" headers="d2188e32 d2188e37 ">  </td>
+<td valign="top" headers="d2188e34 d2188e39 "> SUMMARY </td>
+</tr>
+<tr><td valign="top" headers="d2188e32 d2188e37 ">  </td>
+<td valign="top" headers="d2188e34 d2188e39 "> SCHEDULE </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The <span class="keyword">SASOWCR</span> keyword specifies the critical oil in water saturation (that is,
+the largest oil saturation for which the oil  relative permeability
+to water is zero) within each grid block for scaling the oil relative
+permeability to water for high concentrations of adsorbed solids.</p>
+<p>The tabulated oil relative permeability
+to water functions are scaled between the critical oil in water saturation
+defined by the <span class="keyword">SASOWCR</span> keyword and the maximum
+oil saturation defined in terms of the minimum water and gas saturations
+using the <a href="SASWL.html#SASWL"> SASWL</a> and <a href="SASGL.html#SASGL"> SASGL</a> keywords respectively.</p>
+<p>The <span class="keyword">SASOWCR</span> keyword should only be used if water is present in the model and
+if end-point scaling has been specified via the <span class="keyword">RUNSPEC</span> keyword <a href="ENDSCALE.html#ENDSCALE"> ENDSCALE</a> and the solid wettability adsorption option has been selected via
+the <span class="keyword">RUNSPEC</span> keyword <a href="SOLID.html#SOLID"> SOLID</a> and the <span class="keyword">PROPS</span> keyword <a href="SOLWTAB.html#SOLWTAB"> SOLWTAB</a>. </p>
+<p>The <span class="keyword">SASOWCR</span> keyword should be followed by one real number for each grid block
+in the current input box specifying the critical oil in water saturation.
+The saturation should be in the range 0.0 to 1.0 inclusive. The data
+must be terminated by a slash (/).</p>
+<p>Grid blocks are ordered with
+the X-axis index cycling fastest followed by the Y-axis and Z-axis
+indices. Repeat counts may be used for repeated values (for example
+10*0.21). Note that spaces must not be inserted on either side of
+the asterisk.</p>
+<p>If the keyword <span class="keyword">SASOWCR</span> is omitted for some or all of the grid blocks in a model where it
+could be specified, the critical oil in water saturations for the
+high solid adsorption concentration relative permeability to water
+calculations will default to the values defined in the appropriate
+relative permeability tables via the <a href="SURFNUM.html#SURFNUM"> SOLWNUM</a> keyword.</p>
+<p>See <a href="../ecl_td/sattabsc_Saturation_Table_Scaling.html#sattabsc_saturation_table_scaling">"Saturation table
+scaling"</a> in the <cite>ECLIPSE Technical Description</cite> for
+details of the end-point scaling procedure.</p>
+<div class="section" id="sasowcr_example"><a name="sasowcr_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>----RUNSPEC section
+DIMENS
+ 1 7 3 /
+ENDSCALE
+ /
+----PROPS section
+-------- IX1-IX2 JY1-JY2 KZ1-KZ2
+BOX
+           1   1   2   7   1   3
+SASOWCR
+ 5*0.21  10*0.19  3*0.18  /</code></pre></div>
+</div>
+</div>
+
+</body>
+</html>

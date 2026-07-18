@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using the ECLIPSE 100 surfactant model"/>
+<meta name="DC.subject" content="Surfactant model using partitioned tracers in ECLIPSE 100, Surfactant, Using ECLIPSE 100"/>
+<meta name="keywords" content="Surfactant model using partitioned tracers in ECLIPSE 100, Surfactant, Using ECLIPSE 100"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="surfactant_using_the_eclipse_100_surfactant_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using the ECLIPSE 100 surfactant model</title>
+</head>
+<body>
+
+
+<div class="nested0" id="surfactant_using_the_eclipse_100_surfactant_model"><a name="surfactant_using_the_eclipse_100_surfactant_model"><!-- --></a>
+<h1 class="topictitle1">Using the ECLIPSE 100 surfactant model</h1>
+
+
+ <div>
+<p>The model is activated by specifying the keyword <a href="../ecl_rm/SURFACT.html#SURFACT">SURFACT</a> in the <span class="keyword">RUNSPEC</span> section.</p>
+
+<p>It is possible to output the geometric data used by the surfactant
+model by setting the '<samp class="codeph">KOVERD</samp>' argument in <a href="../ecl_rm/RPTGRID.html#RPTGRID">RPTGRID</a>. This outputs a map
+of the K/D values used in the calculation of the capillary number.</p>
+
+<p>In the <span class="keyword">PROPS</span> section, there are three obligatory
+keywords and two further optional keywords for cases in which adsorption
+takes place:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">   
+<thead align="left">
+<tr>
+<th valign="top" width="33.33333333333333%" id="d1548e74">Restriction</th>
+
+<th valign="top" width="33.33333333333333%" id="d1548e77">Keyword</th>
+
+<th valign="top" width="33.33333333333333%" id="d1548e80">Description</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d1548e74 ">Required</td>
+
+<td valign="top" width="33.33333333333333%" headers="d1548e77 "> <a href="../ecl_rm/SURFST.html#SURFST">SURFST</a>  (or 						   <a href="../ecl_rm/SURFSTES.html#SURFSTES">SURFSTES)</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d1548e80 "> Water-oil surface tension in the presence of surfactant (and
+salts).  </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d1548e74 ">Required</td>
+
+<td valign="top" width="33.33333333333333%" headers="d1548e77 "> <a href="../ecl_rm/SURFVISC.html#SURFVISC">SURFVISC</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d1548e80 ">Modified water viscosity. </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d1548e74 ">Required</td>
+
+<td valign="top" width="33.33333333333333%" headers="d1548e77 "> <a href="../ecl_rm/SURFCAPD.html#SURFCAPD">SURFCAPD</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d1548e80 ">Capillary de-saturation data.  </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d1548e74 ">Optional</td>
+
+<td valign="top" width="33.33333333333333%" headers="d1548e77 "> <a href="../ecl_rm/SURFADS.html#SURFADS">SURFADS</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d1548e80 ">Adsorption isotherm.  </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d1548e74 ">If <span class="keyword">SURFADS</span> is present</td>
+
+<td valign="top" width="33.33333333333333%" headers="d1548e77 "> <a href="../ecl_rm/SURFROCK.html#SURFROCK">SURFROCK</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d1548e80 ">Rock properties and adsorption model indicator. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The surfactant properties data can be written to the <samp class="codeph">PRINT</samp> file by setting the '<samp class="codeph">SURF</samp>' argument in the <a href="../ecl_rm/RPTPROPS.html#RPTPROPS">RPTPROPS</a> keyword.</p>
+
+<p>The miscible relative permeability curves are specified using the <a href="../ecl_rm/SURFNUM.html#SURFNUM">SURFNUM</a> keyword in conjunction
+with the usual saturation function keywords. If a non-zero capillary
+pressure is entered in the <span class="keyword">SWFN</span> or <span class="keyword">SWOF</span> table, this will be ignored and the capillary pressure will be taken
+as the appropriate fraction of the capillary pressure for the <span class="keyword">SATNUM</span> table.</p>
+
+<p>The injected surfactant concentration of a water injector is specified
+using the <a href="../ecl_rm/WSURFACT.html#WSURFACT">WSURFACT</a> keyword. Output of the surfactant concentration, modified
+water viscosity, capillary number, oil-water surface tension, adsorbed
+concentration and fluid-in-place data can be controlled using arguments
+'<samp class="codeph">SURFBLK</samp>', '<samp class="codeph">SURFADS</samp>' and '<samp class="codeph">FIPSURF</samp>' in the <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a> keyword. In addition a field/group/well/connection summary
+can be obtained at each report time by adding the argument '<samp class="codeph">WELLS</samp>' to <span class="keyword">RPTSCHED</span>. An extra mode of
+controlling the timestep is available, which sets a target surfactant
+change in a timestep. The default is to have no control. This control
+can be set by specifying a target <samp class="codeph">TRGSFT</samp> in record
+2 of the <a href="../ecl_rm/TUNING.html#TUNING">TUNING</a> keyword.</p>
+
+<p>The list of <span class="keyword">SUMMARY</span> keywords has been extended
+to output surfactant specific data. These keywords follow the passive
+tracer format with a keyword concatenated with the tracer name. In
+this case surfactant is referred to as <span class="keyword">SUR</span>. For
+example the keyword for the field total surfactant production would
+be <span class="keyword">FTPRSUR</span>.</p>
+
+<p>Diffusion can be applied to a surfactant if the Environmental Tracer
+option is active (item 4 of the <a href="../ecl_rm/TRACERS.html#TRACERS">TRACERS</a> keyword in the <span class="keyword">RUNSPEC</span> section). This is done by using the <span class="keyword">TRDIFSUR</span> keyword (that is the <a href="../ecl_rm/TRDIF.html#TRDIF">TRDIF</a> keyword for the tracer called 'SUR' which is the surfactant).</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">For some simulation models with substantial surfactant
+effects you may want to consider using the <a href="../ecl_rm/CPR.html#CPR">CPR</a> solver or tightening the convergence
+criteria (record 2 of the <a href="../ecl_rm/TUNING.html#TUNING">TUNING</a> keyword) in order to improve the convergence of the linear
+solver. In particular, this might be helpful for models with the Dual
+Porosity or Parallel options active.</span></div>
+
+<div class="section" id="surfactant_using_partitioned_tracers"><a name="surfactant_using_partitioned_tracers"><!-- --></a><h4 class="sectiontitle">Using partitioned
+tracers</h4><p>Partitioned tracers allow a given tracer to dissolve
+in a secondary phase, as a function of pressure. With surfactants
+the primary phase is water but the secondary phase can be oil, say,
+and this feature can model the partitioning of the surfactant into
+the oil. See <a href="tracertr_Tracer_Tracking.html#tracertr_tracer_tracking"> "Tracer
+Tracking"</a> for a more detailed discussion.</p>
+</div>
+
+<div class="section" id="surfactant_restrictions"><a name="surfactant_restrictions"><!-- --></a><h4 class="sectiontitle">Restrictions</h4><p>If a cell is defined with zero pore volume in the <span class="keyword">GRID</span> section, then making it active by changing the pore volume in the <span class="keyword">EDIT</span> section using <a href="../ecl_rm/PORV.html#PORV">PORV</a>, is not allowed with the surfactant model.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

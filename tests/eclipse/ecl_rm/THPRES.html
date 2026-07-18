@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="THPRES"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="THPRES"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>THPRES</title>
+</head>
+<body>
+
+
+<div class="nested0" id="THPRES"><a name="THPRES"><!-- --></a>
+<h1 class="keyword">THPRES</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="thpres.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="thpres.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2586e45"> x </th>
+
+<th valign="top" id="d2586e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2586e54"> x </th>
+
+<th valign="top" id="d2586e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2586e45 d2586e54 ">  </td>
+
+<td valign="top" headers="d2586e48 d2586e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2586e45 d2586e54 ">  </td>
+
+<td valign="top" headers="d2586e48 d2586e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2586e45 d2586e54 ">  </td>
+
+<td valign="top" headers="d2586e48 d2586e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2586e45 d2586e54 ">  </td>
+
+<td valign="top" headers="d2586e48 d2586e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2586e45 d2586e54 ">  </td>
+
+<td valign="top" headers="d2586e48 d2586e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2586e45 d2586e54 "> x </td>
+
+<td valign="top" headers="d2586e48 d2586e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2586e45 d2586e54 ">  </td>
+
+<td valign="top" headers="d2586e48 d2586e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2586e45 d2586e54 ">  </td>
+
+<td valign="top" headers="d2586e48 d2586e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword sets the threshold pressures for flow between adjacent
+equilibration regions. The threshold pressure switch <samp class="codeph">THPRES</samp> must be set in keyword <a href="EQLOPTS.html#EQLOPTS"> EQLOPTS</a> in the <span class="keyword">RUNSPEC</span> section. The facility prevents
+flow between adjacent equilibration regions until the potential difference
+exceeds the specified threshold value. Thereafter the potential difference
+for flow across equilibration region boundaries is reduced by the
+appropriate threshold value.</p>
+
+<p>When the Threshold Pressure option is active (<samp class="codeph">THPRES</samp> specified in keyword <span class="keyword">EQLOPTS</span>), each interface
+between adjacent equilibration regions has its own threshold pressure.
+In fact, if the threshold pressures are irreversible (that is, if
+the switch <samp class="codeph">IRREVERS</samp> is also specified in keyword <span class="keyword">EQLOPTS</span>), each interface has two threshold pressures, one
+for flow in each direction.</p>
+
+<p>The threshold pressure is set to zero for any interface not specified
+with the <span class="keyword">THPRES</span> keyword. If the threshold pressures
+are irreversible, the threshold pressure should be specified separately
+for each direction; otherwise it is set to zero for the direction
+not specified.</p>
+
+<p>Threshold pressures can be output to the Print file using the argument <samp class="codeph">THPRES</samp> in keyword <a href="RPTSOL.html#RPTSOL">  RPTSOL</a>.</p>
+
+<p>The <span class="keyword">THPRES</span> keyword should be followed by a number
+of data records, terminated with a line containing just a slash (/).
+Each record consists of three numbers, and is terminated with a slash.
+The numbers represent:</p>
+
+<ol>
+<li> From equilibration region number (I) <p>Must not exceed <samp class="codeph">NTEQUL</samp> (see keyword <a href="EQLDIMS.html#EQLDIMS">  EQLDIMS</a>).</p>
+ </li>
+
+<li> To equilibration region number (J) <p>Must not exceed <samp class="codeph">NTEQUL</samp>.</p>
+ </li>
+
+<li> Threshold pressure for flow from region I to region J. <p>If
+this quantity is defaulted (by terminating the record after item 2),
+the threshold pressure for this interface (and this direction if the
+threshold pressures are irreversible) will be calculated by the program
+from the initial conditions. It is set equal to the maximum potential
+difference between communicating cells across the interface, for any
+phase that is present in the upstream cell. (Thus, for example, the
+oil potential difference in the water zone does not influence the
+threshold pressure.)</p>
+ <p>UNITS: barsa (<samp class="codeph">METRIC</samp>),
+psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+</ol>
+
+<p>End the record with a slash (/).</p>
+
+<p>Terminate the set of records with a line containing just a slash.</p>
+
+<p>See also the <a href="THPRESFT.html#THPRESFT">  THPRESFT</a> keyword.</p>
+
+<div class="section" id="thpres_example"><a name="thpres_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p> <samp class="codeph">NTEQUL=3</samp>, irreversible threshold pressures:</p>
+<pre><code>-- RUNSPEC section
+EQLDIMS
+ 3 /
+EQLOPTS
+ THPRES IRREVERS /
+-- SOLUTION section
+THPRES
+1  2  12.0  /
+2  1  5.0   /
+1  3  7.0   /
+3  1  7.0   /
+2  3  /</code></pre><p>Since you have set individual threshold pressure values, 
+in either direction, between regions 1 and 2,
+and also regions 1 and 3, these values will be used. If there is communication
+between regions 2 and 3, threshold pressure values will be calculated
+from the conditions at the start of the run; otherwise they will be
+set to zero. The same principle will apply for communication between
+regions 3 and 2. Threshold pressures can be output to the Print file
+using the argument <samp class="codeph">THPRES</samp> in keyword <a href="RPTSOL.html#RPTSOL"> RPTSOL</a>.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

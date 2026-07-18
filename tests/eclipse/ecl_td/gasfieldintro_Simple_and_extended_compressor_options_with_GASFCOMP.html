@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Simple and extended compressor options with GASFCOMP"/>
+<meta name="DC.subject" content="Gas field operations"/>
+<meta name="keywords" content="Gas field operations"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gasfieldintro_simple_and_extended_compressor_options_with_gasfcomp"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Simple and extended compressor options with GASFCOMP</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gasfieldintro_simple_and_extended_compressor_options_with_gasfcomp"><a name="gasfieldintro_simple_and_extended_compressor_options_with_gasfcomp"><!-- --></a>
+<h1 class="topictitle1">Simple and extended compressor options with GASFCOMP</h1>
+
+
+ <div>
+<p>This section describes the options available for compressors defined
+with keyword <a href="../ecl_rm/GASFCOMP.html#GASFCOMP"> GASFCOMP</a> when using the Standard Network model. If you are using
+the Extended Network model, you should define the compressors with
+keyword <a href="../ecl_rm/NETCOMPA.html#NETCOMPA">NETCOMPA</a> instead. These compressors have common functionality with
+the extended compressor option described below. See the chapter on
+the Network option for details of the Extended Network model and its
+associated compressor keyword <span class="keyword">NETCOMPA</span>.</p>
+
+<p>The simple option for automatic compressors has just two states:
+“all compressors on” and “all compressors off”. The compressors are
+turned on whenever the field cannot meet its target rate without them,
+and turned off whenever the target rate decreases to see if the field
+can meet it without them. The automatic compressors are also turned
+on while calculating the field’s delivery capacity.</p>
+
+<p>The extended compressor option offers a more versatile set of facilities,
+firstly by giving each compressor up to five distinct levels of compression,
+and secondly by allowing them to be turned on or switched to a higher
+compression level individually in a predefined order until the field
+can make its production target. The parameters of each compression
+level (VFP table number, ALQ value and gas consumption rate) for each
+compressor are entered in separate records of keyword <span class="keyword">GASFCOMP</span>.</p>
+
+<p>In the extended compressor option, individual compressors are turned
+on, or switched to a higher level of compression, in a predefined
+sequence whenever necessary to maintain the production target. Each
+compression level of each compressor is given an “action sequence
+number”, specified by item 6 in the <a href="../ecl_rm/GASFCOMP.html#GASFCOMP">GASFCOMP</a> keyword. A particular
+sequence number can be assigned to the compression levels of more
+than one compressor, if required, but the levels of any one compressor
+must all have different sequence numbers. When the field cannot make
+its target, the actions with sequence number 1 are performed first,
+that is, all compression levels having an action sequence number 1
+are turned on. If the target still cannot be met, compression levels
+with action sequence number 2 are turned on, and so on until the target
+is met or no more compressors can be switched to a higher compression
+level. In common with the simple compressor option, all compressors
+are turned off whenever the target rate decreases, to see if the target
+can be met without them. Also in analogy with the simple option, all
+automatic compressors operate at their highest compression level while
+ECLIPSE is calculating the field’s delivery capacity.</p>
+
+<p>To keep track of the state of each compressor, there is a <span class="keyword">SUMMARY</span> section keyword <span class="keyword">GMCPL</span> that writes
+the current compression level of the compressor in each group’s pipeline
+to the <span class="keyword">SUMMARY</span> file. The compression level is represented
+in the <span class="keyword">SUMMARY</span> file by a number between 0 (for
+no compression) and 5 (for the highest allowed level).</p>
+
+<p>The extended compressor option requires a small amount of extra
+storage, which must be reserved by setting the first switch in the <a href="../ecl_rm/GASFIELD.html#GASFIELD">GASFIELD</a> keyword in the <span class="keyword">RUNSPEC</span> section to YES.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

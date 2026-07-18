@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Line search"/>
+<meta name="DC.subject" content="Optimization line search"/>
+<meta name="keywords" content="Optimization line search"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="techdesc_line_search"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Line search</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="techdesc_line_search"><a name="techdesc_line_search"><!-- --></a>
+<h1 class="topictitle1">Line search</h1>
+
+
+
+ <div>
+<p>Given a search direction, <em>s</em>, the standard line search algorithm
+is to determine some step size multiplier,  <math><mi>α</mi></math>, which maximizes the objective function value.
+The control parameters are updated using the algorithm  <math><mrow><munder><mrow>
+<mi>λ</mi></mrow><mo>̲</mo></munder><mo>=</mo>
+<munder><mrow><mi>λ</mi></mrow><mo>̲</mo>
+</munder><mo>+</mo><mi>α</mi><munder><mrow><mi>s</mi></mrow><mo>̲</mo></munder></mrow></math>. The
+following figure illustrates the problem.</p>
+
+<div class="fignone" id="techdesc.XID-000000db"><a name="techdesc.XID-000000db"><!-- --></a>
+
+ <br/><img src="../img/opt3.png" width="284px"/><br/> <br/><span class="figcap">
+           Figure 812.1  Line search</span></div>
+
+<p>With no preferred scale, a line search may take many iterations
+to find the optimum position. However, along the way, we may encounter,
+or jump over, a new constraint. An indication of the position of the
+nearest constraint to the starting position of a line search can be
+obtained by expanding the constraint inequalities to give:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="techdesc.XID-000000e0"/>
+ <math><mrow><mrow><msub>
+<mrow><mi>V</mi></mrow><mrow><mi>i</mi></mrow></msub>
+<mo>(</mo><mstyle><mi>X</mi>
+</mstyle><mo>+</mo><mrow><msub><mrow><mi>α</mi>
+</mrow><mrow><mi>i</mi></mrow></msub><mi>Δ</mi>
+<mstyle><mi>X</mi></mstyle></mrow>
+<mo>,</mo><mtext> </mtext><mtext> </mtext><msub><mrow>
+<munder><mrow><mi>λ</mi></mrow>
+<mrow><mo>̲</mo></mrow></munder></mrow><mrow><mi>f</mi>
+</mrow></msub><mo>+</mo><mrow><msub><mrow><mi>α</mi>
+</mrow><mrow><mi>i</mi></mrow></msub><mi>Δ</mi>
+<msub><mrow><munder><mrow><mi>λ</mi>
+</mrow><mrow><mo>̲</mo></mrow></munder></mrow><mrow>
+<mi>f</mi></mrow></msub></mrow><mo>)</mo></mrow><mo>=</mo><mrow><msub><mrow><mi>V</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>(</mo><mstyle><mi>X</mi></mstyle><mo>,</mo>
+<mrow><munder><mrow><mi>λ</mi>
+</mrow><mrow><mo>̲</mo></mrow></munder></mrow><mo>)</mo></mrow><mo>+</mo><mrow><msub><mrow><mi>α</mi>
+</mrow><mrow><mi>i</mi></mrow></msub><mo>(</mo><mrow>
+<mfrac><mrow><mo>∂</mo><msub><mrow><mi>V</mi>
+</mrow><mrow><mi>i</mi></mrow></msub></mrow><mrow><mo>∂</mo><mstyle><mi>X</mi>
+</mstyle></mrow></mfrac><mo>⋅</mo></mrow><mrow><mi>Δ</mi><mi>X</mi></mrow><mo>)</mo></mrow><mo>+</mo><mrow><msub><mrow><mi>α</mi></mrow><mrow>
+<mi>i</mi></mrow></msub><mo>(</mo><mrow><mfrac><mrow>
+<mo>∂</mo><msub><mrow><mi>V</mi></mrow><mrow><mi>i</mi></mrow></msub></mrow><mrow><mo>∂</mo><msub>
+<mrow><munder><mrow><mi>λ</mi>
+</mrow><mrow><mo>̲</mo></mrow></munder></mrow><mrow>
+<mi>f</mi></mrow></msub></mrow></mfrac></mrow><mo>⋅</mo><mo>Δ</mo><msub><mrow><munder>
+<mrow><mi>λ</mi></mrow><mrow><mo>̲</mo></mrow>
+</munder></mrow><mrow><mi>f</mi></mrow></msub><mo>)</mo></mrow><mo>≤</mo><mn>0</mn></mrow></math> 
+</td><td align="right">[Eq. 812.1]
+              </td></tr></tbody></table>
+<p>Clearly, the closest constraint (that which would be first violated
+if an unrestricted amount of the search direction were used) is that
+for which the value of  <math><mi>α</mi>
+</math>  is smallest when the inequality becomes an equality constraint.
+This may be obtained by rearranging equation <a href="techdesc_Line_Search.html#techdesc.XID-000000e0">812.1</a>, from which:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="techdesc.equ.00e6"/>
+ <math><mrow><msub><mrow>
+<mi>α</mi></mrow><mrow><mi>i</mi></mrow></msub>
+<mo>=</mo><msub><mrow><mo>-</mo><mi>V</mi></mrow>
+<mrow><mi>i</mi></mrow></msub><mo>/</mo><mo>(</mo>
+<mrow><mfrac><mrow><mo>∂</mo><msub><mrow><mi>V</mi></mrow><mrow><mi>i</mi></mrow></msub></mrow>
+<mrow><mo>∂</mo><msub><mrow><munder>
+<mrow><mi>λ</mi></mrow><mrow><mo>̲</mo></mrow>
+</munder></mrow><mrow><mi>f</mi></mrow></msub></mrow>
+</mfrac></mrow><mo>⋅</mo><mi>Δ</mi>
+<msub><mrow><munder><mrow><mi>λ</mi>
+</mrow><mrow><mo>̲</mo></mrow></munder></mrow><mrow>
+<mi>f</mi></mrow></msub><mo>+</mo><mfrac><mrow><mo>∂</mo><msub><mrow><mi>V</mi></mrow><mrow><mi>i</mi></mrow></msub></mrow><mrow><mo>∂</mo>
+<mstyle><mrow><mi>X</mi></mrow>
+</mstyle></mrow></mfrac><mo>⋅</mo><mi>Δ</mi><mi>X</mi><mo>)</mo></mrow></math> 
+</td><td align="right">[Eq. 812.2]
+              </td></tr></tbody></table>
+<p>This sets a useful guide for the line search algorithm in the presence
+of constraints, and in practice can save many iterations of the line
+search.</p>
+
+<p>As a further aid to convergence of the overall optimization loop,
+the tolerance used in determining the proximity of a constraint,  <math><mi>ε</mi>
+</math>, can be specified to potentially ‘catch’ several
+new constraints at once.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

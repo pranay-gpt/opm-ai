@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="FORMOPTS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="FORMOPTS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>FORMOPTS</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="FORMOPTS"><a name="FORMOPTS"><!-- --></a>
+<h1 class="keyword">FORMOPTS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="formopts.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="formopts.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d748e45"> </th>
+
+<th valign="top" id="d748e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d748e54">                         x </th>
+
+<th valign="top" id="d748e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d748e45 d748e54 ">                         x </td>
+
+<td valign="top" headers="d748e48 d748e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d748e45 d748e54 "> </td>
+
+<td valign="top" headers="d748e48 d748e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d748e45 d748e54 "> </td>
+
+<td valign="top" headers="d748e48 d748e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d748e45 d748e54 "> </td>
+
+<td valign="top" headers="d748e48 d748e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d748e45 d748e54 "> </td>
+
+<td valign="top" headers="d748e48 d748e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d748e45 d748e54 "> </td>
+
+<td valign="top" headers="d748e48 d748e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d748e45 d748e54 "> </td>
+
+<td valign="top" headers="d748e48 d748e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d748e45 d748e54 "> </td>
+
+<td valign="top" headers="d748e48 d748e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>You can use this keyword to control of some formulations options
+typically associated with compositional effects in ECLIPSE 300.
+These options should only make very small differences to the simulator
+output but in some cases may significantly affect the performance
+of the simulation. In future versions of the program the default options
+may change, with this keyword available for back compatibility.</p>
+
+<p>The keyword should be followed by a list of options required. The
+default is for all these options to be switched off.</p>
+
+<p>The data should be terminated by a slash (/).</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">From the 2002A release onwards <samp class="codeph">HCSCAL</samp> has been
+turned on by default. Back compatibility can be enforced by using
+the <samp class="codeph">NOHCSCAL</samp> keyword.</span></div>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">HCSCAL</samp> </td>
+
+<td valign="top">If the <samp class="codeph">HCSCAL</samp> option is active an extra scaling
+of the hydrocarbon relative permeabilities is performed. In a compositional
+model, oil can change to gas without passing through a two-phase state.
+The hydrocarbon relative permeabilities are interpolated to give a
+smooth transition between the two states (see <a href="../ecl_td/satfunct_Near_critical_oil_and_gas_relative_permeabilities.html#satfunct_near_critical_oil_and_gas_relative_permeabilities">"Near critical oil
+and gas relative permeabilities"</a> in the <cite>ECLIPSE Technical
+Description</cite>). However, if the gas relative permeability at
+connate water differs from the oil relative permeability (note that
+Krog has to equal Krow at connate water) then a discontinuity can
+occur in the hydrocarbon relative permeability as a system becomes
+two phase. This discontinuity can be avoided by making Krg equal Kro
+at connate water, which is not an unreasonable assumption. Alternatively,
+the <samp class="codeph">HCSCAL</samp> option scales Krg near the critical point
+in an analogous manner to the hydrocarbon relative permeability, again
+avoiding a discontinuity.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NOHCSCAL</samp> </td>
+
+<td valign="top"> Turns off the <samp class="codeph">HCSCAL</samp> option<p>The <samp class="codeph">HCSCAL</samp> option will be turned off automatically if the <a href="ODD3P.html#ODD3P"> ODD3P</a> relative permeability
+and capillary pressure hysteresis model is selected or if the Surfactant
+Model is active (see <a href="../ecl_td/surfactant_Surfactant_Model.html#surfactant_surfactant_model">"Surfactant model"</a> in the <cite>ECLIPSE Technical Description</cite>). This is equivalent
+to specifying <samp class="codeph">NOHCSCAL</samp>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">SINGLEP</samp> </td>
+
+<td valign="top">The <samp class="codeph">SINGLEP</samp> option modifies the densities
+used in the hydrostatic term for flow between two cells when the fluid
+is a single phase hydrocarbon. By default the code labels a single
+phase hydrocarbon as oil or gas, depending on the fluid critical temperature
+as estimated by the Li correlation. The density for each phase is
+then taken as the saturation weighted density of the two cells between
+which a flow is being calculated. In the case of a single phase hydrocarbon
+this leads to discontinuities as a cell changes state, whereas physically
+the fluid is actually a continuous single phase. The <samp class="codeph">SINGLEP</samp> option treats a single phase hydrocarbon as just that, with the
+density taken to be the (saturation weighted) hydrocarbon density
+without worrying if the hydrocarbon is an oil or a gas. Note that
+two phase behavior is unaltered.<p>The <samp class="codeph">SINGLEP</samp> option
+cannot be used in thermal runs.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NOPCSPT</samp> </td>
+
+<td valign="top">The <samp class="codeph">NOPCSPT</samp> (No Pc Split) option modifies
+how the gas-oil capillary pressure is treated. By default ECLIPSE 300
+(only in the compositional mode) splits the gas-oil capillary pressure
+between the oil and gas phases based on the saturation:<p> <math><mrow><mi>P</mi>
+<mi>o</mi><mi>i</mi><mi>l</mi></mrow><mo>=</mo><mi>P</mi><mrow><mo>-</mo><mrow><mi>P</mi><mi>c</mi>
+<mi>o</mi><mi>g</mi></mrow><mo>×</mo><mo>(</mo>
+<mfrac><mrow><msub><mi>S</mi><mi>g</mi></msub></mrow>
+<mrow><mrow><mi>S</mi><mi>o</mi></mrow><mo>+</mo>
+<mrow><mi>S</mi><mi>g</mi></mrow></mrow></mfrac><mo>)</mo></mrow></math>                             </p>
+<p>  
+                                 <math><mrow>
+<mi>P</mi><mi>g</mi><mi>a</mi><mi>s</mi></mrow><mo>=</mo><mi>P</mi><mo>+</mo><mrow><mi>P</mi><mi>c</mi>
+<mi>o</mi><mi>g</mi></mrow><mo>×</mo><mo>(</mo>
+<mfrac><mrow><msub><mi>S</mi><mi>o</mi></msub></mrow>
+<mrow><mrow><mi>S</mi><mi>o</mi></mrow><mo>+</mo>
+<mrow><mi>S</mi><mi>g</mi></mrow></mrow></mfrac><mo>)</mo></math>                             </p>
+<p>Essentially,
+the solution variable pressure,                     <math><mi>P</mi></math>, is the hydrocarbon pressure rather than the phase pressure for
+either gas or oil. This prevents many of the discontinuities associated
+with the single phase transition of oil to gas; given a phase relabeling
+the phase pressure will remain the same. However because of the upwinding
+of mobilities in the flow, discontinuities can still occur in the
+flows </p>
+<p>If the <samp class="codeph">NOPCSPT</samp> option is used then the
+capillary pressure is assumed to be associated with the gas phase:</p>
+<p> <math><mrow><mi>P</mi>
+<mi>o</mi><mi>i</mi><mi>l</mi></mrow><mo>=</mo><mi>P</mi></math> </p>
+<p>                                    <math><mrow><mi>P</mi>
+<mi>g</mi><mi>a</mi><mi>s</mi></mrow><mo>=</mo><mi>P</mi><mo>+</mo><mrow><mi>P</mi><mi>c</mi><mi>o</mi>
+<mi>g</mi></mrow></math> </p>
+<p>This option is not recommended
+in compositional cases where the fluid is likely to reach a state
+near to the critical point.</p>
+<p>Note that this
+is the assumption in ECLIPSE 100.</p>
+<p>The <samp class="codeph">NOPCSPT</samp> option will be turned on automatically if the <a href="ODD3P.html#ODD3P"> ODD3P</a> relative permeability and capillary
+pressure hysteresis model is selected.</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<div class="section" id="formopts_example"><a name="formopts_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>Use the single
+phase density options, but leave the default capillary pressure treatment.</p>
+<pre><code>FORMOPTS
+SINGLEP  /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

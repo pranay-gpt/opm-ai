@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Multisegment wells"/>
+<meta name="DC.subject" content="Multisegment well, Well, Horizontal, Multi-lateral, Multisegment, Horizontal well, Multi-lateral well"/>
+<meta name="keywords" content="Multisegment well, Well, Horizontal, Multi-lateral, Multisegment, Horizontal well, Multi-lateral well"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="multisegintro_multi-segment_wells"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Multisegment wells </title>
+</head>
+<body>
+
+
+<div class="nested0" id="multisegintro_multi-segment_wells"><a name="multisegintro_multi-segment_wells"><!-- --></a>
+<h1 class="keyword">Multisegment wells </h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="multisegintro.tab.0009"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="multisegintro.tab.0009" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">                         x                   
+  </td>
+
+<td valign="top">                         ECLIPSE 100         
+            </td>
+
+</tr>
+
+<tr>
+<td valign="top">                        x                    
+ </td>
+
+<td valign="top">                         ECLIPSE 300         
+            </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The multisegment well model is a special extension, which is available
+in both ECLIPSE 100 and ECLIPSE 300. It provides a detailed description
+of fluid flow in the well bore. The facility is specifically designed
+for horizontal and multilateral wells, although it can of course be
+used to provide a more detailed analysis of fluid flow in standard
+vertical and deviated wells. Like the standard well model, the equations
+are solved fully implicitly and simultaneously with the reservoir
+equations, to provide stability and to ensure that operating targets
+are met exactly. A description of the model, with two example applications,
+is published in <cite><span> <a href="biblio_Bibliography.html#biblio_79910">Holmes et al (1998)</a> </span></cite>.</p>
+
+<p>The detailed description of the fluid flowing conditions within
+the well is obtained by dividing the well bore (and any lateral branches)
+into a number of one-dimensional segments. Each segment has its own
+set of independent variables to describe the local fluid conditions.
+In ECLIPSE 100 there are four variables per segment: the fluid pressure,
+the total flow rate and the flowing fractions of water and gas. In
+ECLIPSE 300 there are  N<sub>comps</sub> +3    variables per segment
+(where  N<sub>comps</sub>  is the number of hydrocarbon components),
+the fluid pressure, the total molar flow rate and the flowing molar
+densities of water and each hydrocarbon component. Each segment may
+have completions in one or more reservoir grid blocks, or none at
+all if there are no perforations in that location. The variables within
+each segment are evaluated by solving material balance equations for
+each phase or component and a pressure drop equation that takes into
+account the local hydrostatic, friction and acceleration pressure
+gradients. The pressure drop may be calculated from a homogeneous
+flow model where all the phases flow with the same velocity, or a
+‘drift flux’ model that allows slip between the phases. Alternatively,
+the pressure drop may optionally be derived from precalculated VFP
+tables, which can potentially offer greater accuracy and provide the
+ability to model chokes.          </p>
+
+<div class="section" id="multisegintro_benefits"><a name="multisegintro_benefits"><!-- --></a><h4 class="sectiontitle">Benefits</h4><p>The
+multisegment well model has all the capabilities of the Wellbore Friction
+option, and provides several additional features and greater flexibility.
+The benefits of using this well model include:</p>
+<ul>
+<li>Improved handling of multilateral topology. Data input has been
+designed for ease of use with multilateral wells. There are two separate
+keywords to define the segment structure and the perforated lengths.
+Individual branches are identified by their branch number. Branches
+may, if required, have sub-branches.</li>
+
+<li>Improved modeling of multiphase flow. Use of the drift flux model
+or precalculated pressure drop tables can produce more accurate pressure
+gradients than the homogeneous flow treatment used in the other well
+models. The pressure gradient can vary from segment to segment throughout
+the well; it is calculated fully implicitly in each segment using
+the local flowing conditions.</li>
+
+<li>Flexibility. The variable number of grid block completions per
+segment allows the choice between using many segments for greater
+accuracy or fewer segments for faster computation.</li>
+
+<li>The multisegment well model contains several facilities for modeling
+advanced wells. Specific segments can be configured to model flow
+control devices such as chokes, by providing a pressure drop table
+that describes their pressure loss characteristics as a function of
+flow. Various ‘built in’ flow control device models are also provided:<ul>
+<li>Variable pressure loss multipliers can be used to represent ‘smart’
+devices which react to isolate high GOR or WOR regions.</li>
+
+<li>Flow limiting valves can also be used to represent ‘smart’ devices
+which react to limit the flow of oil, water or gas through a segment.</li>
+
+<li>Other advanced well components such as sub-critical valves, ‘labyrinth’
+devices and downhole separators can also be modeled.</li>
+
+</ul>
+</li>
+
+<li>Crossflow can be modeled more realistically, as the fluid mixture
+can vary throughout the well. Complex crossflow regimes may potentially
+occur in multilateral wells, including branch-to-branch crossflow
+and crossflow within individual branches. In the other well models,
+if crossflow occurred, the mixture flowing back into the reservoir
+would reflect the average contents of the well bore, regardless of
+which parts of the well were crossflowing.</li>
+
+<li>Wellbore storage effects can be modeled more accurately by dividing
+the well bore into several segments. The drift flux model allows phases
+to flow in opposite directions at low flow rates, so that phase redistribution
+within the well bore can occur during shut-in well tests.</li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

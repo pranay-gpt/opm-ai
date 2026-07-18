@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WELOPENL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WELOPENL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WELOPENL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WELOPENL"><a name="WELOPENL"><!-- --></a>
+<h1 class="keyword">WELOPENL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="welopenl.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="welopenl.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2920e45">                         x                   
+  </th>
+
+<th valign="top" id="d2920e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2920e54">                         x                   
+  </th>
+
+<th valign="top" id="d2920e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2920e45 d2920e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2920e48 d2920e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2920e45 d2920e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2920e48 d2920e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2920e45 d2920e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2920e48 d2920e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2920e45 d2920e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2920e48 d2920e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2920e45 d2920e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2920e48 d2920e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2920e45 d2920e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2920e48 d2920e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2920e45 d2920e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2920e48 d2920e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2920e45 d2920e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d2920e48 d2920e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword can be used to shut or reopen wells or well connections
+in local grids, without having to specify the rest of the well control
+data or connection data. The connections must first have been defined
+with the keyword <a href="COMPDATL.html#COMPDATL"> COMPDATL</a>. <span class="keyword">WELOPENL</span> performs the same role as <a href="WELOPEN.html#WELOPEN"> WELOPEN</a> does, but the
+name of the local grid containing the connections specified in the
+record should be entered in item 2 of <span class="keyword">WELOPENL</span>.</p>
+
+<p>To shut or reopen a well, leave items 4- 8 defaulted. Well connections
+can be shut or reopened either according to their I,J,K location (items
+4 - 6) or according to their completion number (items 7 and 8). Completion
+numbers are set in keyword <a href="COMPLMPL.html#COMPLMPL"> COMPLMPL</a>.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The records may be terminated after item 1 or item 2. The remaining
+items will assume their default values.</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li>Well name, well name template, well list or well list template.
+ <p>A template enclosed in quotes can be used to refer to multiple
+wells or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+             </li>
+
+<li>Name of local grid containing the connections to be opened or
+closed     <p>If this item is defaulted or set to a blank string,
+the local grid name will be set to the well’s local grid named in
+keyword <a href="WELSPECL.html#WELSPECL"> WELSPECL</a>. (In ECLIPSE 100, the local grid name should not be defaulted if
+the local grid is amalgamated, unless items 4-8 have been defaulted.)</p>
+<p>The local grid name may also be defaulted if the connection locations
+in items 4, 5 and 6 are all defaulted, as the action in item 3 then
+applies to the well itself (or to specific completions within it if
+items 7 and 8 are set, and ECLIPSE 100 already knows which local grid
+they belong to).</p>
+<p>ECLIPSE 100</p>
+<p>If items 4 - 8 are all defaulted but a local
+grid name is specified here, the action in item 3 will be performed
+on any wells named in item 1 that have connections in the named local
+grid (or any other local grids amalgamated with it).</p>
+<p>DEFAULT:'
+'</p>
+             </li>
+
+<li>Open/shut flag for the well or connections
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">   
+<tbody>
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">OPEN</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Well or connections open to flow</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">SHUT</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Well or connections completely isolated from formation</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">STOP</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Well stopped off above formation, allowing crossflow through
+the well bore if two or more connections are open (If the record applies
+to a connection, it has the same effect as <samp class="codeph">SHUT</samp>).</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">AUTO</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Well or connections initially <samp class="codeph">SHUT</samp> but open
+automatically. (See keyword <a href="WCONPROD.html#WCONPROD"> WCONPROD</a> item 2 for an explanation of <samp class="codeph">AUTO</samp> applying
+to wells, and keyword <a href="COMPDAT.html#COMPDAT"> COMPDAT</a> item 6 for connections).</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">POPN</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> The well opens only if it is “priority-closed”, that is temporarily
+closed under Prioritization control (see <a href="../ecl_td/wellmode_Group_production_control_options.html#wellmode_prioritization_-_an_alternative_to_guide_rate_control">"Prioritization
+- an alternative to guide rate control"</a> in the <cite>ECLIPSE
+Technical Description</cite>). The well remains closed if it has been
+closed for any other reason. This may be useful when changing the
+group control method from Prioritization to Guide Rate control.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">OPEN</samp>                </p>
+    
+        </li>
+
+<li>I - location of connecting grid block(s) <p>DEFAULT: Negative</p>
+             </li>
+
+<li>J - location of connecting grid block(s)<p>DEFAULT: Negative</p>
+</li>
+
+<li>K - location of connecting grid block(s) <p>DEFAULT: Negative</p>
+</li>
+
+<li>Number of first completion in range <p>DEFAULT: Negative</p>
+ 
+           </li>
+
+<li>Number of last completion in range  <p>DEFAULT: Negative</p>
+ 
+                                                                 
+                                                                </li>
+
+</ol>
+
+<p>If items 4 - 8 are all defaulted, the Open/Shut/Stop command applies
+to the well, leaving the connections unchanged. An attempt to open
+a well with no connections open will result in an error condition.</p>
+
+<p>If any of items 4 - 8 are set zero or positive, the command applies
+to the eligible connections of the well, leaving the status of the
+well itself unchanged. The eligible connections are those with I,J,K
+locations matching the specified location indices in items 4 - 6 and
+a completion number in the range specified by items 7 - 8. A zero
+or negative value for a location index (I, J or K) matches any value
+of that location index. Similarly a zero or negative value for a completion
+range lower/upper end-point indicates that there is no lower/upper
+bound on the completion numbers.</p>
+
+<p>To open a well <strong>and</strong> one or more of its connections requires
+two records, one to operate on the well and the other to operate on
+the connections.</p>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record containing just a slash.</p>
+
+<p>ECLIPSE 100</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The local grid name in item 2 is required
+only when the keyword has to operate on connections within amalgamated
+local grids. In all other cases it can be defaulted. But if it is
+specified in these other cases, it restricts the keyword’s operation
+to wells having connections in the named local grid (or any other
+local grid amalgamated with it). Whenever item 2 is defaulted, keyword <a href="WELOPEN.html#WELOPEN"> WELOPEN</a> may be used instead
+of <span class="keyword">WELOPENL</span> with the same effect. </span></div>
+
+<div class="section" id="welopenl_example"><a name="welopenl_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WELOPENL
+-- Open all shut or stopped wells whose names begin with P in the field
+ 'P*' /
+-- Shut well PROD3, if it is open
+ PROD3  1*  SHUT /
+-- Shut all wells having connections in local grid CARF1
+-- (and any other local grids amalgamated with it)
+ '*'  CARF1  SHUT /
+-- Open all well connections in layer 3 of local grid CARF2
+ '*'  CARF2  OPEN  0 0 3 /
+-- Open all connections in local grid CARF3 for well PROD4
+ PROD4  CARF3  OPEN  0 0 0 /
+-- Shut all connections in local grid CARF4 for well PROD4
+ PROD4  CARF4  SHUT  0 0 0 /
+-- Shut connections in layer 4 of local grid CARF2 for well PROD5
+ PROD5  CARF2  SHUT  0 0 4 / 
+-- Shut connection in completions 4, 5 and 6 in well PROD6
+ PROD6  1*  SHUT  0 0 0 4 6/ 
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

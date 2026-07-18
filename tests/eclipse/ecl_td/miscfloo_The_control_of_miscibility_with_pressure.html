@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The control of miscibility with pressure"/>
+<meta name="DC.subject" content="Miscible flood modeling controlling miscibility with pressure"/>
+<meta name="keywords" content="Miscible flood modeling controlling miscibility with pressure"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="miscfloo_the_control_of_miscibility_with_pressure"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The control of miscibility with pressure</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="miscfloo_the_control_of_miscibility_with_pressure"><a name="miscfloo_the_control_of_miscibility_with_pressure"><!-- --></a>
+<h1 class="topictitle1">The control of miscibility with pressure</h1>
+
+
+ <div>
+<p>In many miscible displacements, the gas is only miscible with the
+reservoir oil at high pressure. Typically the gas-oil capillary pressure
+reduces with increasing pressure, and only when it has reduced to
+zero can the two fluids be considered to be miscible. It is possible
+to model the transition between miscibility and immiscibility as a
+function of pressure by using the <a href="../ecl_rm/PMISC.html#PMISC">PMISC</a> keyword.</p>
+
+<p>The <span class="keyword">PMISC</span> function interpolates between the
+immiscible and miscible values of the PVT properties, relative permeability
+data and capillary pressure data.</p>
+
+<p>The PVT properties are interpolated as follows (taking gas properties
+as an example):</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="miscfloo.equ.00d8"/>
+ <math><mrow><mfrac><mrow>
+<mn>1</mn></mrow><mrow><msub><mrow><mi>B</mi></mrow>
+<mrow><mi>g</mi></mrow></msub></mrow></mfrac><mo>=</mo>
+<mrow><mfrac><mrow><mn>1</mn></mrow><mrow><msub><mrow>
+<mi>B</mi></mrow><mrow><mi>g</mi><mi>m</mi></mrow>
+</msub></mrow></mfrac><msub><mrow><mi>M</mi></mrow>
+<mrow><mi>p</mi></mrow></msub></mrow><mo>+</mo><mrow>
+<mfrac><mrow><mn>1</mn></mrow><mrow><msub><mrow><mi>B</mi></mrow><mrow><mi>g</mi><mi>i</mi></mrow></msub>
+</mrow></mfrac><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>M</mi></mrow><mrow><mi>p</mi>
+</mrow></msub></mrow><mo>)</mo></mrow></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 399.1]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="miscfloo.equ.00db"/>
+ <math><mrow><mfrac><mrow>
+<mn>1</mn></mrow><mrow><msub><mrow><mi>B</mi><mi>μ</mi></mrow><mrow><mi>g</mi></mrow></msub></mrow>
+</mfrac><mo>=</mo><mrow><mfrac><mrow><mn>1</mn></mrow>
+<mrow><msub><mrow><mi>B</mi><mi>μ</mi></mrow><mrow>
+<mi>g</mi><mi>m</mi></mrow></msub></mrow></mfrac>
+<msub><mrow><mi>M</mi></mrow><mrow><mi>p</mi></mrow>
+</msub></mrow><mo>+</mo><mrow><mfrac><mrow><mn>1</mn>
+</mrow><mrow><mi>B</mi><msub><mrow><mi>μ</mi>
+</mrow><mrow><mi>g</mi><mi>i</mi></mrow></msub></mrow>
+</mfrac><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mrow><mi>M</mi></mrow><mrow><mi>p</mi></mrow>
+</msub></mrow><mo>)</mo></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 399.2]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>B</mi>
+<mi>g</mi></msub></math> </td>
+
+<td valign="top">= gas formation volume factor</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>B</mi>
+<mrow><mi>g</mi><mi>i</mi></mrow></msub></math> </td>
+
+<td valign="top">= immiscible gas formation volume factor</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>B</mi>
+<mrow><mi>g</mi><mi>m</mi></mrow></msub></math> </td>
+
+<td valign="top">= miscible gas formation volume factor</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mrow><mi>B</mi><mi>μ</mi></mrow><mi>g</mi></msub></math> </td>
+
+<td valign="top"> = gas FVF * viscosity</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mrow><mi>B</mi><mi>μ</mi></mrow><mrow><mi>g</mi><mi>i</mi>
+</mrow></msub></math> </td>
+
+<td valign="top">= gas FVF * viscosity (immiscible)</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mrow><mi>B</mi><mi>μ</mi></mrow><mrow><mi>g</mi><mi>m</mi>
+</mrow></msub></math>  </td>
+
+<td valign="top">= gas FVF * viscosity (miscible)</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>M</mi>
+<mi>p</mi></msub></math> </td>
+
+<td valign="top">= pressure dependent miscibility function.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The miscible formation volume factor is calculated from the Todd-Longstaff
+density:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="miscfloo.equ.00ee"/>
+ <math><msub><mi>B</mi>
+<mrow><mi>g</mi><mi>m</mi></mrow></msub><mo>=</mo>
+<mfrac><mrow><msub><mi>ρ</mi><mrow><mi>g</mi><mo>,</mo><mi>s</mi></mrow></msub></mrow><mrow><msub><mi>ρ</mi><mrow><mi>g</mi><mtext> eff</mtext></mrow>
+</msub></mrow></mfrac></math> 
+</td><td align="right">[Eq. 399.3]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>ρ</mi>
+<mrow><mi>g</mi><mo>,</mo><mi>s</mi></mrow></msub>
+</math> </td>
+
+<td valign="top"> = surface density of solvent gas (<a href="../ecl_rm/SDENSITY.html#SDENSITY">SDENSITY</a> keyword)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>              <math><msub><mi>ρ</mi>
+<mrow><mi>g</mi><mtext> eff</mtext></mrow></msub>
+</math>  = effective solvent density in equations <a href="miscfloo_Density_model.html#miscfloo.Xmiscfloo.XID-0000009d">397.4</a>  or <a href="miscfloo_Density_model.html#miscfloo.Xmiscfloo.equ.00c5">397.7</a>.</p>
+
+<p>The relative permeability interpolation algorithm has two steps:</p>
+
+<ol>
+<li>Scale the relative permeability end-points by the miscibility
+function. For example, the residual oil saturation:   <p>        
+           <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi><mi>r</mi></mrow>
+</msub><mo>=</mo><mrow><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>o</mi><mi>r</mi><mi>m</mi></mrow></msub>
+<msub><mrow><mi>M</mi></mrow><mrow><mi>p</mi></mrow>
+</msub><mo>+</mo><mrow><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>o</mi><mi>r</mi><mi>i</mi></mrow></msub>
+<mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub>
+<mrow><mi>M</mi></mrow><mrow><mi>p</mi></mrow></msub>
+</mrow><mo>)</mo></mrow></mrow></mrow></mrow></math> </p>
+                <p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>S</mi>
+<mrow><mi>o</mi><mi>r</mi><mi>m</mi></mrow></msub>
+</math> </td>
+
+<td valign="top">= miscible residual oil</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>S</mi>
+<mrow><mi>o</mi><mi>r</mi><mi>i</mi></mrow></msub>
+</math> </td>
+
+<td valign="top">  = immiscible residual oil</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>M</mi>
+<mi>p</mi></msub></math> </td>
+
+<td valign="top"> = pressure dependent miscibility function.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+             </li>
+
+<li>Calculate the miscible and immiscible relative permeability scaling
+for the new end points. Then the relative permeability is again an
+interpolation between the two using the miscibility function: <p> 
+                  <math><msub><mi>k</mi>
+<mi>r</mi></msub><mo>=</mo><mrow><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>m</mi></mrow></msub><msub><mi>M</mi><mi>p</mi></msub></mrow><mo>+</mo><mrow><msub>
+<mi>k</mi><mrow><mi>r</mi><mi>i</mi></mrow></msub>
+<mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mi>M</mi>
+<mi>p</mi></msub></mrow><mo>)</mo></mrow></math> </p>
+                <p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>m</mi></mrow></msub></math>  
+   </td>
+
+<td valign="top"> = scaled miscible k<sub>r</sub>    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>i</mi></mrow></msub></math> </td>
+
+<td valign="top">=scaled immiscible k<sub>r</sub>.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</li>
+
+</ol>
+
+<p>Because the miscible capillary pressure is zero, the capillary
+pressure is treated as follows:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="miscfloo.equ.0111"/>
+ <math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>o</mi><mi>g</mi></mrow></msub>
+<mo>=</mo><mrow><msub><mi>P</mi><mrow><mi>c</mi><mi>o</mi><mi>g</mi><mtext> (immisc)</mtext></mrow>
+</msub><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub>
+<mi>M</mi><mi>p</mi></msub></mrow><mo>)</mo></mrow>
+</math> 
+</td><td align="right">[Eq. 399.4]
+              </td></tr></tbody></table>
+</div>
+
+</div>
+
+
+</body>
+</html>

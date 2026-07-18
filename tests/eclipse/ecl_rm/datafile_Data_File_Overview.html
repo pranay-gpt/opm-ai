@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Data File Overview"/>
+<meta name="DC.subject" content="Data file sections"/>
+<meta name="keywords" content="Data file sections"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="datafile_data_file_overview"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Data File Overview</title>
+</head>
+<body>
+
+
+<div class="nested0" id="datafile_data_file_overview"><a name="datafile_data_file_overview"><!-- --></a>
+<h1 class="topictitle1">Data File Overview</h1>
+
+
+ <div>
+<p>An ECLIPSE data input file is split into sections, each of which
+is introduced by a keyword. A list of all section-header keywords
+is given below, together with a brief description of the contents
+of each section. A more detailed breakdown of the section contents
+may be found in the section overviews which follow immediately after
+this general overview.</p>
+
+<p>After the section overviews, this manual contains a detailed description
+of the data for each keyword, in alphabetical keyword order. Some
+keywords are recognized by both ECLIPSE 100 and ECLIPSE 300,
+while others are valid in only one of the simulators. A flag table
+under each keyword heading indicates which simulator(s) the keyword
+may be used with, and the section(s) in which the keyword is entered.
+The flag table also indicates whether the keyword is specific to one
+of the ‘special extensions’ which are licensed separately.</p>
+
+<p>In keywords that are recognized by both simulators, some data items
+may apply only to one simulator. These items are distinguished in
+this manual by <strong>margin notes</strong>, such as <em>ECLIPSE 100</em>. Furthermore,
+in data items requiring an option to be selected from a list of available
+options, some of the options may be valid in only one of the simulators;
+these options are similarly distinguished by a margin note. Margin
+notes such as <em>ECLIPSE 300</em> are also employed to indicate
+that a paragraph of text applies to just one of the simulators.</p>
+
+<div class="section" id="datafile_Data_file_Overview_data_file_sections"><a name="datafile_Data_file_Overview_data_file_sections"><!-- --></a><h4 class="sectiontitle">Data file sections</h4><p>The data file sections are:</p>
+
+<div class="tablenoborder"><a name="datafile_Data_file_Overview.tab.001a"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="datafile_Data_file_Overview.tab.001a" frame="border" border="1" rules="all"><caption>
+           Table 4.1  Data file sections</caption>   
+<thead align="left">
+<tr>
+<th valign="top" id="d3256e70"> Required? </th>
+
+<th valign="top" id="d3256e73"> Section Name </th>
+
+<th valign="top" id="d3256e76"> Description </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d3256e70 "> Required </td>
+
+<td valign="top" headers="d3256e73 "> <a href="RUNSPEC.html#RUNSPEC">  RUNSPEC</a> </td>
+
+<td valign="top" headers="d3256e76 "> Title, problem dimensions, switches, phases present
+and components for example. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3256e70 "> Required </td>
+
+<td valign="top" headers="d3256e73 "> <a href="GRID.html#GRID">  GRID</a> </td>
+
+<td valign="top" headers="d3256e76 "> Specification of geometry of computational grid
+(location of grid block corners), and of rock properties (porosity
+and absolute permeability for example) in each grid block. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3256e70 "> Optional </td>
+
+<td valign="top" headers="d3256e73 "> <a href="EDIT.html#EDIT">  EDIT</a> </td>
+
+<td valign="top" headers="d3256e76 "> Modifications to calculated pore volumes, grid
+block center depths and transmissibilities. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3256e70 "> Required </td>
+
+<td valign="top" headers="d3256e73 "> <a href="PROPS.html#PROPS">  PROPS</a> </td>
+
+<td valign="top" headers="d3256e76 "> Tables of properties of reservoir rock and fluids
+as functions of fluid pressures, saturations and compositions (including
+density, viscosity, relative permeability and capillary pressure).
+Contains the equation of state description in compositional runs. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3256e70 "> Optional </td>
+
+<td valign="top" headers="d3256e73 "> <a href="REGIONS.html#REGIONS">  REGIONS</a> </td>
+
+<td valign="top" headers="d3256e76 "> Splits computational grid into regions for calculation
+of:<ul>
+<li> PVT properties (fluid densities and viscosities) </li>
+
+<li> Saturation properties (relative permeabilities and capillary
+pressures) </li>
+
+<li> Initial conditions (equilibrium pressures and saturations) </li>
+
+<li> Fluids in place (fluid-in-place and inter-region flows) </li>
+
+<li> EoS regions (for compositional runs). <p>If this section is omitted,
+all grid blocks are put in region 1.</p>
+ </li>
+
+</ul>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3256e70 "> Required </td>
+
+<td valign="top" headers="d3256e73 "> <a href="SOLUTION.html#SOLUTION">  SOLUTION</a> </td>
+
+<td valign="top" headers="d3256e76 "> Specification of initial conditions in reservoir.
+May be: <ul>
+<li> Calculated using specified fluid contact depths to give potential
+equilibrium </li>
+
+<li> Read from a restart file set up by an earlier run </li>
+
+<li> User-specified for every grid block <p>(not recommended for general
+use)</p>
+ </li>
+
+</ul>
+ </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3256e70 "> Optional </td>
+
+<td valign="top" headers="d3256e73 "> <a href="SUMMARY.html#SUMMARY">  SUMMARY</a> </td>
+
+<td valign="top" headers="d3256e76 "> Specification of data to be written to the Summary
+file after each timestep. Necessary if certain types of graphical
+output (for example  water-cut as a function of time) are to
+be generated after the run has finished. If this section is omitted
+no Summary files are created. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3256e70 "> Required </td>
+
+<td valign="top" headers="d3256e73 "> <a href="SCHEDULE.html#SCHEDULE">  SCHEDULE</a> </td>
+
+<td valign="top" headers="d3256e76 "> Specifies the operations to be simulated (production
+and injection controls and constraints) and the times at which output
+reports are required. Vertical flow performance curves and simulator
+tuning parameters may also be specified in the <span class="keyword">SCHEDULE</span> section. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3256e70 "> Optional (ECLIPSE 300) </td>
+
+<td valign="top" headers="d3256e73 "> <a href="OPTIMIZE.html#OPTIMIZE">  OPTIMIZE</a> </td>
+
+<td valign="top" headers="d3256e76 "> Specifies a reservoir optimization problem (objective
+function, control parameters and constraints). </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>The sections must be specified in the order shown above.</p>
+<p>It is recommended that the body of sections that are not frequently
+changed be held in separate files, which are included in the data
+using the <a href="INCLUDE.html#INCLUDE">  INCLUDE</a> keyword.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> The <span class="keyword">OPTIMIZE</span> section header must <strong>not</strong> be specified in an included file. </span></div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

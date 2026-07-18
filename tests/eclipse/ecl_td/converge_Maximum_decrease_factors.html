@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Maximum decrease factors"/>
+<meta name="DC.subject" content="Reporting and diagnostics, Convergence reports ECLIPSE 300, Maximum decrease factors"/>
+<meta name="keywords" content="Reporting and diagnostics, Convergence reports ECLIPSE 300, Maximum decrease factors"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="converge_maximum_decrease_factors"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Maximum decrease factors</title>
+</head>
+<body>
+
+
+<div class="nested0" id="converge_maximum_decrease_factors"><a name="converge_maximum_decrease_factors"><!-- --></a>
+<h1 class="topictitle1">Maximum decrease factors</h1>
+
+
+ <div>
+<p>Similarly, timestep sizes may be decreased by the maximum decrease
+allowed for a certain target.</p>
+
+<pre><code>MdSC : Maximum decrease due to Solution change
+MdTP : Maximum decrease due to Throughput change
+MdPC : Maximum decrease due to Pressure change
+MdTT : Maximum decrease due to Time Truncation error
+MdTE : Maximum decrease due to Temperature change (thermal)
+MdEn : Maximum decrease due to Energy change (thermal)
+MdSA : Maximum decrease due to Saturation change (thermal)</code></pre>
+<p>Only lines containing the step code contain the ";" character.
+This may therefore be used to find such lines, or extract them from
+the <samp class="codeph">PRT</samp> file using a utility such as <samp class="codeph">grep</samp> on UNIX systems.</p>
+
+<p>Reduction of timestep size may be necessary when the simulator
+has difficulty converging. The format in the output file when such
+a reduction is in force is as follows:</p>
+
+<pre><code>@--Message at   250.0000 Days 8 Sep 1990
+@  Reducing SCT  timestep to  15.5000
+@  Throughput 1.66718 &gt; limit 1.00000</code></pre>
+<p>This states that the current timestep, whose size was set to attain
+a solution change target, was reduced because the cell throughput
+was greater than the prescribed limit. Reducing a timestep allows
+the simulator to accurately calculate events that are occurring on
+a smaller time scale than the original timestep size that was estimated
+based on the solution change target.</p>
+
+<p>If <a href="../ecl_rm/RPTPRINT.html#RPTPRINT">RPTPRINT</a> argument 9 is set to 1, information is also output on the
+number of cells in each phase/implicitness state. A line is provided
+for each non-linear iteration, for example:</p>
+
+<pre><code>3/OW/GW/W 253 0 63 0 3/OW/GW/W/OG/O/G 5 0 3 0 0 0 0
+3/OW/GW/W 240 0 76 0 3/OW/GW/W/OG/O/G 5 0 3 0 0 0 0</code></pre>
+<p>The first set of numbers are for explicit mobility cells in three-phase,
+two-phase oil-water, two-phase oil-gas, and water filled states. The
+second set of numbers are for implicit mobility cells in a similar
+set of phase states.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

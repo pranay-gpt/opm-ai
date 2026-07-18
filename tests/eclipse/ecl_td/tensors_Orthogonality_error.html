@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Orthogonality error"/>
+<meta name="DC.subject" content="Tensor permeability orthogonality error"/>
+<meta name="keywords" content="Tensor permeability orthogonality error"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="tensors_orthogonality_error"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Orthogonality error</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="tensors_orthogonality_error"><a name="tensors_orthogonality_error"><!-- --></a>
+<h1 class="topictitle1">Orthogonality error</h1>
+
+
+ <div>
+<p>The MPFA or nine point discretization reduces to a standard two
+point flux scheme (that is, a five-point scheme in 2D or a seven-point
+scheme in 3D) if the grid is sufficiently orthogonal.</p>
+
+<p>For example, the MPFA discretization reduces to 5- or 7-points
+when both</p>
+
+<ul>
+<li>the grid system is orthogonal and</li>
+
+<li>the permeability tensor  <math><mrow><munder><mrow>
+<mi>K</mi></mrow><mo>̲</mo></munder></mrow></math> is diagonal</li>
+
+</ul>
+
+<p>In general, when the grid is either non-orthogonal or  <math><mrow><munder><mrow>
+<mi>K</mi></mrow><mo>̲</mo></munder></mrow></math> is a full tensor then a 9-point (2D) or 27-point (3D) discretization
+results. It is possible to control the application of the MPFA scheme
+based on a cell orthogonality error indicator. Essentially for grids
+which are nearly orthogonal it is desirable to apply the MPFA discretization
+only in regions of high non-orthogonality to reduce the CPU cost.
+In the context of a full tensor permeability, an orthogonality indicator
+can be defined as follows:</p>
+
+<div class="fignone" id="tensors.orthog.korthogonalityerrorindicator"><a name="tensors.orthog.korthogonalityerrorindicator"><!-- --></a>
+
+ <br/><img src="../img/tensors2.png" width="260px"/><br/> 
+<br/><span class="figcap">
+           Figure 25.1  K-orthogonality error indicator</span></div>
+
+<p>Consider an interface PQ between two cells 1 and 2. The permeabilities
+in each cells are  <math>
+<mrow><msub><mrow><munder><mrow><mi>K</mi></mrow><mo>̲</mo></munder></mrow><mrow><mn>1</mn></mrow></msub>
+</mrow></math> and  <math><mrow><msub><mrow>
+<munder><mrow><mi>K</mi></mrow><mo>̲</mo></munder>
+</mrow><mrow><mn>2</mn></mrow></msub></mrow></math>. The directed area normal on the interface is denoted by  <math><mrow><munder><mrow><mi>A</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow></math>. Let  <math><mrow><msub><mrow>
+<munder><mrow><mi>a</mi></mrow><mrow>
+<mo>̲</mo></mrow></munder></mrow><mrow><mn>1</mn>
+</mrow></msub></mrow></math> and  <math><mrow><msub><mrow>
+<munder><mrow><mi>a</mi></mrow><mrow>
+<mo>̲</mo></mrow></munder></mrow><mrow><mn>2</mn>
+</mrow></msub></mrow></math> be the vectors joining the midpoints
+of opposite faces of the cells. We call  <math><mrow><msub><mrow>
+<munder><mrow><mi>a</mi></mrow><mrow>
+<mo>̲</mo></mrow></munder></mrow><mrow><mn>1</mn>
+</mrow></msub></mrow></math> and  <math><mrow><msub><mrow>
+<munder><mrow><mi>a</mi></mrow><mrow>
+<mo>̲</mo></mrow></munder></mrow><mrow><mn>2</mn>
+</mrow></msub></mrow></math> the <em>covariant</em> basis vectors.
+Define the <em>contravariant</em> basis vectors  <math><mrow>
+<msup><mrow><munder><mrow><mi>a</mi>
+</mrow><mrow><mo>̲</mo></mrow></munder></mrow><mrow>
+<mn>1</mn></mrow></msup></mrow></math> and  <math><mrow><msup><mrow>
+<munder><mrow><mi>a</mi></mrow><mrow>
+<mo>̲</mo></mrow></munder></mrow><mrow><mn>2</mn>
+</mrow></msup></mrow></math> with the condition that</p>
+
+<p> <math><mrow><msub><mrow>
+<munder><mrow><mi>a</mi></mrow><mrow>
+<mo>̲</mo></mrow></munder></mrow><mrow><mi>i</mi>
+</mrow></msub><mo>∙</mo><msup><mrow><munder><mrow><mi>a</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow><mrow><mi>j</mi></mrow></msup>
+<mo>=</mo><msub><mrow><mi>δ</mi></mrow><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math> </p>
+
+<p>where  <math><msub><mi>δ</mi>
+<mrow><mi>i</mi><mi>j</mi></mrow></msub></math>  is
+the Kronecker delta.</p>
+
+<p>Now consider a potential gradient in cell 1,</p>
+
+<p> <math><mrow><mrow><munder><mrow><mi>∇</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow><mi>φ</mi><mo>=</mo><mrow>
+<munderover><mrow><mi>Σ</mi></mrow>
+<mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow>
+<mn>2</mn></mrow></munderover><mrow><msub><mrow><mi>α</mi></mrow><mrow><mi>j</mi></mrow></msub><msup>
+<mrow><munder><mrow><mi>a</mi></mrow>
+<mrow><mo>̲</mo></mrow></munder></mrow><mrow><mi>j</mi>
+</mrow></msup></mrow></mrow></mrow></math> </p>
+
+<p>The flux through PQ from cell 1 is therefore</p>
+
+<p> <math><mrow><mi>f</mi>
+<mo>=</mo><mi>λ</mi><mo>⋅</mo><mrow><munder><mrow><mi>A</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow><mo>∙</mo><mrow><munder><mrow><mi>K</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow><mo>∙</mo><mrow><mi>∇</mi><mi>φ</mi></mrow><mo>=</mo><mrow><mi>λ</mi><mrow>
+<munderover><mrow><mi>Σ</mi></mrow>
+<mrow><mi>j</mi><mo>⁢</mo><mo>=</mo><mtext> </mtext>
+<mn>1</mn></mrow><mrow><mn>2</mn></mrow></munderover>
+<mrow><msub><mrow><mi>α</mi></mrow><mrow><mi>j</mi>
+</mrow></msub><mrow><munder><mrow><mi>A</mi></mrow><mrow><mo>̲</mo></mrow></munder></mrow>
+<mo>∙</mo><mrow><munder><mrow><mi>K</mi>
+</mrow><mrow><mo>̲</mo></mrow></munder></mrow><mo>∙</mo><msup><mrow><munder><mrow><mi>a</mi></mrow><mrow><mo>̲</mo></mrow></munder></mrow>
+<mrow><mi>j</mi></mrow></msup></mrow></mrow></mrow>
+</mrow></math> </p>
+
+<p>where  <math><mi>λ</mi></math>  accounts for the mobility.</p>
+
+<p>Since this expression can be used for arbitrary values of  <math><msub><mi>α</mi>
+<mi>j</mi></msub></math>, it follows that if  <math><mrow><mrow><munder><mrow><mi>A</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow><mo>∙</mo><mrow><munder><mrow><mi>K</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow></mrow></math> is parallel to  <math><mrow><msub><mrow>
+<munder><mrow><mi>a</mi></mrow><mrow>
+<mo>̲</mo></mrow></munder></mrow><mrow><mn>1</mn>
+</mrow></msub></mrow></math>, such that  <math><mrow><mrow><munder><mrow><mi>A</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow><mo>∙</mo><mrow><munder><mrow><mi>K</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow><mo>∙</mo><msup><mrow><munder><mrow><mi>a</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow><mrow><mn>2</mn></mrow></msup>
+<mo>=</mo><mn>0</mn></mrow></math>, then the flux depends
+only on the gradient in the covariant direction  <math><mrow><msub><mrow>
+<munder><mrow><mi>a</mi></mrow><mrow>
+<mo>̲</mo></mrow></munder></mrow><mrow><mn>1</mn>
+</mrow></msub></mrow></math> and implies that a two point
+discretization can be employed.</p>
+
+<p>The grid is said to be <em> K-orthogonal</em> (see <cite><span> <a href="biblio_Bibliography.html#biblio_90969">Gunasekera et al (1998)</a> </span></cite> and <cite><span> <a href="biblio_Bibliography.html#biblio_54414">Aavatsmark et al (1998)</a> </span></cite>) when  <math><mrow><mrow><munder><mrow><mi>A</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow><mo>∙</mo><mrow><munder><mrow><mi>K</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow></mrow></math> is parallel to  <math><mrow><msub><mrow>
+<munder><mrow><mi>a</mi></mrow><mrow>
+<mo>̲</mo></mrow></munder></mrow><mrow><mn>1</mn>
+</mrow></msub></mrow></math>.</p>
+
+<p>A convenient measure of orthogonality error for an interface is
+therefore</p>
+
+<p> <math><mrow><mi>ε</mi>
+<mo>=</mo><mrow><mo>‖</mo><mrow><munder>
+<mrow><mi>A</mi></mrow><mrow><mo>̲</mo></mrow>
+</munder></mrow><mo>∙</mo><mrow><munder>
+<mrow><mi>K</mi></mrow><mrow><mo>̲</mo></mrow>
+</munder></mrow><mrow><mo>-</mo><mfrac><mrow><mo>[</mo>
+<mo>(</mo><mrow><munder><mrow><mi>A</mi>
+</mrow><mrow><mo>̲</mo></mrow></munder></mrow><mo>∙</mo><mrow><munder><mrow><mi>K</mi>
+</mrow><mrow><mo>̲</mo></mrow></munder></mrow><mo>)</mo><mo>∙</mo><msub><mrow><munder>
+<mrow><mi>a</mi></mrow><mrow><mo>̲</mo></mrow>
+</munder></mrow><mrow><mn>1</mn></mrow></msub><mo>]</mo><msub><mrow><munder><mrow><mi>a</mi></mrow><mrow><mo>̲</mo></mrow></munder></mrow>
+<mrow><mn>1</mn></mrow></msub></mrow><mrow><mo>‖</mo>
+<msub><mrow><munder><mrow><mi>a</mi>
+</mrow><mrow><mo>̲</mo></mrow></munder></mrow><mrow>
+<mn>1</mn></mrow></msub><mo>∙</mo><msub><mrow><munder><mrow><mi>a</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow><mrow><mn>1</mn></mrow></msub>
+<mo>‖</mo></mrow></mfrac></mrow><mo>‖</mo></mrow><mo>/</mo><mrow><mo>‖</mo><mrow><munder>
+<mrow><mi>A</mi></mrow><mrow><mo>̲</mo></mrow>
+</munder></mrow><mo>∙</mo><mrow><munder>
+<mrow><mi>K</mi></mrow><mrow><mo>̲</mo></mrow>
+</munder></mrow><mo>‖</mo></mrow></mrow></math> </p>
+
+<p>This is evaluated separately for each of the two cells adjoining
+the interface  <math><mrow><munder><mrow><mi>A</mi></mrow><mrow><mo>̲</mo>
+</mrow></munder></mrow></math>. The maximum of these two values
+provides a measure of the departure from orthogonality for the interface,
+that is, the departure from a two point flux approximation for this
+interface.</p>
+
+<p>Keyword <a href="../ecl_rm/ORTHERRO.html#ORTHERRO">ORTHERRO</a> may be used to specify two point fluxes for all interfaces
+with  <math><mi>ε</mi><mo>&lt;</mo>
+<mrow><mi>O</mi><mi>R</mi><mi>T</mi><mi>H</mi><mi>E</mi><mi>R</mi><mi>R</mi><mi>O</mi></mrow></math>. The familiar 5-point (2D) or 7-point (3D) scheme then applies in
+regions when all interfaces have negligible orthogonality error. Alternatively
+using <a href="../ecl_rm/ORTHERRX.html#ORTHERRX">ORTHERRX</a>, <a href="../ecl_rm/ORTHERRY.html#ORTHERRY">ORTHERRY</a> and <a href="../ecl_rm/ORTHERRZ.html#ORTHERRZ">ORTHERRZ</a> controls calculation of MPF fluxes for interfaces in the
+grid I, J and K directions.</p>
+
+<p>Application of MPFA can also be controlled by a minimum pore volume
+limit using the <a href="../ecl_rm/MINPORV9.html#MINPORV9">MINPORV9</a> keyword, so that cells with  <math><mrow>
+<mi>P</mi><mi>O</mi><mi>R</mi><mi>V</mi></mrow><mo>&lt;</mo><mrow><mi>M</mi><mi>I</mi><mi>N</mi><mi>P</mi><mi>O</mi><mi>R</mi><mi>V</mi><mn>9</mn>
+</mrow></math>  use the familiar 5- point or 9-point discretization.
+The 5- or 9-point discretization (using <a href="../ecl_rm/NEWTRAN.html#NEWTRAN">NEWTRAN</a> transmissibilities)
+is also used in regions for which <a href="../ecl_rm/MPFANUM.html#MPFANUM">MPFANUM</a> is set equal to 0.</p>
+
+<p>The keywords <span class="keyword">ORTHERRO</span>, <span class="keyword">ORTHERRX</span>, <span class="keyword">ORTHERRZ</span> and <span class="keyword">MINPORV9</span> can
+be individually applied to local grids if they are specified between
+the corresponding <a href="../ecl_rm/CARFIN.html#CARFIN">CARFIN</a> and <a href="../ecl_rm/ENDFIN.html#ENDFIN">ENDFIN</a> pairs.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

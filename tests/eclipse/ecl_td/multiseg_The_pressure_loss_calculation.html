@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The pressure loss calculation"/>
+<meta name="DC.subject" content="Multisegment well pressure loss calculation"/>
+<meta name="keywords" content="Multisegment well pressure loss calculation"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="multiseg_the_pressure_loss_calculation"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The pressure loss calculation</title>
+</head>
+<body>
+
+
+<div class="nested0" id="multiseg_the_pressure_loss_calculation"><a name="multiseg_the_pressure_loss_calculation"><!-- --></a>
+<h1 class="topictitle1">The pressure loss calculation</h1>
+
+
+ <div>
+<div class="p">The following options are available for calculating the pressure
+drop<dl>
+
+<dt class="dlterm">Using a built-in homogeneous flow model </dt>
+
+<dd>This assumes there is no slip between the phases. The hydrostatic
+term depends on the density of the fluid mixture within the segment,
+which is simply a flow-weighted average of the phase densities. The
+frictional pressure drop calculation is the same as the method used
+by the Wellbore Friction option (see <a href="wbfrictintro_Calculating_the_frictional_pressure_loss.html#wbfrictintro_calculating_the_frictional_pressure_loss"> "Calculating the frictional pressure loss"</a>). The acceleration
+pressure drop across the segment is the difference between the velocity
+heads of the inflowing and outflowing mixture (see <a href="driftflx_Acceleration_pressure_loss.html#driftflx_acceleration_pressure_loss"> "Acceleration pressure loss"</a>).</dd>
+
+
+<dt class="dlterm">Interpolating the pressure drop from pre-calculated VFP tables.</dt>
+
+<dd>VFP tables can be constructed (using, for example, the program
+VFP <em>i</em>) to describe the pressure drop along a certain length
+of tubing at the appropriate angle of inclination. The pressure drop
+along a segment is interpolated from the respective VFP table and
+can be scaled according to the length or depth span of the segment.
+Optionally, the table can be constructed to contain just the friction
+pressure drop, and ECLIPSE computes the hydrostatic pressure drop
+from the properties of the fluid within the segment (an option useful
+for undulating sections of tubing). VFP tables can also be used to
+describe pressure losses across chokes (the program VFP <em>i</em> contains
+the Sachdeva choke model).</dd>
+
+
+<dt class="dlterm">Using a built-in ‘drift flux’ slip model.</dt>
+
+<dd>This is a simple correlation that is continuous across the range
+of flowing conditions. It includes the effects of slip as two components:
+a local vertical slip velocity superimposed on a velocity ratio resulting
+from the profiles of holdup fraction and flow velocity across the
+tubing cross-section. The local vertical slip velocity will produce
+countercurrent flow (phases flowing in opposite directions) when the
+mixture velocity is small enough.</dd>
+
+
+<dt class="dlterm">Using a built-in model for a specific flow control device.</dt>
+
+<dd>There is a built-in model to represent sub-critical flow through
+a valve with a specified throat cross-section area. See keyword <a href="../ecl_rm/WSEGVALV.html#WSEGVALV">WSEGVALV</a> for further details.<p>There is a built-in ‘flow limiting valve’ model, which is a hypothetical
+device that reacts dynamically to limit the flow rate of oil, water
+or gas (at surface conditions) through a segment to a specified maximum
+value, by sharply increasing the frictional pressure drop across the
+segment if the limit is exceeded. See keyword <a href="../ecl_rm/WSEGFLIM.html#WSEGFLIM">WSEGFLIM</a> for further details.</p>
+<p>There is also a built-in model that corresponds to a ‘labyrinth’
+flow control device, which may be used to control the inflow profile
+along a horizontal well or branch by imposing an additional pressure
+drop between the sand face and the tubing. See keyword <a href="../ecl_rm/WSEGLABY.html#WSEGLABY">WSEGLABY</a> for further details.</p>
+<p>Another built-in model calculates the pressure drop across an
+inflow control device that is placed around a section of the tubing
+and diverts the inflowing fluid from the adjacent part of the formation
+through a sand screen and then into a spiral constriction before it
+enters the tubing. See keyword <a href="../ecl_rm/WSEGSICD.html#WSEGSICD">WSEGSICD</a> for further details.</p>
+<p>There is also a built-in model that corresponds to an ‘autonomous’
+inflow control device. This works in a similar way to the ‘spiral’
+inflow control device. See keyword <a href="../ecl_rm/WSEGAICD.html#WSEGAICD">WSEGAICD</a> for further details.</p>
+</dd>
+
+</dl>
+</div>
+
+<p>The homogeneous flow model is the default method; it is simple
+to compute, and gives results similar to the Wellbore Friction option
+(when there is no crossflow). VFP tables provide the most flexible,
+and potentially the most accurate, method of calculating pressure
+losses. They can be constructed (for example with VFP <em>i</em>) using
+an appropriate choice of multiphase flow correlation. The drift flux
+model is less accurate than using properly calculated VFP tables,
+because of the need for simplicity and continuity in the built-in
+correlation. The main reason for its presence is to provide a means
+of modeling phase separation and countercurrent flow at low flow velocities,
+such as in shut-in well tests. Various parameters in the drift flux
+model that govern the slip velocity can be adjusted with the keyword <a href="../ecl_rm/WSEGFMOD.html#WSEGFMOD">WSEGFMOD</a>.</p>
+
+<p>The frictional pressure loss across individual segments can be
+adjusted by specifying a scaling factor with the keyword <a href="../ecl_rm/WSEGMULT.html#WSEGMULT">WSEGMULT</a>. Optionally, the scaling
+factor can be defined to vary with the water-oil ratio and gas-oil
+ratio of the mixture flowing through the segment. A variable multiplier
+may be applied, for example, to model the operation of an adjustable
+flow control device whose purpose is to choke back production from
+high WOR or GOR regions.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GQUALITY"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GQUALITY"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GQUALITY</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GQUALITY"><a name="GQUALITY"><!-- --></a>
+<h1 class="keyword">GQUALITY</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gquality.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gquality.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d884e45">  </th>
+
+<th valign="top" id="d884e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d884e54"> x </th>
+
+<th valign="top" id="d884e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d884e45 d884e54 ">  </td>
+
+<td valign="top" headers="d884e48 d884e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d884e45 d884e54 ">  </td>
+
+<td valign="top" headers="d884e48 d884e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d884e45 d884e54 ">  </td>
+
+<td valign="top" headers="d884e48 d884e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d884e45 d884e54 ">  </td>
+
+<td valign="top" headers="d884e48 d884e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d884e45 d884e54 ">  </td>
+
+<td valign="top" headers="d884e48 d884e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d884e45 d884e54 ">  </td>
+
+<td valign="top" headers="d884e48 d884e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d884e45 d884e54 ">  </td>
+
+<td valign="top" headers="d884e48 d884e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d884e45 d884e54 "> x </td>
+
+<td valign="top" headers="d884e48 d884e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>In <span class="keyword">GASWAT</span> mode it is possible to set a target
+for the quality of gas produced by a group. The quality is in terms
+of calorific value/mole. Calorific value is determined by summing
+the component rates multiplied by their calorific values set with
+the keyword <a href="CALVAL.html#CALVAL"> CALVAL</a>, and then dividing by the total molar rate. (See <a href="../ecl_td/gaswat_GASWAT_Option.html#gaswat_gaswat_option">"GASWAT option"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.)</p>
+
+<p>The group must have a target such as a gas rate, which is distributed
+between the children using guide rates. By modifying these guide rates
+the simulator can weight the production between low and high quality
+wells so that a required group quality is obtained as well as satisfying
+the group production target. The quality target is only satisfied
+if:</p>
+
+<ol>
+<li> At least two children are under group control. </li>
+
+<li> At least one child must be producing gas with a higher quality
+than the <span class="keyword">GQUALITY</span> value. </li>
+
+<li> At least one child must be producing gas with a lower quality
+than the <span class="keyword">GQUALITY</span> value. </li>
+
+</ol>
+
+<p>The keyword is followed by any number of records, each containing
+the items of data described below, and each terminated with a slash
+(/).</p>
+
+<p>The set of records is ended by a blank record, containing only
+a slash.</p>
+
+<ol>
+<li> Group name or name root, or <samp class="codeph">FIELD</samp> (to set the
+field quality target) <p>A group name root, enclosed in quotes and
+ending with an asterisk (*), can be used to refer to several groups
+in one record.</p>
+</li>
+
+<li id="gquality_23835"><a name="gquality_23835"><!-- --></a>  Gas quality target <p>UNITS: kJ/kg-M (<samp class="codeph">METRIC</samp>), Btu/lb-M (<samp class="codeph">FIELD</samp>), J/gm-M (<samp class="codeph">LAB</samp>), kJ/kg-M (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+</ol>
+
+<div class="section" id="gquality.example"><a name="gquality.example"><!-- --></a><h4 class="sectiontitle">Example</h4> <pre><code>GQUALITY
+ FIELD  1.51 /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

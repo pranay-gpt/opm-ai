@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="AQUNUM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="AQUNUM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>AQUNUM</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="AQUNUM"><a name="AQUNUM"><!-- --></a>
+<h1 class="keyword">AQUNUM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="aqunum.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="aqunum.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d130e45"> x </th>
+
+<th valign="top" id="d130e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d130e54"> x </th>
+
+<th valign="top" id="d130e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d130e45 d130e54 ">  </td>
+
+<td valign="top" headers="d130e48 d130e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d130e45 d130e54 "> x </td>
+
+<td valign="top" headers="d130e48 d130e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d130e45 d130e54 ">  </td>
+
+<td valign="top" headers="d130e48 d130e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d130e45 d130e54 ">  </td>
+
+<td valign="top" headers="d130e48 d130e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d130e45 d130e54 ">  </td>
+
+<td valign="top" headers="d130e48 d130e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d130e45 d130e54 ">  </td>
+
+<td valign="top" headers="d130e48 d130e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d130e45 d130e54 ">  </td>
+
+<td valign="top" headers="d130e48 d130e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d130e45 d130e54 ">  </td>
+
+<td valign="top" headers="d130e48 d130e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword specifies blocks representing one-dimensional numerical
+aquifers. One or more aquifers may be set up. Each line of <span class="keyword">AQUNUM</span> declares that a given grid block is to represent
+a numerical aquifer. This enables its properties (such as initial
+pressure and volume) to be independent of its size and position in
+the grid. To complete the description of the aquifer, connections
+to other blocks may be made using the <a href="AQUCON.html#AQUCON">  AQUCON</a> keyword.</p>
+
+<p>The total number of lines of data following the <span class="keyword">AQUNUM</span> keyword must be less than or equal to the value set by the 1<sup>st</sup> item in the <a href="AQUDIMS.html#AQUDIMS">  AQUDIMS</a> keyword in the <span class="keyword">RUNSPEC</span> section.</p>
+
+<p>Each record must be terminated by a slash (/). The set of records
+must be terminated with a blank record containing just a slash.</p>
+
+<p>The items in <span class="keyword">AQUNUM</span> are as follows:</p>
+
+<ol>
+<li> Aquifer identification number <p>This should be a number between
+1 and the maximum number of aquifers, set in the keyword <span class="keyword">AQUDIMS</span>.</p>
+ </li>
+
+<li> I-coordinate of grid block to represent aquifer </li>
+
+<li> J-coordinate of grid block to represent aquifer </li>
+
+<li> K-coordinate of grid block to represent aquifer. <p>For dual
+porosity cases, this should be in the fracture. Additionally, for
+dual porosity (single permeability) cases, the inactive grid block
+with these I,J,K coordinates should be set as dual porosity if the <a href="DPNUM.html#DPNUM">  DPNUM</a> keyword is used.
+It is possible to use <span class="keyword">DPNUM</span> to set the inactive
+grid block as single porosity and then place the K-coordinate in the
+matrix, but this is not recommended as it does not use <span class="keyword">DPNUM</span> default values.</p>
+ </li>
+
+<li> Cross-sectional area <p>This may be larger than can be accommodated
+within the grid block I,J,K. However, the position of the grid block
+on graphical displays is unchanged.</p>
+ <p>UNITS: m<sup>2</sup> (<samp class="codeph">METRIC</samp>), ft<sup>2</sup> (<samp class="codeph">FIELD</samp>), cm<sup>2</sup> (<samp class="codeph">LAB</samp>), m<sup>2</sup> (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+<li> Length <p>This may be larger than can be accommodated within
+the grid block I,J,K.</p>
+ <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft
+(<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+<li> Porosity <p>UNITS: m<sup>3</sup>/m<sup>3</sup> (<samp class="codeph">METRIC</samp>), ft<sup>3</sup>/ft<sup>3</sup> (<samp class="codeph">FIELD</samp>), cc/cc
+(<samp class="codeph">LAB</samp>), m<sup>3</sup>/m<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT:  Grid cell value</p>
+ </li>
+
+<li> Permeability <p>UNITS: mD (<samp class="codeph">METRIC</samp>), mD (<samp class="codeph">FIELD</samp>), mD (<samp class="codeph">LAB</samp>), mD (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+<li> Aquifer depth <p>This may differ from the geometric position
+in the reservoir. It may be defaulted, in which case the grid block
+depth is obtained.</p>
+ <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+<li> Initial pressure <p>This may be specified explicitly or defaulted.
+If defaulted, the initial pressure is set by the equilibration procedure
+to be in hydrostatic equilibrium with the reservoir. The default procedure
+is recommended except for when your enter all of the initial pressures.</p>
+  <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+<p>ECLIPSE 100</p>
+  </li>
+
+<li>PVT table number for aquifer<p>DEFAULT: Block <a href="PVTNUM.html#PVTNUM">  PVTNUM</a> value.</p>
+ <p>ECLIPSE 100</p>
+</li>
+
+<li> Saturation table number for aquifer<p>DEFAULT:
+Block <a href="SATNUM.html#SATNUM">  SATNUM</a> value.</p>
+ </li>
+
+</ol>
+
+<div class="section" id="aqunum_notes"><a name="aqunum_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li> The length, cross-sectional area and porosity are used to calculate
+the aquifer volume. The length, cross-sectional area and permeability
+are used to calculate the aquifer transmissibility. </li>
+
+<li> The table number used for flow into the aquifer will be that
+used for normal grid flows. </li>
+
+<li> In dual porosity runs the aquifer should be placed in the lower
+half (that is the fracture part) of the grid. </li>
+
+<li> The aquifer pore volume is calculated from the data entered in
+the <span class="keyword">AQUNUM</span> keyword in all cases using <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="aqunum.XID-000000a8"/>
+ <math><mrow><mrow><mi>P</mi><mi>O</mi><mi>R</mi><mi>V</mi></mrow><mo>=</mo><mrow><mi>P</mi><mi>o</mi><mi>r</mi><mi>o</mi>
+<mi>s</mi><mi>i</mi><mi>t</mi><mi>y</mi></mrow><mo>⋅</mo><mrow><mi>L</mi><mi>e</mi><mi>n</mi><mi>g</mi>
+<mi>t</mi><mi>h</mi></mrow><mo>⋅</mo><mrow><mi>A</mi>
+<mi>r</mi><mi>e</mi><mi>a</mi></mrow></mrow></math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table><p>where the porosity is taken from the grid block value
+if defaulted. Any values of <a href="MULTPV.html#MULTPV"> MULTPV</a> entered in the <span class="keyword">GRID</span> or <span class="keyword">EDIT</span> sections does <strong>not</strong> apply to numerical aquifer cells. Any edits
+to <a href="PORV.html#PORV"> PORV</a> in the <span class="keyword">EDIT</span> section for numerical aquifer cells are ignored and
+the aquifer pore volume is always calculated from equation <a href="AQUNUM.html#aqunum.XID-000000a8">247.1</a>. See also <a href="../ecl_td/aquifer_Aquifer_Modeling_Facilities.html#aquifer_aquifer_modeling_facilities">"Aquifer modeling
+facilities"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+</li>
+
+<li> In parallel runs, defining a numerical aquifer in one grid partition
+and connecting it to cells in other partitions leads to the so-called
+off-processor connections which can degrade the overall performance.
+The number of off-processor connections is reported as part of the
+warning when this situation occurs. It is recommended that the creation
+of off-processor connections is avoided, or at least that their number
+is reduced. If this is not possible, try to increase <samp class="codeph">NSTACK</samp> and <samp class="codeph">LITMAX</samp> but expect more linear iterations per
+timestep. Note that analytical aquifers do not require any off-processor
+connections at all. </li>
+
+</ul>
+</div>
+
+<div class="section" id="aqunum_example"><a name="aqunum_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>In the following
+example a four cell aquifer is defined, with default porosity, depth
+and initial pressure. Aquifer-grid connections are made to the first
+cell specified with a given aquifer number.</p>
+<pre><code>AQUNUM
+ 1  7  1  1  1.0E+5  20000  1*  200.0  2*   1  1   /
+ 1  8  1  1  1.0E+5  20000  1*  200.0  2*   1  1   /
+ 1  9  1  1  1.0E+5  20000  1*  200.0  2*   1  1   /
+ 1 10  1  1  1.0E+5  20000  1*  200.0  2*   1  1   /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

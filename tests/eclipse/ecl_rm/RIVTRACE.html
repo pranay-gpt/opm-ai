@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="RIVTRACE"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="RIVTRACE"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>RIVTRACE</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="RIVTRACE"><a name="RIVTRACE"><!-- --></a>
+<h1 class="keyword">RIVTRACE</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="rivtrace.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="rivtrace.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2018e45">                         x </th>
+
+<th valign="top" id="d2018e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2018e54"> </th>
+
+<th valign="top" id="d2018e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2018e45 d2018e54 "> </td>
+
+<td valign="top" headers="d2018e48 d2018e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2018e45 d2018e54 "> </td>
+
+<td valign="top" headers="d2018e48 d2018e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2018e45 d2018e54 "> </td>
+
+<td valign="top" headers="d2018e48 d2018e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2018e45 d2018e54 "> </td>
+
+<td valign="top" headers="d2018e48 d2018e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2018e45 d2018e54 "> </td>
+
+<td valign="top" headers="d2018e48 d2018e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2018e45 d2018e54 "> </td>
+
+<td valign="top" headers="d2018e48 d2018e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2018e45 d2018e54 "> </td>
+
+<td valign="top" headers="d2018e48 d2018e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2018e45 d2018e54 ">                         x </td>
+
+<td valign="top" headers="d2018e48 d2018e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword specifies the concentration of an injected tracer.
+If a tracer does not appear in the list of tracer names in the  <span class="keyword">RIVTRACE</span> keyword, a concentration of 0.0 is assumed.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li>River name. <p>Each river must previously have been declared.</p>
+</li>
+
+<li>Name of the tracer <p>(Up to 3 characters)</p>
+</li>
+
+<li>Value of the tracer concentration <math><msub>
+<mi>T</mi><mtext>conc</mtext></msub></math> <p>If a cumulative
+tracer factor is specified in item 4, then  <math><msub>
+<mi>T</mi><mtext>conc</mtext></msub></math>  is taken
+as the maximum tracer concentration.</p>
+</li>
+
+<li>The value of the cumulative tracer factor, <math><msub>
+<mi>T</mi><mtext>cum</mtext></msub></math>. <p>The cumulative
+tracer factor allows the tracer concentration to be specified as a
+linear function of the total cumulative water flow.</p>
+ <p>If a cumulative
+tracer factor is specified, then the tracer concentration in the injection
+stream is given by: </p>
+ <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="rivtrace.equ.0057"/>
+ <math><mrow><msub><mrow>
+<mi>T</mi></mrow><mrow><mi>c</mi></mrow></msub><mo>=</mo><mrow><mtext>MIN</mtext><mo>⁡</mo><mrow><mrow>
+<mrow><mo>(</mo><mtext>CI</mtext><mo>⋅</mo><msub>
+<mrow><mi>T</mi></mrow><mrow><mtext>cum</mtext></mrow>
+</msub><mo>,</mo><msub><mrow><mi>T</mi></mrow><mrow>
+<mtext>conc</mtext></mrow></msub><mo>)</mo></mrow>
+</mrow></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table> <p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mtext>CI</mtext>
+</math> </td>
+
+<td valign="top">Total cumulative water flow at the previous timestep</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>T</mi>
+<mtext>cum</mtext></msub></math> </td>
+
+<td valign="top">Cumulative tracer factor </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>T</mi>
+<mtext>conc</mtext></msub></math> </td>
+
+<td valign="top"> Tracer concentration entered in item 3.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>UNITS: 1/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), 1/stb
+(<samp class="codeph">FIELD</samp>),  1/scc(<samp class="codeph">LAB</samp>), 1/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li>The branch name.<p>If no branch is specified the main branch is
+used.</p>
+ <p>If item 6 is not specified or defaulted, the tracer is
+injected in the upstream flow of this branch with the concentration
+set by items 2 and 3. This should be a branch with an upstream massflow
+boundary condition.</p>
+</li>
+
+<li>Reach number. <p>If this item is specified, the tracer is injected
+in this reach with the concentration set by items 2 and 3. The item
+5 is then ignored.</p>
+ </li>
+
+</ol>
+
+<p>End data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash
+(/).</p>
+
+<div class="section" id="rivtrace_example"><a name="rivtrace_example"><!-- --></a><h4 class="sectiontitle">Example</h4>            
+    <p>In this example tracer <samp class="codeph">WT1</samp> is being injected
+through the main branch of river <samp class="codeph">RIV1</samp> and through
+branch <samp class="codeph">BR2</samp> of river <samp class="codeph">RIV2</samp>. Tracer <samp class="codeph">WT2</samp> is injected in reaches 5 and 15 of river <samp class="codeph">RIV2</samp>.</p>
+          <pre><code>RIVTRACE
+ RIV1  WT1  1.0 3*/
+ RIV2  WT1  1.0 1*  BR2  1*/
+ RIV2  WT2  1.0 1*  BR2  5/
+ RIV2  WT2  1.0 1* 1* 15/
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

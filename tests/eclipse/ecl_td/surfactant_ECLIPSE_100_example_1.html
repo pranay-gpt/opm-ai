@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Example 1"/>
+<meta name="DC.subject" content="Surfactant model example, Surfactant, Example"/>
+<meta name="keywords" content="Surfactant model example, Surfactant, Example"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="surfactant_eclipse_100_example_1"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Example 1</title>
+</head>
+<body>
+
+
+<div class="nested0" id="surfactant_eclipse_100_example_1"><a name="surfactant_eclipse_100_example_1"><!-- --></a>
+<h1 class="topictitle1">Example 1</h1>
+
+
+ <div>
+<p>This is a 2D example modeling water injection into oil. To aid
+recovery, a surfactant slug is injected into the reservoir some time
+after the primary water drive. Water injection is resumed after the
+surfactant injection period. The performance of the surfactant drive
+is assumed not to be salt sensitive in this study.</p>
+
+<div class="section" id="e100_surfactant_runspec_eg1"><a name="e100_surfactant_runspec_eg1"><!-- --></a><h4 class="sectiontitle">RUNSPEC</h4><pre><code>RUNSPEC 
+TITLE
+Example Surfactant Flood Case.
+
+DIMENS
+ 5    5    1  /
+
+NONNC
+OIL
+WATER
+SURFACT
+FIELD
+
+TRACERS
+ 0    1    0    0 'DIFF  ' /
+
+TABDIMS
+ 2    2   20    5    6   20 /
+
+REGDIMS
+ 6    1    0    0    0    1 /
+
+WELLDIMS
+ 2    1    1    2 /
+
+START
+ 1 'JAN' 1983  /
+
+NSTACK
+ 8 /</code></pre></div>
+
+<div class="section" id="e100_surfactant_grid_eg1"><a name="e100_surfactant_grid_eg1"><!-- --></a><h4 class="sectiontitle">GRID</h4><pre><code>GRID    ============================================================
+DXV
+   5*75.0 /
+
+PERMX
+  25*50.0 /
+
+PERMY
+  25*50.0 /
+
+DYV
+   5*75.0 /
+
+DZ
+  25*30.0 /
+
+TOPS
+  25*4000.0 /
+
+PERMY
+  25*50.0 /
+
+PORO
+  25*0.2 /
+
+RPTGRID
+ 'DX'  'DY'  'DZ'  'PERMX'  'PERMY'  'PERMZ'  'MULTX'
+ 'MULTY'  'MULTZ'  'PORO'  'NTG'  'TOPS'  'PORV'
+ 'DEPTH'  'TRANX'  'TRANY'  'TRANZ'  'COORDSYS'
+ 'COORD'  'ZCORN'   'NNC'  'AQNUM'  'AQCON'
+ 'ALLNNC'  'SIGMAV'  'DZMTRXV'  'DIFFMX'  'DIFFMY'
+ 'DIFFMZ'  'DIFFMMF'  'DIFFX'  'DIFFY'  'DIFFZ'
+ 'KOVERD'  /</code></pre></div>
+
+<div class="section" id="e100_surfactant_props_eg1"><a name="e100_surfactant_props_eg1"><!-- --></a><h4 class="sectiontitle">PROPS</h4><pre><code>PROPS   ============================================================
+TRACER
+ 'ONE' 'WAT' /
+/
+
+SWFN
+-- Table 1 - Immiscible curves - SATNUM
+    .25    .0    4.0
+    .7    1.0     .0
+/
+-- Table 2 - Miscible curves   - SURFNUM
+    .25    .0    4.0
+    .99    1.0     .0
+/
+
+SOF2 
+-- Table 1 - Immiscible curves - SATNUM
+    .3000  .0000
+    .7600 1.0000
+/
+-- Table 2 - Miscible curves   - SURFNUM
+    .0100  .0000
+    .7600 1.0000
+/
+
+PVTW
+ 4000.0  1.0  3.03E-06  .5  0.0 /
+ 4000.0  1.0  3.03E-06  .5  0.0 /
+
+PVDO
+  .0     1.0     2.0
+ 8000.0   .92    2.0
+/
+  .0     1.0     2.0
+ 8000.0   .92    2.0
+/
+
+ROCK
+ 4000.0         .30E-05 /
+ 4000.0         .30E-05 /
+
+DENSITY
+ 52.0000  64.0000   .04400 /
+ 52.0000  64.0000   .04400 /
+
+-- Water Viscosity vs surfactant concentration tables.
+SURFVISC
+-- Surfactant      Water viscosity at 4000 psi
+-- concentration
+--   LB/STB             CENTIPOISE
+      0.0                   0.5   
+      0.1                   1.1
+      0.2                   1.2 
+      0.8                   1.3  /
+      0.0                   0.5 
+      0.1                   0.6
+      0.2                   0.7
+      0.8                   0.8  /
+
+-- Surfactant Adsorption tables
+SURFADS
+-- Surfactant       Adsorbed mass
+-- concentration
+--   LB/STB              LB/LB
+     0.0                  0.00000
+     0.1                  0.00005
+     0.2                  0.00005 
+     1.0                  0.00005 /
+     0.0                  0.00000
+     0.1                  0.00005
+     0.2                  0.00005 
+     1.0                  0.00005 /
+
+-- Water/Oil surface tension vs Surfactant concentration
+SURFST
+-- Surfactant      Water/Oil Surface Tension
+-- concentration
+-- LB/STB          LB/IN
+    0.0            5.0E-04
+    0.1            6.34E-05
+    0.2            2.23E-05
+    0.5            2.07E-06/
+    0.0            5.0E-04
+    0.1            6.34E-05
+    0.2            2.23E-05
+    0.5            2.07E-06/
+
+-- Capillary de-saturation curve
+SURFCAPD
+-- LOG10(Capillary Number)     Miscibility  
+--                             Function
+        -9                       0.0
+         2                       0.0 
+         5                       1.0
+        10                       1.0 /
+       -10                       0.0
+         2                       0.0 
+         5                       1.0
+        10                       1.0 /
+
+-- Extra rock properties.
+SURFROCK
+-- De-adsorption model            Rock mass 
+-- indicator                      Density
+--   1 - reversible                 
+--   2 - irreversible              LB/RB
+      1                            1000 /
+      1                            1000 / 
+
+RPTPROPS
+ 'SURFVISC'  /</code></pre></div>
+
+<div class="section" id="e100_surfactant_regions_eg1"><a name="e100_surfactant_regions_eg1"><!-- --></a><h4 class="sectiontitle">REGIONS</h4><pre><code>REGIONS    ===========================================================
+FIPNUM
+ 1 2 5 6 6
+ 3 4 5 6 6
+ 5 5 5 6 6
+ 6 6 6 6 6
+ 6 6 6 6 6  /
+
+-- Immiscible table numbers
+SATNUM
+ 25*1 /
+
+-- Miscible table numbers
+SURFNUM
+ 25*2 /
+
+RPTREGS
+ 'PVTNUM'  'SATNUM'  'EQLNUM'  'FIPNUM'  'KRNUMX'
+ 'KRNUMX-'  'KRNUMY'  'KRNUMY-'  'KRNUMZ'  'KRNUMZ-'
+ 'IMBNUM'  'IMBNUMX'  'IMBNUMX-'  'IMBNUMY'  'IMBNUMY-'
+ 'IMBNUMZ'  'IMBNUMZ-'  'ROCKNUM'  'ENDNUM'  'TNUM'
+ 'MISCNUM'  'KRNUMMF'  'IMBNUMMF'  'SURFNUM'  /</code></pre></div>
+
+<div class="section" id="e100_surfactant_solution_eg1"><a name="e100_surfactant_solution_eg1"><!-- --></a><h4 class="sectiontitle">SOLUTION</h4><pre><code>SOLUTION  ==========================================================
+TBLKFONE
+  25*0 /
+
+EQUIL
+4000  4000  6000  0   0   0   0   0   0  /
+
+RPTSOL
+'PRES'  'SOIL'  'SWAT'  'RESTART'  'OILAPI'
+'FIPTR=2'  'TBLK'  'FIPPLY'   'SURFBLK'
+'FIPSURF=2'  /</code></pre></div>
+
+<div class="section" id="e100_surfactant_summary_eg1"><a name="e100_surfactant_summary_eg1"><!-- --></a><h4 class="sectiontitle">SUMMARY</h4><pre><code>SUMMARY    ===========================================================
+CTFRSUR
+ 'P' 5 5  1 /
+/
+
+FTPRSUR
+
+WTPRSUR
+'P' /
+
+FTPTSUR
+
+WTPTSUR
+'P' /
+
+FTITSUR
+
+WTITSUR
+'I' /
+
+BTCNFSUR
+1 1 1 /
+2 2 1 /
+5 5 1 /
+/
+
+FTIPTSUR
+FTIPFSUR
+
+RTIPTSUR
+1 /
+
+RTIPFSUR
+1 /
+
+BTIPTSUR
+1 1 1 /
+/
+
+FTADSUR
+
+RTADSUR
+ 1 /
+
+BTADSUR
+1 1 1 /
+/
+
+BTCASUR
+1 1 1 /
+/</code></pre></div>
+
+<div class="section" id="e100_surfactant_schedule_eg1"><a name="e100_surfactant_schedule_eg1"><!-- --></a><h4 class="sectiontitle">SCHEDULE</h4><pre><code>SCHEDULE  ==========================================================
+RPTSCHED                  
+'PRES'  'SOIL'  'SWAT'  'RESTART=2'  'FIP=2'
+'WELLS=2'  'SUMMARY=2'  'CPU=2'  'NEWTON=2'
+'OILAPI'  'FIPTR=2'  'TBLK'  'FIPSALT=2'
+'SURFBLK'  'SURFADS'  'FIPSURF=2'  /
+
+WELSPECS
+'I'  'G'   1  1  4000  'WAT'  /
+'P'  'G'   5  5  4000  'OIL'  /
+/
+
+COMPDAT
+'I       '   1   1   1   1 'OPEN'   0  .0   1.0 /
+'P       '   5   5   1   1 'OPEN'   0  .0   1.0 /
+/
+
+WCONPROD
+'P' 'OPEN' 'BHP' 5* 3999.0 /
+/
+
+WCONINJE
+'I' 'WAT' 'OPEN' 'RATE' 200.0 /
+/
+
+WTRACER
+ 'I' 'ONE'  0.8 /
+/
+
+-- Start injecting the Surfactant Slug
+WSURFACT
+ 'I'   0.8 /
+ /
+
+TUNING
+ 1  /
+ 10* 0.4 /
+  /
+
+TSTEP
+  2*100
+/
+
+WTRACER
+ 'I' 'ONE'  0.0 /
+/
+
+-- Water chase  
+WSURFACT
+ 'I'   0.0 /
+ /
+
+TSTEP
+ 5*100 /
+
+END</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

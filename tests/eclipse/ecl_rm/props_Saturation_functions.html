@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Saturation functions"/>
+<meta name="DC.subject" content="PROPS section saturation functions, PROPS section one-dimensional saturation functions"/>
+<meta name="keywords" content="PROPS section saturation functions, PROPS section one-dimensional saturation functions"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="props_saturation_functions"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Saturation functions</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="props_saturation_functions"><a name="props_saturation_functions"><!-- --></a>
+<h1 class="topictitle1">Saturation functions</h1>
+
+
+ <div>
+<p>Saturation functions are used to describe properties that depend
+on the phase saturations, namely the relative permeabilities and capillary
+pressures.</p>
+
+<p>In two-phase systems there is only one independent saturation and
+the properties are one dimensional functions.</p>
+
+<div class="p">In three-phase systems there are two independent saturations and
+properties can be either one or two dimensional functions. A number
+of ways of modeling three phase properties are available:        
+ <ul>
+<li>Capillary pressures and the water and gas relative permeabilities
+are treated as one dimensional functions, but the oil relative permeability
+is treated as a two dimensional function by interpolating the oil-gas
+and oil-water relative permeabilities. Interpolation of the oil relative
+permeability is performed using either the default method or one of
+Stone’s methods.             </li>
+
+<li>Two dimensional tables can be entered for any (or all) of the
+phase relative permeabilities.             </li>
+
+<li><p>ECLIPSE 300</p>
+<p>The Baker methods can be used to describe any (or all) of the phase
+relative permeabilities as two dimensional functions.</p>
+</li>
+
+</ul>
+                </div>
+
+<p>The methods described above can be applied to individual phases,
+and different methods can be used for each phase. Two further methods
+are available that apply to all phases:</p>
+
+<ul>
+<li><p>ECLIPSE 300</p>
+<p>The IKU three phase method.</p>
+</li>
+
+<li><p>ECLIPSE 300</p>
+<p> The ODD3P three phase method.</p>
+</li>
+
+</ul>
+
+<p>See <a href="../ecl_td/satfunct_Saturation_Functions.html#satfunct_saturation_functions">"Saturation Functions"</a> in the <cite>ECLIPSE Technical Description</cite> for further details.</p>
+
+<div class="section" id="propsonedim.satfunctions"><a name="propsonedim.satfunctions"><!-- --></a><h4 class="sectiontitle">One dimensional saturation
+functions</h4><p>There is a choice of two families of keywords
+for entering relative permeabilities and capillary pressures as functions
+of a single saturation. The first family: <a href="SWOF.html#SWOF"> SWOF</a> and (<a href="SGOF.html#SGOF"> SGOF</a> or <a href="SLGOF.html#SLGOF"> SLGOF</a>), allows you to enter the oil relative permeabilities in the same
+tables as the water and gas relative permeabilities. The second family: <a href="SWFN.html#SWFN"> SWFN</a>, <a href="SGFN.html#SGFN"> SGFN</a> and (<a href="SOF3.html#SOF3"> SOF3</a> or <a href="SOF2.html#SOF2"> SOF2</a>), requires the oil relative permeabilities to be entered
+in a separate table versus oil saturation.</p>
+<p>You can select whichever
+family is best suited to the form of the original data, except that
+the second family must be used in gas-water runs and runs employing
+the ECLIPSE 100 Miscible Flood or Solvent options. Keywords from the
+two families cannot be mixed.</p>
+<p>A single saturation function table
+might be of the form:</p>
+<pre><code>SWFN
+--Sw     Krw    Pcow
+  0.22    .0    7.0
+  0.3     .0    4.0
+  0.5     .24   2.5
+  0.8     .65   1.0
+  0.9     .83    .5
+  1.0    1.00    .0  /</code></pre><p>As with all keywords, the data may be spaced or split over lines
+at will, but it is convenient here to place it into columns. In all
+but the first column, default values may be entered, and these values
+are filled in by linear interpolation.</p>
+<p>The slash character (/)
+terminates the table above. If a run has more than one saturation
+table region, these must be entered in sequence, each terminated by
+a slash character (/). The tables are assigned to blocks later, in
+the <a href="REGIONS.html#REGIONS"> REGIONS</a> section.</p>
+<p>Some saturation values in the left-most column are significant:</p>
+<p> <math><msub><mi>S</mi><mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow>
+</msub></math>  The first value in the table is the connate water,
+0.22 in this case, the minimum water saturation in a block in the
+initial state.                </p>
+<p> <math><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>c</mi><mi>r</mi></mrow></msub>
+</math>  The saturation value at which water becomes mobile is the
+critical water saturation, 0.3 in this case.                </p>
+<p>The second column contains water relative permeabilities, and the
+third the water-oil capillary pressures, defined as <math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>o</mi><mi>w</mi></mrow></msub>
+<mo>=</mo><msub><mi>P</mi><mi>o</mi></msub><mrow>
+<mo>-</mo><msub><mi>P</mi><mi>w</mi></msub></mrow>
+</math>.                </p>
+<p>The gas saturation functions can
+be input in a similar way using the <a href="SGFN.html#SGFN"> SGFN</a> keyword. The first value should be zero, as
+‘connate’ gas does not exist, and the critical gas is
+defined in the same manner as the critical water. Gas-oil capillary
+pressures are defined as <math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>o</mi><mi>g</mi></mrow></msub>
+<mo>=</mo><msub><mi>P</mi><mi>g</mi></msub><mrow>
+<mo>-</mo><msub><mi>P</mi><mi>o</mi></msub></mrow>
+</math>.  </p>
+<p>ECLIPSE 100</p>
+<p>In gas-water runs the relative permeability and
+capillary pressure data can be entered with one keyword, <a href="SGWFN.html#SGWFN"> SGWFN</a>, <span class="keyword">SGFN</span> and <a href="SWFN.html#SWFN"> SWFN</a>.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

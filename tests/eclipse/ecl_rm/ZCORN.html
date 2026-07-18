@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ZCORN"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ZCORN"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ZCORN</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ZCORN"><a name="ZCORN"><!-- --></a>
+<h1 class="keyword">ZCORN</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="zcorn.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="zcorn.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d3130e45"> x </th>
+
+<th valign="top" id="d3130e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d3130e54"> x </th>
+
+<th valign="top" id="d3130e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d3130e45 d3130e54 ">  </td>
+
+<td valign="top" headers="d3130e48 d3130e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3130e45 d3130e54 "> x </td>
+
+<td valign="top" headers="d3130e48 d3130e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3130e45 d3130e54 ">  </td>
+
+<td valign="top" headers="d3130e48 d3130e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3130e45 d3130e54 ">  </td>
+
+<td valign="top" headers="d3130e48 d3130e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3130e45 d3130e54 ">  </td>
+
+<td valign="top" headers="d3130e48 d3130e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3130e45 d3130e54 ">  </td>
+
+<td valign="top" headers="d3130e48 d3130e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3130e45 d3130e54 ">  </td>
+
+<td valign="top" headers="d3130e48 d3130e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3130e45 d3130e54 ">  </td>
+
+<td valign="top" headers="d3130e48 d3130e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Each grid block has 8 corners. This keyword enables the depths
+of each corner of each grid block to be separately specified. It is
+used for specifying depths for corner point geometry.</p>
+
+<p>The <span class="keyword">ZCORN</span> data are entered for the current box.
+If a <a href="BOX.html#BOX">  BOX</a> keyword
+is currently active (<a href="ENDBOX.html#ENDBOX">  ENDBOX</a> has not cancelled it) when <span class="keyword">ZCORN</span> is encountered,
+then the number of values entered must be the number for that box.
+If no <span class="keyword">BOX</span> keyword is currently active, then the
+default box spanning the global grid is assumed, which is defined
+by the <a href="DIMENS.html#DIMENS">  DIMENS</a> keyword.</p>
+
+<p>The keyword must be followed by</p>
+
+<p> <samp class="codeph">2 * NDX * 2 * NDY * 2 * NDZ</samp> </p>
+
+<p>values, where <samp class="codeph">NDX</samp>, <samp class="codeph">NDY</samp>, <samp class="codeph">NDZ</samp> are the dimensions of the current box. For cell <em>i</em>, the 8 <span class="keyword">ZCORN</span> values are z<sub>i,1</sub>, z<sub>i,2</sub>, z<sub>i,3</sub>, z<sub>i,4</sub>, z<sub>i,5</sub>, z<sub>i,6</sub>, z<sub>i,7</sub>, z<sub>i,8</sub>. Here values 1-4 are
+for the top face, with z<sub>i,1</sub> on the near left corner, z<sub>i,2</sub> on the near right corner, z<sub>i,3</sub> on the far left
+corner, and z<sub>i,4</sub>, on the far right corner. Values 5-8 have
+the same function for the bottom face. Then the arrangement of the <span class="keyword">ZCORN</span> values within this range are:</p>
+
+<ul>
+<li> for the first row of <samp class="codeph">NDX</samp> cells, input the near
+top values z<sub>1,1</sub>, z<sub>1,2</sub>, z<sub>2,1</sub>, z<sub>2,2</sub>,..., z<sub>i,1</sub>, z<sub>i,2</sub>,... z<sub>NDX,1</sub>, z<sub>NDX,2</sub>, followed by the far top values z<sub>1,3</sub>, z<sub>1,4</sub>, z<sub>2,3</sub>, z<sub>2,4</sub>,..., z<sub>i,3</sub>, z<sub>i,4</sub>,... z<sub>NDX,3</sub>, z<sub>NDX,4</sub>. </li>
+
+<li> Repeat for each subsequent row of <samp class="codeph">NDX</samp> cells
+in the top plane. </li>
+
+<li> Now repeat the last two steps for the <strong>bottom</strong> values of
+the top plane. </li>
+
+<li> Finally, repeat all previous steps for each plane in the grid. </li>
+
+</ul>
+
+<p>The resulting data will lie on the grid constructed by the corner
+points in space, with “touching” corners of adjacent cells separated
+by a small margin. The separation is only for visualizing the grid,
+and does not affect the <span class="keyword">ZCORN</span> values.</p>
+
+<p>The last value is followed by a slash (/).</p>
+
+<p>As the data for this keyword can be quite voluminous, it is suggested
+that the data should be prepared using a grid pre-processor (for example
+Petrel).</p>
+
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>),
+cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+
+<p>DEFAULT:   &lt;undefined&gt;</p>
+
+<p>If fine control is required in positioning the corner points in
+local grid refinements (see <a href="../ecl_td/lgrc_Local_Grid_Refinement_and_Coarsening.html#lgrc_local_grid_refinement_and_coarsening">"Local grid refinement
+and coarsening"</a> in the <cite>ECLIPSE Technical Description</cite>), then <span class="keyword">ZCORN</span> can also be used in a <a href="CARFIN.html#CARFIN">  CARFIN</a> or <a href="REFINE.html#REFINE">  REFINE</a> block. In this
+case, the <span class="keyword">ZCORN</span> values will be checked for consistency
+with the parent grid. The current box here is for the local grid.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>If the average value of <samp class="codeph">DZ</samp> &lt;= 10<sup>-6</sup> for any cell, the cell will be either be made
+inactive or in thermal cases it may become rock-filled.</p>
+
+<div class="section" id="zcorn_example"><a name="zcorn_example"><!-- --></a><h4 class="sectiontitle">Example</h4>               
+ <p>Here <samp class="codeph">NDX=3</samp>, <samp class="codeph">NDY=2</samp>, <samp class="codeph">NDZ=2</samp>:, and the two z-planes are horizontal with all cells touching exactly.</p>
+          <pre><code>ZCORN
+ 24*1000
+ 24*1020
+ 24*1020
+ 24*1040 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

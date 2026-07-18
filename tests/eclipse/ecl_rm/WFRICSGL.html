@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WFRICSGL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WFRICSGL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WFRICSGL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WFRICSGL"><a name="WFRICSGL"><!-- --></a>
+<h1 class="keyword">WFRICSGL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wfricsgl.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wfricsgl.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2940e45"> x </th>
+
+<th valign="top" id="d2940e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2940e54">  </th>
+
+<th valign="top" id="d2940e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2940e45 d2940e54 ">  </td>
+
+<td valign="top" headers="d2940e48 d2940e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2940e45 d2940e54 ">  </td>
+
+<td valign="top" headers="d2940e48 d2940e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2940e45 d2940e54 ">  </td>
+
+<td valign="top" headers="d2940e48 d2940e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2940e45 d2940e54 ">  </td>
+
+<td valign="top" headers="d2940e48 d2940e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2940e45 d2940e54 ">  </td>
+
+<td valign="top" headers="d2940e48 d2940e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2940e45 d2940e54 ">  </td>
+
+<td valign="top" headers="d2940e48 d2940e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2940e45 d2940e54 ">  </td>
+
+<td valign="top" headers="d2940e48 d2940e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2940e45 d2940e54 "> x </td>
+
+<td valign="top" headers="d2940e48 d2940e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword may be used to define both the segment structure and
+the connection locations of a multisegment well situated in a local
+grid (or an amalgamated set of local grids), using the data from the <a href="WFRICTNL.html#WFRICTNL"> WFRICTNL</a> keyword. It
+replaces both the <a href="WELSEGS.html#WELSEGS"> WELSEGS</a> keyword and the <a href="COMPSEGL.html#COMPSEGL"> COMPSEGL</a> keyword. It thus provides an easy way of converting a friction
+well into a multisegment well, simply by changing the keyword name
+to <span class="keyword">WFRICSGL</span>. (See <a href="../ecl_td/fricwells_Converting_friction_wells_to_multi-segment_wells.html#fricwells_converting_friction_wells_to_multi-segment_wells">"Converting friction wells to multisegment
+wells"</a> in the <cite>ECLIPSE Technical Description</cite>.)</p>
+
+<p>Note that friction wells and multisegment wells cannot coexist
+in the same run. <strong>All</strong> the friction wells must be converted if
+this facility is used. Also the <a href="FRICTION.html#FRICTION">  FRICTION</a> keyword must be removed from the <span class="keyword">RUNSPEC</span> section, replacing it with the <a href="WSEGDIMS.html#WSEGDIMS"> WSEGDIMS</a> keyword with
+appropriate dimensions.</p>
+
+<p>ECLIPSE creates the segment structure such that there is one segment
+per local grid block connection, plus an additional segment at the
+well’s bottom hole reference point. The segments are distributed so
+that the nodal point of each segment is located at the center of the
+corresponding grid block connection. The segment lengths are set equal
+to the tubing length between adjacent connections. The depths of the
+segment nodes are set equal to the center depths of the connecting
+grid blocks, as there is no data in <span class="keyword">WFRICTNL</span> that
+defines the depth trajectory of the well bore. ECLIPSE outputs the
+resulting <span class="keyword">WELSEGS</span> and <span class="keyword">COMPSEGL</span> data to the Print file in the appropriate keyword format. The keyword
+data may then be copied, if desired, to replace the <span class="keyword">WFRICSGL</span> keyword in the data file where it can be edited for additional flexibility.
+It is advisable to readjust the segment depths to correspond to the
+actual well trajectory, as setting them equal to the grid block center
+depths produces spurious undulations if the grid is not aligned with
+the well.</p>
+
+<p>When the <span class="keyword">WFRICTNL</span> data represents a multilateral
+well, ECLIPSE creates the branches and numbers them. However, ECLIPSE
+is unable to recognize whether the original main stem continues past
+a branch junction. Instead, <strong>two</strong> new branches are created at
+each branch junction, one of these being the continuation of the main
+stem. It is important to allow for this when setting the maximum number
+of branches in <span class="keyword">WSEGDIMS</span>. For example, a well consisting
+of a main stem and a single lateral branch will be converted to have
+three branches: the upper part of the main stem, the lateral branch
+and the section of the main stem below the branch junction. You can
+reduce the number of branches, if desired, by copying the output <span class="keyword">WELSEGS</span> and <span class="keyword">COMPSEGL</span> data and editing
+it to renumber all the main stem sections as branch 1 (don’t forget
+to edit the branch numbers in <span class="keyword">COMPSEGL</span> accordingly).</p>
+
+<p>The <span class="keyword">WFRICSGL</span> keyword data items are identical
+to those of the <span class="keyword">WFRICTNL</span> keyword.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

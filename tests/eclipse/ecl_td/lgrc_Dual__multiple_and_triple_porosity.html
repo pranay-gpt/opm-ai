@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Dual, multiple and triple porosity"/>
+<meta name="DC.subject" content="Local grid refinement, Dual porosity, Multiple porosity"/>
+<meta name="keywords" content="Local grid refinement, Dual porosity, Multiple porosity"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrc_dual__multiple_and_triple_porosity"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Dual, multiple and triple porosity</title>
+</head>
+<body>
+
+
+<div class="nested0" id="lgrc_dual__multiple_and_triple_porosity"><a name="lgrc_dual__multiple_and_triple_porosity"><!-- --></a>
+<h1 class="topictitle1">Dual, multiple and triple porosity</h1>
+
+
+ <div>
+<p>In dual, multiple and triple porosity runs, the global coordinates
+specified in <a href="../ecl_rm/CARFIN.html#CARFIN">CARFIN</a> and <a href="../ecl_rm/RADFIN.html#RADFIN">RADFIN</a> refer to the (outer, in the case of multi-porosity) matrix
+blocks only. For example, in dual porosity, in an 8*8*6 global grid,
+to refine the matrix cell at (8, 8, 2) together with its corresponding
+fracture cell at (8, 8, 5) use;</p>
+
+<pre><code>CARFIN
+ --          I1 I2 J1 J2 K1 K2 NX NY NZ NW
+  'CARF882'  8  8  8  8  2  2  5  5  10 3 /
+ENDFIN</code></pre>
+<p>The refinement has 5*5*5 matrix cells and 5*5*5 fracture cells.
+For multiple and triple porosity, the same principle applies, namely
+that the global grid z- or k-extents (K1 and K2, data items 6 and
+7) are always defined for the matrix grid only, but the size of the
+local grid in the z- or k-direction (NZ, data item 10) covers all
+porosities. To find its size in one porosity only (for example in
+the matrix) it must be divided by <samp class="codeph">NPOROS</samp>, which is <samp class="codeph">NMTRIX+1</samp>, where <samp class="codeph">NMTRIX</samp> is the number of
+matrix porosities (for multi porosity, it is data item 1 of keyword <a href="../ecl_rm/NMATRIX.html#NMATRIX">NMATRIX</a>, or it is 1 for dual
+porosity), or the number of matrix and vug porosities (for triple
+porosity, it is data item 1 of keyword <a href="../ecl_rm/TRPLPORO.html#TRPLPORO"> TRPLPORO</a>). Conversely, NZ
+must be divisible exactly by <samp class="codeph">NPOROS</samp>.</p>
+
+<p>ECLIPSE 100        </p>
+
+<p>If the keyword <a href="../ecl_rm/DPNUM.html#DPNUM">DPNUM</a> has been used to specify
+regions of the reservoir for which a conventional single porosity
+model is to be used in a dual porosity run, then the local grid may
+not straddle different <span class="keyword">DPNUM</span> regions. A local grid
+in a dual porosity run must either lie entirely within a dual porosity
+region or entirely within a single porosity region. Within an LGR
+amalgamation, all the constituent local grids must be in the same <span class="keyword">DPNUM</span> region.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

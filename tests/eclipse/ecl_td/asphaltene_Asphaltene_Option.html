@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Asphaltene option"/>
+<meta name="DC.subject" content="Fluid model, Asphaltene formation, Asphaltene damage, Asphaltene pre-2011.1 model, Asphaltene"/>
+<meta name="keywords" content="Fluid model, Asphaltene formation, Asphaltene damage, Asphaltene pre-2011.1 model, Asphaltene"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="asphaltene_asphaltene_option"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Asphaltene option</title>
+</head>
+<body>
+
+
+<div class="nested0" id="asphaltene_asphaltene_option"><a name="asphaltene_asphaltene_option"><!-- --></a>
+<h1 class="keyword">Asphaltene option</h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="asphaltene.tab.0009"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="asphaltene.tab.0009" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">                                             
+ </td>
+
+<td valign="top">                         ECLIPSE 100         
+            </td>
+
+</tr>
+
+<tr>
+<td valign="top">                         x                   
+  </td>
+
+<td valign="top">                         ECLIPSE 300         
+            </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The purpose of this option is to model asphaltene formation and
+its impact on reservoir performance. There are a number of asphaltene
+models currently in existence, but there is still no consensus about
+the characterization of asphaltene behavior. The asphaltene option
+implements a simplified but practical model that provides  sufficient
+flexibility to simulate a wide range of processes associated with
+asphaltene behavior.</p>
+
+<p>The asphaltene modeling option is activated with the <a href="../ecl_rm/ASPHALTE.html#ASPHALTE">ASPHALTE</a> keyword in the <span class="keyword">RUNSPEC</span> section.</p>
+
+<div class="section" id="asphaltene_asphaltene_formation"><a name="asphaltene_asphaltene_formation"><!-- --></a><h4 class="sectiontitle">Asphaltene formation</h4><p>The following terms describe asphaltene formation
+and may be different to those in the literature:</p>
+<ul>
+<li>precipitation: where asphaltene particles (“fines”)
+appear in the fluid             </li>
+
+<li> dissolution: the reverse of precipitation, where fines dissolve
+back into the oil             </li>
+
+<li> flocculation: where the precipitated fines aggregate to form
+bigger particles, (“flocs”)             </li>
+
+<li> dissociation: the reverse of flocculation; where flocs split
+up into fines             </li>
+
+<li> deposition: where flocs leave the fluid and attach to the reservoir
+rock             </li>
+
+<li>entrainment: the reverse of deposition, where deposited asphaltene
+becomes suspended in the fluid.             </li>
+
+</ul>
+</div>
+
+<div class="section" id="asphaltene_asphaltene_damage"><a name="asphaltene_asphaltene_damage"><!-- --></a><h4 class="sectiontitle">Asphaltene damage</h4><p>Asphaltene precipitation and deposition can alter the reservoir
+flow in a number of ways. It is possible to model the effects of asphaltene
+on the following reservoir and fluid properties:</p>
+<ul>
+<li>porosity </li>
+
+<li>permeability</li>
+
+<li>viscosity </li>
+
+<li>wettability </li>
+
+</ul>
+</div>
+
+<div class="section" id="asphaltene_pre-2011.1_model"><a name="asphaltene_pre-2011.1_model"><!-- --></a><h4 class="sectiontitle">Pre-2011.1 model</h4><p>A modified asphaltene model was introduced in the 2011.1 version,
+called the three-component model, since it uses separate components
+to represent the precipitation, flocculation and deposition states
+of the asphaltene. The pre-2011.1 model is still available, and both
+are described in this chapter. The main differences are:</p>
+<ul>
+<li>The three-component model simplifies the precipitation model by
+allowing only one component to represent the asphaltene in the oil
+phase (precipitate).             </li>
+
+<li>The three-component model uses an extra solid component to model
+deposited asphaltene. This leads to some differences in the way the
+deposition terms are calculated. There are also slight differences
+in the way asphaltene deposition data is entered in keywords <a href="../ecl_rm/ASPDEPO.html#ASPDEPO"> ASPDEPO</a>, <a href="../ecl_rm/ASPLCRT.html#ASPLCRT">ASPLCRT</a> and <a href="../ecl_rm/ASPWETF.html#ASPWETF">ASPWETF</a>. The solid (deposition)
+component does not take part in the flash, and the solid properties
+need to be specified.  <p>The value of the solid density in the three-component
+model is important as it affects the reservoir pressure. If it is
+less than or greater than the equivalent density of the precipitate
+in the oil phase, then as asphaltene is deposited the reservoir pressure
+will increase or decrease to preserve the fluid volume.</p>
+      
+         <p>In the pre-2011.1 model, deposited asphaltene is still
+considered as part of the oil phase, so the oil properties do not
+change as asphaltene is deposited. In the three-component model, deposited
+asphaltene is removed from the oil phase, leading to a lighter oil
+and increased volatility. This in turn will affect the reservoir pressure
+if gas comes out of solution.</p>
+</li>
+
+<li>The three-component model no longer uses the pre-2011.1 asphaltene
+permeability damage model, keyword <a href="../ecl_rm/ASPKDAM.html#ASPKDAM">ASPKDAM</a>. Instead a solid-dependent
+mobility multiplier can be used.             </li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

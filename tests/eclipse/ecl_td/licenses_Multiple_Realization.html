@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Multiple Realization"/>
+<meta name="DC.subject" content="Special licenses"/>
+<meta name="keywords" content="Special licenses"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="licenses_multiple_realization"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Multiple Realization</title>
+</head>
+<body>
+
+
+<div class="nested0" id="licenses_multiple_realization"><a name="licenses_multiple_realization"><!-- --></a>
+<h1 class="topictitle1">Multiple Realization</h1>
+
+
+ <div>
+<p>Multiple Realization (MR) licensing was implemented as a way to
+lower the cost of running multiple similar versions of the same model.</p>
+
+<p>Firstly, you generate MR data sets using programs such as Petrel
+or MEPO.  The data set differs from a standard data set in that it
+includes the <a href="../ecl_rm/MULTREAL.html#MULTREAL"> MULTREAL</a> keyword.</p>
+
+<p>Following the <span class="keyword">MULTREAL</span> keyword is a UID (Unique
+Identifier), which is a long string of numbers and a word (‘yes’ or
+‘no’). All MR data sets generated from the same base case at the same
+time will have the same UID. The word, Yes or No, tells ECLIPSE whether
+to continue if MR or parallel licenses are not available. This is
+however not yet implemented in the generating applications.</p>
+
+<p>The parallel and multiple realization licenses used to be separate.
+From the 2011.1 release onwards, they are used interchangeably.</p>
+
+<p>When the first of a group with a single UID starts running, the
+standard set of licenses that would be required for that job is checked
+out. In addition, an MR/parallel license is checked out as well. When
+the second and subsequent jobs from the same group start, they each
+only check out an MR/parallel license. Even if the first job finishes,
+the standard set of licenses are kept checked out until all running
+jobs from that group finish.</p>
+
+<p>Parallel and reservoir coupling are excluded from this licensing
+scheme, and if any data set includes these features, they will be
+checked out as normal. This means that if you want to run Nmr realizations
+of a parallel case with Nprocs domains, you will require the following
+total number of MR/parallel licenses: Nmr (one for each MR case) +
+Nmr * Nprocs (for the overall number of parallel licenses needed). </p>
+
+<div class="section" id="mr_example"><a name="mr_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>If you want to run
+20 realizations of an initial ECLIPSE model that requires a LGR license: </p>
+<p>Without MR licenses you would require 20 ECLIPSE Black Oil + 20
+LGR licenses. </p>
+<p>With MR licenses you will need 1 ECLIPSE Black
+Oil + 1 LGR license + 20 ECLIPSE Parallel/MR licenses </p>
+<p>If the
+same model requires 8 way parallel, you will require 1 ECLIPSE Black
+Oil + 1 LGR license + 20 ECLIPSE Parallel/MR licenses + 8*20 ECLIPSE
+Parallel/MR licenses. </p>
+</div>
+
+<p>The example in figure <a href="licenses_Multiple_Realization.html#licenses.XID-00000260">755.1</a>  shows 6 MR jobs running through a system that can handle 3 jobs
+at a time.</p>
+
+<div class="fignone" id="licenses.XID-00000260"><a name="licenses.XID-00000260"><!-- --></a>
+
+ <br/><img src="../img/mrlicense.png" width="545px"/><br/> <br/><span class="figcap">
+           Figure 755.1  Example shows 6 MR jobs running through a system that can handle
+3 jobs at a time</span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

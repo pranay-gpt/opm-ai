@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SURFVISC"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SURFVISC"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SURFVISC</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SURFVISC"><a name="SURFVISC"><!-- --></a>
+<h1 class="keyword">SURFVISC</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="surfvisc.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="surfvisc.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2502e45"> x </th>
+
+<th valign="top" id="d2502e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2502e54">  </th>
+
+<th valign="top" id="d2502e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2502e45 d2502e54 ">  </td>
+
+<td valign="top" headers="d2502e48 d2502e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2502e45 d2502e54 ">  </td>
+
+<td valign="top" headers="d2502e48 d2502e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2502e45 d2502e54 ">  </td>
+
+<td valign="top" headers="d2502e48 d2502e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2502e45 d2502e54 "> x </td>
+
+<td valign="top" headers="d2502e48 d2502e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2502e45 d2502e54 ">  </td>
+
+<td valign="top" headers="d2502e48 d2502e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2502e45 d2502e54 ">  </td>
+
+<td valign="top" headers="d2502e48 d2502e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2502e45 d2502e54 ">  </td>
+
+<td valign="top" headers="d2502e48 d2502e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2502e45 d2502e54 "> x </td>
+
+<td valign="top" headers="d2502e48 d2502e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTPVT"> NTPVT</a>  (set in the <span class="keyword">TABDIMS</span> keyword)
+tables of surfactant viscosity functions, each terminated by a slash
+(/), describing the effect on the viscosity of pure water of increasing
+the concentration of surfactant in solution. Each table consists of
+2 columns of data:</p>
+
+<ol>
+<li> The surfactant concentration in the solution. <p>The values should
+increase monotonically down the column.</p>
+ <p>UNITS: kg/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), lb/stb (<samp class="codeph">FIELD</samp>), gm/scc
+(<samp class="codeph">LAB</samp>)</p>
+ </li>
+
+<li> The solution water viscosity at this surfactant concentration
+and the reference pressure (entered with the <a href="PVTW.html#PVTW"> PVTW</a> keyword). <p>UNITS: cP (<samp class="codeph">METRIC</samp>), cP (<samp class="codeph">FIELD</samp>), cP (<samp class="codeph">LAB</samp>), cP (<samp class="codeph">PVT-M</samp>)</p>
+<p>If the Polymer Flood Model is active, then
+the viscosity input in the <span class="keyword">SURFVISC</span> keyword will
+be multiplied by the polymer viscosity multiplier supplied in the <a href="PLYVISC.html#PLYVISC"> PLYVISC</a> or <a href="PLYVISCS.html#PLYVISCS"> PLYVISCS</a> keywords.</p>
+</li>
+
+</ol>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The viscosity entered in this keyword at zero surfactant concentration
+should be equal to the reference viscosity entered in keyword <span class="keyword">PVTW</span> (or <a href="PVTWSALT.html#PVTWSALT"> PVTWSALT</a>, whichever is used). This is required because the pure water
+viscosity update takes the form of a multiplier that is the ratio
+of reference viscosity divided by solution water viscosity, this ratio
+interpolated at the given surfactant concentration. Hence, at zero
+surfactant concentration, there will be no change to the water viscosity
+because the ratio modifier is equal to one.</span></div>
+
+<p>Each table must contain at least two, and no more than <a href="TABDIMS.html#TABDIMS.NPPVT"> NPPVT</a> (set
+in the <span class="keyword">TABDIMS</span> keyword) rows. Each row must be
+complete, containing an entry in every column of the table.</p>
+
+<p>See <a href="../ecl_td/surfactant_Surfactant_Model.html#surfactant_surfactant_model">"Surfactant model"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.</p>
+
+<div class="section" id="surfvisc_example"><a name="surfvisc_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTPVT</samp> = 1 and <samp class="codeph">NPPVT</samp> ≥ 3</p>
+ <pre><code>SURFVISC
+ .00  0.34
+ .01  0.38
+ .02  0.40  /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

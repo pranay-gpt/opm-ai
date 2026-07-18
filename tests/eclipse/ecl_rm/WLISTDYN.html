@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WLISTDYN"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WLISTDYN"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WLISTDYN</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WLISTDYN"><a name="WLISTDYN"><!-- --></a>
+<h1 class="keyword">WLISTDYN</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wlistdyn.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wlistdyn.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2992e45"> x </th>
+
+<th valign="top" id="d2992e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2992e54"> x </th>
+
+<th valign="top" id="d2992e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2992e45 d2992e54 ">  </td>
+
+<td valign="top" headers="d2992e48 d2992e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2992e45 d2992e54 ">  </td>
+
+<td valign="top" headers="d2992e48 d2992e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2992e45 d2992e54 ">  </td>
+
+<td valign="top" headers="d2992e48 d2992e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2992e45 d2992e54 ">  </td>
+
+<td valign="top" headers="d2992e48 d2992e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2992e45 d2992e54 ">  </td>
+
+<td valign="top" headers="d2992e48 d2992e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2992e45 d2992e54 ">  </td>
+
+<td valign="top" headers="d2992e48 d2992e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2992e45 d2992e54 ">  </td>
+
+<td valign="top" headers="d2992e48 d2992e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2992e45 d2992e54 "> x </td>
+
+<td valign="top" headers="d2992e48 d2992e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword <span class="keyword">WLISTDYN</span> may be used set up a dynamic
+well list. This list differs from a static, user-defined well list
+(see keyword <a href="WLIST.html#WLIST">  WLIST</a>) in that membership of the list is automatically reset at the end
+of each timestep. The membership is determined by a condition on a
+well type quantity. For example, the list might be made up of all
+the wells in a particular group that have a water cut greater than
+0.7. Membership may also be defined as, for example, the 3 wells with
+the highest water cut belonging to a particular group.</p>
+
+<p>Well lists whose names begin with an asterisk (*) may be entered
+wherever a well name root can be entered in the <span class="keyword">SCHEDULE</span> section well keywords. Well lists may also be used in the <a href="ACTIONX.html#ACTIONX"> ACTIONX</a> keyword to define
+a grouping of wells, whose combined rates, totals or ratios can form
+part of a triggering condition in this keyword. </p>
+
+<p>Combined rates, totals and ratios for all
+the wells in a well list may also be written to the summary file using
+an appropriate group summary mnemonic followed by the well list name
+(see <a href="summary_Well_and_group_flow_quantities.html#summary_well_and_group_flow_quantities">  "Well and group flow quantities"</a>).</p>
+
+<p>The maximum number of dynamic well lists in a simulation is limited
+by item 12 of the <a href="WELLDIMS.html#WELLDIMS"> WELLDIMS</a> keyword. A well may belong to more than one list at a time,
+up to a maximum number as set in item 11 of <span class="keyword">WELLDIMS</span>.</p>
+
+<p>The <span class="keyword">WLISTDYN</span> keyword should be followed by any
+number of data records, terminating with a blank record containing
+just a slash (/). Each data record consists of the following items,
+and is terminated with a slash. The data items are:</p>
+
+<ol>
+<li> The well list name. This should consist of up to 8 characters,
+enclosed in quotes. The first character of the list name must be an
+asterisk and the second character must be a letter. </li>
+
+<li> Group name or group name root or well list or well list template.<p>A group name root, enclosed in quotes and ending with an asterisk
+(*), can be used to refer to several groups in one record.</p>
+ <p>All the wells that belong to this group (or these groups) or this
+well list (or these well lists) will be considered for membership
+of this dynamic well list. Note that wells which can be hierarchically
+traced to this group through intermediate groups will not be considered
+for membership of the dynamic well list.</p>
+ </li>
+
+<li> Well mnemonic. This is the
+defining quantity for list membership. <p>If the mnemonic refers to
+a production type quantity, then only production wells from the group
+defined in item 2 will be considered for membership of the list. Similarly
+if the mnemonic refers to an injection type quantity, only injection
+wells will be considered. </p>
+ <p>The mnemonic must be one of:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">WOPR</samp> </td>
+
+<td valign="top">Well oil production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WOPT</samp> </td>
+
+<td valign="top">Well oil production total</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WOIR</samp> </td>
+
+<td valign="top">Well oil injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WOIT</samp> </td>
+
+<td valign="top">Well oil injection total</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WWPR</samp> </td>
+
+<td valign="top">Well water production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WWPT</samp> </td>
+
+<td valign="top">Well water production total</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WWIR</samp> </td>
+
+<td valign="top">Well water injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WWIT</samp> </td>
+
+<td valign="top">Well water injection total</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WGPR</samp> </td>
+
+<td valign="top">Well gas production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WGPT</samp> </td>
+
+<td valign="top">Well gas production total</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WGIR</samp> </td>
+
+<td valign="top">Well gas injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WGIT</samp> </td>
+
+<td valign="top">Well gas injection total</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WLPR</samp> </td>
+
+<td valign="top">Well liquid production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WLPT</samp> </td>
+
+<td valign="top">Well liquid production total</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WVPR</samp> </td>
+
+<td valign="top">Well voidage production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WVPT</samp> </td>
+
+<td valign="top">Well voidage production total</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WVIR</samp> </td>
+
+<td valign="top">Well voidage injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WVIT</samp> </td>
+
+<td valign="top">Well voidage injection total</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WGOR</samp> </td>
+
+<td valign="top">Well gas oil ratio</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WWCT</samp> </td>
+
+<td valign="top">Well water cut</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WWGR</samp> </td>
+
+<td valign="top">Well water gas ratio</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WBHP</samp> </td>
+
+<td valign="top">Well bottom hole pressure (production type quantity)</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WTHP</samp> </td>
+
+<td valign="top">Well tubing head pressure (production type quantity)</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WU*</samp> </td>
+
+<td valign="top">Any well UDQ (treated as both production and injection type
+quantity)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ </li>
+
+<li> The operator for the membership condition. This must be one of: <p>'&gt;' (Greater than)</p>
+ <p>'&lt;' (Less than)</p>
+<p>'HIGHEST'</p>
+<p>'LOWEST'</p>
+<p>Only the first character is significant and the case
+is not significant, so 'H', 'h' and 'Highest' are all equivalent.</p>
+<p>When this item is set to HIGHEST
+or LOWEST, the default for item 5 is 1. </p>
+ </li>
+
+<li> The value for the membership condition. <p>If the operator in
+item 4 is greater than or less than, then the unit of this value depends
+upon the quantity selected in item 3.</p>
+ <p>If the operator in item
+4 is HIGHEST or LOWEST, then this value is the number of wells selected
+from the top or bottom of a list ordered by the well quantity in item
+3.</p>
+<p>This item should not be
+defaulted unless item 4 is set to HIGHEST or LOWEST. The default value
+is then 1. </p>
+ </li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="section" id="wlistdyn_notes"><a name="wlistdyn_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li> The automatic updating of a dynamic well list at the end of every
+timestep may be disabled by setting item 2 of this keyword to '<samp class="codeph">OFF</samp> ' and leaving items 3 to 5 blank. The contents of this
+well list then become static. To reverse this action, set item 2 to
+'<samp class="codeph">ON</samp>' (and leave items 3 to 5 blank). </li>
+
+<li> If a dynamic well list name is entered in item 1 of a <a href="WLIST.html#WLIST"> WLIST</a> keyword, then it
+becomes a static list and is no longer updated at the end of each
+timestep. Its contents are effectively frozen at this point and may
+be altered by the operations of the <span class="keyword">WLIST</span> keyword.
+Similarly, if a static well list name is entered in item 1 of this
+keyword, then the list is emptied and henceforth is defined by the
+membership condition in this keyword. </li>
+
+<li> The contents of all dynamic well lists are reported in the .PRT
+file at each report time. </li>
+
+<li>If a well list or well list
+template is used in item 2, this can refer to either static or dynamic
+well lists. The order of evaluation of dynamic well lists is determined
+by the order of the <span class="keyword">WLISTDYN</span> keywords (or records
+within a keyword) in the data file, which may be significant if a
+dynamic well list is used. If the same well list is used in items
+1 and 2, no wells will match as the list is emptied as the first stage
+of evaluation. A well name template cannot be used due to potential
+ambiguity.</li>
+
+<li> <a href="WELLDIMS.html#WELLDIMS"> WELLDIMS</a> item 11 should not be defaulted if a well
+list is to be used in item 2, as ECLIPSE will be unable to add any
+well in it to the well list in item 1.</li>
+
+<li>If a UDQ is used in item 3,
+it is important to realise that a UDQ does not have the concept of
+being a production or injection type quantity, regardless of how it
+is defined. Care must be taken to avoid, for instance, closing injection
+wells because a UDQ based on their production is below a certain value.</li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The recovery plant option"/>
+<meta name="DC.subject" content="Gas plants and NGLs, Recovery plant"/>
+<meta name="keywords" content="Gas plants and NGLs, Recovery plant"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gas_plants_the_recovery_plant_option"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The recovery plant option</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="gas_plants_the_recovery_plant_option"><a name="gas_plants_the_recovery_plant_option"><!-- --></a>
+<h1 class="topictitle1">The recovery plant option</h1>
+
+
+ <div>
+<p>The recovery plant option takes all the gas exported from the field
+and processes this into NGLs and remaining gas. All other field quantities,
+such as GOR and gas-injection are reported prior to this processing.
+The aim of this facility is to model processing of the gas produced
+by the reservoir through facilities such as coolers, which can extract
+additional liquids from the stock tank gas.</p>
+
+<p>Recovery plant calculations are turned on if the <a href="../ecl_rm/RECOVERY.html#RECOVERY">RECOVERY</a> keyword is encountered.
+The recovery plant table may be specified in the <span class="keyword">SOLUTION</span> or <span class="keyword">SCHEDULE</span> sections, and may be re-specified
+during the <span class="keyword">SCHEDULE</span> section.</p>
+
+<p>The <span class="keyword">RECOVERY</span> keyword has two arguments, followed
+by a table of one or more rows of data.</p>
+
+<p>The first argument specifies the lower component index used to
+define the ‘heavy’ fraction. This defaults to the last component.</p>
+
+<p>The second argument specifies the upper component index used to
+define the ‘heavy’ fraction. This defaults to the last component.</p>
+
+<p>The table consists of                  <math><mrow>
+<msub><mrow><mi>N</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>m</mi><mi>p</mi><mi>s</mi></mrow></msub>
+<mo>+</mo><mn>1</mn></mrow></math> columns, where <math><mrow><msub><mrow>
+<mi>N</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>m</mi>
+<mi>p</mi><mi>s</mi></mrow></msub></mrow></math> is
+the number of components in the run, listing the NGL recovery fractions
+of each component as a function of the ‘heavy’ mole fraction. The
+recovery fraction is the number of moles of NGL per mole of feed for
+each component.          </p>
+
+<p>The defaults for items 1 and 2 imply that the recovery plant table
+is normally composed of recovery fractions against the mole fraction
+of the last component in the feed.</p>
+
+<p>An example would be:</p>
+
+<pre><code>RECOVERY 
+6 9 
+--Z9  CO2 N2    C1    C2      C3   C4-6 CZ7 CZ8 CZ9 
+  0.0 0.0 0.002 0.001 0.45000 0.65 0.98 1.0 1.0 1.0 
+  0.2 0.0 0.002 0.001 0.48000 0.68 0.99 1.0 1.0 1.0 
+/ </code></pre>
+<p>The feed used by the recovery table is the export gas from the
+field, which is the total gas production minus gas used for fuel and
+for reinjection.</p>
+
+<p>The volume of NGL produced is obtained using Amagat’s law, adding
+the partial molar volumes. The molar density used is that entered
+with <span class="keyword">DNGL</span>.</p>
+
+<p>The rate of production of recovered NGLs and of the remaining gas
+is reported in the printed output, and may be obtained from the <a href="../ecl_rm/SUMMARY.html#SUMMARY"> SUMMARY</a> section using the
+following keywords:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"><span class="keyword">FNRR</span></td>
+
+<td valign="top">NGL recovery volume rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">FNRT</span></td>
+
+<td valign="top">NGL recovery volume total</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">FNRM</span></td>
+
+<td valign="top">NGL recovery molar rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">FGRR</span></td>
+
+<td valign="top">gas remaining volume rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">FGRT</span></td>
+
+<td valign="top">gas remaining volume total</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">FGRM</span></td>
+
+<td valign="top">gas remaining molar rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">FXNR</span></td>
+
+<td valign="top">NGL recovery composition</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">FYGR</span></td>
+
+<td valign="top">gas remaining composition</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The rates and totals for the recovery process are also output to
+the <span class="keyword">PRINT</span> file under the <span class="keyword">REPORT</span> header, in the table headed ‘NGL recovery’. The compositions are
+reported in the same section in the table headed ‘Recovered NGLs and
+remaining gas’.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

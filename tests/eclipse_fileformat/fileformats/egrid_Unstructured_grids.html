@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Unstructured grids"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="egrid_unstructured_grids"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Unstructured grids</title>
+</head>
+<body>
+
+
+<div class="nested0" id="egrid_unstructured_grids"><a name="egrid_unstructured_grids"><!-- --></a>
+<h1 class="topictitle1">Unstructured grids</h1>
+
+
+ <div>
+<p>Keywords for unstructured grids are valid following a <span class="keyword">GRIDHEAD</span> keyword with type 2. Unstructured grids may of
+type “general” in which all cells, faces and nodes are
+specified explicitly, or may be “coordinate line based”
+in which a coordinate line description is used for the “2.5D”
+parts. They are arranged as follows:</p>
+
+<ol>
+<li>For 2.5D radial grids: <ol type="a">
+<li><span class="keyword">RADAXIS</span></li>
+
+<li><span class="keyword">RADANISO</span></li>
+
+</ol>
+ </li>
+
+<li>For 3D radial grids: <ol type="a">
+<li><span class="keyword">RAD3CAPK</span></li>
+
+<li><span class="keyword">RAD3AXIS</span></li>
+
+<li><span class="keyword">RAD3DIRS</span></li>
+
+<li><span class="keyword">RAD3ANIS</span> (optional)</li>
+
+</ol>
+ </li>
+
+<li><span class="keyword">AQUIFER</span> (optional)</li>
+
+<li>For a stand alone grid or the 1st grid in a composite grid (optional
+for coordinate line based unstructured grids): <ol type="a">
+<li><span class="keyword">NDCOORD</span></li>
+
+<li><span class="keyword">MODFACE</span> (only for coordinate line based grids)</li>
+
+<li><span class="keyword">NFACENOD</span></li>
+
+<li><span class="keyword">FACENODS</span></li>
+
+<li><span class="keyword">FACEHING</span></li>
+
+<li><span class="keyword">FACETYPS</span></li>
+
+<li><span class="keyword">FACEHALO</span></li>
+
+</ol>
+ </li>
+
+<li>For the first coordinate line based unstructured grid using the
+areal grid and coordinate line set (there can be multiple areal grids
+and coordinate line sets): <ol type="a">
+<li><span class="keyword">REPCELL</span></li>
+
+<li><span class="keyword">COORDTYP</span> (optional)</li>
+
+<li><span class="keyword">COORDSEG</span> (optional)</li>
+
+<li><span class="keyword">COORD</span></li>
+
+<li><span class="keyword">SPLIT</span> (optional)</li>
+
+<li><span class="keyword">NSPLITC</span> (optional)</li>
+
+<li><span class="keyword">SPLITC</span> (optional)</li>
+
+<li><span class="keyword">NULLCORN</span> (optional)</li>
+
+</ol>
+ </li>
+
+<li>At least one of the following: <ol type="a">
+<li><span class="keyword">ZCORN</span></li>
+
+<li><span class="keyword">EXICORN</span></li>
+
+<li><span class="keyword">XYZCORN</span></li>
+
+</ol>
+ </li>
+
+<li><span class="keyword">NCELL2D</span></li>
+
+<li><span class="keyword">CELL2D</span></li>
+
+<li><span class="keyword">ENDFACE</span> (optional)</li>
+
+<li><span class="keyword">SIDEFACE</span> (optional)</li>
+
+<li>For general unstructured grids and optionally for coordinate line
+based grids: <ol type="a">
+<li><span class="keyword">MODCELL</span> (only for coordinate line based grids)</li>
+
+<li><span class="keyword">NCELLFAC</span></li>
+
+<li><span class="keyword">CELLFACS</span></li>
+
+<li><span class="keyword">CELLCTRS</span> (not for coordinate line based grids)</li>
+
+</ol>
+ </li>
+
+<li><span class="keyword">SIMCELL</span> (optional for grids within a composite
+grid)</li>
+
+<li><span class="keyword">VIRCELL</span> (optional for grids within a composite
+grid)</li>
+
+<li><span class="keyword">EXTCELL</span> (optional for grids within a composite
+grid)</li>
+
+<li><span class="keyword">HOSTCELL</span> (For LGRs only)</li>
+
+<li><span class="keyword">AMALGAM</span> (For LGRs only)</li>
+
+</ol>
+
+<p>Note that nodes and faces are shared across unstructured grids
+within the same composite grid.</p>
+
+
+<div class="tablenoborder"><a name="egrid.tab.0381"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="egrid.tab.0381" frame="border" border="1" rules="all"><caption>
+           Table 28.1  Unstructured grid keywords </caption>    
+<thead align="left">
+<tr>
+<th valign="top" id="d24e264"> Keyword </th>
+
+<th valign="top" id="d24e267"> No. of Items </th>
+
+<th valign="top" id="d24e270"> Data Type </th>
+
+<th valign="top" id="d24e273"> Contents </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">RADAXIS</span> </td>
+
+<td valign="top" headers="d24e267 "> 6 </td>
+
+<td valign="top" headers="d24e270 ">REAL</td>
+
+<td valign="top" headers="d24e273 "> For a radial grid, two points defining the axis
+of rotation. <p>x1, y1, z1, x2, y2, z2.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">RADANISO</span> </td>
+
+<td valign="top" headers="d24e267 ">1</td>
+
+<td valign="top" headers="d24e270 ">REAL</td>
+
+<td valign="top" headers="d24e273 "> XY permeability scale. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">RAD3CAPK</span> </td>
+
+<td valign="top" headers="d24e267 "> 1 </td>
+
+<td valign="top" headers="d24e270 "> INTE </td>
+
+<td valign="top" headers="d24e273 "> For a 3D radial grid, the number of cells along
+the radial axis in each end cap. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">RAD3AXIS</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">3*(NZ+2*NCAP-1)</samp> </td>
+
+<td valign="top" headers="d24e270 ">REAL</td>
+
+<td valign="top" headers="d24e273 "> For a 3D radial grid, x,y,z coordinates for each
+point on the radial axis. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">RAD3DIRS</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">6*(2*NAXIS-1)</samp> </td>
+
+<td valign="top" headers="d24e270 ">REAL</td>
+
+<td valign="top" headers="d24e273 "> For a 3D radial grid, direction vectors giving
+disk directions, along and across the radial axis, alternately for
+each point on the radial axis and for each segment between points
+on the radial axis. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">RAD3ANIS</span> </td>
+
+<td valign="top" headers="d24e267 "> 3 </td>
+
+<td valign="top" headers="d24e270 ">REAL</td>
+
+<td valign="top" headers="d24e273 "> For a 3D radial grid, anisotropic scaling in
+x,y,z. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">AQUIFER</span> </td>
+
+<td valign="top" headers="d24e267 "> 1 </td>
+
+<td valign="top" headers="d24e270 "> CHAR </td>
+
+<td valign="top" headers="d24e273 "> Aquifer grid and type of aquifer ('NUMERICAL'). </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">NDCOORD</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">3*NNODES</samp> </td>
+
+<td valign="top" headers="d24e270 ">REAL</td>
+
+<td valign="top" headers="d24e273 "> Real data array <span class="keyword">NDCOORD</span>(<span class="keyword">NNODES</span>,3) of nodal coordinates x,y,z for each node in ascending
+order. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">MODFACE</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">NMFACES</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> List of implicit face IDs with modified nodes
+for coordinate line based grids. <span class="keyword">NFACENOD</span> and <span class="keyword">FACENODS</span> keywords following this only apply to the listed
+faces. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">NFACENOD</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">NFACES</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Integer array of number of nodes for each face,
+in ascending face order. Used in conjunction with <span class="keyword">FACENODS</span> to determine the nodes of each face. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">FACENODS</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">TOTAL NFACENOD</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Integer array of nodes. For each face in ascending
+order, the nodes of that face are listed. Used in conjunction with <span class="keyword">NFACENOD</span> to determine the nodes of each face. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">FACEHING</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">2*NHIFACES</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Face ID and hinge node ID pairs for each hinged
+face. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">FACETYPS</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">2*NFTYPES</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Face ID and face type (2-radial, 4 combined radial/linear,
+16 spherical) pairs for faces with non-standard face types. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">FACEHALO</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">2*NHAFACES</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Face ID and halo cell ID pairs for faces on LGR
+cells connecting to the parent grid. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">REPCELL</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">NRCELLS</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> List of cells replaced (in earlier grids) when
+new grids corresponding to the current areal grid and coordinate line
+set were added. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">COORDTYP</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">NCLINES</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Coordinate line types: 0 - undefined, 1 - vertical,
+2 - straight, 3 - segmented, -1 general. Not needed if coordinate
+lines all of same type. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">COORDSEG</span> </td>
+
+<td valign="top" headers="d24e267 ">1 or <samp class="codeph">NSECLINES</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Number of segments on each segmented coordinate
+line. If all segmented coordinate lines have the same number of segments
+then only a single value need be written. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">COORD</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">3*NCPTS</samp> </td>
+
+<td valign="top" headers="d24e270 "> REAL </td>
+
+<td valign="top" headers="d24e273 "> x,y,z triples for vertical, straight and segmented
+coordinate lines. Top and bottom points are written for vertical and
+straight coordinate lines, <span class="keyword">NSEG</span>+1 points are written
+for segmented coordinate lines. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">SPLIT</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">2*NSPCLINES</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Coordinate line index and number of unique splits
+for each split coordinate line. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">NSPLITC</span> </td>
+
+<td valign="top" headers="d24e267 ">&nbsp;</td>
+ 
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Number of cell corners shared by each unique
+split. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">SPLITC</span> </td>
+
+<td valign="top" headers="d24e267 ">&nbsp;</td>
+ 
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> List of areal cell IDs (positive for top cell,
+negative for bottom cell) shared by each unique split. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">NULLCORN</span> </td>
+
+<td valign="top" headers="d24e267 ">&nbsp;</td>
+ 
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Number of present values followed by number of
+missing values, in <span class="keyword">ZCORN</span>/<span class="keyword">EXICORN</span>/<span class="keyword">XYZCORN</span> order, repeated for all data. Only needed
+if there are missing values. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">ZCORN</span> </td>
+
+<td valign="top" headers="d24e267 ">&nbsp;</td>
+ 
+<td valign="top" headers="d24e270 ">REAL</td>
+
+<td valign="top" headers="d24e273 "> Z values on vertical coordinate lines, in order
+of unique splits, coordinate line index, then k layer. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">EXICORN</span> </td>
+
+<td valign="top" headers="d24e267 ">&nbsp;</td>
+ 
+<td valign="top" headers="d24e270 ">REAL</td>
+
+<td valign="top" headers="d24e273 "> Parameter values on straight and segmented coordinate
+lines, in order of unique splits, coordinate line index, then k layer.
+Parameters are scaled to be in the range 0 to 1 for straight coordinate
+lines and the first segment of segmented coordinate lines, 1 to 2
+for the next segment, then 2 to 3, and so on. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">XYZCORN</span> </td>
+
+<td valign="top" headers="d24e267 ">&nbsp;</td>
+ 
+<td valign="top" headers="d24e270 ">REAL</td>
+
+<td valign="top" headers="d24e273 "> x,y,z triples for points on general coordinate
+lines, in order of unique splits, coordinate line index, then k layer. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">NCELL2D</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">N2DCELLS</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Number of coordinate lines defining each areal
+cell. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">CELL2D</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">TOTAL 2DCELCLS</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> List of coordinate line indices for each areal
+cell. Cell center coordinate lines are automatically set from the
+last <span class="keyword">N2DCELL</span> coordinate lines. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">ENDFACE</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">N2DCELLS</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Local top layer 3D face IDs for each areal cell
+(add number of faces in earlier grids to get true 3D face ID), or
+-1 if implicit face not used. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">SIDEFACE</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">N2DEDGES</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Local top layer 3D face IDs for each areal cell
+edge (add number of faces in earlier grids and total number of end
+faces in this grid to get true 3D face ID), or -1 if implicit face
+not used. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">MODCELL</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">NMCELLS</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> List of implicit cell IDs with modified faces
+for coordinate line based grids. <span class="keyword">NCELLFAC</span> and <span class="keyword">CELLFACS</span> keywords following this only apply to the listed
+cells. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">NCELLFAC</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">NX*NY*NZ</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Integer array of number of faces each cell, in
+ascending cell ID order. A value of -1 indicates a non-present cell.
+Used in conjunction with <span class="keyword">CELLFACS</span> to determine
+the faces of each cell. <span class="keyword">NUMCELLS</span>=number of present
+cells. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">CELLFACS</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">TOTAL NCELLFAC</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Integer array of faces. For each present cell
+in ascending cell ID order, the faces of that cell are listed. Used
+in conjunction with NCELLFAC to determine the faces of each cell. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">CELLCTRS</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">3*NUMCELLS</samp> </td>
+
+<td valign="top" headers="d24e270 "> REAL </td>
+
+<td valign="top" headers="d24e273 "> Real data array <span class="keyword">CELLCTRS</span>(NUMCELLS,3)
+of coordinates x,y,z of present cell centers in ascending cell ID
+order. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">SIMCELL</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">NUMCELLS</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Integer array of mapping between present cell
+Ids and simulation cell Ids in ascending cell ID order. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">VIRCELL</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">NUMCELLS</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Integer array of mapping between present cell
+Ids and virtual cell Ids, in ascending cell ID order. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">EXTCELL</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">NUMCELLS</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Integer array of external cell Ids for each present
+cell. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">HOSTCELL</span> </td>
+
+<td valign="top" headers="d24e267 "> <samp class="codeph">NUMCELLS</samp> </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> Host cell ids for present local grid cells. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e264 "> <span class="keyword">AMALGAM</span> </td>
+
+<td valign="top" headers="d24e267 "> 4 </td>
+
+<td valign="top" headers="d24e270 ">INTE</td>
+
+<td valign="top" headers="d24e273 "> 1) number of domains <p>2) number of I-cells
+in external grid</p>
+<p>3) number of J-cells in external grid</p>
+<p>4) number of K-cells in external grid.</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The virtual grid is only for display purposes, and the external
+grid is a simplified simulation grid, relating to (I,J,K) values.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

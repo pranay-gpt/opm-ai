@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Each subsequent record"/>
+<meta name="DC.subject" content="DYNAMICR"/>
+<meta name="keywords" content="DYNAMICR"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="dynamicr_each_subsequent_record"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Each subsequent record</title>
+</head>
+<body>
+
+
+<div class="nested0" id="dynamicr_each_subsequent_record"><a name="dynamicr_each_subsequent_record"><!-- --></a>
+<h1 class="topictitle1">Each subsequent record</h1>
+
+
+ <div>
+<p>The conditions defined will be applied to the region number and
+name defined in record 1 above.</p>
+
+<p>Please refer to <a href="ACTIONX.html#actionx_each_subsequent_record"> "Each subsequent
+record"</a> for details of the format of a condition and lists
+of mnemonics.</p>
+
+<p>When <span class="keyword">DYNAMICR</span> is specified in the <span class="keyword">SOLUTION</span> section, many of the mnemonic values are not meaningful - for instance,
+no wells have yet been defined. Conditions containing undefined values
+will be ignored and a warning given.</p>
+
+<div class="section" id="dynamicr_specific_requirements_for_dynamicr_conditions"><a name="dynamicr_specific_requirements_for_dynamicr_conditions"><!-- --></a><h4 class="sectiontitle">Specific requirements for DYNAMICR conditions</h4><p>The
+left hand side of the condition must be either a block keyword or
+one of the <span class="keyword">DYNAMICR</span> special keywords. Grid indexes
+are not specified for the block keywords as each grid block will be
+considered individually in turn.</p>
+<p>To create a <span class="keyword">DYNAMICR</span> condition which is also dependent on a condition which is not evaluated
+block-by-block, the non-block-by-block condition should be specified
+in an <a href="ACTIONX.html#ACTIONX"> ACTIONX</a> keyword
+so that the <span class="keyword">DYNAMICR</span> keyword is only evaluated
+if the other condition is fulfilled. See examples.</p>
+</div>
+
+<div class="section" id="dynamicr_dynamicr_special_mnemonics"><a name="dynamicr_dynamicr_special_mnemonics"><!-- --></a><h4 class="sectiontitle">DYNAMICR
+special mnemonics</h4><p>Note that these mnemonics cannot be used
+with <a href="ACTIONX.html#ACTIONX">  ACTIONX</a>,
+and that the double quotes are required as part of the mnemonic.</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">DIST_TO_GRIDBLOCK</samp> </td>
+
+<td valign="top">This can be used on either the left or right hand side of a
+condition - or both. It is followed by the x, y, z indexes of the
+reference grid block. The distance to the center of this grid block
+is then evaluated for each grid block.<p>One or more of the indexes
+can be defaulted. If this is done, the default value used for each
+evaluation will be the same as that index for the grid block to which
+the distance is being calculated. This allows the calculation of the
+distance to a row or layer of cells rather than a single cell.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> Indexes cannot be defaulted when running in parallel. </span></div>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">DIST_TO_WELLNAME</samp> </td>
+
+<td valign="top">This can be used on either the left or right hand side of a
+condition - or both. It is followed by the name of the well and the
+number of the connection to be used. The distance to the center of
+the grid block in which the connection is situated is then evaluated
+for each grid block. Note that the connection number refers to a single
+grid block only. This mnemonic cannot be used in the <span class="keyword">SOLUTION</span> section since the wells have not yet been defined. See <a href="dynamicr_Examples.html#dynamicr.eg5"> Example 5</a>.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>ECLIPSE 300</p>
+<p>Template characters or well lists can be used in place of a well
+name. However, only the first well which matches the requirements
+will be considered. If, for instance, the minimum distance to one
+of two wells is required, two separate conditions on the two wells
+must be specified and combined using OR.</p>
+</div>
+
+<div class="section" id="dynamicr_dynamicr_special_conditions"><a name="dynamicr_dynamicr_special_conditions"><!-- --></a><h4 class="sectiontitle">DYNAMICR
+special conditions</h4><p>Note that these conditions cannot be
+used with <a href="ACTIONX.html#ACTIONX">  ACTIONX</a>, and that the double quotes are required as part of the condition.</p>
+<p>When “region families” are referred to generically, they can be
+either dynamic region families, or ordinary FIP region families defined
+in the <span class="keyword">REGIONS</span> section.</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">ALL</samp> </td>
+
+<td valign="top">this can be used in two ways:<ul>
+<li> As an entire condition by itself. This allows a default region
+value to be set for a particular dynamic region family without having
+to evaluate a quantity for every grid block. </li>
+
+<li> Or by following it with pairs of region family name + region
+number. This allows a dynamic region to be set up which combines all
+the cells in several regions. Up to three pairs can be specified per
+condition; if more than this are required then multiple <samp class="codeph">ALL</samp> conditions can be combined using the standard methods for combining
+conditions. </li>
+
+</ul>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">IN</samp> </td>
+
+<td valign="top">this condition has no associated value on the left hand side.
+The right hand side has a region family name and region number. Each
+grid block’s region number is set to the specified value if it is
+in the given region. Used alone, it simply duplicates an existing
+region. Its utility comes when it is combined with other conditions.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NOT_IN</samp> </td>
+
+<td valign="top"> this condition has no associated value on the left hand side.
+The right hand side has a region family name and region number. Each
+grid block’s region number is set to the specified value if it is
+not in the given region. It can be used simply to set up a region
+consisting of all those grid blocks not in an existing region, or
+in combination with other conditions.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> While it is possible to use <samp class="codeph">NOT_IN</samp> to set a default region value for all cells which don’t meet an
+already calculated complex condition, it requires much less computation
+to use <samp class="codeph">ALL</samp> to set a default value for all cells first. </span></div>
+</div>
+
+<div class="section" id="dynamicr_local_grids"><a name="dynamicr_local_grids"><!-- --></a><h4 class="sectiontitle">Local grids</h4><p>Dynamic
+regions cannot be specified for local grid blocks. However, if required,
+local grid mnemonics can be used on the right hand side of a condition
+in exactly the same way as for <a href="ACTIONX.html#ACTIONX">  ACTIONX</a>.</p>
+<p>The methods of use for this keyword
+are:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">Statically</td>
+
+<td valign="top"><span class="keyword">DYNAMICR</span> is used to define a region family
+in the <span class="keyword">SOLUTION</span> section, or once only in the <span class="keyword">SCHEDULE</span> section. Once defined, the region values for the
+cells never change. This is very similar to an ordinary FIP region
+family defined in the <span class="keyword">REGIONS</span> section, except that
+conditions can be used to determine the region values. See <a href="dynamicr_Examples.html#dynamicr.eg1"> Example 1</a>. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> Dynamically - automatic</td>
+
+<td valign="top">The <span class="keyword">DYNAMICR</span> keyword is specified inside
+an <span class="keyword">ACTIONX</span> keyword using the <samp class="codeph">ALWAYS</samp> condition. Region values will be recomputed every timestep. See <a href="dynamicr_Examples.html#dynamicr.eg2"> Example 2</a>. </td>
+
+</tr>
+
+<tr>
+<td valign="top">Dynamically - conditional</td>
+
+<td valign="top">The <span class="keyword">DYNAMICR</span> keyword is specified inside
+an <span class="keyword">ACTIONX</span> keyword using any condition. Normal <span class="keyword">ACTIONX</span> functionality is used to determine when the region
+values will be recomputed. See <span class="keyword">ACTIONX</span> examples
+for sample conditions.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> Dynamically - manual</td>
+
+<td valign="top">The <span class="keyword">DYNAMICR</span> keyword is specified at multiple
+points within the <span class="keyword">SCHEDULE</span> section for the same
+dynamic region family. Region values will be recomputed each time
+the keyword is encountered. There is no reason why the conditions
+on the region values should be the same in all definitions. See <a href="dynamicr_Examples.html#dynamicr.eg3"> Example 3</a>. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>These methods can be freely combined as required for a
+single dynamic region family.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

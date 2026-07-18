@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GPTABLE"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GPTABLE"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GPTABLE</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GPTABLE"><a name="GPTABLE"><!-- --></a>
+<h1 class="keyword">GPTABLE</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gptable.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gptable.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d876e45">  </th>
+
+<th valign="top" id="d876e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d876e54"> x </th>
+
+<th valign="top" id="d876e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d876e45 d876e54 ">  </td>
+
+<td valign="top" headers="d876e48 d876e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d876e45 d876e54 ">  </td>
+
+<td valign="top" headers="d876e48 d876e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d876e45 d876e54 ">  </td>
+
+<td valign="top" headers="d876e48 d876e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d876e45 d876e54 ">  </td>
+
+<td valign="top" headers="d876e48 d876e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d876e45 d876e54 ">  </td>
+
+<td valign="top" headers="d876e48 d876e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d876e45 d876e54 "> x </td>
+
+<td valign="top" headers="d876e48 d876e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d876e45 d876e54 ">  </td>
+
+<td valign="top" headers="d876e48 d876e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d876e45 d876e54 "> x </td>
+
+<td valign="top" headers="d876e48 d876e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword enables tables to be entered to control gas plants.
+(See <a href="../ecl_td/gas_plants_Gas_plant_tables.html#gas_plants_gas_plants_and_ngls">"Gas plants and
+NGLs"</a> in the <cite>ECLIPSE Technical Description</cite>.)</p>
+
+<p>The keyword contains the following items of data.</p>
+
+<ol>
+<li> The gas plant table number. <p>This should lie between 1 and
+the maximum number of gas plant tables, specified using the <a href="GPTDIMS.html#GPTDIMS">  GPTDIMS</a> keyword in
+the <span class="keyword">RUNSPEC</span> section.</p>
+ </li>
+
+<li> The lower component index used to define the heavy fractions. <p>This defaults to the last component.</p>
+ </li>
+
+<li> The upper component index used to define the heavy fractions. <p>This defaults to the last component.</p>
+ </li>
+
+<li> A table of recovery fractions versus heavy mole fraction. <p>Each value of the heavy mole fraction should be followed by N<sub>comps</sub>  values (where   N<sub>comps</sub>  is the number of
+components in the run). The set of   N<sub>comps</sub>  values lists
+the liquid recovery fractions for each hydrocarbon component (that
+is the number of moles of liquid per unit mole of feed for each component). </p>
+ <p>Thus there should be  N<sub>comps</sub> +1  numbers for each
+value of the heavy mole fraction. </p>
+ </li>
+
+</ol>
+
+<p>The table should be terminated with a slash.</p>
+
+<p>The defaults for items 2 and 3 imply that the gas plant table is
+normally of recovery fractions against the mole fraction of the last
+component in the feed.</p>
+
+<p>If the recoveries do not vary with the heavy mole fraction, it
+is only necessary to enter data for a single value of that heavy mole
+fraction.</p>
+
+<div class="section" id="gptable_example"><a name="gptable_example"><!-- --></a><h4 class="sectiontitle">Example</h4> <p>The first
+column contains the heavy component mole fractions, for the tenth
+component. The remaining columns are the recovery fractions of components
+1 to 10.</p>
+ <pre><code>GPTABLE
+1 10 10
+-- C7+  CO2 N2   C1   C2       C3    C4-6  C71  C72  C73 C74
+   0.0  0.0 0.00 0.00 0.00031  0.05  0.10  1.0  1.0  1.0 1.0
+   0.2  0.0 0.00 0.00 0.00032  0.07  0.12  1.0  1.0  1.0 1.0
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

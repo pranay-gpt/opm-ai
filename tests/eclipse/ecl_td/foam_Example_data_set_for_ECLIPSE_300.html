@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Example data set for ECLIPSE 300"/>
+<meta name="DC.subject" content="Enhanced oil recovery, Foam example, Foam, Example"/>
+<meta name="keywords" content="Enhanced oil recovery, Foam example, Foam, Example"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="foam_example_data_set_for_eclipse_300"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Example data set for ECLIPSE 300</title>
+</head>
+<body>
+
+
+<div class="nested0" id="foam_example_data_set_for_eclipse_300"><a name="foam_example_data_set_for_eclipse_300"><!-- --></a>
+<h1 class="topictitle1">Example data set for ECLIPSE 300</h1>
+
+
+ <div>
+<p>The <a href="foam_example_data_set_for_eclipse_100.html#foam_example_data_set_for_eclipse_100"> "Example
+data set for ECLIPSE 100"</a> can be modified to run with ECLIPSE
+300. A new well is added to inject the foam surfactant in the water
+phase. The functional model is used for the gas mobility. Two components
+are added, to represent the foam surfactant in the water phase and
+that adsorbed to the rock.</p>
+
+<div class="section" id="foam_runspec1"><a name="foam_runspec1"><!-- --></a><h4 class="sectiontitle">RUNSPEC</h4><p>The <span class="keyword">RUNSPEC</span> section is modified to include the water components,
+solid model and number of reactions. In addition the number of wells
+is increased:</p>
+<pre><code>RUNSPEC
+
+TITLE
+ Simple FOAM model example
+
+DIMENS
+ 10   10    3  /
+
+OIL
+WATER
+GAS
+SOLID         Solid component used to model adsorbed foam
+BLACKOIL
+COMPSOL
+3 /           Oil, gas and one solid component
+COMPW
+2 /           Water and foam surfactant components
+REACTION
+2 1 1* 1* 1 / Foam decay, adsorption/desorption
+FIELD
+
+EQLDIMS
+1  100   10    1    1 /
+
+TABDIMS
+2    1   16   12    2   12    1    1 /
+
+REGDIMS
+ 2    1    0    0    0    1 /
+
+WELLDIMS
+ 3    1    1    3 /
+
+NUPCOL
+ 4 /
+
+START
+ 19 'APR' 1994  /
+
+NSTACK
+ 24 /
+
+FMTOUT</code></pre></div>
+
+<div class="section" id="foam_grid1"><a name="foam_grid1"><!-- --></a><h4 class="sectiontitle">GRID</h4><p>The <span class="keyword">GRID</span> section is the same as the ECLIPSE 100 example:</p>
+<pre><code>GRID
+--     ARRAY  VALUE     ------- BOX ------
+EQUALS
+      'DX'    1000      /
+      'DY'    1000      /
+      'PORO'  0.3       /
+      'DZ'    20        1  10  1  10  1  1  /
+      'PERMX' 500       /
+      'MULTZ' 0.64      /
+      'TOPS'  8325      /
+      'DZ'    30        1  10  1  10  2  2  /
+      'PERMX' 50        /
+      'MULTZ' 0.265625  /
+      'DZ'    50        1  10  1  10  3  3  /
+      'PERMX' 200       /
+/       EQUALS IS TERMINATED BY A NULL RECORD
+
+-- THE Y AND Z DIRECTION PERMEABILITIES ARE COPIED FROM PERMX
+--    SOURCE  DESTINATION  ------- BOX ------
+COPY
+      'PERMX'    'PERMY'   1  10  1  10  1  3  /
+      'PERMX'    'PERMZ'   /
+/
+
+-- OUTPUT OF DX, DY, DZ, PERMX, PERMY, PERMZ, MULTZ, PORO AND TOPS DATA
+-- IS REQUESTED, AND OF THE CALCULATED PORE VOLUMES AND X, Y AND Z
+-- TRANSMISSIBILITIES
+RPTGRID 
+ 'DX'  'DY'  'DZ'  'PERMX'  'PERMY'  'PERMZ'  'MULTZ'
+ 'PORO'  'TOPS'  'PORV'  'TRANX'  'TRANY'  'TRANZ'  /</code></pre></div>
+
+<div class="section" id="foam_props1"><a name="foam_props1"><!-- --></a><h4 class="sectiontitle">PROPS</h4><p>The <span class="keyword">PROPS</span> section has a number of changes from the ECLIPSE 100 example:</p>
+<ul>
+<li> Solid component properties for adsorbed foam are specified </li>
+
+<li>Water component properties for water and the foam surfactant are
+specified</li>
+
+<li> The functional gas mobility reduction model is used </li>
+
+<li>A reaction is used to model foam decay</li>
+
+<li> Two reactions are used to model foam adsorption and desorption </li>
+
+</ul>
+<pre><code>PROPS 
+--
+--  SWAT   KRW   PCOW
+--
+SWFN
+ 0.12  0       0
+ 1.0   0.1     0  /
+/
+
+--
+--  SGAS   KRG   PCOG
+--
+SGFN
+    0     0       0
+    0.02  0       0
+    0.05  0.005   0
+    0.12  0.025   0
+    0.2   0.075   0
+    0.25  0.125   0
+    0.3   0.19    0
+    0.4   0.41    0
+    0.45  0.6     0
+    0.5   0.72    0
+    0.6   0.87    0
+    0.7   0.94    0
+    0.85  0.98    0
+    1.0   1.0     0
+/
+/
+
+-- OIL RELATIVE PERMEABILITY IS TABULATED AGAINST OIL SATURATION
+-- FOR OIL-WATER AND OIL-GAS-CONNATE WATER CASES
+--
+--  SOIL     KROW     KROG
+SOF3
+    0        0        0
+    0.18     0        0
+    0.28     0.0001   0.0001
+    0.38     0.001    0.001
+    0.43     0.01     0.01
+    0.48     0.021    0.021
+    0.58     0.09     0.09
+    0.63     0.2      0.2
+    0.68     0.35     0.35
+    0.76     0.7      0.7
+    0.83     0.98     0.98
+    0.86     0.997    0.997
+    0.879    1        1
+    0.88     1        1    /
+/
+
+--
+--    REF. PRES   COMPRESSIBILITY
+--
+ROCK
+        14.7          3.0D-6          /
+
+--
+-- SURFACE DENSITIES OF RESERVOIR FLUIDS
+--
+--        OIL   WATER   GAS
+DENSITY
+         49.1   64.79  0.06054  /
+
+--
+--   PGAS   BGAS   VISGAS
+PVDG
+     14.7 166.666   0.008
+    264.7  12.093   0.0096
+    514.7   6.274   0.0112
+   1014.7   3.197   0.014
+   2014.7   1.614   0.0189
+   2514.7   1.294   0.0208
+   3014.7   1.080   0.0228
+   4014.7   0.811   0.0268
+   5014.7   0.649   0.0309
+   9014.7   0.386   0.047   /
+
+--
+--   RS      POIL  FVFO  VISO
+PVTO
+    0.001    14.7 1.062  1.04    /
+    0.0905  264.7 1.15   0.975   /
+    0.18    514.7 1.207  0.91    /
+    0.371  1014.7 1.295  0.83    /
+    0.636  2014.7 1.435  0.695   /
+    0.775  2514.7 1.5    0.641   /
+    0.93   3014.7 1.565  0.594   /
+    1.270  4014.7 1.695  0.51
+           5014.7 1.671  0.549
+           9014.7 1.579  0.74    /
+    1.618  5014.7 1.827  0.449
+           9014.7 1.726  0.605   /
+/
+
+--Solid component properties
+CNAMES
+         OIL GAS SOLID /
+CVTYPE
+         1*  1*  SOLID /
+MW
+         1*  1*  18.015 /
+SDREF
+         1*  1*  62.964 /
+
+--Water component properties
+CWTYPE
+         1*      SURFF /    Water component 2 is foam surfactant
+MWW
+         18.015  18.015 /
+PREFW
+         4014.7  4014.7 /   PVTW item 1
+DREFW
+         62.964  62.964 /   (DENSITY item 2) / (PVTW item 2)
+CREFW
+         3.13D-6 3.13D-6 /  PVTW item 3
+VREFW
+         0.31    0.31
+         0       0     /    PVTW items 4 and 5
+
+--
+--Foam decay, adsorption and desorption
+--
+STOREAC
+--OIL  GAS  SOLID  WAT  SURF
+  0.0  0.0  0.0    0.0  1.0 /     Decay       SURF-&gt;WATER
+  0.0  0.0  1.0    0.0  0.0 /                 SOLID&lt;-&gt;SURF
+STOPROD
+--OIL  GAS  SOLID  WAT  SURF
+  0.0  0.0  0.0    1.0  0.0 /     Decay       SURF-&gt;WATER
+  0.0  0.0  0.0    0.0  1.0 /                 SOLID&lt;-&gt;SOLID
+REACRATE
+--DECAY    ADSO
+  0.000231 1.0  / Foam decay with constant half life 
+--                      = 3000 days
+EQLDREAC
+1 3 3 5 1 BOTH 1 / Rate proportional to SOLID - EQLDTAB_1(SURF)
+EQLDTAB
+0.0     0.00000
+0.001   0.22065
+1.000   0.22065 /
+REACCORD
+--OIL  GAS  SOLID  WAT  SURF
+  0.0  0.0  0.0    0.0  1.0 / Foam decay  proportional to SURF  conc
+  0.0  0.0  0.0    0.0  0.0 /
+--
+
+--
+--  GAS MOBILITY REDUCTION
+--
+FOAMFRM
+1.1 /
+1.1 /
+
+FOAMFSC
+0.001 0.1 1.0e-6 /
+0.001 0.1 1.0e-6 /
+
+FOAMFST
+0     10.0
+0.01   5.0
+0.05   0.1/
+0     11.0
+0.01   6.0
+0.05   0.2 /
+
+FOAMFCN
+1E-7 0.1 /
+1E-7 0.1 /
+
+--
+-- OUTPUT CONTROLS FOR PROPS DATA
+--
+RPTPROPS
+ 'FOAM'  /</code></pre></div>
+
+<div class="section" id="foam_regions1"><a name="foam_regions1"><!-- --></a><h4 class="sectiontitle">REGIONS</h4><p>The <span class="keyword">REGIONS</span> section is unchanged:</p>
+<pre><code>REGIONS
+EQUALS
+ 'SATNUM' 1 /
+ 'FIPNUM' 1 /
+ 'SATNUM' 2   1 3  1 3  1 3 /
+ 'FIPNUM' 2   1 3  1 3  1 3 /
+/</code></pre></div>
+
+<div class="section" id="foam_solution1"><a name="foam_solution1"><!-- --></a><h4 class="sectiontitle">SOLUTION</h4><p>The <span class="keyword">SOLUTION</span> section has been modified to include initial water
+composition. The initial solids are defaulted:</p>
+<pre><code>SOLUTION
+-- DATA FOR INITIALISING FLUIDS TO POTENTIAL EQUILIBRIUM
+--
+--    DATUM  DATUM   OWC    OWC    GOC    GOC    RSVD   RVVD   SOLN
+--    DEPTH  PRESS  DEPTH   PCOW  DEPTH   PCOG  TABLE  TABLE   METH
+EQUIL
+       8400   4800   8500    0     8200    0      1      0       0  /
+
+-- VARIATION OF INITIAL RS WITH DEPTH
+--
+--    DEPTH    RS
+RSVD
+       8200  1.270
+       8500  1.270  /
+--
+-- VARIATION OF INITIAL WATER COMPOSITION WITH DEPTH
+--
+--    DEPTH  WAT  SURF
+WMFVD
+       8200  1.0 0.0
+       8500  1.0 0.0  /
+
+--
+-- OUTPUT CONTROLS
+--
+RPTSOL
+ 'PRESSURE' 'SWAT' 'SGAS' 'FOAM' /</code></pre></div>
+
+<div class="section" id="foam_summary1"><a name="foam_summary1"><!-- --></a><h4 class="sectiontitle">SUMMARY</h4><p>The simulator
+specific <span class="keyword">SUMMARY</span> vectors are changed:</p>
+<pre><code>SUMMARY
+--REQUEST PRINTED OUTPUT OF SUMMARY FILE DATA
+RUNSUM
+
+-- FIELD OIL PRODUCTION
+FOPR
+
+-- WELL GAS-OIL RATIO FOR PRODUCER
+WGOR
+'PRODUCER'
+/
+
+-- WELL BOTTOM-HOLE PRESSURE
+WBHP
+'PRODUCER'
+/
+
+-- SATURATIONS IN INJECTION AND PRODUCTION CELL
+BGSAT
+10 10 3 /
+1  1  1 /
+/
+
+BOSAT
+10 10 3 /
+1  1  1 /
+/
+
+BWSAT
+10 10 3 /
+1  1  1 /
+/
+
+-- PRESSURE IN INJECTION AND PRODUCTION CELL
+BPR
+10 10 3
+1  1  1
+/
+
+BSSAT
+10 10 3 /
+1  1  1 /
+/
+BFOAM
+10 10 3 /
+1  1  1 /
+/
+BREAC
+10 10 3 1 /
+10 10 3 2 /
+10 10 3 3 /
+1  1  1 1 /
+1  1  1 2 /
+1  1  1 3 /
+/</code></pre></div>
+
+<div class="section" id="foam_schedule1"><a name="foam_schedule1"><!-- --></a><h4 class="sectiontitle">SCHEDULE</h4><p>The <span class="keyword">SCHEDULE</span> section has been modified to reflect the different
+foam injection method. Water alternating with gas (WAG) is injected.
+The water contains a foam surfactant to reduce the mobility of the
+following gas:</p>
+<pre><code>SCHEDULE
+-- CONTROLS ON OUTPUT AT EACH REPORT TIME
+RPTSCHED 
+ 'PRESSURE' 'SWAT' 'SGAS' 'SOIL' 'FOAM' 'WELLS=2' 'NEWTON=2' 'FIPFOAM=2'
+ 'FOAMMOB' /
+
+RPTRST
+ 'BASIC=3' 'FIP' 'FREQ=2' /
+
+
+
+-- WELL SPECIFICATION DATA
+--
+--     WELL   GROUP LOCATION  BHP   PI
+--     NAME   NAME    I  J   DEPTH DEFN
+WELSPECS
+    'PRODUCER' 'G'   10 10    8400 'OIL'  /
+    'GINJ'     'G'    1  1    8335 'GAS'  /
+    'WINJ'     'G'    1  1    8335 'WAT'  /
+/
+
+--
+-- SPECIFY THE FOAM INJECTOR
+--
+WELLSTRW
+   WATER  1.0 0.0 /   PURE WATER
+   FOAM   0.9 0.1 /   10% SURFACTANT IN WATER
+/
+WINJW
+   WINJ STREAM FOAM /   SET WELL WINJ TO USE THE FOAM STREAM
+/
+
+-- COMPLETION SPECIFICATION DATA
+--
+--     WELL     -LOCATION- OPEN/ SAT CONN  WELL
+--     NAME     I  J K1 K2 SHUT  TAB FACT  DIAM
+COMPDAT
+    'PRODUCER'  10 10 3  3 'OPEN' 0   -1   0.5  /
+    'GINJ'       1  1 1  1 'OPEN' 1   -1   0.5  /
+    'WINJ'       1  1 1  1 'OPEN' 1   -1   0.5  /
+/
+
+--
+-- PRODUCTION WELL CONTROLS
+--
+--      WELL     OPEN/  CNTL   OIL  WATER   GAS  LIQU   RES   BHP
+--      NAME     SHUT   MODE  RATE   RATE  RATE  RATE  RATE
+WCONPROD
+     'PRODUCER' 'OPEN' 'ORAT' 20000  4*                      1000 /
+/
+
+--
+-- INJECT FOAM
+--
+--      WELL     INJ   OPEN/  CNTL    FLOW
+--      NAME    TYPE   SHUT   MODE    RATE
+WCONINJE
+        'GINJ'   'GAS' 'SHUT' 'RATE'  100000  1* 10000 /
+        'WINJ'   'WAT' 'OPEN' 'RATE'   65000  1* 10000 /
+/
+TSTEP
+ 30 /
+
+-- INJECT GAS
+--
+--      WELL     INJ   OPEN/  CNTL    FLOW
+--      NAME    TYPE   SHUT   MODE    RATE
+WCONINJE
+        'GINJ'   'GAS' 'OPEN' 'RATE'  100000  1* 10000 /
+        'WINJ'   'WAT' 'SHUT' 'RATE'   65000  1* 10000 /
+/
+
+--
+-- INJECT FOAM
+--
+--      WELL     INJ   OPEN/  CNTL    FLOW
+--      NAME    TYPE   SHUT   MODE    RATE
+WCONINJE
+        'GINJ'   'GAS' 'SHUT' 'RATE'  100000  1* 10000 /
+        'WINJ'   'WAT' 'OPEN' 'RATE'   65000  1* 10000 /
+/
+TSTEP
+ 30 /
+
+-- INJECT GAS
+--
+--      WELL     INJ   OPEN/  CNTL    FLOW
+--      NAME    TYPE   SHUT   MODE    RATE
+WCONINJE
+        'GINJ'   'GAS' 'OPEN' 'RATE'  100000  1* 10000 /
+        'WINJ'   'WAT' 'SHUT' 'RATE'   65000  1* 10000 /
+/
+TSTEP
+ 70 / 
+
+END</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

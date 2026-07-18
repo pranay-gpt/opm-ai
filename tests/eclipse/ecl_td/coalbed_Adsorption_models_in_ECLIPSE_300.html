@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Adsorption models in ECLIPSE 300"/>
+<meta name="DC.subject" content="Unconventionals, Coal bed methane, Coal surface adsorption, Adsorption table input, Adsorption extended Langmuir isotherm, Adsorption, Gas re-adsorption into coal, Coal surface, Extended Langmuir isotherm"/>
+<meta name="keywords" content="Unconventionals, Coal bed methane, Coal surface adsorption, Adsorption table input, Adsorption extended Langmuir isotherm, Adsorption, Gas re-adsorption into coal, Coal surface, Extended Langmuir isotherm"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="coalbed_adsorption_models_in_eclipse_300"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Adsorption models in ECLIPSE 300</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="coalbed_adsorption_models_in_eclipse_300"><a name="coalbed_adsorption_models_in_eclipse_300"><!-- --></a>
+<h1 class="topictitle1">Adsorption models in ECLIPSE 300</h1>
+
+
+ <div>
+<p>The sorption models that can be used are:</p>
+
+<ul>
+<li> Table input, the adsorption capacities for each component are
+input by the <a href="../ecl_rm/LANGMUIR.html#LANGMUIR">LANGMUIR</a> keyword. </li>
+
+<li> The Extended Langmuir isotherm. See the keyword <a href="../ecl_rm/LANGMEXT.html#LANGMEXT">LANGMEXT</a>. </li>
+
+</ul>
+
+<div class="section" id="coalbed_table_input"><a name="coalbed_table_input"><!-- --></a><h4 class="sectiontitle">Table input</h4><p>Using
+the keyword <a href="../ecl_rm/LANGMUIR.html#LANGMUIR">LANGMUIR</a>, the adsorption capacities of each component are given versus
+pressure. Table lookup is done using the partial pressure, in order
+to determine the adsorption capacity of each component. The first
+row of the table is recommended to be at zero (partial) pressure,
+defining the minimum values to be zero. Thus if the component is not
+present the adsorption capacity is set to zero.</p>
+<p>The partial
+pressures, used to look up the adsorption capacities, are scaled with
+corresponding <a href="../ecl_rm/LANGMPL.html#LANGMPL">LANGMPL</a> values if this keyword is present.</p>
+</div>
+
+<div class="section" id="coalbed_extended_langmuir_isotherm"><a name="coalbed_extended_langmuir_isotherm"><!-- --></a><h4 class="sectiontitle">Extended Langmuir
+isotherm</h4><p>The Extended Langmuir isotherm <cite><span> <a href="biblio_Bibliography.html#biblio_56540">(Arri et al, 1992)</a> </span></cite> can be used to describe the coal sorption for the different
+components. See keyword <a href="../ecl_rm/LANGMEXT.html#LANGMEXT">LANGMEXT</a>.</p>
+<p>The adsorption capacity is a function of the pressure
+and the free gas phase composition. For each component, two parameters
+need to be input: the Langmuir volume constant  <math><msub><mtext>V</mtext>
+<mi>i</mi></msub></math>  and the Langmuir pressure constant
+ <math><msub><mtext>P</mtext><mi>i</mi></msub></math>. These parameters are
+typically determined from experiments. Different isotherms can be
+used in different regions of the field. See keyword <a href="../ecl_rm/COALNUM.html#COALNUM">COALNUM</a>.</p>
+<p>The multi-component
+adsorption capacity is calculated by:</p>
+<p> <math><mrow><msub><mrow>
+<mi>L</mi><mo>(</mo><mi>p</mi><mo>,</mo><mi>α</mi>
+<mo>,</mo><msub><mrow><mi>y</mi></mrow><mrow><mn>1</mn></mrow></msub><mo>,</mo><msub><mrow><mi>y</mi>
+</mrow><mrow><mn>2</mn></mrow></msub><mo>,</mo><mi>…</mi><mo>)</mo></mrow><mrow><mi>i</mi></mrow></msub>
+<mo>=</mo><mrow><mi>θ</mi><mfrac><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>s</mi></mrow></msub></mrow>
+<mrow><mi>R</mi><msub><mrow><mi>T</mi></mrow><mrow>
+<mi>s</mi></mrow></msub></mrow></mfrac><mo>(</mo>
+<mrow><msub><mstyle><mrow><mi>V</mi></mrow></mstyle><mrow><mi>i</mi></mrow></msub>
+<mfrac><mrow><msub><mrow><mi>y</mi></mrow><mrow><mi>i</mi></mrow></msub><mfrac><mrow><mi>α</mi><mi>p</mi>
+</mrow><mrow><msub><mstyle><mrow>
+<mi>P</mi></mrow></mstyle><mrow><mi>i</mi></mrow>
+</msub></mrow></mfrac></mrow><mrow><mn>1</mn><mo>+</mo>
+<mrow><munderover><mrow><mo>∑</mo></mrow><mrow><mtext>j=1</mtext></mrow><mrow>
+<msub><mrow><mtext>N</mtext>
+</mrow><mrow><mtext>comps</mtext>
+</mrow></msub></mrow></munderover><msub><mrow><mi>y</mi>
+</mrow><mrow><mi>j</mi></mrow></msub><mfrac><mrow><mi>α</mi><mi>p</mi></mrow><mrow><msub><mstyle><mrow><mi>P</mi></mrow></mstyle>
+<mrow><mi>j</mi></mrow></msub></mrow></mfrac></mrow>
+</mrow></mfrac></mrow><mo>)</mo></mrow></mrow></math> </p>
+<p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mi>θ</mi></math> </td>
+
+<td valign="top">  = Scaling factor</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub>
+<mi>P</mi><mi>s</mi></msub></math> </td>
+
+<td valign="top">  = Pressure at standard conditions</td>
+
+</tr>
+
+<tr>
+<td valign="top">R</td>
+
+<td valign="top">= Universal gas constant</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub>
+<mi>T</mi><mi>s</mi></msub></math> </td>
+
+<td valign="top">  = Temperature at standard conditions</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mstyle><mrow><mtext>V</mtext>
+</mrow></mstyle><mrow><mi>i</mi></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top"> = Langmuir volume constant for component i</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub>
+<mtext>P</mtext><mi>i</mi></msub></math> </td>
+
+<td valign="top"> = Langmuir pressure constant for component i</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub>
+<mtext>y</mtext><mi>i</mi></msub></math> </td>
+
+<td valign="top">  = Hydro carbon mole fraction in gas phase for component i</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mtext>p</mtext></math> </td>
+
+<td valign="top">  = Pressure</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>α</mi></mrow></math> </td>
+
+<td valign="top">  = Pressure multiplier as given by <a href="../ecl_rm/LANGMPL.html#LANGMPL">LANGMPL</a> </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>For the special case of a single component, the Extended
+Langmuir isotherm is identical to the usual Langmuir isotherm giving
+the storage capacity as a function of pressure only:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="coalbed.equ.009d"/>
+ <math><mrow><mrow>
+<mi>L</mi><mo>(</mo><mi>p</mi><mo>,</mo><mi>α</mi>
+<mo>)</mo></mrow><mo>=</mo><mrow><mi>θ</mi><mfrac>
+<mrow><msub><mrow><mi>P</mi></mrow><mrow><mi>s</mi>
+</mrow></msub></mrow><mrow><mi>R</mi><msub><mrow><mi>T</mi></mrow><mrow><mi>s</mi></mrow></msub></mrow>
+</mfrac><mo>(</mo><mrow><mstyle>
+<mrow><mi>V</mi></mrow></mstyle><mfrac><mrow><mfrac>
+<mrow><mi>α</mi><mi>p</mi></mrow><mstyle><mrow><mi>P</mi></mrow></mstyle>
+</mfrac></mrow><mrow><mn>1</mn><mo>+</mo><mfrac><mrow>
+<mi>α</mi><mi>p</mi></mrow><mstyle>
+<mrow><mi>P</mi></mrow></mstyle></mfrac></mrow></mfrac>
+</mrow><mo>)</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 489.1]
+              </td></tr></tbody></table><p>where <strong>V</strong> is the maximum storage capacity for the
+gas, referred to as the Langmuir volume constant, and <strong>P</strong> is
+the Langmuir pressure constant. The constants used in the Extended
+Langmuir formulation can hence be estimated from a series of single-component
+gas experiments.</p>
+<p>Since the Langmuir volume constant V is given
+as surface volume over coal weight, the simulator translates this
+to moles over coal weight using the ideal gas law (with the term  <math><mfrac><mrow><msub>
+<mi>P</mi><mi>s</mi></msub></mrow><mrow><mrow><mi>R</mi><msub><mi>T</mi><mi>s</mi></msub></mrow></mrow>
+</mfrac></math>).</p>
+<p>It is possible to scale the adsorption
+capacity by a factor  <math><mi>θ</mi></math>  for each cell in the grid with the <a href="../ecl_rm/LANGMULT.html#LANGMULT">LANGMULT</a> keyword. Typically
+this can be used to account for differences in ash or moisture contents.
+To apply a different scaling for each component the keyword <a href="../ecl_rm/LANGMULC.html#LANGMULC">LANGMULC</a> can be used.</p>
+<p>Note that <span class="keyword">LANGMULT</span> and <span class="keyword">LANGMULC</span> cannot be used together.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Time-dependent sorption"/>
+<meta name="DC.subject" content="Shale gas time-dependent sorption, Shale gas time-dependent sorption and matrix discretization, Shale gas, Time-dependent sorption"/>
+<meta name="keywords" content="Shale gas time-dependent sorption, Shale gas time-dependent sorption and matrix discretization, Shale gas, Time-dependent sorption"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="shalegas_time-dependent_sorption"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Time-dependent sorption</title>
+</head>
+<body>
+
+
+<div class="nested0" id="shalegas_time-dependent_sorption"><a name="shalegas_time-dependent_sorption"><!-- --></a>
+<h1 class="topictitle1">Time-dependent sorption</h1>
+
+
+ <div>
+<p>For the time-dependent method a simulation cell either contains
+free gas in a pore space or adsorbed gas in the rock. The rock is
+represented by one simulation cell and the pore volume by a connecting
+simulation cell. Darcy flow through a rock cell is not permitted.
+The usual pore volume of a cell now represents the rock volume where
+the imaginary micro pore space flow is accounted for by a diffusive
+flow equation. A cell having a non-zero coal region number as set
+by <a href="../ecl_rm/COALNUM.html#COALNUM">COALNUM</a> hence needs to specify a “porosity” value that
+corresponds to a rock fraction value or using the keyword <a href="../ecl_rm/ROCKFRAC.html#ROCKFRAC">ROCKFRAC</a>. For cells having
+a zero coal region number the porosity value correspond to the pore
+volume fraction.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">It is recommended that the <span class="keyword">ROCKFRAC</span> keyword
+is used to set the rock volume and not the porosity keyword <span class="keyword">PORO</span>.             </span></div>
+
+<p>If pore volume-pore volume connections exists a permeability value
+also need to be input in order to compute the transmissibility between
+the matrix subgrid cells. This is usually done by <a href="../ecl_rm/PERMX.html#PERMX">PERMX</a>.</p>
+
+<p> <br/><div class="imagebreak"><img src="../img/shalegas1.png" width="436px"/></div><br/>  </p>
+
+<div class="section" id="shalegas_matrix_discretization__nmatopts__and_time-dependent_sorption"><a name="shalegas_matrix_discretization__nmatopts__and_time-dependent_sorption"><!-- --></a><h4 class="sectiontitle">Matrix discretization (NMATOPTS) and time-dependent sorption</h4><p>Using the time-dependent method the primary matrix subgrid cells
+are used to define both the total pore volume and the total coal volume
+that is partitioned. The primary matrix subgrid cells need to be defined
+as coal by <a href="../ecl_rm/COALNUM.html#COALNUM"> COALNUM</a> in order to tell that the matrix contains adsorbed gas.
+To redefine the matrix subgrid cells with a coal region number the
+keyword <a href="../ecl_rm/COALNUMR.html#COALNUMR">COALNUMR</a> should be used.</p>
+<p>With the time-dependent sorption model,
+the diffusive flow of adsorbed gas can be studied in detail using
+the matrix discretization option. The coal region numbers need to
+be the same for all connected matrix sub-grid cells. Mixing pore volume
+and coal volume with the option is not generally recommended as the
+interpretation of the resulting response from the matrix, which might
+include Darcy flow, needs to be carefully considered. Usually in such
+cases, the basic multi-porosity model should be used where the connection
+transmissibilities/diffusivities are controlled by the user-input
+ sigma factors. Alternatively, the instant adsorption model can be
+used if appropriate. Darcy flow then controls the gas flowing towards
+the fractures within the pore space of the matrix.</p>
+<p>The matrix
+discretization option generates sigma factors for the connections.
+Thus for pore-volume to pore-volume connections, the permeabilities
+together with the generated sigma factor are used to generate the
+transmissibilities in a similar way as for dual porosity. It is possible
+to specify permeabilities individually for the different pore systems.
+If unspecified, the input permeability given to the primary matrix
+cell is used. The transmissibility would then be constructed according
+to the block volume of the sub-matrix grid cell and the permeability
+of the sub-matrix grid cell. Note that such a transmissibility must
+be viewed as an internal connection within the matrix block. The transport
+will be diffusive through a cell connected with a non-zero coal region
+number.</p>
+<p>For more information about the diffusive flow see <a href="coalbed_Introduction.html#coalbed_introduction"> "Coal bed methane
+model"</a>.</p>
+<p>The second item of <a href="../ecl_rm/NMATOPTS.html#NMATOPTS">NMATOPTS</a> specifies a fraction
+of either the fracture pore volume or a fraction of the matrix block
+volume to be used for the first primary matrix grid cell. The method
+is selected by the third item of <span class="keyword">NMATOPTS</span>. With
+the time-dependent method, it is usually better to specify a fraction
+of the matrix block volume since the first matrix sub-grid cell is
+not necessary a pore volume cell. Similarly if all the cells in the
+matrix are defined as rock cells (cells with a coal region number)
+there is no pore volume represented in the matrix. This means that
+if a non-zero pore volume is assigned to the primary matrix block
+on input, the volume will be neglected. Warnings are issued if this
+is the case. It should also be noted that if the third item of <span class="keyword">NMATOPTS</span> is put to <span class="keyword">FPORV</span> and there is
+no pore volume within the matrix, the partitioning method switches
+to use the <span class="keyword">MBLKV</span> method for this matrix grid cell.
+Warnings are issued if this is the case. Any rock volume that is assigned
+to cells that are not coal cells will not alter the simulation results.
+Using the <span class="keyword">FPORV</span> method with <span class="keyword">NMATOPTS</span>, the first matrix block will get a size that will match the specified
+pore volume under the assumption that all the matrix blocks have a
+pore volume. However, if only some of the sub-matrix cells have a
+pore volume, a normalization of the input porosity is applied to these
+cells in order to match the input matrix grid cells total pore volume.
+As an example, if only one sub-matrix grid cell is a pore volume cell,
+the entire matrix pore volume is assigned to this sub-matrix grid
+cell.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

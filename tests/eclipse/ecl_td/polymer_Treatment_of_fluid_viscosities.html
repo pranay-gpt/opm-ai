@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Treatment of fluid viscosities"/>
+<meta name="DC.subject" content="The ECLIPSE 100 polymer flood simulation model treatment of fluid viscosities, Polymer flood, Fluid viscosity, Viscosity"/>
+<meta name="keywords" content="The ECLIPSE 100 polymer flood simulation model treatment of fluid viscosities, Polymer flood, Fluid viscosity, Viscosity"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="polymer_treatment_of_fluid_viscosities"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Treatment of fluid viscosities</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="polymer_treatment_of_fluid_viscosities"><a name="polymer_treatment_of_fluid_viscosities"><!-- --></a>
+<h1 class="topictitle1">Treatment of fluid viscosities</h1>
+
+
+ <div>
+<p>The viscosity terms used in the fluid flow equations contain the
+effects of a change in the viscosity of the aqueous phase due to the
+presence of polymer and salt in the solution. However, to incorporate
+the effects of physical dispersion at the leading edge of the slug
+and also the fingering effects at the rear edge of the slug the fluid
+components are allocated effective viscosity values that are calculated
+using the Todd-Longstaff technique.</p>
+
+<p>Consider the effective polymer viscosity term. The viscosity of
+a fully mixed polymer solution as an increasing function of the polymer
+concentration in solution (<math><mrow><msub><mrow>
+<mi>μ</mi></mrow><mrow><mi>m</mi></mrow></msub><mo>⁡</mo><mrow><mo>(</mo><msub><mrow><mi>C</mi></mrow>
+<mrow><mi>p</mi></mrow></msub><mo>)</mo></mrow></mrow>
+</math>) must be input. The viscosity of the solution at the maximum
+polymer concentration also needs to be specified and denotes the injected
+polymer concentration in solution (<math><msub>
+<mi>μ</mi><mi>p</mi></msub></math>). The effective polymer
+viscosity is taken to be:          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="polymer.XID-000000a7"/>
+ <math><mrow><msub><mrow>
+<mi>μ</mi></mrow><mrow><mi>p</mi><mo>,</mo><mtext> eff</mtext></mrow></msub><mo>=</mo><msup><mrow><mo>(</mo><mrow><msub><mrow><mi>μ</mi></mrow><mrow><mi>m</mi></mrow></msub><mo>⁡</mo><mrow><mo>(</mo><msub>
+<mrow><mi>C</mi></mrow><mrow><mi>p</mi></mrow></msub>
+<mo>)</mo></mrow></mrow><mo>)</mo></mrow><mrow><mi>ω</mi></mrow></msup><mo>⋅</mo><msubsup><mrow><mi>μ</mi></mrow><mrow><mi>p</mi></mrow><mrow><mtext> </mtext><mn>1</mn><mo>-</mo><mi>ω</mi></mrow>
+</msubsup></mrow></math> 
+</td><td align="right">[Eq. 435.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mi>ω</mi></math> </td>
+
+<td valign="top">is the Todd-Longstaff mixing parameter.     </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The mixing parameter is useful in modeling the degree of segregation
+between the water and the injected polymer solution. If  <math><mrow><mi>ω</mi>
+<mo>=</mo><mn>1</mn></mrow></math> t hen the polymer solution
+and water are fully mixed in each.          </p>
+
+<p>If <math><mrow><mi>ω</mi>
+<mo>=</mo><mn>0</mn></mrow></math>, the polymer solution
+is completely segregated from the water.          </p>
+
+<p>The partially mixed water viscosity is calculated in an analogous
+manner using the fully mixed polymer viscosity and the pure water
+viscosity (<math><msub><mi>μ</mi>
+<mi>w</mi></msub></math>):          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="polymer.XID-0000008a"/>
+ <math><mrow><msub><mrow>
+<mi>μ</mi></mrow><mrow><mi>w</mi><mo>,</mo><mi>e</mi>
+</mrow></msub><mo>=</mo><msup><mrow><mo>(</mo><mrow>
+<msub><mrow><mi>μ</mi></mrow><mrow><mi>m</mi></mrow>
+</msub><mo>⁡</mo><mrow><mo>(</mo><msub><mrow><mi>C</mi></mrow><mrow><mi>p</mi></mrow></msub><mo>)</mo>
+</mrow></mrow><mo>)</mo></mrow><mrow><mi>ω</mi></mrow>
+</msup><mo>⋅</mo><msubsup><mrow><mi>μ</mi></mrow>
+<mrow><mi>w</mi></mrow><mrow><mtext> </mtext><mn>1</mn>
+<mo>-</mo><mi>ω</mi></mrow></msubsup></mrow></math> 
+</td><td align="right">[Eq. 435.2]
+              </td></tr></tbody></table>
+<p>In order to calculate the effective water viscosity to be inserted
+into equation <a href="polymer_The_polymer_flood_simulation_model.html#polymer.XID-0000002e">434.1</a>, the total water equation is written as the sum of contributions
+from the polymer solution and the pure water. The following expression
+then gives the effective water viscosity to be inserted into equation <a href="polymer_The_polymer_flood_simulation_model.html#polymer.XID-0000002e">434.1</a>:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="polymer.XID-00000091"/>
+ <math><mrow><mfrac><mrow>
+<mn>1</mn></mrow><mrow><msub><mrow><mi>μ</mi></mrow>
+<mrow><mi>w</mi><mo>,</mo><mtext> eff</mtext></mrow>
+</msub></mrow></mfrac><mo>=</mo><mfrac><mrow><mn>1</mn>
+<mo>-</mo><mover><mrow><mi>C</mi></mrow><mrow><mo> ¯</mo></mrow></mover></mrow><mrow><msub><mrow>
+<mi>μ</mi></mrow><mrow><mi>w</mi><mo>,</mo><mi>e</mi>
+</mrow></msub></mrow></mfrac><mo>+</mo><mfrac><mrow>
+<mover><mrow><mi>C</mi></mrow><mrow><mo> ¯</mo>
+</mrow></mover></mrow><mrow><msub><mrow><mi>μ</mi>
+</mrow><mrow><mi>p</mi><mo>,</mo><mtext> eff</mtext>
+</mrow></msub></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 435.3]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="polymer.equ.0094"/>
+ <math><mrow><mover><mrow>
+<mi>C</mi></mrow><mrow><mo> ¯</mo></mrow></mover>
+<mo>=</mo><mfrac><mrow><msub><mrow><mi>C</mi></mrow>
+<mrow><mi>p</mi></mrow></msub></mrow><mrow><msub>
+<mrow><mi>C</mi></mrow><mrow><mi>p</mi><mo>,</mo>
+<mtext> max</mtext></mrow></msub></mrow></mfrac></mrow>
+</math> 
+</td><td align="right">[Eq. 435.4]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><mover><mrow>
+<mi>C</mi></mrow><mrow><mo> ¯</mo></mrow></mover>
+</mrow></math> </td>
+
+<td valign="top">is the effective saturation for the injected polymer solution
+within the total aqueous phase in the cell.    </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>If the brine option is active, the above expressions still hold
+for the effective polymer and water viscosity terms. The injected
+salt concentration needs to be specified in order to evaluate the
+maximum polymer solution viscosity,                  <math><msub><mi>μ</mi>
+<mi>p</mi></msub></math>. The effective salt component viscosity
+to be used in equation <a href="polymer_The_polymer_flood_simulation_model.html#polymer.Xpolymer.equ.0034">434.3</a>  is set equal to the effective water viscosity.          </p>
+
+<p>Note that the effective viscosities are computed at the pressure
+of the oil phase.</p>
+
+<div class="section" id="polymer_treatment_of_fluid_viscosities_in_the_well"><a name="polymer_treatment_of_fluid_viscosities_in_the_well"><!-- --></a><h4 class="sectiontitle">Treatment of fluid viscosities in the well</h4><p>The multisegment
+well and friction well models both include frictional pressure drops
+which depend upon fluid viscosity. Polymer bearing water will by default
+have a viscosity as defined by equation <a href="polymer_Treatment_of_fluid_viscosities.html#polymer.equ.0094">435.4</a>, where the Todd-Longstaff mixing parameter <math><mi>ω</mi></math>  is assigned to the well using the <a href="../ecl_rm/WELSPECS.html#WELSPECS"> WELSPECS</a> or <a href="../ecl_rm/WELSPECL.html#WELSPECL"> WELSPECL</a> keyword. There is
+a further option to control this viscosity; which is using the keyword <a href="../ecl_rm/WPOLYRED.html#WPOLYRED"> WPOLYRED</a> to set the polymer
+reduction factor  <math><mi>α</mi></math>. The water phase viscosity in the wellbore is then calculated as </p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="polymer.Xpolymer.Xpolymer.equ.00a7"/>
+ <math><msub><mi>μ</mi>
+<mi>w</mi></msub><mo>=</mo><msub><mrow><msub><mrow>
+<mi>α</mi><mi>μ</mi></mrow><mrow><mi>w</mi><mtext> eff</mtext></mrow></msub><mo>+</mo><mrow><mo>(</mo>
+<mn>1</mn><mrow><mo>-</mo><mi>α</mi></mrow><mo>)</mo>
+<mi>μ</mi></mrow></mrow><mi>w</mi></msub></math> 
+</td><td align="right">[Eq. 435.5]
+              </td></tr></tbody></table><p>Polymer and water are assumed to travel with the same
+velocity in the wellbore.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="MULTIREG"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="MULTIREG"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>MULTIREG</title>
+</head>
+<body>
+
+
+<div class="nested0" id="MULTIREG"><a name="MULTIREG"><!-- --></a>
+<h1 class="keyword">MULTIREG</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="multireg.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="multireg.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1444e45"> x </th>
+
+<th valign="top" id="d1444e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1444e54"> x </th>
+
+<th valign="top" id="d1444e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1444e45 d1444e54 ">  </td>
+
+<td valign="top" headers="d1444e48 d1444e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1444e45 d1444e54 "> x </td>
+
+<td valign="top" headers="d1444e48 d1444e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1444e45 d1444e54 "> x </td>
+
+<td valign="top" headers="d1444e48 d1444e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1444e45 d1444e54 "> x </td>
+
+<td valign="top" headers="d1444e48 d1444e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1444e45 d1444e54 "> x </td>
+
+<td valign="top" headers="d1444e48 d1444e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1444e45 d1444e54 "> x </td>
+
+<td valign="top" headers="d1444e48 d1444e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1444e45 d1444e54 ">  </td>
+
+<td valign="top" headers="d1444e48 d1444e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1444e45 d1444e54 ">  </td>
+
+<td valign="top" headers="d1444e48 d1444e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p><span class="keyword">MULTIREG</span> is similar to the <a href="MULTIPLY.html#MULTIPLY"> MULTIPLY</a> keyword, but
+uses either <a href="FLUXNUM.html#FLUXNUM"> FLUXNUM</a> flux regions, <a href="MULTNUM.html#MULTNUM"> MULTNUM</a> regions or <a href="OPERNUM.html#OPERNUM"> OPERNUM</a> regions, rather than boxes of cells.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the items of data described below, and each terminated by a slash
+(/).</p>
+
+<p>The records can be terminated early using the slash character (/),
+the remaining items taking default values. Defaults can also be specified
+by a null repeat count of the form n*, where n is the number of consecutive
+items to be defaulted.</p>
+
+<p>Each record consists of the following items of data:</p>
+
+<ol>
+<li>The name of the array to be modified</li>
+
+<li>The constant by which the array, specified by item 1, is to be
+multiplied <p>The constant should not be negative, and, for the <span class="keyword">REGIONS</span> section, should be an integer.</p>
+ <p>DEFAULT:
+0.0</p>
+</li>
+
+<li>The flux region number, <span class="keyword">MULTNUM</span> region number
+or <span class="keyword">OPERNUM</span> region number (with choice of region
+determined using item 4) The flux region number refers to the region
+defined using the <span class="keyword">FLUXNUM</span> keyword in the <span class="keyword">GRID</span> section. It is not necessary to use the Flux Boundary
+option. <p>The <span class="keyword">MULTNUM</span> region number refers to
+the region defined using the <span class="keyword">MULTNUM</span> keyword in
+the <span class="keyword">GRID</span> section.</p>
+ <p>The <span class="keyword">OPERNUM</span> region number refers to the region defined using the <span class="keyword">OPERNUM</span> keyword in the <span class="keyword">GRID</span> or <span class="keyword">REGIONS</span> section.</p>
+</li>
+
+<li>Choice of region: MULTNUM (M), FLUXNUM (F) or OPERNUM (O). <p>DEFAULT:  M</p>
+</li>
+
+</ol>
+
+<p>The set of records is ended by a blank record, containing only
+a slash (/).</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The <span class="keyword">FLUXNUM</span> keyword, <span class="keyword">MULTNUM</span> keyword or <span class="keyword">OPERNUM</span> keyword must be entered before
+the <span class="keyword">MULTIREG</span> keyword. If item 4 is defaulted, then
+the <span class="keyword">MULTNUM</span> keyword is used.</span></div>
+
+<p>In ECLIPSE 100, this keyword may not be used
+to modify the <a href="PBUB.html#PBUB"> PBUB</a> or <a href="PDEW.html#PDEW"> PDEW</a> arrays.</p>
+
+<p>In ECLIPSE 300, this keyword may be used in <span class="keyword">SCHEDULE</span> section. However, this is a specialist facility.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">In the <span class="keyword">SCHEDULE</span> section, regions (predefined
+by the <span class="keyword">FIPxxxx</span> keyword in the <span class="keyword">REGIONS</span> section) can be used in item 4.</span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

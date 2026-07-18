@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Convergence criteria"/>
+<meta name="DC.subject" content="Solution of the linear equations convergence criteria, Solution of the linear equations, Convergence criteria"/>
+<meta name="keywords" content="Solution of the linear equations convergence criteria, Solution of the linear equations, Convergence criteria"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sollineq_convergence_criteria"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Convergence criteria</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="sollineq_convergence_criteria"><a name="sollineq_convergence_criteria"><!-- --></a>
+<h1 class="topictitle1">Convergence criteria</h1>
+
+
+ <div>
+<p>The convergence criterion in ECLIPSE 100 is based on the maximum
+residuals for each phase. These are normalized to represent effective
+saturation normalized residuals so that the convergence criteria are
+physically meaningful in terms of saturation changes.</p>
+
+<p>In the ECLIPSE 300 formulation, because the equations are formulated
+in terms of pressure and molar densities, it is more appropriate to
+base the convergence criterion on a reduction in root mean square
+residual.</p>
+
+<p>The convergence criteria for the linear equations in both ECLIPSE
+100 and ECLIPSE 300 are described in more detail below.</p>
+
+<div class="section" id="sollineq_eclipse_100"><a name="sollineq_eclipse_100"><!-- --></a><h4 class="sectiontitle">ECLIPSE
+100 convergence criteria</h4><p>Convergence of the linear solver
+can be monitored by setting the 7th parameter of keyword <span class="keyword">DEBUG</span> greater than zero. If set to 1, a debug report is
+generated showing, at each iteration for each phase:</p>
+<ol>
+<li id="sollineq.XID-00000173"><a name="sollineq.XID-00000173"><!-- --></a> Saturation normalized root mean square
+residuals, </li>
+
+<li id="sollineq.XID-00000175"><a name="sollineq.XID-00000175"><!-- --></a> Residual sums (material balance errors)
+and  </li>
+
+<li id="sollineq.XID-00000177"><a name="sollineq.XID-00000177"><!-- --></a> Absolute maximum saturation normalized
+residuals.</li>
+
+</ol>
+<p>The Orthomin procedure is set to minimize item 1 above. Item
+2 should be zero to within rounding error, while item 3 is used to
+test for convergence. The standard convergence criterion is that the
+maximum saturation normalized residual, <math><mrow><msub><mrow>
+<mo>|</mo><mi>r</mi><mo>|</mo></mrow><mrow><mtext>max</mtext></mrow></msub></mrow></math>, be less than <samp class="codeph">TRGLCV</samp> (= 0.0001). The value of <samp class="codeph"> TRGLCV </samp> may be reset using keyword <a href="../ecl_rm/TUNING.html#TUNING"> TUNING</a>, but this is seldom necessary and should not be done without
+good reason. Convergence is also assumed if <math><mrow><msub><mrow>
+<mo>|</mo><mi>r</mi><mo>|</mo></mrow><mrow><mtext>max</mtext></mrow></msub></mrow></math> is less than  <math><mrow><mrow><mtext>MIN</mtext></mrow><mrow><mo>(</mo><mrow><mn>0.1</mn>
+</mrow><msub><mrow><mrow><mo>|</mo><mi>b</mi><mo>|</mo></mrow></mrow><mrow><mi>max</mi></mrow></msub>
+<mo>,</mo><msub><mrow><mn>0.001</mn><mi>r</mi></mrow>
+<mrow><mtext>top</mtext></mrow></msub><mo>,</mo><mtext>XXXLCV</mtext><mo>)</mo></mrow></mrow></math>. The default
+setting of <samp class="codeph">XXXLCV</samp> is 0.001 and this may also be reset
+in <span class="keyword">TUNING</span>, <math><mrow><msub><mrow>
+<mo>|</mo><mi>b</mi><mo>|</mo></mrow><mrow><mtext>max</mtext></mrow></msub></mrow></math> is the largest
+saturation normalized input residual and r<sub>top</sub> is the greatest
+saturation normalized residual to occur at any stage of the procedure.
+r<sub>top</sub> may be much larger than <math><mrow><msub><mrow>
+<mo>|</mo><mi>b</mi><mo>|</mo></mrow><mrow><mtext>max</mtext></mrow></msub></mrow></math> because the colsum
+constraint makes the initial residuals quite large. Values of the
+step length, s, and the orthogonalizations coefficients (beta) are
+also printed in the debug output. The perfect step is s = 1.0, but
+this is seldom achieved. If the seventh <a href="../ecl_rm/DEBUG.html#DEBUG"> DEBUG</a> parameter is set to
+2 then the sum of the absolute un-normalized residuals is printed
+corresponding to the input residual, b, and the final residual,  <math><mi>r</mi><mo>=</mo>
+<mi>b</mi><mrow><mo>-</mo><mrow><mi>A</mi><mi>x</mi>
+</mrow></mrow></math>. This is the ‘residual from solution check’.
+If the seventh <span class="keyword">DEBUG</span> parameter is set to 3 then
+residual maps are printed for each phase at each iteration.</p>
+</div>
+
+<div class="section" id="sollineq_eclipse_300"><a name="sollineq_eclipse_300"><!-- --></a><h4 class="sectiontitle">ECLIPSE
+300 convergence criteria</h4><p>The convergence criterion on the
+linear solver is a reduction in RMS of the residual, so that convergence
+is achieved at the nth iteration if</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.018f"/>
+ <math><mrow><mfrac>
+<mrow><msub><mrow><mrow><mo>‖</mo><mi>R</mi><mo>‖</mo></mrow></mrow><mrow><mn>2</mn></mrow></msub>
+</mrow><mrow><msub><mrow><mo>‖</mo><msup><mrow><mi>R</mi></mrow><mrow><mi>o</mi></mrow></msup><mo>‖</mo>
+</mrow><mrow><mn>2</mn></mrow></msub></mrow></mfrac>
+<mo>&lt;</mo><mrow><mi>T</mi><mi>O</mi><mi>L</mi>
+</mrow></mrow></math> 
+</td><td align="right">[Eq. 678.1]
+              </td></tr></tbody></table><p>where</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.0193"/>
+ <math><mrow><msub>
+<mrow><mo>‖</mo><mi>R</mi><mo>‖</mo></mrow><mrow>
+<mn>2</mn></mrow></msub><mo>⁢</mo><mo>=</mo><msqrt>
+<mrow><mfrac><mrow><munderover><mrow><mi>Σ</mi></mrow><mrow><mi>i</mi><mo>⁢</mo><mo>=</mo>
+<mtext> </mtext><mn>1</mn></mrow><mrow><mi>N</mi>
+</mrow></munderover><mo>⁢</mo><mtext> </mtext><munderover>
+<mrow><mi>Σ</mi></mrow><mrow><mi>c</mi><mo>⁢</mo><mo>=</mo><mtext> </mtext><mn>1</mn>
+</mrow><mrow><msub><mrow><mi>N</mi></mrow><mrow><mi>c</mi><mi>i</mi></mrow></msub></mrow></munderover>
+<msup><mrow><mo>(</mo><mfrac><mrow><msub><mrow><mi>R</mi></mrow><mrow><mi>i</mi><mo>,</mo><mtext> </mtext>
+<mi>c</mi></mrow></msub></mrow><mrow><msub><mrow><mi>P</mi><mi>V</mi></mrow><mrow><mi>i</mi></mrow></msub>
+</mrow></mfrac><mo>)</mo></mrow><mrow><mn>2</mn>
+</mrow></msup></mrow><mrow><mi>N</mi></mrow></mfrac>
+</mrow></msqrt><mtext> </mtext></mrow></math> 
+</td><td align="right">[Eq. 678.2]
+              </td></tr></tbody></table><p>with</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mi>R</mi></math> </td>
+
+<td valign="top">  = linear residual</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msup>
+<mrow><mi>R</mi></mrow><mrow><mi>o</mi></mrow></msup>
+</math> </td>
+
+<td valign="top">  = initial linear residual</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub>
+<mi>R</mi><mrow><mi>i</mi><mo>,</mo><mi>c</mi>
+</mrow></msub></math> </td>
+
+<td valign="top">  = residual for equation  <math><mi>c</mi></math>  in grid cell  <math>
+<mi>i</mi></math>  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>P</mi><msub><mi>V</mi><mi>i</mi></msub></mrow>
+</math> </td>
+
+<td valign="top">  = pore volume for cell  <math><mi>i</mi></math>          </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>N</mi></math> </td>
+
+<td valign="top">  = total number of active cells</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub>
+<mi>N</mi><mrow><mi>c</mi><mi>i</mi></mrow></msub>
+</math> </td>
+
+<td valign="top">  = number of equations for cell  <math><mi>i</mi></math>          </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>T</mi><mi>O</mi><mi>L</mi></mrow></math> </td>
+
+<td valign="top">  = RMS convergence tolerance specified in <a href="../ecl_rm/CVCRIT.html#CVCRIT">CVCRIT</a> (default 1.0E-5).</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

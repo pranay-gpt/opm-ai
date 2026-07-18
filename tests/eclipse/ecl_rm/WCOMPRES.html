@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WCOMPRES"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WCOMPRES"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WCOMPRES</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WCOMPRES"><a name="WCOMPRES"><!-- --></a>
+<h1 class="keyword">WCOMPRES</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wcompres.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wcompres.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2830e45">  </th>
+
+<th valign="top" id="d2830e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2830e54"> x </th>
+
+<th valign="top" id="d2830e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2830e45 d2830e54 "> x </td>
+
+<td valign="top" headers="d2830e48 d2830e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2830e45 d2830e54 ">  </td>
+
+<td valign="top" headers="d2830e48 d2830e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2830e45 d2830e54 ">  </td>
+
+<td valign="top" headers="d2830e48 d2830e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2830e45 d2830e54 ">  </td>
+
+<td valign="top" headers="d2830e48 d2830e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2830e45 d2830e54 ">  </td>
+
+<td valign="top" headers="d2830e48 d2830e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2830e45 d2830e54 ">  </td>
+
+<td valign="top" headers="d2830e48 d2830e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2830e45 d2830e54 ">  </td>
+
+<td valign="top" headers="d2830e48 d2830e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2830e45 d2830e54 ">  </td>
+
+<td valign="top" headers="d2830e48 d2830e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword may be used to reduce to memory requirements of a
+simulation with a large number of wells, some of which have many connections,
+but most have relatively few connections. In such circumstances, internal
+well arrays holding connection data that are dimensioned to the maximum
+number of connections per well multiplied by the maximum number of
+wells (see items 1 and 2 of <a href="WELLDIMS.html#WELLDIMS"> WELLDIMS</a>) will be wasteful of memory. If this keyword is specified,
+these internal arrays will be dimensioned to the actual number of
+well connections in the simulation, which you can specify in item
+1 below. Alternatively, if item 1 is defaulted, a pre-sweep of the <span class="keyword">SCHEDULE</span> section keywords will be performed to estimate
+the number of well connections in the simulation. Both the actual
+and estimated number of connections are reported in the print file
+at the end of the simulation.</p>
+
+<p>The keyword is followed by one record containing one item and must
+be terminated with a slash (/).</p>
+
+<ol>
+<li>Number of well connections in the simulation. <p>DEFAULT: This
+quantity will be estimated by a pre-sweep of the Schedule section
+keywords that define wells and well connections.</p>
+ </li>
+
+</ol>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">In some circumstances, the number of connections estimated by
+the pre-sweep or that you have set may be less than the actual number
+of connections required during the simulation. For example, this will
+happen if new connections are defined in a flexible restart run that
+are not present in the base run. (A pre-sweep of the restart data
+may not be reliable, and is thus banned, as some or all of the <span class="keyword">SCHEDULE</span> section keywords may have been deleted before
+the timestepping keyword at the restart time.) In these circumstances,
+extra space for the internal well arrays will be automatically reallocated
+by increasing the number of connections in blocks of ten.</span></div>
+
+<div class="section" id="wcompres_example"><a name="wcompres_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WCOMPRES
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

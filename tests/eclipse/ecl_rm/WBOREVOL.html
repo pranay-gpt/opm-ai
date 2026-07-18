@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WBOREVOL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WBOREVOL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WBOREVOL</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+<div class="nested0" id="WBOREVOL"><a name="WBOREVOL"><!-- --></a><h1 class="keyword">WBOREVOL</h1>
+
+ <div>
+<div class="tablenoborder"><a name="wborevol.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wborevol.tab.0005" class="flagtable" frame="border" border="1" rules="all">  <thead align="left"><tr><th valign="top" id="d2824e35"> x </th>
+<th valign="top" id="d2824e37"> ECLIPSE 100 </th>
+</tr>
+<tr><th valign="top" id="d2824e40">  </th>
+<th valign="top" id="d2824e42"> ECLIPSE 300 </th>
+</tr>
+</thead>
+<tbody><tr><td valign="top" headers="d2824e35 d2824e40 ">  </td>
+<td valign="top" headers="d2824e37 d2824e42 "> RUNSPEC </td>
+</tr>
+<tr><td valign="top" headers="d2824e35 d2824e40 ">  </td>
+<td valign="top" headers="d2824e37 d2824e42 "> GRID </td>
+</tr>
+<tr><td valign="top" headers="d2824e35 d2824e40 ">  </td>
+<td valign="top" headers="d2824e37 d2824e42 "> EDIT </td>
+</tr>
+<tr><td valign="top" headers="d2824e35 d2824e40 ">  </td>
+<td valign="top" headers="d2824e37 d2824e42 "> PROPS </td>
+</tr>
+<tr><td valign="top" headers="d2824e35 d2824e40 ">  </td>
+<td valign="top" headers="d2824e37 d2824e42 "> REGIONS </td>
+</tr>
+<tr><td valign="top" headers="d2824e35 d2824e40 ">  </td>
+<td valign="top" headers="d2824e37 d2824e42 "> SOLUTION </td>
+</tr>
+<tr><td valign="top" headers="d2824e35 d2824e40 ">  </td>
+<td valign="top" headers="d2824e37 d2824e42 "> SUMMARY </td>
+</tr>
+<tr><td valign="top" headers="d2824e35 d2824e40 "> x </td>
+<td valign="top" headers="d2824e37 d2824e42 "> SCHEDULE </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This keyword specifies an effective wellbore volume for individual
+wells, to enable ECLIPSE to model wellbore storage effects in well
+tests. ECLIPSE calculates the well solution variables (BHP, water
+fraction and gas fraction) by solving a material balance equation
+for each phase in each well:</p>
+<p>production rate = inflow through connections - material accumulation
+in wellbore.</p>
+<p>Normally, the accumulation term is made negligible by giving the
+wellbore a very small volume (1.0<sup>-5</sup> FT<sup>3</sup>). But
+the keyword <span class="keyword">WBOREVOL</span> allows you to specify a larger
+volume, enabling ECLIPSE to model wellbore storage effects through
+the accumulation term. The keyword should be entered <strong>before</strong> the <a href="WCONPROD.html#WCONPROD"> WCONPROD</a> or <a href="WELOPEN.html#WELOPEN"> WELOPEN</a> keyword
+that opens or stops the well at the start of the test. Note that in
+order to calculate the BHP variation in a shut-in test, the well must
+be <strong>stopped</strong> rather than <strong>shut</strong>.</p>
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+<ol><li> Well name, well name template, well list or well list template <p>A template enclosed in quotes can be used to refer to multiple wells
+or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+ </li>
+<li> Effective wellbore volume <p>UNITS: m<sup>3</sup> (<samp class="codeph">METRIC</samp>), ft<sup>3</sup> (<samp class="codeph">FIELD</samp>), cc (<samp class="codeph">LAB</samp>), m<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 1.0E-5,
+giving negligible storage effects.</p>
+<p>The default
+wellbore volume for standard wells can now be <strong>reduced</strong> by a
+factor of 10<sup> <a href="OPTIONS.html#options.258">OPTIONS(258)</a> </sup>.</p>
+ </li>
+<li> Well BHP at start of test <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma
+(<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: Pressure in the grid block
+containing the topmost connection in the well. (This is a suitable
+value for the start of the flowing period, provided that the bottom
+hole datum depth has been defaulted in item 5 of keyword <a href="WELSPECS.html#WELSPECS"> WELSPECS</a>. If the bottom
+hole datum is set at any other depth, you should either set the initial
+BHP here if it is known, or let the well reach its initial BHP by
+running it <strong>stopped</strong> for a while before the test.)</p>
+ <p>The
+setting of the initial BHP is ignored if the wellbore volume is 1.0E-5
+or less, as this turns the wellbore storage facility off.</p>
+ </li>
+</ol>
+<p>End the data record with a slash (/).</p>
+<p>End the set of records with a blank record, containing just a slash.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> This keyword must <strong>not</strong> be used for multisegment wells
+(see <a href="../ecl_td/multisegintro_Multi-segment_Wells.html#multisegintro_multi-segment_wells">"Multisegment wells"</a> in the <cite>ECLIPSE Technical Description</cite>). Their wellbore
+volumes are set when their segments are defined in keyword <a href="WELSEGS.html#WELSEGS"> WELSEGS</a>.</span></div>
+<div class="section" id="wborevol_example"><a name="wborevol_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WBOREVOL
+-- well name    wellbore volume    initial pressure
+    PRODUCER         17600       /
+/</code></pre></div>
+<div class="section" id="wborevol_the_effective_wellbore_volume"><a name="wborevol_the_effective_wellbore_volume"><!-- --></a><h4 class="sectiontitle">The effective
+wellbore volume</h4><p>The effective wellbore volume can be determined
+from the dimensionless wellbore storage coefficient, as shown below.</p>
+<p>The dimensionless wellbore storage coefficient, C<sub>D</sub>,
+is defined as:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wborevol.equ.0083"/> <math><msub><mi>C</mi><mi>D</mi></msub><mo>=</mo><mfrac><mrow><mi>C</mi></mrow><mrow><mrow><mn>2</mn><mi>π</mi><mi>φ</mi><msub><mi>c</mi><mi>t</mi></msub><mi>h</mi><msubsup><mi>r</mi><mi>w</mi><mn>2</mn></msubsup></mrow></mrow></mfrac></math> </td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  <tbody><tr><td valign="top"> <math><mi>C</mi></math> </td>
+<td valign="top"> is the wellbore storage coefficient     </td>
+</tr>
+<tr><td valign="top"> <math><mi>π</mi></math> </td>
+<td valign="top"> is 3.14159   </td>
+</tr>
+<tr><td valign="top"> <math><mi>φ</mi></math> </td>
+<td valign="top">is the formation porosity     </td>
+</tr>
+<tr><td valign="top"> <math><msub><mi>c</mi><mi>t</mi></msub></math> </td>
+<td valign="top"> is the total compressibility of the system (fluid + rock)
+     </td>
+</tr>
+<tr><td valign="top"> <math><mi>h</mi></math> </td>
+<td valign="top"> is the formation thickness   </td>
+</tr>
+<tr><td valign="top"> <math><msub><mi>r</mi><mi>w</mi></msub></math> </td>
+<td valign="top"> is the wellbore radius.    </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The wellbore storage coefficient C is defined as the increase
+in the volume of fluid that the wellbore can store per unit increase
+in pressure,</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wborevol.equ.0094"/> <math><mrow><mi>C</mi><mo>⁢</mo><mo>=</mo><mtext> </mtext><mfrac><mrow><mi>d</mi><mi>V</mi></mrow><mrow><mi>d</mi><mi>P</mi></mrow></mfrac></mrow></math> </td><td align="right">[Eq. 247.2]
+              </td></tr></tbody></table><p>For storage due to fluid expansion in the wellbore,</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wborevol.equ.0098"/> <math><mi>C</mi><mo>=</mo><mrow><msub><mi>c</mi><mi>w</mi></msub><msub><mi>V</mi><mi>w</mi></msub></mrow></math> </td><td align="right">[Eq. 247.3]
+              </td></tr></tbody></table><div class="p">where
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  <tbody><tr><td valign="top">c<sub>w</sub></td>
+<td valign="top"> is the compressibility of the fluid in the wellbore</td>
+</tr>
+<tr><td valign="top">V<sub>w </sub></td>
+<td valign="top">is the effective volume of the wellbore.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Thus the effective wellbore volume is related to the
+dimensionless storage coefficient by:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wborevol.equ.00a1"/> <math><msub><mi>V</mi><mi>w</mi></msub><mo>=</mo><mfrac><mrow><mrow><mn>2</mn><mi>π</mi><mi>φ</mi><msub><mi>c</mi><mi>t</mi></msub><mi>h</mi><msubsup><mi>r</mi><mi>w</mi><mn>2</mn></msubsup><msub><mi>C</mi><mi>D</mi></msub></mrow></mrow><mrow><msub><mi>c</mi><mi>w</mi></msub></mrow></mfrac></math> </td><td align="right">[Eq. 247.4]
+              </td></tr></tbody></table></div>
+</div>
+</div>
+
+</body>
+</html>

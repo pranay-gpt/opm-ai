@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SOR"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SOR"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SOR</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="SOR"><a name="SOR"><!-- --></a>
+<h1 class="keyword">SOR</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="sor.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="sor.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2378e45">  </th>
+
+<th valign="top" id="d2378e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2378e54"> x </th>
+
+<th valign="top" id="d2378e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2378e45 d2378e54 ">  </td>
+
+<td valign="top" headers="d2378e48 d2378e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2378e45 d2378e54 ">  </td>
+
+<td valign="top" headers="d2378e48 d2378e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2378e45 d2378e54 ">  </td>
+
+<td valign="top" headers="d2378e48 d2378e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2378e45 d2378e54 "> x </td>
+
+<td valign="top" headers="d2378e48 d2378e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2378e45 d2378e54 ">  </td>
+
+<td valign="top" headers="d2378e48 d2378e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2378e45 d2378e54 ">  </td>
+
+<td valign="top" headers="d2378e48 d2378e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2378e45 d2378e54 ">  </td>
+
+<td valign="top" headers="d2378e48 d2378e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2378e45 d2378e54 ">  </td>
+
+<td valign="top" headers="d2378e48 d2378e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword should be used in conjunction with <a href="EOS.html#EOS"> EOS</a> compositional simulations. It specifies
+a residual oil saturation that does not vaporize. Residual oil could
+be modeled in a number of ways: by using heavy oil components that
+do not vaporize (though these would be mobile); by using critical
+oil saturations (though the oil would be volatile); by using <a href="SOLID.html#SOLID"> SOLID</a> components; or by
+using dual porosity (<a href="DUALPORO.html#DUALPORO"> DUALPORO</a>). The <span class="keyword">SOR</span> model is intended as a simple
+alternative to these.</p>
+
+<p><span class="keyword">SOR</span> is a replacement for <a href="SORMW1.html#SORMW1"> SORMW1</a> and works in a different way. In
+the <span class="keyword">SOR</span> model, the hydrocarbons are divided into
+two: residual oil and mobile hydrocarbons. The residual oil composition
+remains fixed throughout the simulation. It is treated as a separate
+phase that does not flow and does not contribute to the flash. It
+does contribute to the cell oil saturation and calculations of saturation
+functions such as relative permeabilities. The residual oil phase
+can be thought of as being trapped in pores, separate from the mobile
+hydrocarbon in the cell. The residual oil has only two properties:
+compressibility and saturation.</p>
+
+<p>In the residual oil model, the oil saturation is divided into two
+parts, the mobile oil saturation and the residual oil saturation:</p>
+
+<p>  <math><mrow><mi>S</mi>
+<mi>O</mi><mi>I</mi><mi>L</mi></mrow><mo>=</mo>
+<mrow><mi>S</mi><mi>O</mi><mi>I</mi><mi>L</mi><mi>M</mi></mrow><mo>+</mo><mrow><mi>S</mi><mi>O</mi>
+<mi>I</mi><mi>L</mi><mi>R</mi></mrow></math> </p>
+
+<p>The residual oil saturation given by this keyword is the fraction
+of the pore volume that is residual oil. It is not the fraction of
+the hydrocarbon volume (as used by some other authors).</p>
+
+<div class="section" id="sor_related_keywords"><a name="sor_related_keywords"><!-- --></a><h4 class="sectiontitle">Related keywords</h4><p>Three optional keywords can be used with <span class="keyword">SOR</span>.</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <a href="SOILR.html#SOILR"> SOILR</a> </td>
+
+<td valign="top">By default the residual oil saturation is set by the <span class="keyword">SOR</span> keyword, with the same value for all cells in each
+saturation region. However, the <span class="keyword">SOILR</span> keyword can
+be used to override the <span class="keyword">SOR</span> values and specify
+the residual oil saturation on a cell-by-cell basis.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <a href="ROMF.html#ROMF"> ROMF</a> </td>
+
+<td valign="top">By default the residual oil composition is set equal to the
+initial oil composition in each cell, but the <span class="keyword">ROMF</span> keyword can be used to specify the composition directly.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <a href="SOROPTS.html#SOROPTS"> SOROPTS</a> </td>
+
+<td valign="top">By default the residual oil saturation in a cell remains constant
+throughout the simulation. However a more physically realistic compressibility
+model can be set using the <span class="keyword">SOROPTS</span> keyword.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+<div class="section" id="sor_initialization"><a name="sor_initialization"><!-- --></a><h4 class="sectiontitle">Initialization</h4><p>The
+way the initial residual oil is calculated varies, depends on whether
+the <a href="ROMF.html#ROMF"> ROMF</a> keyword is
+used. The presence of <span class="keyword">ROMF</span> also effects mobile
+oil, water and gas saturation calculations.</p>
+<ul>
+<li>If the <span class="keyword">ROMF</span> keyword is used to set the residual
+oil composition, then the mobile oil composition is set equal to the
+original cell composition, and mixed with the residual oil in proportion <math><mrow><mn>1</mn>
+<mo>⁢</mo><mo>−</mo><mtext> </mtext><msub><mrow><mi>S</mi><mi>O</mi><mi>I</mi><mi>L</mi><mi>R</mi>
+</mrow><mrow><mi>o</mi></mrow></msub></mrow></math>: <math><mrow><msub><mrow>
+<mi>S</mi><mi>O</mi><mi>I</mi><mi>L</mi><mi>R</mi>
+</mrow><mrow><mi>o</mi></mrow></msub></mrow></math>, where  <math><mrow>
+<msub><mrow><mi>S</mi><mi>O</mi><mi>I</mi><mi>L</mi>
+<mi>R</mi></mrow><mrow><mi>o</mi></mrow></msub></mrow>
+</math> is the initial residual oil saturation, equal to the <span class="keyword">SOR</span> or <a href="SOILR.html#SOILR"> SOILR</a> value. Regarding saturation calculations, it is assumed that the <math><mrow><msub><mrow>
+<mi>S</mi><mi>O</mi><mi>I</mi><mi>L</mi><mi>R</mi>
+</mrow><mrow><mi>o</mi></mrow></msub></mrow></math> value is equal to the pore volume value containing residual oil
+and hence only <math>
+<mrow><mn>1</mn><mo>−</mo><msub><mrow><mi>S</mi><mi>O</mi><mi>I</mi><mi>L</mi><mi>R</mi></mrow><mrow>
+<mn>0</mn></mrow></msub></mrow></math> remains available
+for gas, water and mobile oil. For example, for <span class="keyword">SOR</span> set to 0.3, <a href="SOIL.html#SOIL"> SOIL</a> to 0.84 and <a href="SWAT.html#SWAT"> SWAT</a> to 0.16, this yields mobile oil saturation equal to 0.7*0.84 and
+water saturation equal to 0.7*0.16.</li>
+
+<li>If the <span class="keyword">ROMF</span> keyword is not used, the oil in
+the cell is partitioned into residual oil and mobile oil. If there
+is not enough oil in the cell, the initial residual oil saturation
+is reduced to the initial oil saturation <math><mrow>
+<msub><mrow><mi>S</mi><mi>O</mi><mi>I</mi><mi>L</mi>
+<mi>R</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>&lt;</mo><msub><mrow><mi>S</mi><mi>O</mi><mi>I</mi>
+<mi>L</mi></mrow><mrow><mi>o</mi></mrow></msub></mrow>
+</math>. The residual oil composition will be equal to the initial
+oil composition. In this case, the oil saturation is split between
+mobile oil and residual oil saturations. For a model with <span class="keyword">SOR</span> set to 0.3, <span class="keyword">SOIL</span> to 0.84 and <span class="keyword">SWAT</span> to 0.16, the mobile oil saturation is equal to 0.84-0.3
+and the water saturation equal to 0.16.</li>
+
+</ul>
+</div>
+
+<div class="section" id="sor_simulation"><a name="sor_simulation"><!-- --></a><h4 class="sectiontitle">Simulation</h4><p>The number
+of residual oil moles in a cell stays constant throughout the simulation,
+which means the concentration will change as the pressure changes.</p>
+<p>The mobile hydrocarbons are flashed in the usual way to determine
+the phase split and phase properties (such as density and viscosity).
+The phase saturations are then modified to include the residual oil.
+Therefore relative permeabilities and capillary pressures will be
+based on the total oil saturation in the cell. It is recommended that
+the oil relative permeability is set to zero for oil saturations below
+the residual oil saturation.</p>
+</div>
+
+<div class="section" id="sor_output"><a name="sor_output"><!-- --></a><h4 class="sectiontitle">Output</h4><p>Reported oil saturations <span class="keyword">SOIL</span> represent the total oil saturation, including both
+residual and mobile oil. Other fluid properties (such as oil phase
+density, viscosity, <span class="keyword">XMF</span>) are for the mobile hydrocarbon
+only. In the case where there is no mobile oil, the cell hydrocarbon
+state will be single phase gas, although the cell may contain residual
+oil and water. Apart from saturation, the oil phase properties for
+cells with no mobile hydrocarbon are meaningless; this is also true
+of oil phase properties for gas-filled cells in normal simulations,
+but may seem surprising since these cells can have a non-zero (residual)
+oil saturation.</p>
+<p>Fluid in place calculations are performed using
+both the residual oil and the mobile hydrocarbons.</p>
+<p>The composition
+of the residual oil and the saturations of residual and mobile oil
+can be output to the print file <a href="RPTSOL.html#RPTSOL"> RPTSOL</a>, <a href="RPTSCHED.html#RPTSCHED"> RPTSCHED</a>, the restart file <a href="RPTRST.html#RPTRST"> RPTRST</a>, and the summary file, using the following mnemonics and
+keywords:</p>
+
+<div class="tablenoborder"><a name="sor.tab.0076"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="sor.tab.0076" frame="border" border="1" rules="all"><caption>
+           Table 247.3  Residual and mobile oil output keywords</caption>   
+<thead align="left">
+<tr>
+<th valign="top" id="d2378e561"> </th>
+
+<th valign="top" id="d2378e564"> RPTSOL/RPTSCHED/RPTRST </th>
+
+<th valign="top" id="d2378e567"> SUMMARY vector </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2378e561 "> Residual oil composition </td>
+
+<td valign="top" headers="d2378e564 "> <samp class="codeph">ROMLS</samp> </td>
+
+<td valign="top" headers="d2378e567 "> <span class="keyword">BROMLS</span> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2378e561 "> Residual oil saturation </td>
+
+<td valign="top" headers="d2378e564 "> <samp class="codeph">SOILR</samp> </td>
+
+<td valign="top" headers="d2378e567 "> <span class="keyword">BSOILR</span> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2378e561 "> Residual oil compressibility (see <a href="SOROPTS.html#SOROPTS"> SOROPTS</a>) </td>
+
+<td valign="top" headers="d2378e564 "> <samp class="codeph">COILR</samp> </td>
+
+<td valign="top" headers="d2378e567 "> <span class="keyword">BCOILR</span> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2378e561 "> Mobile oil saturation </td>
+
+<td valign="top" headers="d2378e564 "> <samp class="codeph">SOILM</samp> </td>
+
+<td valign="top" headers="d2378e567 "> <span class="keyword">BSOILM</span> </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+<div class="section" id="sor_keyword_data"><a name="sor_keyword_data"><!-- --></a><h4 class="sectiontitle">Keyword data</h4><p>The data
+comprises <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a>  (set in the <span class="keyword">TABDIMS</span> keyword) values,
+each terminated by a slash. Each value represents the residual oil
+saturation in each saturation region and should be between 0 and 1.
+Values close to 1 may cause convergence issues, since the effective
+pore volume (that is that available to flow) is proportional to <math><mn>1</mn><mrow>
+<mo>-</mo><mrow><mi>S</mi><mi>O</mi><mi>I</mi><mi>L</mi><mi>R</mi></mrow></mrow></math>. </p>
+</div>
+
+<div class="section" id="sor_example"><a name="sor_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With  <samp class="codeph">NTSFUN</samp> = 2</p>
+ <pre><code>SOR
+  .1  /
+ .15  /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

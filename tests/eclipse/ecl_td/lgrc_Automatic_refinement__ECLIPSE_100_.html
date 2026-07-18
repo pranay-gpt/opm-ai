@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Automatic refinement (ECLIPSE 100)"/>
+<meta name="DC.subject" content="Local grid refinement automatic refinement, Automatic refinement, Local grid refinement, Automatic"/>
+<meta name="keywords" content="Local grid refinement automatic refinement, Automatic refinement, Local grid refinement, Automatic"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrc_automatic_refinement__eclipse_100_"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Automatic refinement (ECLIPSE 100)</title>
+</head>
+<body>
+
+
+<div class="nested0" id="lgrc_automatic_refinement__eclipse_100_"><a name="lgrc_automatic_refinement__eclipse_100_"><!-- --></a>
+<h1 class="topictitle1">Automatic refinement (ECLIPSE 100)</h1>
+
+
+ <div>
+<p>The Automatic Refinement facility permits the grid to be refined
+as a reverse process to coarsening, with minimal change to the input
+data. This is useful for the automatic scaling of existing data sets
+for massively parallel computations, and for performing grid refinement
+sensitivity studies. There are several caveats on its use. The facility
+should not be used to create ‘in-place’ LGRS.</p>
+
+<p>You specify refinement factors (NRX, NRY, NRZ) for each grid dimension
+by adding the <span class="keyword">RUNSPEC</span> section keyword <a href="../ecl_rm/AUTOREF.html#AUTOREF">AUTOREF</a> to an existing base
+data set. For a base data set with grid dimensions <span class="keyword">NX</span>, <span class="keyword">NY</span>, <span class="keyword">NZ</span>, ECLIPSE converts
+the input data to the refined grid, obtained by refining each base
+cell into NRX*NRY*NRZ cells. Each grid cell is simply refined uniformly
+by the factors NRX, NRY, NRZ in each dimension. It is possible to
+coarsen an auto-refined grid so as to achieve auto-refinement only
+in a part of the grid.</p>
+
+<p>The base data set should first be run without auto-refinement to
+check for any errors. Error and consistency checking of the data set
+with auto-refinement is performed with respect to the base grid, but
+any output files such as <samp class="codeph">GRID</samp>, <samp class="codeph">RESTART</samp> or <samp class="codeph">FLUX</samp> files, refer to the auto-refined grid.</p>
+
+<dl>
+
+<dt class="dlterm">Treatment of GRID section data in automatically refined grids</dt>
+
+<dd>Data for the auto-refined grid is inherited from host cells in
+the base grid. Most data is simply copied to the automatically refined
+cells from the host cells in the base grid. The exceptions to this
+rule are the geometric grid data <span class="keyword">DX</span>, <span class="keyword">DY</span>, <span class="keyword">DZ</span>, <span class="keyword">TOPS</span>, <span class="keyword">DZNET</span>, <span class="keyword">DZMTRXV</span>, <span class="keyword">COORD</span> and <span class="keyword">ZCORN</span>. These are determined such that the obvious refinement
+rules are observed. Note that the <span class="keyword">PINCH</span> and <span class="keyword">PINCHOUT</span> values are not altered from the base grid and
+that the <span class="keyword">MINPVV</span>/<span class="keyword">MINPV</span> data for
+the auto-refined grid is simply inherited from host cells in the base
+grid.<p>By default, data for the multiplier keywords, for example <a href="../ecl_rm/MULTX.html#MULTX">MULTX</a>, is also inherited from
+host cells in the base grid. Therefore in the auto-refined grid, <span class="keyword">MULTX</span>(IB, JB, KB) applies to all auto-refined
+cells (IA, JA, KA) contained within the base grid cell (IB, JB, KB)
+rather than just on the X+ direction interface between cells (IB, JB, KB)
+and (IB+1, JB, KB) in the base grid.</p>
+<p>If item 4 of
+the <span class="keyword">AUTOREF</span> keyword is set to 1, then <span class="keyword">MULTX</span>, for example, will be applied only between auto-refined
+cells on the X+ interface between these base grid cells.</p>
+<p>If
+item 4 of the <span class="keyword">AUTOREF</span> keyword is set to 2, then <span class="keyword">MULTX</span>, for example, assumes its default behavior in the
+auto-refined grid, and additional multipliers, for example <span class="keyword">SMULTX</span>, may also be entered, which only apply between auto-refined
+cells on the X+ interface between base grid cells.</p>
+<p>Any numerical
+aquifers will be represented equivalently in the auto-refined grid
+by the central auto-refined cell within the host cell in the base
+grid. The specified aquifer length and cross-sectional area are copied
+from the base grid to retain the initial volumes.</p>
+<p>Any coarsening
+boxes specified in the base grid using the <a href="../ecl_rm/COARSEN.html#COARSEN">COARSEN</a> keyword are auto-refined.
+The keyword <a href="../ecl_rm/AUTOCOAR.html#AUTOCOAR">AUTOCOAR</a> may be used to specify coarsening boxes in the base grid
+which are not auto-refined; this allows regions of the auto-refined
+grid to be coarsened back to the base grid if required.</p>
+</dd>
+
+
+
+<dt class="dlterm">Treatment of EDIT section data in automatically refined grids</dt>
+
+<dd>Data entered in the <span class="keyword">EDIT</span> section is upscaled
+from the base grid to the auto-refined grid in an appropriate manner.
+Edited pore volumes in the base grid are applied to auto-refined cells
+by multiplying by the ratio of new (edited) to old pore volumes for
+host cells in the base grid. In like fashion, any transmissibilities
+entered in the <span class="keyword">EDIT</span> section are accounted for by
+applying a multiplier which is the ratio of new (edited) transmissibility
+for the host cells in the base grid to the value of transmissibility
+on the host cells in the base grid obtained by upscaling the calculated
+transmissibilities on the auto-refined grid to the base grid.</dd>
+
+
+
+<dt class="dlterm">Treatment of REGIONS section data in automatically refined grids</dt>
+
+<dd>Any region data specified in the <span class="keyword">PROPS</span>, <span class="keyword">REGIONS</span> or <span class="keyword">SCHEDULE</span> sections is inherited
+by the auto-refined grid from the host cells in the base grid. This
+applies also to end-points specified in the <span class="keyword">PROPS</span> section.</dd>
+
+
+<dt class="dlterm">Treatment of SUMMARY section data in automatically refined grids</dt>
+
+<dd>Any grid cell numbers or completion location indices for the base
+grid entered in the <span class="keyword">SUMMARY</span> section are converted
+to the central auto-refined cell within the base cell. The <samp class="codeph">SUMMARY</samp> and <samp class="codeph">RSM</samp> files exhibit this conversion.</dd>
+
+
+</dl>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

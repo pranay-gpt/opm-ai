@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="AQUCON"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="AQUCON"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>AQUCON</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="AQUCON"><a name="AQUCON"><!-- --></a>
+<h1 class="keyword">AQUCON</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="aqucon.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="aqucon.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d114e45"> x </th>
+
+<th valign="top" id="d114e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d114e54"> x </th>
+
+<th valign="top" id="d114e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d114e45 d114e54 ">  </td>
+
+<td valign="top" headers="d114e48 d114e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d114e45 d114e54 "> x </td>
+
+<td valign="top" headers="d114e48 d114e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d114e45 d114e54 ">  </td>
+
+<td valign="top" headers="d114e48 d114e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d114e45 d114e54 ">  </td>
+
+<td valign="top" headers="d114e48 d114e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d114e45 d114e54 ">  </td>
+
+<td valign="top" headers="d114e48 d114e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d114e45 d114e54 "> x </td>
+
+<td valign="top" headers="d114e48 d114e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d114e45 d114e54 ">  </td>
+
+<td valign="top" headers="d114e48 d114e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d114e45 d114e54 ">  </td>
+
+<td valign="top" headers="d114e48 d114e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p> <span class="keyword">AQUCON</span> connects a numerical aquifer (declared
+using the <a href="AQUNUM.html#AQUNUM">  AQUNUM</a> keyword) to one or more reservoir cells. The connection to the reservoir
+is set up by an arbitrary box defined by lower and upper I, J and
+K indices.</p>
+
+<p>For each active grid block within the box, an aquifer connection
+is made to the face specified in item 8 if either of the following
+conditions are met:</p>
+
+<ul>
+<li> The face is on the outside of the reservoir, or </li>
+
+<li> The face adjoins an inactive cell. </li>
+
+</ul>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> Care must be taken while considering the IJK box extents. Multiple
+thin layers of cells on the reservoir boundary are strongly recommended
+over bulky boxes covering inner regions. ECLIPSE does not check for
+aquifer connections inside the reservoir. As a result, any cell within
+the prescribed box may be attached an aquifer as long as its adjacent
+cell is inactive. There are various situations when cells may be inactive
+inside the reservoir, for example due to their small pore volume (see <a href="MINPV.html#MINPV">  MINPV</a>) or when a sector
+model (see <a href="USEFLUX.html#USEFLUX">  USEFLUX</a>) is surrounded by inactive cells of the full-field model. </span></div>
+
+<p>Any number of records may be entered, each terminated with a slash
+(/). The set of records must be terminated with a blank record containing
+just a slash.</p>
+
+<p>The total number of lines of <span class="keyword">AQUCON</span> data must
+be less than or equal to <span class="keyword">MXNAQC</span> set in item 2 of
+keyword <a href="AQUDIMS.html#AQUDIMS">  AQUDIMS</a> in the <span class="keyword">RUNSPEC</span> section.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>The keyword can be specified in the <span class="keyword">GRID</span> section.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>The keyword can be specified in the <span class="keyword">GRID</span> and <span class="keyword">SOLUTION</span> sections.</p>
+
+<p>The items in each record are:</p>
+
+<ol>
+<li> Aquifer identification number <p>This should be a number between
+1 and the maximum number of aquifers, set in the keyword <span class="keyword">AQUDIMS</span>.</p>
+ </li>
+
+<li> Lower I-coordinate of cells to be connected </li>
+
+<li> Upper I-coordinate of cells to be connected </li>
+
+<li> Lower J-coordinate of cells to be connected </li>
+
+<li> Upper J-coordinate of cells to be connected </li>
+
+<li> Lower K-coordinate of cells to be connected </li>
+
+<li> Upper K-coordinate of cells to be connected </li>
+
+<li> Face of the cell to be connected to the aquifer. <p>This should
+be one of I+, I-, J+, J-, K+ or K-, where K+ for instance means the
+bottom face. Alternatively, X+, X-, Y+, Y-, Z+ or Z- could be chosen
+where Z+ for instance means the bottom face.</p>
+ </li>
+
+<li> The transmissibility multiplier <p>The multiplier enables the
+calculated transmissibility value to be multiplied by a user-defined
+factor, for example in history matching.</p>
+ <p>DEFAULT: 1.0</p>
+ <p>ECLIPSE 100</p>
+ </li>
+
+<li>Transmissibility option <p>The option enables
+the aquifer connection transmissibility to be calculated based on
+either the aquifer cross-sectional area (specified in item 5 of <span class="keyword">AQUNUM</span>) or the aquifer connection cell area. A value of
+0 uses the cross-sectional area specified in item 5 of <span class="keyword">AQUNUM</span>, whereas a value of 1 uses the cross-sectional area calculated from
+the aquifer connection cell. Note: the second option is only used
+for non-radial grids.</p>
+<p>An integer, either 0 or 1</p>
+<p>DEFAULT:
+0</p>
+ </li>
+
+<li> Allow aquifer connections to cell faces adjoining active cells? <p>Either <samp class="codeph">YES</samp> or <samp class="codeph">NO</samp> </p>
+ <p>If this
+data item is set to <samp class="codeph">YES</samp>, the restriction that a connected
+face must not adjoin an active cell is lifted, allowing aquifer connections
+into the middle of the reservoir. This option should be used with
+care and is not recommended for general use.</p>
+<p>DEFAULT: <samp class="codeph">NO</samp> </p>
+ <p>ECLIPSE 100</p>
+</li>
+
+<li> VE option only. VE fraction (<a href="VEFRAC.html#VEFRAC">  VEFRAC</a>) for relative
+permeability calculations for aquifer-to-grid connections.<p>A value
+of 1.0 gives pure VE relative permeabilities with the whole face available
+for flow; while a value of 0.0 gives pure rock curves.</p>
+<p>DEFAULT:
+1.0</p>
+ <p>ECLIPSE 100</p>
+</li>
+
+<li> VE option only. VE fraction (<a href="VEFRACP.html#VEFRACP">  VEFRACP</a>) for capillary
+pressure calculation for aquifer-to-grid connections.<p>A value of
+1.0 gives pure VE pseudo capillary pressures, while a value of 0.0
+gives pure rock curves.</p>
+<p>DEFAULT: 1.0</p>
+ </li>
+
+</ol>
+
+<p>The transmissibility between the numerical aquifer and grid block
+is calculated as follows:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="aqucon.equ.0090"/>
+ <math><mi>T</mi><mo>=</mo>
+<mfrac><mrow><mtext>CDARCY</mtext></mrow><mrow><mo>(</mo>
+<mn>1</mn><mo>/</mo><msub><mi>T</mi><mi>a</mi>
+</msub><mo>)</mo><mo>+</mo><mo>(</mo><mn>1</mn><mo>/</mo><msub><mi>T</mi><mi>c</mi></msub><mo>)</mo>
+</mrow></mfrac></math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>T</mi>
+<mi>c</mi></msub></math> </td>
+
+<td valign="top">  = Component of transmissibility from the grid block </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>T</mi>
+<mi>a</mi></msub></math> </td>
+
+<td valign="top">   = Component of transmissibility from the aquifer </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>In the Cartesian case:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="aqucon.equ.0099"/>
+ <math><mrow><msub><mrow>
+<mi>T</mi></mrow><mrow><mi>c</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mrow><mi>K</mi></mrow>
+<mrow><mi>c</mi></mrow></msub><mo>⋅</mo><msub><mrow>
+<mi>A</mi></mrow><mrow><mi>c</mi></mrow></msub><mo>⋅</mo><mtext>NTG</mtext></mrow><mrow><msub><mrow><mi>D</mi></mrow><mrow><mi>c</mi></mrow></msub></mrow>
+</mfrac></mrow></math> 
+</td><td align="right">[Eq. 247.2]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>K</mi>
+<mi>c</mi></msub></math> </td>
+
+<td valign="top">   = Cell permeability in the appropriate direction </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>A</mi>
+<mi>c</mi></msub></math> </td>
+
+<td valign="top">   = Cell face area </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mtext>NTG</mtext>
+</math> </td>
+
+<td valign="top">   = The cell net-to-gross ratio if the cell face X or Y </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>D</mi>
+<mi>c</mi></msub></math> </td>
+
+<td valign="top">   = Distance from the cell center the face </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>If transmissibility option 0 (item 10) is used:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="aqucon.equ.00a6"/>
+ <math><mrow><msub><mrow>
+<mi>T</mi></mrow><mrow><mi>a</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mrow><mi>K</mi></mrow>
+<mrow><mi>a</mi></mrow></msub><mo>⋅</mo><msub><mrow>
+<mi>A</mi></mrow><mrow><mi>a</mi></mrow></msub></mrow>
+<mrow><msub><mrow><mi>D</mi></mrow><mrow><mi>a</mi>
+</mrow></msub></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 247.3]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>K</mi>
+<mi>a</mi></msub></math> </td>
+
+<td valign="top">   = Aquifer permeability from <span class="keyword">AQUNUM</span>  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>A</mi>
+<mi>a</mi></msub></math> </td>
+
+<td valign="top">   = Aquifer area from <span class="keyword">AQUNUM</span>  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>D</mi>
+<mi>a</mi></msub></math> </td>
+
+<td valign="top">   = Half the aquifer length from <span class="keyword">AQUNUM</span>  </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>If transmissibility option 1 (item 10) is used:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="aqucon.equ.00b4"/>
+ <math><mrow><msub><mrow>
+<mi>T</mi></mrow><mrow><mi>a</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mrow><mi>K</mi></mrow>
+<mrow><mi>a</mi></mrow></msub><mo>⋅</mo><msub><mrow>
+<mi>A</mi></mrow><mrow><mi>c</mi></mrow></msub></mrow>
+<mrow><msub><mrow><mi>D</mi></mrow><mrow><mi>a</mi>
+</mrow></msub></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 247.4]
+              </td></tr></tbody></table>
+<p>ECLIPSE 100</p>
+
+<p>The NNCs that both connect the aquifer cells
+and connect the aquifer to the reservoir can be listed by using the <span class="keyword">ALLNNC</span> mnemonic (24<sup>th</sup> control) in the <a href="RPTGRID.html#RPTGRID">  RPTGRID</a> keyword.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>For this simulator, the NNCs can be output
+using the <span class="keyword">NNC</span> mnemonic in the <span class="keyword">RPTGRID</span> keyword.</p>
+
+<p>In addition, an array with the name <span class="keyword">AQUIFERN</span> is written to the <samp class="codeph">INIT</samp> file to illustrate which
+cells are connected to each aquifer. If a cell is connected to aquifer
+N, then the number <math><msup><mn>2</mn>
+<mrow><mo>(</mo><mi>N</mi><mrow><mo>-</mo><mn>1</mn>
+</mrow><mo>)</mo></mrow></msup></math>  will appear in
+the <samp class="codeph">AQUIFERN</samp> array. If a cell is connected to multiple
+aquifers, then the appropriate output numbers are summed. Cells representing
+the aquifer itself are given a negative number. </p>
+
+<p>See also <a href="../ecl_td/aquifer_Aquifer_Modeling_Facilities.html#aquifer_aquifer_modeling_facilities">"Aquifer modeling
+facilities"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

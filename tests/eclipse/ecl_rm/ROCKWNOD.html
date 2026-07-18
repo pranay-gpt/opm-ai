@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ROCKWNOD"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ROCKWNOD"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ROCKWNOD</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ROCKWNOD"><a name="ROCKWNOD"><!-- --></a>
+<h1 class="keyword">ROCKWNOD</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="rockwnod.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="rockwnod.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2074e45"> x </th>
+
+<th valign="top" id="d2074e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2074e54">  </th>
+
+<th valign="top" id="d2074e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2074e45 d2074e54 ">  </td>
+
+<td valign="top" headers="d2074e48 d2074e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2074e45 d2074e54 ">  </td>
+
+<td valign="top" headers="d2074e48 d2074e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2074e45 d2074e54 ">  </td>
+
+<td valign="top" headers="d2074e48 d2074e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2074e45 d2074e54 "> x </td>
+
+<td valign="top" headers="d2074e48 d2074e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2074e45 d2074e54 ">  </td>
+
+<td valign="top" headers="d2074e48 d2074e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2074e45 d2074e54 ">  </td>
+
+<td valign="top" headers="d2074e48 d2074e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2074e45 d2074e54 ">  </td>
+
+<td valign="top" headers="d2074e48 d2074e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2074e45 d2074e54 ">  </td>
+
+<td valign="top" headers="d2074e48 d2074e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data comprises <samp class="codeph">NTROCC</samp> (see keyword <a href="ROCKCOMP.html#ROCKCOMP"> ROCKCOMP</a> in the <span class="keyword">RUNSPEC</span> section) tables of water saturation values, each
+terminated by a slash (/). The tables define the water saturation
+node values for the 2-D water induced compaction tables entered with
+keywords <a href="ROCK2D.html#ROCK2D"> ROCK2D</a> and
+ <a href="ROCK2DTR.html#ROCK2DTR"> ROCK2DTR</a>.</p>
+
+<p>Each table consists of up to <a href="TABDIMS.html#TABDIMS.NSSFUN"> NSSFUN</a> (set in the <span class="keyword">TABDIMS</span> keyword) values of the water saturation increase,
+that is the current water saturation minus its initial value. Within
+each table the values should be positive and strictly increasing.
+The number of entries in each table must correspond to the number
+of pore volume and transmissibility multiplier entries in the corresponding <span class="keyword">ROCK2D</span> and <span class="keyword">ROCK2DTR</span> tables.</p>
+
+<p>The <samp class="codeph">NTROCC</samp> tables correspond to the rock compaction
+table region numbers, which are set using keyword <a href="ROCKNUM.html#ROCKNUM">  ROCKNUM</a>.</p>
+
+<p>The water saturation used when looking up the tables is the maximum
+attained water saturation for a grid block minus the water saturation
+at the start of the run. Thus the water induced compaction is assumed
+to be irreversible and is tabulated relative to the change in water
+saturation rather than the absolute saturation. See <a href="../ecl_td/rockcomp_Rock_Compaction.html#rockcomp_rock_compaction">"Rock compaction"</a> in the <cite>ECLIPSE Technical Description</cite> for details.</p>
+
+<p>See also keywords <span class="keyword">ROCK2D</span>, <span class="keyword">ROCK2DTR</span> and <a href="ROCKTABW.html#ROCKTABW">  ROCKTABW</a>.</p>
+
+<div class="section" id="rockwnod_example"><a name="rockwnod_example"><!-- --></a><h4 class="sectiontitle">Example</h4>   <p>With <samp class="codeph">NTROCC=2</samp> and <samp class="codeph">NPPVT≥5</samp>:</p>
+ <pre><code>ROCKWNOD
+ 0.0 
+ 0.3 
+ 0.4 
+ 0.7 
+ 1.0  /
+ 0.0 
+ 0.4 
+ 0.7 
+ 1.0  /
+
+ROCK2D
+    0.0   0.88
+          0.88
+          0.88
+          0.88
+          0.88 /
+ 1000.0   0.92
+          0.92
+          0.91
+          0.90
+          0.90 /
+ 9000.0   1.0
+          1.0
+          0.98
+          0.94
+          0.94 /
+/
+    0.0   0.88
+          0.88
+          0.88
+          0.88 /
+ 1000.0   0.92
+          0.91
+          0.90
+          0.90 /
+ 9000.0   1.0
+          1.0
+          0.94
+          0.94 /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

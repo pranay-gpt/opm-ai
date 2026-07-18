@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Segment structure"/>
+<meta name="DC.subject" content="Multisegment well, Multi-lateral well, Well, Multisegment, Multi-lateral, Multi-lateral well"/>
+<meta name="keywords" content="Multisegment well, Multi-lateral well, Well, Multisegment, Multi-lateral, Multi-lateral well"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="multiseg_segment_structure"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Segment structure</title>
+</head>
+<body>
+
+
+<div class="nested0" id="multiseg_segment_structure"><a name="multiseg_segment_structure"><!-- --></a>
+<h1 class="topictitle1">Segment structure</h1>
+
+
+ <div>
+<p>A multisegment well can be considered as a collection of segments
+arranged in a gathering tree topology, similar to the node-branch
+structure of a network in the Network option. A single-bore well will,
+of course, just consist of a series of segments arranged in sequence
+along the wellbore. A multilateral well has a series of segments along
+its main stem, and each lateral branch consists of a series of one
+or more segments that connects at one end to a segment on the main
+stem (figure <a href="multiseg_Segment_structure.html#multiseg.XID-00000009">547.1</a>). It is possible,
+if required, for lateral branches to have sub-branches; this may be
+useful when modeling certain inflow control devices as part of the
+network of segments.</p>
+
+<p>The segment network for each well may thus have any number of ‘generations’
+of branches and sub-branches, but it must conform to gathering-tree
+topology. Segments within the gathering tree topology can be connected
+in order to form loops - this facility is described in <a href="multiseg_looped_flowpaths.html#multiseg_looped_flowpaths"> "Looped flow paths"</a>.</p>
+
+<div class="fignone" id="multiseg.XID-00000009"><a name="multiseg.XID-00000009"><!-- --></a>
+
+ <br/><img src="../img/multiseg1.png" width="449px"/><br/> 
+<br/><span class="figcap">
+           Figure 547.1  A multilateral, multisegment well</span></div>
+
+<p>Each segment consists of a <strong>node</strong> and a <strong>flow path</strong> to
+its parent segment’s node. (The term ‘flow path’ is used here rather
+than ‘branch’, as the latter term is reserved for lateral branches
+in multilateral wells, each of which may contain several segments.)
+A segment’s node is positioned at the end that is furthest away from
+the wellhead (figure <a href="multiseg_Segment_structure.html#multiseg.XID-00000015">547.2</a>).
+Each node lies at a specified depth, and has a nodal pressure which
+is determined by the well model calculation. Each segment also has
+a specified length, diameter, roughness, area and volume. The volume
+is used for wellbore storage calculations, while the other attributes
+are properties of its flow path and are used in the friction and acceleration
+pressure loss calculations. Also associated with each segment’s flow
+path are the flow rates of oil, water and gas, which are determined
+by the well model calculation.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The top segment is a special case. It does not have a parent
+segment so no pressure drop is calculated along this segment’s flow
+path. Hence there is no need to specify diameter, roughness and area
+for this segment. The equation for the pressure drop along the flow
+path is replaced by a boundary condition appropriate to the well’s
+mode of control. See <a href="multiseg_the_top_segment.html#multiseg_the_top_segment"> "The
+top segment"</a> for details.             </span></div>
+
+<div class="fignone" id="multiseg.XID-00000015"><a name="multiseg.XID-00000015"><!-- --></a>
+
+ <br/><img src="../img/multiseg2.png" width="377px"/><br/> 
+<br/><span class="figcap">
+           Figure 547.2  Well segments</span></div>
+
+<p>A segment node must be positioned at each branch junction. Flow
+from the formation through grid-block-to-well connections also enters
+the well at segment nodes. A segment (or to be more precise, its node)
+can accept flow from any number of grid block connections (figure <a href="multiseg_Segment_structure.html#multiseg.XID-0000001f">547.3</a>). If you wish to have a separate
+segment node for each connection (for greatest accuracy) then it is
+best to position the nodes to lie at the center of their corresponding
+grid block connections. But it is also possible to reduce the number
+of segments by allocating two or more grid block connections to each
+segment. In this case it best to position each segment node to lie
+at the center of the perforated interval that is allocated to the
+segment. However, it is not possible to allocate a single grid block
+connection to more than one segment.</p>
+
+<p>ECLIPSE allocates each grid block connection to the segment whose
+node lies nearest to it. If necessary, you can override this by explicitly
+specifying the segment to which the connection should be allocated
+in the <a href="../ecl_rm/COMPSEGS.html#COMPSEGS">COMPSEGS</a> (or <a href="../ecl_rm/COMPSEGL.html#COMPSEGL">COMPSEGL</a>) keyword.</p>
+
+<div class="fignone" id="multiseg.XID-0000001f"><a name="multiseg.XID-0000001f"><!-- --></a>
+
+ <br/><img src="../img/multiseg3.png" width="346px"/><br/> 
+<br/><span class="figcap">
+           Figure 547.3  Allocating connection flows to segments</span></div>
+
+<p>It is also possible to position segment nodes at intermediate points
+along the wellbore, for example where the tubing properties or inclination
+angle change. Additional segments can be defined to represent chokes
+or inflow control devices. In common with other aspects of numerical
+simulation, the optimum number of segments required to model a particular
+well depends on your preferred compromise between speed and accuracy.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

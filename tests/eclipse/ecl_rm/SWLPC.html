@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SWLPC"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SWLPC"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SWLPC</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SWLPC"><a name="SWLPC"><!-- --></a>
+<h1 class="keyword">SWLPC</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="swlpc.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="swlpc.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2522e45"> x </th>
+
+<th valign="top" id="d2522e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2522e54">  </th>
+
+<th valign="top" id="d2522e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2522e45 d2522e54 ">  </td>
+
+<td valign="top" headers="d2522e48 d2522e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2522e45 d2522e54 ">  </td>
+
+<td valign="top" headers="d2522e48 d2522e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2522e45 d2522e54 ">  </td>
+
+<td valign="top" headers="d2522e48 d2522e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2522e45 d2522e54 "> x </td>
+
+<td valign="top" headers="d2522e48 d2522e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2522e45 d2522e54 ">  </td>
+
+<td valign="top" headers="d2522e48 d2522e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2522e45 d2522e54 ">  </td>
+
+<td valign="top" headers="d2522e48 d2522e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2522e45 d2522e54 ">  </td>
+
+<td valign="top" headers="d2522e48 d2522e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2522e45 d2522e54 ">  </td>
+
+<td valign="top" headers="d2522e48 d2522e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">SWLPC</span> and <span class="keyword">ISWLPC</span> keywords
+scales the connate water end point of the oil-water capillary pressure
+curves without scaling the corresponding oil relative permeability
+curves.</p>
+
+<p>The <span class="keyword">SWLPC</span> keyword should not be used unless
+water is present in the model (keyword <a href="WATER.html#WATER"> WATER</a> in the <span class="keyword">RUNSPEC</span> section).
+The keyword <a href="ENDSCALE.html#ENDSCALE"> ENDSCALE</a> should be specified in the <span class="keyword">RUNPSEC</span> section.</p>
+
+<p>The <span class="keyword">SWLPC</span> keyword should be followed by one
+real number for each grid block in the current input box, specifying
+the connate water saturation within the grid block. The saturation
+should be in the range 0.0 to 1.0 inclusive. The data must be terminated
+by a slash (/).</p>
+
+<p>Grid blocks are ordered with the X-axis index cycling fastest followed
+by the Y and Z indices. Repeat counts may be used for repeated values
+(for example 10*0.21). Note that spaces must not be inserted on either
+side of the asterisk.</p>
+
+<p>If <span class="keyword">SWLPC</span> is not specified, the oil-water (or
+gas-water) capillary pressure scaling is performed using the connate
+water saturation specified with the <a href="swl_SWL_ISWL.html#swl_swl_iswl"> SWL</a> family of keywords (<span class="keyword">SWL</span>, <span class="keyword">SWLX</span>, <span class="keyword">SWLX-</span>, <span class="keyword">SWLY</span>, <span class="keyword">SWLY-</span>,  <span class="keyword">SWLZ</span>, <span class="keyword">SWLZ-</span>). If in turn any of the keywords <span class="keyword">SWL</span>,  <span class="keyword">SWLX</span>, <span class="keyword">SWLX-</span>, <span class="keyword">SWLY</span>, <span class="keyword">SWLY-</span>, <span class="keyword">SWLZ</span>, <span class="keyword">SWLZ-</span> are omitted, then the connate water saturation for an oil-water
+(or gas-water) capillary pressure calculation defaults to the value
+used in the appropriate water saturation function table.</p>
+
+<p>If the hysteresis model (switch '<samp class="codeph">HYSTER</samp>' in keyword <a href="SATOPTS.html#SATOPTS"> SATOPTS</a>) is active then
+the <span class="keyword">SWLPC</span> data will scale the drainage curve. The
+imbibition curve can be scaled by using the equivalent  <span class="keyword">ISWLPC</span> keyword.</p>
+
+<p>See also keywords <span class="keyword">SWL</span> and <a href="ENPTVD.html#ENPTVD"> ENPTVD</a> in the <span class="keyword">PROPS</span> section.</p>
+
+<p>See <a href="../ecl_td/sattabsc_Saturation_Table_Scaling.html#sattabsc_saturation_table_scaling">"Saturation table
+scaling"</a> in the <cite>ECLIPSE Technical Description</cite> for
+details of the endpoint scaling procedure.</p>
+
+<div class="section" id="swlpc_example"><a name="swlpc_example"><!-- --></a><h4 class="sectiontitle">Example</h4>               
+ <pre><code>----RUNSPEC section
+DIMENS
+ 1 7 3 /
+ENDSCALE
+ /
+----PROPS section
+SWLPC
+ 7*0.22   7*0.20   7*0.18   /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

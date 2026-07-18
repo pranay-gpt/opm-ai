@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WELPI"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WELPI"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WELPI</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WELPI"><a name="WELPI"><!-- --></a>
+<h1 class="keyword">WELPI</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="welpi.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="welpi.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2922e45">                         x                   
+  </th>
+
+<th valign="top" id="d2922e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2922e54">                         x                   
+  </th>
+
+<th valign="top" id="d2922e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2922e45 d2922e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2922e48 d2922e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2922e45 d2922e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2922e48 d2922e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2922e45 d2922e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2922e48 d2922e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2922e45 d2922e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2922e48 d2922e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2922e45 d2922e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2922e48 d2922e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2922e45 d2922e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2922e48 d2922e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2922e45 d2922e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2922e48 d2922e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2922e45 d2922e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d2922e48 d2922e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword can be used to set the productivity/injectivity index
+(PI) value of one or more wells to a specified value. The well connection
+properties must be defined in the usual manner, with keyword <a href="COMPDAT.html#COMPDAT"> COMPDAT</a>, but the connection
+transmissibility factors are adjusted proportionately so that the
+calculated PI of the well equals the specified value. The PI is calculated
+using the phase and drainage radius defined in items 6 and 7 of keyword <a href="WELSPECS.html#WELSPECS"> WELSPECS</a>. The definition
+of the PI and its relationship to the well’s connection transmissibility
+factors is discussed in <a href="../ecl_td/wellinfl_The_productivity_index.html#wellinfl_the_productivity_index">"The productivity
+index"</a> in the <cite>ECLIPSE Technical Description</cite>. Note
+that the calculation is not suitable for application to horizontal
+wells.</p>
+
+<p>The adjustment of the connection factors is performed at the time
+the <a href="WELPI.html#WELPI"> WELPI</a> keyword
+is entered, using the current grid block solution. If the fluid mobilities
+in the grid blocks subsequently change, the well’s actual PI also
+changes.</p>
+
+<p>The P.I. value should not be set for gas wells which have a D-factor
+or use a special inflow equation (item 8 in <span class="keyword">WELSPECS</span>). In these circumstances the gas phase P.I. vary with the well’s
+BHP.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>Under some circumstances the P.I. set for
+a newly opened gas injector are not exact due to the composition of
+the injected gas not being accurately known during the calculation.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li>Well name, well name template, well list or well list template
+    <p>A template enclosed in quotes can be used to refer to multiple
+wells or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+             </li>
+
+<li>Steady-state productivity/injectivity index value of the well(s)
+  <p>UNITS: sm<sup>3</sup>/day/bars (<samp class="codeph">METRIC</samp>), stb/day/psi
+or Mscf/day/psi (<samp class="codeph">FIELD</samp>), scc/hr/atm (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day/atm (<samp class="codeph">PVT-M</samp>)</p>
+          
+     <p>This item must be supplied and cannot be defaulted.</p>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">When the <span class="keyword">WELPI</span> keyword is read, the connections
+that are currently defined for the well will have their connection
+factors scaled to give the well the specified PI at the current grid
+block conditions. If at a later time new connections are introduced,
+the connection factors are not scaled again unless <span class="keyword">WELPI</span> is reentered, and so the PI of the well changes. Moreover, if an
+existing connection is later re-specified with <span class="keyword">COMPDAT</span>, its connection factor is reset from the <span class="keyword">COMPDAT</span> data, overwriting its earlier scaled value. Consequently, care should
+be taken when changing the connection data after entering <span class="keyword">WELPI</span>.  </span></div>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> Keywords <span class="keyword">WELPI</span> and <a href="WPIMULT.html#WPIMULT"> WPIMULT</a> should not both
+be used on the same well at the same time, unless there is an intervening <a href="TIME.html#TIME"> TIME</a>, <a href="TSTEP.html#TSTEP"> TSTEP</a> or <a href="DATES.html#DATES"> DATES</a> keyword.</div>
+
+<div class="section" id="welpi_example"><a name="welpi_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WELPI
+ PROD1  10.2 /
+ PROD2  14.3 /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

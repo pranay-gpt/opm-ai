@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GASSOL solution in the aqueous phase"/>
+<meta name="DC.subject" content="Carbon dioxide solution, Aqueous phase"/>
+<meta name="keywords" content="Carbon dioxide solution, Aqueous phase"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gassol_gassol_solution_in_the_aqueous_phase"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GASSOL solution in the aqueous phase</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="gassol_gassol_solution_in_the_aqueous_phase"><a name="gassol_gassol_solution_in_the_aqueous_phase"><!-- --></a>
+<h1 class="keyword">GASSOL solution in the aqueous phase</h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gassol.tab.0009"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gassol.tab.0009" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">                                             
+ </td>
+
+<td valign="top">                         ECLIPSE 100         
+            </td>
+
+</tr>
+
+<tr>
+<td valign="top">                         x     
+                </td>
+
+<td valign="top">                         ECLIPSE 300         
+            </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The GASSOL solution algorithm allows a specified number of gas
+components to dissolve in the aqueous phase. This option is selected
+using the <a href="../ecl_rm/GASSOL.html#GASSOL">GASSOL</a> keyword in the <span class="keyword">RUNSPEC</span> section. The basic
+model consists of fugacity functions for dissolving hydrocarbons in
+the aqueous phase. These are constructed to match the supplied solubility
+data and take the form:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gassol.equ.0020"/>
+ <math><mrow><msubsup><mrow>
+<mi>f</mi></mrow><mrow><mi>i</mi></mrow><mrow><mi>A</mi></mrow></msubsup><mo>=</mo><mrow><msubsup><mrow>
+<mi>x</mi></mrow><mrow><mi>i</mi></mrow><mrow><mi>A</mi></mrow></msubsup><mi>P</mi><msubsup><mrow><mi>ϕ</mi></mrow><mrow><mi>i</mi></mrow><mrow><mi>A</mi></mrow></msubsup><mrow><mo>(</mo><mi>P</mi><mo>,</mo><mi>T</mi><mo>)</mo></mrow></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 431.1]
+              </td></tr></tbody></table>
+<p>where  <math><mrow>
+<msubsup><mrow><mi>x</mi></mrow><mrow><mi>i</mi>
+</mrow><mrow><mi>A</mi></mrow></msubsup></mrow></math> is the saturated mole fraction from the solubility data for component
+ <math><mi>i</mi></math>  and  <math><mrow>
+<msubsup><mrow><mi>ϕ</mi></mrow><mrow><mi>i</mi>
+</mrow><mrow><mi>A</mi></mrow></msubsup><mrow><mo>(</mo><mi>P</mi><mo>,</mo><mi>T</mi><mo>)</mo>
+</mrow></mrow></math> is the fugacity coefficient for component
+ <math><mi>i</mi></math>  in the aqueous phase at pressure  <math><mi>P</mi></math>  and temperature  <math><mi>T</mi></math>. The phase equilibrium between the aqueous hydrocarbons
+and the hydrocarbon phases is defined by the condition that the fugacity
+values are equal. Using the equation of state with a sample pure “gas”
+composition, the corresponding vapor fugacity  <math>
+<msubsup><mi>f</mi><mi>i</mi><mi>V</mi></msubsup>
+</math>  is computed. The aqueous fugacity coefficient for component
+ <math><mi>i</mi></math>  is then given by:          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gassol.equ.002c"/>
+ <math><mrow><mrow><msubsup>
+<mrow><mi>ϕ</mi></mrow><mrow><mi>i</mi></mrow>
+<mrow><mi>A</mi></mrow></msubsup><mrow><mo>(</mo><mi>P</mi><mo>,</mo><mi>T</mi><mo>)</mo></mrow></mrow>
+<mo>=</mo><mfrac><mrow><msubsup><mrow><mi>f</mi>
+</mrow><mrow><mi>i</mi></mrow><mrow><mi>A</mi></mrow>
+</msubsup></mrow><mrow><msubsup><mrow><mi>P</mi><mi>x</mi></mrow><mrow><mi>i</mi></mrow><mrow><mi>A</mi>
+</mrow></msubsup></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 431.2]
+              </td></tr></tbody></table>
+<p>It is also possible to construct the aqueous hydrocarbon component
+Gibbs energy contributions.</p>
+
+<p>The solubility properties of the hydrocarbon components in the
+aqueous phase may be entered as a function of pressure using the <a href="../ecl_rm/SOLUAQA.html#SOLUAQA">SOLUAQA</a> keyword. The data for
+one or more soluble components may be defaulted, whereupon a default
+set of solubilities is generated internally as a function of pressure.
+It is strongly recommended, however, that appropriate values are supplied
+via the <span class="keyword">SOLUAQA</span> keyword to ensure sufficient accuracy
+in the modeling of the solubility behavior.</p>
+
+<p>The solubility data used in the simulation, which may be a combination
+of input and default values, can be reported by via the <samp class="codeph">SOLU</samp> mnemonic of the <a href="../ecl_rm/RPTPROPS.html#RPTPROPS">RPTPROPS</a> keyword.</p>
+
+<p>The initial dissolved hydrocarbons solubility may be specified
+as a function of depth using the <a href="../ecl_rm/RSWVD.html#RSWVD">RSWVD</a> keyword.</p>
+
+<div class="section" id="gassol_notes"><a name="gassol_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li> The initial dissolved hydrocarbon concentrations may not be in
+exact equilibrium with the hydrocarbon oil and gas phases. In addition,
+the initial flash may also modify the input values slightly. </li>
+
+<li> The <a href="../ecl_rm/SOLUAQA.html#SOLUAQA"> SOLUAQA</a> keyword employs two records per component to specify the
+solubility data. The first record consists simply of the component
+number, which should correspond with numerical index of the component
+in the sequence of components defined by the <a href="../ecl_rm/CNAMES.html#CNAMES"> CNAMES</a> keyword. The second
+record consists of a table of solubility as a function of pressure. </li>
+
+<li> When using the <span class="keyword">SOLUAQA</span> keyword, the solubilities
+of one or more dissolving hydrocarbon components may optionally be
+defaulted. In such cases, a default solubility table is generated
+by applying the GASWAT framework with the component properties specified
+in the <span class="keyword">PROPS</span> section. The calculations assume a
+feed composition comprising an equal split between water and the component
+whose properties are being calculated for a range of pressures that
+is defined internally. </li>
+
+<li> If the solubilities for all of the dissolving hydrocarbon components
+are defaulted, the default tables will consist of twenty pressure
+nodes per table. If the solubilities for only some of the dissolving
+hydrocarbon components are defaulted, the number of pressure nodes
+in the defaulted tables will be equal to the maximum number of pressure
+nodes found in the non-defaulted tables. It is strongly recommended
+that appropriate input values are supplied rather than relying upon
+the internally generated default values in order to ensure sufficient
+accuracy in the modeling of the aqueous behavior of the hydrocarbons. </li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

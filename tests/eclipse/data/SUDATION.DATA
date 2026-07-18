@@ -1,0 +1,297 @@
+-----------------------------------------------------------------
+-- This dataset has been changed a little from the 8809 version.
+--
+-- The timestepping has been altered remove steps very close
+-- to non-convergence. This enables exact comparisons to be
+-- made between different versions of Eclipse. If one or more
+-- time-steps are very close to non-convergence, then minute
+-- code changes lead to large differences in the results, for
+-- example a timestep may CHOP. (Note, the two runs may well
+-- give reasonable results from an engineering stance, however
+-- it is difficult to say the the two sets of results are the
+-- same.)
+-----------------------------------------------------------------
+RUNSPEC
+TITLE
+   SUDATION TEST PROBLEM - WITH SUDATION QUIESCENCE
+
+DIMENS
+   30    1    8  /
+
+DUALPORO
+
+OIL
+
+WATER
+
+GAS
+
+DISGAS
+
+FIELD
+
+EQLDIMS
+    1  300   20    1   20 /
+
+TABDIMS
+    2    1   20   20    2   20 /
+
+GRAVDR
+
+REGDIMS
+    2    1    0    0   /
+
+WELLDIMS
+    2    2    1    2 /
+
+NUPCOL
+    4 /
+
+START
+   1 'JAN' 1980  /
+
+NSTACK
+   20 /
+
+OPTIONS
+10*0 1 /
+
+GRID      ==============================================================
+
+--DEBUG
+--0 0 0 0 0 0 0 0 0 0
+--0 0 0 0 0 0 0 0 0 0
+--0 0 0 0 0 0 0 0 0 0
+--0 0 0 0 1 0 0 0 0 0
+--0 0 0 0 0 0 0 0 0 0 /
+
+
+DZMTRX
+35.0  /
+
+EQUALS
+ 'DX'        400   / PROPERTIES COMMON TO MATRIX AND FRACTURES
+ 'DY'        400   /
+ 'DZ'        85    /
+ 'PORO'      0.16   1  30  1  1  1  4  / MATRIX PROPERTIES
+ 'PERMX'     0.8   /
+ 'PERMY'     0.8   /
+ 'PERMZ'     0.14  /
+ 'PORO'      0.02   1  30  1  1  5  8  / FRACTURE PROPERTIES
+ 'PERMX'     14000  /
+ 'PERMY'     19000  /
+ 'PERMZ'      2000  /
+/
+
+OLDTRAN
+
+BOX
+1  30  1  1  1  1  /
+
+TOPS
+ 4300  4350  4400  4450  4500  4550  4600  4650  4700  4750
+ 4800  4850  4900  4950  5000  5050  5100  5150  5200  5250
+ 5300  5350  5400  5450  5500  5550  5600  5650  5700  5750
+ /
+
+BOX
+1  30  1  1  5  5  /
+
+TOPS
+ 4300  4350  4400  4450  4500  4550  4600  4650  4700  4750
+ 4800  4850  4900  4950  5000  5050  5100  5150  5200  5250
+ 5300  5350  5400  5450  5500  5550  5600  5650  5700  5750
+ /
+
+RPTGRID
+-- Report Levels for Grid Section Data
+-- 
+'DX' 
+'DY' 
+'DZ' 
+'PERMX' 
+'PERMY' 
+'PERMZ' 
+'PORO' 
+'TOPS' 
+'PORV' 
+'DEPTH' 
+'TRANX' 
+'TRANY' 
+'TRANZ' 
+'ALLNNC' 
+  /
+
+SIGMA
+  5.0   /
+
+EDIT      =============================================================
+
+MULTIPLY
+'PORV' 55  30  30  1  1  1  8 /
+/
+
+PROPS     ==============================================================
+
+SWFN
+ 0.3000  0.0000  4.50
+ 0.3100  0.0150  2.85
+ 0.3800  0.0450  1.55
+ 0.5     0.1000  0.85
+ 0.6     0.1500  0.30
+ 0.7     0.2000  0.10
+ 1.0     0.6000  0.00
+ /
+ 0.00    0.00    0.00
+ 1.00    1.00    0.00
+ /
+
+SGFN
+ 0.00   0.00   0.0
+ 0.04   0.00   0.2
+ 0.10   0.02   0.5
+ 0.20   0.10   1.0
+ 0.25   0.25   1.5
+ 0.30   0.35   2.0
+ 0.70   1.00  10.0
+ /
+ 0.0    0.0    0.0
+ 0.02   0.0    0.0
+ 1.0    1.0    0.0
+ /
+
+SOF3
+ 0.30   0.0     0.0
+ 0.40   0.1     0.1
+ 0.45   0.25    0.25
+ 0.50   0.4     0.4
+ 0.70   0.9     0.9
+ /
+ 0.0  0.0  0.0
+ 1.0  1.0  1.0
+ /
+
+PVTW
+  0.0   1.0    3.0E-6  0.50   0.00E-01  /
+
+PVTO
+   0.100  850   1.110   80.0  /
+   0.125  1250  1.120   75.0  /
+   0.150  1450  1.125   70.0  /
+   0.175  1650  1.130   65.0  /
+   0.200  2050  1.140   60.0  /
+   0.225  2250  1.145   55.0  /
+   0.250  2450  1.150   50.0
+          3450  1.140   54.0
+          4450  1.130   58.0  /
+/
+
+ROCK
+ 2500.0  0.60E-05 /
+
+PVDG
+  50  63.0    0.0130
+ 250  12.6    0.0131
+ 450   7.0    0.0132
+ 650   5.0    0.0134
+ 850   3.5    0.0136
+1050   2.8    0.0138
+1250   2.3    0.0140
+1450   2.0    0.0142
+1650   1.7    0.0144
+1850   1.5    0.0146
+2050   1.39   0.0148
+2250   1.22   0.0150
+4900   0.61   0.0160 /
+
+DENSITY
+ 58.0   64.0   0.05     /
+
+RPTPROPS
+-- PROPS Reporting Options
+-- 
+'PVTO' 'PVDO' 'PVTW' 'PVTG' 'PVDG' 'DENSITY' 'GRAVITY' 'SDENSITY' 'ROCK' 
+'ROCKTAB' 
+ /
+
+REGIONS    =============================================================
+
+RPTREGS
+  -- Controls on output from regions section
+-- 
+'SATNUM' 'FIPNUM' 
+  /
+
+EQUALS
+ 'SATNUM'  1   1 30 1 1 1 4  /
+ 'SATNUM'  2   1 30 1 1 5 8  /
+ 'FIPNUM'  1   1 30 1 1 1 4  /
+ 'FIPNUM'  2   1 30 1 1 5 8  /
+ /
+
+SOLUTION   =============================================================
+
+EQUIL
+4450  2550  5500  0  4450   0   0   0   5  /
+
+RPTSOL
+-- Initialisation Print Output
+-- 
+'PRES' 'SOIL' 'SWAT' 'SGAS' 'RS' 'FIP=2' 'EQUIL'  /
+
+SUMMARY    ============================================================
+
+FGPR
+FWPR
+FOPR
+FWCT
+FGOR
+
+RUNSUM
+
+ALL
+
+MSUMLINS
+
+MSUMNEWT
+
+SEPARATE
+
+SCHEDULE   ===========================================================
+
+RPTSCHED
+'PRES' 'SOIL' 'SWAT' 'SGAS' 'RS' 'RESTART=2' 'FIP=2' 'WELLS=2' 'SUMMARY=2' 
+'CPU=2' 'WELSPECS' 'NEWTON=2'  /
+
+WELSPECS
+'P'  'G'   11  1  1*  'OIL'  /
+/
+
+COMPDAT
+'P'   11 1  8  8   'OPEN'  0 1*  0.5 /
+/
+
+WCONPROD
+'P'  'O'  'ORAT'  800.0   2500.0   5000.0   1*  1*  500.0 /
+/
+
+TSTEP
+10  40  50  /
+
+TUNING
+10  50  /
+/
+15 /
+
+TSTEP
+400   /
+
+TUNING
+50  100  /
+/
+15 /
+
+TSTEP
+ 500  500  500  1000  1000  1000   1000 /
+
+END

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Timesteps"/>
+<meta name="DC.subject" content="Local grid refinement timesteps, Timesteps, In-place LGRs"/>
+<meta name="keywords" content="Local grid refinement timesteps, Timesteps, In-place LGRs"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrc_timesteps"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Timesteps</title>
+</head>
+<body>
+
+
+<div class="nested0" id="lgrc_timesteps"><a name="lgrc_timesteps"><!-- --></a>
+<h1 class="topictitle1">Timesteps</h1>
+
+
+ <div>
+<div class="section" id="lgrc_local_timestepping__eclipse_100_"><a name="lgrc_local_timestepping__eclipse_100_"><!-- --></a><h4 class="sectiontitle">Local timestepping (ECLIPSE 100)</h4><p>Efficiency is achieved
+by solving each local grid (or amalgamation of local grids) individually
+using “local timestepping”. This allows the local grids
+to have shorter timesteps than the global grid, in order to resolve
+coning effects for example, without holding up the progress of the
+global grid simulation. Each local grid may require several timesteps
+to reach the end of a global timestep. This is very efficient in cases
+where the local grids naturally require much shorter timesteps than
+the global grid.</p>
+<p>Local timestepping has some disadvantages,
+however. The global grid and each of the local grids may individually
+be solved fully implicitly, but since both the global and local grid
+solutions provide boundary conditions for each other, a semi-explicit
+coupling is required. Thus the coupled solution is not fully implicit
+and may even exhibit instabilities in some cases. Also, local timestepping
+can cause group flow rates to drift significantly away from their
+group control targets. The approach of local timestepping is the default
+method for solving local grids and was the only method available in
+versions of ECLIPSE 100 prior to 97A.</p>
+<p>When local timestepping
+is used, the sequence for calculating each global timestep is as follows:</p>
+<ol>
+<li> The global model is advanced through a new timestep in the usual
+way. At this stage the local grids are represented by their host cells
+in the global grid. Wells in refined grids are solved using the grid
+block properties of the refined system. Properties of host cells are
+computed using local grid information. </li>
+
+<li> Each local simulation is then advanced through a series of local
+timesteps that are often smaller than the global timestep. The local
+timesteps are chosen to synchronize with the end of each global timestep. </li>
+
+<li> Flows between the global and local systems are computed dynamically
+as boundary conditions to each local simulation using currently updated
+variables in the local grid and fixed variables in the global grid
+(linearly interpolated in time over the global timestep). Spatial
+interpolation of the pressure field may also be performed for Cartesian
+refinements to enhance accuracy. </li>
+
+<li> The process is completed by updating well rates and material
+in the host cells of the global model to be consistent with the local
+models. The global model is then ready to advance to the next global
+timestep. </li>
+
+<li> After the completion of a global timestep the material for each
+phase in each host cell is compared with the material sum for the
+corresponding local cells. Subsequent global timesteps are often selected
+to keep these material calculations within 2.5%. The convergence report
+summary uses the mnemonic LGRC followed by the name of the constraining
+LGR when this criterion is used. For example: <pre><code>STEP  16 TIME=  116.32  DAYS (+3.5  DAYS LGRC/LGRWEST   4 ITS) 
+PAV=  3185.2</code></pre> <p>This timestep selection criterion may
+be altered using keyword <a href="../ecl_rm/TUNING.html#TUNING"> TUNING</a>.</p>
+ </li>
+
+<li> The first local grid specified within an LGR amalgamation is
+chosen to be the representative of the amalgamation. The convergence
+reports for each amalgamation are identified with this name. </li>
+
+</ol>
+</div>
+
+<div class="section" id="lgrc_in-place_lgrs"><a name="lgrc_in-place_lgrs"><!-- --></a><h4 class="sectiontitle">In-place LGRs</h4><p>In
+ECLIPSE 100, an alternative fully implicit solution method, “LGR
+in-place”, is available to overcome the shortcomings of local
+timestepping. The global and local grids are solved simultaneously
+and fully implicitly as a coupled system. This avoids any problems
+with stability or meeting group control targets associated with local
+timestepping. However, the coupled system chooses a timestep that
+is the minimum of the natural timestep over the global and all local
+grids. In cases where one LGR requires a timestep much smaller than
+the rest of the grid (say for a horizontal well in a Vertical Equilibrium
+model, or for a radial LGR), running the coupled system at this timestep
+may severely limit the efficiency of the simulation. Thus it is possible
+to nominate local grids individually to be solved in-place (keyword <a href="../ecl_rm/LGRLOCK.html#LGRLOCK">LGRLOCK</a>). Any local grids not
+nominated as in-place are advanced using local timestepping. If all
+local grids are nominated as in-place, then a fully coupled implicit
+solution is obtained. This procedure is commonly adopted in ECLIPSE
+300.</p>
+</div>
+
+<div class="section" id="lgrc_eclipse_300"><a name="lgrc_eclipse_300"><!-- --></a><h4 class="sectiontitle">ECLIPSE
+300</h4><p>ECLIPSE 300 solves LGRs using the same timestep as the
+global grid. There is no local timestepping option.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="RVCONSTT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="RVCONSTT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>RVCONSTT</title>
+</head>
+<body>
+
+
+<div class="nested0" id="RVCONSTT"><a name="RVCONSTT"><!-- --></a>
+<h1 class="keyword">RVCONSTT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="rvconstt.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="rvconstt.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2154e45">                         x                   
+  </th>
+
+<th valign="top" id="d2154e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2154e54">                                             
+ </th>
+
+<th valign="top" id="d2154e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2154e45 d2154e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2154e48 d2154e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2154e45 d2154e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2154e48 d2154e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2154e45 d2154e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2154e48 d2154e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2154e45 d2154e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d2154e48 d2154e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2154e45 d2154e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2154e48 d2154e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2154e45 d2154e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2154e48 d2154e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2154e45 d2154e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2154e48 d2154e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2154e45 d2154e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2154e48 d2154e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword is used to declare that the dry gas associated with
+each individual PVT table region contains a constant and uniform concentration
+of vaporized oil. This provides a more efficient way of modeling
+gas condensate systems in which there is no free oil and the pressure
+never falls below the dew point.</p>
+
+<p>The difference between this keyword and <a href="RVCONST.html#RVCONST"> RVCONST</a> is that <span class="keyword">RVCONSTT</span> allows the gas in different PVT table regions to have different
+R<sub>v</sub> values. There must be no transmissibility between PVT
+table regions with different Rv values, to prevent gases with different
+R<sub>v</sub> values from mixing. (If gas is allowed to flow between
+the regions, their R<sub>v</sub> values will change with time, and
+the reservoir must be modeled as wet gas system with oil as an active
+phase.) Similarly, no well can be completed in two or more PVT table
+regions having different R<sub>v</sub> values.</p>
+
+<p>The flags for oil and vaporized oil should not be switched on (keywords <a href="OIL.html#OIL">  OIL</a> and <a href="VAPOIL.html#VAPOIL"> VAPOIL</a> in the <span class="keyword">RUNSPEC</span> section), so that oil is not treated in the model as an active phase.
+The system therefore becomes a two-phase or single-phase model, depending
+on whether or not water is present as well as the gas. The gas should
+be treated as dry gas (using keyword <a href="PVDG.html#PVDG"> PVDG</a> to supply its PVT properties). PVT table regions
+are defined using keyword <a href="PVTNUM.html#PVTNUM"> PVTNUM</a>.</p>
+
+<p>The keyword should be followed by <a href="TABDIMS.html#TABDIMS.NTPVT"> NTPVT</a> 
+(set in the <span class="keyword">TABDIMS</span> keyword) lines, one for each PVT
+table region.</p>
+
+<p>Each line contains two items of data, terminated by a slash (/):</p>
+
+<ol>
+<li>The vaporized oil concentration (R<sub>v</sub>). <p>UNITS: sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), stb/Mscf (<samp class="codeph">FIELD</samp>), scc/scc (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li>The dew point pressure. <p>DEFAULT: 0.0</p>
+ <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+</ol>
+
+<p>The run will terminate if the pressure in any grid block in the
+PVT region falls below this value.</p>
+
+<p>The keyword causes the gas density of each PVT region to be modified
+to include the vaporized oil, and causes the oil flow rate from each
+well to be set equal to its gas flow rate multiplied by the R<sub>v</sub> value associated with the region in which it is completed.
+The group and field oil flows are obtained by summing the well oil
+flows.</p>
+
+<div class="section" id="rvconstt_example"><a name="rvconstt_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTPVT</samp> = 2:</p>
+ <pre><code>RVCONSTT
+ 0.00047 330 /
+ 0.00057 350 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

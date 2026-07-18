@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Equilibration - the EQUIL keyword"/>
+<meta name="DC.subject" content="SOLUTION section equilibration using the EQUIL keyword"/>
+<meta name="keywords" content="SOLUTION section equilibration using the EQUIL keyword"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="solution_equilibration_-_the_equil_keyword"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Equilibration - the EQUIL keyword</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="solution_equilibration_-_the_equil_keyword"><a name="solution_equilibration_-_the_equil_keyword"><!-- --></a>
+<h1 class="topictitle1">Equilibration - the EQUIL keyword</h1>
+
+
+ <div>
+<p>A line of <span class="keyword">EQUIL</span> data must be specified for each
+equilibration region. (Cells may be assigned to equilibration regions
+using <a href="EQLNUM.html#EQLNUM"> EQLNUM</a> in
+the <a href="REGIONS.html#REGIONS"> REGIONS</a> section).
+If there is more than one equilibration region, it is important that
+they are non-communicating.</p>
+
+<p>The <span class="keyword">EQUIL</span> data specifies the initial pressure
+at a reference depth, the initial water-oil and gas-oil contact depths
+and the capillary pressures at these depths, and the equilibration
+options. For example:</p>
+
+<pre><code>EQUIL
+9035 3600 9209 0 9035 0 1 1 20 /</code></pre>
+<div class="p">This specifies:<ul>
+<li>The pressure at datum depth of 9035 is 3600.   </li>
+
+<li>Water oil contact (<math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>o</mi><mi>w</mi></mrow></msub>
+<mo>=</mo><mn>0</mn></math>) is at 9209 ft.   </li>
+
+<li> Gas-oil contact (<math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>o</mi><mi>g</mi></mrow></msub>
+<mo>=</mo><mn>0</mn></math>) is at 9035 ft. </li>
+
+<li>20 sub-intervals used in each cell for initial averaging.</li>
+
+</ul>
+</div>
+
+<p>When capillary pressure exists, an initial saturation distribution
+is found that matches this against the hydrostatic pressure gradient
+due to phase density differences. The 20 refers to the number of sub-intervals
+averaged to obtain the initial solution. The default is 1 sub-interval.
+One sub-interval should be used if an initial gas oil contact is present
+in a compositional run, or to obtain exact initial quiescence.</p>
+
+<p>Composition variation with depth in the initial state may be specified
+in the black oil case using keywords such as <a href="RSVD.html#RSVD"> RSVD</a> (or <a href="PBVD.html#PBVD"> PBVD</a>), to specify R<sub>s</sub> or P<sub>bub</sub>; and <a href="RVVD.html#RVVD"> RVVD</a> (or <a href="PDVD.html#PDVD"> PDVD</a>) to specify R<sub>v</sub> or P<sub>dew.</sub>. Either <span class="keyword">RSVD</span> or <span class="keyword">PBVD</span> is optional, to set R<sub>s</sub> or P<sub>bub</sub> versus depth. Either <span class="keyword">RVVD</span> or <span class="keyword">PDVD</span> is optional, to set R<sub>v</sub> or P<sub>dew</sub> versus depth.</p>
+
+<p>In the compositional case, the compositions can be initialized
+using <a href="ZMFVD.html#ZMFVD"> ZMFVD</a> and <a href="COMPVD.html#COMPVD"> COMPVD</a>, described in the
+discussion of the <span class="keyword">PROPS</span> section, or a constant
+composition may be entered with the <a href="ZI.html#ZI"> ZI</a> keyword in the <span class="keyword">PROPS</span> section.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

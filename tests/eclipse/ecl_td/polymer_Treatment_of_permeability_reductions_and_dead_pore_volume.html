@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Treatment of permeability reductions and dead pore volume"/>
+<meta name="DC.subject" content="The ECLIPSE 100 polymer flood simulation model treatment permeability reduction and dead pore volume, Permeability, Reductions, Pore volume, Dead"/>
+<meta name="keywords" content="The ECLIPSE 100 polymer flood simulation model treatment permeability reduction and dead pore volume, Permeability, Reductions, Pore volume, Dead"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="polymer_treatment_of_permeability_reductions_and_dead_pore_volume"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Treatment of permeability reductions and dead pore volume</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="polymer_treatment_of_permeability_reductions_and_dead_pore_volume"><a name="polymer_treatment_of_permeability_reductions_and_dead_pore_volume"><!-- --></a>
+<h1 class="topictitle1">Treatment of permeability reductions and dead pore volume</h1>
+
+
+ <div>
+<p>The adsorption process causes a reduction in the permeability of
+the rock to the passage of the aqueous phase and is directly correlated
+to the adsorbed polymer concentration. In order to compute the reduction
+in rock permeability, you are required to specify the residual resistance
+factor (RRF) for each rock type (item 2 of the <a href="../ecl_rm/PLYROCK.html#PLYROCK"> PLYROCK</a> keyword). The actual
+resistance factor can then be calculated:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="polymer.equ.00bf"/>
+ <math><mrow><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>k</mi></mrow></msub><mo>=</mo><mn>1.0</mn><mo>+</mo><mrow><mrow><mo>(</mo>
+<mtext>RRF</mtext><mrow><mo>-</mo><mn>1.0</mn></mrow>
+<mo>)</mo></mrow><mfrac><mrow><msubsup><mrow><mi>C</mi>
+</mrow><mrow><mi>p</mi></mrow><mrow><mi>a</mi></mrow>
+</msubsup></mrow><mrow><msubsup><mrow><mi>C</mi></mrow>
+<mrow><mi>p</mi></mrow><mrow><mi>a</mi><mtext>max</mtext>
+</mrow></msubsup></mrow></mfrac></mrow></mrow></math> 
+</td><td align="right">[Eq. 437.1]
+              </td></tr></tbody></table>
+<p>The value of the maximum adsorbed concentration,              
+   <math><msubsup><mi>C</mi>
+<mi>p</mi><mrow><mi>a</mi><mtext>max</mtext></mrow>
+</msubsup></math>, depends on the rock type and needs to be specified
+as item 5 of the <span class="keyword">PLYROCK</span> keyword. This value must
+be non-zero.          </p>
+
+<p>The dead pore volume (item 1 of the <span class="keyword">PLYROCK</span> keyword)
+must also be specified for each rock type. It represents the amount
+of total pore volume in each grid cell that is inaccessible to the
+polymer solution. The effect of the dead pore volume within each cell
+is to cause the polymer solution to travel at a greater velocity than
+inactive tracers embedded in the water. This chromatographic effect
+is modeled by assuming that the dead pore space is constant for each
+rock type:</p>
+
+<ul>
+<li>and either does not exceed the corresponding irreducible water
+saturation (pre 2008.2)</li>
+
+<li>or is independent of the water saturation (post 2008.2 included).</li>
+
+</ul>
+
+<p>If required, the RRF can be set on a cell-by-cell basis using the <a href="../ecl_rm/PLYKRRF.html#PLYKRRF">PLYKRRF</a> keyword. Any cells
+for which it is not set will use the value for their rock type given
+by item 2 of the <span class="keyword">PLYROCK</span> keyword.</p>
+
+<p>If the temperature option is specified, then a temperature dependence
+can be provided for the RRF using the <a href="../ecl_rm/PLYTRRF.html#PLYTRRF">PLYTRRF</a> keyword.</p>
+
+<p>Similarly, the value of the maximum adsorbed concentration can
+be set on a cell-by-cell basis using the <a href="../ecl_rm/PLYCAMAX.html#PLYCAMAX"> PLYCAMAX</a> keyword. Any cells
+for which it is not set will use the value for their rock type given
+by item 5 of the <span class="keyword">PLYROCK</span> keyword.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="VFPCHK"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="VFPCHK"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>VFPCHK</title>
+</head>
+<body>
+
+
+<div class="nested0" id="VFPCHK"><a name="VFPCHK"><!-- --></a>
+<h1 class="keyword">VFPCHK</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="vfpchk.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="vfpchk.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2768e45"> x </th>
+
+<th valign="top" id="d2768e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2768e54"> x </th>
+
+<th valign="top" id="d2768e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2768e45 d2768e54 ">  </td>
+
+<td valign="top" headers="d2768e48 d2768e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2768e45 d2768e54 ">  </td>
+
+<td valign="top" headers="d2768e48 d2768e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2768e45 d2768e54 ">  </td>
+
+<td valign="top" headers="d2768e48 d2768e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2768e45 d2768e54 ">  </td>
+
+<td valign="top" headers="d2768e48 d2768e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2768e45 d2768e54 ">  </td>
+
+<td valign="top" headers="d2768e48 d2768e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2768e45 d2768e54 ">  </td>
+
+<td valign="top" headers="d2768e48 d2768e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2768e45 d2768e54 ">  </td>
+
+<td valign="top" headers="d2768e48 d2768e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2768e45 d2768e54 "> x </td>
+
+<td valign="top" headers="d2768e48 d2768e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>When production well VFP tables are read in, they are checked to
+ensure that curves of BHP versus flow rate at adjacent THP values
+do not cross. If a crossing is detected (that is if the BHP increases
+with decreasing THP) a warning message is printed. It may cause well
+convergence problems or hunting between control modes. However, crossings
+may also occur if some BHP values are set artificially high to indicate
+conditions where the flow is supersonic or exceeds specified erosion
+velocity limits (see keywords "SONICPRS" and "ERODEVEL" in the <cite>VFPi User Guide</cite>). These are legitimate, and serve to prevent
+the well from operating at these conditions. The VFP table check can
+be thresholded (to report only crossover BHPs below a given value),
+or even turned off entirely, with the keyword <span class="keyword">VFPCHK</span>. The keyword should be entered before the <a href="VFPPROD.html#VFPPROD"> VFPPROD</a> keywords to which it should apply.</p>
+
+<p>The <span class="keyword">VFPCHK</span> keyword is followed by a single real
+number terminated with a slash (/), which sets the threshold BHP value
+for the checks. Any crossover BHPs at or above the threshold value
+will be ignored by the checks. A zero or negative value turns off
+the checks entirely.</p>
+
+<p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+
+<p>DEFAULT: 1.0E10</p>
+
+<p>If this keyword is not present, checks are performed with the default
+threshold BHP value.</p>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> <p>ECLIPSE 300</p>
+When ECLIPSE 300 encounters a crossing curve, it attempts
+to correct this internally by reducing the higher BHP value (on the
+lower THP curve) to lie below the lower BHP value (on the higher THP
+curve), so that the BHP increases with increasing THP. However, if
+the BHP values had been made artificially high on purpose to distinguish
+regimes of supersonic or erosional flow, the correction removes this
+distinction and allow the well to operate under these conditions.
+It is therefore important to use <span class="keyword">VFPCHK</span> to prevent
+ECLIPSE 300 altering points that have been given artificially high
+BHP values for this purpose.</div>
+
+<div class="section" id="vfpchk_example"><a name="vfpchk_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <pre><code>VFPCHK
+1.0E5 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

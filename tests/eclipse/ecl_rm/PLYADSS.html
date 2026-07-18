@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PLYADSS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PLYADSS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PLYADSS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="PLYADSS"><a name="PLYADSS"><!-- --></a>
+<h1 class="keyword">PLYADSS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="plyadss.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="plyadss.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1816e45">                         x </th>
+
+<th valign="top" id="d1816e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1816e54"> </th>
+
+<th valign="top" id="d1816e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1816e45 d1816e54 "> </td>
+
+<td valign="top" headers="d1816e48 d1816e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1816e45 d1816e54 "> </td>
+
+<td valign="top" headers="d1816e48 d1816e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1816e45 d1816e54 "> </td>
+
+<td valign="top" headers="d1816e48 d1816e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1816e45 d1816e54 ">                         x </td>
+
+<td valign="top" headers="d1816e48 d1816e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1816e45 d1816e54 "> </td>
+
+<td valign="top" headers="d1816e48 d1816e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1816e45 d1816e54 "> </td>
+
+<td valign="top" headers="d1816e48 d1816e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1816e45 d1816e54 "> </td>
+
+<td valign="top" headers="d1816e48 d1816e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1816e45 d1816e54 "> </td>
+
+<td valign="top" headers="d1816e48 d1816e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword should only be used for polymer studies where the
+salt-sensitivity option has been activated (keyword <a href="BRINE.html#BRINE"> BRINE</a> in <span class="keyword">RUNSPEC</span>).</p>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a>  (set in the <span class="keyword">TABDIMS</span> keyword)
+tables of polymer adsorption functions, each terminated by a slash
+(/), describing the adsorption of polymer by the rock formation.</p>
+
+<p>Each table consists of up to <a href="TABDIMS.html#TABDIMS.NSSFUN"> NSSFUN</a> (set in the <span class="keyword">TABDIMS</span> keyword) elementary sets of records, each corresponding to a given
+solution polymer concentration. In the first record of each set, there
+are two items:</p>
+
+<ol>
+<li>The local polymer concentration in the solution surrounding the
+rock.<p>UNITS: kg/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), lb/stb
+(<samp class="codeph">FIELD</samp>), gm/scc (<samp class="codeph">LAB</samp>)</p>
+      
+      </li>
+
+<li>The corresponding saturated concentration of polymer adsorbed
+by the rock formation, for the solution polymer concentration specified
+by item 1, and the salt concentration given by item 1 in the corresponding <a href="ADSALNOD.html#ADSALNOD"> ADSALNOD</a> table. This
+quantity is therefore the mass of adsorbed polymer per unit mass of
+rock.              <p>UNITS: kg/kg (<samp class="codeph">METRIC</samp>), lb/lb
+(<samp class="codeph">FIELD</samp>), gm/gm (<samp class="codeph">LAB</samp>)</p>
+ </li>
+
+</ol>
+
+<p>In subsequent records of the set, for record N, where N runs from
+2 to a value not greater than <samp class="codeph">NSSFUN</samp>, there is a
+single data item, specifying the adsorbed polymer concentration at
+the solution polymer concentration specified in record 1, and the
+salt concentration specified by item N in the corresponding  <span class="keyword">ADSALNOD</span> table.</p>
+
+<p>Each set of records for a solution polymer concentration value
+should be terminated by a slash (/) and each table should be terminated
+by an additional slash.</p>
+
+<p>The number of salinity concentration entries should also be the
+same for each solution polymer concentration record, and correspond
+to the number of entries in the corresponding <span class="keyword">ADSALNOD</span> table.</p>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> The first solution polymer concentration value
+in each table, and all corresponding adsorbed concentrations at all
+salinities, should be zero.</div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">When the temperature option (keyword <span class="keyword">TEMP</span>) is activated, it is possible to specify this keyword multiple times
+with different values for different temperatures by using the <span class="keyword">PLYATEMP</span> keyword before each occurrence of <span class="keyword">PLYADSS</span> to specify the relevant temperature.</span></div>
+
+<p>See <a href="../ecl_td/polymer_Polymer_Flood_Model.html#polymer_polymer_flood_model">"Polymer flood model"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.</p>
+
+<p>Polymer adsorption functions can also be specified using the <a href="ADSORP.html#ADSORP"> ADSORP</a> keyword.</p>
+
+<p>If fewer than <samp class="codeph">NTSFUN</samp> tables are specified, the
+last table specified will be used for the non-specified ones.</p>
+
+<div class="section" id="plyadss_example"><a name="plyadss_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTSFUN</samp> = 1 and <samp class="codeph">NSSFUN</samp> = 4:</p>
+  <pre><code>PLYADSS
+0.0 0.0
+    0.0
+    0.0
+    0.0 /
+1 0.0002
+  0.0003
+  0.0004
+  0.0004/
+2 0.0005
+  0.0006
+  0.0007
+  0.0008/
+3 0.0008
+  0.0007
+  0.00065
+  0.0006/
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

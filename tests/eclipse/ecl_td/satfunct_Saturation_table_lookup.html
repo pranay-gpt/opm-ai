@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Saturation table lookup"/>
+<meta name="DC.subject" content="Saturation functions"/>
+<meta name="keywords" content="Saturation functions"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="satfunct_saturation_table_lookup"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Saturation table lookup</title>
+</head>
+<body>
+
+
+<div class="nested0" id="satfunct_saturation_table_lookup"><a name="satfunct_saturation_table_lookup"><!-- --></a>
+<h1 class="topictitle1">Saturation table lookup</h1>
+
+
+ <div>
+<p>Saturation values need not be specified at equal intervals, and
+are used in the specified form, rather than being interpolated onto
+regular intervals.</p>
+
+<p>Default values represented by 1* may be inserted as required in
+one or more rows for columns 2 onwards for the one-dimensional table
+keywords <a href="../ecl_rm/SWFN.html#SWFN">SWFN</a>, <a href="../ecl_rm/SWF3.html#SWF3">SWF3</a>, <a href="../ecl_rm/SWOF.html#SWOF">SWOF</a>, <a href="../ecl_rm/SGFN.html#SGFN"> SGFN</a>, <a href="../ecl_rm/SGWFN.html#SGWFN">SGWFN</a>, <a href="../ecl_rm/SGF3.html#SGF3">SGF3</a>, <a href="../ecl_rm/SGOF.html#SGOF">SGOF</a>, <a href="../ecl_rm/SLGOF.html#SLGOF">SLGOF</a>, <a href="../ecl_rm/SOF2.html#SOF2">SOF2</a> and <a href="../ecl_rm/SOF3.html#SOF3">SOF3</a>. Where default values have been entered, the
+actual values will be calculated by linear interpolation using the
+nearest non-default neighbors and substituted into the table.</p>
+
+<p>However, where only one non-default value is entered in an entire
+column or where default values are entered at the start or end of
+the tables, the interpolation behavior for ECLIPSE 100 and ECLIPSE
+300 can differ. For example, for the <span class="keyword">SGOF</span> keyword,
+if the capillary pressure column is defaulted throughout, the values
+are replaced with 0.0 throughout by both simulators. However, if only
+one value is not defaulted and this is not the first value in the
+table, in ECLIPSE 100, the first value is set to 0.0, linear interpolation
+is performed to replace any default values up to the defined value,
+and all subsequent values are assigned to the defined value. In contrast,
+in ECLIPSE 300, all defaulted values in the column are set equal to
+the single non-defaulted value. It is recommended, therefore, that
+when defaults are entered into a table, the table is reported using
+the <a href="../ecl_rm/RPTPROPS.html#RPTPROPS"> RPTPROPS</a> keyword and the resultant
+values inspected to verify the intended interpolation behavior.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

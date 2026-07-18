@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="DATUMRX"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="DATUMRX"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>DATUMRX</title>
+</head>
+<body>
+
+
+<div class="nested0" id="DATUMRX"><a name="DATUMRX"><!-- --></a>
+<h1 class="keyword">DATUMRX</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="datumrx.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="datumrx.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d374e45"> x </th>
+
+<th valign="top" id="d374e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d374e54"> x </th>
+
+<th valign="top" id="d374e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d374e45 d374e54 ">  </td>
+
+<td valign="top" headers="d374e48 d374e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d374e45 d374e54 ">  </td>
+
+<td valign="top" headers="d374e48 d374e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d374e45 d374e54 ">  </td>
+
+<td valign="top" headers="d374e48 d374e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d374e45 d374e54 ">  </td>
+
+<td valign="top" headers="d374e48 d374e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d374e45 d374e54 ">  </td>
+
+<td valign="top" headers="d374e48 d374e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d374e45 d374e54 "> x </td>
+
+<td valign="top" headers="d374e48 d374e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d374e45 d374e54 ">  </td>
+
+<td valign="top" headers="d374e48 d374e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d374e45 d374e54 ">  </td>
+
+<td valign="top" headers="d374e48 d374e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is optional and similar to <a href="DATUMR.html#DATUMR">  DATUMR</a>. However, it allows the provision
+of datum depths for all fluid-in-place sets defined by the <a href="FIP.html#FIP">  FIP</a> keyword, in addition
+to the standard set defined with keyword <a href="FIPNUM.html#FIPNUM">  FIPNUM</a>.</p>
+
+<p>If the <span class="keyword">DATUMRX</span> keyword is used then the datum
+specified in any <a href="DATUM.html#DATUM"> DATUM</a> keyword will be ignored.</p>
+
+<p>Datum depths for all fluid-in-place sets must be specified unless
+the <span class="keyword">DATUMR</span> keyword has been processed previously,
+in which case the datum values of any unspecified fluid-in-place set
+will be based on the <span class="keyword">DATUMR</span> keyword.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> For ECLIPSE 100, an exception is the fluid-in-place
+set created by the keyword <a href="FIPOWG.html#FIPOWG"> FIPOWG</a> whose datum depths will be identical to the depths of the
+default fluid-in-place unless explicitly provided. </span></div>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li> The fluid-in-place region family, to which the specified datum
+depths belong. <p>The family name should be up to 5 characters long.</p>
+<p>A default (1*) or blank (' ') entry refers to the standard
+set of fluid-in-place regions defined with the keyword <span class="keyword">FIPNUM</span>.</p>
+<p>Additional families of fluid-in-place regions may optionally
+be defined, using the keyword <span class="keyword">FIP</span>. The family name
+is a string of up to 5 characters that makes up the second segment
+of the keyword name (characters 4 - 8). Each family
+can divide up the field in different ways. Thus, for example, the
+standard <span class="keyword">FIPNUM</span> family may divide the field into
+layers, and an additional family can be defined to divide the field
+into areal sectors.</p>
+</li>
+
+<li> The datum depths for each region of the fluid-in-place family. <p>A maximum number of <samp class="codeph">NTFIP</samp> values is allowed as defined
+by keywords <a href="REGDIMS.html#REGDIMS"> REGDIMS</a> or <a href="TABDIMS.html#TABDIMS"> TABDIMS</a>. Each
+number must be a positive real number, one for each fluid-in-place
+region in the fluid-in-place.</p>
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+<p>If a datum value is not specified for all fluid-in-place
+regions, the datum values for the remaining fluid-in-place regions
+will be based on the last specified region.</p>
+</li>
+
+</ol>
+
+<p>The datum depths are used to calculate the depth corrected pressures
+(potentials). The datum depths provided for the fluid-in-place sets
+specified by the <span class="keyword">FIP</span> keyword are used when calculating
+the <a href="SUMMARY.html#SUMMARY"> SUMMARY</a> keywords <span class="keyword">RPPO</span>, <span class="keyword">RPPW</span>, <span class="keyword">RPPG</span> and <span class="keyword">RPPC</span> (ECLIPSE 100).</p>
+
+<p>ECLIPSE 100</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> It is possible to specify a negative depth
+value. </span></div>
+
+<div class="section" id="datumrx_example"><a name="datumrx_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>DATUMRX
+ 'XXX  ' 4800 5000 5200 /
+  1*     4850 5100 /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

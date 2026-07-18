@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Dual porosity"/>
+<meta name="DC.subject" content="Thermal dual porosity features"/>
+<meta name="keywords" content="Thermal dual porosity features"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="features_dual_porosity"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Dual porosity</title>
+</head>
+<body>
+
+
+<div class="nested0" id="features_dual_porosity"><a name="features_dual_porosity"><!-- --></a>
+<h1 class="topictitle1">Dual porosity</h1>
+
+
+ <div>
+<p>The use of dual porosity grids in a thermal calculation makes additional
+assumptions about the distribution of rock volume between the porosities.
+In single porosity calculations, the rock volume is assumed to be
+the bulk volume minus the pore volume. This approach cannot be used
+with dual porosity, as it leads to the rock volume being represented
+multiple times, one in each porosity. Instead, default assumptions
+are made about the rock volume distribution, which can be overridden
+by you.</p>
+
+<p>The default behavior assumes that the rock is associated with the
+matrix porosity, as matrix pore volume is contained in pores in the
+rock, as compared with fracture pore volume, which is associated with
+gaps in the matrix rock. However, to represent the local thermal effect
+of rock bounding the fracture, which may cool or heat the fracture
+fluids before a thermal transient advances far into the matrix rock,
+an amount of rock equal to the fracture pore volume is associated
+with the fracture. To prevent negative rock volumes being calculated
+if the porosities are large, this fracture rock volume will be proportionately
+reduced, so that the matrix/fracture rock volume ratio equals that
+of the matrix/fracture pore volume ratio in the case that negative
+volumes would otherwise be produced.</p>
+
+<p>This approach may not be appropriate in all cases, and you
+have the option of overriding this behavior by providing a weighting
+factor for each cell in each porosity, using the <a href="../ecl_rm/ROCKSPLV.html#ROCKSPLV">ROCKSPLV</a> keyword. In this case, the total
+rock volume, defined as the average bulk volume for all porosities
+for a particular cell, less the total pore volume over all porosities
+for that cell, is multiplied by the cell weighting factor specified
+by <span class="keyword">ROCKSPLV</span>, to give the rock volume for that porosity.
+It is not required that the weighting factors sum to unity, and so
+this keyword can also be used as a multiplier.</p>
+
+<p>The default behavior may also be appropriate for triple porosity,
+where the non-matrix porosities are larger voids. For general multiple
+porosity, where the sub-matrix porosities can have a variety of user-defined
+interpretations, the default behavior may or may not be appropriate,
+depending on whether the sub-matrix cells are used to model transients
+in the matrix, or for other purposes.</p>
+
+<p>The use of the <a href="../ecl_rm/ACTNUM.html#ACTNUM">ACTNUM</a> keyword
+with dual porosity and the thermal option creates additional options
+for combining the various data inputs, and you should check carefully
+that the final result is what is expected, as the <span class="keyword">ACTNUM</span> and rock proportioning behaviors are applied separately from each
+other.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

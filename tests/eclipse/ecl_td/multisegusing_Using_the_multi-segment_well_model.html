@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using the multisegment well model"/>
+<meta name="DC.subject" content="Multisegment wells, Using"/>
+<meta name="keywords" content="Multisegment wells, Using"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="multisegusing_using_the_multi-segment_well_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using the multisegment well model</title>
+</head>
+<body>
+
+
+<div class="nested0" id="multisegusing_using_the_multi-segment_well_model"><a name="multisegusing_using_the_multi-segment_well_model"><!-- --></a>
+<h1 class="topictitle1">Using the multisegment well model</h1>
+
+
+ <div>
+<p>If the run contains any multisegment wells, the dimensioning data
+must be supplied in the <span class="keyword">RUNSPEC</span> section keyword <a href="../ecl_rm/WSEGDIMS.html#WSEGDIMS">WSEGDIMS</a>. A run cannot contain
+both multisegment wells and friction wells; any friction wells must
+be converted to multisegment wells (see below).</p>
+
+<div class="section" id="multisegusing_defining_multi-segment_wells"><a name="multisegusing_defining_multi-segment_wells"><!-- --></a><h4 class="sectiontitle">Defining
+multisegment wells</h4><p>A multisegment well, like any other well,
+must first be introduced with the <a href="../ecl_rm/WELSPECS.html#WELSPECS">WELSPECS</a> keyword. The connection
+data must also be specified in the usual way with the <a href="../ecl_rm/COMPDAT.html#COMPDAT">COMPDAT</a> (or <a href="../ecl_rm/COMPDATL.html#COMPDATL">COMPDATL</a>) keyword. The well
+must then be defined as a multisegment well with the keywords <a href="../ecl_rm/WELSEGS.html#WELSEGS">WELSEGS</a> and <a href="../ecl_rm/COMPSEGS.html#COMPSEGS">COMPSEGS</a> (or <a href="../ecl_rm/COMPSEGL.html#COMPSEGL">COMPSEGL</a>; keywords ending in <samp class="codeph">L</samp> should be used for wells in local grids).</p>
+<p>ECLIPSE 100 </p>
+<p>An alternative to using <span class="keyword">WELSEGS</span> and <span class="keyword">COMPSEGS</span> is to use the keyword <a href="../ecl_rm/WFRICSEG.html#WFRICSEG">WFRICSEG</a> (or <a href="../ecl_rm/WFRICSGL.html#WFRICSGL">WFRICSGL</a>). The data for these
+keywords is identical to <a href="../ecl_rm/WFRICTN.html#WFRICTN"> WFRICTN</a> (and <a href="../ecl_rm/WFRICTNL.html#WFRICTNL">WFRICTNL</a>), and they are primarily intended to provide a means of converting
+a friction well into a multisegment well having one segment per grid
+block connection.</p>
+<p>The <span class="keyword">WELSEGS</span> keyword defines
+the segment structure of a well. The first record defines its top
+segment, which must be segment number 1. The top segment’s
+node is taken to be the bottom hole reference depth of the well, so
+that the well’s BHP is equal to that segment’s pressure.
+The remaining records define the rest of the well’s segments,
+working down the main stem and, for multilateral wells, outwards along
+each branch. Branches are identified by their branch number; the main
+stem must be branch number 1.</p>
+<p>The <span class="keyword">COMPSEGS</span> (or <span class="keyword">COMPSEGL</span>) keyword defines the location of
+the grid block connections within the well, by the branch number and
+the distance down the well to the start and end of the perforations. <strong>All</strong> connections in a multisegment well must have their locations
+defined with this keyword. ECLIPSE automatically allocates each grid
+block connection to the segment whose node lies nearest to the center
+of the connection. A segment may contain any number of grid block
+connections. If you wish to define the segments so that there is a
+single grid block connection within each segment, it is best to position
+the segment nodes to be at the center of each grid block connection
+(see figure <a href="multisegusing_Using_the_multi-segment_well_model.html#multisegusing.XID-0000001f">568.1</a>), since
+the flow is modeled as entering the well segment at its node.</p>
+<div class="fignone" id="multisegusing.XID-0000001f"><a name="multisegusing.XID-0000001f"><!-- --></a>
+
+ <br/><img src="../img/multiseg10.png" width="374px"/><br/> 
+<br/><span class="figcap">
+           Figure 568.1  Segment node positions with one segment per grid block connection</span></div>
+<p>In multisegment wells the grid block connections are not
+forced to be at the same depth as the corresponding grid block centers.
+Since ECLIPSE knows the depth of the beginning and end of each segment
+and the position of the center of the connection along the segment,
+it can work out the depth of the center of the connection. ECLIPSE
+sets the connection depths this way by default, although it is possible
+to redefine the connection depths in the <span class="keyword">COMPSEGS</span> keyword. The hydrostatic head between the connection depth and the
+grid block center is calculated explicitly from the fluid contents
+of the grid block (see <a href="multiseg_Inflow_performance.html#multiseg_inflow_performance"> "Inflow performance"</a>).</p>
+<p>ECLIPSE
+100  </p>
+<p>It is possible to define the initial conditions (the pressure
+and the fluid contents) in each segment manually using keyword <a href="../ecl_rm/WSEGINIT.html#WSEGINIT">WSEGINIT</a>. This overrides the
+standard initialization that ECLIPSE performs, which depends in the
+type of well and the conditions in the connecting grid blocks.</p>
+<p>If required, looped flow paths within multisegment wells can be
+specified using the <a href="../ecl_rm/WSEGLINK.html#WSEGLINK">WSEGLINK</a> keyword. See <a href="multiseg_Looped_flowpaths.html#multiseg_looped_flowpaths"> "Looped
+flow paths"</a> for further information.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

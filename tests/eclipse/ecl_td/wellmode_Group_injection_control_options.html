@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Group injection control options"/>
+<meta name="DC.subject" content="Well modeling group production control, Group, Control, Gas accounting tables"/>
+<meta name="keywords" content="Well modeling group production control, Group, Control, Gas accounting tables"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wellmode_group_injection_control_options"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Group injection control options</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wellmode_group_injection_control_options"><a name="wellmode_group_injection_control_options"><!-- --></a>
+<h1 class="topictitle1">Group injection control options</h1>
+
+
+ <div>
+<p>Groups, and the field as a whole, can be given targets and limits
+which govern the injection rate of each phase. The injection controls
+can be applied independently of any production controls the group
+may have. The injection controls are set using the keyword <a href="../ecl_rm/GCONINJE.html#GCONINJE">GCONINJE</a>.</p>
+
+<p>A group at any level (including the field) can have its injection
+rate of water and/or gas (and oil in ECLIPSE 100) controlled
+to meet one of the following targets:</p>
+
+<ul>
+<li>Surface injection rate of a particular phase</li>
+
+<li>Total reservoir volume injection rate of all phases</li>
+
+<li>Reinjection fraction of a particular phase</li>
+
+<li>Total voidage replacement fraction of all injected phases.</li>
+
+<li> <p>ECLIPSE 300                        
+         </p>
+               <p>Wet gas rate (which
+is the volume that the injected hydrocarbon mixture would occupy at
+standard conditions if it were an ideal gas).</p>
+</li>
+
+</ul>
+
+<p>The first control mode gives the group a user-specified surface
+injection rate target. The second control mode gives the group a target
+reservoir volume injection rate for the phase that is equal to the
+user-specified total rate minus the reservoir volume injection rate
+of any other phases in the group. The third control mode gives the
+group a surface injection rate target equal to its production rate
+of the phase (or alternatively the production rate of another named
+group) multiplied by the user-specified reinjection fraction. If the
+phase is gas, gas consumed by the group and any subordinate groups
+is subtracted from the production rate, and gas imported to the group
+and any subordinate groups is added to the production rate, before
+multiplying by the re-injection fraction. (A gas consumption rate
+and import rate can be specified for any group using keyword <a href="../ecl_rm/GCONSUMP.html#GCONSUMP">GCONSUMP</a> in ECLIPSE 100
+and keywords <a href="../ecl_rm/GRUPFUEL.html#GRUPFUEL">GRUPFUEL</a> and <a href="../ecl_rm/GADVANCE.html#GADVANCE">GADVANCE</a> in ECLIPSE 300.) In ECLIPSE 300 gas reserved for
+sale (keyword <a href="../ecl_rm/GRUPSALE.html#GRUPSALE">GRUPSALE</a>) is also subtracted from the production rate. The fourth
+control mode gives the group a target reservoir volume injection rate
+for the phase that is calculated such that the group’s total
+reservoir volume injection rate equals its voidage production rate
+(or alternatively the voidage production rate of another named group)
+multiplied by the user-specified voidage replacement fraction.</p>
+
+<p>If the group has a target set for reservoir volume injection rate
+or voidage replacement fraction for a particular phase, that phase
+is designated the ‘top-up’ phase for the run. It is used
+to top up the total group injection rate to the required target. Its
+injection target depends on the injection rates of the other phase(s)
+within the group, and therefore the ‘top-up’ phase must
+have its injection controls handled last of all. There can only be
+one ‘top-up’ phase at any given time in the simulation
+- different groups cannot have different ‘top-up’ phases.
+An example application of injection control is for a platform to reinject
+all its available gas (that is, produced gas minus gas consumed for
+power), and to inject water so that the water and gas injection together
+replaces the platform’s production voidage. Water is the ‘top-up’
+phase here.</p>
+
+<p>Upper limits can be imposed on the four quantities at any group
+or the field as a whole. If the injection rate exceeds one of a group’s
+upper limits, the violated limit becomes a target for the group. If
+the group was already injecting at a target rate, the original target
+will no longer be met but will act as an upper limit for that quantity.
+For example, a group can inject water to replace its voidage production,
+subject to a surface rate limit that represents its injection water
+handling capacity. Obviously only the ‘top-up’ phase can
+have upper limits specified for quantities 2 or 4 since a limit could
+become a target at some stage in the simulation.</p>
+
+<div class="section" id="wellmode_defining_the_composition_of_injected_gas"><a name="wellmode_defining_the_composition_of_injected_gas"><!-- --></a><h4 class="sectiontitle">Defining the composition of injected gas</h4><p>ECLIPSE 300</p>
+<p>When gas is injected in compositional
+simulations, the nature of this gas must be defined. The injected
+gas may be provided in the following ways:</p>
+<ul>
+<li> The gas may be designated as a named wellstream, whose composition
+is defined explicitly in keyword <a href="../ecl_rm/WELLSTRE.html#WELLSTRE">WELLSTRE</a>.             </li>
+
+<li> The gas may be provided by the production stream of a named group.
+Gas used for fuel (<a href="../ecl_rm/GRUPFUEL.html#GRUPFUEL">GRUPFUEL</a>) and sales (<a href="../ecl_rm/GRUPSALE.html#GRUPSALE">GRUPSALE</a>) is by default subtracted from a source group’s available
+gas supply for reinjection, but the keyword <a href="../ecl_rm/WTAKEGAS.html#WTAKEGAS">WTAKEGAS</a> may be used to alter
+the priorities for re-injection, fuel and sales. The injection gas
+supply from the source group may be augmented by advance gas defined
+in keyword <a href="../ecl_rm/GADVANCE.html#GADVANCE">GADVANCE</a>. The advance gas will be used for reinjection prior to the
+gas produced by this group from the reservoir.             </li>
+
+<li>The gas may be provided by the production stream of a named well.
+The gas supply from the source well may be augmented by advance gas
+defined in keyword <a href="../ecl_rm/WADVANCE.html#WADVANCE">WADVANCE</a>. The advance gas will be used for reinjection prior to the
+gas produced by this group from the reservoir.             </li>
+
+<li>The injected gas may be a mixture from a number of sources. The
+mixture may be specified by the fractional contribution from each
+source (keyword <a href="../ecl_rm/WINJMIX.html#WINJMIX"> WINJMIX</a>). Alternatively the gas from a set of sources may be taken
+in a specified order (keyword <a href="../ecl_rm/WINJORD.html#WINJORD">WINJORD</a>).                                           </li>
+
+</ul>
+<p>Groups with gas injection targets should have the nature of
+their injected gas defined in one of the above ways with the keyword <a href="../ecl_rm/GINJGAS.html#GINJGAS">GINJGAS</a>. If there is not enough
+available gas from the source to fulfil the group’s injection
+requirement, an additional type of gas import named “make-up
+gas” may be defined for the injecting group. This comes from
+a named wellstream, which has an infinite supply and will make up
+the extra requirement to fulfil the group’s injection target.</p>
+<p>In general, therefore, the composition of the injected gas can
+vary with the injection rate and the supply of available gas from
+the sources. When the gas comes from a limited source (namely a group
+or well production stream), the injection gas is taken from the following
+supplies in the stated order:</p>
+<ol>
+<li>The source’s advance gas stream (if defined), up to its
+specified maximum rate. </li>
+
+<li>The source’s production stream, minus the specified fuel
+usage and the gas reserved for sale if the source is a group (unless
+the priorities are reordered by <a href="../ecl_rm/WTAKEGAS.html#WTAKEGAS">WTAKEGAS</a>).</li>
+
+<li>The injecting group’s make-up gas stream.</li>
+
+</ol>
+<p>If the injecting group does not have a make-up gas stream
+defined, there may possibly be a shortfall between its injection requirement
+and the injection gas supply. By default, the group will continue
+to fulfil its injection requirement and the shortfall between supply
+and injection rate will show up as a negative excess in the gas accounting
+tables (see below). However, if the <a href="../ecl_rm/WAVAILIM.html#WAVAILIM">WAVAILIM</a> keyword is entered
+the injection rate will be limited by the available gas supply. A
+shortfall between supply and injection demand will cause the group
+to reduce its injection rate to match the available gas supply; the
+group will then be under <strong>availability</strong> control for gas injection.</p>
+<p>When the injected gas composition may vary with the injection
+rate (when there is make-up or advance gas, or when the injection
+stream is defined by <span class="keyword">WINJORD</span>), the injection calculation
+may be iterated a number of times until the estimated injection rate
+(from which the composition is determined) and the actual injection
+rate converges. Similarly, when the <span class="keyword">WAVAILIM</span> keyword
+is entered and a limited source of gas is shared between two or more
+injection groups, the injection calculation may have to be iterated
+a number of times to ensure that, if any groups inject less than their
+allocated share of available gas, their unused share of available
+gas is re-allocated to other groups. The maximum number of these iterations,
+and their convergence tolerance, is controlled by items 3 and 4 of
+keyword <a href="../ecl_rm/GCONTOL.html#GCONTOL">GCONTOL</a>.</p>
+</div>
+
+<div class="section" id="wellmode_gas_accounting_tables"><a name="wellmode_gas_accounting_tables"><!-- --></a><h4 class="sectiontitle">Gas accounting
+tables</h4><p>ECLIPSE 300 </p>
+<p>The gas rate accounting table is generated in
+the print file at each report step, and provides information on how
+produced gas is used. Each column is described below:</p>
+<ol>
+<li>Fuel volume rate   <p>The rate at which produced gas is used for
+fuel. (Controlled by the <a href="../ecl_rm/GRUPFUEL.html#GRUPFUEL">GRUPFUEL</a> keyword.)</p>
+             </li>
+
+<li>Sales volume rate  <p>The rate at which produced gas is used for
+sales. (Controlled by the <a href="../ecl_rm/GRUPSALE.html#GRUPSALE">GRUPSALE</a> keyword.)</p>
+             </li>
+
+<li>Reinjection volume rate <p>The rate at which produced gas is reinjected
+into the reservoir. (Controlled by the <a href="../ecl_rm/GCONINJE.html#GCONINJE">GCONINJE</a> and <a href="../ecl_rm/WCONINJE.html#WCONINJE">WCONINJE</a> keywords.) This also
+includes gas which is injected into the reservoir during production
+balancing of surface gas (controlled by the <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a> keyword).</p>
+<p>If <a href="../ecl_rm/OPTIONS3.html#options3.108"> item 108</a> of
+the <span class="keyword">OPTIONS3</span> is non-zero, then this will <strong>not</strong> include any gas injected during the surface gas production balancing
+group control mode.</p>
+             </li>
+
+<li>Excess volume rate<p>The rate difference between the gas produced
+and the gas used to meet the fuel, sales and reinjection requirements.</p>
+<p>If <span class="keyword">OPTIONS3</span> item 108 is non-zero, then gas
+injected during the surface gas production balancing group control
+mode will <strong>not</strong> be used in the reporting of the excess (only
+the reinjected gas during the reinjection group control mode).</p>
+</li>
+
+<li>Sum volume rate  <p>This is the sum of the first four columns
+and should equal the gas produced by the field for separators that
+simply accumulate the gas from each stage. (This is the default separator
+configuration). If gas from an intermediate stage is used as a feed
+for a subsequent stage and is also a source of reinjection gas, then
+the sum of the first four columns will not necessarily equal the produced
+gas rate. This is discussed further in the <a href="wellmode_Group_injection_control_options.html#wellmode_export_tables"> "Export tables"</a>.</p>
+</li>
+
+<li>Export volume rate  <p>The sum of the excess gas rate and the
+sales gas rate, that is the rate produced gas is available for export
+after the fuel and reinjection requirements have been met.</p>
+<p>If <span class="keyword">OPTIONS3</span> item 108 is non-zero, then gas injected during
+the surface gas production balancing group control mode will <strong>not</strong> be used in the reporting of the export (only the reinjected gas
+during the reinjection group control mode).</p>
+</li>
+
+<li>Advanced gas volume rate    <p>The rate at which advanced gas
+is used to augment produced gas in a combined reinjection stream.
+(Controlled by the <a href="../ecl_rm/GADVANCE.html#GADVANCE">GADVANCE</a> or <a href="../ecl_rm/WADVANCE.html#WADVANCE"> WADVANCE</a> keywords.) The advanced gas is only used for reinjection
+and not as a source of fuel or sales gas.</p>
+                <p>This
+column is not output if the field is operating with a surface gas
+production balancing limit/target.</p>
+</li>
+
+<li>Make-up gas volume rate <p>The rate at which a make-up gas stream
+is used to top-up advanced and re-injected produced gas in order to
+meet an injection target. (Controlled by the <a href="../ecl_rm/GINJGAS.html#GINJGAS">GINJGAS</a> and <a href="../ecl_rm/WINJGAS.html#WINJGAS"> WINJGAS</a> keywords.)</p>
+   
+            <p>This column is not output if the field is operating
+with a surface gas production balancing limit/target.</p>
+</li>
+
+<li>Reinj + Adv + Make<p>The sum of volume rates of reinjected produced
+gas, advanced gas and make-up gas. Note that this may differ from
+the total field injection gas rate, which could include wellstreams
+or mixtures not associated with produced gas.</p>
+                <p>This column is not output if the field is operating with a surface
+gas production balancing limit/target.</p>
+</li>
+
+</ol>
+</div>
+
+<div class="section" id="wellmode_export_tables"><a name="wellmode_export_tables"><!-- --></a><h4 class="sectiontitle">Export tables</h4><p>ECLIPSE 300             </p>
+<p>Export tables are written to the print file at each report step only
+when both of the following conditions are met:</p>
+<ul>
+<li>A separator has been defined in which the gas from an intermediate
+stage is fed into a subsequent stage or gas plant, instead of the
+stock tank (see item 7 of the <a href="../ecl_rm/SEPCOND.html#SEPCOND"> SEPCOND</a> keyword). </li>
+
+<li>Gas from an intermediate stage of a separator is used as the source
+of re-injection gas (see item 5 of the <a href="../ecl_rm/GINJGAS.html#GINJGAS">GINJGAS</a> keyword).         
+                                                            </li>
+
+</ul>
+<p>If the group has a target set for reservoir volume injection
+rate or voidage replacement fraction for a particular phase, that
+phase is designated the ‘top-up’ phase for the run. It
+is used to top up the total group injection rate to the required target.
+Its injection target depends on the injection rates of the other phase(s)
+within the group, and therefore the ‘top-up’ phase must
+have its injection controls handled last of all. There can only be
+one ‘top-up’ phase at any given time in the simulation
+- different groups cannot have different ‘top-up’ phases.
+An example application of injection control is for a platform to reinject
+all its available gas (that is, produced gas minus gas consumed for
+power), and to inject water so that the water and gas injection together
+replaces the platform’s production voidage. Water is the ‘top-up’
+phase here. In these circumstances, reinjection from an intermediate
+separator stage reduces the feed to a subsequent stage and the separator
+oil rate is thus reduced. This reduced oil rate is reported in the
+table under the Oil Volume Rate column. This export rate should be
+distinguished from the produced oil rate, reported elsewhere in the
+print file, which is the ‘formation’ oil rate prior to
+any reinjection work. The difference then between the formation oil
+and export oil is the oil vapor that is contained in the reinjected
+gas that would otherwise have been separated in the subsequent separator
+stage. Note that it is the produced oil rate and not the export oil
+rate that may be controlled by the <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a> keyword. (This is
+also the case for gas production rates, that is, it is the produced
+gas rate and not the export gas rate that may be controlled.)</p>
+<p>The export gas rate is also included in this table. This is the remaining
+gas rate after reinjection and fuel usage have been accounted for.
+For this type of separator configuration the sum of the reinjected,
+fuel, sales and excess gas rates will not necessarily equal the produced
+gas rate.</p>
+<p>If a Gas Plant table has been specified in the separator
+train that produces an NGL stream (see <a href="../ecl_rm/GPTABLEN.html#GPTABLEN">GPTABLEN</a> or <a href="../ecl_rm/GPTABLE3.html#GPTABLE3">GPTABLE3</a>), then the Export
+table also reports the reduced NGL rate.</p>
+<p>The export oil, gas
+and NGL rates and totals may also be written to the <samp class="codeph">SUMMARY</samp> file using the <span class="keyword">SUMMARY</span> section keywords<span class="keyword">(F,G)E(O,G,N)(R,T)</span>.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The export rate calculation
+should be treated with caution when the intermediate separator stage
+gas is used as part of a mixture to be injected (see the <a href="../ecl_rm/WINJMIX.html#WINJMIX">WINJMIX</a> and <a href="../ecl_rm/WINJORD.html#WINJORD">WINJORD</a> keywords) as it may
+be unable to take the re-injection into account.    </span></div>
+</div>
+
+<div class="section" id="wellmode_apportioning_group_injection_targets_by_guide_rate"><a name="wellmode_apportioning_group_injection_targets_by_guide_rate"><!-- --></a><h4 class="sectiontitle">Apportioning group injection targets by guide rate</h4><p>A group or field target injection rate is apportioned between
+the subordinate wells or groups in a precisely analogous manner to
+a production target, as described in <a href="wellmode_Group_production_control_options.html#wellmode_group_production_control_options"> "Group production
+rate targets - guide rate control"</a>. A well-group’s target
+is shared between its group-controlled injectors in proportion to
+their guide rates, after subtracting the injection rate of any injectors
+under independent control. An injector’s guide rate can be set
+with keyword <a href="../ecl_rm/WGRUPCON.html#WGRUPCON">WGRUPCON</a>, otherwise it will be set equal to the well’s injection
+potential at the beginning of each timestep. Wells are placed under
+independent control if they cannot inject their share of the group’s
+target, or if they have been declared unavailable for group control
+in keyword <span class="keyword">WGRUPCON</span>. If a group cannot inject its
+target rate with its existing wells, the drilling queue is scanned
+for a suitable injector to open.</p>
+<p>Similarly a node-group’s
+(or the field’s) target rate is apportioned among its subordinate
+wells unless a subordinate group either</p>
+<ul>
+<li>  has a target injection rate of its own for that phase, or</li>
+
+<li>has been declared unavailable for injection control at a higher
+level for that phase, or</li>
+
+<li>has been given an injection guide rate for that phase.</li>
+
+</ul>
+<p>ECLIPSE 100 </p>
+<p>Group injection guide rates can be used to control the distribution
+of the injected phase between various groups in the same way as for
+production control. But as an alternative to setting the guide rates
+specifically, they can be calculated at the beginning of each timestep
+according to a choice of two options. One option sets them equal to
+the groups’ voidage production rate. The other option (available
+only to the ‘top-up’ phase) sets them equal to the groups’
+net voidage, that is the production voidage minus the reservoir volume
+injection rate in the other phases. An example application is for
+a platform to reinject its available gas, distributing it to selected
+groups in proportion to their voidage production rate. The platform
+could also inject water to replace the overall production voidage,
+distributing it to all groups in proportion to their net voidage rate.
+This would give less water to the groups that have gas injection.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

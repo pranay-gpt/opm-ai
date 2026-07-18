@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="NUPCOL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="NUPCOL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>NUPCOL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="NUPCOL"><a name="NUPCOL"><!-- --></a>
+<h1 class="keyword">NUPCOL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="nupcol.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="nupcol.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1608e45">                         x                   
+  </th>
+
+<th valign="top" id="d1608e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1608e54">                         x                   
+  </th>
+
+<th valign="top" id="d1608e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1608e45 d1608e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d1608e48 d1608e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1608e45 d1608e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1608e48 d1608e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1608e45 d1608e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1608e48 d1608e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1608e45 d1608e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1608e48 d1608e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1608e45 d1608e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1608e48 d1608e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1608e45 d1608e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1608e48 d1608e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1608e45 d1608e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1608e48 d1608e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1608e45 d1608e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d1608e48 d1608e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword sets the number of non-linear iterations for which
+a full hierarchical production/injection system solution is carried
+out. During any subsequent non-linear iterations of the timestep,
+the well rate targets will remain unchanged to allow convergence.</p>
+
+<p>When any form of group control option is being used (for example,
+keyword <a href="GCONPROD.html#GCONPROD"> GCONPROD</a>), the flow targets of certain wells are directly influenced by the
+behavior of other wells in the field. For example, the target rates
+of producers under group control must allow for the production from
+wells that are under other modes of control within the group. Also
+injection wells performing reinjection or voidage replacement have
+flow targets that depend on the behavior of the production wells.</p>
+
+<p>For the group targets to be met exactly, the flow targets of the
+wells under group control must be recalculated at every Newton iteration.
+But when the well flow targets change at each iteration, the convergence
+rate of the iterations is reduced. This is because the Jacobian matrix
+calculation does not include the terms representing the mutual dependency
+of the well rates.</p>
+
+<p>As a compromise, the well flow targets are updated in the first <span class="keyword">NUPCOL</span> Newton iterations of each timestep, and are kept
+constant for any subsequent iterations. Thus the group/field flow
+targets are met exactly if the timestep converges within <span class="keyword">NUPCOL</span> iterations. Any changes in the solution after the
+first <span class="keyword">NUPCOL</span> iterations may cause the group/field
+flow rates to drift slightly away from their targets. In general,
+larger values of <span class="keyword">NUPCOL</span> result in the group/field
+flow targets being met more accurately, but perhaps at the expense
+of requiring more Newton iterations to achieve convergence.</p>
+
+<p>The value of <span class="keyword">NUPCOL</span> is initialized to 3 in ECLIPSE
+100 and 2 in ECLIPSE 300. This keyword may be used to change the value
+of this quantity at any time in the simulation.</p>
+
+<p>The keyword should be followed by an integer denoting the last
+non-linear iteration for which well rate targets are recalculated.
+The integer should be followed by a slash.</p>
+
+<p>See also keyword <a href="GCONTOL.html#GCONTOL">  GCONTOL</a>.</p>
+
+<div class="section" id="nupcol_notes"><a name="nupcol_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li>If the <span class="keyword">NUPCOL</span> keyword is used in a restart
+run it must be specified after the restart time, or it will be ignored
+and the value from the base run will be used instead.  </li>
+
+<li><span class="keyword">NUPCOL</span> is also used in other situations where
+the control mode, or some other quantity, in the well needs to be
+'frozen' during the Newton iterations. Some examples are <a href="WELDRAW.html#WELDRAW"> WELDRAW</a>, during gas lift
+optimization (<a href="LIFTOPT.html#LIFTOPT"> LIFTOPT</a>), solving networks (<a href="NETBALAN.html#NETBALAN"> NETBALAN</a>) and during prioritization (see keywords  <a href="PRIORITY.html#PRIORITY"> PRIORITY</a> and  <a href="PRORDER.html#PRORDER"> PRORDER</a> for example).</li>
+
+</ul>
+</div>
+
+<div class="section" id="nupcol_example"><a name="nupcol_example"><!-- --></a><h4 class="sectiontitle">Example</h4>           <pre><code>NUPCOL
+ 4 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

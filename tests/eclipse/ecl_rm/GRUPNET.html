@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GRUPNET"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GRUPNET"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GRUPNET</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GRUPNET"><a name="GRUPNET"><!-- --></a>
+<h1 class="keyword">GRUPNET</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="grupnet.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="grupnet.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d928e45"> x </th>
+
+<th valign="top" id="d928e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d928e54"> x </th>
+
+<th valign="top" id="d928e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d928e45 d928e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d928e48 d928e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d928e45 d928e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d928e48 d928e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d928e45 d928e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d928e48 d928e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d928e45 d928e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d928e48 d928e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d928e45 d928e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d928e48 d928e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d928e45 d928e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d928e48 d928e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d928e45 d928e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d928e48 d928e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d928e45 d928e54 "> x </td>
+
+<td valign="top" headers="d928e48 d928e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword defines the structure of a standard production network,
+when using the network option (see <a href="../ecl_td/networkintro_Network_Option.html#networkintro_network_option">"Network option"</a> in the <cite>ECLIPSE Technical Description</cite>). If you are using
+the extended network model (keyword <a href="NETWORK.html#NETWORK"> NETWORK</a> in the <span class="keyword">RUNSPEC</span> section),
+you should define the production network with keywords <a href="BRANPROP.html#BRANPROP"> BRANPROP</a> and <a href="NODEPROP.html#NODEPROP"> NODEPROP</a> instead.</p>
+
+<p>The <span class="keyword">GRUPNET</span> keyword is followed by any number
+of records, each containing the following items of data and terminated
+with a slash (/). The set of records must end with a blank record,
+containing only a slash.</p>
+
+<ol>
+<li> Group name or group name root,   <p>or <samp class="codeph">FIELD</samp> (to set a fixed pressure for the field node)</p>
+           <p>A
+group name root, enclosed in quotes and ending with an asterisk (*),
+can be used to refer to several groups in one record.</p>
+         </li>
+
+<li id="grupnet.XID-00000051"><a name="grupnet.XID-00000051"><!-- --></a> Fixed pressure for the group corresponding
+to the terminal node of the network   <p>Default this item, or set
+it negative, if the group is not a fixed-pressure terminal node in
+the network.</p>
+           <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma
+(<samp class="codeph">PVT-M</samp>)</p>
+         </li>
+
+<li id="grupnet.XID-00000059"><a name="grupnet.XID-00000059"><!-- --></a>Production
+VFP table number for the pipeline from the group to its parent group.
+User-defined arguments can be set with keywords <a href="UDQ.html#UDQ"> UDQ</a> and <a href="UDADIMS.html#UDADIMS"> UDADIMS</a>.           <p>A value of 9999 can be entered
+to indicate that there is no pressure loss in the network branch between
+the group and its parent group.</p>
+           <p>If the group is a
+fixed-pressure node (that is, if a positive value is set for item <a href="GRUPNET.html#grupnet.XID-00000051">2</a>) this item must be defaulted,
+because a fixed-pressure group is a terminal node and cannot have
+a pipeline connection to a higher group.</p>
+<p>If this item is defaulted
+for a group that is not a fixed-pressure node, the group is not part
+of the network.</p>
+<p>Two or more network pipelines may share the
+same VFP table if they have similar pressure loss characteristics.</p>
+<p>DEFAULT: 0 Implying the group has no pipeline connection to its
+parent group.</p>
+         </li>
+
+<li id="grupnet.XID-00000061"><a name="grupnet.XID-00000061"><!-- --></a>Artificial Lift Quantity (ALQ) used
+in the pressure loss calculations for the group's pipeline.     <p>This quantity is used as a look-up parameter for the VFP table in
+item <a href="GRUPNET.html#grupnet.XID-00000059">3</a>. It may be regarded
+as the pump or compressor power, according to the definition used
+in the construction of the table.</p>
+           <p>UNITS: These depend
+on what the ALQ was meant to represent when the table was created.
+Refer to section <a href="vfpprod_Record_6_ALQ_values.html#vfpprod_record_6_alq_values"> "Record 6:ALQ values"</a> in the description of keyword <span class="keyword">VFPPROD</span>.</p>
+<p>DEFAULT: 0</p>
+         </li>
+
+<li>Flag indicating whether the group is a sub-sea completion manifold,
+so that a group production target will be met by adjusting its wells'
+THP limits instead of by the standard method of flowing the wells
+in proportion to their guide rates.  
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top"> A group production target is met by adjusting its wells' THP
+limits, so that all wells may operate at the same THP</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top"> A group production target is met by the standard method of
+group control, and the wells may operate with different THP values</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>Any manifold groups that are subordinate to higher level
+groups having production rate targets (or limits that become rate
+targets if violated) should be given guide rates in keyword <a href="GCONPROD.html#GCONPROD"> GCONPROD</a>, otherwise
+their wells will not operate at the same THP.</p>
+<p>ECLIPSE 100</p>
+<p>Only well-groups can be manifolds,
+not higher level groups that are parents to other groups.</p>
+<p>ECLIPSE 100</p>
+<p>The convergence
+tolerance and iteration limit for the calculation of the manifold
+group's THP are set in keyword <a href="NETBALAN.html#NETBALAN"> NETBALAN</a>. The THP value input in item 10 of keyword <a href="WCONPROD.html#WCONPROD"> WCONPROD</a> for the first
+well in the group is used as the initial guess for the manifold group's
+THP in the first timestep. A suitable value entered for this quantity
+speeds the convergence of the first calculation.</p>
+<p>ECLIPSE 300</p>
+<p>The treatment
+in ECLIPSE 300 differs from that in ECLIPSE 100. Entering <samp class="codeph">YES</samp> indicates that the group's outlet branch acts as an
+automatic choke, and that any production rate target applied to the
+group is met by adjusting the pressure loss across the choke. <strong>The
+group's outlet pipeline must be given a VFP table number of 9999 in
+item </strong> 3, so that its only pressure drop is that of the choke. Groups
+at any level in the tree may be selected, except for the terminal
+node which has no outlet pipeline.</p>
+<p>DEFAULT: <samp class="codeph">NO</samp> </p>
+         </li>
+
+<li id="grupnet.XID-0000007f"><a name="grupnet.XID-0000007f"><!-- --></a>Flag indicating whether gas-lift gas
+from the subordinate wells flows through this group's pipeline. 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top">No liftgas flows along the pipeline, only formation gas.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">FLO</samp> </td>
+
+<td valign="top"> Add the lift gas flows of the subordinate producers to the
+gas flow rate along the pipeline. The lift gas flow is assumed to
+be equal to the sum of the ALQ values of the subordinate producers,
+multiplied by their efficiency factors.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">ALQ</samp> </td>
+
+<td valign="top"> Set the ALQ value for this pipeline equal to the sum of the
+ALQ values of the subordinate producers, multiplied by their efficiency
+factors. The entry in item <a href="GRUPNET.html#grupnet.XID-00000061">4</a> is ignored.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>If the <samp class="codeph">FLO</samp> or <samp class="codeph">ALQ</samp> option
+is selected, the Artificial Lift Quantity for the wells (<a href="WCONPROD.html#WCONPROD"> WCONPROD</a> item 12) and
+the pipeline must be defined as the rate of lift gas injection. This
+definition must be selected in the VFP <em>i</em> program if it is used
+to construct the VFP tables.</p>
+<p>ECLIPSE 300</p>
+<p>If <samp class="codeph">FLO</samp> is entered for a
+well group in ECLIPSE 300, the lift gas flows of its wells are included
+in the network source term and are included in the network flows up
+to the terminal node irrespective of the setting of item 6 for superior
+groups.</p>
+<p>In ECLIPSE 100 <samp class="codeph">FLO</samp> must be entered for all the groups through which the lift gas is
+to flow.</p>
+<p>DEFAULT: <samp class="codeph">NO</samp> </p>
+         </li>
+
+<li><p>ECLIPSE 100</p>
+ 
+         <p>Equivalence the pipeline's ALQ to the surface density?</p>
+<p>The pipeline's ALQ may optionally be made equivalent to the average
+surface density of either the oil phase or the gas phase flowing along
+it. ECLIPSE then automatically sets it equal to this value when it
+looks up the VFP table. The VFP table must have been prepared using
+the same definition of the ALQ (see keyword <a href="VFPPROD.html#VFPPROD"> VFPPROD</a>), and should span the expected
+range of surface density values. This option is useful when a mixture
+of oil or gas with different surface densities flows into the network.
+Obviously the ALQ cannot then also be used to represent a pump or
+compressor, or to represent the lift gas flow rate in item 6 above,
+and the pipeline cannot contain an automatic pump/compressor.</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">DENO</samp> </td>
+
+<td valign="top"> Set the ALQ equal to the average surface density of the <strong>oil</strong> flowing along the pipeline.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">DENG</samp> </td>
+
+<td valign="top"> Set the ALQ equal to the average surface density of the <strong>gas</strong> flowing along the pipeline.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NONE</samp> </td>
+
+<td valign="top"> Do not equate the ALQ to the oil or gas density. Leave it
+at the value entered in item <a href="GRUPNET.html#grupnet.XID-00000061">4</a> (or allow it to be used to represent lift gas or an automatic pump/compressor).</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">NONE</samp> </p>
+         </li>
+
+</ol>
+
+<p>The keyword is followed by any number of records, each containing
+the items of data described below, and each terminated with a slash
+(/).End the data record with a slash (/).</p>
+
+<p>End the data record with a slash (/).</p>
+
+<div class="section" id="grupnet.example"><a name="grupnet.example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>GRUPNET
+  FIELD  200 /
+  PLAT-A  1* 1 /
+  PLAT-B  1* 2 100 /
+ 'GR-A*'  1* 3 1*  YES  /
+  GR-B1   1* 6 1*  YES  FLO /
+  GR-B2   1* 7 1*  YES  FLO /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

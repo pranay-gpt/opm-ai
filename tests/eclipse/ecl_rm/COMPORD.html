@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="COMPORD"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="COMPORD"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>COMPORD</title>
+</head>
+<body>
+
+
+<div class="nested0" id="COMPORD"><a name="COMPORD"><!-- --></a>
+<h1 class="keyword">COMPORD</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="compord.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="compord.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d300e45"> x </th>
+
+<th valign="top" id="d300e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d300e54"> x </th>
+
+<th valign="top" id="d300e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d300e45 d300e54 "> </td>
+
+<td valign="top" headers="d300e48 d300e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d300e45 d300e54 "> </td>
+
+<td valign="top" headers="d300e48 d300e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d300e45 d300e54 "> </td>
+
+<td valign="top" headers="d300e48 d300e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d300e45 d300e54 "> </td>
+
+<td valign="top" headers="d300e48 d300e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d300e45 d300e54 "> </td>
+
+<td valign="top" headers="d300e48 d300e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d300e45 d300e54 "> </td>
+
+<td valign="top" headers="d300e48 d300e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d300e45 d300e54 "> </td>
+
+<td valign="top" headers="d300e48 d300e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d300e45 d300e54 "> x </td>
+
+<td valign="top" headers="d300e48 d300e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/). </p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/). </p>
+
+<ol>
+<li> Well name, well name template, well list or well list template <p>A template enclosed in quotes can be used to refer to multiple wells
+or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST">  WLIST</a>. </p>
+ </li>
+
+<li> Method for ordering the connections in the well 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">DEPTH</samp> </td>
+
+<td valign="top"> The connections will be ordered according to their vertical
+depth, from the top downwards. For connections at the same vertical
+depth, they will be ordered in the sequence they are first declared
+in <a href="COMPDAT.html#COMPDAT">  COMPDAT</a> or <a href="COMPDATL.html#COMPDATL">  COMPDATL</a>. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">INPUT</samp> </td>
+
+<td valign="top"> The connections will be ordered in the sequence that they
+are first declared in <span class="keyword">COMPDAT</span> or <span class="keyword">COMPDATL</span>. If you use this option, you must declare the connections in their
+correct sequence, starting with the connection nearest the wellhead
+then working along the wellbore towards the bottom or toe of the well. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">TRACK</samp> </td>
+
+<td valign="top"> ECLIPSE will determine the order of the connections by attempting
+to trace the well track through the grid from the grid blocks in which
+the connections are located. If this fails, or if all the connections
+in the well are vertical (according to <span class="keyword">COMPDAT</span> item
+13 or <span class="keyword">COMPDATL</span> item 14), <samp class="codeph">DEPTH</samp> ordering will be used. See the second note below for further explanation. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">TRACK</samp> </p>
+ </li>
+
+</ol>
+
+<p>End the data record with a slash (/). </p>
+
+<p>End the set of records with a blank record, containing just a slash. </p>
+
+<div class="section" id="compord_notes"><a name="compord_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li> ECLIPSE uses the connection ordering when outputting RFT/PLT
+data (see <a href="WRFTPLT.html#WRFTPLT">  WRFTPLT</a>) and when calculating the wellbore hydrostatic head with the segmented
+density calculation (<a href="WELSPECS.html#WELSPECS">  WELSPECS</a> item 12 set to <samp class="codeph">SEG</samp>). The connection ordering
+also determines which additional connections are closed in a <samp class="codeph">+CON</samp> workover (see for example <a href="WECON.html#WECON">  WECON</a> item 7). In these workovers, all connections
+below the offending one are also closed. Here, “below”
+is interpreted as “further from the wellhead according to the
+connection ordering”. However, if you set <a href="OPTIONS.html#options.53"> item 53</a> in the <span class="keyword">OPTIONS</span> <a href="OPTIONS.html#OPTIONS"> OPTIONS</a> to &gt; 0 in ECLIPSE 100 “below”
+will be interpreted literally and all connections with a greater depth
+will be closed. For back compatibility in ECLIPSE 300, setting item
+2 in this keyword to <samp class="codeph">DEPTH</samp> will revert both the <samp class="codeph">+CON</samp> workover calculation and the segmented density calculation
+to their pre-2002A state. </li>
+
+<li> When the <samp class="codeph">TRACK</samp> method is selected, ECLIPSE determines
+the connection ordering as described below. If all connections in
+the well penetrate vertically (Z-direction in <span class="keyword">COMPDAT</span> item 13 or <span class="keyword">COMPDATL</span> item 14), the connections
+are ordered according to their depth. But if any connection is declared
+to be horizontal (X- or Y-direction), ECLIPSE will attempt to order
+the connections in heel-to-toe fashion. It takes the heel to be the
+connection whose I,J coordinates are nearest the wellhead I,J (set
+in <span class="keyword">WELSPECS</span> items 3 and 4, or <a href="WELSPECL.html#WELSPECL">  WELSPECL</a> items 4 and
+5). If more than one connection can be a candidate for the heel, ECLIPSE
+selects the one with the minimum depth. The rest of the ordering is
+determined from the location and orientation of the connections. If
+ECLIPSE cannot find a unique sensible ordering (for example with a
+multilateral well), it will issue a warning message and resort to
+ordering the connections by depth. </li>
+
+<li> For wells with complex trajectories, and in particular multilateral
+wells, you should define these as <strong>multisegment</strong> wells (<a href="WELSEGS.html#WELSEGS">  WELSEGS</a>) or, in ECLIPSE
+100, <strong>friction</strong> wells (<a href="WFRICTN.html#WFRICTN">  WFRICTN</a>). The connection ordering for these wells is determined more
+precisely by the additional information supplied in their associated
+keywords. Note that the setting of <span class="keyword">COMPORD</span> item
+2 is <strong>ignored</strong> for these types of well; their connection ordering
+will <strong>always</strong> be determined by a more precise equivalent of the <samp class="codeph">TRACK</samp> method. </li>
+
+<li> The <span class="keyword">COMPORD</span> keyword is optional. If it is
+not entered, all wells will use the <samp class="codeph">TRACK</samp> method. </li>
+
+</ul>
+</div>
+
+<div class="section" id="compord_example"><a name="compord_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>COMPORD
+ HWELL1    INPUT /
+ HWELL2    INPUT /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

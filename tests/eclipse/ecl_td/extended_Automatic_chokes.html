@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Automatic chokes"/>
+<meta name="DC.subject" content="Automatic chokes, Chokes, Automatic, Network"/>
+<meta name="keywords" content="Automatic chokes, Chokes, Automatic, Network"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="extended_automatic_chokes"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Automatic chokes</title>
+</head>
+<body>
+
+
+<div class="nested0" id="extended_automatic_chokes"><a name="extended_automatic_chokes"><!-- --></a>
+<h1 class="topictitle1">Automatic chokes</h1>
+
+
+ <div>
+<p>Automatic chokes form an alternative means of controlling a group’s
+production rate when using the Extended Network option, which is distinct
+from guide rate control or prioritization. The choke is placed in
+a designated branch of the network, and at each network balancing
+iteration ECLIPSE adjusts the pressure loss across it to keep a specified
+group producing at its target rate. The operation of the choke varies
+the pressure in its inlet node, which in turn affects the productivity
+of the subordinate wells while they are operating under THP control.</p>
+
+<div class="section" id="extended_defining_the_choke"><a name="extended_defining_the_choke"><!-- --></a><h4 class="sectiontitle">Defining the choke</h4><p>ECLIPSE 100                      </p>
+<p>A branch is defined to be a choke by answering
+'<samp class="codeph">YES </samp>' to Item 3 of the <a href="../ecl_rm/NODEPROP.html#NODEPROP">NODEPROP</a> keyword for the <strong>inlet node</strong> of the choke. A fixed-pressure node cannot be defined
+as a choke inlet node, since its pressure cannot respond to the choke’s
+pressure loss. Also, source nodes cannot be defined as choke inlet
+nodes. Source nodes that are well-groups can instead be designated
+to be ‘manifold groups’, whose operation is similar to
+choke inlet nodes in that ECLIPSE determines a common well THP that
+makes the group meet its target rate (see <a href="networkintro_Network_Option.html#networkintro_group_production_control_in_the_network_option"> "Group production control in the network option"</a>).</p>
+<p>ECLIPSE 300                      </p>
+<p>A branch is defined to be a choke in a <strong>production</strong> network by answering '<samp class="codeph">YES</samp>' to Item 3 of the <span class="keyword">NODEPROP</span> keyword for the <strong>inlet node</strong> of the choke.
+For an <strong>injection</strong> network this should be the <strong>outlet</strong> node
+of the choke; in either case it should be the node at the end of the
+branch that is nearer the reservoir. A fixed-pressure node cannot
+be defined as a choke inlet node, since its pressure cannot respond
+to the choke’s pressure loss.</p>
+<p>The only pressure drop allowed
+across a branch acting as a choke is that caused by the action of
+the choke itself. The branch should therefore be declared in the <a href="../ecl_rm/BRANPROP.html#BRANPROP">BRANPROP</a> keyword with a VFP
+table of 9999. Any other table number is flagged as an error.</p>
+<p> ECLIPSE 100 </p>
+<p>The
+wells subordinate to the choke respond to the choke pressure drop
+whenever they are operating under THP control. Thus, for the automatic
+choke to work correctly, its subordinate wells must be made to ignore
+any rate targets set for them by guide rate group control. Accordingly,
+ECLIPSE 100 automatically makes them unavailable for guide rate
+group control (this is not necessary in ECLIPSE 300), equivalent
+to setting Item 2 in the <a href="../ecl_rm/WGRUPCON.html#WGRUPCON">WGRUPCON</a> keyword to '<samp class="codeph">NO</samp>'. This is done for all producers
+in source groups subordinate to the choke, as long as there is no
+intermediate fixed-pressure node between the source group and the
+choke. The wells can still be given individual flow rate and BHP limits
+with keyword <a href="../ecl_rm/WCONPROD.html#WCONPROD">WCONPROD</a>, which causes them to come off THP control if they are violated.</p>
+<p> ECLIPSE 100</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If a producer subordinate to a choke is subsequently turned into
+an injector which is subject to group injection control, you must
+make the well available for group control again by entering the <span class="keyword">WGRUPCON</span> keyword with '<samp class="codeph">YES</samp>' in item 2
+at the time that the well is redefined as an injector. </span></div>
+</div>
+
+<div class="section" id="extended_setting_the_rate_target"><a name="extended_setting_the_rate_target"><!-- --></a><h4 class="sectiontitle">Setting the
+rate target</h4><p>The operation of the choke is governed by the
+production rate target of a particular group, which is specified in
+item 5 of keyword <a href="../ecl_rm/NODEPROP.html#NODEPROP">NODEPROP</a>. If the inlet node to the choke shares the same name as a
+group, as declared with the <a href="../ecl_rm/GRUPTREE.html#GRUPTREE"> GRUPTREE</a> keyword, then Item 5 will default to that group. Obviously
+the choke’s inlet node in the network and the nominated group
+in the <span class="keyword">GRUPTREE</span> hierarchy must have a common set
+of subordinate wells, in order for the choke to influence the group’s
+production rate.</p>
+<p>The group’s production rate target is
+set in the same way as for guide rate group control, using keyword <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a> (or <a href="../ecl_rm/GCONENG.html#GCONENG">GCONENG</a> for an energy rate
+target). Alternatively the group’s target may be passed down,
+using guide rates set with the <span class="keyword">GCONPROD</span> keyword,
+as a share of a superior group’s target. Thus the group must
+either have its own production rate target or have a guide rate set
+to give it a share of a superior group’s target.</p>
+<p>Since
+guide rate group control will not operate below a choke, groups subordinate
+to the nominated production rate target group must not be given production
+guide rates.</p>
+<p>ECLIPSE 300</p>
+<p>Injection networks that use the Extended model
+may also have chokes, which are governed by the injection rate target
+of a particular group, for the phase that corresponds to the network’s
+injection phase. The group’s injection rate target is set in
+the same way as for guide rate group control, using keyword <a href="../ecl_rm/GCONINJE.html#GCONINJE">GCONINJE</a>. Alternatively the
+group’s target may be passed down, using guide rates set with
+the <span class="keyword">GCONINJE</span> keyword, as a share of a superior
+group’s target. Thus the group must either have its own injection
+rate target or have an injection guide rate set to give it a share
+of a superior group’s target. Since guide rate group control
+will not operate below a choke, groups subordinate to the nominated
+injection rate target group must not be given injection guide rates
+for the same phase.</p>
+</div>
+
+<div class="section" id="extended_calculating_the_choke___s_pressure_drop"><a name="extended_calculating_the_choke___s_pressure_drop"><!-- --></a><h4 class="sectiontitle">Calculating the choke’s pressure drop</h4><p>Having defined
+the choke and its corresponding group’s production rate target,
+ECLIPSE proceeds as follows. At each network balancing iteration,
+it compares the group’s flow with its target. If the flow is
+too large ECLIPSE increases the inlet pressure of the choke to reduce
+the flow. If the flow is below the target the pressure at the inlet
+will be decreased until either the target is met or the inlet pressure
+is the same as the outlet pressure (that is there is no pressure drop
+across the choke). In this latter case ECLIPSE then looks to the production
+rules to see if the flow may be increased by drilling a new well,
+for example (see keyword <a href="../ecl_rm/PRORDER.html#PRORDER">PRORDER</a>). The choke’s pressure drop can be written to the <samp class="codeph">SUMMARY</samp> file using the <span class="keyword">SUMMARY</span> section
+keyword <span class="keyword">GPRB</span> and naming the choke’s inlet
+node.</p>
+<p> ECLIPSE 300 </p>
+<p>Chokes in injection networks operate in a similar
+manner. The pressure in the choke’s outlet node (nearer the
+reservoir) is iterated until the injection rate of the subordinate
+wells matches the injection target of the corresponding group. If
+the wells do not have sufficient injectivity to meet the target, the
+outlet node’s pressure is kept the same as the inlet node’s
+pressure (so there is no pressure drop across the choke) and the injection
+rate will fall below the target. ECLIPSE then scans the drilling queue
+to see if there is a suitable injector to drill to increase the group’s
+injectivity. The choke’s pressure drop can be written to the <samp class="codeph">SUMMARY</samp> file using the <span class="keyword">SUMMARY</span> section
+keyword <span class="keyword">GPRBW</span> or <span class="keyword">GPRBG</span>, for
+a water or gas injection network respectively, and naming the choke’s
+outlet node.</p>
+<p> ECLIPSE 100            
+      </p>
+<p>The group targets are met to within
+a tolerance specified in item 4 of the <a href="../ecl_rm/NETBALAN.html#NETBALAN">NETBALAN</a> keyword. But unlike
+subsea manifold groups, the calculation of the pressure drops at chokes
+is calculated as a part of the main network iteration and hence the
+maximum number of iterations to solve for the choke is the same as
+for the network as a whole, that is it is governed by item 3 of <span class="keyword">NETBALAN</span> and <strong>not</strong> item 5. Whilst it is clearly dependent
+upon the relative sizes of the tolerances in items 2 and 4 of <span class="keyword">NETBALAN</span>, in general substantially more iterations are
+needed if there are chokes in the network than if there were not.
+You should be prepared to increase item 3 of <span class="keyword">NETBALAN</span> accordingly.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Convergence problems may arise if a group
+is given a very small rate target, either manually or as a result
+of a relatively small guide rate. This is particularly true if the
+low flow required from the wells under that group results in some
+of them being unable to operate under THP control.</span></div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

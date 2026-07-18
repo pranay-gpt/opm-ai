@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="TRACER"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="TRACER"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>TRACER</title>
+</head>
+<body>
+
+
+<div class="nested0" id="TRACER"><a name="TRACER"><!-- --></a>
+<h1 class="keyword">TRACER</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="tracer.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="tracer.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2620e45"> x </th>
+
+<th valign="top" id="d2620e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2620e54"> x </th>
+
+<th valign="top" id="d2620e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2620e45 d2620e54 ">  </td>
+
+<td valign="top" headers="d2620e48 d2620e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2620e45 d2620e54 ">  </td>
+
+<td valign="top" headers="d2620e48 d2620e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2620e45 d2620e54 ">  </td>
+
+<td valign="top" headers="d2620e48 d2620e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2620e45 d2620e54 "> x </td>
+
+<td valign="top" headers="d2620e48 d2620e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2620e45 d2620e54 ">  </td>
+
+<td valign="top" headers="d2620e48 d2620e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2620e45 d2620e54 ">  </td>
+
+<td valign="top" headers="d2620e48 d2620e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2620e45 d2620e54 ">  </td>
+
+<td valign="top" headers="d2620e48 d2620e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2620e45 d2620e54 ">  </td>
+
+<td valign="top" headers="d2620e48 d2620e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword sets up a number of passive tracers, associating each
+of them with a particular fluid used in the study.</p>
+
+<p>In a compositional run, the fluid is one of the hydrocarbon or
+water components. In a black oil model, fluid refers to one of the
+stock tank phases.</p>
+
+<p>The keyword should be followed by one line for each tracer introduced.
+Each line must contain the data items listed below, and is terminated
+by a slash (/). The set of records must end with a blank record, containing
+only a slash (/).</p>
+
+<ol>
+<li> Tracer name  <p>Up to 3 characters (ECLIPSE
+100).</p>
+ <p>Up to 4 characters (ECLIPSE 300).</p>
+ <div class="caution"><span class="cautiontitle">CAUTION:</span> Tracer names starting with ‘F’, ‘S’, ‘T’ or
+a number are not recommended since these may create naming ambiguities
+for postprocessors.</div>
+</li>
+
+<li> The name of the fluid associated with the tracer: <p>ECLIPSE 100</p>
+ <p>Stock
+tank phase name: <samp class="codeph">OIL</samp>, <samp class="codeph">WAT</samp> or <samp class="codeph">GAS</samp>.</p>
+<p>ECLIPSE 300</p>
+<p>Component name, defined by <a href="CNAMES.html#CNAMES">  CNAMES</a> for a hydrocarbon component or <a href="WNAMES.html#WNAMES">  WNAMES</a> for a water component.</p>
+<p>If the tracer is associated with a water component and <span class="keyword">WNAMES</span>, has not been used, use the default name which is
+set as follows:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">WATER</samp> </td>
+
+<td valign="top"> if there is only one water component</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WATnn</samp> </td>
+
+<td valign="top"> if there is more than one water component, for example use <samp class="codeph">WAT02</samp> to associate a tracer with the second water component.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">For a partitioned tracer this will be regarded as the
+free phase.</span></div>
+<p>ECLIPSE 100</p>
+</li>
+
+<li> Units for tracer amount (for example <samp class="codeph">‘kg’</samp>)<p>UNITS: Arbitrary, but must be consistent with what
+is used in <a href="TBLK.html#TBLK">  TBLK</a> and <a href="TVDP.html#TVDP">  TVDP</a>.</p>
+<p>DEFAULT: <samp class="codeph">‘sm3’</samp> (<samp class="codeph">METRIC</samp>), <samp class="codeph">‘stb’</samp> or <samp class="codeph">‘Mscf’</samp> (<samp class="codeph">FIELD</samp>), <samp class="codeph">‘scc’</samp> (<samp class="codeph">LAB</samp>)</p>
+<p>In field units, oil and water phase tracers have <samp class="codeph">‘stb’</samp> as default, whereas gas phase tracers have <samp class="codeph">‘Mscf’</samp>.</p>
+ <p>ECLIPSE 100</p>
+</li>
+
+<li> The ‘solution’ phase of a partitioned tracer:<p>Stock tank phase name: <samp class="codeph">OIL</samp>, <samp class="codeph">WAT</samp>, <samp class="codeph">GAS</samp> or <samp class="codeph">MULT</samp>.</p>
+<p> <samp class="codeph">MULT</samp> indicates a multi-partitioned tracer, that is a tracer that partitions
+into two or more phases, and which is a generalization of the standard
+partitioned tracers. When <samp class="codeph">MULT</samp> is specified the actual
+phases into which the tracer partitions must be specified together
+with the K(P) tables in keyword <a href="TRACERKM.html#TRACERKM">  TRACERKM</a>.</p>
+<p>This item need only be supplied
+if partitioned tracers are being used (see keyword <a href="PARTTRAC.html#PARTTRAC">  PARTTRAC</a>).</p>
+ <p>ECLIPSE 100</p>
+</li>
+
+<li> The number of the K(P) table to use for
+this partitioned tracer within a wellbore.<p>This item need only be
+supplied if partitioned tracers are being used (see keywords <span class="keyword">PARTTRAC</span>, <a href="TRACERKP.html#TRACERKP">  TRACERKP</a> and <span class="keyword">TRACERKM</span>).</p>
+ </li>
+
+<li><p>ECLIPSE 100</p>
+ <p>The phase which is used for adsorption calculation of a multi-partitioned
+tracer, that is a tracer with <samp class="codeph">MULT</samp> specified in item
+4. If adsorption is active (see keywords <a href="TRADS.html#TRADS">  TRADS</a> and <a href="ADSORP.html#ADSORP">  ADSORP</a>), this item species the phase concentration that will be
+used when calculating adsorption.</p>
+<p>Stock tank phase name: <samp class="codeph">OIL</samp>, <samp class="codeph">WAT</samp>, <samp class="codeph">GAS</samp> or <samp class="codeph">ALL</samp>.</p>
+<p> <span class="keyword">ALL</span> indicates that adsorption
+will be based on the overall, pore-volume averaged tracer concentration.</p>
+<p>DEFAULT: the phase specified in item 2.</p>
+<p>This item need only
+be supplied if partitioned tracers are being used in conjunction with
+adsorption.</p>
+</li>
+
+</ol>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Some reported tracer quantities can be prone to rounding errors
+if the model is made of cells with exceeding small pore volumes. This
+might happen if modeling a core when using <samp class="codeph">FIELD</samp> or <samp class="codeph">METRIC</samp> units. In this situation the solution is to convert
+to <samp class="codeph">LAB</samp> units. </span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

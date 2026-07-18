@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Network option"/>
+<meta name="DC.subject" content="Group production control, Extended network model, Pumps, Injection compressors, Network pumps, Artificial lift quantity, Network flow lines, Injection network, Network, Compressors, Injection, Group, Controls"/>
+<meta name="keywords" content="Group production control, Extended network model, Pumps, Injection compressors, Network pumps, Artificial lift quantity, Network flow lines, Injection network, Network, Compressors, Injection, Group, Controls"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="networkintro_network_option"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Network option</title>
+</head>
+<body>
+
+
+<div class="nested0" id="networkintro_network_option"><a name="networkintro_network_option"><!-- --></a>
+<h1 class="keyword">Network option</h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="networkintro.tab.0009"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="networkintro.tab.0009" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">                         x                   
+  </td>
+
+<td valign="top">                         ECLIPSE 100         
+            </td>
+
+</tr>
+
+<tr>
+<td valign="top">                         x     
+                </td>
+
+<td valign="top">                         ECLIPSE 300         
+            </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The network option is designed to provide variable tubing head
+pressure (THP) limits to groups of wells, which depend on the groups'
+flow rates according to a set of pipeline pressure loss relationships.
+The option calculates the well THP limits dynamically by balancing
+the flow rates and pressure losses in the network.</p>
+
+<p>Consider a group of wells flowing into a common manifold which
+is connected by a pipeline to an outlet at a fixed pressure (figure <a href="networkintro_Network_Option.html#networkintro.XID-00000026">631.1</a>). For example, the group
+may represent the wells flowing into a particular subsea completion
+manifold, and the fixed pressure outlet may be a separator or stock
+tank. The pressure in the manifold will vary with the overall production
+rate of the group, according to the relationship between the pressure
+loss through the pipeline and the flow rate, water cut and GOR of
+the group. This relationship is represented schematically in figure <a href="networkintro_Network_Option.html#networkintro.XID-00000027">631.2</a>  by the pipeline curve. However,
+the group’s production rate will itself vary with the manifold
+pressure if at least one of its wells is on THP control, since the
+manifold pressure is applied to each well as a THP limit. The combined
+production rate of the wells versus the THP limit is represented by
+the wellbore curve in figure <a href="networkintro_Network_Option.html#networkintro.XID-00000027">631.2</a>. The actual manifold pressure and flow rate of the group
+will be given by the intersection of these two curves.</p>
+
+<div class="fignone" id="networkintro.XID-00000026"><a name="networkintro.XID-00000026"><!-- --></a>
+
+ <br/><img src="../img/network1.png" width="392px" alt=""/><br/> 
+<br/><span class="figcap">
+           Figure 631.1  Common wellhead manifold and pipeline</span></div>
+
+<div class="fignone" id="networkintro.XID-00000027"><a name="networkintro.XID-00000027"><!-- --></a>
+
+ <br/><img src="../img/network2.png" width="466px"/><br/> <br/><span class="figcap">
+           Figure 631.2  Well THP versus group flow rate for wellstream and pipeline</span></div>
+
+<p>Using the ECLIPSE multilevel grouping hierarchy, a pipeline network
+can be built up, with a pipeline connecting each group to its ‘parent’
+in the grouping tree. A group of wells connected to a common manifold
+passes its production stream through a pipeline to its parent group,
+which gathers the production from a number of common well manifolds
+and sends it along another pipeline to its own parent group, and so
+on up the grouping tree until a group with a fixed-pressure separator
+or stock tank is encountered. Each group is a 'node' in the network.
+The group with the separator is a ‘fixed-pressure node’,
+and the groups subordinate to this have their own ‘nodal pressures,’
+which are determined from the pipeline pressure losses and the production
+rates. The nodal pressures of each well-group at the bottom of the
+tree are applied to their wells as THP limits. (Note that any fixed
+THP limits specified for the wells will be overwritten by the calculated
+values.) The nodal pressure of each group is printed in the well reports
+in the THP column, and can also be written to the <samp class="codeph">SUMMARY</samp> file using the mnemonic GPR.</p>
+
+<p>For example, consider the grouping tree shown in Figure <a href="networkintro_Network_Option.html#networkintro.XID-00000033">631.3</a>. The groups on the bottom
+level (GR-A1 for example) may be subsea completion manifolds, connected
+to their respective platforms PLAT-A and PLAT-B by pipelines. The
+two platforms can be declared as fixed-pressure nodes, with pressures
+set equal to their separator pressures. Alternatively the FIELD can
+be given a fixed pressure, and the two platforms connected to it by
+additional pipelines. It is not essential for the network to cover
+the whole grouping tree. For example group GR-A2 can be isolated from
+the network (by not giving it a pipeline connection to PLAT-A), and
+THP limits for its wells set or defaulted independently.</p>
+
+<div class="fignone" id="networkintro.XID-00000033"><a name="networkintro.XID-00000033"><!-- --></a>
+
+ <br/><img src="../img/network3.png" width="406px"/><br/> 
+<br/><span class="figcap">
+           Figure 631.3  An example network</span></div>
+
+<p>Note that the network structure coincides with the grouping hierarchy
+built using the <a href="../ecl_rm/GRUPTREE.html#GRUPTREE">GRUPTREE</a> keyword. If you require the network to have a different topology
+from the group control hierarchy, then you must use the extended network
+model which is described in a later section (see <a href="extended_The_extended_network_model.html#extended_the_extended_network_model"> "The extended network model"</a>).</p>
+
+<div class="section" id="networkintro_group_production_control_in_the_network_option"><a name="networkintro_group_production_control_in_the_network_option"><!-- --></a><h4 class="sectiontitle">Group production control in the network option</h4><p>Group
+control targets and limits can be applied to any group regardless
+of whether it is part of a pipeline network. A production rate target
+applied to a group in the network will be met as long as its subordinate
+wells have sufficient potential. The wells’ potentials will
+of course depend on the nodal pressures in the network, since these
+determine the wells’ THP limits.</p>
+<p>Consider, for example,
+a target production rate of 10,000 STB/DAY of oil applied to the group
+GR-A1. The THP limits of each of its wells are set equal to the group’s
+nodal pressure in the network. The standard procedure for group control
+will apportion the rate target among the group’s wells in proportion
+to their oil phase guide rates (which by default are set equal to
+their production potentials). If some wells cannot produce at their
+allocated rate targets, they will produce as much as they can under
+their own flow and pressure limits, while the remaining wells under
+group control make up the rest of the group’s flow target.</p>
+<p>When a well is under group control, it will be producing at the
+rate target allocated to it. Its THP has a value greater than the
+group’s nodal pressure in the network (otherwise the well will
+have changed to THP control). The THP values of the group-controlled
+wells in this group are in general all different. However, if the
+group represents a sub-sea completion manifold, in reality all its
+wells are operating at the same THP, that is the pressure in the manifold.
+The standard method of group control by guide rates is therefore not
+appropriate for groups in which all the wells share a common manifold.</p>
+<p>ECLIPSE 100       </p>
+<p>An alternative
+method of group control is available for groups representing subsea
+completion manifolds. This method calculates the THP required to make
+the group produce at the desired rate. Thus it allows the group to
+produce at a specified rate while its wells remain on THP control
+operating at a common THP. Physically this method is equivalent to
+applying a choke to the group’s outlet flow line, to increase
+the upstream pressure and reduce the production rate, as opposed to
+choking back each well separately. The group is able to produce at
+its target rate as long as the calculated value of its wells’
+common THP remains above the group’s (unchoked) nodal pressure
+in the network. If the calculated THP value falls below the group’s
+nodal pressure in the network, the wells operate at the group’s
+nodal pressure and the group is no longer able to produce its target
+rate. At this point the production rules (see keyword <a href="../ecl_rm/PRORDER.html#PRORDER">PRORDER</a>) are activated to increase
+the productivity of the group and bring the group’s production
+back to its target rate. This alternative method of group control
+may be invoked by declaring the group to be a subsea completion manifold
+in keyword <a href="../ecl_rm/GRUPNET.html#GRUPNET">GRUPNET</a> or <a href="../ecl_rm/NODEPROP.html#NODEPROP">NODEPROP</a>.</p>
+<p>ECLIPSE 100</p>
+<p>In the standard
+network model, this method of group control can only be applied to
+well-groups (that is the groups containing wells, not higher level
+groups that have subordinate groups). However, when using the extended
+network model, a similar treatment can be applied to production rate
+targets at any level below the fixed pressure node by invoking the
+automatic choke option. (see <a href="extended_Automatic_chokes.html#extended_automatic_chokes"> "Automatic
+chokes"</a>.) In the standard network model a target rate applied
+to a higher level group will be apportioned among its subordinate
+wells, or groups with guide rates, according to the standard group
+control procedure. For example, consider a rate target of 20,000 stb/day
+of oil applied to group PLAT-A. This is apportioned among the wells
+in groups GR-A1 and GR-A2 in proportion to their guide rates. The
+wells under group control operate at their allocated rates, and in
+general they all have different THP values. Defining groups GR-A1
+and GR-A2 as manifold groups has no effect, as the rate target applies
+to a higher level group. However, if the manifold groups are also
+given guide rates (in keyword <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a>), the alternative
+method of group control can be applied and their wells operate at
+their common manifold pressures. This is because the rate target given
+to PLAT-A is passed down to the groups GR-A1 and GR-A2 in proportion
+to their guide rates. If these two groups are given equal guide rates,
+for example, they both have a target of 10,000 stb/day of oil. In
+each of the two groups, the common THP required to produce this rate
+is calculated and applied to their wells as THP limits. If one group
+cannot make its target without falling below its network nodal pressure,
+the other group tries to make up PLAT-A’s production to 20,000
+stb/day. To summarize, if a rate target is to be applied to a group
+that is superior to a manifold group, the subordinate manifold groups
+should be given guide rates. A warning message is printed if this
+is not so.</p>
+<p> ECLIPSE 300</p>
+<p>ECLIPSE 300
+does not use this method of applying rate constraints to manifold
+groups. Instead it uses automatic chokes to apply rate constraints
+at any level in the network, not just to well groups. (See <a href="extended_Automatic_chokes.html#extended_automatic_chokes"> "Automatic
+chokes"</a>.) The method is the same whether using the standard
+or extended network models. ECLIPSE calculates the pressure drop across
+the choke that is necessary to reduce the flow rate to the required
+target value. The choke must be represented by a branch with a VFP
+table number of 9999, so that the only pressure loss in this branch
+is that of the choke. If the branch represents a pipeline having its
+own pressure losses, an intermediate node must be inserted to distinguish
+the choke from the rest of the pipeline.</p>
+</div>
+
+<div class="section" id="networkintro_pumps_and_compressors"><a name="networkintro_pumps_and_compressors"><!-- --></a><h4 class="sectiontitle">Pumps and
+compressors</h4><p>Pumps and compressors in the production network’s
+flow lines can be modeled using the Artificial Lift Quantity (ALQ),
+in a similar way to the modeling of a pump or gas lift in a well.
+The artificial lift quantity for each flow line can be set and reset
+at any time in the simulation.</p>
+<p>ECLIPSE
+100                    </p>
+<p>There is an option to switch on a pump
+or compressor in the network if a group’s oil or gas production
+rate falls below a specified limit. For example, consider the pipeline
+between PLAT-A and the FIELD. The production from PLAT-A declines
+when its subordinate wells are operating with their THP values equal
+to their groups’ nodal pressures. When the production rate falls
+below a specified limit, a pump or compressor in the pipeline from
+PLAT-A can be switched on automatically. This reduces the pressure
+losses in the pipeline, which decreases PLAT-A’s nodal pressure,
+consequently reducing the nodal pressures in the subordinate groups
+and boosting their wells’ production.</p>
+<p>ECLIPSE 100</p>
+<p>Additional, more versatile, facilities for automatic
+pump or compressor switching are available when using the extended
+network model, which is described in a later section (see <a href="extended_Automatic_compressors.html#extended_automatic_compressors"> "Automatic compressors"</a>).</p>
+<p>ECLIPSE
+100  </p>
+<p>An alternative use for the ALQ is to define it to represent
+the average surface density of either the oil phase or the gas phase
+flowing along a pipeline. ECLIPSE then automatically sets it equal
+to this value when looking up the VFP table. The VFP table must have
+been prepared using the same definition of the ALQ, and should span
+the expected range of surface density values. This option is useful
+when a mixture of oil or gas with different surface densities flows
+into the network. Obviously the ALQ then cannot be also used to represent
+a pump or compressor, and the pipeline cannot contain any automatic
+pump/compressor.</p>
+</div>
+
+<div class="section" id="networkintro_injection_network"><a name="networkintro_injection_network"><!-- --></a><h4 class="sectiontitle">Injection network</h4><p>In addition to the production network, a separate network can
+also be defined for water or gas injection. Each network exists independently
+of the other. A particular group may be a node in both networks, if
+required, but in this case the group will have two independent nodal
+pressures, one for each network to which it belongs.</p>
+<p>Pumps can
+be modeled in the injection network flow lines, but the artificial
+lift quantity cannot be varied.</p>
+<p>As an example of an injection
+network, consider a pump that takes water at a fixed inlet pressure
+and pumps it into a manifold supplying a number of water injectors.
+The outlet pressure of the pump, and thus the pressure in the manifold,
+varies with the total injection rate. The injection wells operate
+under THP control, with the THP equal to the pressure in the manifold.
+Using the grouping tree shown in figure <a href="networkintro_Network_Option.html#networkintro.XID-00000033">631.3</a>, let the injection pump
+be situated on platform PLAT-B, and the injection wells belong to
+group GR-B2. Declare PLAT-B as a fixed-pressure node in the water
+injection network, with its pressure equal to the pump inlet pressure,
+and declare GR-B2 as a variable-pressure node connected to PLAT-A
+by a pipeline containing the pump. It makes no difference whether
+or not PLAT-A and GR-B2 are also nodes in the production network.</p>
+<p> ECLIPSE 300  </p>
+<p>In ECLIPSE 300
+it is possible to use the extended network model for injection networks,
+allowing group injection rate constraints to be handled by automatic
+chokes</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

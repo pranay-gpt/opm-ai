@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Examples"/>
+<meta name="DC.subject" content="UDT"/>
+<meta name="keywords" content="UDT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="udt_examples"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Examples</title>
+</head>
+<body>
+
+<div class="nested0" id="udt_examples"><a name="udt_examples"><!-- --></a><h1 class="topictitle1">Examples</h1>
+
+ <div><div class="section" id="udt_example_1"><a name="udt_example_1"><!-- --></a><h4 class="sectiontitle">Example 1</h4><p>This is a generic
+example showing the structure of a four-dimensional table:</p>
+<pre><code>RUNSPEC
+
+UDTDIMS
+(max tables) (max rows) (max points) (max dims)/
+...
+SCHEDULE
+
+UDT
+(table name) (no. of dimensions m &lt;= 4)/
+(interpolation method IA1) (value 1) (value 2) ... (value n1)/
+(interpolation method IA2) (value 1) (value 2) ... (value n2)/
+(interpolation method IA3) (value 1) (value 2) ... (value n3)/
+(interpolation method IA4) (value 1) (value 2) ... (value n4)/
+-- the next 1..n2 rows contain n1 values each, and represent a table
+ in dimensions IA1 and IA2, for IA3 = 1 and IA4 = 1.
+
+-- {IA1 value 1} {IA1 value 2} ... {IA1 value i}
+  {Result111} {Result211} ...{Resulti11} / -- for IA2 Value 1
+.../
+{Result1j1} {Result2j1} ...{Resultij1} / -- for IA2 Value j
+/ --Third dimension (IA3) value 1 table termination
+-- the next 1..n2 rows contain n1 values each, and represent a table
+ in dimensions IA1 and IA2, for IA3 = 2 and IA4 = 1.
+
+-- Next 1 to j rows corresponding to the results table for in the
+ dimensions of IA1 and IA2, for IA3 value 2  -- {IA1 value 1} {IA1 value 2} ... {IA1 value i}
+  {Result112} {Result212} ...{Resulti12} / -- for IA2 Value 1
+  .../
+  {Result1j2} {Result2j2} ...{Resultij2} / -- for IA2 Value j
+  / --Third dimension (IA3) value 2 table termination 
+  -- the next 1..n2 rows contain n1 values each, and represent a table
+ in dimensions IA1 and IA2, for IA3 = k and IA4 = 1.
+...
+/
+--we’ve now entered all values for IA4 value 1
+/
+-- the next 1..n2 rows contain n1 values each, and represent a table
+ in dimensions IA1 and IA2, for IA3 = 1 and IA4 = 2.
+...
+/
+-- the next 1..n2 rows contain n1 values each, and represent a table
+ in dimensions IA1 and IA2, for IA3 = 2 and IA4 = 2.
+...
+/
+...
+-- the next 1..n2 rows contain n1 values each, and represent a table
+ in dimensions IA1 and IA2, for IA3 = n3 and IA4 = 2.
+...
+/
+
+--we’ve now entered all values for IA4 value 2
+/
+...
+-- the next 1..n2 rows contain n1 values each, and represent a table
+ in dimensions IA1 and IA2, for IA3 = 1 and IA4 = l.
+...
+/
+-- the next 1..n2 rows contain n1 values each, and represent a table
+ in dimensions IA1 and IA2, for IA3 = 2 and IA4 = l.
+...
+/
+...
+-- the next 1..n2 rows contain n1 values each, and represent a table
+ in dimensions IA1 and IA2, for IA3 = k and IA4 = l.
+-- Next 1 to j rows corresponding to the results table for in the
+ dimensions of IA1 and IA2, for IA3 value k
+-- {IA1 value 1} {IA1 value 2} ... {IA1 value i}
+{Result11k} {Result21k} ...{Resulti1k} / -- for IA2 Value 1
+.../
+{Result1jk} {Result2jk} ...{Resultijk} / -- for IA2 Value j
+/ -- Third dimension (IA3) value k table termination
+--we’ve now entered all values for IA4 value l
+/
+--we’ve now entered all values for this table
+/
+--we’ve now entered all tables in this UDT keyword</code></pre></div>
+<div class="section" id="udt_example_2"><a name="udt_example_2"><!-- --></a><h4 class="sectiontitle">Example 2</h4><p>This is a simple
+table with one dimension which will be linearly interpolated within
+the table but clamped to the first or last value as appropriate when
+outside it</p>
+<pre><code>RUNSPEC
+
+UDTDIMS
+1 8 4 1 /
+...
+SCHEDULE
+
+UDT
+'TUTESTA' 1/
+'LC' 4.0E+06 5.0E+06 6.0E+06 7.0E+06 /
+-- the next row contains four values, one for each point in the
+-- first and only dimension
+40 50 60 70 /
+/ -- this slash terminates the second dimension, which in this
+-- case is 1
+/ -- this slash terminates the UDT keyword</code></pre></div>
+<div class="section" id="udt_example_3"><a name="udt_example_3"><!-- --></a><h4 class="sectiontitle">Example 3</h4><p>This is a
+sample table with 3 dimensions. The first dimension will be evaluated
+using linear interpolation and extrapolation, the second using the
+nearest value, and the third using the ID of the elements. The first
+dimension has three interpolation points, the other two dimensions
+have two each.</p>
+<pre><code>RUNSPEC
+
+UDTDIMS
+1 20 4 3/
+...
+SCHEDULE
+
+UDT
+'TUTESTB' 3  /
+'LL'  1 2 3  /
+'NV'  2 4  /
+'ID' 'W2' '*' /
+-- the next two rows are both for the first 'ID' dimension'
+1 2 3 / -- values corresponding to the first 'NV' dimension
+2 4 6 / -- values corresponding to the second 'NV' dimension
+/ -- this slash terminates the 'NV' dimensions
+-- the next two rows are both for the second 'ID' dimension'
+10 11 12 / -- values corresponding to the first 'NV' dimension
+20 22 24 / -- values corresponding to the second 'NV' dimension
+/ -- this slash terminates the 'NV' dimensions
+/ -- this slash terminates the 'ID' dimensions
+/ -- this slash terminates the UDT keyword</code></pre><p>So, if a <span class="keyword">UDQ</span> had a table reference like</p>
+<pre><code>UDQ
+DEFINE WUTESTB TUTESTB[WOPR,WGPR,WWPR]</code></pre><p>with wells W1
+and W2, then the result of the table reference would be a well vector
+with two elements. The simulator would start off with the first element
+of the well vector, which is well W1.</p>
+<p><span class="keyword">WOPR</span>  would be evaluated for W1, and then linear interpolation/extrapolation
+used. <span class="keyword">WGPR</span> would be evaluated for W1, and then
+the “nearest value” method of interpolation used. <span class="keyword">WWPR</span> is not evaluated at all, because the third dimension of the table
+uses the ‘ID’ method. Instead, use the well name for its first element,
+which is W1, and compare it with the names associated with the interpolation
+points. The name does not match the first point ‘W2’, but it does
+match the second point which is the wildcard character ‘*’.</p>
+<p>So, for the third dimension, the simulator uses the second set of
+values: the two rows starting with 10 and ending with 24.</p>
+<p>For
+the second dimension, the simulator determines whether the value of <span class="keyword">WGPR</span> for W1 is closer to 2 or to 4. If the value is closer
+to 2, the simulator uses row 10 11 12. If it is closer to 4, the simulator
+uses row 20 22 24.</p>
+<p>And finally the simulator performs a linear
+interpolation or extrapolation based on where the value of <span class="keyword">WOPR</span> lies with relation to the interpolation points for
+the first dimension, which are 1 2 3.</p>
+<p>So, if <span class="keyword">WGPR</span> for W1 is 2, and <span class="keyword">WOPR</span> for W1 is 1.5, the result
+would be 10.5 - the simulator takes row 10 11 12, and then interpolates
+half way between the first two values.</p>
+<p>This process is then
+repeated for well W2. This time the simulator uses the first block
+of values: the two rows starting with 1 and ending with 6, since this
+block has the name ‘W2’. Assuming for simplicity that W2 and W1 have
+the same values for <span class="keyword">WGPR</span> and <span class="keyword">WOPR</span>, then this time the result will be 1.5.</p>
+<p>This produces the
+well vector <span class="keyword">WUTESTB</span> as the result, with values
+10.5 and 1.5. Units can be assigned to it within the <span class="keyword">UDQ</span> keyword as required.</p>
+</div>
+<div class="section" id="udt_example_4"><a name="udt_example_4"><!-- --></a><h4 class="sectiontitle">Example 4</h4><p>This is a four dimensional table which is equivalent
+to the VFP table in the GASLIFT sample dataset.</p>
+<pre><code>UDT
+TUVFP 4 /
+-- Table name and number of dimensions
+LC 5.00000E+02  1.00000E+03  2.00000E+03  3.00000E+03  4.00000E+03  5.00000E+03 / 
+-- Dimension 1 Flow rate (LIQ) values A1
+LC 2.00000E+01  6.00000E+01  1.00000E+02 / 
+-- Dimension 2 THP values A2
+LC 0.00000E+00  4.00000E-01  8.00000E-01 / 
+-- Dimension 3 WCT values A3
+LC 0.00000E+00  1.00000E+05  2.00000E+05  3.00000E+05  4.00000E+05 / 
+-- Dimension 4 Gas lift values A4
+
+1.29E+02 1.09E+02 9.45E+01 9.40E+01 9.69E+01 1.01E+02 / -- A1 values for A2(1), A3(1), A4(1) 
+1.90E+02 1.89E+02 1.90E+02 1.91E+02 1.93E+02 1.96E+02 / -- A1 values for A2(2), A3(1), A4(1) 
+2.34E+02 2.35E+02 2.36E+02 2.39E+02 2.42E+02 2.46E+02 / -- A1 values for A2(3), A3(1), A4(1) 
+/ -- end of A3(1), A4(1) table      
+1.59E+02 1.54E+02 1.45E+02 1.41E+02 1.41E+02 1.44E+02 / -- A1 values for A2(1), A3(2), A4(1) 
+2.13E+02 2.13E+02 2.14E+02 2.16E+02 2.19E+02 2.23E+02 / -- A1 values for A2(2), A3(2), A4(1) 
+2.56E+02 2.56E+02 2.58E+02 2.60E+02 2.63E+02 2.67E+02 / -- A1 values for A2(3), A3(2), A4(1) 
+/ -- end of A3(2), A4(1) table   
+1.95E+02 1.93E+02 1.93E+02 1.95E+02 1.98E+02 2.02E+02 / -- A1 values for A2(1), A3(3), A4(1) 
+2.41E+02 2.41E+02 2.42E+02 2.44E+02 2.47E+02 2.51E+02 / -- A1 values for A2(2), A3(3), A4(1) 
+2.83E+02 2.83E+02 2.84E+02 2.86E+02 2.89E+02 2.93E+02 / -- A1 values for A2(3), A3(3), A4(1) 
+/ -- end of A3(3), A4(1) table       
+/ -- end of A4(1) table     
+4.21E+01 5.16E+01 6.46E+01 7.38E+01 8.15E+01 8.85E+01 / -- A1 values for A2(1), A3(1), A4(2) 
+1.45E+02 1.55E+02 1.65E+02 1.73E+02 1.79E+02 1.85E+02 / -- A1 values for A2(2), A3(1), A4(2) 
+2.05E+02 2.14E+02 2.23E+02 2.30E+02 2.35E+02 2.41E+02 / -- A1 values for A2(3), A3(1), A4(2) 
+/ -- end of A3(1), A4(2) table   
+5.33E+01 6.77E+01 8.92E+01 1.02E+02 1.13E+02 1.20E+02 / -- A1 values for A2(1), A3(2), A4(2) 
+1.65E+02 1.78E+02 1.92E+02 1.98E+02 2.04E+02 2.10E+02 / -- A1 values for A2(2), A3(2), A4(2) 
+2.21E+02 2.31E+02 2.42E+02 2.49E+02 2.55E+02 2.60E+02 / -- A1 values for A2(3), A3(2), A4(2) 
+/ -- end of A3(2), A4(2) table    
+8.46E+01 1.06E+02 1.34E+02 1.48E+02 1.60E+02 1.68E+02 / -- A1 values for A2(1), A3(3), A4(2) 
+1.84E+02 1.99E+02 2.15E+02 2.25E+02 2.32E+02 2.39E+02 / -- A1 values for A2(2), A3(3), A4(2) 
+2.40E+02 2.52E+02 2.64E+02 2.72E+02 2.78E+02 2.84E+02 / -- A1 values for A2(3), A3(3), A4(2) 
+/ -- end of A3(3), A4(2) table   
+/ -- end of A4(2) table   
+3.74E+01 4.42E+01 5.60E+01 6.49E+01 7.37E+01 8.17E+01 / -- A1 values for A2(1), A3(1), A4(3) 
+1.02E+02 1.20E+02 1.42E+02 1.56E+02 1.65E+02 1.73E+02 / -- A1 values for A2(2), A3(1), A4(3) 
+1.70E+02 1.91E+02 2.09E+02 2.19E+02 2.26E+02 2.33E+02 / -- A1 values for A2(3), A3(1), A4(3) 
+/ -- end of A3(1), A4(3) table      
+4.08E+01 5.00E+01 6.70E+01 8.12E+01 9.30E+01 1.03E+02 / -- A1 values for A2(1), A3(2), A4(3) 
+1.18E+02 1.40E+02 1.65E+02 1.79E+02 1.89E+02 1.98E+02 / -- A1 values for A2(2), A3(2), A4(3) 
+1.97E+02 2.15E+02 2.30E+02 2.40E+02 2.48E+02 2.55E+02 / -- A1 values for A2(3), A3(2), A4(3) 
+/ -- end of A3(2), A4(3) table      
+4.52E+01 5.79E+01 8.38E+01 1.09E+02 1.27E+02 1.41E+02 / -- A1 values for A2(1), A3(3), A4(3) 
+1.39E+02 1.63E+02 1.89E+02 2.04E+02 2.15E+02 2.25E+02 / -- A1 values for A2(2), A3(3), A4(3) 
+2.14E+02 2.32E+02 2.50E+02 2.61E+02 2.69E+02 2.77E+02 / -- A1 values for A2(3), A3(3), A4(3) 
+/ -- end of A3(3), A4(3) table      
+/ -- end of A4(3) table      
+3.68E+01 4.23E+01 5.16E+01 6.12E+01 7.00E+01 7.84E+01 / -- A1 values for A2(1), A3(1), A4(4) 
+9.58E+01 1.10E+02 1.31E+02 1.45E+02 1.55E+02 1.63E+02 / -- A1 values for A2(2), A3(1), A4(4) 
+1.55E+02 1.73E+02 1.94E+02 2.06E+02 2.15E+02 2.22E+02 / -- A1 values for A2(3), A3(1), A4(4) 
+/ -- end of A3(1), A4(4) table        
+3.96E+01 4.62E+01 5.97E+01 7.22E+01 8.36E+01 9.38E+01 / -- A1 values for A2(1), A3(2), A4(4) 
+9.99E+01 1.17E+02 1.43E+02 1.61E+02 1.75E+02 1.85E+02 / -- A1 values for A2(2), A3(2), A4(4) 
+1.67E+02 1.88E+02 2.14E+02 2.27E+02 2.38E+02 2.47E+02 / -- A1 values for A2(3), A3(2), A4(4) 
+/ -- end of A3(2), A4(4) table     
+4.33E+01 5.16E+01 7.01E+01 8.83E+01 1.05E+02 1.19E+02 / -- A1 values for A2(1), A3(3), A4(4) 
+1.05E+02 1.26E+02 1.62E+02 1.83E+02 1.98E+02 2.10E+02 / -- A1 values for A2(2), A3(3), A4(4) 
+1.84E+02 2.07E+02 2.35E+02 2.49E+02 2.60E+02 2.69E+02 / -- A1 values for A2(3), A3(3), A4(4) 
+/ -- end of A3(3), A4(4) table      
+/ -- end of A4(4) table       
+3.76E+01 4.23E+01 5.06E+01 5.97E+01 6.84E+01 7.68E+01 / -- A1 values for A2(1), A3(1), A4(5) 
+9.28E+01 1.04E+02 1.23E+02 1.37E+02 1.48E+02 1.57E+02 / -- A1 values for A2(2), A3(1), A4(5) 
+1.50E+02 1.66E+02 1.86E+02 2.00E+02 2.09E+02 2.17E+02 / -- A1 values for A2(3), A3(1), A4(5) 
+/ -- end of A3(1), A4(5) table      
+4.00E+01 4.54E+01 5.67E+01 6.77E+01 7.83E+01 8.83E+01 / -- A1 values for A2(1), A3(2), A4(5) 
+9.63E+01 1.10E+02 1.33E+02 1.50E+02 1.64E+02 1.75E+02 / -- A1 values for A2(2), A3(2), A4(5) 
+1.54E+02 1.73E+02 1.98E+02 2.14E+02 2.27E+02 2.37E+02 / -- A1 values for A2(3), A3(2), A4(5) 
+/ -- end of A3(2), A4(5) table   
+4.35E+01 4.99E+01 6.42E+01 7.91E+01 9.35E+01 1.07E+02 / -- A1 values for A2(1), A3(3), A4(5) 
+9.99E+01 1.16E+02 1.43E+02 1.65E+02 1.82E+02 1.95E+02 / -- A1 values for A2(2), A3(3), A4(5) 
+1.61E+02 1.82E+02 2.14E+02 2.33E+02 2.47E+02 2.58E+02 / -- A1 values for A2(3), A3(3), A4(5) 
+/ -- end of A3(3), A4(5) table      
+/ -- end of A4(5) table       
+/
+/</code></pre></div>
+</div>
+</div>
+
+</body>
+</html>

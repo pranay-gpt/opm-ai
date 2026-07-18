@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="FLASHOPT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Advanced"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="FLASHOPT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>FLASHOPT</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="FLASHOPT"><a name="FLASHOPT"><!-- --></a>
+<h1 class="keyword">FLASHOPT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="flashopt.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="flashopt.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d698e45">&nbsp;</th>
+ 
+<th valign="top" id="d698e47">ECLIPSE 100</th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d698e53">x</th>
+
+<th valign="top" id="d698e56">ECLIPSE 300</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d698e45 d698e53 ">&nbsp;</td>
+ 
+<td valign="top" headers="d698e47 d698e56 ">RUNSPEC</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d698e45 d698e53 ">&nbsp;</td>
+ 
+<td valign="top" headers="d698e47 d698e56 ">GRID</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d698e45 d698e53 ">&nbsp;</td>
+ 
+<td valign="top" headers="d698e47 d698e56 ">EDIT</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d698e45 d698e53 ">x</td>
+
+<td valign="top" headers="d698e47 d698e56 ">PROPS</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d698e45 d698e53 ">&nbsp;</td>
+ 
+<td valign="top" headers="d698e47 d698e56 ">REGIONS</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d698e45 d698e53 ">&nbsp;</td>
+ 
+<td valign="top" headers="d698e47 d698e56 ">SOLUTION</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d698e45 d698e53 ">&nbsp;</td>
+ 
+<td valign="top" headers="d698e47 d698e56 ">SUMMARY</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d698e45 d698e53 ">&nbsp;</td>
+ 
+<td valign="top" headers="d698e47 d698e56 ">SCHEDULE</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is used to set certain options in the flash. It contains
+the following data:</p>
+
+<ol>
+<li>Stability criteria <math><mrow><mi>ϵ</mi>
+</mrow></math>.  <p>The flash code will look for a two–phase solution
+if the single phase solution is unstable. Instability is determined
+by calculating a term called the tangent plane distance (<math><mrow><mi>τ</mi>
+</mrow></math>), which is a measure of the change in energy when
+a small amount of a new phase is split off. The single phase is deemed
+unstable if the energy of the system is reduced, <math><mrow><mi>τ</mi>
+<mo>&lt;</mo><mn>0</mn></mrow></math>. Calculation of
+the tangent plane distance can be affected by rounding errors, so
+the calculated value of <math><mrow><mi>τ</mi>
+</mrow></math> can sometimes be small and negative when the true
+value is small and positive. In these cases, one–phase cells will
+be misidentified as two–phase. The stability check can be made more
+robust by testing for <math><mrow><mi>τ</mi>
+<mo>&lt;</mo><mi>ϵ</mi><mo>≤</mo><mn>0</mn></mrow>
+</math>.</p>
+<p> There is a drawback of using <math><mrow><mi>ϵ</mi>
+<mo>&lt;</mo><mn>0</mn></mrow></math>. Some two-phase
+cells with genuinely small negative values of <math><mrow><mi>τ</mi>
+</mrow></math> will now be misidentified as being one-phase. However
+the fluids in these cells should be very close to the phase boundary,
+so the error in this case will be small. Nevertheless it is important
+that only small negative values of <math><mrow><mi>ϵ</mi>
+</mrow></math> should be used, <math><mrow><msup><mrow>
+<mo>−</mo><mn>1</mn><mo>×</mo><mn>10</mn></mrow>
+<mrow><mo>−</mo><mn>8</mn></mrow></msup><mo>&lt;</mo>
+<mi>ϵ</mi><mo>≤</mo><mn>0</mn></mrow></math>, otherwise
+the flash results will be unreliable.</p>
+  <p>DEFAULT: 0.0</p>
+ </li>
+
+</ol>
+
+<div class="section" id="flashopt_example"><a name="flashopt_example"><!-- --></a><h4 class="sectiontitle">Example</h4> <pre><code>FLASHOPT
+ -1.0e-12 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

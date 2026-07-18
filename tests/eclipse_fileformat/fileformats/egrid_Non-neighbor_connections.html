@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Non-neighbor connections"/>
+<meta name="DC.subject" content="Corner point grids"/>
+<meta name="keywords" content="Corner point grids"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="egrid_non-neighbor_connections"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Non-neighbor connections</title>
+</head>
+<body>
+
+
+<div class="nested0" id="egrid_non-neighbor_connections"><a name="egrid_non-neighbor_connections"><!-- --></a>
+<h1 class="topictitle1">Non-neighbor connections</h1>
+
+
+ <div>
+<p>Non-neighbor connection data may be included at the end of the
+file. The keywords are arranged as follows:</p>
+
+<p>For the global grid and for each local grid (optional):</p>
+
+<ol>
+<li><span class="keyword">NNCHEAD</span> array</li>
+
+<li><span class="keyword">NNC1</span> array</li>
+
+<li><span class="keyword">NNC2</span> array</li>
+
+<li><span class="keyword">NNCL</span> array (For LGRs only)</li>
+
+<li><span class="keyword">NNCG</span> array (For LGRs only)</li>
+
+<li><span class="keyword">NNCHEADA</span> keyword</li>
+
+<li><span class="keyword">NNA1</span> array (For amalgamated LGRs only)</li>
+
+<li><span class="keyword">NNA2</span> array (For amalgamated LGRs only)</li>
+
+</ol>
+
+
+<div class="tablenoborder"><a name="egrid.tab.01f3"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="egrid.tab.01f3" frame="border" border="1" rules="all"><caption>
+           Table 23.1  Corner point NNC keywords </caption>    
+<thead align="left">
+<tr>
+<th valign="top" id="d20e98">Keyword                      </th>
+
+<th valign="top" id="d20e101">   No. of Items                      </th>
+
+<th valign="top" id="d20e104">Data Type                      </th>
+
+<th valign="top" id="d20e107">Contents                      </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d20e98 "><span class="keyword">NNCHEAD</span>                   
+</td>
+
+<td valign="top" headers="d20e101 ">10                      </td>
+
+<td valign="top" headers="d20e104 ">INTE</td>
+
+<td valign="top" headers="d20e107 ">Non-neighbor connection header (This excludes
+NNCs between two amalgamated LGRs, which are reported by <span class="keyword">NNCHEADA</span>)                         <p>1) NUMNNC = number
+of NNCs</p>
+<p>2) LGR number (0 for global grid)</p>
+<p>3-10) Spare</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d20e98 "><span class="keyword">NNC1</span>                      
+</td>
+
+<td valign="top" headers="d20e101 ">  NUMNNC                                     
+</td>
+
+<td valign="top" headers="d20e104 ">INTE</td>
+
+<td valign="top" headers="d20e107 "> Upstream cell numbers for non-neighbor  connections.
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d20e98 "><span class="keyword">NNC2</span>                      
+</td>
+
+<td valign="top" headers="d20e101 "> NUMNNC                                      
+</td>
+
+<td valign="top" headers="d20e104 ">INTE</td>
+
+<td valign="top" headers="d20e107 ">Downstream cell numbers for non-neighbor  connections.
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d20e98 ">  <span class="keyword">NNCL</span>                    
+</td>
+
+<td valign="top" headers="d20e101 ">  NCONGL                                     
+</td>
+
+<td valign="top" headers="d20e104 ">INTE</td>
+
+<td valign="top" headers="d20e107 ">Integer LGR cell numbers, identifying the local
+cells connected to global grid.                      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d20e98 "> <span class="keyword">NNCG</span>                     
+</td>
+
+<td valign="top" headers="d20e101 ">NCONGL                      </td>
+
+<td valign="top" headers="d20e104 ">INTE</td>
+
+<td valign="top" headers="d20e107 "> Integer global cell numbers, identifying cells
+connected to the local grid cells given by the NNCL array. (No of
+connections = NCONGL)                      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d20e98 "><span class="keyword">NNCHEADA</span>                  
+</td>
+
+<td valign="top" headers="d20e101 ">10                      </td>
+
+<td valign="top" headers="d20e104 ">INTE</td>
+
+<td valign="top" headers="d20e107 ">Header for NNCs between two amalgamated LGRs:
+<p>1) ILOC1 = index of first LGR</p>
+<p>2) ILOC2 = index of second
+LGR</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d20e98 "><span class="keyword">NNA1</span>                      
+</td>
+
+<td valign="top" headers="d20e101 "> NUMNCA        </td>
+
+<td valign="top" headers="d20e104 ">INTE</td>
+
+<td valign="top" headers="d20e107 ">Cell numbers in connecting local grid ILOC1  
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d20e98 "> <span class="keyword">NNA2</span>                     
+</td>
+
+<td valign="top" headers="d20e101 ">  NUMNCA                        </td>
+
+<td valign="top" headers="d20e104 ">INTE                                         
+</td>
+
+<td valign="top" headers="d20e107 "> Cell numbers in connecting local grid ILOC2</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

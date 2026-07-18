@@ -1,0 +1,460 @@
+RUNSPEC
+TITLE
+  Simple FOAM model example - New RUNSPEC
+
+DIMENS
+   10   10    3  /
+
+OIL
+
+WATER
+
+GAS
+
+DISGAS
+
+FOAM
+
+FIELD
+
+EQLDIMS
+    1  100   10    1    1 /
+
+TABDIMS
+    2    1   16   12    2   12    1    1 /
+
+REGDIMS
+    2    1    0    0  /
+
+WELLDIMS
+    2    1    1    2 /
+
+NUPCOL
+    4 /
+    
+UNIFOUT
+
+START
+  19 'APR' 1994  /
+
+NSTACK
+   24 /
+
+
+GRID    ================================================================
+-------- IN THIS SECTION , THE GEOMETRY OF THE  SIMULATION GRID AND THE
+-------- ROCK PERMEABILITIES AND POROSITIES ARE DEFINED.
+------------------------------------------------------------------------
+--
+--     ARRAY  VALUE     ------- BOX ------
+EQUALS
+      'DX'    1000      /
+      'DY'    1000      /
+      'PORO'  0.3       /
+
+      'DZ'    20        1  10  1  10  1  1  /
+      'PERMX' 500       /
+      'MULTZ' 0.64      /
+      'TOPS'  8325      /
+
+      'DZ'    30        1  10  1  10  2  2  /
+      'PERMX' 50        /
+      'MULTZ' 0.265625  /
+
+      'DZ'    50        1  10  1  10  3  3  /
+      'PERMX' 200       /
+
+/       EQUALS IS TERMINATED BY A NULL RECORD
+
+-- THE Y AND Z DIRECTION PERMEABILITIES ARE COPIED FROM PERMX
+--    SOURCE  DESTINATION  ------- BOX ------
+COPY
+      'PERMX'    'PERMY'   1  10  1  10  1  3  /
+      'PERMX'    'PERMZ'   /
+/
+-- OUTPUT OF DX, DY, DZ, PERMX, PERMY, PERMZ, MULTZ, PORO AND TOPS DATA
+-- IS REQUESTED, AND OF THE CALCULATED PORE VOLUMES AND X, Y AND Z
+-- TRANSMISSIBILITIES
+RPTGRID
+ -- Report Levels for Grid Section Data
+ -- 
+ 'DX' 
+ 'DY' 
+ 'DZ' 
+ 'PERMX' 
+ 'PERMY' 
+ 'PERMZ' 
+ 'MULTZ' 
+ 'PORO' 
+ 'TOPS' 
+ 'PORV' 
+ 'TRANX' 
+ 'TRANY' 
+ 'TRANZ' 
+ / 
+
+PROPS    ===============================================================
+
+--
+--  SWAT   KRW   PCOW
+--
+SWFN
+    0.12  0       0
+    1.0   0.1    0  /
+/
+
+--
+--  SGAS   KRG   PCOG
+--
+SGFN
+
+    0     0       0
+    0.02  0       0
+    0.05  0.005   0
+    0.12  0.025   0
+    0.2   0.075   0
+    0.25  0.125   0
+    0.3   0.19    0
+    0.4   0.41    0
+    0.45  0.6     0
+    0.5   0.72    0
+    0.6   0.87    0
+    0.7   0.94    0
+    0.85  0.98    0
+    1.0   1.0     0
+/
+/
+
+-- OIL RELATIVE PERMEABILITY IS TABULATED AGAINST OIL SATURATION
+-- FOR OIL-WATER AND OIL-GAS-CONNATE WATER CASES
+--
+--  SOIL     KROW     KROG
+SOF3
+
+    0        0        0
+    0.18     0        0
+    0.28     0.0001   0.0001
+    0.38     0.001    0.001
+    0.43     0.01     0.01
+    0.48     0.021    0.021
+    0.58     0.09     0.09
+    0.63     0.2      0.2
+    0.68     0.35     0.35
+    0.76     0.7      0.7
+    0.83     0.98     0.98
+    0.86     0.997    0.997
+    0.879    1        1
+    0.88     1        1    /
+/
+
+--
+--    REF. PRES. REF. FVF  COMPRESSIBILITY  REF VISCOSITY  VISCOSIBILITY
+--
+PVTW
+       4014.7     1.029        3.13D-6           0.31            0 /
+
+--
+--    REF. PRES   COMPRESSIBILITY
+--
+ROCK
+        14.7          3.0D-6          /
+
+--
+-- SURFACE DENSITIES OF RESERVOIR FLUIDS
+--
+--        OIL   WATER   GAS
+DENSITY
+         49.1   64.79  0.06054  /
+
+--
+--   PGAS   BGAS   VISGAS
+PVDG
+     14.7 166.666   0.008
+    264.7  12.093   0.0096
+    514.7   6.274   0.0112
+   1014.7   3.197   0.014
+   2014.7   1.614   0.0189
+   2514.7   1.294   0.0208
+   3014.7   1.080   0.0228
+   4014.7   0.811   0.0268
+   5014.7   0.649   0.0309
+   9014.7   0.386   0.047   /
+
+
+--
+--   RS      POIL  FVFO  VISO
+PVTO
+    0.001    14.7 1.062  1.04    /
+    0.0905  264.7 1.15   0.975   /
+    0.18    514.7 1.207  0.91    /
+    0.371  1014.7 1.295  0.83    /
+    0.636  2014.7 1.435  0.695   /
+    0.775  2514.7 1.5    0.641   /
+    0.93   3014.7 1.565  0.594   /
+    1.270  4014.7 1.695  0.51
+           5014.7 1.671  0.549
+           9014.7 1.579  0.74    /
+    1.618  5014.7 1.827  0.449
+           9014.7 1.726  0.605   /
+/
+
+--
+-- FOAM ADSOPTION ISOTHERMS
+--
+FOAMADS
+ 0.0     0.00000
+ 1.0     0.00005
+30.0     0.00005  /
+
+ 0.0     0.00000
+ 1.0     0.00002
+30.0     0.00002  /
+
+--
+-- ROCK DENSITY AND ADSORPTION MODEL
+--
+FOAMROCK
+ 1  2650 /
+ 2  2650 /
+
+--
+--  FOAM DECAY DATAAS A FUNCTION OF WATER SATURATION
+--
+FOAMDCYW
+ 0.0 3000
+ 1.0 2000 /
+
+ 0.0 3000
+ 1.0 2000 /
+
+--
+--  FOAM DECAY DATA AS A FUNCTION OF OIL SATURATION
+--
+FOAMDCYO
+ 0.0 3000.0
+ 1.0 2500.0  /
+
+ 0.0 3000.0
+ 1.0 2500.0  /
+
+
+--
+--  FOAM MOBILITY REDUCTION
+--
+FOAMMOB
+  0      1
+  0.001  0.4
+  0.1    0.1
+  1.2    0.05   /
+
+--
+--  PRESSURE EFFECT ON THE MOBILITY REDUCTION
+--  IN THIS CASE HIGHER PRESSURE REDUCES THE FOAM EFFECTIVENESS
+--
+FOAMMOBP
+ 3000 0
+ 6000 0.2  /
+
+--
+--  SHEAR RATE EFFECT ON THE MOBILITY
+--  IN THIS CASE HIGH SHEAR REDUCES THE FOAM EFFECTIVENESS
+--
+FOAMMOBS
+ 0.0 0
+ 4.0 0.1   /
+
+
+--
+-- OUTPUT CONTROLS FOR PROPS DATA
+--
+RPTPROPS
+ 'FOAM'  /
+
+REGIONS
+
+EQUALS
+ 'SATNUM' 1 /
+ 'FIPNUM' 1 /
+ 'SATNUM' 2   1 3  1 3  1 3 /
+ 'FIPNUM' 2   1 3  1 3  1 3 /
+/
+
+SOLUTION ===============================================================
+-------- THE SOLUTION SECTION DEFINES THE INITIAL STATE OF THE SOLUTION
+-------- VARIABLES (PHASE PRESSURES, SATURATIONS AND GAS-OIL RATIOS)
+------------------------------------------------------------------------
+-- DATA FOR INITIALISING FLUIDS TO POTENTIAL EQUILIBRIUM
+--
+--    DATUM  DATUM   OWC    OWC    GOC    GOC    RSVD   RVVD   SOLN
+--    DEPTH  PRESS  DEPTH   PCOW  DEPTH   PCOG  TABLE  TABLE   METH
+EQUIL
+       8400   4800   8500    0     8200    0      1      0       0  /
+
+-- VARIATION OF INITIAL RS WITH DEPTH
+--
+--    DEPTH    RS
+RSVD
+       8200  1.270
+       8500  1.270  /
+
+--
+-- OUTPUT CONTROLS
+--
+RPTSOL
+   'PRESSURE' 'SWAT' 'SGAS' 'FOAM' /
+
+SUMMARY  ===============================================================
+-------- THIS SECTION SPECIFIES DATA TO BE WRITTEN TO THE SUMMARY FILES
+-------- AND WHICH MAY LATER BE USED WITH THE ECLIPSE GRAPHICS PACKAGE
+------------------------------------------------------------------------
+
+--REQUEST PRINTED OUTPUT OF SUMMARY FILE DATA
+
+RUNSUM
+SEPARATE
+PERFORMA
+-- FIELD OIL PRODUCTION
+FOPR
+
+-- WELL GAS-OIL RATIO FOR PRODUCER
+WGOR
+'PRODUCER'
+/
+
+-- WELL BOTTOM-HOLE PRESSURE
+
+WBHP
+'PRODUCER'
+/
+
+-- SATURATIONS IN INJECTION AND PRODUCTION CELL
+BGSAT
+10 10 3
+1  1  1
+/
+
+BOSAT
+10 10 3
+1  1  1
+/
+
+BWSAT
+10 10 3
+1  1  1
+/
+
+-- PRESSURE IN INJECTION AND PRODUCTION CELL
+BPR
+10 10 3
+1  1  1
+/
+
+FTPRFOA
+FTPTFOA
+FTIRFOA
+FTITFOA
+FTIPTFOA
+FTADSFOA
+FTDCYFOA
+
+BTCNFFOA
+ 1 1 1 /
+ 2 2 1 /
+/
+WTPRFOA
+'OP' /
+RTIPTFOA
+ 1 /
+
+BTADSFOA
+ 1 1 1 /
+/
+BTDCYFOA
+ 1 1 1 /
+/
+BTHLFFOA
+ 1 1 1 /
+/
+RTADSFOA
+ 1 /
+RTDCYFOA
+ 1 /
+ 
+TCPU
+
+ALL
+SCHEDULE ===============================================================
+-------- THE SCHEDULE SECTION DEFINES THE OPERATIONS TO BE SIMULATED
+------------------------------------------------------------------------
+-- CONTROLS ON OUTPUT AT EACH REPORT TIME
+
+RPTSCHED                                         FIELD   10:29 13 JUN 85
+ 'PRESSURE' 'SWAT' 'SGAS' 'SOIL' 'FOAM' 'WELLS=2' 'NEWTON=2' FIPFOAM = 2
+ 'TRADS' 'FOAMADS' 'FOAMDCY' 'FOAMMOB' /
+
+RPTRST
+ 3 0 1 0 0 2 /
+
+-- SET 'NO RESOLUTION' OPTION
+DRSDT
+      0  /
+
+-- WELL SPECIFICATION DATA
+--
+--     WELL   GROUP LOCATION  BHP   PI
+--     NAME   NAME    I  J   DEPTH DEFN
+WELSPECS
+    'PRODUCER' 'G'   10 10    8400 'OIL'  /
+    'INJECTOR' 'G'    1  1    8335 'GAS'  /
+/
+
+-- COMPLETION SPECIFICATION DATA
+--
+--     WELL     -LOCATION- OPEN/ SAT CONN  WELL
+--     NAME     I  J K1 K2 SHUT  TAB FACT  DIAM
+COMPDAT
+    'PRODUCER'  10 10 3  3 'OPEN' 0   -1   0.5  /
+    'INJECTOR'   1  1 1  1 'OPEN' 1   -1   0.5  /
+  /
+
+--
+-- PRODUCTION WELL CONTROLS
+--
+--      WELL     OPEN/  CNTL   OIL  WATER   GAS  LIQU   RES   BHP
+--      NAME     SHUT   MODE  RATE   RATE  RATE  RATE  RATE
+WCONPROD
+     'PRODUCER' 'OPEN' 'ORAT' 20000  4*                      1000 /
+  /
+
+--
+-- INJECTION WELL CONTROLS
+--
+--      WELL     INJ   OPEN/  CNTL    FLOW
+--      NAME    TYPE   SHUT   MODE    RATE
+WCONINJE
+     'INJECTOR' 'GAS' 'OPEN' 'RATE'  100000  /
+  /
+  
+TIGHTEN
+0.001 /
+
+TUNING
+1* 50 /
+/
+/
+
+TSTEP
+ 1 9 /
+
+--
+-- SPECIFY THE FOAM INJECTOR
+--
+WFOAM
+ 'INJECTOR'  1.1 /
+/
+
+TSTEP
+ 1 9 90 20*100  5*1000 /
+
+END
+

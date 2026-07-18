@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WNETDP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WNETDP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WNETDP</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WNETDP"><a name="WNETDP"><!-- --></a>
+<h1 class="keyword">WNETDP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wnetdp.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wnetdp.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d3004e45">                         x                   
+  </th>
+
+<th valign="top" id="d3004e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d3004e54">                         x                   
+  </th>
+
+<th valign="top" id="d3004e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d3004e45 d3004e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3004e48 d3004e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3004e45 d3004e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3004e48 d3004e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3004e45 d3004e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3004e48 d3004e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3004e45 d3004e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3004e48 d3004e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3004e45 d3004e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3004e48 d3004e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3004e45 d3004e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3004e48 d3004e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3004e45 d3004e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3004e48 d3004e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3004e45 d3004e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d3004e48 d3004e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword can be used when running the network option (see <a href="../ecl_td/networkintro_Network_Option.html#networkintro_network_option">"Network option"</a> in the <cite>ECLIPSE Technical Description</cite>), to apply an
+additional fixed pressure drop between a well's tubing head and its
+group's corresponding node in the network. Normally the wells' THP
+limits are set equal to their group's nodal pressure at each network
+balancing calculation. But if a fixed pressure drop is specified with
+this keyword for a well, the well's THP is set as follows:</p>
+
+<ul>
+<li>for a production well in a production network: <p>well THP = group’s
+nodal pressure + fixed pressure drop for well</p>
+</li>
+
+<li>for an injection well in an injection network:<p>well THP = group’s
+nodal pressure - fixed pressure drop for well.</p>
+</li>
+
+</ul>
+
+<p>The keyword can also be used to isolate individual wells from the
+effects of the network. If the fixed pressure drop is set to a value
+greater than or equal to 1.0E10, the well's THP limit remains unchanged
+by the network balancing calculation and is not set equal to its group's
+nodal pressure. The well's flow, however, is still added to the network
+flows.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li>Well name, well name template, well list or well list template <p>A template enclosed in quotes can be used to refer to multiple wells
+or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+             </li>
+
+<li>Fixed pressure drop between
+the well and its group’s network node. User-defined arguments can
+be set with keywords <a href="UDQ.html#UDQ"> UDQ</a> and <a href="UDADIMS.html#UDADIMS"> UDADIMS</a>.
+             <p>A value greater than or equal to 1.0E10 causes the
+well's THP limit to become independent of its group's nodal pressure.
+It remains constant unless changed manually in, for example, keyword <a href="WCONPROD.html#WCONPROD">  WCONPROD</a>.</p>
+     
+          <p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.0</p>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="section" id="wnetdp_example"><a name="wnetdp_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WNETDP
+ PROD1  20.0 /
+ PROD2  30.0 /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

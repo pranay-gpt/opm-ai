@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="LAGTRAC"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="LAGTRAC"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>LAGTRAC</title>
+</head>
+<body>
+
+
+<div class="nested0" id="LAGTRAC"><a name="LAGTRAC"><!-- --></a>
+<h1 class="keyword">LAGTRAC</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="lagtrac.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="lagtrac.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1218e45">  </th>
+
+<th valign="top" id="d1218e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1218e54"> x </th>
+
+<th valign="top" id="d1218e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1218e45 d1218e54 "> x </td>
+
+<td valign="top" headers="d1218e48 d1218e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1218e45 d1218e54 ">  </td>
+
+<td valign="top" headers="d1218e48 d1218e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1218e45 d1218e54 ">  </td>
+
+<td valign="top" headers="d1218e48 d1218e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1218e45 d1218e54 ">  </td>
+
+<td valign="top" headers="d1218e48 d1218e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1218e45 d1218e54 ">  </td>
+
+<td valign="top" headers="d1218e48 d1218e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1218e45 d1218e54 ">  </td>
+
+<td valign="top" headers="d1218e48 d1218e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1218e45 d1218e54 ">  </td>
+
+<td valign="top" headers="d1218e48 d1218e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1218e45 d1218e54 ">  </td>
+
+<td valign="top" headers="d1218e48 d1218e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword activates the Lagrangian tracer solver option. For
+more information on this option please see    <a href="../ecl_td/tracertr_Lagrangian_tracer_solver__E300_.html#tracertr_lagrangian_tracer_solver__e300_">"Lagrangian tracer
+solver"</a>  in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<p>The data consists of four items, describing the maximum number
+of streamlines and streamline segments, along with the target number
+of streamlines and the minimum number of streamlines for each cell.
+The data must be terminated by a slash (/).</p>
+
+<ol>
+<li>The maximum number of streamlines. <p>DEFAULT: (Number of components
++ number of phases) times number of cells in model times 0.1.</p>
+</li>
+
+<li>The maximum number of streamline segments. Each streamline is
+made up of a number of segments, with the number of segments being
+one greater than the number of cells the streamline passes through.
+This entry is the maximum number of streamline segments which can
+be traced in total, that is the sum of the number of segments for
+all streamlines. <p>DEFAULT: 100 times maximum number of streamlines.</p>
+</li>
+
+<li>The target number of streamlines as a fraction of the total number
+of cells in the grid. <p>DEFAULT: 0.1</p>
+</li>
+
+<li>The minimum number of streamlines to pass through any cell. <p>DEFAULT: 1</p>
+</li>
+
+</ol>
+
+<div class="section" id="lagtrac_notes"><a name="lagtrac_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li>The Lagrangian tracer solver is not compatible with the radial
+local grid refinement.</li>
+
+<li>The Lagrangian tracer solver is not compatible with local grid
+refinements where two refined regions are immediately adjacent, or
+a refinement is immediately adjacent to a fault. A fault running through
+a refined area is also not permitted.</li>
+
+<li>The Lagrangian tracer solver is not compatible with dual porosity.</li>
+
+<li>The Lagrangian tracer solver is not compatible with explicit NNCs
+set using <a href="NNC.html#NNC">  NNC</a> keyword.</li>
+
+<li>For grids with a large number of cells, the default values for
+items 3 and 4 may require an unfeasibly large amount of memory, especially
+when a model is run in parallel. Setting item 4 to zero and reducing
+item 3 by several orders of magnitude may be required.</li>
+
+</ul>
+</div>
+
+<div class="section" id="lagtrac_example"><a name="lagtrac_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>Up to 4000
+streamlines comprising up to 100000 streamline segments. The algorithm
+will initially trace approximately 0.2 streamlines per cell, and will
+then add streamlines until every cell contains at least one streamline
+segment.</p>
+ <pre><code>LAGTRAC
+ 4000   100000   0.2   1  /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

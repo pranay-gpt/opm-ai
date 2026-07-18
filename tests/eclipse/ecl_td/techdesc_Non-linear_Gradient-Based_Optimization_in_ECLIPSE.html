@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Non-linear gradient-based optimization"/>
+<meta name="DC.subject" content="Production optimization"/>
+<meta name="keywords" content="Production optimization"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="techdesc_non-linear_gradient-based_optimization_in_eclipse"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Non-linear gradient-based optimization</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="techdesc_non-linear_gradient-based_optimization_in_eclipse"><a name="techdesc_non-linear_gradient-based_optimization_in_eclipse"><!-- --></a>
+<h1 class="topictitle1">Non-linear gradient-based optimization</h1>
+
+
+ <div>
+<div class="section" id="techdesc_optimization_structure"><a name="techdesc_optimization_structure"><!-- --></a><h4 class="sectiontitle">Optimization
+structure</h4><p>The central task of optimization is to maximize
+some objective function, <em>J</em>, by variation of a set of control
+parameters, <math>
+<mrow><munder><mrow><mi>λ</mi></mrow><mo>̲</mo>
+</munder></mrow></math>. An example optimization problem is
+that of reservoir optimization, where <em>J</em> can be simply the total
+oil produced and <math>
+<mrow><munder><mrow><mi>λ</mi></mrow><mo>̲</mo>
+</munder></mrow></math> are the controlling well rates during
+a simulation run.</p>
+<p>This optimization task is invariably iterative.
+For gradient-based optimization, this can be represented schematically
+as shown in the following figure.</p>
+<div class="fignone" id="techdesc.XID-0000000b"><a name="techdesc.XID-0000000b"><!-- --></a>
+
+ <br/><img src="../img/opt1.png" width="420px"/><br/> <br/><span class="figcap">
+           Figure 809.1  Schematic representation of gradient based optimization</span></div>
+<p>This iterative structure is based on obtaining a search direction,
+ <math><mi>s</mi></math>, from a set of gradients of the objective function with respect
+to the control parameters, <em>dJ/d</em> <math><mrow><munder><mrow>
+<mi>λ</mi></mrow><mo>̲</mo></munder></mrow></math>. A line search is performed using this initial search direction
+to find the optimum step size at which point the line search is terminated
+and a new direction calculated. This loop is repeated until one (or
+more) termination criteria are met. These termination criteria include
+lower limits on the relative changes of <em> J </em> or of  <math><mrow><munder><mrow>
+<mi>λ</mi></mrow><mo>̲</mo></munder></mrow></math>.</p>
+<p>This optimization loop structure has been implemented in
+ECLIPSE 300, and is controlled by keyword definitions given in the <span class="keyword">OPTIMIZE</span> section of the ECLIPSE 300 data file.</p>
+</div>
+
+<div class="section" id="techdesc_impact_of_constraints"><a name="techdesc_impact_of_constraints"><!-- --></a><h4 class="sectiontitle">Impact of constraints</h4><p>The presence of constraints within an optimization greatly increases
+the complexity of the problem (<cite><span> <a href="biblio_Bibliography.html#biblio_51367">Sokolnikoff and Redheffer,
+1967</a> </span></cite>). Constraints may vary from simple bounds
+on parameter values to full non-linear functional inequality relationships
+between parameters and ECLIPSE outputs, for example, the well and
+group production constraints.</p>
+<p>The former are dealt with relatively
+easily, by a restriction of the step during a line search. However,
+the latter require modifications to the search direction.</p>
+<p>Inequality
+constraints are most frequently found in the form  <math><mrow><mi>f</mi>
+<mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>)</mo>
+</mrow><mo>≤</mo><mi>K</mi></math>, which may be rewritten
+as:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="techdesc.equ.001e"/>
+ <math><mrow><mi>f</mi>
+<mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>)</mo>
+<mo>-</mo><mi>K</mi></mrow><mo>=</mo><mi>V</mi><mo>≤</mo><mn>0</mn></math> 
+</td><td align="right">[Eq. 809.1]
+              </td></tr></tbody></table><p>A constraint of this form is said to become “active”
+when the inequality becomes an equality, that is when <em>V </em> = 0.
+Otherwise the constraint is said to be “inactive”.</p>
+<p>A simple
+example that illustrates the impact of constraints is shown in the
+following figure.</p>
+<div class="fignone" id="techdesc.XID-00000025"><a name="techdesc.XID-00000025"><!-- --></a>
+
+ <br/><img src="../img/opt2.png" width="361px"/><br/> <br/><span class="figcap">
+           Figure 809.2  An Example of constrained optimization.</span></div>
+<p>This diagram shows the objective
+function contour map for a problem with two variables,  <math><msub><mi>λ</mi>
+<mn>1</mn></msub></math>  and  <math><msub>
+<mi>λ</mi><mn>2</mn></msub></math>, in which a nonlinear
+inequality constraint function  <math><mrow>
+<mi>f</mi><mo>(</mo><msub><mi>λ</mi><mn>1</mn>
+</msub><mo>,</mo><msub><mi>λ</mi><mn>2</mn></msub>
+<mo>)</mo></mrow><mo>≤</mo><mi>K</mi></math> divides
+the parameter space into feasible (bottom left) and infeasible (top
+right) regions. From a starting position at A using a search direction
+indicated by the dashed line, a line search would have to terminate
+at B (to avoid violating the constraint). From B, an unconstrained
+search direction would point towards C, which violates the constraint.
+The direction we require is towards the constrained maximum at D.</p>
+<p>The Lagrangian formulation is a well established mechanism for
+combining an objective function with equality constraints. For the
+example above, we form the following Lagrangian function: <a href="biblio_Bibliography.html#biblio_51367">(Sokolnikoff and Redheffer,
+1967)</a>          </p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="techdesc.equ.0034"/>
+ <math><mrow><mrow><mi>L</mi><mrow><mo>(</mo><munder><mrow>
+<mi>λ</mi></mrow><mrow><mo>̲</mo></mrow></munder><mo>)</mo></mrow></mrow><mo>=</mo><mrow><mi>J</mi><mo>(</mo><mrow><munder><mrow><mi>λ</mi>
+</mrow><mrow><mo>̲</mo></mrow></munder></mrow><mo>)</mo><mo>-</mo><mrow><mi>Φ</mi><mi>V</mi><mo>(</mo>
+<mrow><munder><mrow><mi>λ</mi></mrow>
+<mrow><mo>̲</mo></mrow></munder></mrow><mo>)</mo>
+</mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 809.2]
+              </td></tr></tbody></table><p>For suitable values of the Lagrange multiplier, <math><mi>Φ</mi></math>, unconstrained optimization of the Lagrangian simultaneously achieves
+constrained optimization of the original objective function.</p>
+<p>The Lagrangian formulation relies on being able to determine which
+inequality constraints are active, that is which are currently an
+equality constraint. As the above illustration indicated, a specialized
+line search algorithm can be used for just such a purpose. However,
+one potential problem of this approach is that it may dominate the
+optimization convergence - at worst we may end up following the Simplex
+algorithm of linear programming, with one iteration per constraint.</p>
+<p> <a href="techdesc_adjoint_gradient_calculations_in_eclipse.html#techdesc_adjoint_gradient_calculations_in_eclipse"> "Adjoint gradient calculations in ECLIPSE"</a> shows how we use
+the Lagrangian formulation to construct the optimization gradients
+using the Adjoint method.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

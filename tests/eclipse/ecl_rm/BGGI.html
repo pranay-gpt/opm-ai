@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="BGGI"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="BGGI"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>BGGI</title>
+</head>
+<body>
+
+
+<div class="nested0" id="BGGI"><a name="BGGI"><!-- --></a>
+<h1 class="keyword">BGGI</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="bggi.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="bggi.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d172e45"> x </th>
+
+<th valign="top" id="d172e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d172e54">  </th>
+
+<th valign="top" id="d172e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d172e45 d172e54 ">  </td>
+
+<td valign="top" headers="d172e48 d172e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d172e45 d172e54 ">  </td>
+
+<td valign="top" headers="d172e48 d172e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d172e45 d172e54 ">  </td>
+
+<td valign="top" headers="d172e48 d172e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d172e45 d172e54 "> x </td>
+
+<td valign="top" headers="d172e48 d172e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d172e45 d172e54 ">  </td>
+
+<td valign="top" headers="d172e48 d172e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d172e45 d172e54 ">  </td>
+
+<td valign="top" headers="d172e48 d172e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d172e45 d172e54 ">  </td>
+
+<td valign="top" headers="d172e48 d172e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d172e45 d172e54 ">  </td>
+
+<td valign="top" headers="d172e48 d172e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTPVT"> NTPVT</a>  (set in the <span class="keyword">TABDIMS</span> keyword)
+tables of saturated gas FVF multiplier functions, describing the variation
+of the saturated FVF of gas with pressure and Gi values. Each table
+is terminated by a slash (/). Each table contains a maximum of <a href="TABDIMS.html#TABDIMS.NPPVT"> NPPVT</a>  (set
+in the <span class="keyword">TABDIMS</span> keyword) records terminated by a
+slash (/) and each record contains a maximum of <samp class="codeph">NPPVT</samp> rows of data. The rows of data specify a two-dimensional (P, Gi)
+function which multiplies the saturated gas FVF value at (P, Gi=0)
+to give the true saturated gas FVF at (P, Gi). The saturated gas FVF
+value at (P, Gi=0) is obtained from the corresponding <span class="keyword">PVTG</span> table.</p>
+
+<p>The first row of data in each record contains:</p>
+
+<ol>
+<li> The gas pressure value. <p>The values should increase monotonically
+down the column.</p>
+ <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia
+(<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>)</p>
+ </li>
+
+<li> The factor by which the saturated gas FVF calculated from the <a href="PVTG.html#PVTG"> PVTG</a> keyword at a pressure
+corresponding to item 1 has to be multiplied to give the true saturated
+gas FVF at a pressure corresponding to item 1 and a Gi value given
+by item 1 in the corresponding <a href="GINODE.html#GINODE"> GINODE</a> table. </li>
+
+</ol>
+
+<p>The other rows in the record — that is rows 2 to <samp class="codeph">NPPVT</samp> — each contain item 2 only. This defines the
+corresponding factor by which the saturated gas FVF at (P, Gi=0) (computed
+from the <span class="keyword">PVTG</span> data) has to be multiplied to give
+the true saturated FVF for gas at the pressure value given the first
+row and whose Gi value is specified in the corresponding record in
+the <span class="keyword">GINODE</span> keyword. </p>
+
+<p>See <a href="../ecl_td/gipscomp_Gi_pseudo-compositional_model.html#gipscomp">"Gi pseudo-compositional
+model"</a> in the <cite>ECLIPSE Technical Description</cite> for
+further information.</p>
+
+<div class="section" id="bggi_example"><a name="bggi_example"><!-- --></a><h4 class="sectiontitle">Example</h4> <p>In this example, <samp class="codeph">NTPVT</samp> = 1 and there is one table of data, terminated by
+the final slash (/). Also <samp class="codeph">NPPVT</samp> =2 and the table contains
+two records, each terminated by a slash and each record contains two
+rows of data. The first row of each record contains the gas pressure
+and a multiplication factor, while the second row contains a multiplication
+factor.</p>
+ <pre><code>BGGI
+ 100.0  1.0
+        0.99   /
+ 200.0  1.0
+        0.992  /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

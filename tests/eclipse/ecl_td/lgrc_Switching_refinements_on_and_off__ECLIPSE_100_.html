@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Switching refinements on and off (ECLIPSE 100)"/>
+<meta name="DC.subject" content="Local grid refinement, Switching on, Switching off"/>
+<meta name="keywords" content="Local grid refinement, Switching on, Switching off"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrc_switching_refinements_on_and_off__eclipse_100_"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Switching refinements on and off (ECLIPSE 100)</title>
+</head>
+<body>
+
+
+<div class="nested0" id="lgrc_switching_refinements_on_and_off__eclipse_100_"><a name="lgrc_switching_refinements_on_and_off__eclipse_100_"><!-- --></a>
+<h1 class="topictitle1">Switching refinements on and off (ECLIPSE 100)</h1>
+
+
+ <div>
+<p>Refinements may be switched on or off at any time during a simulation
+using keywords <a href="../ecl_rm/LGRON.html#LGRON">LGRON</a> and <a href="../ecl_rm/LGROFF.html#LGROFF">LGROFF</a> in the <span class="keyword">SCHEDULE</span> data section. For example,</p>
+
+<pre><code>LGROFF
+  'SOUTH' /</code></pre>
+<p>switches off the refinement called SOUTH, while</p>
+
+<pre><code>LGRON
+  'NORTH' /</code></pre>
+<p>switches on the refinement called NORTH.</p>
+
+<p>Refinements can be made to switch on and off automatically depending
+on the number of active (that is, open or stopped, but not shut) wells
+they contain. For example, using either</p>
+
+<pre><code>LGROFF
+ --NAME     NWELLS
+   'SOUTH'  2      /</code></pre>
+<p>or</p>
+
+<pre><code>LGRON
+ --NAME     NWELLS 
+  'SOUTH'  2      /
+</code></pre>
+<p>causes the refinement called SOUTH to be on whenever it contains
+two or more active wells, and off whenever it contains less than two.</p>
+
+<p>If <span class="keyword">LGROFF</span> and <span class="keyword">LGRON</span> are not
+used then all refinements defined in the <span class="keyword">GRID</span> data
+section are activated throughout the entire simulation.</p>
+
+<p>Switching refinements on part way through a run is not advised,
+in general, since there is no valid procedure for allocating material
+to refined cells except at initial conditions when equilibration is
+used. If a refinement is switched on during a simulation, material
+is distributed uniformly to the refined cells within each host cell.</p>
+
+<p>It is possible to add extra local grids when restarting a run.
+This is analogous to switching on an LGR part way through a run, but
+allows an LGR to be added without re-running the base case. The new
+LGRs should be added to the <span class="keyword">GRID</span> section after
+all the existing LGRs have been specified. The new LGRs are turned
+on at the next timestep, unless instructed otherwise with the <span class="keyword">LGROFF</span> keyword. This facility allows you to add new LGRs
+into the grid where new wells are about to be opened. It is generally
+not permitted to add a new LGR around a well that already exists.
+If this is required, however, the existing well and all its connections
+must be shut before the first <a href="../ecl_rm/TIME.html#TIME">TIME</a>, <a href="../ecl_rm/TSTEP.html#TSTEP"> TSTEP</a> or <a href="../ecl_rm/DATES.html#DATES">DATES</a> keyword is read in the restart run. In order to continue
+to model the well, a new counterpart well should be defined in the
+local grid (with a different name) using <a href="../ecl_rm/WELSPECL.html#WELSPECL">WELSPECL</a> and <a href="../ecl_rm/COMPDATL.html#COMPDATL">COMPDATL</a> or <a href="../ecl_rm/COMPDATM.html#COMPDATM">COMPDATM</a>, which has all the
+attributes of the existing shut well. ECLIPSE then ignores the existing
+global well, and an error condition results if the well is ever to
+be reopened. This procedure is not recommended in general.</p>
+
+<p> ECLIPSE 300</p>
+
+<p>Flexible restarts can be used in ECLIPSE 300 to add LGRs on a restart
+run, given that no LGRs existed in the base run. The new LGRs should
+be added to the <span class="keyword">GRID</span> section (as normal). No other
+keywords are required. The new LGRs are turned on at the next timestep.
+It is important to note that when adding an LGR using a restart, refinement
+around an existing well is not possible. If this is the case, an error
+message is output.</p>
+
+<p>  ECLIPSE 300                </p>
+
+<p>Flexible restarts can also be used in ECLIPSE 300 to turn LGRs
+off in a restart run. Any LGRs found in the <samp class="codeph">RESTART</samp> file of the base run are ignored by ECLIPSE 300. See also the <a href="../ecl_rm/GETGLOB.html#GETGLOB">GETGLOB</a> and <a href="../ecl_rm/GETSOL.html#GETSOL">GETSOL</a> keywords.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

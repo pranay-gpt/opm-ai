@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Matrix-matrix transmissibility and diffusivity"/>
+<meta name="DC.subject" content="Multi porosity model matrix-matrix connections"/>
+<meta name="keywords" content="Multi porosity model matrix-matrix connections"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="multiporo_matrix-matrix_transmissibility_and_diffusivity"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Matrix-matrix transmissibility and diffusivity</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="multiporo_matrix-matrix_transmissibility_and_diffusivity"><a name="multiporo_matrix-matrix_transmissibility_and_diffusivity"><!-- --></a>
+<h1 class="topictitle1">Matrix-matrix transmissibility and diffusivity</h1>
+
+
+ <div>
+<p>Each pore system is connected as described above.</p>
+
+<p>The transmissibilities between the sub-grid cells are then calculated
+similar to the matrix-fracture transmissibilities as described in <a href="dualporo_dual_porosity.html#dualporo_dual_porosity"> "Dual Porosity"</a>. Note that
+the innermost matrix grid cell properties are used to set up the transmissibilities
+and diffusivities.</p>
+
+<p>The permeability factor used between the subgrid porosities can
+be set, similarly to dual porosity, by the keyword <a href="../ecl_rm/PERMMF.html#PERMMF">PERMMF</a>.</p>
+
+<p>For two grid cells where inner matrix cell I connects to the outer
+grid cell J (which could be matrix or fracture), the transmissibility
+is given as</p>
+
+<p>              <math><mrow><msub><mrow>
+<mtext>TR</mtext></mrow><mrow><mi>I</mi><mi>J</mi>
+</mrow></msub><mo>=</mo><mtext>CDARCY</mtext><mo>⋅</mo>
+<msub><mrow><mi>K</mi></mrow><mrow><mi>I</mi></mrow>
+</msub><mo>⋅</mo><mrow><mi>V</mi><msub><mrow><mi>B</mi></mrow><mrow><mi>I</mi></mrow></msub></mrow>
+<mo>⋅</mo><msub><mrow><mi>σ</mi></mrow><mrow><mi>K</mi></mrow></msub></mrow></math>         </p>
+
+<p>where  </p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>K</mi>
+<mi>I</mi></msub></math> </td>
+
+<td valign="top"> is taken as the X-direction permeability of the matrix blocks
+(unless <span class="keyword">PERMMF</span> is also specified),</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><mi>V</mi>
+<msub><mi>B</mi><mi>I</mi></msub></mrow></math> </td>
+
+<td valign="top">is the matrix cell bulk volume (note that this is not the pore
+volume, having no porosity factor), and</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>σ</mi>
+<mi>K</mi></msub></math> </td>
+
+<td valign="top"> is a factor of dimensionality  <math><msup>
+<mtext>LENGTH</mtext><mrow><mo>-</mo><mn>2</mn></mrow>
+</msup></math>, to account for the matrix-matrix interface area
+per unit volume.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Note that the cell index for  <math><msub>
+<mi>σ</mi><mi>K</mi></msub></math>  has been written as <em>K</em> rather than <em>I. </em> When <em>I</em> and <em>J</em> are both matrix
+cells, then <em>K</em> is the <em>outer</em> matrix cell <em>J</em>. However,
+when outer cell <em>J</em> is the fracture, then <em>K</em> is the inner
+cell: that is, <em>K</em> is the outermost matrix. The result of this
+is to have all the sigma values in contiguous locations in the first <em>N</em> -1 porosity locations in the <a href="../ecl_rm/SIGMAV.html#SIGMAV">SIGMAV</a> keyword input. The innermost <span class="keyword">SIGMAV</span> porosity (porosity <em>N=</em>             <a href="../ecl_rm/NMATRIX.html#NMATRIX">NMATRIX</a> +1) is not used.</p>
+
+<p>The diffusivity is similarly given as</p>
+
+<p>              <math><mrow><msub><mrow>
+<mtext>DIFF</mtext></mrow><mrow><mi>I</mi><mi>J</mi>
+</mrow></msub><mo>=</mo><msub><mrow><mtext>DIFFMMF</mtext>
+</mrow><mrow><mi>I</mi></mrow></msub><msub><mrow><mo>⋅</mo><mtext>VOL</mtext></mrow><mrow><mi>I</mi></mrow>
+</msub><mo>⋅</mo><msub><mrow><mi>σ</mi></mrow><mrow>
+<mi>K</mi></mrow></msub></mrow></math>         </p>
+
+<p>where </p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><mi>D</mi>
+<mi>I</mi><mi>F</mi><mi>F</mi><mi>M</mi><mi>M</mi>
+<msub><mi>F</mi><mi>I</mi></msub></mrow></math> </td>
+
+<td valign="top"> is the diffusivity multiplier, and</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><mi>V</mi>
+<mi>O</mi><msub><mi>L</mi><mi>I</mi></msub></mrow>
+</math> </td>
+
+<td valign="top"> is the matrix cell pore volume or coal volume (coal bed methane
+option)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

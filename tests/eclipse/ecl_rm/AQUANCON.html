@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="AQUANCON"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="AQUANCON"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>AQUANCON</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="AQUANCON"><a name="AQUANCON"><!-- --></a>
+<h1 class="keyword">AQUANCON</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="aquancon.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="aquancon.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d108e45">         x      </th>
+
+<th valign="top" id="d108e48">         ECLIPSE 100      </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d108e54">         x      </th>
+
+<th valign="top" id="d108e57">         ECLIPSE 300      </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d108e45 d108e54 ">               </td>
+
+<td valign="top" headers="d108e48 d108e57 ">         RUNSPEC      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d108e45 d108e54 ">         x      </td>
+
+<td valign="top" headers="d108e48 d108e57 ">         GRID      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d108e45 d108e54 ">               </td>
+
+<td valign="top" headers="d108e48 d108e57 ">         EDIT      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d108e45 d108e54 ">               </td>
+
+<td valign="top" headers="d108e48 d108e57 ">         PROPS      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d108e45 d108e54 ">               </td>
+
+<td valign="top" headers="d108e48 d108e57 ">         REGIONS      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d108e45 d108e54 ">         x      </td>
+
+<td valign="top" headers="d108e48 d108e57 ">         SOLUTION      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d108e45 d108e54 ">               </td>
+
+<td valign="top" headers="d108e48 d108e57 ">         SUMMARY      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d108e45 d108e54 ">               </td>
+
+<td valign="top" headers="d108e48 d108e57 ">         SCHEDULE      </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p><span class="keyword">AQUANCON</span> connects analytic aquifers, declared
+using <a href="AQUCT.html#AQUCT"> AQUCT</a>, <a href="AQUFETP.html#AQUFETP"> AQUFETP</a>, <a href="AQUFLUX.html#AQUFLUX"> AQUFLUX</a>, <a href="AQUCHWAT.html#AQUCHWAT">  AQUCHWAT</a> or <a href="AQUCHGAS.html#AQUCHGAS"> AQUCHGAS</a>, and <a href="AQUFET.html#AQUFET"> AQUFET</a> in ECLIPSE 100,
+to one or more reservoir cells.</p>
+
+<p>The connection to the reservoir is set up by an arbitrary box defined
+by lower and upper I, J and K indices (refer to items 2-7 below).
+For each active grid block within the box, an aquifer connection is
+made to the face specified in item 8 if either of the following conditions
+is met:</p>
+
+<ul>
+<li>the face is on the outside of the reservoir, or             </li>
+
+<li>the face adjoins an inactive cell.       </li>
+
+</ul>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Care must be taken while considering the IJK box extents. Multiple
+thin layers of cells on the reservoir boundary are strongly recommended
+over bulky boxes covering inner regions. ECLIPSE does not check for
+aquifer connections inside the reservoir. As a result, any cell within
+the prescribed box may be attached an aquifer as long as its adjacent
+cell is inactive. There are various situations when cells may be inactive
+inside the reservoir, for example due to their small pore volume (see <a href="MINPV.html#MINPV"> MINPV</a>) or when a sector
+model (see <a href="USEFLUX.html#USEFLUX"> USEFLUX</a>) is surrounded by inactive cells of the full-field model.</span></div>
+
+<p>Any number of records may be entered, each terminated with a slash
+(/). The set of records must be terminated with a blank record containing
+just a slash.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>The keyword can be specified in the <span class="keyword">SOLUTION</span> section.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>The keyword can be specified in the <span class="keyword">GRID</span> and <span class="keyword">SOLUTION</span> sections.</p>
+
+<p>The items in each record are:</p>
+
+<ol>
+<li>Aquifer identification number          <p>This should be a number
+between 1 and the maximum number of aquifers, set in the keyword <a href="AQUDIMS.html#AQUDIMS"> AQUDIMS</a>.</p>
+</li>
+
+<li>Lower I-location of connecting grid blocks</li>
+
+<li>Upper I-location of connecting grid blocks</li>
+
+<li>Lower J-location of connecting grid blocks</li>
+
+<li>Upper J-location of connecting grid blocks</li>
+
+<li>Lower K-location of connecting grid blocks</li>
+
+<li>Upper K-location of connecting grid blocks</li>
+
+<li>Index defining the face of the reservoir to which the aquifer
+connects (where <samp class="codeph">NDIVIX</samp>, <samp class="codeph">NDIVIY</samp> and <samp class="codeph">NDIVIZ</samp> are specified in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS"> DIMENS</a>): 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">I- or X-</td>
+
+<td valign="top"> I or X = 1 face</td>
+
+</tr>
+
+<tr>
+<td valign="top">I+ or X+</td>
+
+<td valign="top">I or X = <samp class="codeph">NDIVIX</samp> face</td>
+
+</tr>
+
+<tr>
+<td valign="top">J- or Y- </td>
+
+<td valign="top">J or Y = 1 face</td>
+
+</tr>
+
+<tr>
+<td valign="top">J+ or Y+ </td>
+
+<td valign="top">J or Y = <samp class="codeph">NDIVIY</samp> face</td>
+
+</tr>
+
+<tr>
+<td valign="top">K- or Z-</td>
+
+<td valign="top">K or Z = 1 face (top)</td>
+
+</tr>
+
+<tr>
+<td valign="top">K+ or Z+</td>
+
+<td valign="top">K or Z = <samp class="codeph">NDIVIZ</samp> face (bottom)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</li>
+
+<li>The aquifer influx coefficient.        <p>This determines the
+fraction of the total communication between the reservoir and the
+aquifer for each cell defined in the box above.</p>
+ <p>The default
+for each cell in the box is its face area. If a non-default value
+is entered, the value is assigned to each cell within the box.</p>
+<p>If a reservoir cell is defined more than once, its previous value
+for the aquifer influx coefficient is added to the present value.
+The exception is the case where you enter a zero value, which then
+sets the influx coefficient for all the cells in the box to zero</p>
+<p>The aquifer influx coefficient is not used if the aquifer is a
+constant flux aquifer (keyword <span class="keyword">AQUFLUX</span>). A negative
+value is not accepted.</p>
+<p>UNITS: m<sup>2</sup> (<samp class="codeph">METRIC</samp>), ft<sup>2</sup> (<samp class="codeph">FIELD</samp>), cm<sup>2</sup> (<samp class="codeph">LAB</samp>), m<sup>2</sup> (<samp class="codeph">PVT-M</samp>)</p>
+       
+     </li>
+
+<li>Aquifer influx coefficient multiplier.<p>The multiplier is applied
+to the influx coefficients of the aquifer - cell connections within
+the box.</p>
+<p>For constant flux aquifers (keyword <span class="keyword">AQUFLUX</span>) the multiplier is applied to the cell areas.</p>
+<p>DEFAULT: 1.0</p>
+</li>
+
+<li>Allow aquifer connections to cell faces adjoining active cells?<p>either: <samp class="codeph">YES</samp> or <samp class="codeph">NO</samp> </p>
+<p>If this
+data item is set to <samp class="codeph">YES</samp>, the restriction that a connected
+face must not adjoin an active cell is lifted, allowing aquifer connections
+into the middle of the reservoir. This option should be used with
+care and is not recommended for general use.</p>
+<p>DEFAULT: <samp class="codeph">NO</samp> </p>
+          </li>
+
+</ol>
+
+<p>ECLIPSE 100</p>
+
+<p>The total number of grid blocks connected
+to any single aquifer must not exceed the value set by item 6 in the <a href="AQUDIMS.html#AQUDIMS"> AQUDIMS</a> keyword in the <span class="keyword">RUNSPEC</span>   section. In addition, this keyword cannot be
+used with the keyword <a href="AQUFET.html#AQUFET"> AQUFET</a>.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Each aquifer can only have one connection in any given grid
+block. When more than one connection in a grid block is specified
+for a single aquifer only the first will be connected.</span></div>
+
+<p>ECLIPSE 100</p>
+
+<p>The aquifer connections can be listed by setting
+the argument <span class="keyword">AQUFET</span>, <span class="keyword">AQUCT</span> or <span class="keyword">AQUANCON</span> in the <a href="RPTSOL.html#RPTSOL"> RPTSOL</a> keyword to 2.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>The aquifer connections can be listed by specifying
+the mnemonic <span class="keyword">AQUANCON</span> in the <span class="keyword">RPTSOL</span> keyword.</p>
+
+<p>For both simulators, an array with the name <span class="keyword">AQUIFERA</span> is written to the <a href="INIT.html#INIT"> INIT 
+</a> file to illustrate which cells are connected to each aquifer.
+If a cell is connected to aquifer N then the number        <math><msup><mn>2</mn>
+<mrow><mo>(</mo><mi>N</mi><mrow><mo>-</mo><mn>1</mn>
+</mrow><mo>)</mo></mrow></msup></math>  appears in the <span class="keyword">AQUIFERA</span> array. If a cell is connected to multiple aquifers
+then the appropriate output numbers are summed. Similarly, for gas
+aquifers, an array <span class="keyword">AQUIFERG</span> is written to the <span class="keyword">INIT</span> file.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Each unique aquifer can only be connected to one grid. That
+is, an aquifer can only be connected to either the global grid or
+to a single local grid refinement.</span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The keyword <span class="keyword">AQUANCON</span> must not be used in
+restarted runs, as the aquifer specification data cannot be changed.</span></div>
+
+<p>See also <a href="../ecl_td/aquifer_Aquifer_Modeling_Facilities.html#aquifer_aquifer_modeling_facilities">"Aquifer modeling
+facilities"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<div class="section" id="aquancon_example"><a name="aquancon_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>One Carter-Tracy
+aquifer, connected to two vertical sides of a 10 x 10 x 2 grid with
+one face where the aquifer influx coefficient is set to 1000.</p>
+<pre><code>AQUCT
+ 1 7000.0 4000.0 200.0 .3 1.0E-5 500.0 50.0 10.0 1 1 /
+/
+AQUANCON
+ 1 1 10 10 10 1 2 'J+' /
+ 1 10 10 1 10 1 2 'I+' 1000. /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The slave reservoirs"/>
+<meta name="DC.subject" content="Reservoir coupling, Slave reservoir"/>
+<meta name="keywords" content="Reservoir coupling, Slave reservoir"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="rescouplusing_the_slave_reservoirs"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The slave reservoirs</title>
+</head>
+<body>
+
+
+<div class="nested0" id="rescouplusing_the_slave_reservoirs"><a name="rescouplusing_the_slave_reservoirs"><!-- --></a>
+<h1 class="topictitle1">The slave reservoirs</h1>
+
+
+ <div>
+<p>The slave reservoirs are represented by standard ECLIPSE data files.
+These may be restarts from previous runs. You should ensure that they
+are set up to start at the required date. If they are restart runs,
+ensure also that the correct file name and report number are entered
+in the <a href="../ecl_rm/RESTART.html#RESTART">RESTART</a> keyword.</p>
+
+<p>A slave run may be set to start at a date later than the start
+of the master run. In this case the slave will be “dormant”,
+having no production or injection, until its start date is reached
+in the master run. Note that the simulation time will not be the same
+as in the master run, so it is best to use the <a href="../ecl_rm/DATES.html#DATES">DATES</a> keyword to specify report
+times, and also to include the <a href="../ecl_rm/DATE.html#DATE">DATE</a> keyword in the <span class="keyword">SUMMARY</span> section to present
+the results by calendar date rather than simulation time. An error
+message will be issued if the slave run is set to start earlier than
+the master run.</p>
+
+<p>The only additional keyword required in a slave run’s data
+file is <a href="../ecl_rm/GRUPSLAV.html#GRUPSLAV">GRUPSLAV</a>. This identifies the slave groups, and the associated master
+groups to which they are coupled. You can also set instructions to
+ignore any rate limits set in the slave run’s data file, or
+take the minimum of these limits and the limits imposed by the master
+run. For example, for slave reservoir R2 in Figure <a href="rescouplintro_Reservoir_Coupling.html#rescouplintro.XID-00000027">616.1</a>, using the default option of observing only the rate limits
+communicated from the master for all phases:</p>
+
+<pre><code>GRUPSLAV
+--  slave   assoc   oil     wat/liq  gas     resv    oil     wat     gas
+--  group   master  prod    prod     prod    prod    inj     inj     inj 
+--  name    group   limits  limits   limits  limits  limits  limits  limits
+   'FIELD'  'R2'   /
+/</code></pre>
+<p>The slave groups’ production rate can be controlled by either
+guide rate control or prioritization. If you wish to use guide rate
+control, reference the slave groups with keyword <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a>, selecting '<samp class="codeph">RATE</samp>' as the action to be performed on violating any limits:</p>
+
+<pre><code>GCONPROD
+-- group   ctl   oil   wat   gas   liq   limit   field  guide  g-r  
+-- name    mode  rate  rate  rate  rate  action  ctrl?  rate   phase
+  'FIELD' 'ORAT' 1.0    3*               'RATE'  / 
+/</code></pre>
+<p>The default option in <span class="keyword">GRUPSLAV</span> will overwrite
+any rate limits specified here. Alternatively, if you wish to use
+prioritization, reference the slave groups with keyword <a href="../ecl_rm/GCONPRI.html#GCONPRI">GCONPRI</a>, selecting '<samp class="codeph">PRI</samp>' as the action to be performed on violating each limit
+(the <a href="../ecl_rm/PRIORITY.html#PRIORITY">PRIORITY</a> keyword must previously have been entered):</p>
+
+<pre><code>GCONPRI
+--  GROUP    OIL   OIL   WAT   WAT   GAS   GAS   LIQ   LIQ   RESV  PBAL
+--  NAME     RATE  ACTN  RATE  ACTN  RATE  ACTN  RATE  ACTN  RATE  FRAC
+   'FIELD'    1*  'PRI'   1*   'PRI'  1*   'PRI'  1*   'PRI'  /
+/</code></pre>
+<p>It is not strictly necessary to set up injection controls for the
+slave groups with keyword <a href="../ecl_rm/GCONINJE.html#GCONINJE">GCONINJE</a>, as injection rate limits imposed by the master will automatically
+be handled by guide rate control. If injection constraints are already
+specified in the data file, you can choose either to ignore them or
+take their minimum with the limits imposed by the master run (see
+keyword <span class="keyword">GRUPSLAV</span>). Reinjection and voidage replacement
+targets applied in the master reservoir to groups superior to the
+master groups are translated into surface rate and reservoir volume
+rate targets respectively at the slave groups. If you wish to apply
+reinjection or voidage replacement targets directly to the master
+groups, they will be observed more accurately if they are applied
+instead directly to their corresponding slave groups in the slave
+reservoir.</p>
+
+<p>Additional production and injection constraints may be applied
+to subordinate groups in the usual way. But any groups in the slave
+reservoir that are superior to the slave groups (for example 'FIELD'
+in slave reservoir R3) must not have any constraints on them, as these
+would interfere with the targets of the slave groups.</p>
+
+<p>If there is a pipeline network in the slave reservoir, specify
+it in the usual way with keyword <a href="../ecl_rm/GRUPNET.html#GRUPNET">GRUPNET</a> (or <a href="../ecl_rm/BRANPROP.html#BRANPROP">BRANPROP</a> and <a href="../ecl_rm/NODEPROP.html#NODEPROP">NODEPROP</a> for an Extended Network),
+defining it from the slave group(s) down to the well groups. The network
+in the slave reservoir must not extend higher than the slave groups.
+To couple the network to the master reservoir’s network, the
+slave groups must be defined as fixed-pressure nodes in <span class="keyword">GRUPNET</span> or <span class="keyword">NODEPROP</span>. In an Extended Network, for each
+slave group there must be a corresponding network fixed-pressure node
+with the same name. The value of the fixed pressure specified here
+does not matter, as it will be over-written by the nodal pressure
+communicated from the master. If using keyword <a href="../ecl_rm/NETBALAN.html#NETBALAN">NETBALAN</a>, ensure it is set
+up to balance the network at every timestep (which is the default).</p>
+
+<p>There should be sufficient <span class="keyword">DATES</span> keywords to
+advance the simulation up to the end of the run. If you “overshoot”,
+the slave run is automatically terminated when the master run ends.
+If you “undershoot”, the slave run will stop at its last
+report date, and the master run will continue without any production
+or injection from this slave (unless told to stop with an “end-run”
+flag in keyword <a href="../ecl_rm/GECON.html#GECON">GECON</a>).</p>
+
+<p>Choose the report dates carefully. The timesteps in the master
+run are synchronized so as not to overshoot a report date in any slave.
+Thus if the report dates differ slightly between the slaves and the
+master run, this will restrict the timestep size throughout the set
+of coupled reservoirs. So it is best to have a common set of report
+dates. You will certainly need to synchronize the report dates on
+which <samp class="codeph">RESTART</samp> files are to be written, if you wish
+subsequently to restart the coupled simulation.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

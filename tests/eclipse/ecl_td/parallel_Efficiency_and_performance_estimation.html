@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Efficiency and performance estimation"/>
+<meta name="DC.subject" content="ECLIPSE 100 parallel partitioning, Parallel Option, Efficiency, Performance, Timing reports, Reports, Timing"/>
+<meta name="keywords" content="ECLIPSE 100 parallel partitioning, Parallel Option, Efficiency, Performance, Timing reports, Reports, Timing"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="parallel_efficiency_and_performance_estimation"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Efficiency and performance estimation</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="parallel_efficiency_and_performance_estimation"><a name="parallel_efficiency_and_performance_estimation"><!-- --></a>
+<h1 class="topictitle1">Efficiency and performance estimation</h1>
+
+
+ <div>
+<p>The theoretical efficiency of the parallel option needs to be broken
+down into three components:</p>
+
+<ul>
+<li>The modified linear solver algorithm may require more iterations
+than the purely serial solver (that is the algorithm may be less powerful).
+This effect will vary from model to model; however, experience to
+date suggests that the degradation in performance is small in most
+cases.             </li>
+
+<li>The modified algorithm requires more work even when the number
+of linear iterations remains the same. The extra work is required
+to allow the majority of the code to be made to run in parallel. This
+increase is typically between 15% and 30% of the original run, for
+numbers of processors in the range 4 to 32. Two processors is a special
+case with typically no overhead, as no extra filling terms are required.
+            </li>
+
+<li>The critical issue for a parallel algorithm is the fraction of
+the code that remains serial. It is critical because this is the fraction
+that cannot be reduced by increasing the number of processors; it
+is the limit on the possible speed-up of the run.</li>
+
+</ul>
+
+<p>The work that does not run in parallel consists of the calculations
+not associated with the grid block solution (for example wells and
+I/O). In addition, the section of the linear solver required to communicate
+information between domains is not wholly parallel, in the sense that
+some processors must remain idle.</p>
+
+<p>The proportion of the total CPU time spent in the serial sections
+of the code can be investigated using the ECLIPSE timing facility.
+If the mnemonic '<samp class="codeph">CPU</samp>' is specified in keyword <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">  RPTSCHED</a>, ECLIPSE produces
+a timing report. This report is slightly different in the parallel
+case. Four extra mnemonics have been added:</p>
+
+<p>Below <samp class="codeph">GINV</samp>:</p>
+
+<p> <samp class="codeph">GAM</samp> is the tree elimination for the gamma calculation.</p>
+
+<p>Below <samp class="codeph">SRCH</samp>:</p>
+
+<p> <samp class="codeph">FORW</samp> is the parallel forward sweep through each
+domain</p>
+
+<p> <samp class="codeph">TREE</samp> is the tree elimination to communicate between
+domains</p>
+
+<p> <samp class="codeph">BACK</samp> is the parallel backward sweep through each
+domain.</p>
+
+<p>An example is shown below:</p>
+
+<pre><code>=======================================================
+TIMING REPORTS AT CPU=   955 SECS - ELAPSED=   989 SECS
+=======================================================
+ZZSS    1  0  0
+               RR      1  0  0
+SR      1  0  0
+TS     20100100
+              NX     52 99 99
+                            WC    231  0  0
+                            LMRS  231  1  1
+                                          LMRI  231  0  0
+                                          LMRO  231  0  0
+                            CONV  231  0  0
+                            LMJC  179  2  2
+                                          LMJI  179  0  0
+                                          LMJO  179  0  0
+                            LXX   179 78 78
+                                          WGIN  179  0  0
+                                          GINV  179 19 18
+                                                        GAM   179  2  2
+                                         WRES  179  0  0
+                                         ITER  179 59 59
+                                                       NORM 1720  3  3
+                                                       SRCH 1541 41 41
+                                                                     FORW 1541 15 15
+                                                                     TREE 1541  2  2
+                                                                     BACK 1541 16 16
+                                                       WADX 1541  0  0
+                                                       ORTH 1541 12 12
+                                                       UPDA 1541  3  4
+                                         WSOL  179  0  0
+                            XUIT  179  1  1
+                            LCMI  179 16 16
+XW     20  0  0
+   31 READING END</code></pre>
+<pre><code>PARALLEL 
+16 ‘S’ /</code></pre>
+<p>ECLIPSE 100 optionally allows you to run the parallel algorithm
+on a single processor by specifying ‘S’ after the number
+of processors in the parallel code.</p>
+
+<p>If a model is run on a single processor, the theoretical speed-up
+can be estimated from the fractions under the <samp class="codeph">GAM</samp> and <samp class="codeph">TREE</samp> mnemonics, provided that the well solution
+and I/O sections of the code only consume a negligible fraction of
+the CPU time. Note that the <samp class="codeph">GAM</samp> and <samp class="codeph">TREE</samp> sections of code are not genuine serial sections but include the
+serial component. The following application of Amdahl’s law
+can be thought of as a conservative measure of the theoretical speed-up.</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="parallel.equ.0099"/>
+ <math><mi>S</mi><mo>=</mo>
+<mrow><mi>G</mi><mi>A</mi><mi>M</mi></mrow><mo>+</mo>
+<mrow><mi>T</mi><mi>R</mi><mi>E</mi><mi>E</mi>
+</mrow></math> 
+</td><td align="right">[Eq. 766.1]
+              </td></tr></tbody></table>
+<p>Serial fraction:</p>
+
+<p>Theoretical parallel CPU time: </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="parallel.equ.009c"/>
+ <math><mrow><mo>(</mo>
+<mfrac><mrow><mn>1</mn><mrow><mo>-</mo><mi>S</mi>
+</mrow></mrow><mrow><mi>N</mi><mi>P</mi></mrow>
+</mfrac><mo>+</mo><mfrac><mrow><mi>S</mi></mrow><mrow>
+<mi>N</mi><mi>P</mi><mo>-</mo><mn>1</mn></mrow>
+</mfrac><mrow><msub><mrow><mi>log</mi></mrow><mrow>
+<mn>2</mn></mrow></msub><mrow><mo>(</mo><mi>N</mi>
+<mi>P</mi><mo>)</mo></mrow><mo>⁡</mo></mrow><mo>)</mo><msub><mrow><mi>C</mi><mi>P</mi><mi>U</mi>
+</mrow><mrow><mi>s</mi><mi>e</mi><mi>r</mi><mi>i</mi>
+<mi>a</mi><mi>l</mi></mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 766.2]
+              </td></tr></tbody></table>
+<p>NP is the number of processors (usually = number of domains)</p>
+
+<p>where</p>
+
+<p>The actual performance will be less than this theoretical value
+for a number of reasons, including:</p>
+
+<ul>
+<li>Load balancing, where the amount of work on each processor is
+not exactly equal.             </li>
+
+<li> Overheads associated with the implementation on the parallel
+computer.  </li>
+
+</ul>
+
+<p>In the distributed memory case these include the latency and bandwidth
+limitations of the message passing system. In the shared memory case
+these include the startup cost of the parallel loops and the bottleneck
+of all processes accessing the memory at the same time.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

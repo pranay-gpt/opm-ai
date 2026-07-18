@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="MULTZ-"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="MULTZ-"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>MULTZ-</title>
+</head>
+<body>
+
+
+<div class="nested0" id="MULTZ-"><a name="MULTZ-"><!-- --></a>
+<h1 class="keyword">MULTZ-</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="multz-.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="multz-.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1488e45"> x </th>
+
+<th valign="top" id="d1488e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1488e54"> x </th>
+
+<th valign="top" id="d1488e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1488e45 d1488e54 ">  </td>
+
+<td valign="top" headers="d1488e48 d1488e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1488e45 d1488e54 "> x </td>
+
+<td valign="top" headers="d1488e48 d1488e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1488e45 d1488e54 "> x </td>
+
+<td valign="top" headers="d1488e48 d1488e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1488e45 d1488e54 ">  </td>
+
+<td valign="top" headers="d1488e48 d1488e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1488e45 d1488e54 ">  </td>
+
+<td valign="top" headers="d1488e48 d1488e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1488e45 d1488e54 ">  </td>
+
+<td valign="top" headers="d1488e48 d1488e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1488e45 d1488e54 ">  </td>
+
+<td valign="top" headers="d1488e48 d1488e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1488e45 d1488e54 "> x </td>
+
+<td valign="top" headers="d1488e48 d1488e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword should be followed by one non-negative real number
+for every grid block in the current input box. The data must be terminated
+by a slash (/).</p>
+
+<p>The values specified act as multipliers on the transmissibilities
+calculated by the program for the -Z face of each grid block or specified
+directly using <a href="TRANZ.html#TRANZ"> TRANZ</a> in the <span class="keyword">EDIT</span> section.</p>
+
+<p>Thus, a value of <span class="keyword">MULTZ-</span> specified for block
+(I, J, K) multiplies the transmissibility between blocks (I, J, K)
+and (I, J, K-1).</p>
+
+<p>In order to use <span class="keyword">MULTZ-</span>, the negative direction
+transmissibility multipliers must be enabled using the keyword <a href="GRIDOPTS.html#GRIDOPTS"> GRIDOPTS</a> in the <span class="keyword">RUNSPEC</span> section.</p>
+
+<p>Grid blocks are ordered with the X axis index cycling fastest,
+followed by the Y and Z axis indices. Repeat counts may be used for
+repeated values (for example 115*0). Note that spaces must not be
+inserted on either side of the asterisk.</p>
+
+<p>See also the <a href="MULTZ.html#MULTZ"> MULTZ</a> keyword.</p>
+
+<p>If both the <span class="keyword">MULTZ</span> keyword and <span class="keyword">MULTZ-</span> are specified, then the product is used. For example, if <span class="keyword">MULTZ</span> is specified for the block (I, J, K) and <span class="keyword">MULTZ-</span> is specified for the block (I, J, K+1), then the
+program uses the product of the nominated <span class="keyword">MULTZ</span> and <span class="keyword">MULTZ-</span> values to multiply the calculated
+transmissibility between the two adjacent blocks.</p>
+
+<div class="section" id="multz-_non-neighbor_connections"><a name="multz-_non-neighbor_connections"><!-- --></a><h4 class="sectiontitle">Non-neighbor
+connections</h4> <p>Any non-neighbor connections generated due to
+pinchouts have transmissibilities that reflect the <span class="keyword">MULTZ</span> values for the upper of the two cells connected across a pinchout,
+and the <span class="keyword">MULTZ-</span> values for the lower of the two
+cells. A pinchout non-neighbor connection in column (I, J) between
+layers K1 and K2, with K2 &gt; K1, has its calculated transmissibility
+multiplied by the value of <span class="keyword">MULTZ</span> for cell (I, J, K1)
+and <span class="keyword">MULTZ-</span> for cell (I, J, K2). Non-neighbor connections
+entered explicitly using the <a href="NNC.html#NNC">  NNC</a> keyword are not affected.</p>
+</div>
+
+<div class="section" id="multz-_use_in_the_grid_section"><a name="multz-_use_in_the_grid_section"><!-- --></a><h4 class="sectiontitle">Use in the GRID
+section</h4> <p>If <span class="keyword">MULTZ-</span> is entered in the <span class="keyword">GRID</span> section, then it applies only to the transmissibilities
+calculated by the program using the information in the <span class="keyword">GRID</span> section, and <strong>not</strong> to any transmissibilities entered directly
+in the <a href="EDIT.html#EDIT"> EDIT</a> section
+using the <a href="TRANZ.html#TRANZ"> TRANZ</a> keyword.
+Any <span class="keyword">MULTZ-</span> values that are not specified when the
+end of the <span class="keyword">GRID</span> section is reached, default to
+1.0.</p>
+ </div>
+
+<div class="section" id="multz-_use_in_the_edit_section__eclipse_100_only_"><a name="multz-_use_in_the_edit_section__eclipse_100_only_"><!-- --></a><h4 class="sectiontitle">Use in the EDIT section (ECLIPSE 100)</h4> <p>If <span class="keyword">MULTZ-</span> is entered in the <span class="keyword">EDIT</span> section, then it acts as an additional multiplier on the transmissibilities
+after reading any modified transmissibilities from the <span class="keyword">EDIT</span> section. Any non-neighbor connections are modified to reflect the
+edited values of <span class="keyword">MULTZ-</span>.</p>
+<p>Use of the <span class="keyword">MULTZ-</span> multiplier in the <span class="keyword">EDIT</span> section
+is <strong>not</strong> recommended in general, except as modifiers to values
+of <a href="TRANZ.html#TRANZ"> TRANZ</a> entered
+explicitly in the <span class="keyword">EDIT</span> section. The keyword <span class="keyword">MULTZ-</span> should normally be specified in the <span class="keyword">GRID</span> section rather than in the <span class="keyword">EDIT</span> section.</p>
+</div>
+
+<div class="section" id="multz-_use_in_the_schedule_section"><a name="multz-_use_in_the_schedule_section"><!-- --></a><h4 class="sectiontitle">Use in the
+SCHEDULE section</h4> <p><span class="keyword">MULTZ-</span> can be used in
+the <span class="keyword">SCHEDULE</span> section to modify the transmissibilities
+during the run. Well connection transmissibility factors are <strong>not</strong> affected by this keyword (instead, use <a href="WPIMULT.html#WPIMULT"> WPIMULT</a> for example, for this purpose).</p>
+<p>The modified transmissibilities can be output to the Print file
+by using the mnemonic <samp class="codeph">MULT</samp> in the <a href="RPTSCHED.html#RPTSCHED"> RPTSCHED</a> keyword.</p>
+<p>In ECLIPSE 300, if values are defaulted or
+set negative, the transmissibilities for the corresponding cells are
+not modified.</p>
+ </div>
+
+<div class="section" id="multz-_example"><a name="multz-_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>-------- IX1-IX2 JY1-JY2 KZ1-KZ2
+BOX
+           1  11   1  19   2   2 /
+MULTZ-
+ 209*1000 /
+ENDBOX</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

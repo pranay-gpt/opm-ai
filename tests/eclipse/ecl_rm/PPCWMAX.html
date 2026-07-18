@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PPCWMAX"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PPCWMAX"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PPCWMAX</title>
+</head>
+<body>
+
+
+<div class="nested0" id="PPCWMAX"><a name="PPCWMAX"><!-- --></a>
+<h1 class="keyword">PPCWMAX</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="ppcwmax.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="ppcwmax.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1866e45"> x </th>
+
+<th valign="top" id="d1866e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1866e54"> x </th>
+
+<th valign="top" id="d1866e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1866e45 d1866e54 ">  </td>
+
+<td valign="top" headers="d1866e48 d1866e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1866e45 d1866e54 ">  </td>
+
+<td valign="top" headers="d1866e48 d1866e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1866e45 d1866e54 ">  </td>
+
+<td valign="top" headers="d1866e48 d1866e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1866e45 d1866e54 "> x </td>
+
+<td valign="top" headers="d1866e48 d1866e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1866e45 d1866e54 ">  </td>
+
+<td valign="top" headers="d1866e48 d1866e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1866e45 d1866e54 ">  </td>
+
+<td valign="top" headers="d1866e48 d1866e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1866e45 d1866e54 ">  </td>
+
+<td valign="top" headers="d1866e48 d1866e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1866e45 d1866e54 ">  </td>
+
+<td valign="top" headers="d1866e48 d1866e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword can be used to limit the scaling of the capillary
+pressure curves when the <a href="SWATINIT.html#SWATINIT"> SWATINIT</a> keyword has been used to input an initial water distribution.
+Typically, if the input water saturation is above the connate saturation
+in blocks well above the transition zone, the scaling of the P<sub>c</sub> curve leads to unphysically high capillary pressure values.</p>
+
+<p>The keyword should be followed by <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a> 
+(set in the <span class="keyword">TABDIMS</span> keyword) records, each
+terminated by a slash (/).</p>
+
+<p>Each record consists of the following items of data:</p>
+
+<ol>
+<li> The maximum capillary pressure for this saturation region; it
+must be greater than the maximum capillary pressure in the corresponding
+saturation function table. <p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm
+(<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: Infinity (no limit)</p>
+ </li>
+
+<li> Either <samp class="codeph">YES</samp> or <samp class="codeph">NO</samp>, indicating
+whether the connate saturation should be modified to honor the input
+water saturation when the capillary pressure limit is exceeded. <p>DEFAULT: <samp class="codeph">NO</samp> </p>
+ </li>
+
+</ol>
+
+<p>If a maximum capillary pressure is supplied via item 1 and item
+2 is set to <samp class="codeph">NO</samp>, the input water saturation (from <span class="keyword">SWATINIT</span>) is not honored in grid blocks that exceed the
+maximum capillary pressure. In such cases, the rescaled maximum capillary
+pressure will be set to the maximum specified by <span class="keyword">PPCWMAX</span>, and the initial water saturation will be adjusted to be consistent
+with this rescaling.</p>
+
+<p>If a maximum capillary pressure is supplied via item 1, and item
+2 is set to <samp class="codeph">YES</samp>, the capillary pressure is reset
+using the values input via the saturation tables, and the connate
+saturation will be set to the <span class="keyword">SWATINIT</span> value. In
+such cases, the maximum table capillary pressure remains unscaled
+and the effect of changing the connate saturation to the supplied <span class="keyword">SWATINIT</span> value will be to adjust the initial water saturation
+to be consistent with the unscaled capillary pressure.</p>
+
+<p>See also the <span class="keyword">SWATINIT</span> and <a href="pcw_PCW_IPCW.html#pcw_pcw_ipcw"> PCW</a> keywords in
+the <span class="keyword">PROPS</span> section.</p>
+
+<div class="section" id="ppcwmax_example"><a name="ppcwmax_example"><!-- --></a><h4 class="sectiontitle">Example</h4>
+      
+<p>With <samp class="codeph">NTSFUN</samp> = 2</p>
+
+<pre><code>PPCWMAX
+    15.0       YES     /
+    17.0       YES     /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Records 7 to NTHP*NWFR*NGFR*NALQ+6"/>
+<meta name="DC.subject" content="VFPPROD"/>
+<meta name="keywords" content="VFPPROD"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="vfpprod_records_7_to_nthp_nwfr_ngfr_nalq_6"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Records 7 to NTHP*NWFR*NGFR*NALQ+6</title>
+</head>
+<body>
+
+
+<div class="nested0" id="vfpprod_records_7_to_nthp_nwfr_ngfr_nalq_6"><a name="vfpprod_records_7_to_nthp_nwfr_ngfr_nalq_6"><!-- --></a>
+<h1 class="topictitle1">Records 7 to NTHP*NWFR*NGFR*NALQ+6</h1>
+
+
+ <div>
+<p> <samp class="codeph">NTHP*NWFR*NGFR*NALQ</samp> successive records each containing
+the following items, and each terminated with a slash (/).</p>
+
+<ol>
+<li> NT (THP value number). </li>
+
+<li> NW (WFR value number) </li>
+
+<li> NG (GFR value number) </li>
+
+<li> NA (ALQ value number) </li>
+
+<li> BHP or THT at <p>1st FLO value</p>
+ <p>NT<sup>th</sup> THP value</p>
+<p>NW<sup>th</sup> WFR value</p>
+<p>NG<sup>th</sup> GFR value</p>
+<p>NA<sup>th</sup> ALQ value</p>
+ </li>
+
+<li> BHP or THT at <p>2<sup>nd</sup> FLO value</p>
+ <p>NT<sup>th</sup> THP value</p>
+<p>NW<sup>th</sup> WFR value</p>
+<p>NG<sup>th</sup> GFR
+value</p>
+<p>NA<sup>th</sup> ALQ value</p>
+ </li>
+
+</ol>
+
+<p>.......................................</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">NFLO+4 BHP or THT at</td>
+
+<td valign="top">&nbsp;</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">last FLO value</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">NT<sup>th</sup> THP value</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">NW<sup>th</sup> WFR value</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">NG<sup>th</sup> GFR value</td>
+
+</tr>
+
+<tr>
+<td valign="top">&nbsp;</td>
+
+<td valign="top">NA<sup>th</sup> ALQ value</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>All combinations of</p>
+
+<p>NF = 1 to <samp class="codeph">NFLO</samp> </p>
+
+<p>NT = 1 to <samp class="codeph">NTHP</samp> </p>
+
+<p>NW = 1 to <samp class="codeph">NWFR</samp> </p>
+
+<p>NG = 1 to <samp class="codeph">NGFR</samp> </p>
+
+<p>NA = 1 to <samp class="codeph">NALQ</samp> must be covered.</p>
+
+<p>For THT:</p>
+
+<p>UNITS: °C (<samp class="codeph">METRIC</samp>), °F (<samp class="codeph">FIELD</samp>), °C (<samp class="codeph">LAB</samp>), °C (<samp class="codeph">PVT-M</samp>)</p>
+
+<p>For BHP:</p>
+
+<p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+
+<p>VFP tables created by the VFP <em>i</em> program may contain some
+BHP values set to 1.0E10. This value indicates that the particular
+combination of flowing conditions is physically impossible, as the
+fluid in the well bore would exceed the sonic velocity. This may occur,
+for example, at high flow rates and GOR values and low THP values.
+The artificially high BHP ensures that during the simulation the well
+flowing conditions will not enter the forbidden region of unphysical
+combinations of flowing conditions.</p>
+
+<p>However, because ECLIPSE interpolates linearly between adjacent
+points in the table, the 1.0E10 values influence the interpolated
+BHP all the way out to the “physical” table points adjacent
+to the forbidden region. The sharp change in BHP around these points
+may cause the wells to behave in an unexpected manner. You are therefore
+recommended to change any 1.0E10 values in the table to a pressure
+slightly greater than the reservoir pressure. This should reduce the
+sharp change in interpolated BHP, while still preventing the well
+conditions from entering the “forbidden region”. If ECLIPSE
+detects any 1.0E10 values when reading the <span class="keyword">VFPPROD</span> data, it prints a warning message inviting you to replace them with
+a lower pressure.</p>
+
+<p>This can be avoided by instructing VFP <em>i</em> to use another pressure
+value to indicate supersonic flow (see the "VFPi User Guide", and
+keyword <samp class="codeph">SONICPRS</samp> in the VFP <em>i</em> manual). A suitable
+value would be a round number (therefore easily recognizable) that
+is slightly greater than the maximum expected reservoir pressure.</p>
+
+<p>If a pressure of less than 1.0E10 is used to indicate supersonic
+flow, you may get a warning message when the table is read saying
+that the BHP increases with decreasing THP. In this case, you may
+use the <a href="VFPCHK.html#VFPCHK"> VFPCHK</a> keyword
+to set the threshold BHP to the value used to indicate supersonic
+flow, to prevent these values from triggering the warning.</p>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> <p>ECLIPSE 300</p>
+ When ECLIPSE 300 encounters a crossing curve, it
+attempts to correct this internally by reducing the higher BHP value
+(on the lower THP curve) to lie below the lower BHP value (on the
+higher THP curve), so that the BHP increases with increasing THP.
+However, if the BHP values had been made artificially high on purpose
+to distinguish regimes of supersonic or erosional flow, the correction
+removes this distinction and allow the well to operate under these
+conditions. It is therefore important to use <span class="keyword">VFPCHK</span> to prevent ECLIPSE 300 altering points that have been given artificially
+high BHP values for this purpose.</div>
+
+<p>The VFP <em>i</em> program can be used to transform existing VFP tables
+in a number of ways. It can replace any 1.0E10 values with a more
+reasonable user-defined value. It can transform the ALQ definitions
+for gas lift into the additive <samp class="codeph">GRAT</samp> definition. It
+can remove the unstable side of the VFP curves (to the left of the
+minimum), replacing it with lines of constant BHP, which may be useful
+in curing simulator problems caused by wells suddenly dying (see keyword <a href="WVFPEXP.html#WVFPEXP"> WVFPEXP</a>). It also contains
+extensive graphical facilities for examining and editing VFP tables
+in cross-section and displaying them in 3D.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

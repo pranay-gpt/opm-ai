@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GCALECON"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GCALECON"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GCALECON</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GCALECON"><a name="GCALECON"><!-- --></a>
+<h1 class="keyword">GCALECON</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gcalecon.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gcalecon.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d804e45"> x </th>
+
+<th valign="top" id="d804e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d804e54">  </th>
+
+<th valign="top" id="d804e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d804e45 d804e54 ">  </td>
+
+<td valign="top" headers="d804e48 d804e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d804e45 d804e54 ">  </td>
+
+<td valign="top" headers="d804e48 d804e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d804e45 d804e54 ">  </td>
+
+<td valign="top" headers="d804e48 d804e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d804e45 d804e54 ">  </td>
+
+<td valign="top" headers="d804e48 d804e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d804e45 d804e54 ">  </td>
+
+<td valign="top" headers="d804e48 d804e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d804e45 d804e54 ">  </td>
+
+<td valign="top" headers="d804e48 d804e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d804e45 d804e54 ">  </td>
+
+<td valign="top" headers="d804e48 d804e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d804e45 d804e54 "> x </td>
+
+<td valign="top" headers="d804e48 d804e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword allows minimum economic limits to be set for the energy
+rate and/or the mean calorific value of individual groups and the
+field, when running the gas calorific value control option (see <a href="../ecl_td/gcalvalintro_Gas_Calorific_Value_Control.html#gcalvalintro_gas_calorific_value_control">"Gas calorific value
+control"</a> in the <cite>ECLIPSE Technical Description</cite>).</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).
+The set of records must end with a blank record, containing only a
+slash (/).</p>
+
+<ol>
+<li> Group name or group name root, <p>or <samp class="codeph">FIELD</samp> (for
+field economic limit data)</p>
+ <p>A group name root, enclosed in quotes
+and ending with an asterisk (*), can be used to refer to several groups
+in one record.</p>
+ </li>
+
+<li> Minimum energy production rate <p>UNITS: kJ/day (<samp class="codeph">METRIC</samp>), Btu/day (<samp class="codeph">FIELD</samp>), J/hr (<samp class="codeph">LAB</samp>),
+kJ/day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 0.0</p>
+<p>If the group’s
+energy production rate falls below the specified minimum, all the
+producers in the group are shut or stopped (see item 9 in keyword <a href="WELSPECS.html#WELSPECS">  WELSPECS</a>). A zero
+or negative value switches off this limit.</p>
+ </li>
+
+<li> Minimum calorific value <p>UNITS: kJ/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), Btu/Mscf (<samp class="codeph">FIELD</samp>), J/scc (<samp class="codeph">LAB</samp>), kJ/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT:
+0.0</p>
+<p>If the group’s mean calorific value falls below the specified
+minimum, all the producers in the group are shut or stopped (see item
+9 in keyword <span class="keyword">WELSPECS</span>). A zero or negative value
+switches off this limit.</p>
+ </li>
+
+<li> End run flag 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top">The run stops at the next report time if all the producers
+in the group are shut or stopped for any reason, provided the group
+has had at least one producer open previously</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top">The run continues regardless</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>DEFAULT: <samp class="codeph">NO</samp> </p>
+ </li>
+
+</ol>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> If the <a href="GECON.html#GECON">  GECON</a> keyword is entered subsequently to <span class="keyword">GCALECON</span>,
+item 8 of the <span class="keyword">GECON</span> keyword overwrites the end
+run flag defined here. </span></div>
+
+<p>End each data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="section" id="gcalecon_example"><a name="gcalecon_example"><!-- --></a><h4 class="sectiontitle">Example</h4> <pre><code>GCALECON
+ G1  1.0E7  28000  YES/
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

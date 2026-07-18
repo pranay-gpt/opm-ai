@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="BRANPROP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="BRANPROP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>BRANPROP</title>
+</head>
+<body>
+
+
+<div class="nested0" id="BRANPROP"><a name="BRANPROP"><!-- --></a>
+<h1 class="keyword">BRANPROP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="branprop.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="branprop.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d198e45"> x </th>
+
+<th valign="top" id="d198e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d198e54"> x </th>
+
+<th valign="top" id="d198e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d198e45 d198e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d198e48 d198e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d198e45 d198e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d198e48 d198e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d198e45 d198e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d198e48 d198e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d198e45 d198e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d198e48 d198e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d198e45 d198e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d198e48 d198e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d198e45 d198e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d198e48 d198e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d198e45 d198e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d198e48 d198e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d198e45 d198e54 "> x </td>
+
+<td valign="top" headers="d198e48 d198e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword must be used to define the structure of the network
+when the extended network model is employed (keyword <a href="NETWORK.html#NETWORK"> NETWORK</a> in the <span class="keyword">RUNSPEC</span> section). The network structure can be different
+from the group control hierarchy defined by keyword <a href="GRUPTREE.html#GRUPTREE"> GRUPTREE</a>. However, it
+must have a gathering tree structure, and the source nodes (the bottom
+nodes in the tree) must correspond to groups in the <span class="keyword">GRUPTREE</span> hierarchy (usually well groups or satellite groups); in ECLIPSE 100
+the corresponding nodes and groups must have the same name in both
+structures. The remaining network nodes and <span class="keyword">GRUPTREE</span> groups need not coincide.</p>
+
+<p>You cannot mix <span class="keyword">BRANPROP</span> and <a href="GRUPNET.html#GRUPNET"> GRUPNET</a>; the complete
+production network must be defined with either <span class="keyword">BRANPROP</span> and <a href="NODEPROP.html#NODEPROP"> NODEPROP</a> (for an extended network) or <span class="keyword">GRUPNET</span> (for a standard
+network).</p>
+
+<p>In ECLIPSE 300, if an injection network is
+present as well, it must be of the same type as the production network.
+If the production network has been defined with <span class="keyword">BRANPROP</span> and <span class="keyword">NODEPROP</span> then the injection network must
+also be defined with these keywords.</p>
+
+<p>In ECLIPSE 100 production networks may use <span class="keyword">BRANPROP</span> and <span class="keyword">NODEPROP</span>; injection networks
+must be defined using <a href="GNETINJE.html#GNETINJE"> GNETINJE</a>.</p>
+
+<p>The <span class="keyword">BRANPROP</span> keyword is followed by any number
+of records, each containing the following items of data and terminated
+with a slash (/). The set of records must end with a blank record,
+containing only a slash.</p>
+
+<ol>
+<li>Name of the branch’s downtree node.<p>(up to 8 characters)</p>
+<p>This is the node that is nearer to the wells and further from
+the terminal node at the top of the tree. In a production network
+it is the branch’s inlet node; in an injection network it is
+the branch’s outlet node.</p>
+</li>
+
+<li>Name of the branch’s uptree node.<p>(up to 8 characters)</p>
+<p>This is the node that is nearer to the terminal node at the top
+of the tree. In a production network it is the branch’s outlet
+node; in an injection network it is the branch’s inlet node.</p>
+</li>
+
+<li>VFP table number for the branch.<p>In a production network this
+should be the production VFP table number (keyword <a href="VFPPROD.html#VFPPROD"> VFPPROD</a>).</p>
+<p>ECLIPSE 300</p>
+<p>In an
+injection network this should be the injection VFP table number (keyword <a href="VFPINJ.html#VFPINJ"> VFPINJ</a>). The inlet and
+outlet nodes must both belong to the same type of network (Item 7
+of keyword <span class="keyword">NODEPROP</span>).</p>
+<p>Two or more network
+pipelines may share the same VFP table if they have similar pressure
+loss characteristics.</p>
+<p>A value of 9999 can be entered to indicate
+that there is no pressure loss in the network branch defined by items
+1 and 2. Branches representing chokes (see item 3 of keyword <span class="keyword">NODEPROP</span>) <strong>must</strong> have a value of 9999 input here.</p>
+<p>ECLIPSE 300</p>
+<p>Compositional
+production VFP tables (keyword <span class="keyword">VFPPROD</span>) are not
+currently supported in the network model.</p>
+<p>A value of 0 will
+close the branch, that is remove it from the network. The inlet node’s
+production (or the outlet node’s injection) is not added to
+the network flows.</p>
+</li>
+
+<li>Artificial Lift Quantity (ALQ) used in the pressure loss calculations
+for the branch.<p>This quantity is used as a look-up parameter for
+the VFP table in item 3. It may be regarded as the pump or compressor
+power, for example, according to the definition used in the construction
+of the table.</p>
+<p>ECLIPSE 100</p>
+<p>If the branch contains an automatic compressor
+(keyword <a href="NETCOMPA.html#NETCOMPA"> NETCOMPA</a>), the ALQ value entered here should correspond to the compressor’s
+“off” state (which would normally be zero).</p>
+<p>ECLIPSE 100</p>
+<p>Default
+this item if the ALQ is equated to <samp class="codeph">DENO</samp> or <samp class="codeph">DENG</samp> in item 5.</p>
+<p>UNITS: These depend on what the ALQ
+was meant to represent when the table was created. Refer to section <a href="vfpprod_Record_6_ALQ_values.html#vfpprod_record_6_alq_values"> "Record 6:ALQ values"</a> in the description of keyword <span class="keyword">VFPPROD</span>.</p>
+<p>DEFAULT:  Zero</p>
+</li>
+
+<li><p>ECLIPSE 100</p>
+<p>Equate the branch’s ALQ to the surface density.</p>
+<p>The branch’s
+ALQ may optionally be equated to the average surface density of either
+the oil phase or the gas phase flowing along it. ECLIPSE will then
+automatically set it equal to this value when it looks up the VFP
+table. The VFP table must have been prepared using the same definition
+of the ALQ (see keyword <span class="keyword">VFPPROD</span>), and should span
+the expected range of surface density values. This option is useful
+when a mixture of oil or gas with different surface densities flows
+into the network. Obviously the ALQ cannot then also be used to represent
+a pump or compressor, and the branch cannot contain an automatic compressor.</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">DENO</samp> </td>
+
+<td valign="top"> Set the ALQ equal to the average surface density of the <strong>oil</strong> flowing along the branch.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">DENG</samp> </td>
+
+<td valign="top"> Set the ALQ equal to the average surface density of the <strong>gas</strong> flowing along the branch.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NONE</samp> </td>
+
+<td valign="top"> Do not equate the ALQ to the oil or gas density. Leave it
+at the value entered in item 4 (or let it be reset by the automatic
+compressor facility).</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT:   <samp class="codeph">NONE</samp> </p>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record containing just a slash.</p>
+
+<p>See also keyword <a href="NODEPROP.html#NODEPROP"> NODEPROP</a>.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> It is possible to change the network topology during the run
+by adding new branches between the nodes. However, each node may only
+have one uptree branch (in the direction of the terminal node at the
+top of the tree). Hence if a node’s uptree branch is redirected
+to a different uptree node, its original uptree branch must be removed
+by giving it a zero VFP table number in item 3. </span></div>
+
+<div class="section" id="branprop_example"><a name="branprop_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>BRANPROP
+-- DnTre    UpTre     VFP     ALQ    ALQ=
+-- node     node     table   value   dens?
+    GB2     N4           3 /
+    GA2     N3           2 /
+    GB1     N2           1 /
+    GA1     N1        9999 /
+    N4      N3           4 /
+    N3      N2           4 /
+    N2      N1           5 /
+    N1      FIELD        6    100  /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

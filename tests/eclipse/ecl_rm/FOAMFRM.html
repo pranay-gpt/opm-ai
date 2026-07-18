@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="FOAMFRM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="FOAMFRM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>FOAMFRM</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="FOAMFRM"><a name="FOAMFRM"><!-- --></a>
+<h1 class="keyword">FOAMFRM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="foamfrm.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="foamfrm.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d726e45"> x </th>
+
+<th valign="top" id="d726e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d726e54"> x </th>
+
+<th valign="top" id="d726e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d726e45 d726e54 ">  </td>
+
+<td valign="top" headers="d726e48 d726e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d726e45 d726e54 ">  </td>
+
+<td valign="top" headers="d726e48 d726e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d726e45 d726e54 ">  </td>
+
+<td valign="top" headers="d726e48 d726e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d726e45 d726e54 "> x </td>
+
+<td valign="top" headers="d726e48 d726e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d726e45 d726e54 ">  </td>
+
+<td valign="top" headers="d726e48 d726e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d726e45 d726e54 ">  </td>
+
+<td valign="top" headers="d726e48 d726e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d726e45 d726e54 ">  </td>
+
+<td valign="top" headers="d726e48 d726e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d726e45 d726e54 ">  </td>
+
+<td valign="top" headers="d726e48 d726e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a>  (set in the <span class="keyword">TABDIMS</span> keyword)
+tables defining the parameters which control the gas mobility reduction
+as a function of the reference mobility reduction factor. Each table
+consists of one row of data containing one item which should be terminated
+with a slash(/):</p>
+
+<ol>
+<li> The reference mobility reduction factor. This value must be greater
+than zero and should typically lie in the region of 1 to 100 </li>
+
+</ol>
+
+<p>The single item in the first table must be specified. If the single
+item is omitted from the second or subsequent tables, the reference
+mobility reduction factor will be copied from the previous table.</p>
+
+<p>This keyword is only relevant if the foam model is used with the
+functional gas mobility reduction model.</p>
+
+<p>This requires the <a href="FOAM.html#FOAM"> FOAM</a> option to be specified in the <span class="keyword">RUNSPEC</span> section and <samp class="codeph">FUNC</samp> to be set for item 2 of the <a href="FOAMOPTS.html#FOAMOPTS"> FOAMOPTS</a> keyword.</p>
+
+<p>The foam model is activated by using an additional
+water component <a href="COMPW.html#COMPW"> COMPW</a> to represent the foam surfactant <a href="CWTYPE.html#CWTYPE"> CWTYPE</a>. ECLIPSE 300 supports the functional form
+of the gas mobility model, so this need not be specified.</p>
+
+<p>In both simulators, the <a href="FOAMFSC.html#FOAMFSC"> FOAMFSC</a> keyword must be specified with the functional gas mobility
+reduction model. See <a href="../ecl_td/foam_Foam_Model.html#foam_foam_model">"Foam model"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.</p>
+
+<p>For the functional model of gas mobility reduction, the mobility
+reduction factor <math><msub><mi>M</mi>
+<mrow><mi>r</mi><mi>f</mi></mrow></msub></math>  is
+expressed in the form: </p>
+
+<p>  <math><mrow><msub><mrow>
+<mi>M</mi></mrow><mrow><mi>r</mi><mi>f</mi></mrow>
+</msub><mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow>
+<mn>1</mn><mo>+</mo><mo>(</mo><msub><mrow><mi>M</mi>
+</mrow><mrow><mi>r</mi></mrow></msub><mo>⋅</mo><msub>
+<mrow><mi>F</mi></mrow><mrow><mi>s</mi></mrow></msub>
+<mo>⋅</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi>F</mi>
+</mrow><mrow><mi>o</mi></mrow></msub><mo>⋅</mo><msub>
+<mrow><mi>F</mi></mrow><mrow><mi>c</mi></mrow></msub>
+<mo>)</mo></mrow></mfrac></mrow></math> </p>
+
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>M</mi>
+<mi>r</mi></msub></math> </td>
+
+<td valign="top">   is the reference mobility reduction factor (this keyword). </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mi>s</mi></msub></math> </td>
+
+<td valign="top">   is the mobility reduction factor dependence upon surfactant
+concentration (<a href="FOAMFSC.html#FOAMFSC"> FOAMFSC</a> keyword). </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mi>w</mi></msub></math> </td>
+
+<td valign="top">   is the mobility reduction factor dependence upon water saturation
+(<a href="FOAMFSW.html#FOAMFSW"> FOAMFSW</a> keyword). </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mi>o</mi></msub></math> </td>
+
+<td valign="top">   is the mobility reduction factor dependence upon oil saturation
+(<a href="FOAMFSO.html#FOAMFSO"> FOAMFSO</a> keyword). </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mi>c</mi></msub></math> </td>
+
+<td valign="top">   is the mobility reduction factor dependence upon capillary
+number (<a href="FOAMFCN.html#FOAMFCN"> FOAMFCN</a> keyword). </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is optional. If this keyword is not specified the
+reference mobility reduction factor will default to 1.0. See also
+the <span class="keyword">FOAMFCN</span>, <span class="keyword">FOAMFSC</span>, <span class="keyword">FOAMFSO</span> and <span class="keyword">FOAMFSW</span> keywords. The reference
+mobility reduction factor is only applied in grid blocks which contain
+foam with a concentration which is greater than or equal to the minimum
+concentration specified by item 3 of the <span class="keyword">FOAMFSC</span> keyword.</p>
+
+<div class="section" id="foamfrm_example"><a name="foamfrm_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NTSFUN</samp> = 5</p>
+<pre><code>FOAMFRM
+50 / 
+75 /
+/
+55 /
+60 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

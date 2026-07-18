@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Well completions"/>
+<meta name="DC.subject" content="Well modeling inflow performance, Well modeling completions, Well modeling relative permeabilities in well connections, Well modeling gas wells, Well modeling scale deposition, Well modeling facilities, Well completions, Well, Connection, Crossflow, Scale deposition, Productivity index"/>
+<meta name="keywords" content="Well modeling inflow performance, Well modeling completions, Well modeling relative permeabilities in well connections, Well modeling gas wells, Well modeling scale deposition, Well modeling facilities, Well completions, Well, Connection, Crossflow, Scale deposition, Productivity index"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wellmode_well_completions"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Well completions</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wellmode_well_completions"><a name="wellmode_well_completions"><!-- --></a>
+<h1 class="topictitle1">Well completions</h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wellmode.tab.000a"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wellmode.tab.000a" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> x </td>
+
+<td valign="top"> ECLIPSE 100 </td>
+
+</tr>
+
+<tr>
+<td valign="top"> x </td>
+
+<td valign="top"> ECLIPSE 300 </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Each well can be completed in several layers of the reservoir.
+A communication between the well bore and a single grid block is defined
+as a <em>connection</em>. A given well may have any number of connections,
+as long as it does not exceed the maximum number of connections per
+well, which is specified in keyword <a href="../ecl_rm/WELLDIMS.html#WELLDIMS">WELLDIMS</a> in the <span class="keyword">RUNSPEC</span> section. (Any of the <span class="keyword">WELLDIMS</span> maximum values
+may be increased on a restart, and in ECLIPSE 300 it is also possible
+to increase them during a run using the <a href="../ecl_rm/CHANDIMS.html#CHANDIMS">CHANDIMS</a> keyword.)</p>
+
+<p>The connections belonging to a particular well need not all lie
+in the same vertical column of grid blocks, so it is possible to model
+highly deviated wells. Moreover a well can be completed in several
+grid blocks within the same layer, enabling the simulator to model
+horizontal wells. This feature is also useful in 3D radial coning
+studies where the well connects with all the innermost, wedge-shaped,
+blocks in any given layer.</p>
+
+<div class="section" id="wellmode_inflow_performance"><a name="wellmode_inflow_performance"><!-- --></a><h4 class="sectiontitle">Inflow performance</h4><p>The flow rate of a phase (oil, water or gas) through a connection
+is proportional to the product of three quantities:</p>
+<ul>
+<li>the transmissibility between the grid block and the well bore</li>
+
+<li>the mobility of the phase in the grid block at the perforations</li>
+
+<li>the pressure drawdown between the grid block and the well bore.</li>
+
+</ul>
+<p>These quantities are discussed in more detail in <a href="wellinfl_Well_Inflow_Performance.html#wellinfl_well_inflow_performance"> "Well inflow performance"</a>.</p>
+<p>In certain situations the
+drawdown in one layer may have the opposite sign to the drawdown in
+the other completed layers. The simulator will allows <strong>crossflow</strong> to take place between the reservoir layers through the well bore.
+A material balance constraint is observed within the well bore at
+formation level, so that the mixture of phases flowing out of the
+well bore corresponds to the average phase or component mixture entering
+the well bore. A special case in which crossflow may occur is when
+the well is plugged off above the formation while the completions
+remain open to the reservoir. In ECLIPSE 100 the crossflow facility
+can be turned off if you do not wish this to occur, using a switch
+in the keyword <a href="../ecl_rm/WELSPECS.html#WELSPECS">WELSPECS</a>.</p>
+</div>
+
+<div class="section" id="wellmode_relative_permeabilities_in_well_connections"><a name="wellmode_relative_permeabilities_in_well_connections"><!-- --></a><h4 class="sectiontitle">Relative permeabilities in well connections</h4><p>The
+relative permeability of a phase in a well connection is a function
+of the saturations in the grid block containing the connection. By
+default, the relative permeabilities are calculated using the Saturation
+Function tables associated with the grid block containing the connection.
+However, the engineer can supply additional relative permeability
+tables for calculating the fluid mobilities at the well connections.
+These tables could take into account the effects of coning and/or
+partial completion within the grid block, or they could be well <strong>pseudo</strong> tables derived from an earlier fine-grid simulation. The
+association between the relative permeability tables and the well
+connections is defined using the keyword <a href="../ecl_rm/COMPDAT.html#COMPDAT">COMPDAT</a>.</p>
+<p>An alternative
+means of allowing for coning or partial completion within a grid block
+is to re-scale the Saturation Function tables to different end-point
+saturation values. The engineer can optionally supply alternative
+sets of end-point saturation values for use in particular well connections.
+These end-point values are used to transform the grid block saturations
+into the saturations ‘seen by’ the well connections. The
+alternative end-point saturation values are entered using the keyword <a href="../ecl_rm/COMPRP.html#COMPRP">COMPRP</a>.</p>
+<p>ECLIPSE 100</p>
+<p>In simulation
+runs which use the Vertical Equilibrium option, the keyword <a href="../ecl_rm/COMPVE.html#COMPVE">COMPVE</a> should be used instead
+of <span class="keyword">COMPRP</span>, to supply depth values for the top and
+bottom of the perforated interval. The <span class="keyword">COMPVE</span> keyword
+may be used to specify partial penetration data in non-VE runs also;
+ECLIPSE automatically translates the top and bottom depths of the
+perforations into <span class="keyword">COMPRP</span> type scaled end-points.</p>
+</div>
+
+<div class="section" id="wellmode_special_facilities_for_gas_wells"><a name="wellmode_special_facilities_for_gas_wells"><!-- --></a><h4 class="sectiontitle">Special
+facilities for gas wells</h4><p>There are two facilities for improving
+the accuracy of modeling gas inflow. Firstly, the non-Darcy component
+of the pressure drawdown resulting from turbulence near the well bore
+is modeled by a flow-dependent contribution to the skin factor. The
+turbulence skin factor for a well connection is equal to the product
+of the free gas flow rate in the connection and the connection’s
+D-factor. Well D-factors are defined using the keyword <a href="../ecl_rm/WDFAC.html#WDFAC">WDFAC</a> or they may be calculated
+from a correlation using the keyword <a href="../ecl_rm/WDFACCOR.html#WDFACCOR">WDFACCOR</a>.</p>
+<p>The second
+facility is the option to use a special inflow equation to provide
+a more accurate model of the flow of gas into the well. ECLIPSE 100
+offers a choice of three models: the Russell-Goodrich equation, the
+dry gas pseudo-pressure equation and the generalized pseudo-pressure
+method. These are all methods of taking into account the pressure-dependence
+of the gas properties between the grid block pressure and the well
+bore pressure. The generalized pseudo-pressure equation also takes
+account of the effects of condensate dropout. They are described in
+more detail in <a href="wellinfl_Special_inflow_equations.html#wellinfl_special_inflow_equations">  "Special inflow equations"</a>. You can select the desired equation
+by setting a switch in the keyword <a href="../ecl_rm/WELSPECS.html#WELSPECS">WELSPECS</a>. The generalized pseudo-pressure
+equation is also available in ECLIPSE 300, where it may be activated
+for specific wells using the <span class="keyword">WELSPECS</span> keyword,
+or it may be activated for all production wells using the keyword <a href="../ecl_rm/PSEUPRES.html#PSEUPRES">PSEUPRES</a>.</p>
+</div>
+
+<div class="section" id="wellmode_scale_deposition_model"><a name="wellmode_scale_deposition_model"><!-- --></a><h4 class="sectiontitle">Scale deposition
+model</h4><p>A scale deposition model is available, which accounts
+for the cumulative effects of scale deposited around the well connections
+and the resulting degradation of the productivity index.</p>
+<p>The
+rate of scale deposition in each well connection is proportional to
+the flow rate of water into it and also varies with the amount of
+impurities dissolved in the water. Formation water and injected sea
+water contain different impurities and thus the overall rate of scale
+deposition is dependent on the relative proportion of sea water and
+formation water.</p>
+<p>This scale deposition process is modeled by
+a table that defines the rate of scale deposition per unit water flow
+rate as a function of the fraction of sea water present in the water
+flowing into a connection (see keyword <a href="../ecl_rm/SCDPTAB.html#SCDPTAB">SCDPTAB</a>). The sea water fraction
+is represented by a user-configured passive water tracer (see keyword <a href="../ecl_rm/SCDPTRAC.html#SCDPTRAC">SCDPTRAC</a>).</p>
+<p>A second scale
+damage table defines how the current amount of deposited scale alters
+the PI of the well connections (see keyword <span class="keyword">SCDATAB</span>).</p>
+<p>The calculation for the effect of scale damage on a well
+is performed explicitly. Thus, at the end of each timestep the mass
+of scale deposited around each connection is incremented according
+to the flow of water during the timestep and the current sea water
+concentration. This is translated into a PI reduction factor for each
+connection, that is used during the following timestep.</p>
+<p>You
+may supply multiple versions of each of the two table types. The <a href="../ecl_rm/WSCTAB.html#WSCTAB">WSCTAB</a> keyword must be supplied
+to select which tables are to be used by each well for the calculation.</p>
+<p>The <a href="../ecl_rm/WSCCLEAN.html#WSCCLEAN">WSCCLEAN</a> keyword may be used to reduce the amount of scale deposited
+around well connections after a scale cleanup operation. (The <a href="../ecl_rm/WSCCLENL.html#WSCCLENL">WSCCLENL</a> keyword should be
+used for wells in local grid refinements.)</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

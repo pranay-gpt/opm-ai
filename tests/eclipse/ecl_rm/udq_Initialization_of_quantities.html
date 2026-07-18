@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Initialization of quantities"/>
+<meta name="DC.subject" content="UDQ"/>
+<meta name="keywords" content="UDQ"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="udq_initialization_of_quantities"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Initialization of quantities</title>
+</head>
+<body>
+
+
+<div class="nested0" id="udq_initialization_of_quantities"><a name="udq_initialization_of_quantities"><!-- --></a>
+<h1 class="topictitle1">Initialization of quantities</h1>
+
+
+ <div>
+<p>A quantity is initialized using the first <samp class="codeph">ASSIGN</samp> or <samp class="codeph">DEFINE</samp> record referencing the quantity in the
+ <span class="keyword">UDQ</span> data. Upon initialization the elements of
+the quantity are undefined. When they are output or used with in an <a href="ACTION.html#ACTION">  ACTION</a> (<a href="ACTIONG.html#ACTIONG"> ACTIONG</a>, <a href="ACTIONR.html#ACTIONR"> ACTIONR</a>, <a href="ACTIONW.html#ACTIONW"> ACTIONW</a>, <a href="ACTIONS.html#ACTIONS"> ACTIONS</a>, <a href="ACTIONX.html#ACTIONX"> ACTIONX</a>) keyword, undefined
+elements are replaced by the value specified in item 3 of <a href="UDQPARAM.html#UDQPARAM"> UDQPARAM</a> keyword.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">UDQs are only created for entities that exist at the time of
+initialization, so, for instance, defaulting the well name in a UDQ
+ASSIGN does not mean that all wells that will ever be defined will
+have a UDQ with that value. Instead, it means that the wells that
+are already defined when the UDQ is initialized will have that value.
+Wells that are defined subsequently will have an undefined element
+value. Similar logic applies to groups, connections, and segments.<div class="p">This means that to initialize a UDQ for a particular entity (well,
+connection, etc) the UDQ keyword must come after the entity has been
+defined. In most cases this will be after one of the following keywords:
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">Well UDQs</td>
+
+<td valign="top"><span class="keyword">WELSPECS</span>, <span class="keyword">WELSPECL</span> </td>
+
+</tr>
+
+<tr>
+<td valign="top">Connection UDQs</td>
+
+<td valign="top"><span class="keyword">COMPDAT</span>, <span class="keyword">COMPDATL</span></td>
+
+</tr>
+
+<tr>
+<td valign="top">Segment UDQs</td>
+
+<td valign="top"><span class="keyword">WELSEGS</span></td>
+
+</tr>
+
+<tr>
+<td valign="top">Group UDQs</td>
+
+<td valign="top"><span class="keyword">WELSPECS</span>, <span class="keyword">WELSPECL</span> (with
+at least one well in the required group)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+</span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="BDENSITY"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="BDENSITY"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>BDENSITY</title>
+</head>
+<body>
+
+
+<div class="nested0" id="BDENSITY"><a name="BDENSITY"><!-- --></a>
+<h1 class="keyword">BDENSITY</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="bdensity.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="bdensity.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d170e45"> x </th>
+
+<th valign="top" id="d170e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d170e54"> x </th>
+
+<th valign="top" id="d170e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d170e45 d170e54 ">  </td>
+
+<td valign="top" headers="d170e48 d170e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d170e45 d170e54 ">  </td>
+
+<td valign="top" headers="d170e48 d170e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d170e45 d170e54 ">  </td>
+
+<td valign="top" headers="d170e48 d170e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d170e45 d170e54 "> x </td>
+
+<td valign="top" headers="d170e48 d170e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d170e45 d170e54 ">  </td>
+
+<td valign="top" headers="d170e48 d170e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d170e45 d170e54 ">  </td>
+
+<td valign="top" headers="d170e48 d170e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d170e45 d170e54 ">  </td>
+
+<td valign="top" headers="d170e48 d170e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d170e45 d170e54 ">  </td>
+
+<td valign="top" headers="d170e48 d170e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword may optionally be used in runs with the brine tracking
+option active (keyword <a href="BRINE.html#BRINE">  BRINE</a>). It enables the brine surface density to vary with the
+salt concentration. If the keyword is not present, the brine takes
+the surface density of water, as specified in the <a href="DENSITY.html#DENSITY">  DENSITY</a> (or <a href="GRAVITY.html#GRAVITY">  GRAVITY</a>) keyword.</p>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTPVT"> NTPVT</a>  (set in the <span class="keyword">TABDIMS</span> keyword)
+records, each terminated by a slash (/). Each record consists of up
+to <a href="TABDIMS.html#TABDIMS.NPPVT"> NPPVT</a> (set in the <span class="keyword">TABDIMS</span> keyword) values of water
+surface density. The density values in each record correspond with
+the salt concentration values tabulated in column 1 of each table
+in the <a href="PVTWSALT.html#PVTWSALT"> PVTWSALT</a> keyword.</p>
+
+<p>UNITS: kg/m<sup>3</sup> (<samp class="codeph">METRIC</samp>), lb/ft<sup>3</sup> (<samp class="codeph">FIELD</samp>), gm/cc (<samp class="codeph">LAB</samp>), kg/m<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+
+<p>See also keywords <span class="keyword">PVTWSALT</span> and <span class="keyword">DENSITY</span>.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">When density variations are large, the
+brine tracking method may become unstable since the tracer equations
+are solved after the flow equations. In this case, a brine model using
+the multi component water method is recommended.</span></div>
+
+<div class="section" id="bdensity_example"><a name="bdensity_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NTPVT</samp> = 2 and <samp class="codeph">NPPVT</samp> ≥ 4:</p>
+<pre><code>BDENSITY
+ 64.0  65.0  67.0  69.0  /
+ 64.1  64.8  65.1 /
+PVTWSALT
+5000 0.0 /
+ 0.0 1.01 3.00E-06 0.52 0.0
+ 0.2 1.00 3.00E-06 0.52 0.0
+ 0.5 0.98 3.00E-06 0.52 0.0
+ 1.0 0.95 3.00E-06 0.52 0.0 /
+ 4000 0.0 /
+ 0.0 1.01 3.00E-06 0.52 0.0
+ 0.2 1.00 3.00E-06 0.52 0.0
+ 0.5 0.98 3.00E-06 0.52 0.0 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

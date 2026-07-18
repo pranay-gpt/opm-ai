@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using the solvent model"/>
+<meta name="DC.subject" content="Solvent model entering PVT data, Solvent model entering relative permeability data, Solvent model entering data for the miscible/immiscible transition, Solvent model entering data for solvent injection, Solvent, Initiating, PVT, Relative permeability"/>
+<meta name="keywords" content="Solvent model entering PVT data, Solvent model entering relative permeability data, Solvent model entering data for the miscible/immiscible transition, Solvent model entering data for solvent injection, Solvent, Initiating, PVT, Relative permeability"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="solvent_using_the_solvent_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using the solvent model</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="solvent_using_the_solvent_model"><a name="solvent_using_the_solvent_model"><!-- --></a>
+<h1 class="topictitle1">Using the solvent model</h1>
+
+
+ <div>
+<div class="section" id="solvent_initiating_the_model"><a name="solvent_initiating_the_model"><!-- --></a><h4 class="sectiontitle">Initiating the model</h4><p>Two keywords in <span class="keyword">RUNSPEC</span> control the Solvent
+and Miscible models:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <a href="../ecl_rm/SOLVENT.html#SOLVENT"> SOLVENT</a> </td>
+
+<td valign="top">Activates the separate solvent component </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <a href="../ecl_rm/MISCIBLE.html#MISCIBLE"> MISCIBLE</a> </td>
+
+<td valign="top"> Initiates the mixing calculation.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>If <span class="keyword">SOLVENT</span> is specified, then the four-component
+model is used. The <span class="keyword">SOLVENT</span> keyword should only
+be used with the other three components/phases (Water, Oil, Gas) present.</p>
+<p>If the Solvent Model is run in immiscible mode, the mixing is
+not performed, and the four components take their pure PVT properties.
+The relative permeabilities are calculated as for a traditional black
+oil case, with the solvent and gas taking their respective fraction
+of the total ‘gas’ relative permeability.</p>
+</div>
+
+<div class="section" id="solvent_pvt_data"><a name="solvent_pvt_data"><!-- --></a><h4 class="sectiontitle">PVT data</h4><p>This consists
+of the <span class="keyword">PVDS</span> and <span class="keyword">SDENSITY</span> keywords:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <a href="../ecl_rm/SDENSITY.html#SDENSITY">  SDENSITY</a> </td>
+
+<td valign="top">Surface density of the solvent  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <a href="../ecl_rm/PVDS.html#PVDS"> PVDS</a> </td>
+
+<td valign="top">Pressure dependent data for each PVT region (analogous to <a href="../ecl_rm/PVDG.html#PVDG">  PVDG</a> </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>These PVT data can be used with the mixing parameter  <math><mi>ω</mi>
+</math>, input in the <span class="keyword">PROPS</span> section with the
+keyword <a href="../ecl_rm/TLMIXPAR.html#TLMIXPAR">TLMIXPAR</a> as described in the <a href="solvent_Viscosity_model.html#solvent_viscosity_model"> "Viscosity model"</a> and <a href="solvent_Density_model.html#solvent_density_model"> "Density model"</a>. If the grid contains cells whose <a href="../ecl_rm/MISCNUM.html#MISCNUM">MISCNUM</a> region is zero, this
+mixing parameter is automatically set to zero in those cells. Use
+the mnemonic <span class="keyword">TLMIXPAR</span> in the <a href="../ecl_rm/RPTPROPS.html#RPTPROPS">RPTPROPS</a> keyword to echo the <span class="keyword">TLMIXPAR</span> data. The miscibility region numbers are specified
+using keyword <span class="keyword">MISCNUM</span> in the <span class="keyword">REGIONS</span> section. The first argument <samp class="codeph">NTMISC </samp> of the keyword <a href="../ecl_rm/MISCIBLE.html#MISCIBLE">MISCIBLE</a> sets the maximum number
+of regions which can be defined.</p>
+</div>
+
+<div class="section" id="solvent_relative_permeability_data"><a name="solvent_relative_permeability_data"><!-- --></a><h4 class="sectiontitle">Relative permeability
+data</h4><p>The relative permeability data needs to be specified
+as follows:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <a href="../ecl_rm/SGFN.html#SGFN"> SGFN</a> </td>
+
+<td valign="top">For  <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>g</mi></mrow></msub></math> in
+immiscible regions (either <a href="../ecl_rm/MISCNUM.html#MISCNUM"> MISCNUM</a> =0 or  <math><msub><mi>S</mi>
+<mi>g</mi></msub><mo>»</mo><mn>0</mn></math>) </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <a href="../ecl_rm/SWFN.html#SWFN"> SWFN</a> </td>
+
+<td valign="top">For any case containing water. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <a href="../ecl_rm/SOF2.html#SOF2"> SOF2</a> </td>
+
+<td valign="top">Three-component or miscible case: cases with <span class="keyword">MISCNUM</span> =0 in at least one cell, <span class="keyword">SOF2</span> gives  <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>o</mi><mi>g</mi></mrow></msub>
+</math>. <p> Four-component case: <span class="keyword">SOF2</span> gives
+ <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>h</mi><mi>c</mi></mrow></msub>
+</math> (<math><msub><mi>k</mi>
+<mi>r</mi></msub></math> of the miscible hydrocarbon phase
+to water). </p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <a href="../ecl_rm/SOF3.html#SOF3"> SOF3</a> </td>
+
+<td valign="top">Three-component cases: Three-phase cases with <span class="keyword">MISCNUM</span> =0 in at least one cell.  <p> Four-component cases: immiscible displacement
+regions </p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <a href="../ecl_rm/SSFN.html#SSFN"> SSFN</a> </td>
+
+<td valign="top">In immiscible or miscible four-component cases. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>In four-component cases, the miscibility function needs
+to be defined to control the transition from miscible to immiscible
+relative permeabilities. This is done using the <a href="../ecl_rm/MISC.html#MISC"> MISC</a> keyword in the <span class="keyword">PROPS</span> section.</p>
+<p>The miscible solvent-oil relative
+permeability curves can modified using the <a href="../ecl_rm/MSFN.html#MSFN"> MSFN</a> keyword. If the <span class="keyword">MSFN</span> keyword is omitted, straight line relative permeability
+curves will be used.</p>
+</div>
+
+<div class="section" id="solvent_transition_between_immiscibility_and_miscibility"><a name="solvent_transition_between_immiscibility_and_miscibility"><!-- --></a><h4 class="sectiontitle">Transition between immiscibility and miscibility</h4><p>The transition between an immiscible and a miscible displacement
+is controlled by the following keywords:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <a href="../ecl_rm/MISC.html#MISC"> MISC</a> </td>
+
+<td valign="top"> Tables of the miscibility function versus local solvent fraction
+(four-component) </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <a href="../ecl_rm/PMISC.html#PMISC"> PMISC</a> </td>
+
+<td valign="top"> Tables of the miscibility function versus oil pressure. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p> <span class="keyword">MISC</span> is required for all four-component
+runs, but <span class="keyword">PMISC</span> is optional. If <span class="keyword">PMISC</span> is not specified, the solvent/oil displacement is assumed to be
+miscible at all pressures.</p>
+</div>
+
+<div class="section" id="solvent_injecting_solvent_into_the_reservoir"><a name="solvent_injecting_solvent_into_the_reservoir"><!-- --></a><h4 class="sectiontitle">Injecting solvent into the reservoir</h4><p>Solvent can be injected
+by specifying a gas injection well. A separate keyword <a href="../ecl_rm/WSOLVENT.html#WSOLVENT">WSOLVENT</a> can then be used to
+specify the fraction of the gas flow as solvent.</p>
+<p>It is also
+possible to initialize the model by enumeration and to include a Solvent
+saturation. This is achieved using the <a href="../ecl_rm/SSOL.html#SSOL">SSOL</a> keyword in the <span class="keyword">SOLUTION</span> section.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ACTNUM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ACTNUM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ACTNUM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ACTNUM"><a name="ACTNUM"><!-- --></a>
+<h1 class="keyword">ACTNUM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="actnum.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="actnum.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d24e45">x</th>
+
+<th valign="top" id="d24e48">ECLIPSE 100</th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d24e54">x</th>
+
+<th valign="top" id="d24e57">ECLIPSE 300</th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d24e45 d24e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d24e48 d24e57 ">RUNSPEC</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e45 d24e54 ">x</td>
+
+<td valign="top" headers="d24e48 d24e57 ">GRID</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e45 d24e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d24e48 d24e57 ">EDIT</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e45 d24e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d24e48 d24e57 ">PROPS</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e45 d24e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d24e48 d24e57 ">REGIONS</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e45 d24e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d24e48 d24e57 ">SOLUTION</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e45 d24e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d24e48 d24e57 ">SUMMARY</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d24e45 d24e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d24e48 d24e57 ">SCHEDULE</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword should be followed by one integer for every grid block
+in the current box to identify an active/inactive grid block:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">0</td>
+
+<td valign="top">Indicates that the corresponding grid block
+is inactive</td>
+
+</tr>
+
+<tr>
+<td valign="top">1</td>
+
+<td valign="top">Indicates that the corresponding grid block
+is active</td>
+
+</tr>
+
+<tr>
+<td valign="top">2</td>
+
+<td valign="top">Indicates that the corresponding grid block
+has rock volume only(ECLIPSE 300 Thermal only)               </td>
+
+</tr>
+
+<tr>
+<td valign="top">3</td>
+
+<td valign="top">Indicates that the corresponding grid block
+has pore volume only (ECLIPSE 300 Thermal only).</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data must be terminated by a slash (<samp class="codeph">/</samp>).</p>
+
+<p>Grid blocks are ordered with the X axis index cycling fastest,
+followed by the Y and Z axis indices. Repeat counts may be used for
+repeated values (for example <samp class="codeph">12*0</samp>). Note that spaces
+must not be inserted on either side of the asterisk.</p>
+
+<p>It should be noted that <span class="keyword">ACTNUM</span> is one of a number
+of ways of identifying inactive grid blocks – any method that results
+in zero pore volume will cause a grid block to be treated as inactive.
+Other possibilities include:</p>
+
+<ul>
+<li>Setting the porosity (<a href="PORO.html#PORO"> PORO</a>), or net to gross thickness ratio (<a href="NTG.html#NTG"> NTG</a>), to zero in the <span class="keyword">GRID</span> section.</li>
+
+<li>Setting a minimum threshold pore volume, using either the <a href="MINPV.html#MINPV"> MINPV</a> or <a href="MINPVV.html#MINPVV"> MINPVV</a> keywords;  any
+grid blocks having a pore volume smaller than the minimum pore volume
+will be treated as inactive.</li>
+
+</ul>
+
+<p>The active cell indicator information is output to both the EGRID
+and GRID files. Please refer to the description provided in the <cite>ECLIPSE File Formats Reference Manual</cite>.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>The values set using this keyword can be output
+by setting item 5 of the <a href="DEBUG3.html#DEBUG3"> DEBUG3</a> keyword to a non-zero positive value.</p>
+
+<p>This array of information is further updated internally to provide
+a natural cell to active cell mapping (refer to additional output
+given by this <span class="keyword">DEBUG3</span> switch as well as the <samp class="codeph">IOCN</samp> argument for use with the <a href="RPTGRID.html#RPTGRID"> RPTGRID</a> and <a href="RPTGRIDL.html#RPTGRIDL"> RPTGRIDL</a> keywords).</p>
+
+<div class="section" id="ecl300thermaldualmultiporosity"><a name="ecl300thermaldualmultiporosity"><!-- --></a><h4 class="sectiontitle">ECLIPSE
+300 Thermal option with dual- or multi-porosity</h4>                      <p>For runs with the Thermal option and dual- or multi-porosity, the
+combination of available <span class="keyword">ACTNUM</span> values can cause
+inconsistencies in how the data is used.</p>
+           <ul>
+<li>A wholly inactive (<span class="keyword">ACTNUM</span>=0) matrix or fracture
+cell will deactivate the corresponding fracture or matrix, but other
+values will affect only the selected porosity and leave the other
+porosities unaltered. However, the meaning of a rock-only fracture
+cell or a fluid-only matrix cell, for example, is ill-defined, and
+care should be taken care in using these options. For more information,
+see <a href="../ecl_td/dualporo_Dual_Porosity.html#dualporo_dual_porosity">"Dual porosity"</a> in the <cite>ECLIPSE Technical Description</cite>.</li>
+
+<li>Also note that pore volume only (<span class="keyword">ACTNUM</span>=3)
+means that the porosity will be set to 1.0, regardless of the input
+porosity values. Some control over the fraction of cell volume that
+is pore volume is available with this option by using net to gross
+values (<samp class="codeph">NTG</samp>).</li>
+
+</ul>
+         </div>
+
+<div class="section" id="actnum_example"><a name="actnum_example"><!-- --></a><h4 class="sectiontitle">Example</h4>              
+   <p>This example shows the <span class="keyword">ACTNUM</span> values for
+a grid with <samp class="codeph">NDIVIX=8</samp>, <samp class="codeph">NDIVIY=6</samp>,
+and <samp class="codeph">NDIVIZ=3</samp> set in the <a href="DIMENS.html#DIMENS"> DIMENS</a> keyword in the <span class="keyword">RUNSPEC</span> section:</p>
+         <pre><code>ACTNUM
+0 0 0 1 1 1 0 0
+0 1 1 1 1 1 0 0
+1 1 1 1 1 0 0 0
+0 1 1 1 1 1 1 1
+0 0 1 1 0 1 1 1
+0 0 1 0 0 1 1 0
+0 0 0 1 1 1 0 0
+0 0 0 1 1 1 0 0
+1 1 0 0 1 0 0 0
+0 1 1 1 1 1 1 1
+0 0 1 1 0 1 0 1
+0 0 1 0 0 0 0 0
+0 0 0 1 1 1 0 0
+0 0 0 0 0 1 0 1
+1 1 0 0 0 0 0 1
+1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1
+0 0 1 0 0 1 1 1 /</code></pre>       </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WSEGSOLV"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WSEGSOLV"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WSEGSOLV</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WSEGSOLV"><a name="WSEGSOLV"><!-- --></a>
+<h1 class="keyword">WSEGSOLV</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wsegsolv.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wsegsolv.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d3080e45"> x </th>
+
+<th valign="top" id="d3080e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d3080e54"> x </th>
+
+<th valign="top" id="d3080e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d3080e45 d3080e54 "> x </td>
+
+<td valign="top" headers="d3080e48 d3080e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3080e45 d3080e54 ">  </td>
+
+<td valign="top" headers="d3080e48 d3080e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3080e45 d3080e54 ">  </td>
+
+<td valign="top" headers="d3080e48 d3080e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3080e45 d3080e54 ">  </td>
+
+<td valign="top" headers="d3080e48 d3080e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3080e45 d3080e54 ">  </td>
+
+<td valign="top" headers="d3080e48 d3080e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3080e45 d3080e54 ">  </td>
+
+<td valign="top" headers="d3080e48 d3080e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3080e45 d3080e54 ">  </td>
+
+<td valign="top" headers="d3080e48 d3080e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3080e45 d3080e54 ">  </td>
+
+<td valign="top" headers="d3080e48 d3080e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword controls the iterative linear solver that is used
+for multisegment wells that contain segment chord links, that is,
+loops specified using the <a href="WSEGLINK.html#WSEGLINK"> WSEGLINK</a> keyword. (See <a href="../ecl_td/multisegintro_Multi-segment_Wells.html#multisegintro_multi-segment_wells">"Multisegment wells"</a> in the <cite>ECLIPSE Technical Description</cite>). This keyword
+also allows this solver to be applied to multisegment wells without
+loops.</p>
+
+<p>Due to the additional matrix terms caused by the additional flowpaths
+in looped wells, additional storage would be required while solving
+the well’s linear system within each Newton iteration, so to avoid
+this additional storage requirement, these wells are solved using
+an iterative linear solver.</p>
+
+<p>This iterative solver uses an incomplete LU factorization (ILU)
+pre-conditioner. You can specify how close this incomplete factorization
+approximates the true LU factorization using the fill level and drop
+tolerance that are items 4 and 5 of this keyword respectively.</p>
+
+<p>For wells without loops, as long as the segments are ordered carefully,
+there is no fill-in when calculating the LU-factorization of the well
+linear system (that is, no additional non-zero entries are generated).
+Hence a direct solver, in particular a technique known as the “cheap
+LU factorization”, is used. However, the default implementation has
+some inefficiencies so the memory requirement and computational expense
+is higher than strictly necessary. For this reason, it can be preferable
+to choose the multisegment well iterative solver, which should solve
+the well linear system directly (and efficiently) purely in the pre-conditioning
+step without the need for iterations. If the multisegment well iterative
+linear solver is used for a well with no loops, then the “cheap LU
+factorization” form of the ILU pre-conditioner is automatically used.</p>
+
+<p>The <span class="keyword">WSEGSOLV</span> keyword is followed by a data record
+consisting of the following items, terminated with a slash (/).</p>
+
+<ol>
+<li> Whether to use the iterative linear solver for wells which do
+not have any segment chord links (see the <span class="keyword">WSEGLINK</span> keyword).
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top">Use the iterative solver for all multisegment wells, even if
+they do not have a chord segment link. (This can reduce the memory
+requirement for runs with large numbers of segments per well.)</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top">Only use the iterative solver for multisegment wells which
+have a chord segment link.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">NO</samp> </p>
+ </li>
+
+<li> Maximum number of iterations of the linear solver when solving
+the multisegment well linear systems <p>DEFAULT: 30</p>
+ </li>
+
+<li> Target convergence tolerance in the multisegment well iterative
+linear solver. This is the absolute target for the L2-norm of the
+well equation residuals. <p>DEFAULT: 1.0E-10</p>
+ </li>
+
+<li> Fill level of the ILU pre-conditioner in linear solver. This
+indicates how much fill-in is allowed when calculating the incomplete
+LU-factorization of the well linear system - this incomplete factorization
+is used as a pre-conditioner in the linear iterations. <p>The higher
+the level of fill, the greater the memory requirement for the pre-conditioner.</p>
+ <p>DEFAULT: 2</p>
+ </li>
+
+<li> Drop tolerance level in the ILU pre-conditioner in linear solver.
+In the LU decomposition of the well linear system, any fill-in values
+which would have an absolute value below this drop tolerance are ignored.
+This value has no effect if the fill level specified in item 4 is
+zero. <p>The lower the drop tolerance, the greater the memory requirement
+for the pre-conditioner.</p>
+ <p>DEFAULT: 0.0</p>
+ </li>
+
+<li> Limit beneath which the pressure drop derivative with respect
+to total flow is linearized for segments which represent ICDs. This
+is used to avoid a zero derivative at low flows which can cause problems
+for the iterative linear solver. This item only affects secondary
+linked segments containing devices specified with the <a href="WSEGAICD.html#WSEGAICD"> WSEGAICD</a>, <a href="WSEGSICD.html#WSEGSICD"> WSEGSICD</a>, <a href="WSEGLABY.html#WSEGLABY"> WSEGLABY</a> or <a href="WSEGVALV.html#WSEGVALV"> WSEGVALV</a> keywords. If
+you increase the number of iteration cycles or reduction factor in
+the <a href="WSEGITER.html#WSEGITER"> WSEGITER</a> keyword
+you may find it is also necessary to increase this number. <p>DEFAULT:
+1.0E-8</p>
+ <p>ECLIPSE 100</p>
+</li>
+
+<li> Looped well flow chop threshold.<p>During
+the non-linear solving of looped multisegment wells, spurious high
+flows are occasionally generated. Using items 7 and 8 of <span class="keyword">WSEGSOLV</span>, these flows can be controlled. Any attempt by
+the solver to increase a segment total flow control variable from
+an absolute value above the threshold (item 7) by a factor greater
+than the multiplier (item 8) will be chopped to the maximum allowed
+value. Negative values disable the flow chops. The total flow control
+variable is a weighted sum of phase flows. Although optimum values
+will vary from case to case, a value of 10 for each of items 7 and
+8 is reasonable.</p>
+<p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), stb/day (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: -1.0</p>
+ <p>ECLIPSE 100</p>
+</li>
+
+<li> Looped well flow chop multiplier. See item
+7 for a description.<p>DEFAULT: -1.0</p>
+ </li>
+
+</ol>
+
+<div class="section" id="wsegsolv_example"><a name="wsegsolv_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WSEGSOLV
+ 1* 50 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

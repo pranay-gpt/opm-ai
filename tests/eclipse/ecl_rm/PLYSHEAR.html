@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PLYSHEAR"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PLYSHEAR"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PLYSHEAR</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="PLYSHEAR"><a name="PLYSHEAR"><!-- --></a>
+<h1 class="keyword">PLYSHEAR</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="plyshear.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="plyshear.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1838e45">                         x                   
+  </th>
+
+<th valign="top" id="d1838e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1838e54">                                             
+ </th>
+
+<th valign="top" id="d1838e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1838e45 d1838e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1838e48 d1838e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1838e45 d1838e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1838e48 d1838e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1838e45 d1838e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1838e48 d1838e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1838e45 d1838e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d1838e48 d1838e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1838e45 d1838e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1838e48 d1838e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1838e45 d1838e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1838e48 d1838e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1838e45 d1838e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1838e48 d1838e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1838e45 d1838e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d1838e48 d1838e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is used to activate the polymer shear thinning/thickening
+option and to supply the shear effect data. The keyword is optional,
+and if omitted no shear effect calculations are performed.</p>
+
+<p>For shear thinning, a positive feedback effect is possible whereby
+increased flow speed leads to reduced viscosity which in turn produces
+more increase in flow speed. If the shear thinning multiplier is too
+small, this will produce a runaway condition producing convergence
+problems. An alternative option for the input of shear-thinning multipliers
+is available via the <a href="PLYSHLOG.html#PLYSHLOG"> PLYSHLOG</a> keyword, which may reduce this effect by
+controlling the logarithmic derivative of the multiplier. This alternative
+may be more appropriate if the shear-thinning data shows log-log behavior.
+The <span class="keyword">PLYSHEAR</span> multiplier can also be controlled
+as described in <a href="PLYSHEAR.html#plyshear_notes"> "Notes"</a>.</p>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTPVT"> NTPVT</a>  (set in the <span class="keyword">TABDIMS</span> keyword)
+tables of polymer shear thinning/thickening data, each terminated
+by a slash (/). The data is supplied as a shear multiplier that is
+applied in the update of the effective water and polymer viscosities
+and thus in the update of the water phase and polymer flows. This
+multiplier is tabulated as a function of water phase/polymer flow
+velocity.</p>
+
+<p>Each table consists of 2 columns of data:</p>
+
+<ol>
+<li>The water phase/polymer flow velocity.   <p>By default this velocity
+is calculated taking into account the mobile water saturation. The
+pre-2014.1 velocity calculation, which omits the mobile water saturation,
+may be activated by setting <span class="keyword">OPTIONS</span> keyword <a href="OPTIONS.html#options.228">item 228</a> to 1.</p>
+         
+      <p>The values should increase monotonically down the column.
+The first entry should be 0.0.</p>
+                <p>UNITS: m/day
+(<samp class="codeph">METRIC</samp>), ft/day (<samp class="codeph">FIELD</samp>), cm/hr
+(<samp class="codeph">LAB</samp>)</p>
+             </li>
+
+<li>The corresponding factor applied to the effective water and polymer
+viscosities (entered using <a href="PVTW.html#PVTW"> PVTW</a> with <a href="PLYVISC.html#PLYVISC"> PLYVISC</a>, <a href="PLYVISCS.html#PLYVISCS"> PLYVISCS</a>, <a href="PLYVISCT.html#PLYVISCT"> PLYVISCT</a> or <a href="PLYVSCST.html#PLYVSCST"> PLYVSCST</a>) due to shear
+thinning/thickening of the polymer. <p>Usually the first entry would
+be 1.0.</p>
+</li>
+
+</ol>
+
+<p>Each table must contain at least two, and no more than <a href="TABDIMS.html#TABDIMS.NPPVT"> NPPVT</a> (set
+in the <span class="keyword">TABDIMS</span> keyword) rows. Each row must be complete, containing
+an entry in every column of the table.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Changes made in the <span class="keyword">SCHEDULE</span> section will
+not be honored in a restart run unless the re-specification is also
+included in the restart data file. This may be done either by placing
+the new data for <span class="keyword">PLYSHEAR</span> in the <span class="keyword">PROPS</span> section or by leaving the <span class="keyword">SCHEDULE</span> section keywords
+in place and using the <a href="SKIPREST.html#SKIPREST"> SKIPREST</a> keyword.    </span></div>
+
+<p>The resulting shear viscosities of the water and polymer, at a
+given polymer concentration and flow velocity, are:</p>
+
+<p>                                                <math><mrow><msub><mrow>
+<mi>μ</mi></mrow><mrow><mi>w,sh</mi></mrow></msub>
+<mo>=</mo><mrow><msub><mrow><mi>μ</mi></mrow><mrow>
+<mi>w,eff</mi></mrow></msub><msubsup><mrow><mi>Z</mi>
+</mrow><mrow><mi>w</mi></mrow><mrow><mo>*</mo></mrow>
+</msubsup><mo>,</mo></mrow><msub><mrow><mi>μ</mi>
+</mrow><mrow><mi>p,sh</mi></mrow></msub><mo>=</mo>
+<mrow><msub><mrow><mi>μ</mi></mrow><mrow><mi>p,eff</mi>
+</mrow></msub><msubsup><mrow><mi>Z</mi></mrow><mrow>
+<mi>p</mi></mrow><mrow><mo>*</mo></mrow></msubsup>
+</mrow></mrow></math>                                       </p>
+
+<p>where each viscosity multiplier is calculated in the form</p>
+
+<p> <math><mrow><mi>Z</mi>
+<mo>=</mo><mfrac><mrow><mn>1</mn><mo>+</mo><mrow>
+<mo>(</mo><mi>P</mi><mo>−</mo><mn>1</mn><mo>)</mo><mi>M</mi></mrow></mrow><mrow><mi>P</mi></mrow>
+</mfrac></mrow></math> </p>
+
+<p>and</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>μ</mi></mrow><mrow><mi>w</mi><mo>,</mo><mi>s</mi><mi>h</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the shear water viscosity</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>μ</mi></mrow><mrow><mi>p</mi><mo>,</mo><mi>s</mi><mi>h</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the shear polymer viscosity</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>μ</mi>
+<mrow><mi>w</mi><mo>,</mo><mrow><mi>e</mi><mi>f</mi>
+<mi>f</mi></mrow></mrow></msub></math> </td>
+
+<td valign="top"> is the effective water viscosity</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>μ</mi></mrow><mrow><mi>p</mi><mo>,</mo><mrow>
+<mi>e</mi><mi>f</mi><mi>f</mi></mrow></mrow></msub>
+</mrow></math> </td>
+
+<td valign="top">is the effective polymer viscosity</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>P</mi></math> </td>
+
+<td valign="top">is the viscosity multiplier assuming no shear effect (entered
+using the <span class="keyword">PLYVISC</span>, <span class="keyword">PLYVISCS</span>, <span class="keyword">PLYVISCT</span>, or <span class="keyword">PLYVSCST</span> keywords).</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>M</mi></math> </td>
+
+<td valign="top"> is the shear effect multiplier supplied in the <span class="keyword">PLYSHEAR</span> keyword.       </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Note that for                           <math><mrow>
+<mi>M</mi><mo>=</mo><mn>1</mn></mrow></math>, or no
+shear effect, the simulator recovers the effective component viscosities,
+and for  <math><mrow>
+<mi>M</mi><mo>=</mo><mn>0</mn></mrow></math>, or maximum
+shear thinning, the shear viscosities are                  </p>
+
+<p>                                                <math><mrow><msub><mrow>
+<mi>μ</mi></mrow><mrow><mi>w</mi><mo>,</mo><mi>sh</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub>
+<mrow><mi>μ</mi></mrow><mrow><mi>w</mi><mo>,</mo>
+<mrow><mi>eff</mi></mrow></mrow></msub></mrow><mrow>
+<mi>P</mi></mrow></mfrac><mo>,</mo><msub><mrow><mi>μ</mi></mrow><mrow><mi>p</mi><mo>,</mo><mi>sh</mi>
+</mrow></msub><mo>=</mo><mfrac><mrow><msub><mrow><mi>μ</mi></mrow><mrow><mi>p</mi><mo>,</mo><mrow><mi>eff</mi></mrow></mrow></msub></mrow><mrow><mi>P</mi>
+</mrow></mfrac></mrow></math> </p>
+
+<p>which corresponds to the minimum viscosity that can be obtained.
+If the polymer concentration is zero (P=1) the simulator recovers
+the effective component viscosities again, which, in that particular
+case equal the pure water viscosity.</p>
+
+<div class="section" id="plyshear_notes"><a name="plyshear_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li>If the shear effect is not significant, the <span class="keyword">PLYSHEAR</span> keyword should be omitted, as the calculation of the velocity-dependent
+viscosity increases the run time.             </li>
+
+<li>The positive feedback effect noted above for shear thinning will
+occur for <em>P </em> significantly larger than 1.0 if the gradient of
+the <span class="keyword">PLYSHEAR</span> data,  <math><mrow><mrow><mfrac>
+<mrow><mo>ⅆ</mo><mrow><mo>(</mo><mi>log</mi><mo>⁡</mo><mrow><mo>(</mo><mi>M</mi><mo>)</mo></mrow>
+<mo>)</mo></mrow></mrow><mrow><mo>ⅆ</mo><mrow><mo>(</mo><mi>log</mi><mo>⁡</mo><mrow><mo>(</mo><mi>v</mi><mo>)</mo></mrow><mo>)</mo></mrow></mrow>
+</mfrac></mrow><mo>&lt;</mo><mo>−</mo><mn>1</mn>
+</mrow></math>. When <em>P</em> is near 1.0 (on a cell-by-cell or
+well/well-segment basis) this condition may be relaxed but should
+be monitored on a case-by-case basis. The simulator will warn if the
+data in <span class="keyword">PLYSHEAR</span> violates this condition. It is
+recommended to keep the <span class="keyword">PLYSHEAR</span> data within this
+bounding condition. </li>
+
+<li>In versions of ECLIPSE before 2012.1, shear thinning only was
+allowed and multiplier values in column 2 were required to decrease
+monotonically down the column. This has now been relaxed to allow
+shear thickening; however, in some cases, convergence problems may
+result. Currently, there is one case in which the cause of these problems
+is known. If a well is set not to allow crossflow (<a href="WELSPECS.html#WELSPECS"> WELSPECS</a> item 10) then
+oscillation in the temporary closure pattern of well connections due
+to a backflow condition can cause the well not to converge. Note that
+crossflow is allowed now for polymer, and it is preferred to use crossflow
+as this is the physical condition. If it is required that crossflow
+is disallowed, then shear effects can exacerbate non-convergence.
+In this case consider using <a href="OPTIONS.html#options.198">item
+198</a> in <span class="keyword">OPTIONS</span> which closes back-flowing
+connections in the event of non-convergence (but not for multisegment
+wells).  </li>
+
+</ul>
+<p>See the <a href="../ecl_td/polymer_Polymer_Flood_Model.html#polymer_polymer_flood_model">"Polymer flood model"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.</p>
+</div>
+
+<div class="section" id="plyshear_example"><a name="plyshear_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTPVT</samp> = 1 and <samp class="codeph">NPPVT</samp> ≥ 4:</p>
+ <pre><code>PLYSHEAR
+  0.0  1.0
+  1.0  0.8
+  3.0  0.75
+  6.0  0.7
+ 10.0  0.68  /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

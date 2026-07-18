@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GETDATA"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GETDATA"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GETDATA</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GETDATA"><a name="GETDATA"><!-- --></a>
+<h1 class="keyword">GETDATA</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="getdata.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="getdata.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d846e45"> x </th>
+
+<th valign="top" id="d846e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d846e54">  </th>
+
+<th valign="top" id="d846e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d846e45 d846e54 ">  </td>
+
+<td valign="top" headers="d846e48 d846e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d846e45 d846e54 "> x </td>
+
+<td valign="top" headers="d846e48 d846e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d846e45 d846e54 "> x </td>
+
+<td valign="top" headers="d846e48 d846e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d846e45 d846e54 "> x </td>
+
+<td valign="top" headers="d846e48 d846e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d846e45 d846e54 "> x </td>
+
+<td valign="top" headers="d846e48 d846e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d846e45 d846e54 "> x </td>
+
+<td valign="top" headers="d846e48 d846e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d846e45 d846e54 ">  </td>
+
+<td valign="top" headers="d846e48 d846e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d846e45 d846e54 ">  </td>
+
+<td valign="top" headers="d846e48 d846e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">GETDATA</span> keyword allows ECLIPSE to read named
+arrays from previously generated initial or restart files. The keyword
+should be followed by four items of data:</p>
+
+<ol>
+<li> Full name of the file from which to import. <p>The file name
+should not exceed 72 characters in length.</p>
+ </li>
+
+<li> Flag indicating whether the import file is formatted or unformatted
+(binary). <p>A single word, either <samp class="codeph">FORMATTED</samp> or <samp class="codeph">UNFORMATTED</samp>.</p>
+ <p>The word may be shortened to <samp class="codeph">F</samp> or <samp class="codeph">U</samp>.</p>
+<p>DEFAULT: <samp class="codeph">UNFORMATTED</samp> </p>
+ </li>
+
+<li> Name of the array (<samp class="codeph">ZNAME</samp>) that you wish to construct
+by importing data from the import file. <p> <samp class="codeph">ZNAME</samp> must be a valid ECLIPSE array name for the current section of the
+data set.</p>
+ </li>
+
+<li> Name of the corresponding array (<samp class="codeph">ZALT</samp>) in the
+import file. <p>The array <samp class="codeph">ZALT</samp> in the import file
+is imported into the simulation as the array <samp class="codeph">ZNAME</samp>.</p>
+<p>DEFAULT: The same name as in item 3.</p>
+ </li>
+
+</ol>
+
+<p>The data should be terminated by a slash (/).</p>
+
+<div class="section" id="getdata_example"><a name="getdata_example"><!-- --></a><h4 class="sectiontitle">Example</h4> <p>This example
+inputs the <samp class="codeph">SWCR</samp> array from the run <samp class="codeph">old_run</samp>. <samp class="codeph">init</samp> as <span class="keyword">SWATINIT</span> in the current
+realization:</p>
+ <pre><code>GETDATA
+ old_run.init   UNFORMATTED   SWATINIT   SWCR /</code></pre> </div>
+
+<div class="section" id="getdata_note"><a name="getdata_note"><!-- --></a><h4 class="sectiontitle">Note</h4> <p>In order to obtain
+the correct information from the restart or init file, this keyword
+also requires the Grid file.</p>
+ <p>The “standard” Grid
+file is required (see <a href="GRIDFILE.html#GRIDFILE">  GRIDFILE</a> keyword). By default, <span class="keyword">GRIDFILE</span> will produce
+an extensible Grid file (<samp class="codeph">.EGRID</samp>) but not the “standard”
+Grid file. Before <span class="keyword">GETDATA</span> is used, the base run,
+from which the restart files are obtained, must contain the <span class="keyword">GRIDFILE</span> keyword with the first item set to 2. This will
+produce the correct Grid file needed to process the <span class="keyword">GETDATA</span> keyword. This information needs to be read in or imported for the
+current run. Refer to keywords <a href="ACTNUM.html#ACTNUM">  ACTNUM</a> and <a href="GDFILE.html#GDFILE">  GDFILE</a>.</p>
+ </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

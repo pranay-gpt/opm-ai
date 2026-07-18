@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="UDT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="UDT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>UDT</title>
+</head>
+<body>
+
+
+<div class="nested0" id="UDT"><a name="UDT"><!-- --></a>
+<h1 class="keyword">UDT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="udt.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="udt.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2702e45"> x </th>
+
+<th valign="top" id="d2702e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2702e54"> x </th>
+
+<th valign="top" id="d2702e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2702e45 d2702e54 ">  </td>
+
+<td valign="top" headers="d2702e48 d2702e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2702e45 d2702e54 ">  </td>
+
+<td valign="top" headers="d2702e48 d2702e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2702e45 d2702e54 ">  </td>
+
+<td valign="top" headers="d2702e48 d2702e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2702e45 d2702e54 ">  </td>
+
+<td valign="top" headers="d2702e48 d2702e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2702e45 d2702e54 ">  </td>
+
+<td valign="top" headers="d2702e48 d2702e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2702e45 d2702e54 ">  </td>
+
+<td valign="top" headers="d2702e48 d2702e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2702e45 d2702e54 ">  </td>
+
+<td valign="top" headers="d2702e48 d2702e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2702e45 d2702e54 "> x </td>
+
+<td valign="top" headers="d2702e48 d2702e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Using the <span class="keyword">UDT</span> keyword you can define lookup
+tables in the <span class="keyword">SCHEDULE</span> section. These can then
+be used to assign values to user-defined quantities in a <a href="UDQ.html#UDQ">  UDQ</a> keyword.</p>
+
+<p>Tables can have any number of dimensions between 1 and 4, any number
+of interpolation points per dimension, and any number of values in
+the table itself. The maximum number of tables, interpolation points,
+values and dimensions permitted in any one data set is set using the <a href="UDTDIMS.html#UDTDIMS">  UDTDIMS</a> keyword.</p>
+
+<p>The <span class="keyword">UDT</span> keyword is followed by a varying number
+of records depending on the required dimension of the table, each
+terminated by a slash (/). The set of records must end with a blank
+record, containing only a slash (/), to indicate the end of the <span class="keyword">UDT</span> keyword.</p>
+
+<div class="section" id="udt_record_1_basic_data_for_table"><a name="udt_record_1_basic_data_for_table"><!-- --></a><h4 class="sectiontitle">Record 1: Basic
+data for table</h4><ol>
+<li> Table name <p>A name, which must be unique, which will be used
+to identify the table in <span class="keyword">UDQ</span> definitions. The name
+must begin with ‘TU’ and cannot exceed 8 characters in length.</p>
+ </li>
+
+<li> Number of dimensions in this table (<samp class="codeph">NUMDIM</samp>) <p>An integer value between 1 and <samp class="codeph">MUDTDS</samp>, the maximum
+number of <span class="keyword">UDT</span> table dimensions, which is specified
+in item 4 in <a href="UDTDIMS.html#UDTDIMS"> UDTDIMS</a>. Note that it is not possible to set this value to be greater than
+4.</p>
+ </li>
+
+</ol>
+</div>
+
+<div class="section" id="udt_records_2_to_numdim_1"><a name="udt_records_2_to_numdim_1"><!-- --></a><h4 class="sectiontitle">Records 2 to NUMDIM+1</h4><ol>
+<li> The type of interpolation to be used for this dimension. <p>This
+is one of ‘NV’, ‘LC’, ‘LL’ or ‘ID’</p>
+ 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">‘NV’</td>
+
+<td valign="top">dimensions will use the nearest value.</td>
+
+</tr>
+
+<tr>
+<td valign="top">‘LC’</td>
+
+<td valign="top">dimensions will be linearly interpolated within the table but
+clamped to the first or last value as appropriate when outside it.</td>
+
+</tr>
+
+<tr>
+<td valign="top">‘LL’</td>
+
+<td valign="top">dimensions will be linearly interpolated within the table and
+linearly extrapolated outside it.</td>
+
+</tr>
+
+<tr>
+<td valign="top">‘ID’ </td>
+
+<td valign="top">dimensions will use the name or identifier associated with
+the element rather than the value. If there is no match found, the
+table lookup will return the undefined value specified by item 3 of
+the <a href="UDQPARAM.html#UDQPARAM">  UDQPARAM</a> keyword. The first match found will always be used.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</li>
+
+<li> The interpolation points for this dimension. <ul>
+<li> For ‘ID’ dimensions, these will be character strings, which can
+optionally use wildcard characters. This dimension type is only available
+for group or well mnemonics as data items. </li>
+
+<li> For all other dimensions, these will be numerical values, which
+must be entered in ascending order. </li>
+
+</ul>
+ </li>
+
+</ol>
+</div>
+
+<div class="section" id="udt_records_numdim_2_onwards"><a name="udt_records_numdim_2_onwards"><!-- --></a><h4 class="sectiontitle">Records NUMDIM+2
+onwards</h4><p>Each record contains multiple values, one for each
+interpolation point in the first dimension, terminated with a slash.</p>
+<p>The first record corresponds to the first interpolation point
+in each dimension other than the first. The second record corresponds
+to the second interpolation point in the second dimension, and the
+first point for subsequent dimensions, and so on.</p>
+<p>At the end
+of the records for the points for the second dimension, there is a
+record containing only a slash, to indicate the end of this dimension.</p>
+<p>The next record will correspond to the first interpolation point
+in the second dimension, the second point in the third dimension,
+and the first point in the fourth dimension.</p>
+<p>This pattern repeats,
+with a record containing only a slash every time you complete a dimension.
+So after the record which corresponds to the last point in the second
+dimension and the last point in the third dimension, there will be
+two records containing only slashes.</p>
+<p>Note that you always have
+to terminate the second dimension with a slash, even if the dimension
+is 1 because it is a one-dimensional table.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

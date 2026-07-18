@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WTHPMAX"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WTHPMAX"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WTHPMAX</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WTHPMAX"><a name="WTHPMAX"><!-- --></a>
+<h1 class="keyword">WTHPMAX</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wthpmax.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wthpmax.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d3106e45"> x </th>
+
+<th valign="top" id="d3106e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d3106e54">  </th>
+
+<th valign="top" id="d3106e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d3106e45 d3106e54 ">  </td>
+
+<td valign="top" headers="d3106e48 d3106e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3106e45 d3106e54 ">  </td>
+
+<td valign="top" headers="d3106e48 d3106e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3106e45 d3106e54 ">  </td>
+
+<td valign="top" headers="d3106e48 d3106e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3106e45 d3106e54 ">  </td>
+
+<td valign="top" headers="d3106e48 d3106e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3106e45 d3106e54 ">  </td>
+
+<td valign="top" headers="d3106e48 d3106e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3106e45 d3106e54 ">  </td>
+
+<td valign="top" headers="d3106e48 d3106e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3106e45 d3106e54 ">  </td>
+
+<td valign="top" headers="d3106e48 d3106e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3106e45 d3106e54 "> x </td>
+
+<td valign="top" headers="d3106e48 d3106e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword controls an option to close a well if its tubing head
+pressure increases above a specified upper limit, such as the maximum
+pressure design limit for the wellhead. A high THP could occur if
+the well’s GOR increases, for example due to gas coning. A closed
+well can be tested periodically for reopening (if requested with keyword <a href="WTEST.html#WTEST"> WTEST</a>). The well is reopened
+when its THP falls below the specified reopening limit, for example
+when the gas cone has subsided to cause a sufficient reduction in
+GOR.</p>
+
+<p>The well’s operating THP is checked against its maximum design
+limit at the end of each timestep, when the economic limits are checked
+(for example keyword <a href="WECON.html#WECON"> WECON</a>). If the THP exceeds the upper limit, the well is shut or
+stopped, depending on the instructions in item 9 of keyword <a href="WELSPECS.html#WELSPECS"> WELSPECS</a>. The action
+takes place at the end of the timestep, so the THP limit is exceeded
+for one timestep. However, in common with the economic limits, if
+the limit is violated by proportionately more than the tolerance fraction
+set in keyword <a href="WLIMTOL.html#WLIMTOL"> WLIMTOL</a> ECLIPSE repeats the timestep after closing the well.</p>
+
+<p>Wells closed on violating their maximum THP limit may be tested
+periodically to see if they can be reopened. The testing must be requested
+with keyword <span class="keyword">WTEST</span>, and the closure reason string
+in item 3 of that keyword must contain a D. During testing, the THP
+of the well is calculated when the well is flowing either at a specified
+rate of a given phase, or the rate it was flowing at when it was last
+closed, subject to obeying its BHP limit and any rate limits on other
+phases set in keyword <a href="WCONPROD.html#WCONPROD"> WCONPROD</a> or <a href="WELTARG.html#WELTARG"> WELTARG</a>. The test is performed at the beginning of the timestep, using the
+current conditions in the grid cells containing the well’s connections.
+If the well’s THP has fallen below a specified upper limit, the well
+is reopened and flows until closed again by its maximum THP design
+limit or for any other reason.</p>
+
+<p>The <span class="keyword">WTHPMAX</span> keyword is followed by any number
+of records, each containing the following items of data, and each
+terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li> Well name, well name template, well list or well list template <p>A template enclosed in quotes can be used to refer to multiple wells
+or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+ </li>
+
+<li> Maximum THP design limit <p>The well will be shut or stopped
+(see item 9 of keyword <span class="keyword">WELSPECS</span>) at the end of
+the timestep if its operating THP exceeds this limit.</p>
+ <p>A default,
+zero or negative value switches off this limit.</p>
+<p>UNITS: barsa
+(<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+<li> Rate limit applied (see item 4) when testing the well to see
+if it can be reopened after being closed on violating its maximum
+THP limit 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">ORAT</samp> </td>
+
+<td valign="top">Oil rate </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WRAT</samp> </td>
+
+<td valign="top">Water rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">GRAT</samp> </td>
+
+<td valign="top">Gas rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">LRAT</samp> </td>
+
+<td valign="top">Liquid rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">RESV</samp> </td>
+
+<td valign="top">Reservoir fluid volume rate </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>DEFAULT:    <samp class="codeph">ORAT</samp> </p>
+ </li>
+
+<li> Value of the rate limit (see item 3) applied when testing the
+well to see if it can be reopened <p>The units depend upon the quantity
+chosen in item 3. The appropriate units are listed in the specification
+for keyword <a href="WCONPROD.html#WCONPROD">  WCONPROD</a>.</p>
+ <p>A default, zero or negative value sets the value
+of the rate limit equal to the well’s flow rate of the associated
+quantity when it was last closed after exceeding its maximum THP design
+limit.</p>
+ </li>
+
+<li> Maximum THP limit for reopening the well during a test <p>UNITS:
+barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma
+(<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+ <p>The well
+will be reopened if its THP has fallen below the value set here. The
+value must not exceed the maximum design limit set in item 2.</p>
+ <p>A default, zero or negative value applies the same limit as set in
+item 2.</p>
+ </li>
+
+</ol>
+
+<p>End data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">items 3, 4 and 5 apply only if the well is to be tested periodically
+for reopening after being closed on violating its maximum THP design
+limit. If you wish to have the well tested periodically, you must
+set the appropriate instructions in keyword <a href="WTEST.html#WTEST"> WTEST</a>, and ensure that the closure reason
+string in item 3 of that keyword contains a ‘D’.</span></div>
+
+<div class="section" id="wthpmax_example"><a name="wthpmax_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WTHPMAX
+-- well   max THP   testing   testing       max THP
+-- name   limit     limit     limit value   to reopen
+  PROD1   1000       ORAT     500           800 /
+  PROD2   1000       RESV     1*            800 /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

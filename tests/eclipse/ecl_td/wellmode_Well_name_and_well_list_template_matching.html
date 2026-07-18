@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Well name and well list template matching"/>
+<meta name="DC.subject" content="Well modeling well name and well list template matching, Template matching, Well modeling facilities, Wildcard characters"/>
+<meta name="keywords" content="Well modeling well name and well list template matching, Template matching, Well modeling facilities, Wildcard characters"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wellmode_well_name_and_well_list_template_matching"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Well name and well list template matching</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wellmode_well_name_and_well_list_template_matching"><a name="wellmode_well_name_and_well_list_template_matching"><!-- --></a>
+<h1 class="topictitle1">Well name and well list template matching</h1>
+
+
+ <div>
+<p>The template matching feature of ECLIPSE enables multiple wells
+to be referenced using a single template containing wildcard characters.
+The wildcard characters supported by ECLIPSE are the asterisk (*)
+to match zero or more characters, and the question mark (?) to match
+a single non-empty character. When these characters are required at
+the start of a template they should be preceded by a backslash (\)
+to differentiate between alternative uses of the symbols, for example
+to indicate a well list (*) and as an alias for the triggering wells
+with an action block (?). All well name matches are case insensitive.</p>
+
+<p>Consider the specification of the following wells in the <span class="keyword">SCHEDULE</span> section.</p>
+
+<pre><code>WELSPECS
+ 'PR10-OIL'   GR-A1   3   2   1*   OIL /
+ 'PR11-OIL'   GR-A1   3   5   1*   OIL /
+ 'GAS-PR1'    GR-A2   3   8   1*   GAS /
+ 'GAS-PR2'    GR-A2   3   3   1*   GAS /
+ 'IN1-GAS'    GR-A3   4   4   1*   GAS /
+ 'IN2-GAS'    GR-A3   4   6   1*   GAS /
+ 'IN10-WAT'   GR-A4   5   2   1*   WAT /
+ 'IN11-WAT'   GR-A4   6   5   1*   WAT /
+ 'X'          GR-A5   7   2   1*   LIQ /
+ 'Y'          GR-A5   7   5   1*   LIQ /
+/</code></pre>
+<p>New well lists consisting of all the wells containing the sub-string
+‘PR’ and another consisting of all the wells containing
+the sub-string ‘IN’ could then be created in the following
+manner:</p>
+
+<pre><code>WLIST
+ '*PR-WELS'   NEW    '\*PR*' /
+ '*IN-WELS'   NEW    '\*IN*' /
+/</code></pre>
+<p>Similarly to shut all wells with names composed of seven characters
+the question mark symbol can be used.</p>
+
+<pre><code>WELOPEN
+ '\???????'    SHUT /
+/</code></pre>
+<p>In this context the preceding backslash (\) is not strictly required;
+however, if the keyword appears within an action block it is necessary
+to differentiate between the wildcard character and the alias for
+the triggering wells. For example, when the following action is triggered
+all wells with a water cut greater than 0.25 will be shut, whilst
+all wells with single character names will have their liquid rate
+target / limit halved.</p>
+
+<pre><code>ACTIONX
+ ACT1 100000 /
+ WWCT '*' &gt; 0.25 /
+/
+-- either use the alias ? to select triggering wells
+WELOPEN
+ '?'   SHUT /
+/
+-- or match template against all the wells in the field with a single
+-- character name
+WTMULT
+ '\?'   LRAT   0.5 /
+/
+ENDACTIO</code></pre>
+<p>To maintain back-compatibility a single asterisk still represents
+all the wells in the field. Alternatively, the above action could
+test only a subset of wells, for example those belonging to a well
+list</p>
+
+<pre><code>ACTIONX
+ ACT1 100000 /
+ WWCT '*PR-WELS' &gt; 0.25 /
+/</code></pre>
+<p>or matching a given template</p>
+
+<pre><code>ACTIONX
+ ACT1 100000 /
+ WWCT '\*GAS*' &gt; 0.25 /
+/</code></pre>
+<p>However, note that it is not possible to use the template matching
+mechanism to select a subset of the wells triggering the action.</p>
+
+<p>Wildcard characters can be included in well names and well lists
+in all appropriate <span class="keyword">SCHEDULE</span> keywords. In addition
+wildcard characters can be included in well names and well lists for <span class="keyword">W*</span> and <span class="keyword">LW*</span> keywords in the <span class="keyword">SUMMARY</span> section. For example</p>
+
+<pre><code>-- well water production rate for wells containing the
+-- substring 'PR' and the wells X &amp; Y
+WWPR
+ '\*PR*' 'X' 'Y' /
+-- well mode of control for wells belong to well lists
+-- containing the substring 'WELS'
+WMCTL
+ '**WELS*' /</code></pre>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">For all keywords, well name and well list templates containing
+wildcard characters must be enclosed within quotes.             </span></div>
+
+<p>The <a href="../ecl_rm/WTEMPQ.html#WTEMPQ"> WTEMPQ</a> keyword can be used to further explore the well template
+matching mechanism. The <span class="keyword">WTEMPQ</span> keyword writes a
+list of all the currently defined wells matching the supplied well
+name or well list template to the PRT file.</p>
+
+<p>ECLIPSE 100                      </p>
+
+<p>The pre-2006.1 well name and well list behavior
+can be restored through <a href="../ecl_rm/OPTIONS.html#options.93"> item 93</a> of the <span class="keyword">OPTIONS</span> keyword.</p>
+
+<p>ECLIPSE 300                   </p>
+
+<p>The pre-2006.1 well name and well list behavior
+can be restored through <a href="../ecl_rm/OPTIONS3.html#options3.94">item 94</a> of the <span class="keyword">OPTIONS3</span> keyword.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

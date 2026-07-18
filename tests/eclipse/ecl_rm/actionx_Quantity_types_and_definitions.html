@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Quantity types and definitions"/>
+<meta name="DC.subject" content="ACTIONX"/>
+<meta name="keywords" content="ACTIONX"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="actionx_quantity_types_and_definitions"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Quantity types and definitions</title>
+</head>
+<body>
+
+
+<div class="nested0" id="actionx_quantity_types_and_definitions"><a name="actionx_quantity_types_and_definitions"><!-- --></a>
+<h1 class="topictitle1">Quantity types and definitions</h1>
+
+
+ <div>
+<div class="section"><h4 class="sectiontitle">Constant quantity</h4><p>This is defined by the
+following items:</p>
+<ol>
+<li> Triggering condition value. </li>
+
+<li> Increment to the triggering condition value defined in item 1. <p>After each time the action is performed, the specified increment
+is added to the triggering condition value. The increment may be negative,
+if desired.</p>
+ <p>DEFAULT:  0.0</p>
+ </li>
+
+</ol>
+</div>
+
+<div class="section"><h4 class="sectiontitle">Time quantity</h4><ol>
+<li> This is defined by a single keyword. The following keywords can
+be used in both ECLIPSE 100 and ECLIPSE 300:
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">DAY</samp> </td>
+
+<td valign="top">Current simulation day of the month</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">MNTH</samp> </td>
+
+<td valign="top">Current simulation month</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">YEAR</samp> </td>
+
+<td valign="top"> Current simulation year</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</li>
+
+</ol>
+<p>These quantities will be compared against the nearest integer
+values of a constant quantity on the other side of the operator in
+a condition. The <samp class="codeph">MNTH</samp> keyword may also be compared
+against three letter abbreviations for calendar months (<samp class="codeph">JAN</samp>, <samp class="codeph">FEB</samp> ... <samp class="codeph">DEC</samp>). See <a href="actionx_Examples.html#actionx_example_3"> "Example 3"</a> and <a href="actionx_Examples.html#actionx_example_4"> "Example 4"</a> for
+usage of this quantity type.</p>
+</div>
+
+<div class="section"><h4 class="sectiontitle">Region quantity</h4><p>This is defined by the following
+items:</p>
+<ol>
+<li>Region keyword. The following keywords can be used in both ECLIPSE
+100 and ECLIPSE 300 unless other stated. <p>This must be one of: </p>
+    
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"><span class="keyword">RPR</span></td>
+
+<td valign="top"> Region pressure</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">ROSAT</span></td>
+
+<td valign="top"> Region oil saturation average value</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">RWSAT</span></td>
+
+<td valign="top">Region water saturation average value</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">RGSAT</span></td>
+
+<td valign="top"> Region gas saturation average value</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">ROIP</span></td>
+
+<td valign="top"> Region oil in place</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">RWIP</span></td>
+
+<td valign="top"> Region water in place</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">RGIP</span></td>
+
+<td valign="top"> Region gas in place (in liquid and gas phases)</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">RGIGP</span></td>
+
+<td valign="top"> Region gas in place (in gas phase only). This keyword can
+be used in ECLIPSE 100.</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">RUxxx</span></td>
+
+<td valign="top">User-defined region quantity</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ </li>
+
+<li>Fluid-in-place region number.<p>This should be an integer between
+0 and <samp class="codeph">NTFIP</samp> (see keyword <a href="REGDIMS.html#REGDIMS"> REGDIMS</a> in the <span class="keyword">RUNSPEC</span> section). </p>
+       <p>ECLIPSE 100</p>
+<p>Region 0 refers to the whole field.</p>
+     
+   <p>Fluid-in-place regions are defined with the keyword <a href="FIPNUM.html#FIPNUM"> FIPNUM</a> in the <span class="keyword">REGIONS</span> section.</p>
+  </li>
+
+<li>The fluid-in-place region family, to which the specified region
+belongs. <p>The family name should be up to 5 characters long.</p>
+                <p>A default (1*) or blank (' ') entry refers to
+the standard set of fluid-in-place regions defined with the keyword <span class="keyword">FIPNUM</span>.</p>
+<p>Additional families of fluid-in-place regions
+may optionally be defined, using the keyword <a href="FIP.html#FIP"> FIP</a>. The family name is string of up to
+5 characters that makes up the second part of the keyword name (characters 4 - 8).
+Each family can divide up the field in different ways. Thus, for example,
+the standard  <span class="keyword">FIPNUM</span> family may divide the field
+into layers, and an additional family can be defined to divide the
+field into areal sectors.</p>
+</li>
+
+</ol>
+</div>
+
+<div class="section" id="actionx_field_quantity"><a name="actionx_field_quantity"><!-- --></a><h4 class="sectiontitle">Field quantity</h4><p>This is defined by the following item:</p>
+<ol>
+<li> Field keyword. The allowed mnemonics are all field keywords listed
+in the <a href="SUMMARY.html#SUMMARY">  SUMMARY</a> section. </li>
+
+</ol>
+<p> <strong>Keywords with a component index</strong> </p>
+<p>ECLIPSE 300</p>
+<p>Keywords
+that provide information at a component level must have the component
+number appended to the keyword with an underscore, see Examples 5
+and 6.</p>
+</div>
+
+<div class="section" id="actionx_group_or_well_list_quantity"><a name="actionx_group_or_well_list_quantity"><!-- --></a><h4 class="sectiontitle">Group or
+well list quantity</h4><p>This is defined by the following items:</p>
+<ol>
+<li> Group keyword. The allowed mnemonics are all group keywords listed
+in the <span class="keyword">SUMMARY</span> section. <p> <strong>Keywords with a component
+index</strong> </p>
+ <p>ECLIPSE 300</p>
+<p>Keywords that provide information at a component
+level must have the component number appended to the keyword with
+an underscore, see Examples 5 and 6.</p>
+ </li>
+
+<li> Group name (or name root, enclosed in quotes and ending with
+an asterisk - these are not permitted in a right hand quantity). A
+well list name may be specified for this item for the subset of group
+mnemonics listed under <a href="summary_Well_list_quantities.html#summary_welllistquantities">  Well list quantities</a> in the <span class="keyword">SUMMARY</span> section. The quantity defined in item 1 will then
+be calculated for the well grouping currently defined by this list. </li>
+
+</ol>
+</div>
+
+<div class="section" id="actionx_well_quantity"><a name="actionx_well_quantity"><!-- --></a><h4 class="sectiontitle">Well quantity</h4><p>This is defined by the following items:</p>
+<ol>
+<li> Well keyword. The allowed keywords are all well keywords listed
+in the <a href="SUMMARY.html#SUMMARY">  SUMMARY</a> section. </li>
+
+<li> Well name (or name root, enclosed in quotes and ending with an
+asterisk - these are not permitted in a right hand quantity). The
+well name may be defaulted by using the character ‘*’ (this is not
+permitted in a right hand quantity). </li>
+
+</ol>
+<dl>
+
+<dt class="dlterm">Keywords with a component index</dt>
+
+<dd>ECLIPSE 300. Keywords that provide information at a component
+level must have the component number appended to the keyword with
+an underscore, see Examples 5 and 6.</dd>
+
+
+<dt class="dlterm">Keywords with a completion index</dt>
+
+<dd>Well keywords that need a completion index must have this index
+appended to the keyword with underscores (two if the index is less
+than 10, one if it is less than 100, none otherwise).</dd>
+
+</dl>
+</div>
+
+<div class="section" id="actionx_well_lgr_quantity"><a name="actionx_well_lgr_quantity"><!-- --></a><h4 class="sectiontitle">Well LGR quantity</h4><p>ECLIPSE 300</p>
+<p>This quantity refers to
+wells in a local grid refinement. It is defined by the following items:</p>
+<ol>
+<li> Well keywords. The allowed keywords are all those well keywords
+listed in the <a href="SUMMARY.html#SUMMARY">  SUMMARY</a> section. These keywords should be prefixed by an ‘L’ to
+indicate an LGR well quantity (as is the case for summary mnemonics) </li>
+
+<li> Well name (or name root, enclosed in quotes and ending with an
+asterisk - these are not permitted in a right hand quantity). The
+well name may be defaulted by using the character ‘*’ (this is not
+permitted in a right hand quantity). </li>
+
+<li> Local grid name </li>
+
+</ol>
+<p>If the well name is defaulted using the character ‘*’, the
+requested quantities are evaluated for <strong>all</strong> wells in the specified
+LGR. Note that it is not permitted to default the well name if this
+is a right hand quantity.</p>
+<p> <strong>Keywords with a component index</strong> </p>
+<p>Keywords that provide information at a component level must
+have the component number appended to the keyword with an underscore,
+see Examples 5 and 6.</p>
+</div>
+
+<div class="section" id="actionx_well_segment_quantity"><a name="actionx_well_segment_quantity"><!-- --></a><h4 class="sectiontitle">Well segment quantity</h4><p>This is defined by the following items:</p>
+<ol>
+<li> Well segment keyword. The allowed keywords are all those segment
+keywords listed in the <a href="SUMMARY.html#SUMMARY">  SUMMARY</a> section. </li>
+
+<li> Multisegment well name (or name root, enclosed in quotes and
+ending with an asterisk - these are not permitted in a right hand
+quantity). <p>If a well name root is specified, then wells that conform
+to the name root but are not multisegment wells are ignored.</p>
+ </li>
+
+<li> Well segment number. <p>An integer between 1 and <samp class="codeph">NSEGMX</samp> (set in the <span class="keyword">RUNSPEC</span> section keyword <a href="WSEGDIMS.html#WSEGDIMS">  WSEGDIMS</a>)</p>
+ </li>
+
+</ol>
+</div>
+
+<div class="section" id="actionx_well_connection_quantity"><a name="actionx_well_connection_quantity"><!-- --></a><h4 class="sectiontitle">Well connection
+quantity</h4><ol>
+<li> Well connection keyword. The allowed keywords are all those connection
+keywords listed in the <a href="SUMMARY.html#SUMMARY">  SUMMARY</a> section. </li>
+
+<li> Well name (or name root, enclosed in quotes and ending with an
+asterisk - these are not permitted in a right hand quantity). The
+well name may be defaulted by using the character ‘*’ (this is not
+permitted in a right hand quantity). </li>
+
+<li id="actionx.XID-000001d6"><a name="actionx.XID-000001d6"><!-- --></a> I - location of connecting grid block(s) <p>DEFAULT: Negative (allows any I-location)</p>
+ </li>
+
+<li> J - location of connecting grid block(s) <p>DEFAULT: Negative
+(allows any J-location)</p>
+ </li>
+
+<li id="actionx.XID-000001dc"><a name="actionx.XID-000001dc"><!-- --></a> K - location of connecting grid block(s) <p>DEFAULT: Negative (allows any K-location)</p>
+ </li>
+
+</ol>
+<p>If any of items 3, 4, or 5 are set negative, then a left hand
+quantity will be evaluated for more than one connection in the well.
+These connections are those with I,J,K locations matching the specified
+location indices in items 3, 4, or 5. If the well name is defaulted
+using the character ‘*’, the left hand quantity will be evaluated
+for <strong>all</strong> wells in the global model. Note that it is not permitted
+to default connection locations or well name if this is a right hand
+quantity.</p>
+</div>
+
+<div class="section" id="actionx_well_lgr_connection_quantity"><a name="actionx_well_lgr_connection_quantity"><!-- --></a><h4 class="sectiontitle">Well LGR
+connection quantity</h4><p>This quantity refers to connections
+in a local grid refinement. It is defined by the following items:</p>
+<ol>
+<li> Well connection keywords. The allowed keywords are all those
+connection keywords listed in the <a href="SUMMARY.html#SUMMARY">  SUMMARY</a> section. These keywords should be prefixed
+by an ‘L’ to indicate an LGR connection quantity (as is the case for
+summary mnemonics) </li>
+
+<li> Well name (or name root, enclosed in quotes and ending with an
+asterisk - these are not permitted in a right hand quantity). The
+well name may be defaulted by using the character ‘*’ (this is not
+permitted in a right hand quantity). </li>
+
+<li> Local grid name </li>
+
+<li> I - location of connecting grid block(s) within the local grid <p>DEFAULT: Negative (allows any I-location)</p>
+ </li>
+
+<li> J - location of connecting grid block(s) within the local grid <p>DEFAULT: Negative (allows any J-location)</p>
+ </li>
+
+<li> K - location of connecting LGR grid block(s) within the local
+grid <p>DEFAULT: Negative (allows any K-location)</p>
+  </li>
+
+</ol>
+<p>If any of items 4, 5, or 6 are set negative, then a left hand
+quantity will be evaluated for more than one connection in the well.
+These connections are those with I,J,K locations matching the specified
+location indices in items 4, 5, or 6 within the local grid. If the
+well name is defaulted using the character ‘*’, the requested connection
+quantities are evaluated for <strong>all</strong> wells in the specified LGR.
+Note that it is not permitted to default connection locations or well
+name if this is a right hand quantity.</p>
+</div>
+
+<div class="section" id="actionx_aquifer_quantity"><a name="actionx_aquifer_quantity"><!-- --></a><h4 class="sectiontitle">Aquifer quantity</h4><p>This is defined by the following items:</p>
+<ol>
+<li> Aquifer keyword. The allowed keywords are all aquifer keywords
+listed in the <a href="SUMMARY.html#SUMMARY">  SUMMARY</a> section. </li>
+
+<li> Aquifer number </li>
+
+</ol>
+</div>
+
+<div class="section" id="actionx_block_quantity"><a name="actionx_block_quantity"><!-- --></a><h4 class="sectiontitle">Block quantity</h4><ol>
+<li> Block keyword. The allowed keywords are all block keywords listed
+in the <a href="SUMMARY.html#SUMMARY">  SUMMARY</a> section. </li>
+
+<li> I - location of grid block </li>
+
+<li> J - location of grid block </li>
+
+<li> K - location of grid block </li>
+
+</ol>
+<p>Location indices cannot be defaulted.</p>
+</div>
+
+<div class="section" id="actionx_lgr_block_quantity"><a name="actionx_lgr_block_quantity"><!-- --></a><h4 class="sectiontitle">LGR Block quantity</h4><ol>
+<li> Block keyword. The allowed keywords are all block keywords listed
+in the <a href="SUMMARY.html#SUMMARY">  SUMMARY</a> section. These keywords should be prefixed by an ‘L’ to indicate
+an LGR block quantity (as is the case for summary mnemonics) </li>
+
+<li> Local grid name </li>
+
+<li> I - location of grid block </li>
+
+<li> J - location of grid block </li>
+
+<li> K - location of grid block </li>
+
+</ol>
+<p>Location indices cannot be defaulted.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

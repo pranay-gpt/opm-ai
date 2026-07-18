@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="K-value tables (ECLIPSE 300)"/>
+<meta name="DC.subject" content="PROPS section ECLIPSE 300 K-value tables"/>
+<meta name="keywords" content="PROPS section ECLIPSE 300 K-value tables"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="props_k-value_tables__eclipse_300_"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>K-value tables (ECLIPSE 300)</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="props_k-value_tables__eclipse_300_"><a name="props_k-value_tables__eclipse_300_"><!-- --></a>
+<h1 class="topictitle1">K-value tables (ECLIPSE 300)</h1>
+
+
+ <div>
+<p>If K-value tables are to be used in the reservoir (<a href="KVALUES.html#KVALUES"> KVALUES</a> in <span class="keyword">RUNSPEC</span>) or for the separators, these may be entered in the <span class="keyword">PROPS</span> section using the <a href="KVTABLE.html#KVTABLE"> KVTABLE</a> keyword as functions of pressure. <math><mrow><msub><mrow>
+<mi>N</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>m</mi>
+<mi>p</mi><mi>s</mi></mrow></msub></mrow></math> K-values
+are entered at each pressure value. K-value dependence on composition
+can be model by interpolating between a set of K-value tables depending
+on the mole fraction of a nominated component. The K-value tables
+are supplied using the <a href="KVTABCn.html#KVTABCn"> KVTABCn</a> keywords, the interpolation points via the <a href="KVMF.html#KVMF"> KVMF</a> keyword and the component specified
+with the <a href="KVCOMP.html#KVCOMP"> KVCOMP</a> keyword.</p>
+
+<p>Generic table reading routines are used to read many ECLIPSE 300
+tables, including <span class="keyword">KVTABLE</span>, <span class="keyword">KVTABCn</span> and <a href="KVTABTn.html#KVTABTn"> KVTABTn</a>.
+If values in a table are defaulted (*), the table values are constructed
+using linear interpolation and constant extrapolation. For instance,
+below are four examples which demonstrate the values used internally
+when defaults are used in the <span class="keyword">KVTABLE</span> table (with
+one component).</p>
+
+<p>For Example 1, linear interpolation will be used to define the
+K-values for the defaulted pressure values of 200 and 300:</p>
+
+<pre><code>KVTABLE
+--p_oil  K-value
+  100.0   1    
+  200.0   *    (internal value used = 2)
+  300.0   *    (internal value used = 3)
+  400.0   4    
+/</code></pre>
+<p>For Example 2,constant extrapolation will be used to define the
+K-values for the defaulted pressure values of 100 and 400:</p>
+
+<pre><code>KVTABLE
+--p_oil  K-value
+  100.0   *    (internal value used = 2)
+  200.0   2    
+  300.0   3    
+  400.0   *    (internal value used = 3)
+/</code></pre>
+<p>For Example 3, constant extrapolation will be used to define the
+K-values for the defaulted pressure values of 200, 300 and 400:</p>
+
+<pre><code>KVTABLE
+--p_oil  K-value
+  100.0   1    
+  200.0   *    (internal value used = 1)
+  300.0   *    (internal value used = 1)
+  400.0   *    (internal value used = 1)
+/</code></pre>
+<p>For Example 4,constant extrapolation will be used to define the
+K-values for the defaulted pressure values of 100, 300 and 400:</p>
+
+<pre><code>KVTABLE
+--p_oil  K-value
+  100.0   *    (internal value used = 2)
+  200.0   2    
+  300.0   *    (internal value used = 2)
+  400.0   *    (internal value used = 2)
+/</code></pre>
+<p>As an alternative to entering K-values in tabular form, the <a href="KVGEN.html#KVGEN"> KVGEN</a> keyword may be used
+to request that they be generated internally from a given sample.
+These may be used either to control the interphase equilibrium over
+the field (the <span class="keyword">KVALUES</span> keyword in the <span class="keyword">RUNSPEC</span> section) or in separator calculations (the <a href="SEPCOND.html#SEPCOND"> SEPCOND</a> keyword in the <span class="keyword">SCHEDULE</span> section).</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

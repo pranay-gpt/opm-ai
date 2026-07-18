@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Miscellaneous points"/>
+<meta name="DC.subject" content="Vertical equilibrium miscellaneous"/>
+<meta name="keywords" content="Vertical equilibrium miscellaneous"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ve_miscellaneous_points"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Miscellaneous points</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ve_miscellaneous_points"><a name="ve_miscellaneous_points"><!-- --></a>
+<h1 class="topictitle1">Miscellaneous points</h1>
+
+
+ <div>
+<p><span class="keyword">RESTART</span> files produced by VE runs include the
+lowest and highest contact depths, as required by the phase combination
+used. It is not possible to restart a VE run from a non-VE run.</p>
+
+<p>Although the saturation distributions assumed by the VE algorithm
+are based on zero capillary pressures, non-zero values may be entered
+in the <span class="keyword">PROPS</span> data section, to be used if the <a href="../ecl_rm/VEFRAC.html#VEFRAC">VEFRAC</a> mixing parameter is
+not unity; the VE fraction will ignore rock capillary pressures.</p>
+
+<p>The VE model described above assumes a three zone saturation distribution.
+It is possible to extend this model to allow four zones. In such a
+case, considering the oil water phase combination, there would be
+a critical water saturation up to a highest contact depth, and a (possibly
+different) connate saturation above this. This extension to a 'four
+cycle' VE model could be provided in future if demand exists.</p>
+
+<p>If twisted sloping faults are used, the intersection of a cell
+face with a plane of constant depth becomes slightly curved. This
+curvature is ignored when setting up the cell geometry data for VE.
+However, the fractional volumes below distinct depths are then re-normalized
+to ensure that the volume fraction below the highest distinct depth
+is 1.</p>
+
+<p>If the reservoir geometry is entered using <a href="../ecl_rm/TOPS.html#TOPS">TOPS</a>, <a href="../ecl_rm/DX.html#DX">DX</a>, <a href="../ecl_rm/DY.html#DY">DY</a> etc., rather than with corner point geometry (<a href="../ecl_rm/COORD.html#COORD">COORD</a>, <a href="../ecl_rm/ZCORN.html#ZCORN">ZCORN</a> etc.), the top and bottom
+of the cells will be flat. In this case an unrealistic step function
+change in the relative permeability would be obtained when the fluid
+contact reaches the top of a cell, which would cause problems in solving
+the non-linear flow equations. To avoid this, the cell top is ‘spread’
+slightly, over 10% of the cell depth, so that the flow relative permeability
+rises from zero to its maximum value as the fluid contact traverses
+this interval.</p>
+
+<p>In a dipping reservoir specified using <span class="keyword">TOPS</span>, <span class="keyword">DX</span> etc. the VE algorithm will prevent flow to the adjacent
+cell if the water level is below the bottom of the adjacent cell.
+A better method of specifying a dipping reservoir would be to use
+corner point geometry (<span class="keyword">COORD</span>, <span class="keyword">ZCORN</span> etc.). However the full face of each cell can be specified for flow
+by using the <span class="keyword">OPTIONS</span> keyword, setting <span class="keyword">OPTIONS</span>(<a href="../ecl_rm/OPTIONS.html#options.19">19</a>)=1. A second
+option can be used by specifying <span class="keyword">OPTIONS</span>(19)=2,
+in which case the flows are calculated assuming a corner point approximation
+to the original grid. The pore volume and transmissibilities are preserved,
+however the VE flow calculations are performed assuming the cells
+to be part of a continuous layer. This corner point approximation
+will be output to the <span class="keyword">GRID</span> file and hence can be
+plotted using a pre-processor such as PETREL. This latter option is
+used in Local Grid Refinement cases if the grid is entered as a block
+centered grid.</p>
+
+<p>Consider a reservoir specified using corner point geometry. When
+there is a gap of non-zero thickness between a pair of adjacent active
+cells in a column which are connected together (such as for a pinchout
+of non-zero thickness due to use of <span class="keyword">MINPV</span>), contact
+depths cannot be resolved in this dead space. In this case, setting <span class="keyword">OPTIONS</span>(<a href="../ecl_rm/OPTIONS.html#options.52">52</a>)=2 instructs
+ECLIPSE to modify corner-point depths on the bottom face of the topmost
+cell in the pair to be equal to those for the top face of the bottommost
+cell. If the Local Grid Refinement option is used, ECLIPSE always
+modifies the corner point depths in local grids to avoid gaps between
+local and global grids where there is a connection.</p>
+
+<p>In the assumed segregated fluid distributions described previously,
+the connate saturation of a phase was always assumed to be present
+throughout a cell. As soon as this is exceeded, a contact forms, and
+flow is generally possible through the top or bottom of the cell.
+This will usually occur at a lower saturation than the critical value.
+For example, the connate gas saturation is often zero. If any gas
+saturation exists in a cell it will be assumed to be concentrated
+at the top, and thus be mobile through the top of the cell, even if
+this is below the critical gas saturation. This is a straightforward
+consequence of the assumption of vertical equilibrium, but may not
+be appropriate in some cases. For example, if gas appears in a cell
+through bubble point crossing, it would be evenly distributed through
+the cell, and could not concentrate at the top until the critical,
+rather than the connate, saturation is reached. Arguments 4 and 5
+of the <a href="../ecl_rm/OPTIONS.html#OPTIONS">OPTIONS</a> keyword (used in the <span class="keyword">SCHEDULE</span> section)
+enable the critical water and gas saturation values to replace the
+connate in the simulation if required. Note, however, that this may
+result in the VE equilibration option not being static, as this always
+uses connate saturations.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

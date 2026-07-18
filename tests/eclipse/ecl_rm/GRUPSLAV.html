@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GRUPSLAV"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GRUPSLAV"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GRUPSLAV</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GRUPSLAV"><a name="GRUPSLAV"><!-- --></a>
+<h1 class="keyword">GRUPSLAV</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="grupslav.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="grupslav.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d936e45"> x </th>
+
+<th valign="top" id="d936e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d936e54">  </th>
+
+<th valign="top" id="d936e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d936e45 d936e54 ">  </td>
+
+<td valign="top" headers="d936e48 d936e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d936e45 d936e54 ">  </td>
+
+<td valign="top" headers="d936e48 d936e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d936e45 d936e54 ">  </td>
+
+<td valign="top" headers="d936e48 d936e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d936e45 d936e54 ">  </td>
+
+<td valign="top" headers="d936e48 d936e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d936e45 d936e54 ">  </td>
+
+<td valign="top" headers="d936e48 d936e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d936e45 d936e54 ">  </td>
+
+<td valign="top" headers="d936e48 d936e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d936e45 d936e54 ">  </td>
+
+<td valign="top" headers="d936e48 d936e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d936e45 d936e54 "> x </td>
+
+<td valign="top" headers="d936e48 d936e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword must be used in each reservoir coupling slave run
+to identify the slave groups and their associated master groups in
+the master run, and to set the filter flags that determine which rate
+constraints are to be imposed on them (see <a href="../ecl_td/rescouplintro_Reservoir_Coupling.html#rescouplintro_reservoir_coupling">"Reservoir coupling"</a> in the <cite>ECLIPSE Technical Description</cite>).</p>
+
+<p>If the slave run is activated by the master run (see keyword <a href="SLAVES.html#SLAVES">  SLAVES</a>), the slave groups’
+rate constraints are transmitted from the master run by the message
+passing system, at each timestep of the master run.</p>
+
+<p>Alternatively, the slave run may be activated on its own. In this
+case, the slave groups’ rate constraints are read from the input Reservoir
+Coupling file, which must be specified with the keyword <a href="USECUPL.html#USECUPL">  USECUPL</a>.</p>
+
+<p>In either case, the slave run’s timesteps are synchronized to coincide
+with the timesteps of the master run (either transmitted from the
+master run or read from the Reservoir Coupling file). The slave run
+may, however, take more than one timestep to reach the end of the
+master run’s timestep.</p>
+
+<p>The <span class="keyword">GRUPSLAV</span> keyword is followed by any number
+of records, each containing the following items of data, and each
+terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li> The slave group’s name or group name root <p>or <samp class="codeph">FIELD</samp> (if the <samp class="codeph">FIELD</samp> group is the slave group)</p>
+ <p>A group name root, enclosed in quotes and ending with an asterisk
+(*), can be used to refer to several groups in one record</p>
+<p>The
+slave reservoir must contain one or more slave groups. They need not
+all be on the same level in the group tree, but a slave group cannot
+be subordinate to another slave group. The slave groups must not be
+subject to production or injection rate constraints applied to any
+superior group within the slave reservoir.</p>
+<p>The groups must previously
+have been declared with the keyword <a href="GRUPTREE.html#GRUPTREE">  GRUPTREE</a> or <a href="WELSPECS.html#WELSPECS">  WELSPECS</a>.</p>
+ </li>
+
+<li> The name of the slave group’s associated master group in the
+master reservoir <p>The slave group may have a different name from
+its master group. For example, the slave group may be the top level
+group in the slave reservoir, and thus must be called <samp class="codeph">FIELD</samp>.</p>
+ <p>If a default (1*) or blank name (' ') is entered, ECLIPSE
+assumes the associated master group has the same name as its slave
+group.</p>
+<p>In slave runs activated by the master run, ECLIPSE checks
+that the master-slave group pairs specified in keywords <a href="GRUPMAST.html#GRUPMAST">  GRUPMAST</a> and <span class="keyword">GRUPSLAV</span> are consistent.</p>
+ </li>
+
+<li> The filter flag for oil production rate constraints (up to 4
+characters) <p>This determines the source of the oil rate constraints
+to be applied to the slave group: the master run (or the Reservoir
+Coupling file), the slave run’s own data file, or both.</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">MAST</samp> </td>
+
+<td valign="top">Apply only the constraints transmitted from the master run
+or read from the Reservoir Coupling file. Ignore any rate constraints
+specified for this slave group in the slave run’s own data file.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">SLAV</samp> </td>
+
+<td valign="top"> Apply only the constraints specified for this slave group
+in the slave run’s own data file. Ignore any rate constraints transmitted
+from the master run or read from the Reservoir Coupling file.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">BOTH</samp> </td>
+
+<td valign="top"> Apply the rate constraints from both sources, taking the minimum
+of the two values.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">MAST</samp> </p>
+ </li>
+
+<li> The filter flag for water and liquid production rate constraints <p> The choices are the same as for item 3.</p>
+ </li>
+
+<li> The filter flag for gas production rate constraints <p>The choices
+are the same as for item 3.</p>
+ </li>
+
+<li> The filter flag for reservoir fluid volume production rate constraints <p>The choices are the same as for item 3.</p>
+ </li>
+
+<li> The filter flag for oil injection rate constraints <p> The choices
+are the same as for item 3.</p>
+ </li>
+
+<li> The filter flag for water injection rate constraints <p> The
+choices are the same as for item 3.</p>
+ </li>
+
+<li> The filter flag for gas injection rate constraints <p> The choices
+are the same as for item 3.</p>
+ </li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="section" id="grupslav_notes"><a name="grupslav_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li> The <samp class="codeph">SLAV</samp> option in items 3 - 9 is only intended
+for use when the slave run is performed on its own and reads the slave
+group rate constraints from the input Reservoir Coupling file. This
+allows you to see how the slave reservoir would perform in the absence
+of selected rate constraints imposed by the master run. The <samp class="codeph">SLAV</samp> option should <strong>not</strong> be used when the slave run
+is activated by the master run as part of the coupled system. Ignoring
+rate constraints imposed by the master run would cause target or limiting
+rates imposed on the global system to be exceeded. </li>
+
+<li> If a rate constraint is applied to a phase that is not an active
+phase in the slave run, ECLIPSE transforms it into a constraint on
+an associated phase, using the latest available production ratios.
+This may happen in the following two circumstances: <ul>
+<li> Gas is an active phase in the master run, but not in the slave
+run that instead has a constant R<sub>s</sub>  specified with keyword <a href="RSCONST.html#RSCONST">  RSCONST</a> or <a href="RSCONSTT.html#RSCONSTT">  RSCONSTT</a>. </li>
+
+<li> Oil is an active phase in a gas condensate master run, but not
+in the slave run that instead has a constant R<sub>v</sub> specified
+with keyword <a href="RVCONST.html#RVCONST">  RVCONST</a> or <a href="RVCONSTT.html#RVCONSTT">  RVCONSTT</a>. </li>
+
+</ul>
+ </li>
+
+</ul>
+</div>
+
+<div class="section" id="grupslav_example"><a name="grupslav_example"><!-- --></a><h4 class="sectiontitle">Examples</h4><p>Slave groups
+PL-A and PL-B take their rate constraints from the master run, but
+in addition PL-B observes its own limits on water injection rate.</p>
+<pre><code>GRUPSLAV
+--  slave   assoc   oil     wat/liq  gas     resv    oil     wat     gas
+--  group   master  prod    prod     prod    prod    inj     inj     inj 
+--  name    group   limits  limits   limits  limits  limits  limits  limits
+     PL-A    UP-A  /
+     PL-B    UP-B     5*                                     BOTH   /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

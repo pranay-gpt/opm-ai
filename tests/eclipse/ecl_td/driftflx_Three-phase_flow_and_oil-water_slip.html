@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Three-phase flow and oil-water slip"/>
+<meta name="DC.subject" content="Multisegment wells the drift flux slip model three-phase flow and oil-water slip"/>
+<meta name="keywords" content="Multisegment wells the drift flux slip model three-phase flow and oil-water slip"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="driftflx_three-phase_flow_and_oil-water_slip"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Three-phase flow and oil-water slip</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="driftflx_three-phase_flow_and_oil-water_slip"><a name="driftflx_three-phase_flow_and_oil-water_slip"><!-- --></a>
+<h1 class="topictitle1">Three-phase flow and oil-water slip</h1>
+
+
+ <div>
+<p>The drift flux model described above was formulated for two-phase
+gas-liquid mixtures. Three-phase mixtures flowing in the wellbore,
+and oil-water mixtures, use a different model.</p>
+
+<p>Three-phase mixtures, first use the formulation above to model
+the total slip between the gas phase and the combined liquid phase.
+The properties of the combined liquid phase (density, viscosity) are
+calculated as an average of the oil and water properties, weighted
+according to the volume fraction                  <math><mi>α</mi></math>  of each phase. This treatment neglects any tendency of the oil-water
+mixture to form emulsions, but it is in common practice as a way of
+applying two-phase flow correlations to oil-water-gas mixtures in
+a well. The gas-liquid interfacial tension is calculated as      
+   </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="driftflx.equ.0112"/>
+ <math><msub><mi>σ</mi>
+<mrow><mi>g</mi><mi>l</mi></mrow></msub><mo>=</mo>
+<mfrac><mrow><mrow><msub><mi>α</mi><mi>o</mi></msub>
+<msub><mi>σ</mi><mrow><mi>g</mi><mi>o</mi></mrow>
+</msub></mrow><mo>+</mo><mrow><msub><mi>α</mi><mi>w</mi></msub><msub><mi>σ</mi><mrow><mi>w</mi><mi>g</mi></mrow></msub></mrow></mrow><mrow><msub><mi>α</mi><mi>o</mi></msub><mo>+</mo><msub><mi>α</mi>
+<mi>w</mi></msub></mrow></mfrac></math> 
+</td><td align="right">[Eq. 559.1]
+              </td></tr></tbody></table>
+<p> <math><msub><mi>σ</mi>
+<mrow><mi>g</mi><mi>o</mi></mrow></msub></math>  and
+ <math><msub><mi>σ</mi>
+<mrow><mi>w</mi><mi>g</mi></mrow></msub></math>  are
+the gas-oil and water-gas interfacial tensions. They can either be
+supplied as tabulated functions of pressure with the keywords <a href="../ecl_rm/STOG.html#STOG">STOG</a> and <a href="../ecl_rm/STWG.html#STWG">STWG</a> respectively (in ECLIPSE 100),
+or calculated internally from built-in correlations obtained from <cite><span> <a href="biblio_Bibliography.html#biblio_63252">Beggs (1991)</a> </span></cite>. In ECLIPSE 100 the reservoir fluid temperature is unknown
+and is arbitrarily set to 160 °F (71.1 °C) for these correlations.
+In ECLIPSE 300 the temperature is set to the temperature of the EOS
+region corresponding to the well. Then, having obtained the velocity
+of the combined liquid phase, an oil-water slip model is used to resolve
+the velocities of the oil and water phases.          </p>
+
+<p>By default, ECLIPSE uses the formulation of <cite><span> <a href="biblio_Bibliography.html#biblio_44682">Hasan and Kabir (1999)</a> </span></cite> to model the slip between oil and water in the liquid
+phase. This takes the form of</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="driftflx.equ.011f"/>
+ <math><mrow><msub><mrow>
+<mi>v</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>=</mo><msubsup><mrow><mi>C</mi></mrow><mrow><mn>0</mn>
+</mrow><mrow><mo>′</mo></mrow></msubsup><msub><mrow>
+<mi>v</mi></mrow><mrow><mi>l</mi></mrow></msub><mo>+</mo><mrow><msub><mrow><mi>v</mi></mrow><mrow><mi>d</mi></mrow></msub><mi>′</mi></mrow></mrow></math> 
+</td><td align="right">[Eq. 559.2]
+              </td></tr></tbody></table>
+<p>This model suggests a value of 1.2 for the profile parameter, which
+becomes unity when oil is the continuous phase at                
+ <math><msub><mi>α</mi>
+<mi>o</mi></msub><mo>&gt;</mo><mn>0.7</mn></math>. The
+simulator implements this as a continuous function of the holdup fraction
+of oil in the liquid phase,  <math><msub><mi>α</mi>
+<mrow><mi>o</mi><mi>l</mi></mrow></msub><mo>=</mo>
+<msub><mi>α</mi><mi>o</mi></msub><mo>/</mo><mo>(</mo>
+<msub><mi>α</mi><mi>o</mi></msub><mo>+</mo><msub>
+<mi>α</mi><mi>w</mi></msub><mo>)</mo></math>     
+                 </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="driftflx.XID-00000125"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msub><mrow><mi>C</mi>
+</mrow><mrow><mn>0</mn></mrow></msub><mi>′</mi></mrow>
+<mo>=</mo><mrow><mi>A</mi><mtext>     when  </mtext><mo>(</mo><msub><mrow><mi>α</mi></mrow><mrow><mi>o</mi>
+<mi>l</mi></mrow></msub><mo>≤</mo><mrow><mi>B</mi>
+<mn>1</mn></mrow><mo>)</mo></mrow></mtd></mtr><mtr>
+<mtd><mrow><msub><mrow><mi>C</mi></mrow><mrow><mn>0</mn></mrow></msub><mi>′</mi></mrow><mo>=</mo><mrow>
+<mn>1</mn><mtext>     when  </mtext><mo>(</mo><msub>
+<mrow><mi>α</mi></mrow><mrow><mi>o</mi><mi>l</mi>
+</mrow></msub><mo>≥</mo><mrow><mi>B</mi><mn>2</mn>
+</mrow><mo>)</mo></mrow></mtd></mtr><mtr><mtd><mrow>
+<msub><mrow><mi>C</mi></mrow><mrow><mn>0</mn></mrow>
+</msub><mi>′</mi></mrow><mo>=</mo><mi>A</mi><mrow>
+<mo>-</mo><mrow><mrow><mo>(</mo><mi>A</mi><mrow><mo>-</mo><mn>1</mn></mrow><mo>)</mo></mrow><mo>(</mo>
+<mfrac><mrow><msub><mrow><mi>α</mi></mrow><mrow><mi>o</mi><mi>l</mi></mrow></msub><mrow><mo>-</mo><mrow>
+<mi>B</mi><mn>1</mn></mrow></mrow></mrow><mrow><mi>B</mi><mn>2</mn><mo>-</mo><mrow><mi>B</mi><mn>1</mn>
+</mrow></mrow></mfrac><mo>)</mo><mtext>     when  </mtext>
+<mrow><mo>(</mo><mrow><mi>B</mi><mn>1</mn></mrow>
+<mo>&lt;</mo><msub><mrow><mi>α</mi></mrow><mrow><mi>o</mi><mi>l</mi></mrow></msub><mo>&lt;</mo><mrow><mi>B</mi><mn>2</mn></mrow><mo>)</mo></mrow></mrow>
+</mrow></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 559.3]
+              </td></tr></tbody></table>
+<p>The values of the coefficients default to                  <math><mi>A</mi><mo>=</mo>
+<mn>1.2</mn></math>,  <math><mrow><mi>B</mi>
+<mn>1</mn></mrow><mo>=</mo><mn>0.4</mn></math>  and
+ <math><mrow><mi>B</mi>
+<mn>2</mn></mrow><mo>=</mo><mn>0.7</mn></math>. A
+condition equivalent to equation <a href="driftflx_The_profile_parameter.html#driftflx.equ.0078">557.5</a>, that the oil superficial velocity should increase with the oil
+holdup fraction, requires          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="driftflx.equ.012d"/>
+ <math><mrow><mi>B</mi>
+<mn>1</mn></mrow><mo>&lt;</mo><mrow><mo>(</mo><mn>2</mn><mrow><mo>-</mo><mi>A</mi></mrow><mo>)</mo>
+<mi>B</mi><mn>2</mn></mrow></math> 
+</td><td align="right">[Eq. 559.4]
+              </td></tr></tbody></table>
+<p>The oil-liquid drift velocity is calculated as</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="driftflx.XID-00000131"/>
+ <math><mrow><msub><mi>v</mi><mi>d</mi></msub><mi>′</mi></mrow><mo>=</mo>
+<mrow><mn>1.53</mn><msub><mi>v</mi><mi>c</mi></msub>
+<mi>′</mi><msup><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mi>α</mi><mrow><mi>o</mi><mi>l</mi>
+</mrow></msub></mrow><mo>)</mo></mrow><mn>2</mn>
+</msup></mrow></math> 
+</td><td align="right">[Eq. 559.5]
+              </td></tr></tbody></table>
+<p>where</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="driftflx.equ.0135"/>
+ <math><mrow><mrow><msub>
+<mrow><mi>v</mi></mrow><mrow><mi>c</mi></mrow></msub>
+<mi>′</mi></mrow><mo>=</mo><msup><mrow><mo>[</mo>
+<mfrac><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>o</mi><mi>w</mi></mrow></msub><mo>⁢</mo><mi>g</mi>
+<mo>⁢</mo><mo>(</mo><msub><mrow><mi>ρ</mi></mrow>
+<mrow><mi>w</mi></mrow></msub><mrow><mtext> </mtext>
+<mo>-</mo><mtext> </mtext><msub><mrow><mi>ρ</mi>
+</mrow><mrow><mi>o</mi></mrow></msub></mrow><mo>)</mo>
+</mrow><mrow><msubsup><mrow><mi>ρ</mi></mrow><mrow>
+<mi>w</mi></mrow><mrow><mn>2</mn></mrow></msubsup>
+</mrow></mfrac><mo>]</mo></mrow><mrow><mn>1</mn><mo>/</mo><mn>4</mn></mrow></msup></mrow></math> 
+</td><td align="right">[Eq. 559.6]
+              </td></tr></tbody></table>
+<p> <math><msub><mi>σ</mi>
+<mrow><mi>o</mi><mi>w</mi></mrow></msub></math>  is
+the oil-water interfacial tension. This can either be supplied as
+a tabulated function of pressure with the keyword <a href="../ecl_rm/STOW.html#STOW">STOW</a> (in ECLIPSE 100) or calculated
+internally as the difference between the values of  <math><msub><mi>σ</mi>
+<mrow><mi>g</mi><mi>o</mi></mrow></msub></math>  and
+ <math><msub><mi>σ</mi>
+<mrow><mi>w</mi><mi>g</mi></mrow></msub></math>  obtained
+from the above correlations. Hasan and Kabir state that the drift
+velocity should become zero when oil is the continuous phase, but
+the simulator keeps the form of equation <a href="driftflx_Three-phase_flow_and_oil-water_slip.html#driftflx.XID-00000125">559.3</a>  because when  <math><msub><mi>α</mi>
+<mrow><mi>o</mi><mi>l</mi></mrow></msub><mo>=</mo>
+<mn>0.7</mn></math>  the drift velocity will have diminished
+by an order of magnitude from its value at  <math><msub>
+<mi>α</mi><mrow><mi>o</mi><mi>l</mi></mrow></msub>
+<mo>=</mo><mn>0</mn></math>.          </p>
+
+<p>If you select the <samp class="codeph">SHI-03</samp> or <samp class="codeph">SHI-04</samp> model in item 1 of keyword <a href="../ecl_rm/WSEGDFMD.html#WSEGDFMD">WSEGDFMD</a>, ECLIPSE will use a different formulation for oil-water slip
+based on the results described in <cite><span> <a href="biblio_Bibliography.html#biblio_83536">Shi et al (2005b)</a> </span></cite> or <cite><span> <a href="biblio_Bibliography.html#biblio_29667">Shi et al (2005a)</a> </span></cite> respectively.  In these experiments no profile slip
+was observed between the oil and water phases, and accordingly the
+parameter                  <math><mi>A</mi></math>  in equation <a href="driftflx_Three-phase_flow_and_oil-water_slip.html#driftflx.equ.012d">559.4</a>  is set equal
+to 1.0. The parameters  <math><mrow><mi>B</mi>
+<mn>1</mn></mrow></math>  and  <math><mrow>
+<mi>B</mi><mn>2</mn></mrow></math>  are redundant since
+ <math><mrow><msub><mi>C</mi><mn>0</mn></msub><mi>′</mi></mrow></math> 
+is always 1.0. In place of equation <a href="driftflx_The_drift_velocity.html#driftflx.Xdriftflx.equ.00ed">558.6</a>  the oil-liquid drift velocity is calculated as          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="driftflx.equ.014c"/>
+ <math><mrow><msub><mi>v</mi><mi>d</mi></msub><mi>′</mi></mrow><mo>=</mo>
+<mrow><mn>1.53</mn><msub><mi>v</mi><mi>c</mi></msub>
+<mi>′</mi><msup><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mi>α</mi><mrow><mi>o</mi><mi>l</mi>
+</mrow></msub></mrow><mo>)</mo></mrow><mrow><mi>n</mi>
+<mi>′</mi></mrow></msup></mrow></math> 
+</td><td align="right">[Eq. 559.7]
+              </td></tr></tbody></table>
+<p>where                  <math><mrow><mi>n</mi>
+<mi>′</mi></mrow></math>  is set equal to 0.95 or 1.0 respectively.
+         </p>
+
+<p>The oil-water drift velocity in inclined segments is scaled in
+a similar way as described in the previous section for the gas-liquid
+drift velocity, using an inclination factor                  <math><mrow><mi>m</mi>
+<mo>(</mo><mi>θ</mi><mo>)</mo></mrow></math>  as shown
+in equation <a href="driftflx_The_drift_velocity.html#driftflx.Xdriftflx.equ.00f5">558.7</a>. By default ECLIPSE uses Hasan and Kabir’s relation (<cite><span> <a href="biblio_Bibliography.html#biblio_44682">Hasan and Kabir, 
+1999</a> </span></cite>) as shown in equation <a href="driftflx_The_drift_velocity.html#driftflx.Xdriftflx.equ.00ed">558.6</a>. Alternatively you can request ECLIPSE in keyword <span class="keyword">WSEGDFMD</span> to use a table of  <math><mi>m</mi></math>  vs.  <math><mi>θ</mi></math>  instead. You may then input your own inclination factor table with
+keyword <a href="../ecl_rm/WSEGDFIN.html#WSEGDFIN">WSEGDFIN</a> or let ECLIPSE use its built-in table, which is optimized
+to fit the experimental results described in <cite><span> <a href="biblio_Bibliography.html#biblio_83536">Shi et al (2005b)</a> </span></cite>. This is the recommended option if you select the optimized
+set of model parameters in keyword <span class="keyword">WSEGDFMD</span>. Note
+that the built-in table has different inclination factors for gas-liquid
+and oil-water drift velocities. If you opt for the <samp class="codeph">SHI-04</samp> model described in <cite><span> <a href="biblio_Bibliography.html#biblio_29667">Shi et al (2005a)</a> </span></cite> you are recommended to select the corresponding relation
+for the inclination factor, which is          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="driftflx.equ.015e"/>
+ <math><mrow><mi>m</mi>
+<mo>(</mo><mi>θ</mi><mo>)</mo></mrow><mo>=</mo><mn>1.07</mn><mrow><mi>cos</mi><mi>θ</mi></mrow><mo>+</mo>
+<mn>3.23</mn><mrow><mi>sin</mi><mo>⁡</mo><mrow><mn>2</mn><mi>θ</mi></mrow></mrow><mrow><mo>-</mo><mn>2.32</mn><mrow><mi>sin</mi><mrow><mn>3</mn><mi>θ</mi>
+</mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 559.8]
+              </td></tr></tbody></table>
+<p>This relation is valid up to 88 º from the vertical. Between 88º
+and 90º (horizontal) ECLIPSE will extrapolate                  <math><mrow><mi>m</mi>
+<mo>(</mo><mi>θ</mi><mo>)</mo></mrow></math>  linearly
+to zero.          </p>
+
+<div class="section" id="driftflx_the_effect_of_gas_on_oil-water_slip"><a name="driftflx_the_effect_of_gas_on_oil-water_slip"><!-- --></a><h4 class="sectiontitle">The effect of gas on oil-water slip</h4><p>The presence of free
+gas entrained in the liquid can disrupt the slip between the oil and
+water phases, as <cite><span> <a href="biblio_Bibliography.html#biblio_29667">Shi et al (2005a)</a> </span></cite> concludes. It proposes that the inclination factor 
+                <math><mrow><mi>m</mi>
+<mo>(</mo><mi>θ</mi><mo>)</mo></mrow></math>  for
+oil-water slip should be multiplied by a factor  <math><mrow><msub><mi>m</mi><mi>g</mi></msub><mo>(</mo><mi>θ</mi><mo>,</mo><msub><mi>α</mi><mi>g</mi></msub><mo>)</mo>
+</mrow></math>  that describes this effect as a function of the
+pipe inclination and the gas volume fraction:          </p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="driftflx.equ.016b"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msub><mrow><mi>m</mi>
+</mrow><mrow><mi>g</mi></mrow></msub><mo>(</mo><mi>θ</mi><mo>,</mo><msub><mrow><mi>α</mi></mrow><mrow>
+<mi>g</mi></mrow></msub><mo>)</mo></mrow><mo>=</mo>
+<mn>1</mn><mrow><mo>-</mo><mfrac><mrow><msub><mrow>
+<mi>α</mi></mrow><mrow><mi>g</mi></mrow></msub></mrow>
+<mrow><msub><mrow><mi>a</mi></mrow><mrow><mn>3</mn>
+</mrow></msub><mo>(</mo><mi>θ</mi><mo>)</mo></mrow>
+</mfrac></mrow></mtd><mtd><mtext>when</mtext><msub>
+<mrow><mi>α</mi></mrow><mrow><mi>g</mi></mrow></msub>
+<mo>&lt;</mo><msub><mrow><mi>a</mi></mrow><mrow><mn>3</mn></mrow></msub></mtd></mtr><mtr><mtd><mrow>
+<msub><mrow><mi>m</mi></mrow><mrow><mi>g</mi></mrow>
+</msub><mo>(</mo><mi>θ</mi><mo>,</mo><msub><mrow>
+<mi>α</mi></mrow><mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow><mo>=</mo><mn>0</mn></mtd><mtd><mtext>when</mtext><msub><mrow><mi>α</mi></mrow><mrow><mi>g</mi></mrow></msub><mo>&gt;</mo><msub><mrow><mi>a</mi>
+</mrow><mrow><mn>3</mn></mrow></msub></mtd></mtr>
+</mtable></mrow></math> 
+</td><td align="right">[Eq. 559.9]
+              </td></tr></tbody></table><p>The oil-water drift velocity decreases to zero as the
+gas volume fraction increases from zero to the value             
+    <math><msub><mi>a</mi>
+<mn>3</mn></msub></math> and remains at zero at all higher
+values of  <math><msub><mi>α</mi>
+<mi>g</mi></msub></math>. The cutoff value  <math><msub><mi>a</mi>
+<mn>3</mn></msub></math>  is a function of the pipe inclination.
+At angles between 0 and 70 degrees from the vertical only a small
+amount of gas is required to eliminate the drift between oil and water,
+while for near horizontal flows gas has a much smaller effect (due
+to segregation from the liquid). The following equation approximates
+the observations of <cite><span> <a href="biblio_Bibliography.html#biblio_29667">Shi et al (2005a)</a> </span></cite>                      </p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="driftflx.equ.0173"/>
+ <math><mrow><mrow><msub>
+<mrow><mi>a</mi></mrow><mrow><mn>3</mn></mrow></msub>
+<mo>(</mo><mi>θ</mi><mo>)</mo></mrow><mo>=</mo><mn>0.017</mn><msup><mrow><mi>e</mi></mrow><mrow><msubsup>
+<mrow><mi>θ</mi></mrow><mrow><mi>r</mi></mrow><mrow>
+<mn>3.28</mn></mrow></msubsup></mrow></msup></mrow>
+</math> 
+</td><td align="right">[Eq. 559.10]
+              </td></tr></tbody></table><p>where                  <math><msub>
+<mi>θ</mi><mi>r</mi></msub></math>  is the angle from
+the vertical in radians  <math><mo>(</mo><mo>=</mo>
+<mrow><mi>π</mi><mrow><mi>θ</mi><mi>°</mi></mrow>
+<mo>/</mo><mn>180</mn></mrow><mo>)</mo></math>.  
+       </p>
+<p>You can include the gas effect in the calculation of
+the drift velocity by selecting the <samp class="codeph">SHI-04</samp> option
+in item 3 of keyword <span class="keyword">WSEGDFMD</span>. You are recommended
+to select this option whenever you select the <samp class="codeph">SHI-04</samp> model in item 1. However, the <samp class="codeph">SHI-04</samp> gas effect
+option may be used with any of the drift flux models available in
+item 1, but note that it will not reduce the profile slip which is
+present in the <samp class="codeph">ORIGINAL</samp> model where             
+    <math><mi>A</mi><mo>=</mo>
+<mn>1.2</mn></math>.          </p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

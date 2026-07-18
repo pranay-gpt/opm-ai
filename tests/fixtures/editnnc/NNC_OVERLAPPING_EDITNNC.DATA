@@ -1,0 +1,129 @@
+-- This reservoir simulation deck is made available under the Open Database
+-- License: http://opendatacommons.org/licenses/odbl/1.0/. Any rights in
+-- individual contents of the database are licensed under the Database Contents
+-- License: http://opendatacommons.org/licenses/dbcl/1.0/
+
+-- Copyright (C) 2026 Equinor
+
+-- This deck tests usage of NNC in combination with EDITNNC for an overlapping
+-- value. The deck has only three active cells [1,1,1], [2,1,2], [2,1,3], i.e.,
+-- two TRANNNC are internally generated with values 0.10000000E+01 (i.e., using
+-- the permeability and geometry information from the cells). Two NNCs are
+-- set using the NNC keyword, with values 1111 and 3333. Using the EDITNNC
+-- value of 1 1 1 2 1 2 2, results in the following values written to the INIT
+-- for TRANNNC: 0.22220000E+04 0.33330000E+04 0.20000000E+01 0.10000000E+01
+
+----------------------------------------------------------------------------
+RUNSPEC
+----------------------------------------------------------------------------
+DIMENS 
+2 1 3 /
+
+CO2STORE
+GAS
+WATER
+
+EQLDIMS
+/
+
+TABDIMS
+/
+
+WELLDIMS
+1 1 1 1 /
+
+UNIFOUT
+----------------------------------------------------------------------------
+GRID
+----------------------------------------------------------------------------
+INIT
+
+COORD
+     0   0 0      0   0 2E3
+ 2.5E3   0 0  2.5E3   0 2E3
+   5E3   0 0    5E3   0 2E3
+     0 1E3 0      0 1E3 2E3
+ 2.5E3 1E3 0  2.5E3 1E3 2E3
+   5E3 1E3 0    5E3 1E3 2E3 /
+
+ZCORN
+2*0    2*5E2    2*0 2*5E2
+2*15E2 2*5E2 2*15E2 2*5E2
+2*15E2 2*5E2 2*15E2 2*5E2
+2*15E2 2*10E2 2*15E2 2*10E2
+2*15E2 2*10E2 2*15E2 2*10E2
+8*15E2 /
+
+PORO
+6*0.1 /
+
+PERMX
+6*0.58637152 /
+
+COPY
+PERMX PERMY /
+PERMX PERMZ /
+/
+
+NNC
+1 1 1 2 1 2 1111 /
+1 1 1 2 1 3 3333 /
+/
+----------------------------------------------------------------------------
+EDIT
+----------------------------------------------------------------------------
+TRANZ
+6*0 /
+
+EDITNNC
+1 1 1 2 1 2 2 /
+/
+----------------------------------------------------------------------------
+PROPS
+----------------------------------------------------------------------------
+ROCK
+276.0 1.95e-4 /
+
+SGWFN
+0 0 1 0
+1 1 0 0 /
+----------------------------------------------------------------------------
+SOLUTION
+----------------------------------------------------------------------------
+RPTRST
+BASIC=2 FLOWS /
+
+EQUIL
+0 200 0 0 0 0 1 1 0 /
+----------------------------------------------------------------------------
+SUMMARY
+----------------------------------------------------------------------------
+BPR
+2 1 2 /
+2 1 3 /
+/
+----------------------------------------------------------------------------
+SCHEDULE
+----------------------------------------------------------------------------
+RPTRST
+BASIC=2 FLOWS /
+
+WELSPECS
+'INJ' 'W1' 1 1 1* GAS 3* /
+/
+COMPDAT
+'INJ' 1 1 1 1 'OPEN' 2* 0.1 /
+/
+WCONINJE
+'INJ' GAS OPEN 'RATE' 1E5 1* 480 /
+/
+
+TSTEP
+10 /
+
+WCONINJE
+'INJ' GAS SHUT 'RATE' 1E5 1* 480 /
+/
+
+TSTEP
+10 /

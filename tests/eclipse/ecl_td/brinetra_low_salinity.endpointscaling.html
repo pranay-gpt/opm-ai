@@ -1,0 +1,916 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Low salinity option with end-point scaling"/>
+<meta name="DC.subject" content="Fluid model, Brine model, Brine model low salinity with end-point scaling"/>
+<meta name="keywords" content="Fluid model, Brine model, Brine model low salinity with end-point scaling"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="brinetra_low_salinity_endpointscaling"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Low salinity option with end-point scaling</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="brinetra_low_salinity_endpointscaling"><a name="brinetra_low_salinity_endpointscaling"><!-- --></a>
+<h1 class="topictitle1">Low salinity option with end-point scaling</h1>
+
+
+ <div>
+<p>End-point scaling (which is specified using the <a href="../ecl_rm/ENDSCALE.html#ENDSCALE">ENDSCALE</a> keyword) may be applied
+to both the high and low salinity saturation functions. </p>
+
+<p>For high salinity end-point scaling, the set of keywords <a href="../ecl_rm/swl_SWL_ISWL.html#swl_swl_iswl">SWL</a>, <a href="../ecl_rm/SWLPC.html#SWLPC">SWLPC</a>, <a href="../ecl_rm/SWCR.html#SWCR">SWCR</a>, <a href="../ecl_rm/swu_SWU_ISWU.html#swu_swu_iswu">SWU</a>, <a href="../ecl_rm/sgl_SGL_ISGL.html#sgl_sgl_isgl">SGL</a>, <a href="../ecl_rm/SGLPC.html#SGLPC">SGLPC</a>, <a href="../ecl_rm/SGCR.html#SGCR">SGCR</a>, <a href="../ecl_rm/sgu_SGU_ISGU.html#sgu_sgu_isgu">SGU</a>, <a href="../ecl_rm/SOWCR.html#SOWCR">SOWCR</a>, <a href="../ecl_rm/SOGCR.html#SOGCR">SOGCR</a>, <a href="../ecl_rm/krwx_KRW-IKRWR.html#krwx_krw-ikrwr">KRW</a>, <a href="../ecl_rm/krwx_KRW-IKRWR.html#krwx_krw-ikrwr">KRWR</a>, <a href="../ecl_rm/krgx_KRG-IKRGR.html#krgx_krg-ikrgr">KRG</a>, <a href="../ecl_rm/krgx_KRG-IKRGR.html#krgx_krg-ikrgr">KRGR</a>, <a href="../ecl_rm/kroxx_KRO-ORG.html#kroxx_kro-org">KRO</a>, <a href="../ecl_rm/kroxx_KRO-ORG.html#kroxx_kro-org">KRORW</a>, <a href="../ecl_rm/kroxx_KRO-ORG.html#kroxx_kro-org">KRORG</a>, <a href="../ecl_rm/pcw_PCW_IPCW.html#pcw_pcw_ipcw">PCW</a> and <a href="../ecl_rm/pcg_PCG_IPCG.html#pcg_pcg_ipcg">PCG</a> is available and applies to the tables defined by <a href="../ecl_rm/SATNUM.html#SATNUM">SATNUM</a>. In addition, for the
+high salinity tables, the scaled end-points may also be specified
+as a function of depth using the keywords <a href="../ecl_rm/ENPTVD.html#ENPTVD">ENPTVD</a>, <a href="../ecl_rm/ENKRVD.html#ENKRVD">ENKRVD</a> and <a href="../ecl_rm/ENPCVD.html#ENPCVD">ENPCVD</a>. </p>
+
+<p>For the low salinity end-point scaling, the reduced set of keywords <a href="../ecl_rm/LSWL.html#lswl">LSWL</a>, <a href="../ecl_rm/LSWLPC.html#LSWLPC">LSWLPC</a>, <a href="../ecl_rm/LSWCR.html#LSWCR">LSWCR</a>, <a href="../ecl_rm/LSWU.html#LSWU">LSWU</a>, <a href="../ecl_rm/LSOWCR.html#LSOWCR">LSOWCR</a>, <a href="../ecl_rm/LSOGCR.html#LSOGCR">LSOGCR</a>, <a href="../ecl_rm/LKRW.html#LKRW">LKRW</a>, <a href="../ecl_rm/LKRWR.html#LKRWR">LKRWR</a>, <a href="../ecl_rm/LKRO.html#LKRO">LKRO</a>, <a href="../ecl_rm/LKRORW.html#LKRORW">LKRORW</a>, <a href="../ecl_rm/LKRORG.html#LKRORG">LKRORG</a> and <a href="../ecl_rm/LPCW.html#LPCW">LPCW</a> is available and applies
+to the set of tables defined by <a href="../ecl_rm/LWSLTNUM.html#LWSLTNUM">LWSLTNUM</a> (or <a href="../ecl_rm/LSNUM.html#LSNUM">LSNUM</a>). The low salinity set
+corresponds to the high salinity set of keywords, except that the
+end-points associated with scaling the gas relative permeability and
+the gas-oil capillary pressure are omitted because these are assumed
+to be independent of salinity.</p>
+
+<p>When end-point scaling has been specified, the salinity dependence
+is modeled in a similar manner to that described above except that
+the table derived end-points are replaced by the values from their
+corresponding end-point scaling arrays. (Where the end-point scaling
+arrays have been omitted from the input data, the end-point array
+values are defaulted to their corresponding table end-point values).</p>
+
+<p>Given two sets of saturation functions, one for high salinity and
+one for low salinity, the scaled oil and water saturation end-points
+are interpolated firstly according to:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.highlow"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi></mrow><mrow>
+<mi>I</mi></mrow></msubsup><mo>=</mo><mrow><msub>
+<mrow><mi>F</mi></mrow><mrow><mn>1</mn></mrow></msub>
+<msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi></mrow><mrow><mi>L</mi></mrow>
+</msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow>
+<mrow><mn>1</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi></mrow><mrow><mi>H</mi></mrow>
+</msubsup></mrow></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi><mi>P</mi><mi>C</mi></mrow><mrow><mi>I</mi>
+</mrow></msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi>
+</mrow><mrow><mn>1</mn></mrow></msub><msubsup><mrow>
+<mo>⁢</mo><mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi>
+<mi>P</mi><mi>C</mi></mrow><mrow><mi>L</mi></mrow>
+</msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow>
+<mrow><mn>1</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi><mi>P</mi><mi>C</mi></mrow><mrow>
+<mi>H</mi></mrow></msubsup></mrow></mrow></mtd></mtr>
+<mtr><mtd><mrow><msubsup><mrow><mi>S</mi></mrow><mrow>
+<mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>I</mi>
+</mrow></msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi>
+</mrow><mrow><mn>1</mn></mrow></msub><mo>⁢</mo>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>L</mi></mrow>
+</msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow>
+<mrow><mn>1</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>H</mi>
+</mrow></msubsup></mrow></mrow></mtd></mtr><mtr><mtd>
+<mrow><msubsup><mrow><mi>S</mi></mrow><mrow><mi>W</mi>
+<mi>U</mi></mrow><mrow><mi>I</mi></mrow></msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi></mrow><mrow><mn>1</mn></mrow></msub><mo>⁢</mo><msubsup><mrow><mi>S</mi></mrow><mrow><mi>W</mi><mi>U</mi></mrow><mrow>
+<mi>L</mi></mrow></msubsup></mrow><mo>+</mo><mrow>
+<mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub>
+<mrow><mi>F</mi></mrow><mrow><mn>1</mn></mrow></msub>
+</mrow><mo>)</mo></mrow><msubsup><mrow><mo>⁢</mo><mi>S</mi></mrow><mrow><mi>W</mi><mi>U</mi></mrow><mrow>
+<mi>H</mi></mrow></msubsup></mrow></mrow></mtd></mtr>
+<mtr><mtd><mrow><msubsup><mrow><mi>S</mi></mrow><mrow>
+<mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow>
+<mrow><mi>I</mi></mrow></msubsup><mo>=</mo><mrow>
+<msub><mrow><mi>F</mi></mrow><mrow><mn>1</mn></mrow>
+</msub><mo>⁢</mo><msubsup><mrow><mi>S</mi></mrow>
+<mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>L</mi></mrow></msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>1</mn>
+</mrow></msub></mrow><mo>)</mo></mrow><msubsup><mrow>
+<mo>⁢</mo><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi>
+<mi>C</mi><mi>R</mi></mrow><mrow><mi>H</mi></mrow>
+</msubsup></mrow></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>I</mi>
+</mrow></msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi>
+</mrow><mrow><mn>1</mn></mrow></msub><msubsup><mrow>
+<mo>⁢</mo><mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi>
+<mi>C</mi><mi>R</mi></mrow><mrow><mi>L</mi></mrow>
+</msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow>
+<mrow><mn>1</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>H</mi>
+</mrow></msubsup></mrow></mrow></mtd></mtr></mtable>
+</mrow></math> 
+</td><td align="right">[Eq. 206.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mn>1</mn></msub></math> </td>
+
+<td valign="top">is a weighting function which is tabulated as a function of
+the salt concentration, and is defined in the second column of the <a href="../ecl_rm/LSALTFNC.html#LSALTFNC">LSALTFNC</a> keyword.       </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the scaled minimum water saturation for relative permeability.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi><mi>P</mi>
+<mi>C</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled minimum water saturation for oil-water capillary
+pressure.    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi>
+</mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled critical water saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>W</mi><mi>U</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the scaled maximum water saturation. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi>
+<mi>R</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled critical oil saturation in water.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi><mi>C</mi>
+<mi>R</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled critical oil saturation in gas.</td>
+
+</tr>
+
+<tr>
+<td valign="top">superscripts <math>
+<mrow><mi>H</mi></mrow></math>, <math><mrow><mi>L</mi>
+</mrow></math>, <math>
+<mrow><mi>I</mi></mrow></math> </td>
+
+<td valign="top">denote the high, low and interpolated scaled saturation end-points
+respectively. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Lower and upper case subscripts and superscripts are used here
+to signify the table derived and the scaled end-points respectively.</p>
+
+<p>The capillary pressure and relative permeabilities are looked up
+in the high and low salinity saturation tables applying the set of
+scaled end-points shown below. For capillary pressure, only two-point
+scaling is employed:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.endpointscaling.interpolation.eq1"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>P</mi></mrow><mrow><mi>C</mi><mi>O</mi>
+<mi>W</mi></mrow><mrow><mi>H</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>W</mi></mrow></msub>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>W</mi><mi>L</mi><mi>P</mi><mi>C</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>S</mi></mrow><mrow>
+<mi>W</mi><mi>U</mi><mo>⁡</mo></mrow><mrow><mi>I</mi>
+</mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>P</mi></mrow><mrow><mi>C</mi><mi>W</mi></mrow>
+<mrow><mi>H</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr><mtr><mtd><mrow><msubsup>
+<mrow><mtext> </mtext><mi>P</mi></mrow><mrow><mi>C</mi>
+<mi>O</mi><mi>W</mi></mrow><mrow><mi>L</mi></mrow>
+</msubsup><mo>=</mo><mi>f</mi><mo>(</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>W</mi></mrow>
+</msub><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi><mi>P</mi>
+<mi>C</mi></mrow><mrow><mi>I</mi></mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>S</mi></mrow>
+<mrow><mi>W</mi><mi>U</mi><mo>⁡</mo></mrow><mrow>
+<mi>I</mi></mrow></msubsup><mo>,</mo><msubsup><mrow>
+<mtext> </mtext><mi>P</mi></mrow><mrow><mi>C</mi><mi>W</mi></mrow><mrow><mi>L</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr></mtable></mrow>
+</math> 
+</td><td align="right">[Eq. 206.2]
+              </td></tr></tbody></table>
+<p>For the relative permeabilities, two-point or three-point end-point
+scaling is employed according to whether item 1 of the <a href="../ecl_rm/SCALECRS.html#SCALECRS">SCALECRS</a> keyword has been set
+to NO or YES respectively. (Two-point scaling is selected by default
+if this keyword is omitted.) For two-point scaling:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.endpointscaling.2point"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow>
+<mi>H</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>W</mi></mrow></msub><msubsup><mrow><mo>,</mo>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>I</mi></mrow>
+</msubsup><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi>
+<mi>r</mi></mrow><mrow><mi>h</mi></mrow></msubsup><mo>,</mo><mtext> </mtext><msubsup><mrow><mi>S</mi></mrow>
+<mrow><mi>W</mi><mi>U</mi><mo>⁡</mo></mrow><mrow>
+<mi>I</mi></mrow></msubsup><mo>,</mo><msubsup><mrow>
+<mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow><mi>H</mi></mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow>
+<mrow><mi>R</mi><mi>W</mi><mi>R</mi></mrow><mrow>
+<mi>H</mi></mrow></msubsup><mo>)</mo>
+</mrow></mtd></mtr><mtr><mtd><mrow><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow>
+<mi>L</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>W</mi></mrow></msub><msubsup><mrow><mo>,</mo>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>I</mi></mrow>
+</msubsup><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi>
+<mi>r</mi></mrow><mrow><mi>l</mi></mrow></msubsup><mo>,</mo><mtext> </mtext><msubsup><mrow><mi>S</mi></mrow>
+<mrow><mi>W</mi><mi>U</mi><mo>⁡</mo></mrow><mrow>
+<mi>I</mi></mrow></msubsup><mo>,</mo><msubsup><mrow>
+<mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow><mi>L</mi></mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow>
+<mrow><mi>R</mi><mi>W</mi><mi>R</mi></mrow><mrow>
+<mi>L</mi></mrow></msubsup><mo>)</mo>
+</mrow></mtd></mtr><mtr><mtd><mrow><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>G</mi>
+</mrow><mrow><mi>H</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>O</mi><mi>G</mi></mrow></msub>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>O</mi><mi>G</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>g</mi><mi>c</mi><mi>r</mi></mrow><mrow><mi>h</mi>
+</mrow></msubsup><mo>,</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi>
+</mrow></msub><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi></mrow>
+<mrow><mi>H</mi></mrow></msubsup><mo>,</mo><msubsup>
+<mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi>
+<mi>O</mi><mi>R</mi><mi>G</mi></mrow><mrow><mi>H</mi>
+</mrow></msubsup><mo>)</mo></mrow></mtd>
+</mtr><mtr><mtd><mrow><msubsup><mrow><mi>K</mi></mrow>
+<mrow><mi>R</mi><mi>O</mi><mi>G</mi></mrow><mrow>
+<mi>L</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>O</mi><mi>G</mi></mrow></msub><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi><mi>C</mi><mi>R</mi></mrow><mrow>
+<mi>I</mi></mrow></msubsup><msubsup><mrow><mo>,</mo>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>g</mi><mi>c</mi><mi>r</mi></mrow><mrow><mi>h</mi></mrow>
+</msubsup><mo>,</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi>
+</mrow></msub><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi></mrow>
+<mrow><mi>L</mi></mrow></msubsup><mo>,</mo><msubsup>
+<mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi>
+<mi>O</mi><mi>R</mi><mi>G</mi></mrow><mrow><mi>L</mi>
+</mrow></msubsup><mo>)</mo></mrow></mtd>
+</mtr><mtr><mtd><mrow><msubsup><mrow><mi>K</mi></mrow>
+<mrow><mi>R</mi><mi>O</mi><mi>W</mi></mrow><mrow>
+<mi>H</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>O</mi><mi>W</mi></mrow></msub><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow>
+<mi>I</mi></mrow></msubsup><msubsup><mrow><mo>,</mo>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>r</mi></mrow><mrow><mi>h</mi></mrow>
+</msubsup><mo>,</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi>
+</mrow></msub><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi></mrow>
+<mrow><mi>H</mi></mrow></msubsup><mo>,</mo><msubsup>
+<mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi>
+<mi>O</mi><mi>R</mi><mi>W</mi></mrow><mrow><mi>H</mi>
+</mrow></msubsup><mo>)</mo></mrow></mtd>
+</mtr><mtr><mtd><mrow><msubsup><mrow><mi>K</mi></mrow>
+<mrow><mi>R</mi><mi>O</mi><mi>W</mi></mrow><mrow>
+<mi>L</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>O</mi><mi>W</mi></mrow></msub><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow>
+<mi>I</mi></mrow></msubsup><msubsup><mrow><mo>,</mo>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>r</mi></mrow><mrow><mi>l</mi></mrow>
+</msubsup><mo>,</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi>
+</mrow></msub><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi></mrow>
+<mrow><mi>L</mi></mrow></msubsup><mo>,</mo><msubsup>
+<mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi>
+<mi>O</mi><mi>R</mi><mi>W</mi></mrow><mrow><mi>L</mi>
+</mrow></msubsup><mo>)</mo></mrow></mtd>
+</mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 206.3]
+              </td></tr></tbody></table>
+<p>For three-point scaling, the scaled critical water saturation end-point
+is taken from the interpolated value or the respective high and low
+salinity values according to whether the default or the Stone 1 or
+2 three-phase oil relative permeability models has been selected:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.endpointscaling.3point"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow>
+<mi>H</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>W</mi></mrow></msub><msubsup><mrow><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi></mrow><mrow><mi>H</mi></mrow>
+</msubsup><mo>,</mo><mtext> </mtext><mi>S</mi></mrow>
+<mrow><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow>
+<mi>I</mi></mrow></msubsup><msubsup><mrow><mo>,</mo>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>I</mi>
+</mrow></msubsup><mo>,</mo><mtext> </mtext><msubsup>
+<mrow><mi>S</mi></mrow><mrow><mi>W</mi><mi>U</mi>
+<mo>⁡</mo></mrow><mrow><mi>I</mi></mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow>
+<mrow><mi>R</mi><mi>W</mi></mrow><mrow><mi>H</mi>
+</mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi><mi>R</mi>
+</mrow><mrow><mi>H</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow><mi>L</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>W</mi></mrow></msub>
+<msubsup><mrow><msubsup><mrow><mo>,</mo><mtext> </mtext>
+<mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi></mrow>
+<mrow><mi>H</mi></mrow></msubsup><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi>
+<mi>R</mi></mrow><mrow><mi>I</mi></mrow></msubsup>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><mo>,</mo>
+<mtext> </mtext><msubsup><mrow><mi>S</mi></mrow><mrow>
+<mi>W</mi><mi>U</mi><mo>⁡</mo></mrow><mrow><mi>I</mi>
+</mrow></msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi></mrow>
+<mrow><mi>L</mi></mrow></msubsup><mo>,</mo><msubsup>
+<mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi>
+<mi>W</mi><mi>R</mi></mrow><mrow><mi>L</mi></mrow>
+</msubsup><mo>)</mo></mrow></mtd></mtr>
+<mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>G</mi>
+</mrow><mrow><mi>H</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>O</mi><mi>G</mi></mrow></msub>
+<msubsup><mrow><msubsup><mrow><mo>,</mo><mtext> </mtext>
+<mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi></mrow>
+<mrow><mi>I</mi></mrow></msubsup><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi>
+<mi>C</mi><mi>R</mi></mrow><mrow><mi>I</mi></mrow>
+</msubsup><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>G</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>H</mi></mrow></msubsup><mo>,</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi></mrow></msub><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>O</mi></mrow><mrow><mi>H</mi></mrow>
+</msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>R</mi>
+<mi>G</mi></mrow><mrow><mi>H</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>O</mi><mi>G</mi></mrow><mrow><mi>L</mi>
+</mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi>
+<mi>G</mi></mrow></msub><msubsup><mrow><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi></mrow><mrow><mi>I</mi></mrow>
+</msubsup><mo>,</mo><mtext> </mtext><mi>S</mi></mrow>
+<mrow><mi>O</mi><mi>G</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>G</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>H</mi>
+</mrow></msubsup><mo>,</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi>
+</mrow></msub><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi></mrow>
+<mrow><mi>L</mi></mrow></msubsup><mo>,</mo><msubsup>
+<mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi>
+<mi>O</mi><mi>R</mi><mi>G</mi></mrow><mrow><mi>L</mi>
+</mrow></msubsup><mo>)</mo></mrow></mtd>
+</mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 206.4]
+              </td></tr></tbody></table>
+<p>Default three-phase oil relative permeability model:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.endpointscaling.3phase.relperm"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi>
+<mi>W</mi></mrow><mrow><mi>H</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msub><msubsup><mrow><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi>
+</mrow><mrow><mi>H</mi></mrow></msubsup><mo>,</mo>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>I</mi>
+</mrow></msubsup><msubsup><mrow><mo>,</mo><mtext> </mtext>
+<mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><mo>,</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi></mrow></msub><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>O</mi></mrow><mrow><mi>H</mi></mrow>
+</msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>R</mi>
+<mi>W</mi></mrow><mrow><mi>H</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>O</mi><mi>W</mi></mrow><mrow><mi>L</mi>
+</mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi>
+<mi>W</mi></mrow></msub><msubsup><mrow><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi></mrow><mrow><mi>H</mi></mrow>
+</msubsup><mo>,</mo><mtext> </mtext><mi>S</mi></mrow>
+<mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>I</mi>
+</mrow></msubsup><mo>,</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi>
+</mrow></msub><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi></mrow>
+<mrow><mi>L</mi></mrow></msubsup><mo>,</mo><msubsup>
+<mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi>
+<mi>O</mi><mi>R</mi><mi>W</mi></mrow><mrow><mi>L</mi>
+</mrow></msubsup><mo>)</mo></mrow></mtd>
+</mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 206.5]
+              </td></tr></tbody></table>
+<p>Stone 1 and 2 three-phase oil relative permeability models:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.endpointscaling.stone"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi>
+<mi>W</mi></mrow><mrow><mi>H</mi></mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msub><msubsup><mrow><msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi>
+</mrow><mrow><mi>H</mi></mrow></msubsup><mo>,</mo>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>I</mi>
+</mrow></msubsup><msubsup><mrow><mo>,</mo><mtext> </mtext>
+<mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>H</mi></mrow></msubsup><mo>,</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi></mrow></msub><mo>,</mo>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>O</mi></mrow><mrow><mi>H</mi></mrow>
+</msubsup><mo>,</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>R</mi>
+<mi>W</mi></mrow><mrow><mi>H</mi></mrow></msubsup><mo>)</mo></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>R</mi><mi>O</mi><mi>W</mi></mrow><mrow><mi>L</mi>
+</mrow></msubsup><mo>=</mo><mi>f</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi>
+<mi>W</mi></mrow></msub><msubsup><mrow><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi></mrow><mrow><mi>H</mi></mrow>
+</msubsup><mo>,</mo><mtext> </mtext><mi>S</mi></mrow>
+<mrow><mi>O</mi><mi>W</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><msubsup><mrow>
+<mo>,</mo><mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>L</mi>
+</mrow></msubsup><mo>,</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi>
+</mrow></msub><mo>,</mo><msubsup><mrow><mtext> </mtext>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi></mrow>
+<mrow><mi>L</mi></mrow></msubsup><mo>,</mo><msubsup>
+<mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi>
+<mi>O</mi><mi>R</mi><mi>W</mi></mrow><mrow><mi>L</mi>
+</mrow></msubsup><mo>)</mo></mrow></mtd>
+</mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 206.6]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><mi>f</mi>
+</mrow></math> </td>
+
+<td valign="top">signifies the end-point scaling operation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>W</mi></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">is the grid block water saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the oil saturation for oil relative permeability to water.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the oil saturation for oil relative permeability to gas. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi><mi>c</mi><mi>r</mi>
+</mrow></msub></mrow></math> </td>
+
+<td valign="top">is the saturation table derived critical water saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi><mi>w</mi><mi>c</mi>
+<mi>r</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the saturation table derived critical oil in water saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>W</mi><mi>L</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the scaled minimum water saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi>
+<mi>X</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled maximum oil saturation,  <math><mrow>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>M</mi><mi>A</mi><mi>X</mi></mrow></msub><mo>⁢</mo>
+<mo>=</mo><mo>(</mo><mn>1</mn><mrow>
+<mo>-</mo><mtext> </mtext><msubsup><mrow><mi>S</mi>
+</mrow><mrow><mi>W</mi><mi>L</mi></mrow><mrow><mi>I</mi></mrow></msubsup></mrow><mo>-</mo><mtext> </mtext>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi></mrow><mrow><mi>H</mi></mrow></msubsup><mo>)</mo></mrow></math>.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the scaled minimum gas saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>G</mi><mi>C</mi><mi>R</mi>
+</mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled critical gas saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>g</mi><mi>c</mi><mi>r</mi>
+</mrow></msub></mrow></math> </td>
+
+<td valign="top">is the saturation table derived critical gas saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi><mo>⁡</mo>
+</mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled maximum water relative permeability. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi><mi>R</mi>
+<mo>⁡</mo></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled water relative permeability at residual oil saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is scaled maximum oil relative permeability.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>R</mi>
+<mi>G</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled oil relative permeability at residual gas saturation. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>R</mi>
+<mi>W</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled oil relative permeability at residual water saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>C</mi><mi>W</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the scaled maximum oil-water capillary pressure.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Noting that:</p>
+
+<ol>
+<li>For the scaling of both the high and low salinity saturation tables,
+specifically, for the scaling of the relative permeabilities of oil
+to gas and water, only the high salinity minimum and critical scaled
+gas saturations are used.</li>
+
+<li>For two-point scaling, the positioning of the relative permeability
+at residual saturation of the displacing phase is determined by the
+two-point scaled table value of the displacing critical phase saturation
+whereas, for three-point scaling, this is determined by the scaled
+end-point of the displacing phase critical saturation.</li>
+
+<li>For the default three-phase oil relative permeability model, the
+critical water saturation used in the scaling of the high and low
+salinity oil relative permeabilities to water is based upon the interpolated
+value, whereas for the Stone 1 and 2 three-phase oil relative permeability
+models, the scaling is based upon the respective high and low salinity
+values.</li>
+
+</ol>
+
+<p>For the default three-phase oil relative permeability model, the
+oil saturations used to look up the oil relative permeabilities are:<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.endpointscaling.oilsat.lookup"/>
+ <math><mrow><mtable><mtr><mtd><mrow><mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow></msub>
+</mrow><mo>=</mo><mtext> </mtext><mrow><mo>(</mo><mn>1</mn><mo>⁢</mo><mtext> </mtext><mrow><mo>-</mo>
+<mtext> </mtext><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>W</mi></mrow></msub><mo>-</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>G</mi></mrow></msub></mrow>
+<mo>)</mo></mrow></mrow></mtd></mtr><mtr><mtd><mrow>
+<mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi>
+<mi>G</mi></mrow></msub></mrow><mo>=</mo><mtext> </mtext>
+<mrow><mo>(</mo><mn>1</mn><mo>⁢</mo><mtext> </mtext>
+<mrow><mo>-</mo><mtext> </mtext><msub><mrow><mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi></mrow>
+</msub><mo>-</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>G</mi></mrow></msub></mrow><mo>)</mo></mrow>
+</mrow></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 206.7]
+              </td></tr></tbody></table></p>
+
+<p>For the Stone 1 and Stone 2 three-phase oil relative permeability
+models, the oil saturations used to look up the oil relative permeabilities
+are:<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.endpointscaling.oilsat.stone"/>
+ <math><mrow><mtable><mtr><mtd><mrow><mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>W</mi></mrow></msub>
+</mrow><mo>=</mo><mtext> </mtext><mrow><mo>(</mo><mn>1</mn><mo>⁢</mo><mtext> </mtext><mrow><mo>-</mo>
+<mtext> </mtext><msub><mrow><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>W</mi></mrow></msub></mrow><mo>)</mo>
+</mrow></mrow></mtd></mtr><mtr><mtd><mrow><mrow><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>O</mi><mi>G</mi>
+</mrow></msub></mrow><mo>=</mo><mtext> </mtext><mrow>
+<mo>(</mo><mn>1</mn><mo>⁢</mo><mtext> </mtext><mrow>
+<mo>-</mo><mtext> </mtext><msub><mrow><mtext> </mtext>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>G</mi>
+</mrow></msub><mo>-</mo><mtext> </mtext><msubsup><mrow>
+<mtext> </mtext><mi>S</mi></mrow><mrow><mi>W</mi><mi>C</mi><mi>O</mi></mrow><mrow><mi>I</mi></mrow>
+</msubsup></mrow><mo>)</mo></mrow></mrow></mtd></mtr>
+</mtable></mrow></math> 
+</td><td align="right">[Eq. 206.8]
+              </td></tr></tbody></table></p>
+
+<p>Finally, the relative permeabilities and capillary pressure are
+interpolated according to:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.endpointscaling.relperm.cappress"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>W</mi>
+</mrow><mrow><mi>I</mi></mrow></msubsup><mo>=</mo>
+<mrow><msub><mrow><mi>F</mi></mrow><mrow><mn>1</mn>
+</mrow></msub><msubsup><mrow><mtext> </mtext><mi>K</mi>
+</mrow><mrow><mi>R</mi><mi>W</mi></mrow><mrow><mi>L</mi></mrow></msubsup></mrow><mo>+</mo><mrow><mrow>
+<mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>1</mn></mrow></msub></mrow>
+<mo>)</mo></mrow><msubsup><mrow><mi>K</mi></mrow>
+<mrow><mi>R</mi><mi>W</mi></mrow><mrow><mi>H</mi>
+</mrow></msubsup></mrow></mrow></mtd></mtr><mtr><mtd>
+<mrow><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow>
+<mrow><mi>R</mi><mi>O</mi><mi>W</mi></mrow><mrow>
+<mi>I</mi></mrow></msubsup><mo>=</mo><mrow><msub>
+<mrow><mi>F</mi></mrow><mrow><mn>1</mn></mrow></msub>
+<mo>⁢</mo><msubsup><mrow><mtext> </mtext><mi>K</mi>
+</mrow><mrow><mi>R</mi><mi>O</mi><mi>W</mi></mrow>
+<mrow><mi>L</mi></mrow></msubsup></mrow><mo>+</mo>
+<mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mrow><mi>F</mi></mrow><mrow><mn>1</mn></mrow>
+</msub></mrow><mo>)</mo></mrow><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>W</mi>
+</mrow><mrow><mi>H</mi></mrow></msubsup></mrow></mrow>
+</mtd></mtr><mtr><mtd><mrow><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi>
+<mi>G</mi></mrow><mrow><mi>I</mi></mrow></msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi></mrow><mrow><mn>1</mn></mrow></msub><mo>⁢</mo><msubsup><mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi>
+<mi>G</mi></mrow><mrow><mi>L</mi></mrow></msubsup>
+</mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn>
+<mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow>
+<mn>1</mn></mrow></msub></mrow><mo>)</mo></mrow>
+<msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>O</mi><mi>G</mi></mrow><mrow><mi>H</mi></mrow>
+</msubsup></mrow></mrow></mtd></mtr><mtr><mtd><mrow>
+<msubsup><mrow><mi>P</mi></mrow><mrow><mi>C</mi><mi>O</mi><mi>W</mi></mrow><mrow><mi>I</mi></mrow>
+</msubsup><mo>=</mo><mrow><msub><mrow><mi>F</mi>
+</mrow><mrow><mn>2</mn></mrow></msub><msubsup><mrow>
+<mi>P</mi></mrow><mrow><mi>C</mi><mi>O</mi><mi>W</mi>
+</mrow><mrow><mi>L</mi></mrow></msubsup></mrow><mo>+</mo><mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>F</mi></mrow><mrow><mn>2</mn>
+</mrow></msub></mrow><mo>)</mo></mrow><msubsup><mrow>
+<mi>P</mi></mrow><mrow><mi>C</mi><mi>O</mi><mi>W</mi>
+</mrow><mrow><mi>H</mi></mrow></msubsup></mrow></mrow>
+</mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 206.9]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mn>1</mn></msub></math> </td>
+
+<td valign="top">is a weighting function which is tabulated as a function of
+the salt concentration, and is defined in the second column of the <span class="keyword">LSALTFNC</span> keyword.       </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>F</mi>
+<mn>2</mn></msub></math> </td>
+
+<td valign="top">is a weighting function which is tabulated as a function of
+the salt concentration, and is defined in the third column of the <span class="keyword">LSALTFNC</span> keyword. (Note that this defaults to the second
+column if not specified.)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The gas-oil capillary pressure and gas relative permeability are
+assumed to be independent of salinity. For capillary pressure two-point
+scaling is employed:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.endpointscaling.gasoil.cappress"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msub><mrow><mi>P</mi>
+</mrow><mrow><mi>C</mi><mi>O</mi><mi>G</mi></mrow>
+</msub><mo>=</mo><mi>f</mi><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>G</mi>
+</mrow></msub><mo>,</mo><mtext> </mtext><msubsup><mrow>
+<mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi><mi>P</mi>
+<mi>C</mi></mrow><mrow><mi>H</mi></mrow></msubsup><mo>,</mo><mtext> </mtext><msubsup><mrow><mi>S</mi></mrow>
+<mrow><mi>G</mi><mi>U</mi></mrow><mrow><mi>H</mi>
+</mrow></msubsup><mo>,</mo><mtext> </mtext><msubsup>
+<mrow><mi>P</mi></mrow><mrow><mi>C</mi><mi>G</mi>
+</mrow><mrow><mi>H</mi></mrow></msubsup><mo>)</mo></mrow></mrow></mtd></mtr></mtable>
+</mrow></math> 
+</td><td align="right">[Eq. 206.10]
+              </td></tr></tbody></table>
+<p>For gas relative permeability, depending upon the value of item
+1 of the <a href="../ecl_rm/SCALECRS.html#SCALECRS">SCALECRS</a> keyword, either two-point scaling:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.endpointscaling.2point.gaspress"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msub><mrow><mi>K</mi>
+</mrow><mrow><mi>R</mi><mi>G</mi></mrow></msub><mo>=</mo><mi>f</mi><mrow><mo>(</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>G</mi></mrow></msub>
+<mo>,</mo><mtext> </mtext><msubsup><mrow><mi>S</mi>
+</mrow><mrow><mi>G</mi><mi>C</mi><mi>R</mi></mrow>
+<mrow><mi>H</mi></mrow></msubsup><mo>,</mo><msubsup>
+<mrow><mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi>
+<mi>c</mi><mi>r</mi></mrow><mrow><mi>h</mi></mrow>
+</msubsup><mo>,</mo><mtext> </mtext><msubsup><mrow><mi>S</mi></mrow><mrow><mi>G</mi><mi>U</mi></mrow><mrow>
+<mi>H</mi></mrow></msubsup><mo>,</mo><mtext> </mtext>
+<msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>G</mi></mrow><mrow><mi>H</mi></mrow></msubsup><mo>,</mo><mtext> </mtext><msubsup><mrow><mi>K</mi></mrow>
+<mrow><mi>R</mi><mi>G</mi><mi>R</mi></mrow><mrow>
+<mi>H</mi></mrow></msubsup><mo>)</mo>
+</mrow></mrow></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 206.11]
+              </td></tr></tbody></table>
+<p>or three-point scaling is employed:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.endpointscaling.3point.gaspress"/>
+ <math><mrow><mtable><mtr><mtd><mrow><msub><mrow><mi>K</mi>
+</mrow><mrow><mi>R</mi><mi>G</mi></mrow></msub><mo>=</mo><mi>f</mi><mrow><mo>(</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>G</mi></mrow></msub>
+<msubsup><mrow><mo>,</mo><mtext> </mtext><mi>S</mi>
+</mrow><mrow><mi>W</mi><mi>L</mi></mrow><mrow><mi>H</mi></mrow></msubsup><mo>,</mo><mtext> </mtext>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>G</mi><mi>C</mi><mi>R</mi></mrow><mrow><mi>H</mi></mrow>
+</msubsup><mo>,</mo><msubsup><mrow><mi>S</mi></mrow>
+<mrow><mi>O</mi><mi>G</mi><mi>C</mi><mi>R</mi>
+</mrow><mrow><mi>H</mi></mrow></msubsup><mo>,</mo>
+<mtext> </mtext><msubsup><mrow><mi>S</mi></mrow><mrow>
+<mi>G</mi><mi>U</mi></mrow><mrow><mi>H</mi></mrow>
+</msubsup><mo>,</mo><mtext> </mtext><msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>G</mi></mrow><mrow>
+<mi>H</mi></mrow></msubsup><mo>,</mo><mtext> </mtext>
+<msubsup><mrow><mi>K</mi></mrow><mrow><mi>R</mi><mi>G</mi><mi>R</mi></mrow><mrow><mi>H</mi></mrow>
+</msubsup><mo>)</mo></mrow></mrow></mtd>
+</mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 206.12]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>G</mi></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">is the grid block gas saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>G</mi><mi>L</mi><mi>P</mi>
+<mi>C</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled  minimum gas saturation for capillary pressure.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>G</mi><mi>U</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the scaled maximum gas saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi><mi>g</mi><mi>c</mi>
+<mi>r</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the saturation table derived critical oil saturation in
+gas.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>C</mi><mi>G</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the scaled maximum oil-gas capillary pressure.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>G</mi><mo>⁡</mo>
+</mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled maximum gas relative permeability.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>K</mi></mrow><mrow><mi>R</mi><mi>G</mi><mi>R</mi>
+<mo>⁡</mo></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the scaled gas relative permeability at residual oil saturation.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Hence only the high salinity table and high salinity scaled end-points
+are used for modeling the gas saturation functions. If the current
+grid block gas saturation exceeds the maximum high salinity scaled
+gas saturation, the values of gas relative permeability and gas-oil
+capillary pressure are assumed to remain constant at their corresponding
+maximum values.            </p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SEPVALS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SEPVALS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SEPVALS</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="SEPVALS"><a name="SEPVALS"><!-- --></a>
+<h1 class="keyword">SEPVALS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="sepvals.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="sepvals.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2254e45"> x </th>
+
+<th valign="top" id="d2254e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2254e54">  </th>
+
+<th valign="top" id="d2254e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2254e45 d2254e54 ">  </td>
+
+<td valign="top" headers="d2254e48 d2254e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2254e45 d2254e54 ">  </td>
+
+<td valign="top" headers="d2254e48 d2254e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2254e45 d2254e54 ">  </td>
+
+<td valign="top" headers="d2254e48 d2254e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2254e45 d2254e54 ">  </td>
+
+<td valign="top" headers="d2254e48 d2254e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2254e45 d2254e54 ">  </td>
+
+<td valign="top" headers="d2254e48 d2254e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2254e45 d2254e54 ">  </td>
+
+<td valign="top" headers="d2254e48 d2254e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2254e45 d2254e54 ">  </td>
+
+<td valign="top" headers="d2254e48 d2254e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2254e45 d2254e54 "> x </td>
+
+<td valign="top" headers="d2254e48 d2254e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is used firstly to define the initial separator conditions
+in ECLIPSE 100, and subsequently to change them at any time in the
+simulation. It is required if you wish to model the effects of changing
+separator conditions in ECLIPSE 100 runs. The first entry of the keyword
+sets the initial separator conditions. The first entry must be followed
+by the keyword <a href="GSEPCOND.html#GSEPCOND"> GSEPCOND</a>, which allocates groups to separators. Subsequent entries
+of <span class="keyword">SEPVALS</span> can be used to change the conditions
+of one or more separators. When the separator conditions have been
+changed, ECLIPSE transforms the oil and gas flow rates of the wells
+and groups that feed into the separator. The transformed flow rates
+are used for reporting and the application of controls and limits.</p>
+
+<p>The keyword can only be used in black oil runs, that is oil must
+contain dissolved gas, but gas must not contain vaporized oil. There
+must be at least one <a href="TIME.html#TIME"> TIME</a>, <a href="TSTEP.html#TSTEP"> TSTEP</a> or <a href="DATES.html#DATES"> DATES</a> keyword between successive
+entries of <span class="keyword">SEPVALS</span>, in order to register the change
+in conditions.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).
+The set of records must end with a blank record, containing only a
+slash (/).</p>
+
+<ol>
+<li> Name of the separator <p>Up to 8 characters.</p>
+ <p>There can
+be up to <samp class="codeph">NGMAXZ</samp> separators, where <samp class="codeph">NGMAXZ</samp> is the maximum number of groups, entered using keyword <a href="WELLDIMS.html#WELLDIMS"> WELLDIMS</a> in <span class="keyword">RUNSPEC</span>.</p>
+ <p>The separator must be allocated to a group
+with keyword <span class="keyword">GSEPCOND</span>.</p>
+ <p>Separator name roots
+are not allowed. An error message is issued if the name contains an
+asterisk (*).</p>
+ </li>
+
+<li> Formation volume factor (B<sub>ob</sub>) of bubble point oil,
+when flashed from reservoir conditions (P<sub>bub</sub>, T<sub>res</sub>) to stock tank conditions through the separator system. <p>UNITS:
+rm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), rb/stb (<samp class="codeph">FIELD</samp>), rcc/scc (<samp class="codeph">LAB</samp>), rm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li> Solution gas-oil ratio (R<sub>si</sub>) of bubble point oil,
+when flashed from reservoir conditions (P<sub>bub</sub>, T<sub>re</sub>) to stock tank conditions through the separator system. <p>UNITS:
+sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), Mscf/stb
+(<samp class="codeph">FIELD</samp>), scc/scc (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+ <p>End the data record
+with a slash (/).</p>
+</li>
+
+</ol>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<p>See also keywords <span class="keyword">GSEPCOND</span> and <a href="COMPFLSH.html#COMPFLSH"> COMPFLSH</a>.</p>
+
+<div class="section" id="sepvals_example"><a name="sepvals_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>Set initial
+separator conditions:</p>
+<pre><code>SEPVALS
+-- separator name   Bob     Rsi
+    SEP1            1.251   0.510 /
+    SEP2            1.261   0.515 /
+/</code></pre><p>Assign separators to groups:</p>
+<pre><code>GSEPCOND
+-- group name   separator name
+    PLAT-A       SEP1          /
+    PLAT-B       SEP2          /
+/</code></pre><p>Simulate:</p>
+<pre><code>TIME or TSTEP or DATES
+ .
+ . </code></pre><p>Change conditions of SEP1:</p>
+<pre><code>SEPVALS
+-- separator name   Bob    Rsi
+    SEP1            1.276  0.526  /
+/</code></pre><p>Continue simulation:</p>
+<pre><code>TIME or TSTEP or DATES
+ .
+ .</code></pre></div>
+
+<div class="section" id="sepvals_separator_tests"><a name="sepvals_separator_tests"><!-- --></a><h4 class="sectiontitle">Separator tests</h4><p>PVT analysis of a sample of reservoir fluid normally consists
+of three parts:</p>
+<ul>
+<li> A determination of the bubble point pressure, P<sub>bub</sub>. </li>
+
+<li> A differential liberation, to determine the change in fluid properties
+and the amount of gas liberated as the reservoir pressure declines
+from P<sub>bub</sub>. </li>
+
+<li> A separator test, in which the fluid sample is flashed from bubble
+point conditions (P<sub>bub</sub>, T<sub>res</sub>) to stock tank
+conditions through the separator system, at particular sets of separator
+conditions.</li>
+
+</ul>
+<p>The separator test yields the two items required in this keyword.
+The formation volume factor (B<sub>ob</sub>) from the test is the
+ratio of the volume of oil at bubble point conditions to the volume
+of oil that comes through to the stock tank. (Its reciprocal is called
+the shrinkage factor.) The solution gas-oil ratio (R<sub>si</sub>)
+is the volume of gas, at standard conditions, that was removed by
+the separator system from a unit volume of oil in the stock tank.</p>
+<p>The data entered in the <a href="PVTO.html#PVTO"> PVTO</a> keyword is prepared by a combined PVT analysis of the differential
+liberation and separator test results. Thus the values in the <samp class="codeph"><span class="keyword">PVTO</span></samp> tables are specific to a particular
+set of separator conditions. ECLIPSE assumes that the <span class="keyword">PVTO</span> tables were prepared using the original separator conditions, and
+it is up to you to ensure that the first entry of <span class="keyword">SEPVALS</span> contains the values of B<sub>ob</sub> and R<sub>si</sub> from the
+separator test that were used to prepare the tables.</p>
+</div>
+
+<div class="section" id="sepvals_how_eclipse_100_handles_a_change_of_separator_conditions"><a name="sepvals_how_eclipse_100_handles_a_change_of_separator_conditions"><!-- --></a><h4 class="sectiontitle">How ECLIPSE 100 handles a change of separator conditions</h4><p>A change in separator conditions alters the relationship between
+fluid volumes at reservoir conditions and stock tank conditions. The
+differential liberation data (which governs the shape of the <span class="keyword">PVTO</span> table) will of course remain the same. The effect
+of a separator change is to multiply the oil formation volume factors
+by a constant factor, and to change the R<sub>s</sub> values by a
+certain amount.</p>
+<p>In fact, ECLIPSE does not transform the <span class="keyword">PVTO</span> tables. All calculations of fluid flow and material
+balance within the reservoir are performed using the <span class="keyword">PVTO</span> tables as input by the engineer. However, the oil and gas flows
+through the wells are transformed to reflect the change in separator
+conditions.</p>
+<p>Let the original separator test results be B<sub>ob</sub> and R<sub>si</sub>, and the test results using the new separator
+conditions be B<sub>ob</sub>* and R<sub>si</sub>*. If Q<sub>o</sub> and Q<sub>g</sub> are the oil and gas flow rates at the original
+separator conditions (that is using the <span class="keyword">PVTO</span> tables
+as input), then the oil and gas flow rates at the new separator conditions
+will be:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sepvals.equ.00d5"/>
+ <math><mrow><msubsup><mrow>
+<mi>Q</mi></mrow><mrow><mi>o</mi></mrow><mrow><mtext>*</mtext></mrow></msubsup><mo>=</mo><mrow><msub><mrow>
+<mi>T</mi></mrow><mrow><mtext>oil-oil</mtext></mrow>
+</msub><msub><mrow><mi>Q</mi></mrow><mrow><mi>o</mi>
+</mrow></msub></mrow></mrow></math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sepvals.equ.00d8"/>
+ <math><mrow><msubsup><mrow>
+<mi>Q</mi></mrow><mrow><mi>g</mi></mrow><mrow><mtext>*</mtext></mrow></msubsup><mo>=</mo><mrow><msub><mrow>
+<mi>T</mi></mrow><mrow><mtext>gas-oil</mtext></mrow>
+</msub><msub><mrow><mi>Q</mi></mrow><mrow><mi>o</mi>
+</mrow></msub></mrow><mo>+</mo><msub><mrow><mi>Q</mi>
+</mrow><mrow><mi>g</mi></mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 247.2]
+              </td></tr></tbody></table><p>Where the transformation coefficients are:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sepvals.equ.00dc"/>
+ <math><mrow><msub><mrow>
+<mi>T</mi></mrow><mrow><mtext>oil-oil</mtext></mrow>
+</msub><mo>=</mo><mfrac><mrow><msub><mrow><mi>B</mi>
+</mrow><mrow><mi>o</mi><mi>b</mi></mrow></msub></mrow>
+<mrow><msubsup><mrow><mi>B</mi></mrow><mrow><mi>o</mi>
+<mi>b</mi></mrow><mrow><mtext>*</mtext></mrow></msubsup>
+</mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 247.3]
+              </td></tr></tbody></table><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sepvals.equ.00df"/>
+ <math><msub><mi>T</mi>
+<mtext>gas-oil</mtext></msub><mo>=</mo><mrow><msub><mi>T</mi><mtext>oil-oil</mtext></msub><msubsup><mi>R</mi>
+<mrow><mi>s</mi><mi>i</mi></mrow><mtext>*</mtext>
+</msubsup><mo>-</mo><msub><mi>R</mi><mrow><mi>s</mi>
+<mi>i</mi></mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 247.4]
+              </td></tr></tbody></table><p>After a change in separator conditions, the transformation
+coefficients is printed in a table of separator data if you request
+output of the well scheduling data (<a href="RPTSCHED.html#RPTSCHED"> RPTSCHED</a> mnemonic <samp class="codeph">WELSPECS</samp> or switch
+14 &gt; 0).</p>
+<p>The well and group flow rates are transformed for output.
+Well and group flow targets and limits, and economic limits, are applied
+to the transformed rates. The fluids-in-place reports and inter-region
+flows, however, will still be reported at the original separator conditions.</p>
+<p>In tubing head pressure calculations, the flow rates used to look
+up the VFP tables are not transformed to the new separator conditions.
+Thus if the VFP tables were prepared using PVT data at the original
+separator conditions, you will not have to recalculate them after
+a change in separator conditions. As a consequence, however, the pressure
+drops will no longer match the reported flows, since the reported
+flows are transformed to the new separator conditions. A similar policy
+is applied to pipeline pressure drops when using the Network option.
+In any pipeline subordinate to a separator with changed conditions,
+the flows are back-transformed to the original conditions for the
+pressure drop calculation.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

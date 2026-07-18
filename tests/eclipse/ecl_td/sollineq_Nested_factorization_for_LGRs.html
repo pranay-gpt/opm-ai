@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Nested factorization for LGRs"/>
+<meta name="DC.subject" content="Solution of the linear equations nested factorization for LGRs"/>
+<meta name="keywords" content="Solution of the linear equations nested factorization for LGRs"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sollineq_nested_factorization_for_lgrs"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Nested factorization for LGRs</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="H1" id="sollineq_nested_factorization_for_lgrs"><a name="sollineq_nested_factorization_for_lgrs"><!-- --></a>
+<h1 class="topictitle1">Nested factorization for LGRs</h1>
+
+
+ <div>
+<p>The linear equations to be solved take the form</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.01d7"/>
+ <math><mrow><mi>A</mi><mi>x</mi></mrow><mo>=</mo><mi>b</mi></math> 
+</td><td align="right">[Eq. 680.1]
+              </td></tr></tbody></table>
+<p>where  <math><mi>A</mi></math>  is a banded matrix. The banded nature can be expressed
+as</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.01dc"/>
+ <math><mrow><mi>A</mi><mo>=</mo><mi>D</mi><mo>+</mo><mrow><mi>L</mi>
+<mn>1</mn></mrow><mo>+</mo><mrow><mi>U</mi><mn>1</mn>
+</mrow><mo>+</mo><mrow><mi>L</mi><mn>2</mn></mrow>
+<mo>+</mo><mrow><mi>U</mi><mn>2</mn></mrow><mo>+</mo>
+<mrow><mi>L</mi><mn>3</mn></mrow><mo>+</mo><mrow>
+<mi>U</mi><mn>3</mn></mrow><mo>+</mo><mrow><mi>L</mi>
+<mn>4</mn></mrow><mo>+</mo><mrow><mi>U</mi><mn>4</mn>
+</mrow></mrow></math> 
+</td><td align="right">[Eq. 680.2]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mi>D</mi></math> </td>
+
+<td valign="top">  is a diagonal matrix,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>L</mi><mn>1</mn></mrow></math> </td>
+
+<td valign="top"> <math><mrow>
+<mi>L</mi><mn>2</mn></mrow></math>,  <math><mrow><mi>L</mi>
+<mn>3</mn></mrow></math>,  <math><mrow><mi>L</mi>
+<mn>4</mn></mrow></math> are lower bands, and</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p> <math><mrow><mi>U</mi><mn>1</mn></mrow></math>,  <math><mrow><mi>U</mi>
+<mn>2</mn></mrow></math>,  <math><mrow><mi>U</mi>
+<mn>3</mn></mrow></math>,  <math><mrow><mi>U</mi>
+<mn>4</mn></mrow></math>  are upper bands.</p>
+
+<p>The bands  <math>
+<mrow><mi>L</mi><mn>4</mn></mrow></math> and  <math><mrow><mi>U</mi>
+<mn>4</mn></mrow></math>  represent couplings between sub-grids
+and are usually irregular.</p>
+
+<p>In nested factorization, an approximate preconditioner  <math><mi>M</mi></math>  is constructed by the following nested sequence of factorizations:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.01f1"/>
+ <math><mrow><mi>M</mi><mo>=</mo><mrow><mrow><mo>(</mo><mi>B</mi>
+<mo>+</mo><mtext>L4</mtext><mo>)</mo></mrow><msup>
+<mrow><mi>B</mi></mrow><mrow><mo>-</mo><mn>1</mn>
+</mrow></msup><mrow><mo>(</mo><mi>B</mi><mo>+</mo>
+<mtext>U4</mtext><mo>)</mo></mrow></mrow><mo>=</mo>
+<mi>B</mi><mo>+</mo><mtext>L4</mtext><mo>+</mo><mtext>U4</mtext><mo>+</mo><mtext>L4</mtext><mo>⋅</mo><msup>
+<mrow><mi>B</mi></mrow><mrow><mo>-</mo><mn>1</mn>
+</mrow></msup><mo>⋅</mo><mtext>U4</mtext></mrow></math> 
+</td><td align="right">[Eq. 680.3]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.01f4"/>
+ <math><mrow><mi>B</mi><mo>=</mo><mrow><mrow><mo>(</mo><mi>P</mi>
+<mo>+</mo><mtext>L3</mtext><mo>)</mo></mrow><msup>
+<mrow><mi>P</mi></mrow><mrow><mo>-</mo><mn>1</mn>
+</mrow></msup><mrow><mo>(</mo><mi>P</mi><mo>+</mo>
+<mtext>U3</mtext><mo>)</mo></mrow></mrow><mo>=</mo>
+<mi>P</mi><mo>+</mo><mtext>L3</mtext><mo>+</mo><mtext>U3</mtext><mo>+</mo><mtext>L3</mtext><mo>⋅</mo><msup>
+<mrow><mi>P</mi></mrow><mrow><mo>-</mo><mn>1</mn>
+</mrow></msup><mo>⋅</mo><mtext>U3</mtext></mrow></math> 
+</td><td align="right">[Eq. 680.4]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.01f7"/>
+ <math><mrow><mi>P</mi><mo>=</mo><mrow><mrow><mo>(</mo><mi>T</mi>
+<mo>+</mo><mtext>L2</mtext><mo>)</mo></mrow><msup>
+<mrow><mi>T</mi></mrow><mrow><mo>-</mo><mn>1</mn>
+</mrow></msup><mrow><mo>(</mo><mi>T</mi><mo>+</mo>
+<mtext>U2</mtext><mo>)</mo></mrow></mrow><mo>=</mo>
+<mi>T</mi><mo>+</mo><mtext>L2</mtext><mo>+</mo><mtext>U2</mtext><mo>+</mo><mtext>L2</mtext><mo>⋅</mo><msup>
+<mrow><mi>T</mi></mrow><mrow><mo>-</mo><mn>1</mn>
+</mrow></msup><mo>⋅</mo><mtext>U2</mtext></mrow></math> 
+</td><td align="right">[Eq. 680.5]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.01fa"/>
+ <math><mrow><mi>T</mi><mo>=</mo><mrow><mrow><mo>(</mo><mi>G</mi>
+<mo>+</mo><mtext>L1</mtext><mo>)</mo></mrow><msup>
+<mrow><mi>G</mi></mrow><mrow><mo>-</mo><mn>1</mn>
+</mrow></msup><mrow><mo>(</mo><mi>G</mi><mo>+</mo>
+<mtext>U1</mtext><mo>)</mo></mrow></mrow><mo>=</mo>
+<mi>G</mi><mo>+</mo><mtext>L1</mtext><mo>+</mo><mtext>U1</mtext><mo>+</mo><mtext>L1</mtext><mo>⋅</mo><msup>
+<mrow><mi>G</mi></mrow><mrow><mo>-</mo><mn>1</mn>
+</mrow></msup><mo>⋅</mo><mtext>U1</mtext></mrow></math> 
+</td><td align="right">[Eq. 680.6]
+              </td></tr></tbody></table>
+<p>It follows that</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.01fe"/>
+ <math><mrow><mtable>
+<mtr><mtd><mi>M</mi><mo>=</mo><mi>G</mi><mo>+</mo>
+<mtext>L1</mtext><mo>+</mo><mtext>U1</mtext><mo>+</mo>
+<mtext>L2</mtext><mo>+</mo><mtext>U2</mtext><mo>+</mo>
+<mtext>L3</mtext><mo>+</mo><mtext>U3 + L4 + U4</mtext>
+</mtd></mtr><mtr><mtd><mo>+</mo><mrow><mtext>L1</mtext>
+<msup><mrow><mi>G</mi></mrow><mrow><mo>-</mo><mn>1</mn></mrow></msup><mtext>U1</mtext></mrow><mo>+</mo>
+<mrow><mtext>L2</mtext><msup><mrow><mi>T</mi></mrow>
+<mrow><mo>-</mo><mn>1</mn></mrow></msup><mtext>U2</mtext>
+</mrow><mo>+</mo><mrow><mtext>L3</mtext><msup><mrow>
+<mi>P</mi></mrow><mrow><mo>-</mo><mn>1</mn></mrow>
+</msup><mi>U</mi><mn>3</mn></mrow><mo>+</mo><mrow>
+<mi>L</mi><mn>4</mn><msup><mrow><mi>M</mi></mrow>
+<mrow><mo>-</mo><mn>1</mn></mrow></msup><mi>U</mi>
+<mn>4</mn></mrow></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 680.7]
+              </td></tr></tbody></table>
+<p>that results in</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.0202"/>
+ <math><mrow><mi>M</mi><mo>=</mo><mi>A</mi><mo>+</mo><mi>G</mi>
+<mrow><mo>-</mo><mi>D</mi></mrow><mo>+</mo><mrow>
+<mtext>L1</mtext><msup><mi>G</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup><mtext>U1</mtext></mrow><mo>+</mo>
+<mrow><mtext>L2</mtext><msup><mi>T</mi><mrow><mo>-</mo>
+<mn>1</mn></mrow></msup><mtext>U2</mtext></mrow><mo>+</mo><mrow><mtext>L3</mtext><msup><mi>P</mi><mrow>
+<mo>-</mo><mn>1</mn></mrow></msup><mtext>U3+</mtext>
+<mi>L</mi><mn>4</mn><msup><mi>M</mi><mrow><mo>-</mo>
+<mn>1</mn></mrow></msup><mi>U</mi><mn>4</mn></mrow>
+</mrow></math> 
+</td><td align="right">[Eq. 680.8]
+              </td></tr></tbody></table>
+<p>The diagonal matrix  <math><mi>G</mi></math>  is defined as</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.0207"/>
+ <math><mi>G</mi>
+<mo>=</mo><mi>D</mi><mrow><mo>-</mo><mrow><mi>L</mi>
+<mn>1</mn><msup><mi>G</mi><mrow><mo>-</mo><mn>1</mn>
+</mrow></msup><mi>U</mi><mn>1</mn></mrow><mo>-</mo>
+<mrow><mi>r</mi><mi>o</mi><mi>w</mi><mi>s</mi><mi>u</mi><mi>m</mi><mo>(</mo><mrow><mi>L</mi><mn>2</mn>
+<msup><mi>T</mi><mrow><mo>-</mo><mn>1</mn></mrow>
+</msup><mi>U</mi><mn>2</mn></mrow><mo>+</mo><mrow>
+<mi>L</mi><mn>3</mn><msup><mi>P</mi><mrow><mo>-</mo>
+<mn>1</mn></mrow></msup><mi>U</mi><mn>3</mn></mrow>
+<mo>+</mo><mrow><mi>L</mi><mn>4</mn><msup><mi>P</mi>
+<mrow><mo>-</mo><mn>1</mn></mrow></msup><mi>U</mi>
+<mn>4</mn></mrow><mo>)</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 680.9]
+              </td></tr></tbody></table>
+<p>This choice ensures that</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.020b"/>
+ <math><mrow><mi>r</mi><mi>o</mi><mi>w</mi><mi>s</mi><mi>u</mi><mi>m</mi><mo>(</mo><mi>A</mi><mo>)</mo></mrow><mo>=</mo><mrow><mi>r</mi><mi>o</mi><mi>w</mi><mi>s</mi>
+<mi>u</mi><mi>m</mi><mo>(</mo><mi>M</mi><mo>)</mo>
+</mrow></math> 
+</td><td align="right">[Eq. 680.10]
+              </td></tr></tbody></table>
+<p>where rowsum (A) is the diagonal matrix formed by summing the pressure
+coefficients of A in rows.</p>
+
+<p>This ensures that  <math><msup><mi>M</mi>
+<mrow><mo>-</mo><mn>1</mn></mrow></msup></math>  is
+an exact inverse on the sub-space spanned by constant pressure within
+each sub-grid. This technique is described in <cite><span> <a href="biblio_Bibliography.html#linearsolver_wallis">Wallis et al (1985)</a> </span></cite>.</p>
+
+<p>ECLIPSE 100 </p>
+
+<p>In-place LGRs (specified using keyword <a href="../ecl_rm/LGRLOCK.html#LGRLOCK">LGRLOCK</a>) are solved using the
+above technique but with the rowsum constraint for black oil models.</p>
+
+<p>ECLIPSE 300 </p>
+
+<p>For local grid refinements, the factorization
+can be enhanced by inner iterations on specific sub-grids. This technique
+is particularly effective when the inner iterations involve relatively
+small LGRs such as radial refinements. The sub-grid iterations are
+controlled by the <span class="keyword">LSCRITS</span> keywords when using the
+WARP linear solver (see keyword <a href="../ecl_rm/LSCRIT.html#LSCRIT">LSCRIT</a>).</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

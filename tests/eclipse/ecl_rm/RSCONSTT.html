@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="RSCONSTT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="RSCONSTT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>RSCONSTT</title>
+</head>
+<body>
+
+
+<div class="nested0" id="RSCONSTT"><a name="RSCONSTT"><!-- --></a>
+<h1 class="keyword">RSCONSTT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="rsconstt.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="rsconstt.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2126e45"> x </th>
+
+<th valign="top" id="d2126e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2126e54">  </th>
+
+<th valign="top" id="d2126e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2126e45 d2126e54 ">  </td>
+
+<td valign="top" headers="d2126e48 d2126e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2126e45 d2126e54 ">  </td>
+
+<td valign="top" headers="d2126e48 d2126e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2126e45 d2126e54 ">  </td>
+
+<td valign="top" headers="d2126e48 d2126e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2126e45 d2126e54 "> x </td>
+
+<td valign="top" headers="d2126e48 d2126e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2126e45 d2126e54 ">  </td>
+
+<td valign="top" headers="d2126e48 d2126e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2126e45 d2126e54 ">  </td>
+
+<td valign="top" headers="d2126e48 d2126e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2126e45 d2126e54 ">  </td>
+
+<td valign="top" headers="d2126e48 d2126e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2126e45 d2126e54 ">  </td>
+
+<td valign="top" headers="d2126e48 d2126e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword is used to declare that the dead oil associated with
+each individual PVT table region contains a constant and uniform concentration
+of dissolved gas. This provides a more efficient way of modeling black
+oil systems in which there is no free gas and the pressure never falls
+below the bubble point.</p>
+
+<p>The difference between this keyword and <a href="RSCONST.html#RSCONST"> RSCONST</a> is that <span class="keyword">RSCONSTT</span> allows the oil in different PVT table regions to have different
+Rs values. There must be no transmissibility between PVT table regions
+with different Rs values, to prevent oils with different R<sub>s</sub> values from mixing. (If oil is allowed to flow between the regions,
+their R<sub>s</sub> values will change with time, and the reservoir
+must be modeled as live oil system with gas as an active phase.) Similarly,
+no well can be completed in two or more PVT table regions having different
+R<sub>s</sub> values.</p>
+
+<p>The flags for gas and dissolved gas should not be switched on (keywords <a href="GAS.html#GAS"> GAS</a> and <a href="DISGAS.html#DISGAS"> DISGAS</a> in the <span class="keyword">RUNSPEC</span> section), so that gas is not treated in the model as an active phase.
+The system therefore becomes a two-phase or single-phase model, depending
+on whether or not water is present as well as the oil. The oil should
+be treated as dead oil (using keyword <a href="PVDO.html#PVDO"> PVDO</a> to supply its PVT properties). PVT table regions
+are defined using keyword <a href="PVTNUM.html#PVTNUM"> PVTNUM</a>.</p>
+
+<p>The keyword should be followed by <a href="TABDIMS.html#TABDIMS.NTPVT"> NTPVT</a> 
+(set in the <span class="keyword">TABDIMS</span> keyword) lines, one for each PVT table region.</p>
+
+<p>Each line contains two items of data, terminated by a slash (/):</p>
+
+<ol>
+<li>The dissolved gas concentration (R<sub>s</sub>).<p>UNITS: sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), Mscf/stb (<samp class="codeph">FIELD</samp>), scc/scc (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li> The bubble point pressure.<p>The run will terminate if
+the pressure in any grid block in the PVT region falls below this
+value.</p>
+<p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+</ol>
+
+<p>The keyword causes the oil density of each PVT region to be modified
+to include the dissolved gas, and causes the gas flow rate from each
+well to be set equal to its oil flow rate multiplied by the R<sub>s</sub> value associated with the region in which it is completed.
+The group and field gas flows are obtained by summing the well gas
+flows.</p>
+
+<div class="section" id="rsconstt_example"><a name="rsconstt_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTPVT</samp> = 2:</p>
+ <pre><code>RSCONSTT
+ 0.37 1015 /
+ 0.47 1030 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

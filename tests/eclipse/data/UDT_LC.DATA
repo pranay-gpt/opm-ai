@@ -1,0 +1,379 @@
+--------------------------------------------------------------
+-- User Define Table (UDT) example Data Set
+--------------------------------------------------------------
+RUNSPEC     =================================================
+
+DIMENS
+   30   35    5  /
+
+REGDIMS
+5 3 /
+
+
+OIL
+
+WATER
+
+GAS
+
+SKIP300
+DISGAS
+SAVE
+/
+ENDSKIP
+
+SKIP100
+BLACKOIL
+ENDSKIP
+
+FIELD
+
+EQLDIMS
+    1  100   10    1    1 /
+
+TABDIMS
+    1    1   16   12    1   12 /
+
+WELLDIMS
+   24    4    3   24 /
+
+NUPCOL
+    4 /
+
+START
+   1 'JAN' 1986  /
+
+NSTACK
+   24 /
+
+UDQDIMS
+ 12 12 2 2 2 2 0 3 /
+ 
+UDTDIMS
+  2  30  6  3 /
+
+UNIFOUT
+UNIFIN
+
+NOMONITO
+
+UDQPARAM
+ 2 1e19 -1.0 /
+
+ACTDIMS
+6 /
+
+
+SKIP100
+--FMTSAVE
+--MULTSAVE
+1 /
+ENDSKIP
+
+
+GRID    ================================================================
+
+INIT
+
+--     ARRAY  VALUE     ------- BOX ------
+
+EQUALS
+      'DX'     700      /
+      'DY'     700      /
+      'PORO'  0.2       /
+      'PERMX' 500       /
+      'TOPS'  5000      1  30  1  35  1  1  /
+
+      'DZ'    50        1  30  1  35  1  4  /
+      'DZ'   100        1  30  1  35  5  5  /
+
+      'PORO' 0.0       29  30  1  35  1  1 /
+      'PORO' 0.0       28  28  1  16  1  1 /
+      'PORO' 0.0       28  28  19 35  1  1 /
+
+/       EQUALS IS TERMINATED BY A NULL RECORD
+
+-- THE Y AND Z DIRECTION PERMEABILITIES ARE COPIED FROM PERMX
+--    SOURCE  DESTINATION  ------- BOX ------
+COPY
+      'PERMX'    'PERMY'   /
+      'PERMX'    'PERMZ'   /
+/
+
+MULTIPLY
+  'PERMZ' 0.1 /
+  /
+
+PROPS   ***************************************************************
+
+
+SWFN
+    .25       .00       .0
+    .75       .80       .0
+   1.0       1.0        .0
+  /
+
+SOF3
+    .00       .00    .00
+    .25       .00    .00
+    .75      0.8     .80
+  /
+
+SGFN
+    .00       .00    .0
+    .05       .00    .0
+    .75      1.00    .0
+  /
+
+RPTPROPS
+  8*0 /
+
+DENSITY
+        49.94    62.43    0.061    /
+
+ROCK
+        4000   4.0E-6   /
+
+PVTW
+        4000   1.00    3.0E-6     0.50   0   /
+
+PVTO
+0.165   400  1.012   .40  /
+0.335   800  1.0255  .39  /
+0.500  1200  1.038   .38  /
+0.665  1600  1.051   .37  /
+0.828  2000  1.063   .36  /
+0.985  2400  1.075   .35  /
+1.130  2800  1.087   .34
+       3200  1.080   .35
+       3600  1.074   .36
+       4000  1.068   .37
+       4400  1.062   .38  /
+/
+
+PVDG
+ 400  5.90  0.013
+ 800  2.95  0.0135
+1200  1.96  0.014
+1600  1.47  0.0145
+2000  1.18  0.015
+2400  0.98  0.0155
+2800  0.84  0.016
+3200  0.74  0.0165
+3600  0.65  0.017
+4000  0.56  0.0175
+4400  0.51  0.018
+/
+
+REGIONS *************************************************************
+
+EQUALS
+FIPNUM       1       1  30  1  35   1  1  /
+FIPNUM       2       1  30  1  35   2  2  /
+FIPNUM       3       1  30  1  35   3  3  /
+FIPNUM       4       1  30  1  35   4  4  /
+FIPNUM       5       1  30  1  35   5  5  /
+/
+
+FIPONE
+5250*1 /
+
+EQUALS
+FIPONE       1        1   6  1  35   1  5  /
+FIPONE       2        7  12  1  35   1  5  /
+FIPONE       3       13  18  1  35   1  5  /
+FIPONE       4       19  24  1  35   1  5  /
+FIPONE       5       25  30  1  35   1  5  /
+/
+
+FIPTWO
+5250*1 /
+
+
+EQUALS
+FIPTWO       1        1  30   1   7   1  5  /
+FIPTWO       2        1  30   8  14   1  5  /
+FIPTWO       3        1  30  15  21   1  5  /
+FIPTWO       4        1  30  22  28   1  5  /
+FIPTWO       5        1  30  29  35   1  5  /
+/
+
+
+SOLUTION  ==============================================================
+
+EQUIL      1 TABLES   10 NODES IN EACH           FIELD   23:34 15 SEP 85
+  5040.0 3600.00 5200.00  .00000 4040.00  .00000     1      0       0 /
+
+RSVD
+4000 1.13
+6000 1.13 / 
+
+RPTRST
+BASIC=2 /
+
+
+SUMMARY    ===============================================================
+WUPRICE
+/
+RUNSUM
+SEPARATE
+FOPR 
+GOPR 
+/
+WOPR 
+/
+FOPT 
+GOPT 
+/
+WOPT
+/
+FWPR 
+GWPR 
+/
+WWPR 
+/
+FWPT 
+GWPT 
+/
+WWPT
+/
+FWIR 
+GWIR 
+/
+WWIR 
+/
+FWIT 
+GWIT 
+/
+WWIT
+/
+FGPR 
+GGPR
+/ 
+WGPR
+/ 
+FGPT 
+GGPT
+/ 
+WGPT
+/
+FGIR 
+GGIR
+/ 
+WGIR
+/ 
+FGIT 
+GGIT
+/ 
+WGIT
+/
+FVPR 
+GVPR
+/ 
+WVPR
+/ 
+FVPT 
+GVPT
+/ 
+WVPT
+/
+FVIR 
+GVIR
+/ 
+WVIR
+/ 
+FVIT 
+GVIT
+/ 
+WVIT
+/
+FWCT 
+GWCT
+/ 
+WWCT
+/ 
+FGOR 
+GGOR
+/ 
+WGOR
+/
+FWGR 
+GWGR
+/ 
+WWGR
+/
+WBHP
+/ 
+WTHP
+/ 
+WPI
+/
+FOIP 
+FOIPL 
+FOIPG
+FWIP
+FGIP 
+FGIPL 
+FPR
+FAQR
+FAQRG 
+
+FAQT
+FAQTG 
+
+MSUMLINS
+
+MSUMNEWT
+
+SCHEDULE ===============================================================
+
+--Design two dimension UDT table
+--LC linearly interpolate within the table.
+--Following UDQ define the reference variable
+--The table will be like this
+--     WOPR  4000 6000 8000 10000
+-- WWPR
+--   1        15   25 35 45
+--  100       38   48 58 68
+--  1000      57   67 77 87
+-- 10000      64   73 83 93
+
+UDT
+'TUCATH' 2  /
+'LC'  4000 6000 8000 10000  /
+'LC'  1 100 1000 10000 /
+15 25 35 45 /
+38 48 58 68 /
+57 67 77 87 /
+64 73 83 93 /
+/
+/
+WELSPECS
+    'P12'      'G1'    10 12   1*   'OIL'  /
+    'P16'      'G1'    10 16   1*   'OIL'  /
+    'P20'      'G2'    10 20   1*   'OIL'  /
+    'P24'      'G2'    10 24   1*   'OIL'  /
+/
+
+COMPDAT
+    'P12' 2*  1  2  'OPEN' 0   -1   0.5  /
+    'P16' 2*  2  3  'OPEN' 0   -1   0.5  /
+    'P20' 2*  3  4  'OPEN' 0   -1   0.5  /
+    'P24' 2*  4  5  'OPEN' 0   -1   0.5  /
+    /
+
+WCONPROD
+     'P12' 'OPEN' 'ORAT'  6000  4*  1000 /
+     'P16' 'OPEN' 'ORAT' 10000  4*  1000 /
+     'P20' 'OPEN' 'ORAT'  8000  4*  1000 /
+     'P24' 'OPEN' 'ORAT'  4000  4*  1000 /
+  /
+
+UDQ
+DEFINE WUPRICE TUCATH[WOPR,WWPR]  /
+/
+
+TSTEP
+ 20*10 /
+
+END  

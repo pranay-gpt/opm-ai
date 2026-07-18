@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Generalized minimum residual method (GMRES)"/>
+<meta name="DC.subject" content="Solution of the linear equations, Solution of the linear equations generalized minimum residual method (GMRES), GMRES method"/>
+<meta name="keywords" content="Solution of the linear equations, Solution of the linear equations generalized minimum residual method (GMRES), GMRES method"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sollineq_generalized_minimum_residual_method__gmres_"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Generalized minimum residual method (GMRES)</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="sollineq_generalized_minimum_residual_method__gmres_"><a name="sollineq_generalized_minimum_residual_method__gmres_"><!-- --></a>
+<h1 class="topictitle1">Generalized minimum residual method (GMRES)</h1>
+
+
+ <div>
+<p>The preconditioned GMRES method is mathematically equivalent to
+the Orthomin method. However, it has better numerical properties and
+involves less computational work, so it is generally preferred over
+Orthomin and is used for the WARP solver. The GMRES method for solving
+ <math><mrow><mi>A</mi><mi>x</mi></mrow><mo>=</mo><mi>b</mi></math>   can be summarized as follows:</p>
+
+<div class="section"><h4 class="sectiontitle">Initialization</h4><p>Set initial residual</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="solineq.gmres.initial.eq"/>
+ <math><mrow><mtable>
+<mtr><mtd><msub><mrow><mi>r</mi></mrow><mrow><mn>0</mn></mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext>
+<mi>b</mi><mo>,</mo></mtd><mtd><mi>β</mi><mo>⁢</mo>
+<mo>=</mo><mtext> </mtext><mrow><mo>‖</mo><msub><mrow>
+<msub><mrow><mi>r</mi></mrow><mrow><mn>0</mn></mrow>
+</msub><mo>‖</mo></mrow><mrow><mn>2</mn></mrow></msub>
+<mo>⁢</mo><mtext> </mtext><mo>,</mo></mrow></mtd><mtd>
+<msub><mrow><mi>υ</mi></mrow><mrow><mn>1</mn></mrow>
+</msub><mo>⁢</mo><mo>=</mo><mtext> </mtext><msub>
+<mrow><mi>r</mi></mrow><mrow><mn>0</mn></mrow></msub>
+<mo>/</mo><mi>β</mi></mtd></mtr></mtable></mrow>
+</math> 
+</td><td align="right">[Eq. 684.1]
+              </td></tr></tbody></table></div>
+
+<div class="section"><h4 class="sectiontitle">Iteration</h4><p>For k = 1,2,... until convergence,
+do</p>
+<p>Search direction<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.02a9"/>
+ <math><msub><mi>u</mi><mi>k</mi></msub><mo>=</mo><mrow><msup><mi>M</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup><msub>
+<mi>υ</mi><mi>k</mi></msub></mrow></math> 
+</td><td align="right">[Eq. 684.2]
+              </td></tr></tbody></table></p>
+<p>Matrix multiply:<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.02ac"/>
+ <math><mi>w</mi>
+<mo>=</mo><mrow><mi>A</mi><msub><mi>u</mi><mi>k</mi>
+</msub></mrow></math> 
+</td><td align="right">[Eq. 684.3]
+              </td></tr></tbody></table></p>
+<p>Orthogonalize:<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.02af"/>
+ <math><mrow><mtable><mtr><mtd><msub><mrow><mi>h</mi></mrow>
+<mrow><mi>i</mi><mo>,</mo><mi>k</mi></mrow></msub>
+<mo>=</mo><mrow><mo>(</mo><mi>w</mi><mo>⋅</mo><mrow>
+<msub><mrow><mi>υ</mi></mrow><mrow><mi>i</mi></mrow>
+</msub></mrow><mo>)</mo></mrow></mtd></mtr><mtr><mtd>
+<mi>w</mi><mo>=</mo><mi>w</mi><mo>⁢</mo><mo>−</mo>
+<mtext> </mtext><munderover><mrow><mi>Σ</mi></mrow><mrow><mi>i</mi><mo>⁢</mo><mo>=</mo>
+<mtext> </mtext><mn>1</mn></mrow><mrow><mi>k</mi>
+</mrow></munderover><msub><mrow><mi>h</mi></mrow><mrow>
+<mi>i</mi><mo>,</mo><mtext> </mtext><mi>k</mi></mrow>
+</msub><mo>⁢</mo><mtext> </mtext><msub><mrow><mi>υ</mi>
+</mrow><mrow><mi>i</mi></mrow></msub></mtd></mtr>
+</mtable></mrow></math> 
+</td><td align="right">[Eq. 684.4]
+              </td></tr></tbody></table></p>
+<p>Normalize: <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.02b2"/>
+ <math><mrow><mtable><mtr><mtd><msub><mrow><mi>h</mi></mrow>
+<mrow><mi>k</mi><mo>+</mo><mn>1</mn><mo>,</mo>
+<mtext> </mtext><mi>k</mi></mrow></msub><mo>=</mo>
+<mrow><msub><mrow><mo>‖</mo><mi>w</mi><mo>‖</mo>
+</mrow><mrow><mn>2</mn></mrow></msub></mrow></mtd>
+</mtr><mtr><mtd><msub><mrow><mi>υ</mi></mrow><mrow>
+<mi>k</mi><mo>⁢</mo><mo>+</mo><mtext> </mtext><mn>1</mn></mrow></msub><mo>=</mo><mfrac><mrow><mi>w</mi>
+</mrow><mrow><msub><mrow><mi>h</mi></mrow><mrow><mi>k</mi><mo>+</mo><mn>1</mn><mo>,</mo><mi>k</mi>
+</mrow></msub></mrow></mfrac></mtd></mtr></mtable>
+</mrow></math> 
+</td><td align="right">[Eq. 684.5]
+              </td></tr></tbody></table></p>
+<p>Solution: <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.02b5"/>
+ <math><mrow><msub>
+<mrow><mi>x</mi></mrow><mrow><mi>k</mi></mrow></msub>
+<mo>=</mo><mrow><munderover><mrow><mi>Σ</mi></mrow><mrow><mi>i</mi><mo>⁢</mo><mo>=</mo>
+<mtext> </mtext><mn>1</mn></mrow><mrow><mi>k</mi>
+</mrow></munderover><mrow><msub><mrow><mi>α</mi></mrow>
+<mrow><mi>i</mi></mrow></msub><mo>⁢</mo><mtext> </mtext>
+<msub><mrow><mi>u</mi></mrow><mrow><mi>i</mi></mrow>
+</msub></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 684.6]
+              </td></tr></tbody></table></p>
+<p>where the  <math><msub><mi>α</mi>
+<mi>i</mi></msub></math>  are chosen to minimize the residual
+ <math><msub><mrow>
+<mrow><mo>‖</mo><mi>b</mi><mrow><mo>-</mo><mrow><mi>A</mi><msub><mi>x</mi><mi>k</mi></msub></mrow></mrow>
+<mo>‖</mo></mrow></mrow><mn>2</mn></msub></math> 
+       </p>
+<p>For complete implementation details see <cite><span> <a href="biblio_Bibliography.html#biblio_16837">Saad (1996)</a> </span></cite>.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

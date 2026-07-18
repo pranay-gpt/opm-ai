@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Grid data"/>
+<meta name="DC.subject" content="GRIDFILE options"/>
+<meta name="keywords" content="GRIDFILE options"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="grid_grid_data"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Grid data</title>
+</head>
+<body>
+
+
+<div class="H1" id="grid_grid_data"><a name="grid_grid_data"><!-- --></a>
+<h1 class="topictitle1">Grid data</h1>
+
+
+ <div>
+<p>The contents of the grid file depend on the <samp class="codeph">GRIDFILE</samp> option set for the ECLIPSE run. If the <samp class="codeph">GRIDFILE</samp> option is set to 1, only active global cells are written to the
+grid geometry file. If the <samp class="codeph">GRIDFILE</samp> option is set
+to 2 in the <samp class="codeph">GRID</samp> section of the ECLIPSE input data,
+additional data are written out, defining local grid refinements and
+coarsening groups. The coordinates of any inactive cells are also
+written out when <samp class="codeph">GRIDFILE</samp> option 2 is selected.</p>
+
+<p>The grid file contents are arranged as follows:</p>
+
+<ol>
+<li> <samp class="codeph">DIMENS</samp> array for global grid </li>
+
+<li> <samp class="codeph">RADIAL</samp> flag (optional) </li>
+
+<li> <samp class="codeph">BOXORIG</samp> array (optional) </li>
+
+<li> <samp class="codeph">MAPUNITS</samp> keyword (optional) </li>
+
+<li> <samp class="codeph">MAPAXES</samp> array (optional) </li>
+
+<li> <samp class="codeph">GRIDUNIT</samp> array </li>
+
+<li> <samp class="codeph">GDORIENT</samp> keyword (optional) </li>
+
+<li> For each global grid cell: <ol type="a">
+<li> <samp class="codeph">COORDS</samp> array </li>
+
+<li> <samp class="codeph">CORNERS</samp> array </li>
+
+</ol>
+ </li>
+
+<li> For each local grid: <ol type="a">
+<li> <samp class="codeph">LGR</samp> keyword </li>
+
+<li> <samp class="codeph">LGRILG</samp> array </li>
+
+</ol>
+ </li>
+
+<li> <samp class="codeph">DIMENS</samp> array for local grid </li>
+
+<li> <samp class="codeph">BOXORIG</samp> array (optional) </li>
+
+<li> <samp class="codeph">RADIAL</samp> flag for local grid </li>
+
+<li> For each local grid cell: <ol type="a">
+<li> <samp class="codeph">COORDS</samp> array </li>
+
+<li> <samp class="codeph">CORNERS</samp> array </li>
+
+</ol>
+ </li>
+
+<li> Non-neighbor connection data for the global grid and for each
+local grid (optional): </li>
+
+<li> <samp class="codeph">NNCHEAD</samp> array </li>
+
+<li> <samp class="codeph">NNC1</samp> array </li>
+
+<li> <samp class="codeph">NNC2</samp> array </li>
+
+<li> <samp class="codeph">NNCL</samp> array (For LGRs only) </li>
+
+<li> <samp class="codeph">NNCG</samp> array (For LGRs only) </li>
+
+<li> <samp class="codeph">NNCHEADA</samp> keyword </li>
+
+<li> <samp class="codeph">NNA1</samp> array (For amalgamated LGRs only) </li>
+
+<li> <samp class="codeph">NNA2</samp> array (For amalgamated LGRs only) </li>
+
+</ol>
+
+<p>The <samp class="codeph">MAPUNITS</samp> keyword, and the <samp class="codeph">MAPAXES</samp> and <samp class="codeph">GRIDUNIT</samp> arrays can be used when reloading
+a simulation grid file into FloGrid.</p>
+
+<p>For a dual porosity model, the grid is set up with the first <samp class="codeph">(NX*NY*NZ)/2</samp> cells defining the matrix blocks and the next <samp class="codeph">(NX*NY*NZ)/2</samp> cells defining the fracture cells.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Grid cells need not be in natural order (such as the output
+from parallel runs may be in mixed order, depending on which process
+wrote data first.)</span></div>
+
+
+<div class="tablenoborder"><a name="grid.tab.006c"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="grid.tab.006c" frame="border" border="1" rules="all"><caption>
+           Table 17.1  Grid file keywords </caption>    
+<thead align="left">
+<tr>
+<th valign="top" id="d30e262"> Keyword </th>
+
+<th valign="top" id="d30e265"> No. of Items </th>
+
+<th valign="top" id="d30e268"> Data Type </th>
+
+<th valign="top" id="d30e271"> Contents </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">DIMENS</samp> </td>
+
+<td valign="top" headers="d30e265 "> 3 </td>
+
+<td valign="top" headers="d30e268 "> INTE </td>
+
+<td valign="top" headers="d30e271 "> Grid dimensions, NX,NY,NZ </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">RADIAL</samp> </td>
+
+<td valign="top" headers="d30e265 "> 1 </td>
+
+<td valign="top" headers="d30e268 "> CHAR </td>
+
+<td valign="top" headers="d30e271 "> Set to TRUE or FALSE to indicate whether grid
+is radial </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">BOXORIG</samp> </td>
+
+<td valign="top" headers="d30e265 "> 3 </td>
+
+<td valign="top" headers="d30e268 "> INTE </td>
+
+<td valign="top" headers="d30e271 "> For a subset of a full grid or LGR, output by
+the Extract program, the box origin IX,IY,IZ relative to the original
+grid. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">MAPUNITS</samp> </td>
+
+<td valign="top" headers="d30e265 "> 1 </td>
+
+<td valign="top" headers="d30e268 "> CHAR </td>
+
+<td valign="top" headers="d30e271 "> Units used for the <samp class="codeph">MAPAXES</samp> data
+(for example METRES). </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">MAPAXES</samp> </td>
+
+<td valign="top" headers="d30e265 "> 6 </td>
+
+<td valign="top" headers="d30e268 "> REAL </td>
+
+<td valign="top" headers="d30e271 "> Axes defining grid position relative to map coordinates: <p>(a) X-coordinate of end of Y-axis</p>
+<p>(b) Y-coordinate of end of
+Y-axis</p>
+<p>(c) X-coordinate of origin</p>
+<p>(d) Y-coordinate of
+origin</p>
+<p>(e) X-coordinate of end of X-axis</p>
+<p>(f) Y-coordinate
+of end of X-axis</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">GRIDUNIT</samp> </td>
+
+<td valign="top" headers="d30e265 "> 2 </td>
+
+<td valign="top" headers="d30e268 "> CHAR </td>
+
+<td valign="top" headers="d30e271 "> Units used for grid x,y,z data, with flag indicating
+whether these were output in map or grid coordinates. <p>(a) Units
+(for example METRES)</p>
+<p>(b) MAP or MAPFT if map coordinates used,
+blank otherwise.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">GDORIENT</samp> </td>
+
+<td valign="top" headers="d30e265 "> 5 </td>
+
+<td valign="top" headers="d30e268 "> CHAR </td>
+
+<td valign="top" headers="d30e271 "> Grid orientation <p>(a) Property ordering in
+I direction</p>
+<p>(b) Property ordering in J direction</p>
+<p>(c) Property
+ordering in K direction</p>
+<p>(d) Z-direction</p>
+<p>(e) Grid handedness</p>
+<p>See the <span class="keyword">GDORIENT</span> keyword in the <cite>ECLIPSE
+Reference Manual</cite> for more details.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">COORDS</samp> </td>
+
+<td valign="top" headers="d30e265 "> 4 </td>
+
+<td valign="top" headers="d30e268 ">INTE</td>
+
+<td valign="top" headers="d30e271 "> All cells active <p>(a) Cell coordinates, IX,IY,IZ</p>
+<p>(b) Cell number, ICELL</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> or </td>
+
+<td valign="top" headers="d30e265 "> 5 </td>
+
+<td valign="top" headers="d30e268 ">INTE</td>
+
+<td valign="top" headers="d30e271 "> Only specified cells active <p>(a) Cell coordinates,
+IX,IY,IZ</p>
+<p>(b) Cell number, ICELL</p>
+<p>(c) Active cell indicator
+(0 - inactive, 1 - active)</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> or </td>
+
+<td valign="top" headers="d30e265 "> 7 </td>
+
+<td valign="top" headers="d30e268 ">INTE</td>
+
+<td valign="top" headers="d30e271 "> Only specified cells active <p>(a) Cell coordinates
+IX,IY,IZ</p>
+<p>(b) Cell number, ICELL</p>
+<p>(c) Active cell indicator
+(0 - inactive, 1 - active)</p>
+<p>(d) Host cell number, for an LGR</p>
+<p>(e) For a coarsened cell, the coarsening group number (or for
+compressed VE cases, the cell at the top of the compressed VE column).</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">CORNERS</samp> </td>
+
+<td valign="top" headers="d30e265 "> 24 </td>
+
+<td valign="top" headers="d30e268 "> REAL </td>
+
+<td valign="top" headers="d30e271 "> Corner point position array, RC(3,0:1,0:1,0:1)
+where RC(IDIR,IPOS,JPOS,KPOS) is the value of coordinate IDIR (1=x,
+2=y, 3=z) at the cell corner specified by IPOS, JPOS, KPOS. The corner
+positions are 0 or 1. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">LGR</samp> </td>
+
+<td valign="top" headers="d30e265 "> 1 </td>
+
+<td valign="top" headers="d30e268 "> CHAR </td>
+
+<td valign="top" headers="d30e271 "> LGR name </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> or </td>
+
+<td valign="top" headers="d30e265 "> 2 </td>
+
+<td valign="top" headers="d30e268 "> CHAR </td>
+
+<td valign="top" headers="d30e271 "> Local grid identification for nested LGR model
+(used in ECLIPSE 300): <p>Item 1 - LGR name</p>
+<p>Item 2 - name of
+parent LGR (or GLOBAL if parent is the global grid) If only the name
+of the LGR is defined, it will be assumed that the global grid is
+the parent.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">LGRILG</samp> </td>
+
+<td valign="top" headers="d30e265 "> 11 </td>
+
+<td valign="top" headers="d30e268 "> INTE</td>
+
+<td valign="top" headers="d30e271 "> Integer parameters for LGR: <p>Item 1 - NTHETA
+(=0 for non-radial, =1, 4 or 8 for radial LGR)</p>
+<p>Items 2 to 7
+define the LGR position in the host grid:</p>
+<p>Item 2 - Lower I-index
+in host</p>
+<p>Item 3 - Lower J-index in host</p>
+<p>Item 4 - Lower
+K-index in host</p>
+<p>Item 5 - Upper K-index in host</p>
+<p>Item 6
+- Upper J-index in host</p>
+<p>Item 7 - Upper I-index in host</p>
+<p>Item 8 - Max wells in LGR</p>
+<p>Item 9 - NX for local grid</p>
+<p>Item 10 - NY for local grid</p>
+<p>Item 11 - NZ for local grid</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">NNCHEAD</samp> </td>
+
+<td valign="top" headers="d30e265 "> 10 </td>
+
+<td valign="top" headers="d30e268 ">INTE</td>
+
+<td valign="top" headers="d30e271 "> Non-neighbor connection header. (This excludes
+NNCs between two amalgamated LGRs, which are reported by <samp class="codeph">NNCHEADA</samp>.) <p>Item 1 - NUMNNC = number of NNCs</p>
+<p>Item 2 - LGR number
+(0 for global grid)</p>
+<p>Items 3-10 - Spare</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">NNC1</samp> </td>
+
+<td valign="top" headers="d30e265 "> <samp class="codeph">NUMNNC</samp> </td>
+
+<td valign="top" headers="d30e268 ">INTE</td>
+
+<td valign="top" headers="d30e271 "> Upstream cell numbers for non-neighbor connections. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">NNC2</samp> </td>
+
+<td valign="top" headers="d30e265 "> <samp class="codeph">NUMNNC</samp> </td>
+
+<td valign="top" headers="d30e268 ">INTE</td>
+
+<td valign="top" headers="d30e271 "> Downstream cell numbers for non-neighbor connections. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">NNCL</samp> </td>
+
+<td valign="top" headers="d30e265 "> <samp class="codeph">NCONGL</samp> </td>
+
+<td valign="top" headers="d30e268 ">INTE</td>
+
+<td valign="top" headers="d30e271 "> Integer LGR cell numbers, identifying the local
+cells connected to global grid. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">NNCG</samp> </td>
+
+<td valign="top" headers="d30e265 "> <samp class="codeph">NCONGL</samp> </td>
+
+<td valign="top" headers="d30e268 ">INTE</td>
+
+<td valign="top" headers="d30e271 "> Integer global cell numbers, identifying cells
+connected to the local grid cells given by the NNCL array. (No of
+connections = NCONGL.) </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">NNCHEADA</samp> </td>
+
+<td valign="top" headers="d30e265 "> 10 </td>
+
+<td valign="top" headers="d30e268 ">INTE</td>
+
+<td valign="top" headers="d30e271 "> Header for NNCs between two amalgamated LGRs: <p>Item 1 - ILOC1 = index of first LGR</p>
+<p>Item 2 - ILOC2 = index
+of second LGR</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">NNA1</samp> </td>
+
+<td valign="top" headers="d30e265 "> <samp class="codeph">NUMNCA</samp> </td>
+
+<td valign="top" headers="d30e268 ">INTE</td>
+
+<td valign="top" headers="d30e271 "> Cell numbers in connecting local grid ILOC1 </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d30e262 "> <samp class="codeph">NNA2</samp> </td>
+
+<td valign="top" headers="d30e265 "> <samp class="codeph">NUMNCA</samp> </td>
+
+<td valign="top" headers="d30e268 ">INTE</td>
+
+<td valign="top" headers="d30e271 "> Cell numbers in connecting local grid ILOC2 </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GSWINGF"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GSWINGF"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GSWINGF</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GSWINGF"><a name="GSWINGF"><!-- --></a>
+<h1 class="keyword">GSWINGF</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gswingf.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gswingf.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d956e45"> x </th>
+
+<th valign="top" id="d956e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d956e54"> x </th>
+
+<th valign="top" id="d956e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d956e45 d956e54 ">  </td>
+
+<td valign="top" headers="d956e48 d956e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d956e45 d956e54 ">  </td>
+
+<td valign="top" headers="d956e48 d956e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d956e45 d956e54 ">  </td>
+
+<td valign="top" headers="d956e48 d956e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d956e45 d956e54 ">  </td>
+
+<td valign="top" headers="d956e48 d956e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d956e45 d956e54 ">  </td>
+
+<td valign="top" headers="d956e48 d956e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d956e45 d956e54 ">  </td>
+
+<td valign="top" headers="d956e48 d956e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d956e45 d956e54 ">  </td>
+
+<td valign="top" headers="d956e48 d956e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d956e45 d956e54 "> x </td>
+
+<td valign="top" headers="d956e48 d956e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">GSWINGF</span> keyword is used in place of <a href="SWINGFAC.html#SWINGFAC">  SWINGFAC</a> to turn on
+the Gas Field Operations Model in the Multiple Contract Groups mode.
+This allows two or more separate groups to have their own independent
+gas supply contracts. Each contract group has its own set of swing
+factors and profile factors, and its own DCQ value which ECLIPSE will
+adjust independently to meet the swing requirement if requested to
+do so in the <a href="GASYEAR.html#GASYEAR">  GASYEAR</a>, <a href="GASPERIO.html#GASPERIO">  GASPERIO</a> and <a href="GDCQ.html#GDCQ">  GDCQ</a> keywords.</p>
+
+<p>The <span class="keyword">GSWINGF</span> keyword is used to identify the
+contract groups and supply their swing and profile factors. The following
+features of the Gas Field Operations Model are also activated when
+either <span class="keyword">GSWINGF</span> or <span class="keyword">SWINGFAC</span> is
+first entered:</p>
+
+<ul>
+<li> Group and field gas rate targets are applied to <strong>sales</strong> gas
+rates instead of <strong>gross</strong> gas production rates. </li>
+
+<li> The delivery capacity is calculated at the beginning of each
+timestep. </li>
+
+<li> In ECLIPSE 100, any automatic compressors
+(specified with keyword <a href="GASFCOMP.html#GASFCOMP"> GASFCOMP</a> or <a href="NETCOMPA.html#NETCOMPA"> NETCOMPA</a>) will be turned on and off as required to meet the group or field
+gas targets. </li>
+
+</ul>
+
+<p>The swing factors and profile factors themselves are used to set
+the group gas production targets and to adjust their DCQs when the
+simulation is advanced using the keyword <span class="keyword">GASYEAR</span> or <span class="keyword">GASPERIO</span> instead of <a href="DATES.html#DATES"> DATES</a>, <a href="TIME.html#TIME"> TIME</a> or <a href="TSTEP.html#TSTEP">  TSTEP</a>. Each contract group is automatically placed under Guide Rate Control
+to meet any gas rate targets imposed, unless Prioritization is requested
+with the keyword <a href="GCONPRI.html#GCONPRI"> GCONPRI</a>.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>In order to use the Multiple Contract Groups
+facility, item 1 of the <a href="GASFIELD.html#GASFIELD"> GASFIELD</a> keyword in the <span class="keyword">RUNSPEC</span> section must be
+set to <samp class="codeph">YES</samp>.</p>
+
+<p>The set of contract groups must obey the following restrictions:</p>
+
+<ul>
+<li> One contract group must not be subordinate to another contract
+group. </li>
+
+<li> The set of contract groups must cover the whole field, that is
+every production well must be subordinate to a contract group. <p>ECLIPSE 100</p>
+</li>
+
+<li> There must be no gas consumption or import
+at any node downstream of a contract group (otherwise the contract
+group’s sales gas targets would not be set correctly). </li>
+
+</ul>
+
+<p>See <a href="../ecl_td/gasfieldintro_Applying_separate_gas_supply_contracts_to_individual_groups.html#gasfieldintro_applying_separate_gas_supply_contracts_to_individual_groups">"Applying separate
+gas supply contracts to individual groups"</a> in the <cite>ECLIPSE
+Technical Description</cite> for further details.</p>
+
+<div class="p">The <span class="keyword">GSWINGF</span> keyword is followed by any number
+of records, each containing the following items of data, and each
+terminated with a slash (/). The set of records must end with a blank
+record, containing only a slash (/).
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">1</td>
+
+<td valign="top">Name or name root of the Contract Group(s) to which the following
+swing and profile factors apply<p>A group name root, enclosed in quotes
+and ending with an asterisk (*), can be used to refer to several groups
+in one record.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top">2 - 13</td>
+
+<td valign="top">Swing factors for each month in sequence from January to December.<p>Setting January’s swing factor to a negative value causes the group
+to stop being a contract group.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top">14 - 25</td>
+
+<td valign="top">Profile factors for each month in sequence from January to
+December.<p>A warning is printed if the profile factor for any month
+is greater than that month’s swing factor. If this is so, obeying
+the swing requirement may not guarantee the group could produce its
+target rate profile.</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="section" id="gswingf_normalized_profile_factors"><a name="gswingf_normalized_profile_factors"><!-- --></a><h4 class="sectiontitle">Normalized
+profile factors</h4><p>In order to produce the required ACQ for
+a given DCQ, the profile factors should be normalized such that</p>
+<ul>
+<li>the sum over all months of {profile factor × number of days in
+month} = 365.25,</li>
+
+<li>with February allocated 28.25 days.</li>
+
+</ul>
+<p>If this “normalization requirement” is obeyed, then when leap
+years are taken into account every fourth year, the average annual
+production at a constant DCQ will be DCQ × 365.25, which is the ACQ.
+A warning is printed if the profile factors are not normalized.</p>
+</div>
+
+<div class="section" id="gswingf_example"><a name="gswingf_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>GSWINGF
+-- GROUP  JAN  FEB  MAR  APR  MAY  JUN  JUL  AUG  SEP  OCT  NOV  DEC
+  PLAT-A  2*1.5036  3*1.0024       3*0.5012       3*1.0024       1.5036
+          2*1.5036  3*1.0024       3*0.5012       3*1.0024       1.5036 /
+  PLAT-B  2*1.6551  3*1.0031       3*0.3511       3*1.0031       1.6551
+          2*1.6551  3*1.0031       3*0.3511       3*1.0031       1.6551 / 
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

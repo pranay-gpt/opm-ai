@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="NTG"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="NTG"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>NTG</title>
+</head>
+<body>
+
+
+<div class="nested0" id="NTG"><a name="NTG"><!-- --></a>
+<h1 class="keyword">NTG</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="ntg.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="ntg.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1604e45">                         x </th>
+
+<th valign="top" id="d1604e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1604e54">                         x </th>
+
+<th valign="top" id="d1604e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1604e45 d1604e54 "> </td>
+
+<td valign="top" headers="d1604e48 d1604e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1604e45 d1604e54 ">                         x </td>
+
+<td valign="top" headers="d1604e48 d1604e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1604e45 d1604e54 "> </td>
+
+<td valign="top" headers="d1604e48 d1604e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1604e45 d1604e54 "> </td>
+
+<td valign="top" headers="d1604e48 d1604e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1604e45 d1604e54 "> </td>
+
+<td valign="top" headers="d1604e48 d1604e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1604e45 d1604e54 "> </td>
+
+<td valign="top" headers="d1604e48 d1604e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1604e45 d1604e54 "> </td>
+
+<td valign="top" headers="d1604e48 d1604e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1604e45 d1604e54 "> </td>
+
+<td valign="top" headers="d1604e48 d1604e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword should be followed by one non-negative real number
+for every grid block in the current input box. The values specified
+are used to convert from gross to net thicknesses, and act as multipliers
+of grid block pore volumes and transmissibilities in the X and Y (or
+R and Theta) directions, and also on <samp class="codeph">DZ</samp> for the calculation
+of well connection transmissibility factors. The data must be terminated
+by a slash (/).</p>
+
+<p>Any <samp class="codeph">NTG</samp> values which are not specified when the
+end of the <span class="keyword">GRID</span> section is reached default to 1.0.</p>
+
+<p>Grid blocks whose pore volume is zero are treated by ECLIPSE as
+inactive. Since the computing time and storage space requirements
+of a run depend primarily on the number of active grid blocks, it
+is important that inactive blocks should be unambiguously identified.
+This is best done by setting either <a href="PORO.html#PORO"> PORO</a> or <samp class="codeph">NTG</samp> to zero in inactive
+blocks. It is also possible to set pore volumes directly (array <a href="PORV.html#PORV"> PORV</a> in the <span class="keyword">EDIT</span> section), or to use the <a href="ACTNUM.html#ACTNUM"> ACTNUM</a> keyword.</p>
+
+<p>Grid blocks are ordered with the X axis index cycling fastest,
+followed by the Y and Z axis indices. Repeat counts may be used for
+repeated values (for example 115*0). Note that spaces must not be
+inserted on either side of the asterisk.</p>
+
+<div class="section" id="ntg_notes"><a name="ntg_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li>The use of both <samp class="codeph">NTG</samp> and <a href="DZNET.html#DZNET"> DZNET</a> keywords in the same run is not allowed.</li>
+
+<li>NTG values only apply to the pore volumes by default. Pre-2007.1
+releases of ECLIPSE also scaled the rock volumes by the NTG values.
+Using <a href="OPTIONS3.html#options3.117">item 117</a> in keyword <span class="keyword">OPTIONS3</span> set to a nonzero value will enable the old behavior.
+For thermal runs both the rock volume and the pore volume should be
+zero for a cell to become inactive. </li>
+
+<li>Prior to the 2013.1 release, when <a href="DPGRID.html#DPGRID"> DPGRID</a> was specified,
+ECLIPSE 300 only copied unset fracture NTG values from the matrix
+if the grid was supplied in GSG format. To reproduce this behavior,
+set all NTG values in the fracture to 1.</li>
+
+</ul>
+</div>
+
+<div class="section" id="ntg_example"><a name="ntg_example"><!-- --></a><h4 class="sectiontitle">Example</h4>                 <pre><code>-------- IX1-IX2 JY1-JY2 KZ1-KZ2
+BOX
+           6  11   4   9   2   3   /
+NTG
+ 6*0.4 6*0.4 6*0.48 6*0.51 6*0.7 6*0.72
+ 6*0.4 6*0.4 6*0.48 6*0.51 6*0.7 6*0.72 
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

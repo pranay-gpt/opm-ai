@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Convergence criteria"/>
+<meta name="DC.subject" content="Thermal convergence criteria"/>
+<meta name="keywords" content="Thermal convergence criteria"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="features_convergence_criteria"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Convergence criteria</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="features_convergence_criteria"><a name="features_convergence_criteria"><!-- --></a>
+<h1 class="topictitle1">Convergence criteria</h1>
+
+
+ <div>
+<p>By default, the convergence criteria are chosen to be reliable
+across a wide range of thermal models. If necessary, the default convergence
+criteria can be altered with the <a href="../ecl_rm/CVCRIT.html#CVCRIT">CVCRIT </a> keyword.</p>
+
+<div class="section" id="features_limiting_non-linear_solution_updates"><a name="features_limiting_non-linear_solution_updates"><!-- --></a><h4 class="sectiontitle">Limiting non-linear solution updates</h4><p>Limits           
+      <math><msub><mi>P</mi>
+<mrow><mi>l</mi><mi>i</mi><mi>m</mi></mrow></msub>
+</math>,  <math><msub><mi>S</mi>
+<mrow><mi>l</mi><mi>i</mi><mi>m</mi></mrow></msub>
+</math>  and  <math><msub><mi>T</mi>
+<mrow><mi>l</mi><mi>i</mi><mi>m</mi></mrow></msub>
+</math>  can be set on the pressure change, specific volume change
+and temperature change during a non-linear iteration to help control
+the convergence process. The solution update  <math><mrow>
+<mi>Δ</mi><msub><mi>X</mi><mrow><mi>n</mi><mrow><mo>-</mo><mn>1</mn></mrow></mrow></msub></mrow></math>  in equation <a href="thermalequations_Solution_method.html#thermalequations.equ.0199">319.1</a> is multiplied by a reduction factor  <math><mi>λ</mi></math>,  <math><mn>0</mn><mo>&lt;</mo>
+<mi>λ</mi><mo>≤</mo><mn>1</mn></math>  chosen so that
+for every cell:          </p>
+<p>                              <math><mrow><mi>λ</mi>
+<mo>⋅</mo><mrow><mo>|</mo><mi>Δ</mi><mi>P</mi><mo>|</mo></mrow><mo>≤</mo><msub><mrow><mi>P</mi></mrow>
+<mrow><mi>l</mi><mi>i</mi><mi>m</mi></mrow></msub>
+</mrow></math>                     </p>
+<p>                   
+          <math><mrow><mi>λ</mi>
+<mo>⋅</mo><mrow><mo>|</mo><mi>Δ</mi><mrow><mi>X</mi>
+<mi>′</mi></mrow><mo>⋅</mo><mrow><mrow><mfrac><mrow>
+<mo>∂</mo><mi>V</mi></mrow><mrow><mo>∂</mo><mi>X</mi>
+<mo>′</mo></mrow></mfrac></mrow></mrow><mo>|</mo>
+</mrow><mo>≤</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>l</mi><mi>i</mi><mi>m</mi></mrow></msub></mrow>
+</math>,          </p>
+<p>                              <math><mrow><mi>λ</mi>
+<mo>⋅</mo><mrow><mo>|</mo><mrow><mi>Δ</mi><mi>e</mi>
+<mo>⋅</mo><mrow><mrow><mfrac><mrow><mo>∂</mo><mi>T</mi></mrow><mrow><mo>∂</mo><mi>e</mi></mrow>
+</mfrac></mrow></mrow></mrow><mo>|</mo></mrow><mo>≤</mo><msub><mrow><mi>T</mi></mrow><mrow><mi>l</mi>
+<mi>i</mi><mi>m</mi></mrow></msub></mrow></math> 
+                    </p>
+<p>where                  <math><mrow><mi>X</mi>
+<mi>′</mi></mrow></math>  is any solution variable except
+the pressure          </p>
+<p>                              <math><mrow><mi>X</mi>
+<mi>′</mi></mrow><mo>=</mo><mo>(</mo><msub><mi>m</mi>
+<mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo>
+<msub><mi>m</mi><mi>N</mi></msub><mo>,</mo><msub>
+<mi>m</mi><mi>w</mi></msub><mo>,</mo><mi>e</mi><mo>)</mo></math>                       </p>
+<p>and              
+   <math><mi>V</mi></math>  is the total specific volume, equal to the sum of the phase specific
+volumes defined in equation <a href="thermalequations_Fluid_volume.html#thermalequations.equ.00a6">314.1</a>. The temperature limit is only used in thermal
+simulations, and only in fully implicit cells. Limits  <math><msub><mi>S</mi>
+<mrow><mi>l</mi><mi>i</mi><mi>m</mi></mrow></msub>
+</math>,  <math><msub><mi>T</mi>
+<mrow><mi>l</mi><mi>i</mi><mi>m</mi></mrow></msub>
+</math>  and  <math><msub><mi>P</mi>
+<mrow><mi>l</mi><mi>i</mi><mi>m</mi></mrow></msub>
+</math>  are set using items 13, 14 and 15 of the <a href="../ecl_rm/CVCRIT.html#CVCRIT"> CVCRIT</a> keyword.          </p>
+</div>
+
+<div class="section" id="features_appleyard_chop"><a name="features_appleyard_chop"><!-- --></a><h4 class="sectiontitle">Appleyard chop</h4><p>After the solution is updated new values of the saturations and
+temperatures are calculated by performing a flash. If the saturations
+in an implicit cell change significantly near a critical value - for
+example if a phase appears or disappears or becomes mobile / immobile
+- then the solution change in that cell is chopped, so that the new
+saturations are close to the critical point.</p>
+<p>The Appleyard chop
+is also performed if a property change in an implicit cell is large.
+Chops are performed if the saturation change is greater than 0.2,
+or if the temperature change is greater than                  <math><msub><mi>T</mi>
+<mrow><mi>l</mi><mi>i</mi><mi>m</mi></mrow></msub>
+</math>.          </p>
+<p>The saturation based chop can be switched
+off by using <a href="../ecl_rm/OPTIONS3.html#options3.18">item 18</a> of the <span class="keyword">OPTIONS3</span> keyword. The temperature based chop can be switched
+off by using <a href="../ecl_rm/OPTIONS3.html#options3.27">item 27</a> of <span class="keyword">OPTIONS3</span>. Both chops can be switched off by using <a href="../ecl_rm/OPTIONS3.html#options3.25">item 25</a> of <span class="keyword">OPTIONS3</span>.</p>
+</div>
+
+<div class="section" id="eatures_non-linear_convergence"><a name="eatures_non-linear_convergence"><!-- --></a><h4 class="sectiontitle">Non-linear convergence</h4><p>The non-linear iterations are deemed to have converged when the
+reduction factor                  <math><mi>λ</mi></math>  is greater than 0.9 and the pressure change, specific
+volume change and temperature change during a non-linear iteration
+are less than limits  <math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>o</mi><mi>n</mi></mrow></msub>
+</math>,  <math><msub><mi>S</mi>
+<mrow><mi>c</mi><mi>o</mi><mi>n</mi></mrow></msub>
+</math>  and  <math><msub><mi>T</mi>
+<mrow><mi>c</mi><mi>o</mi><mi>n</mi></mrow></msub>
+</math>:          </p>
+<p>                              <math><mrow><mi>λ</mi>
+<mo>⋅</mo><mrow><mo>|</mo><mrow><mi>Δ</mi><mi>P</mi>
+</mrow><mo>|</mo></mrow><mo>≤</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>n</mi>
+</mrow></msub></mrow></math>                      </p>
+<p> 
+                            <math><mrow><mi>λ</mi>
+<mo>⋅</mo><mrow><mo>|</mo><mrow><mi>Δ</mi><mrow><mi>X</mi><mi>′</mi></mrow><mo>⋅</mo><mrow><mrow><mfrac>
+<mrow><mo>∂</mo><mi>V</mi></mrow><mrow><mo>∂</mo>
+<mi>X</mi><mo>′</mo></mrow></mfrac></mrow></mrow>
+</mrow><mo>|</mo></mrow><mo>≤</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>n</mi>
+</mrow></msub></mrow></math>                      </p>
+<p> 
+                            <math><mrow><mi>λ</mi>
+<mo>⋅</mo><mrow><mo>|</mo><mrow><mi>Δ</mi><mi>e</mi>
+<mo>⋅</mo><mrow><mrow><mfrac><mrow><mo>∂</mo><mi>T</mi></mrow><mrow><mo>∂</mo><mi>e</mi></mrow>
+</mfrac></mrow></mrow></mrow><mo>|</mo></mrow><mo>≤</mo><msub><mrow><mi>T</mi></mrow><mrow><mi>c</mi>
+<mi>o</mi><mi>n</mi></mrow></msub></mrow></math> 
+                    </p>
+<p>The temperature condition is only used
+in thermal simulations, and only in fully implicit cells. Limits 
+                <math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>o</mi><mi>n</mi></mrow></msub>
+</math>,  <math><msub><mi>S</mi>
+<mrow><mi>c</mi><mi>o</mi><mi>n</mi></mrow></msub>
+</math>  and  <math><msub><mi>T</mi>
+<mrow><mi>c</mi><mi>o</mi><mi>n</mi></mrow></msub>
+</math>  are set using items 1, 7 and 8 of the <a href="../ecl_rm/CVCRIT.html#CVCRIT"> CVCRIT</a> keyword.          </p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

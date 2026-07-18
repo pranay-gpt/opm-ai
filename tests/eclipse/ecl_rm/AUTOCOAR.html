@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="AUTOCOAR"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="AUTOCOAR"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>AUTOCOAR</title>
+</head>
+<body>
+
+
+<div class="nested0" id="AUTOCOAR"><a name="AUTOCOAR"><!-- --></a>
+<h1 class="keyword">AUTOCOAR</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="autocoar.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="autocoar.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d160e45"> x </th>
+
+<th valign="top" id="d160e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d160e54">  </th>
+
+<th valign="top" id="d160e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d160e45 d160e54 ">  </td>
+
+<td valign="top" headers="d160e48 d160e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d160e45 d160e54 "> x </td>
+
+<td valign="top" headers="d160e48 d160e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d160e45 d160e54 ">  </td>
+
+<td valign="top" headers="d160e48 d160e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d160e45 d160e54 ">  </td>
+
+<td valign="top" headers="d160e48 d160e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d160e45 d160e54 ">  </td>
+
+<td valign="top" headers="d160e48 d160e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d160e45 d160e54 ">  </td>
+
+<td valign="top" headers="d160e48 d160e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d160e45 d160e54 ">  </td>
+
+<td valign="top" headers="d160e48 d160e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d160e45 d160e54 ">  </td>
+
+<td valign="top" headers="d160e48 d160e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is analogous to the <a href="COARSEN.html#COARSEN">  COARSEN</a> keyword and may be used in auto-refined
+grids (keyword <a href="AUTOREF.html#AUTOREF">  AUTOREF</a> specified in <span class="keyword">RUNSPEC</span>). The <span class="keyword">AUTOCOAR</span> keyword has two effects. Firstly it may be used to coarsen cells
+in the base grid, in a similar manner to <span class="keyword">COARSEN</span>. Secondly, it prevents auto refinement from happening within the
+box of cells specified in items 1 - 6; the coarse cells in the base
+grid are retained.</p>
+
+<p>The difference between the effects of the <span class="keyword">COARSEN</span> and <span class="keyword">AUTOCOAR</span> keywords is that any coarsened cell
+amalgamations constructed with <span class="keyword">COARSEN</span> is then
+auto refined into the number of cells specified in <span class="keyword">AUTOREF</span>, while those constructed with <span class="keyword">AUTOCOAR</span> remain
+unrefined.</p>
+
+<p>Note that it is possible to keep the original base cell structure
+within a box of cells by using <span class="keyword">AUTOCOAR</span> to coarsen
+them into the same number of coarse cells. The effect of this is to
+keep them unaffected by the auto refinement process.</p>
+
+<p>The <span class="keyword">AUTOCOAR</span> keyword is followed by any number
+of records, each containing the following items and each terminated
+with a slash (/). The set of records must end with a blank record
+containing just a slash. Each record defines a box of grid cells for
+coarsening. The data items are:</p>
+
+<ol>
+<li> <samp class="codeph">I1</samp> Lower I coordinate of the box. </li>
+
+<li> <samp class="codeph">I2</samp> Upper I coordinate of the box. </li>
+
+<li> <samp class="codeph">J1</samp> Lower J coordinate of the box. </li>
+
+<li> <samp class="codeph">J2</samp> Upper J coordinate of the box. </li>
+
+<li> <samp class="codeph">K1</samp> Lower K coordinate of the box. </li>
+
+<li> <samp class="codeph">K2</samp> Upper K coordinate of the box. </li>
+
+<li> <samp class="codeph">NX</samp> Number of coarsened cells along the X direction
+in this box. <p> <samp class="codeph">NX</samp> must be an exact factor of I2-I1+1.</p>
+ </li>
+
+<li> <samp class="codeph">NY</samp> Number of coarsened cells along the Y direction
+in this box. <p> <samp class="codeph">NY</samp> must be an exact factor of J2-J1+1.</p>
+ </li>
+
+<li> <samp class="codeph">NZ</samp> Number of coarsened cells along the Z direction
+in this box. <p> <samp class="codeph">NZ</samp> must be an exact factor of K2-K1+1.</p>
+  </li>
+
+</ol>
+
+<p>This divides the box I1-I2, J1-J2, K1-K2 into <samp class="codeph">NX</samp> * <samp class="codeph">NY</samp> * <samp class="codeph">NZ</samp> coarse cells. Coarsening
+boxes specified using <span class="keyword">COARSEN</span> or <span class="keyword">AUTOCOAR</span> must not overlap one another, but they may join together.</p>
+
+<p>The parameter <span class="keyword">MCOARS</span> in keyword <a href="LGR.html#LGR">  LGR</a> in the <span class="keyword">RUNSPEC</span> section must be set equal to or greater than the total number of
+coarse cells. Coarsening generates non-neighbor connections, and is
+disallowed if the keyword <a href="NONNC.html#NONNC">  NONNC</a> has been entered in <span class="keyword">RUNSPEC</span>.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

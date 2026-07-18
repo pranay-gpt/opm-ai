@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="LANGMULT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="LANGMULT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>LANGMULT</title>
+</head>
+<body>
+
+
+<div class="nested0" id="LANGMULT"><a name="LANGMULT"><!-- --></a>
+<h1 class="keyword">LANGMULT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="langmult.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="langmult.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1230e45">  </th>
+
+<th valign="top" id="d1230e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1230e54"> x </th>
+
+<th valign="top" id="d1230e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1230e45 d1230e54 ">  </td>
+
+<td valign="top" headers="d1230e48 d1230e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1230e45 d1230e54 ">  </td>
+
+<td valign="top" headers="d1230e48 d1230e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1230e45 d1230e54 ">  </td>
+
+<td valign="top" headers="d1230e48 d1230e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1230e45 d1230e54 "> x </td>
+
+<td valign="top" headers="d1230e48 d1230e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1230e45 d1230e54 ">  </td>
+
+<td valign="top" headers="d1230e48 d1230e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1230e45 d1230e54 ">  </td>
+
+<td valign="top" headers="d1230e48 d1230e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1230e45 d1230e54 ">  </td>
+
+<td valign="top" headers="d1230e48 d1230e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1230e45 d1230e54 ">  </td>
+
+<td valign="top" headers="d1230e48 d1230e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword may be used with the coal bed methane model (see <a href="../ecl_td/coalbed_Introduction.html#coalbed_introduction">"Coal bed methane
+model"</a> in the <cite>ECLIPSE Technical Description</cite>).</p>
+
+<p>The keyword scales the adsorption capacity on a cell by cell basis.</p>
+
+<p>The keyword should be followed by one real number for every grid
+block, specifying a multiplier for the adsorption capacity. The data
+field should be terminated by a slash (/).</p>
+
+<p>Grid blocks are ordered with the X axis index cycling fastest (from
+1 to <samp class="codeph">NDIVIX</samp>), followed by the Y axis index (from
+1 to <samp class="codeph">NDIVIY</samp>), and finally the Z axis index (from
+1 to <samp class="codeph">NDIVIZ</samp>). <samp class="codeph">NDIVIX</samp>, <samp class="codeph">NDIVIY</samp> and <samp class="codeph">NDIVIZ</samp> are specified in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS"> DIMENS</a>. Repeat counts may be used for repeated values (for example 115*0.9).
+Note that spaces must not be inserted on either side of the asterisk
+(*).</p>
+
+<p>Only the values given for the coal cells are used, see <a href="COALNUM.html#COALNUM"> COALNUM</a>. So for a dual
+porosity run with all matrix cells being coal cells, it is sufficient
+to supply <samp class="codeph">NDIVIX * NDIVIY * NDIVIZ</samp> /2 values.</p>
+
+<p>The keyword is entirely optional and if not specified, or defaulted,
+the adsorption capacity as specified by <a href="LANGMEXT.html#LANGMEXT"> LANGMEXT</a> or <a href="LANGMUIR.html#LANGMUIR"> LANGMUIR</a> is used unaltered.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">This keyword cannot be used with <a href="LANGMULC.html#LANGMULC"> LANGMULC</a>, <a href="GASSATC.html#GASSATC"> GASSATC</a> or <a href="GASADEC.html#GASADEC"> GASADEC</a>.</span></div>
+
+<div class="section" id="langmult_example"><a name="langmult_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NDIVIX=10</samp>, <samp class="codeph">NDIVIY=1</samp> and <samp class="codeph">NDIVIZ=2</samp> specified in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS"> DIMENS</a>:</p>
+ <pre><code>LANGMULT
+ 5* 5*0.2 /</code></pre> <p>The first 5 cells are defaulted to unity,
+while the 5 next cells are scaled to 20% of the adsorption capacity
+as given by the Langmuir isotherm. The remaining cells, not specified,
+are set to the default value of unity.</p>
+ </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

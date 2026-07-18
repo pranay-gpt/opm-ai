@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Format of SUMMARY keywords beginning with LC"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="summary_format_of_summary_keywords_beginning_with_lc"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Format of SUMMARY keywords beginning with LC</title>
+</head>
+<body>
+
+
+<div class="nested0" id="summary_format_of_summary_keywords_beginning_with_lc"><a name="summary_format_of_summary_keywords_beginning_with_lc"><!-- --></a>
+<h1 class="topictitle1">Format of SUMMARY keywords beginning with LC</h1>
+
+
+ <div>
+<p>A local well connection (LC) keyword should be followed by a list
+of LGR names, well names and the local block coordinates. Each connection
+must be specified on a fresh line and terminated by a slash (/). The
+list of connections is terminated by a line containing only a slash
+(/).</p>
+
+<pre><code>LCOPT
+-- LGR Name  Well Name   Local Cell
+   'LGR1'    'WELL1'     1  1  1  /
+   'LGR2'    'PROD'      2  2  2  /
+   'LGR3'    'PROD2'     2  2  2  /
+/</code></pre>
+<p>If the connection coordinates are defaulted for a well (as in well
+PROD2 in the example below), the corresponding quantity is output
+for <strong>all</strong> connections in the well (within the specified LGR).</p>
+
+<pre><code>LCOFR
+-- LGR Name  Well Name   Local Cell
+   'LGR1'    'WELL1'     1  1  1  /
+   'LGR2'    'PROD'      2  2  2  /
+   'LGR3'    'PROD2'              /
+/</code></pre>
+<p>The well name may be defaulted by using the character ‘*’
+(as in the examples below). If both the well name and the local connection
+coordinates are defaulted, then the requested summary quantities are
+output for all well connections in the specified LGR. If the well
+name is defaulted but the connection coordinates are provided, then
+the requested summary quantities will be output for all wells with
+a connection in the specified local block.</p>
+
+<pre><code>LCOFR
+-- LGR Name  Well Name   Local Cell
+   'LGR1'      '*'        /
+   'LGR2'      '*'      2  2  2  /
+/</code></pre>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If the connection coordinates are defaulted, ECLIPSE 100 reserves
+a number of Summary vectors equal to the maximum number of connections
+per well (<span class="keyword">NCWMAX</span>, set in <span class="keyword">RUNSPEC</span> section keyword <a href="WELLDIMS.html#WELLDIMS"> WELLDIMS</a>). If this number is much greater than the actual number of
+connections in the local grid well, defaulting the connection coordinates
+can become quite wasteful. </span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

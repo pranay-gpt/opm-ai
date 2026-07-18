@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Variations on the transmissibility calculation (ECLIPSE 100)"/>
+<meta name="DC.subject" content="Transmissibility calculations, Variations"/>
+<meta name="keywords" content="Transmissibility calculations, Variations"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="transmiss_variations_on_the_transmissibility_calculation"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Variations on the transmissibility calculation (ECLIPSE 100)
+ </title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="transmiss_variations_on_the_transmissibility_calculation"><a name="transmiss_variations_on_the_transmissibility_calculation"><!-- --></a>
+<h1 class="topictitle1">Variations on the transmissibility calculation (ECLIPSE 100)
+ </h1>
+
+
+ <div>
+<p>The transmissibility calculation using <span class="keyword">OLDTRAN</span>, <span class="keyword">OLDTRANR</span> or <span class="keyword">NEWTRAN</span> employs
+an effective average permeability for the face between two adjacent
+blocks, which ECLIPSE 100 calculates from the permeabilities and dimensions
+of these blocks.</p>
+
+<p>Options are available, however, that allow you more control over
+the average permeability employed in these calculations. You may input
+the average permeabilities directly (see keyword <a href="../ecl_rm/LINKPERM.html#LINKPERM">LINKPERM</a>), or request alternative
+averaging formulations (see keyword <a href="../ecl_rm/PERMAVE.html#PERMAVE">PERMAVE</a>).</p>
+
+<p>The options <span class="keyword">LINKPERM</span> and <span class="keyword">PERMAVE</span> may be useful for comparison with other simulators. It is also possible
+to override the transmissibilities calculated by ECLIPSE 100 by supplying
+transmissibilities directly in the <span class="keyword">EDIT</span> section,
+for comparison with other simulators.</p>
+
+<div class="section" id="transmiss_use_of_linking_permeabilities_in_the_transmissibility_calculation"><a name="transmiss_use_of_linking_permeabilities_in_the_transmissibility_calculation"><!-- --></a><h4 class="sectiontitle">Use of linking permeabilities in the transmissibility calculation</h4><p>The <span class="keyword">LINKPERM</span> keyword may optionally be used
+to instruct ECLIPSE 100 to treat the grid block permeabilities (input
+with <a href="../ecl_rm/PERMX.html#PERMX">PERMX</a> and related keywords) as applying to the cell faces instead
+of cell centers.</p>
+<p>ECLIPSE 100 then uses the face permeabilities
+directly as the “linking permeabilities” in the transmissibility
+calculation, instead of calculating the linking permeabilities as
+an average of the adjacent grid block permeabilities.</p>
+<p>For example,
+if  <math><msub><mtext>PERMX</mtext>
+<mi>l</mi></msub></math>  is chosen to represent the linking
+permeability in the X- direction between connecting cells I and J,
+then  <math><msub><mtext>PERMX</mtext>
+<mi>l</mi></msub></math>  simply replaces both  <math><msub><mtext>PERMX</mtext>
+<mi>i</mi></msub></math>  and  <math><msub>
+<mtext>PERMX</mtext><mi>j</mi></msub></math>  in the above
+expressions for the transmissibility in each of the <span class="keyword">OLDTRAN</span>, <span class="keyword">OLDTRANR</span> and <span class="keyword">NEWTRAN</span> cases.
+The  <math><msub><mtext>PERMX</mtext>
+<mi>l</mi></msub></math>  values will be input as either  <math><msub><mtext>PERMX</mtext>
+<mi>i</mi></msub></math>  or  <math><msub>
+<mtext>PERMX</mtext><mi>j</mi></msub></math>  according
+to the option selected in <span class="keyword">LINKPERM</span>.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The grid block values of <span class="keyword">PERMX</span>, <span class="keyword">PERMY</span> and <span class="keyword">PERMZ</span> are required to calculate
+well connection factors (see <a href="wellinfl_The_connection_transmissibility_factor.html#wellinfl_the_connection_transmissibility_factor"> "The connection transmissibility factor"</a>). If linking permeabilities
+are used to apply <span class="keyword">PERMX</span> etc. to block faces, the
+input values may be inappropriate for calculating connection factors.
+In this case, connection factors could be set explicitly in <a href="../ecl_rm/COMPDAT.html#COMPDAT">COMPDAT</a> or connection factor
+multipliers could be applied using <a href="../ecl_rm/WPIMULT.html#WPIMULT">WPIMULT</a>. </span></div>
+</div>
+
+<div class="section" id="ransmiss_alternative_permeability_averaging_schemes"><a name="ransmiss_alternative_permeability_averaging_schemes"><!-- --></a><h4 class="sectiontitle">Alternative permeability averaging schemes</h4><p>The <span class="keyword">PERMAVE</span> keyword may optionally be used to select alternative
+formulations for calculating the average permeability for the cell
+faces in the transmissibility calculation. The different formulations
+can best be compared by considering the formulae employed above in
+the default cases (when neither <span class="keyword">LINKPERM</span> nor <span class="keyword">PERMAVE</span> is specified).</p>
+<p>Firstly, consider the <span class="keyword">OLDTRAN</span> case. The X-transmissibility calculation outlined
+above can be expressed equivalently as:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="transmiss.equ.01cc"/>
+ <math><mrow><msub><mrow>
+<mtext>TRANX</mtext></mrow><mrow><mi>i</mi></mrow>
+</msub><mo>=</mo><mfrac><mrow><mtext>CDARCY</mtext><mo>⋅</mo><msub><mrow><mtext>TMLTX</mtext></mrow><mrow><mi>i</mi></mrow></msub><mo>⋅</mo><mi>A</mi><mo>⋅</mo>
+<mtext>DIPC</mtext></mrow><mrow><mi>B</mi></mrow>
+</mfrac></mrow></math> 
+</td><td align="right">[Eq. 20.1]
+              </td></tr></tbody></table><p>with  <math><mi>B</mi></math>  rewritten as:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="transmiss.equ.01d1"/>
+ <math><mrow><mi>B</mi>
+<mo>=</mo><mfrac><mrow><msub><mrow><mtext>DX</mtext>
+</mrow><mrow><mi>i</mi></mrow></msub><mo>+</mo><msub>
+<mrow><mtext>DX</mtext></mrow><mrow><mi>j</mi></mrow>
+</msub></mrow><mrow><mn>2</mn><mo>⋅</mo><msub><mrow>
+<mtext>PERMX</mtext></mrow><mrow><mtext>av</mtext></mrow>
+</msub></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 20.2]
+              </td></tr></tbody></table><p>and the average permeability is given by a harmonic
+average:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="transmiss.equ.01d5"/>
+ <math><msub><mtext>PERMX</mtext>
+<mtext>av</mtext></msub><mo>=</mo><mfrac><mrow><mrow>
+<mo>(</mo><msub><mi>W</mi><mi>i</mi></msub><mo>+</mo>
+<msub><mi>W</mi><mi>j</mi></msub><mo>)</mo></mrow>
+</mrow><mrow><mo>(</mo><mfrac><mrow><msub><mi>W</mi>
+<mi>i</mi></msub></mrow><mrow><msub><mtext>PERMX</mtext>
+<mi>i</mi></msub></mrow></mfrac><mo>+</mo><mfrac>
+<mrow><msub><mi>W</mi><mi>j</mi></msub></mrow><mrow>
+<msub><mtext>PERMX</mtext><mi>j</mi></msub></mrow>
+</mfrac><mo>)</mo></mrow></mfrac></math> 
+</td><td align="right">[Eq. 20.3]
+              </td></tr></tbody></table><p>with weights</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="transmiss.equ.01d9"/>
+ <math><mtable><mtr><mtd>
+<msub><mi>W</mi><mi>i</mi></msub><mo>=</mo><msub>
+<mtext>DX</mtext><mi>i</mi></msub></mtd></mtr><mtr>
+<mtd><msub><mi>W</mi><mi>j</mi></msub><mo>=</mo>
+<msub><mtext>DX</mtext><mi>j</mi></msub></mtd></mtr>
+</mtable></math> 
+</td><td align="right">[Eq. 20.4]
+              </td></tr></tbody></table><p>This is just a special case of the power law average
+given by:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="transmiss.equ.01dd"/>
+ <math><mrow><msub><mrow>
+<mtext>PERMX</mtext></mrow><mrow><mtext>av</mtext></mrow>
+</msub><mo>=</mo><msup><mrow><mo>[</mo><mfrac><mrow>
+<msub><mrow><mi>W</mi></mrow><mrow><mi>i</mi></mrow>
+</msub><mo>⋅</mo><msup><mrow><msub><mrow><mtext>PERMX</mtext>
+</mrow><mrow><mi>i</mi></mrow></msub></mrow><mrow>
+<mtext>POW</mtext></mrow></msup><mo>+</mo><msub><mrow>
+<mi>W</mi></mrow><mrow><mi>j</mi></mrow></msub><mo>⋅</mo><msup><mrow><msub><mrow><mtext>PERMX</mtext>
+</mrow><mrow><mi>j</mi></mrow></msub></mrow><mrow>
+<mtext>POW</mtext></mrow></msup></mrow><mrow><msub>
+<mrow><mi>W</mi></mrow><mrow><mi>i</mi></mrow></msub>
+<mo>+</mo><msub><mrow><mi>W</mi></mrow><mrow><mi>j</mi></mrow></msub></mrow></mfrac><mo>]</mo></mrow>
+<mrow><mfrac><mrow><mn>1</mn></mrow><mrow><mtext>POW</mtext>
+</mrow></mfrac></mrow></msup></mrow></math> 
+</td><td align="right">[Eq. 20.5]
+              </td></tr></tbody></table><p>where  <math><mtext>POW</mtext>
+<mo>=</mo><mrow><mo>-</mo><mn>1</mn></mrow></math>.</p>
+<p>Other forms of average may be obtained by varying the value
+of  <math><mtext>POW</mtext>
+</math>. A weighted arithmetic average is obtained if  <math><mtext>POW</mtext>
+<mo>=</mo><mn>1</mn></math>, and a geometric average results
+in the limit as  <math><mtext>POW</mtext>
+<mo>→</mo><mn>0</mn></math>, that is</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="transmiss.equ.01e6"/>
+ <math><mrow><msub><mrow>
+<mtext>PERMX</mtext></mrow><mrow><mtext>av</mtext></mrow>
+</msub><mo>=</mo><msup><mrow><mo>[</mo><msup><mrow>
+<msub><mrow><mtext>PERMX</mtext></mrow><mrow><mi>i</mi>
+</mrow></msub></mrow><mrow><msub><mrow><mi>W</mi>
+</mrow><mrow><mi>i</mi></mrow></msub></mrow></msup>
+<mo>⋅</mo><msup><mrow><msub><mrow><mtext>PERMX</mtext>
+</mrow><mrow><mi>j</mi></mrow></msub></mrow><mrow>
+<msub><mrow><mi>W</mi></mrow><mrow><mi>j</mi></mrow>
+</msub></mrow></msup><mo>]</mo></mrow><mrow><mn>1</mn>
+<mo>/</mo><mrow><mo>(</mo><msub><mrow><mi>W</mi>
+</mrow><mrow><mi>i</mi></mrow></msub><mo>+</mo><msub>
+<mrow><mi>W</mi></mrow><mrow><mi>j</mi></mrow></msub>
+<mo>)</mo></mrow></mrow></msup></mrow></math> 
+</td><td align="right">[Eq. 20.6]
+              </td></tr></tbody></table><p>Secondly, consider the <span class="keyword">OLDTRANR</span> case.
+The formulation for <span class="keyword">OLDTRANR</span> is analogous with <span class="keyword">OLDTRAN</span>, but now the weights are given by</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="transmiss.equ.01ed"/>
+ <math><mrow><mtable><mtr>
+<mtd><msub><mrow><mi>W</mi></mrow><mrow><mi>i</mi>
+</mrow></msub><mo>=</mo><mfrac><mrow><msub><mrow>
+<mtext>DX</mtext></mrow><mrow><mi>i</mi></mrow></msub>
+</mrow><mrow><msub><mrow><mi>A</mi></mrow><mrow><mi>i</mi></mrow></msub></mrow></mfrac><mo>=</mo><mfrac>
+<mrow><msub><mrow><mtext>DX</mtext></mrow><mrow><mi>i</mi></mrow></msub></mrow><mrow><msub><mrow><mtext>DY</mtext></mrow><mrow><mi>i</mi></mrow></msub><mo>⋅</mo><msub><mrow><mtext>DZ</mtext></mrow><mrow><mi>i</mi></mrow></msub><mo>⋅</mo><msub><mrow><mtext>RNTG</mtext></mrow><mrow><mi>i</mi></mrow></msub>
+</mrow></mfrac></mtd></mtr><mtr><mtd><msub><mrow><mi>W</mi></mrow><mrow><mi>j</mi></mrow></msub><mo>=</mo>
+<mfrac><mrow><msub><mrow><mtext>DX</mtext></mrow><mrow>
+<mi>j</mi></mrow></msub></mrow><mrow><msub><mrow><mi>A</mi></mrow><mrow><mi>j</mi></mrow></msub></mrow>
+</mfrac><mo>=</mo><mfrac><mrow><msub><mrow><mtext>DX</mtext></mrow><mrow><mi>j</mi></mrow></msub></mrow>
+<mrow><msub><mrow><mtext>DY</mtext></mrow><mrow><mi>j</mi></mrow></msub><mo>⋅</mo><msub><mrow><mtext>DZ</mtext></mrow><mrow><mi>j</mi></mrow></msub><mo>⋅</mo><msub><mrow><mtext>RNTG</mtext></mrow><mrow><mi>j</mi></mrow></msub></mrow></mfrac></mtd></mtr>
+</mtable></mrow></math> 
+</td><td align="right">[Eq. 20.7]
+              </td></tr></tbody></table><p>Finally, consider the <span class="keyword">NEWTRAN</span> case.
+The weights corresponding to the default harmonic average of block
+permeabilities are given by:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="transmiss.equ.01f2"/>
+ <math><mrow><mtable><mtr>
+<mtd><mfrac><mrow><mn>1</mn></mrow><mrow><msub><mrow>
+<mi>W</mi></mrow><mrow><mi>i</mi></mrow></msub></mrow>
+</mfrac><mo>=</mo><msub><mrow><mtext>RNTG</mtext></mrow>
+<mrow><mi>i</mi></mrow></msub><mo>⋅</mo><mfrac><mrow>
+<mi>A</mi><mo>⋅</mo><msub><mrow><mi>D</mi></mrow>
+<mrow><mi>i</mi></mrow></msub></mrow><mrow><msub>
+<mrow><mi>D</mi></mrow><mrow><mi>i</mi></mrow></msub>
+<mo>⋅</mo><msub><mrow><mi>D</mi></mrow><mrow><mi>i</mi></mrow></msub></mrow></mfrac></mtd></mtr><mtr>
+<mtd><mfrac><mrow><mn>1</mn></mrow><mrow><msub><mrow>
+<mi>W</mi></mrow><mrow><mi>j</mi></mrow></msub></mrow>
+</mfrac><mo>=</mo><msub><mrow><mtext>RNTG</mtext></mrow>
+<mrow><mi>j</mi></mrow></msub><mo>⋅</mo><mfrac><mrow>
+<mi>A</mi><mo>⋅</mo><msub><mrow><mi>D</mi></mrow>
+<mrow><mi>j</mi></mrow></msub></mrow><mrow><msub>
+<mrow><mi>D</mi></mrow><mrow><mi>j</mi></mrow></msub>
+<mo>⋅</mo><msub><mrow><mi>D</mi></mrow><mrow><mi>j</mi></mrow></msub></mrow></mfrac></mtd></mtr>
+</mtable></mrow></math> 
+</td><td align="right">[Eq. 20.8]
+              </td></tr></tbody></table><p>and the alternative permeability averages are readily
+expressed in the same manner as above.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

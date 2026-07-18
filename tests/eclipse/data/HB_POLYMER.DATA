@@ -1,0 +1,291 @@
+--This deck is an example for Non-Newtonian Flow (Herschel_Buckley model)
+
+RUNSPEC
+TITLE
+10 by 10 oil/water/polymer + HERSCHEL-BUCKLEY
+DIMENS
+   100   1    1 /
+OIL
+WATER
+POLYMER
+
+NNEWTF    -- new keyword for non-Newtonian behaviour
+-- NTHRBL NLNHBL
+1  5 /
+
+FIELD
+TABDIMS
+   1    1   50    10    10   20 /
+REGDIMS
+    2    1    0    0 /
+WELLDIMS
+    2    1    1    2 /
+START
+   1 'JAN' 1983  /
+UNIFOUT
+UNIFIN
+
+GRID      ==============================================================
+
+GRIDFILE
+ 2 /
+
+INIT
+
+TOPS
+   100*4000.0 /
+DX
+   100*100. /
+DY 
+   100*100 /
+DZ     
+   100*10. /
+
+EQUALS
+'PERMX'  500 /
+'PERMY'  500 /
+'PERMZ'  50 /
+'PORO'   0.2 /
+/
+RPTGRID
+-- Report Levels for Grid Section Data
+-- 
+'PORO' 
+'PORV' 
+ /
+
+
+PROPS     ==============================================================
+SWFN
+    .25    .0    4.0
+    .7    1.0     .0
+/
+SOF2
+    .3000  .0000
+    .7500 1.0000
+/
+PVTW
+  .0  1.0  3.03E-06  .5  0.0 /
+PVDO
+  .0     1.0     2.0
+ 8000.0   .92    2.0
+/
+ROCK
+ 4000.0    .30E-12 /
+DENSITY
+ 52.0000  64.0000   .04400 /
+
+PLYADS
+-- 
+-- Polymer Adsorption Functions
+-- 
+           0         0
+           2         0.000
+           8         0.000  /
+
+PLYROCK
+-- 
+-- Polymer Rock Properties
+-- 
+0.15      2.67      2000         2    0.0035        /
+
+PLYVISC
+-- 
+-- Polymer Solution Viscosity Function
+-- 
+           0          1
+           50         10
+/
+PLYMAX
+-- 
+-- Polymer/Salt Concentrations
+-- 
+           50         0
+/
+
+PLMIXPAR
+-- 
+-- Todd-Longstaff Mixing Parameters
+-- 
+           1      /
+--PLYSHEAR-
+-- 0 1
+-- 1 0.8 
+-- 3 0.75 
+-- 6 0.7
+-- 10 0.68 
+-- 100 0.5
+-- 1000 0.4
+-- 10000 0.3
+--/
+FHERCHBL
+-- Non-Newtonian 
+-- Conc   Tortu   n    tau0
+    0.0     1.0   1.00     0.0 
+   10.0     1.0   0.95     0.1
+   20.0     1.0   0.80     0.20 
+   30.0     1.0   0.8      0.30 
+   50.0     1.0   0.80     0.35 /
+
+RPTPROPS
+-- PROPS Reporting Options
+-- 
+'PLYVISC' 
+/
+
+
+
+SOLUTION   =============================================================
+
+EQUIL
+4000  4000  6000  0   0   0   0   0   0  /
+
+RPTSOL
+-- 
+-- Initialisation Print Output
+-- 
+'RESTART=2' 'FIP=2' 'PBLK' 'SALT' 'PLYADS' 'RK' 'FIPPLY=2' /
+
+SUMMARY    =============================================================
+
+RUNSUM
+
+FPR
+FWCT
+FWSAT
+FCPR
+FCPT
+FCIR
+FCIT
+FCIP
+FCAD
+GCPR
+ 'G' /
+GCPT
+ 'G' /
+GCIR
+ 'G' /
+GCIT
+ 'G' /
+WCPR
+ 'P' /
+WCPT
+ 'P' /
+WCIR
+ 'I' /
+WCIT
+ 'I' /
+--CCPT
+-- 'P' 10 10  1 /
+-- /
+CCIT
+ 'I'  1  1  1 /
+ /
+RCIP
+ 1 2 /
+RCFT
+ 1 2 /
+ /
+RCAD
+ 1 2 /
+BCCN
+ 1 1 1 /
+ 50 1 1 /
+100 1 1 /
+/
+BCIP
+ 1 1 1 /
+ 50 1 1 /
+100 1 1 /
+/
+BCAD
+ 1 1 1 /
+ 50 1 1 /
+100 1 1 /
+/
+BPR
+ 1 1 1 /
+ 50 1 1 /
+100 1 1 /
+/
+BVWAT
+ 1 1 1 /
+ 50 1 1 /
+100 1 1 /
+/
+BVPOLY
+ 1 1 1 /
+ 50 1 1 /
+100 1 1 /
+/
+BWKR
+ 1 1 1 /
+ 50 1 1 /
+100 1 1 /
+/
+
+ALL
+FSPR
+FSPT
+FSIR
+FSIT
+FSIP
+BSCN
+ 1 1 1 /
+ 50 1 1 /
+100 1 1 /
+/
+BSIP
+ 1 1 1 /
+ 50 1 1 /
+100 1 1 /
+/
+
+SEPARATE
+
+MSUMLINS
+
+MSUMNEWT
+
+SCHEDULE   =============================================================
+TUNING
+ 1* 10 /
+/
+ 4* 200 /
+  
+--sorties de la section schedule
+RPTSCHED 
+'FIP=2' 'CPU=2' /
+RPTRST
+'BASIC=2' 'VELOCITY' 'RK' 'VISC' /
+
+WELSPECS
+'I'  'G'   1    1  4000  'WAT'  0.0  'STD'  'SHUT'  'NO'  /
+'P'  'G'   100  1  4000  'OIL'  0.0  'STD'  'SHUT'  'NO'  /
+/
+
+COMPDAT
+'I       '   1   1   1   1 'OPEN'   0  .0   1.0 /
+'P       '   100  1  1   1 'OPEN'   0  .0   1.0 /
+/
+
+WCONPROD
+--'P' 'OPEN' 'BHP' 5* 3999.0 /
+'P' 'OPEN' 'ORAT' 100 4* 2000.0 /
+/
+
+WCONINJE
+'I' 'WAT' 'OPEN' 'RATE' 100.0 1* 6000 /
+/
+
+WPOLYMER
+ 'I' 50.0  0.0 /
+ /
+
+TSTEP
+1.0 9.0 90 10*100.0 /
+
+END
+
+
+

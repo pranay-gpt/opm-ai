@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Matrix sub-grid"/>
+<meta name="DC.subject" content="Grid and reservoir modeling, Dual porosity discretized matrix model (ECLIPSE 100), Dual porosity discretized matrix model (ECLIPSE 100) linear geometry, Dual porosity discretized matrix model (ECLIPSE 100) cylindrical and spherical geometries, Dual porosity discretized matrix model (ECLIPSE 100) volume and transmissibility calculations"/>
+<meta name="keywords" content="Grid and reservoir modeling, Dual porosity discretized matrix model (ECLIPSE 100), Dual porosity discretized matrix model (ECLIPSE 100) linear geometry, Dual porosity discretized matrix model (ECLIPSE 100) cylindrical and spherical geometries, Dual porosity discretized matrix model (ECLIPSE 100) volume and transmissibility calculations"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="dualporo_matrix_sub-grid"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Matrix sub-grid</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="dualporo_matrix_sub-grid"><a name="dualporo_matrix_sub-grid"><!-- --></a>
+<h1 class="topictitle1">Matrix sub-grid</h1>
+
+
+ <div>
+<p>The matrix subdivision is set up automatically by ECLIPSE once
+you have specified the number of sub-cells to split each matrix cell
+into, using the <a href="../ecl_rm/NMATRIX.html#NMATRIX">NMATRIX</a> keyword in the <span class="keyword">RUNSPEC</span> section. The differing
+properties across the field are specified in the usual way by using
+the standard <span class="keyword">GRID</span> section keywords including <a href="../ecl_rm/SIGMAV.html#SIGMAV">SIGMAV</a> to specify the matrix-fracture
+transmissibility.</p>
+
+<p>The generated grid is logarithmic away from the fracture wall and
+can represent a linear (1D), radial (2D) or spherical (3D) geometry.
+You can control the size of the outer matrix sub-cell (as a fraction
+of the corresponding fracture cell) and the geometry type using the <a href="../ecl_rm/NMATOPTS.html#NMATOPTS">NMATOPTS</a> keyword. Once the
+outer sub-cell size and the number of sub-cells required are known,
+the growth factor for each individual matrix cell can be calculated.
+The maximum and minimum growth factors across the field are reported
+in the <samp class="codeph">PRINT</samp> file. If <span class="keyword">NMATOPTS</span> is omitted, then provided <samp class="codeph">NMATRIX</samp> is present, the
+default values from <span class="keyword">NMATOPTS</span> will be assumed.</p>
+
+<p>First an overview of the discretization is given for the linear
+and non-linear geometry types, and then a more detailed view of the
+volume and transmissibility calculations will be provided.</p>
+
+<div class="section" id="dualporo_overview_of_linear_geometry"><a name="dualporo_overview_of_linear_geometry"><!-- --></a><h4 class="sectiontitle">Overview
+of Linear geometry</h4><p>If the geometry is assumed to be 1D then
+the <samp class="codeph">SIGMA</samp> factor and hence the matrix-fracture transmissibility
+are assumed to represent 1D flow.</p>
+<div class="fignone" id="dualporo.overview.linear"><a name="dualporo.overview.linear"><!-- --></a>
+
+ <br/><img src="../img/dualporosity12.png" width="461px"/><br/> 
+<br/><span class="figcap">
+           Figure 95.1  Nested matrix sub-cells in linear geometry</span></div>
+<p>The matrix-fracture transmissibility is assumed to be the
+transmissibility associated with flow over the distance d, through
+area A. The sub-cell transmissibilities are then calculated assuming
+a 1D logarithmic grid over the same matrix volume.</p>
+</div>
+
+<div class="section" id="dualporo_overview_of_cylindrical_and_spherical_geometries"><a name="dualporo_overview_of_cylindrical_and_spherical_geometries"><!-- --></a><h4 class="sectiontitle">Overview of cylindrical and spherical geometries</h4><p>In the 2D (Cylindrical) and 3D (Spherical) flow options the geometry
+is taken to be Cartesian to enable simple mapping from the input matrix-fracture
+transmissibility.</p>
+<div class="fignone" id="dualporo.overview.cylindrical"><a name="dualporo.overview.cylindrical"><!-- --></a>
+
+ <br/><img src="../img/dualporosity13.png" width="345px"/><br/> 
+<br/><span class="figcap">
+           Figure 95.2  Nested matrix sub-cells in cylindrical and spherical geometry</span></div>
+<p>In the 2D case the diagram represents a square cylinder with
+the matrix-fracture transmissibility assumed to represent four times
+the flow over the distance d through area A. In the 3D case the diagram
+represents a cube with the transmissibility taken as sum of six flows
+out of the six faces.</p>
+<p>In each case the sub-cell transmissibilities
+are calculated assuming a logarithmic distribution of sub-cell sizes
+away from the fracture walls.</p>
+</div>
+
+<div class="section" id="dualporo_volume_and_transmissibility_calculations_details"><a name="dualporo_volume_and_transmissibility_calculations_details"><!-- --></a><h4 class="sectiontitle">Volume and transmissibility calculations details</h4><p>Let the <em>n</em> <sup>th</sup> sub-matrix cell have volume  <math><msub><mi>v</mi>
+<mi>n</mi></msub></math>, where <em>n</em> =1 is the sub-cell
+nearest the fracture, and  <math><msub><mi>v</mi>
+<mi>N</mi></msub></math>  is the sub-cell furthest away. <em>N</em> is the value input by keyword <a href="../ecl_rm/NMATRIX.html#NMATRIX">NMATRIX</a>. Then:</p>
+<p> <math><mrow><msub><mrow>
+<mi>V</mi></mrow><mrow><mi>m</mi></mrow></msub><mo>=</mo><mrow><munder><mrow><mi>Σ</mi>
+</mrow><mrow><mi>n</mi></mrow></munder><mo>⁢</mo>
+<mtext> </mtext><msub><mrow><mi>v</mi></mrow><mrow>
+<mi>n</mi></mrow></msub></mrow></mrow></math>      
+  </p>
+<p>where  <math>
+<msub><mi>V</mi><mi>m</mi></msub></math>  is the volume
+of the whole matrix region.</p>
+<p>The outermost sub-cell volume  <math><msub><mi>v</mi>
+<mn>1</mn></msub></math>  is determined by the fraction of
+the fracture pore volume specified by item 2 of the <a href="../ecl_rm/NMATOPTS.html#NMATOPTS">NMATOPTS</a> keyword. The sizes
+of the remaining sub-cells are then functions of the factor</p>
+<p> <math><mi>f</mi>
+<mo>=</mo><msup><mrow><mo>(</mo><mfrac><mrow><mi>X</mi></mrow><mrow><msub><mi>ξ</mi><mn>1</mn></msub>
+</mrow></mfrac><mo>)</mo></mrow><mfrac><mrow><mn>1</mn>
+</mrow><mrow><mi>N</mi><mrow><mo>-</mo><mn>1</mn>
+</mrow></mrow></mfrac></msup></math>          </p>
+<p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <em>X</em> </td>
+
+<td valign="top"> is the distance of the center of the matrix from the fracture
+surface, and</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub>
+<mi>ξ</mi><mn>1</mn></msub></math> </td>
+
+<td valign="top">  is the width of the outermost sub-cell.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>For a LINEAR assumed geometry (<span class="keyword">NMATOPTS</span> item 1), the distances <em>X</em> and  <math><msub><mi>ξ</mi>
+<mn>1</mn></msub></math>  are assumed proportional to the
+volumes  <math><msub>
+<mi>V</mi><mi>m</mi></msub></math>  and  <math><msub><mi>v</mi>
+<mn>1</mn></msub></math>  respectively. For CYLINDRICAL or
+SPHERICAL geometries, these distances are calculated from the geometry
+of a cylindrical or spherical shell with inner and outer radii <em>X</em> and <em>X-</em>  <math><msub><mi>ξ</mi>
+<mn>1</mn></msub></math>, using the known volumes  <math><msub><mi>V</mi>
+<mi>m</mi></msub></math>  and  <math><msub><mi>v</mi>
+<mn>1</mn></msub></math>  for the whole cylinder/sphere and
+the shell.</p>
+<p>The factor <em>f </em> gives the distance  <math><msub><mi>ξ</mi>
+<mi>n</mi></msub></math>  from the matrix-fracture surface
+to the inner surface of the remaining (<em>n</em> &gt;1) interior sub-cells
+by</p>
+<p> <math><mrow>
+<msub><mrow><mi>ξ</mi></mrow><mrow><mi>n</mi></mrow>
+</msub><mo>=</mo><mrow><msup><mrow><mi>f</mi></mrow>
+<mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msup>
+<msub><mrow><mi>ξ</mi></mrow><mrow><mn>1</mn></mrow>
+</msub></mrow></mrow></math>          </p>
+<p>that is, the
+logarithms of the  <math>
+<msub><mi>ξ</mi><mi>n</mi></msub></math>  scale linearly.</p>
+<p>As with  <math>
+<msub><mi>ξ</mi><mn>1</mn></msub></math>, when the assumed
+geometry is CYLINDRICAL or SPHERICAL, the sub-cells are cylindrical
+or spherical shells around the center of the matrix, and  <math><mi>X</mi><mrow>
+<mo>-</mo><msub><mi>ξ</mi><mi>n</mi></msub></mrow>
+</math>  is the inner radius of the shell. The shell volume is determined
+from the inner and outer radii, with the same constant of proportionality
+as used to determine <em>X</em> and  <math><msub><mi>ξ</mi>
+<mn>1</mn></msub></math>  in the first place. For a LINEAR
+assumed geometry the sub-cells are assumed to be slabs parallel to
+the matrix-fracture surface, arranged from the surface to the center
+of the matrix, and the volumes are assumed proportional to the distances.
+The overall effect of this is to obey the relationship</p>
+<p> <math><mrow><mfrac><mrow>
+<mo>(</mo><msup><mrow><mi>X</mi></mrow><mrow><mi>D</mi></mrow></msup><mrow><mo>-</mo><msup><mrow>
+<mrow><mo>(</mo><mi>X</mi><mrow><mo>-</mo><msub>
+<mrow><mi>ξ</mi></mrow><mrow><mn>1</mn></mrow></msub>
+</mrow><mo>)</mo></mrow></mrow><mrow><mi>D</mi></mrow>
+</msup></mrow><mo>)</mo></mrow><mrow><msup><mrow><mi>X</mi></mrow><mrow><mi>D</mi></mrow></msup></mrow>
+</mfrac><mo>=</mo><mfrac><mrow><msub><mrow><mi>v</mi>
+</mrow><mrow><mn>1</mn></mrow></msub></mrow><mrow>
+<msub><mrow><mi>V</mi></mrow><mrow><mi>m</mi></mrow>
+</msub></mrow></mfrac></mrow></math> </p>
+<p>The transmissibilities
+between the sub-cells are then determined by the area of the surface
+between them and the distance between the sub-cell centers (where
+for CYLINDRICAL and SPHERICAL geometries, cell center means the radius
+halfway between the cell’s two surfaces, and for LINEAR geometries,
+the position halfway between the cell’s two surfaces). Thus for any
+geometry, the center of cell <em>n</em> (<em>n</em> &gt;1) is at</p>
+<p> <math><mrow><msub><mrow>
+<mi>c</mi></mrow><mrow><mi>n</mi></mrow></msub><mo>=</mo><mrow><mfrac><mrow><mn>1</mn></mrow><mrow><mn>2</mn></mrow></mfrac><mrow><mo>(</mo><msub><mrow><mi>ξ</mi></mrow><mrow><mi>n</mi><mrow><mo>-</mo><mn>1</mn></mrow></mrow></msub><mo>+</mo><msub><mrow><mi>ξ</mi></mrow><mrow><mi>n</mi></mrow></msub><mo>)</mo>
+</mrow></mrow></mrow></math> </p>
+<p>and the area of the interface
+between cells <em>n</em> and <em>n+1</em> is</p>
+<p> <math><mrow><msub><mrow>
+<mi>A</mi></mrow><mrow><mi>n</mi></mrow></msub><mo>=</mo><msup><mrow><mi>Z</mi><mo>(</mo><mi>X</mi>
+<mrow><mo>-</mo><msub><mrow><mi>ξ</mi></mrow><mrow>
+<mi>n</mi></mrow></msub></mrow><mo>)</mo></mrow><mrow>
+<mi>D</mi><mrow><mo>-</mo><mn>1</mn></mrow></mrow>
+</msup></mrow></math>  </p>
+<p>where <em>D</em> is the dimensionality
+(LINEAR=1, CYLINDRICAL=2, SPHERICAL=3) and <em>Z</em> is a constant
+for all the sub-cells <em>n</em>. For LINEAR this is the constant area
+equivalent to the outer area of the matrix; for CYLINDRICAL it is
+2π times the height of the matrix cylinder and for SPHERICAL it is
+4π.</p>
+<p>Then the transmissibility of the original matrix-fracture
+connection is scaled to the sub-cell to sub-cell connection by the
+factor</p>
+<p> <math>
+<mrow><msub><mrow><mi>G</mi></mrow><mrow><mi>n</mi>
+</mrow></msub><mo>=</mo><mrow><mo>(</mo><mfrac><mrow>
+<msub><mrow><mi>A</mi></mrow><mrow><mi>n</mi></mrow>
+</msub></mrow><mrow><msub><mrow><mi>A</mi></mrow>
+<mrow><mi>X</mi></mrow></msub></mrow></mfrac><mo>)</mo>
+<mo>(</mo><mfrac><mrow><mn>2</mn><mi>X</mi></mrow>
+<mrow><msub><mrow><mi>c</mi></mrow><mrow><mi>n</mi>
+</mrow></msub><mrow><mo>-</mo><msub><mrow><mi>c</mi>
+</mrow><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow>
+</msub></mrow></mrow></mfrac><mo>)</mo></mrow></mrow>
+</math> </p>
+<p>where  <math><mrow><msub><mrow>
+<mi>A</mi></mrow><mrow><mi>X</mi></mrow></msub><mo>=</mo><mi>Z</mi><msup><mrow><mi>X</mi></mrow><mrow>
+<mi>D</mi><mo>−</mo><mn>1</mn></mrow></msup></mrow>
+</math> is the outer area associated with overall matrix size <em>X</em>. Note that the factor <em>Z</em> cancels out in the expression
+as only ratios of the <em>A</em> factors are used.</p>
+<p>For the transmissibility
+between the outer matrix sub-cell and the fracture, the factor  <math><msub><mi>G</mi>
+<mn>1</mn></msub></math>  is  <math><mrow><mn>2</mn>
+<mi>X</mi></mrow><mo>/</mo><msub><mi>ξ</mi><mn>1</mn>
+</msub></math>          </p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

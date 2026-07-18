@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PSPLITY"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PSPLITY"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PSPLITY</title>
+</head>
+<body>
+
+
+<div class="nested0" id="PSPLITY"><a name="PSPLITY"><!-- --></a>
+<h1 class="keyword">PSPLITY</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="psplity.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="psplity.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1904e45">  </th>
+
+<th valign="top" id="d1904e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1904e54"> x </th>
+
+<th valign="top" id="d1904e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1904e45 d1904e54 "> x </td>
+
+<td valign="top" headers="d1904e48 d1904e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1904e45 d1904e54 ">  </td>
+
+<td valign="top" headers="d1904e48 d1904e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1904e45 d1904e54 ">  </td>
+
+<td valign="top" headers="d1904e48 d1904e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1904e45 d1904e54 ">  </td>
+
+<td valign="top" headers="d1904e48 d1904e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1904e45 d1904e54 ">  </td>
+
+<td valign="top" headers="d1904e48 d1904e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1904e45 d1904e54 ">  </td>
+
+<td valign="top" headers="d1904e48 d1904e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1904e45 d1904e54 ">  </td>
+
+<td valign="top" headers="d1904e48 d1904e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1904e45 d1904e54 ">  </td>
+
+<td valign="top" headers="d1904e48 d1904e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This is an optional keyword associated with the <a href="PARALLEL.html#PARALLEL"> PARALLEL</a> keyword. It
+specifies possible partitions arising from domain decomposition in
+the Y-direction. It is envisaged that the data will be collected from
+the output of the <samp class="codeph">PART</samp> mnemonic in the <a href="RPTSOL.html#RPTSOL"> RPTSOL</a> keyword, which
+outputs all potential splits for a given data set.</p>
+
+<p>This keyword is a multiple record version of the now redundant <a href="PDIVY.html#PDIVY"> PDIVY</a> keyword. Using 
+this keyword you can specify all possible partitions
+in a particular direction without having to edit the data set.</p>
+
+<p>The keyword is followed by multiple records each having N<sub>py</sub> integer items (where  N<sub>py</sub>  is the number of processors
+is the Y-direction; if the number of processors specified by the <a href="NPROCY.html#NPROCY"> NPROCY</a> keyword matches
+the entries in a particular record, then this record will be used
+for domain decomposition). Each integer specifies the last y-index
+for the particular processor. The last item must have the value  N<sub>py</sub>. </p>
+
+<p>See also <a href="../ecl_td/parallel_Parallel_option.html#parallel_parallel_option">"Parallel option"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<div class="section" id="psplity_example"><a name="psplity_example"><!-- --></a><h4 class="sectiontitle">Example</h4>             
+   <pre><code>DIMENS
+30 20 3 /
+PSPLITY
+  11  20                                / --NPROCY=  2 LOAD BALANCED (%) =  94.59
+   9  14  20                            / --NPROCY=  3 LOAD BALANCED (%) =  84.69
+   7  11  15  20                        / --NPROCY=  4 LOAD BALANCED (%) =  94.18
+   6  10  13  16  20                    / --NPROCY=  5 LOAD BALANCED (%) =  79.45
+   6   9  12  15  17  20                / --NPROCY=  6 LOAD BALANCED (%) =  80.04
+   5   8  11  13  15  17  20            / --NPROCY=  7 LOAD BALANCED (%) =  70.94
+   5   8  10  12  14  16  18  20        / --NPROCY=  8 LOAD BALANCED (%) =  72.83
+/
+--</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

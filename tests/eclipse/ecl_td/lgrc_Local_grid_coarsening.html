@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Local grid coarsening"/>
+<meta name="DC.subject" content="Local grid coarsening"/>
+<meta name="keywords" content="Local grid coarsening"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrc_local_grid_coarsening"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Local grid coarsening</title>
+</head>
+<body>
+
+
+<div class="nested0" id="lgrc_local_grid_coarsening"><a name="lgrc_local_grid_coarsening"><!-- --></a>
+<h1 class="topictitle1">Local grid coarsening</h1>
+
+
+ <div>
+<p>Grid Coarsening is the complement of local grid refinement. Cells
+may be amalgamated to reduce the total number of active cells in the
+global grid.</p>
+
+<p>ECLIPSE 100 </p>
+
+<p>To reserve memory for grid coarsening, in
+keyword <a href="../ecl_rm/LGR.html#LGR">LGR</a> in the <span class="keyword">RUNSPEC</span> section set <samp class="codeph">MCOARS</samp> equal to the number of coarsening cells (amalgamations), for example:</p>
+
+<pre><code>LGR --MAXLGR  MAXCLS  MCOARS     0       0       48  /</code></pre>
+<p>Because grid coarsening generates non-neighbor connections, the
+keyword <a href="../ecl_rm/NONNC.html#NONNC">NONNC</a> must not be specified in the <span class="keyword">RUNSPEC</span> section.
+Also, care must be taken not to specify grid coarsening where new
+NNCs generated will be invalid, for instance at the boundary of two
+PVT regions with different constant R<sub>s</sub> values.</p>
+
+<p>Coarsenings are specified in the <span class="keyword">GRID</span> data section
+using keyword <a href="../ecl_rm/COARSEN.html#COARSEN">COARSEN</a>. For example, with <samp class="codeph">NDIVIX =10</samp>, <samp class="codeph">NDIVIY=10</samp> and <samp class="codeph">NDIVIZ=6</samp>:</p>
+
+<pre><code>COARSEN -- I1 I2 J1 J2 K1 K2 NX NY NZ --
+     1 10  1  4  1  6  5  2  3  /
+     1  4  5 10  1  6  2  3  3  /
+ /</code></pre>
+<p>The first coarsening reduces the number of active cells from 10*4*6
+= 240 to 5*2*3 = 30. The eight cells at (1,1,1), (2,1,1), (1,2,1),
+(2,2,1), (1,1,2) (2,1,2), (1,2,2), (2,2,2) are amalgamated into a
+single cell for simulation. The second coarsening reduces the number
+of active cells from 4*6*6 = 144 to 2*3*3 = 18, a reduction in the
+number of active cells by a factor of 8. Thus the number of amalgamated
+cells is <samp class="codeph">MCOARS</samp> = 30+18 = 48.</p>
+
+<p><span class="keyword">NX</span>, <span class="keyword">NY</span>, and <span class="keyword">NZ</span> are the number of coarsened cells in each direction within each
+coarsening set. If values are not provided then default values are
+set to 1. Specified values of <span class="keyword">NX</span> must be an exact
+factor of <span class="keyword">I2</span> - <span class="keyword">I1</span> + 1, and similarly
+for <span class="keyword">NY</span> and <span class="keyword">NZ</span>.</p>
+
+<p>Coarsening sets must not overlap one another, but they may join
+together as in the above example. Thus the coarsening facility is
+extremely flexible, allowing the engineer to build a highly complex
+grid. Local grid refinements cannot be placed within or adjacent to
+a grid coarsening, that is the local grids may only be applied to
+non-coarsened cells.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The initial fluid mobility correction"/>
+<meta name="DC.subject" content="End-point scaling, Saturation table scaling"/>
+<meta name="keywords" content="End-point scaling, Saturation table scaling"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sattabsc_the_initial_fluid_mobility_correction"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The initial fluid mobility correction</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="sattabsc_the_initial_fluid_mobility_correction"><a name="sattabsc_the_initial_fluid_mobility_correction"><!-- --></a>
+<h1 class="topictitle1">The initial fluid mobility correction</h1>
+
+
+ <div>
+<p>In the production of a reservoir model it is important to ensure
+that the model is initialized with the correct mobile quantities of
+each fluid as well as the correct quantities of total fluid-in-place.
+If this is not done the recovery factors of each fluid are predicted
+erroneously.</p>
+
+<p>The fine scale equilibration algorithm predicts too small an initial
+mobile oil-in-place even though the fluid volumes-in-place are predicted
+correctly. To see why the mobile fluids-in-place are underestimated
+consider the fine scale equilibration of an oil-water system. The
+variation of water saturation with depth for a typical grid cell that
+intersects the oil-water transition zone is shown in the following
+figure.</p>
+
+<div class="fignone" id="sattabsc.XID-000002a7"><a name="sattabsc.XID-000002a7"><!-- --></a>
+
+ <br/><img src="../img/satta3.png" width="468px"/><br/> 
+<br/><span class="figcap">
+           Figure 165.1  Water saturation versus depth for a typical grid cell that
+intersects the oil-water transition zone</span></div>
+
+<p>The water saturation at the value X is  <math><mn>1.0</mn><mrow><mo>-</mo><mtext>SOWCR</mtext></mrow>
+</math>.  <math><mi>V</mi></math>  is the pore volume.</p>
+
+<p>The initial volume of oil-in-place is  <math><mrow>
+<mi>V</mi><mo>(</mo><mi>A</mi><mo>+</mo><mi>B</mi>
+<mo>)</mo></mrow></math>          </p>
+
+<p>The correct volume of mobile oil-in-place is  <math><mrow><mi>V</mi>
+<mi>A</mi></mrow></math>          </p>
+
+<p>The volume of mobile oil-in-place calculated by the fine scale
+equilibration procedure is  <math><mrow><mi>V</mi>
+<mo>(</mo><mi>A</mi><mrow><mo>-</mo><mi>C</mi>
+</mrow><mo>)</mo></mrow></math>, which leads to an underestimate
+of the total volume of mobile oil of  <math><mrow>
+<mi>V</mi><mi>C</mi></mrow></math>.</p>
+
+<p>The initial volume of mobile oil-in-place is underestimated in
+cases where there is a negligible transition zone. Note that the problem
+may also arise in the calculation of the initial mobile volumes of
+other phases.</p>
+
+<p>A facility based on the end-point scaling option is available in
+ECLIPSE to provide correct estimates of both the total and mobile
+fluids-in-place. The method uses the fine scale equilibration option
+and computes pseudo values for the critical saturation of each phase
+in each grid cell. The procedure adopted is as follows:</p>
+
+<ul>
+<li>For each of the fine scale integration layers (i=1,...,N) the
+saturation, S<sub>pi</sub>, of each phase, p, and its critical saturation
+S<sub>p,cr,i</sub> is determined</li>
+
+<li>The volume of mobile phase within each layer, M<sub>pi</sub>,
+is then found              <p>                    <math><msub><mi>M</mi>
+<mrow><mi>p</mi><mi>i</mi></mrow></msub><mo>=</mo>
+<mn>0</mn></math>  if  <math><msub><mi>S</mi>
+<mrow><mi>p</mi><mi>i</mi></mrow></msub><mo>&lt;</mo>
+<msub><mi>S</mi><mrow><mi>p</mi><mo>,</mo><mrow><mi>c</mi><mi>r</mi><mo>,</mo><mi>i</mi></mrow></mrow>
+</msub></math> </p>
+                <p>                    <math><msub><mi>M</mi>
+<mrow><mi>p</mi><mi>i</mi></mrow></msub><mo>=</mo>
+<mrow><msub><mi>V</mi><mi>i</mi></msub><mo>(</mo>
+<msub><mi>S</mi><mrow><mi>p</mi><mi>i</mi></mrow>
+</msub><mrow><mo>-</mo><msub><mi>S</mi><mrow><mi>p</mi><mo>,</mo><mrow><mi>c</mi><mi>r</mi><mo>,</mo>
+<mi>i</mi></mrow></mrow></msub></mrow><mo>)</mo>
+</mrow></math>  if  <math><msub><mi>S</mi>
+<mrow><mi>p</mi><mi>i</mi></mrow></msub><mo>&gt;</mo>
+<msub><mi>S</mi><mrow><mi>p</mi><mo>,</mo><mrow><mi>c</mi><mi>r</mi><mo>,</mo><mi>i</mi></mrow></mrow>
+</msub></math> </p>
+<p>where  <math><msub>
+<mi>V</mi><mi>i</mi></msub></math>  is the pore volume
+of layer i</p>
+</li>
+
+<li>The total mobile phase volume,  <math><msub>
+<mi>M</mi><mi>p</mi></msub></math>, in each cell is then
+determined using  <math><msub><mi>M</mi>
+<mi>p</mi></msub><mo>=</mo><mrow><msub><mi>Σ</mi>
+<mi>i</mi></msub><msub><mi>M</mi><mrow><mi>p</mi>
+<mo>,</mo><mi>i</mi></mrow></msub></mrow></math>.
+The total phase volume,  <math><mrow><msub><mrow>
+<mi>T</mi></mrow><mrow><mi>p</mi></mrow></msub><mo>=</mo><mrow><msub><mrow><mi>Σ</mi>
+</mrow><mrow><mi>i</mi></mrow></msub><msub><mrow><mi>V</mi></mrow><mrow><mi>i</mi></mrow></msub><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>p</mi><mi>i</mi>
+</mrow></msub></mrow></mrow></math>.             </li>
+
+<li>The average phase saturation in the cell is  <math><mrow><msub><mi>S</mi><mi>p</mi></msub><mi>′</mi></mrow><mo>=</mo>
+<msub><mi>T</mi><mi>p</mi></msub><mo>/</mo><mo>(</mo>
+<mrow><msub><mi>Σ</mi><mi>i</mi></msub><msub><mi>V</mi><mi>i</mi></msub></mrow><mo>)</mo></math> 
+and the average mobile phase saturation is  <math><mrow>
+<msub><mi>M</mi><mi>p</mi></msub><mi>′</mi></mrow>
+<mo>=</mo><msub><mi>M</mi><mi>p</mi></msub><mo>/</mo>
+<mo>(</mo><mrow><msub><mi>Σ</mi><mi>i</mi></msub>
+<msub><mi>V</mi><mi>i</mi></msub></mrow><mo>)</mo>
+</math>.             </li>
+
+<li>For cells in a which a mobility-immobility transition occurs due
+to the saturation variation with depth, the pseudo-critical phase
+saturation is set to  <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sattabsc.equ.02d1"/>
+ <math><msub><mrow><mi>S</mi><mi>′</mi></mrow><mrow><mi>p</mi><mo>,</mo>
+<mrow><mi>c</mi><mi>r</mi><mo>,</mo><mi>i</mi>
+</mrow></mrow></msub><mo>=</mo><msub><mrow><mi>S</mi>
+<mi>′</mi></mrow><mi>p</mi></msub><mrow><mo>-</mo>
+<msub><mrow><mi>M</mi><mi>′</mi></mrow><mi>p</mi>
+</msub></mrow></math> 
+</td><td align="right">[Eq. 165.1]
+              </td></tr></tbody></table></li>
+
+<li>The remaining cells in the grid contain either mobile or immobile
+fluid throughout their depth. In this case           <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sattabsc.equ.02d6"/>
+ <math><msub><mrow><mi>S</mi><mi>′</mi></mrow><mrow><mi>p</mi><mo>,</mo>
+<mrow><mi>c</mi><mi>r</mi><mo>,</mo><mi>i</mi>
+</mrow></mrow></msub><mo>=</mo><mo>(</mo><mrow><msub>
+<mi>Σ</mi><mi>i</mi></msub><msub><mi>V</mi><mi>i</mi>
+</msub><msub><mi>S</mi><mrow><mi>p</mi><mo>,</mo>
+<mrow><mi>c</mi><mi>r</mi><mo>,</mo><mi>i</mi>
+</mrow></mrow></msub></mrow><mo>)</mo><mo>/</mo><mo>(</mo><mrow><msub><mi>Σ</mi><mi>i</mi></msub><msub>
+<mi>V</mi><mi>i</mi></msub></mrow><mo>)</mo></math> 
+</td><td align="right">[Eq. 165.2]
+              </td></tr></tbody></table></li>
+
+</ul>
+
+<p>This calculation of each pseudo critical phase saturation ensures
+that the critical saturations are only modified in the vicinity of
+the fluid contacts in the initial state. During the simulation phase,
+the relative permeability curves are rescaled using the pseudo critical
+saturations computed above. The pseudo critical phase saturations
+are assumed to be isotropic; if directional scaling is enabled, then
+the directional counterparts of the pseudo critical phase saturations
+are set equal to their isotropic form.</p>
+
+<p>The mobile fluid-in-place calculation is activated using the <samp class="codeph">MOBILE</samp> flag in the keyword <a href="../ecl_rm/EQLOPTS.html#EQLOPTS">EQLOPTS</a> of the <span class="keyword">RUNSPEC</span> section. In a three-phase run, the initial mobile fluid-in-place
+correction is applied to all the critical end points <a href="../ecl_rm/SOWCR.html#SOWCR">SOWCR</a>, <a href="../ecl_rm/SOGCR.html#SOGCR">SOGCR</a>, <a href="../ecl_rm/SWCR.html#SWCR">SWCR</a> and <a href="../ecl_rm/SGCR.html#SGCR">SGCR</a>. In an oil-water system
+it is applied only to <span class="keyword">SOWCR</span> and <span class="keyword">SWCR</span>. In a gas-oil system it is applied only to <span class="keyword">SOGCR</span> and <span class="keyword">SGCR</span>. In a gas-water system it is applied
+only to <span class="keyword">SWCR</span> and <span class="keyword">SGCR</span>. Output
+of the processed end points used in the simulation can be requested
+with the keywords <span class="keyword">SOWCR</span>, <span class="keyword">SOGCR</span>, <span class="keyword">SWCR</span> and <span class="keyword">SGCR</span> (items 24-27)
+in the <a href="../ecl_rm/RPTSOL.html#RPTSOL">RPTSOL</a> keyword (the output is headed by keywords <span class="keyword">PSOWCR</span>, <span class="keyword">PSOGCR</span>, <span class="keyword">PSWCR</span> and <span class="keyword">PSGCR</span>).</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

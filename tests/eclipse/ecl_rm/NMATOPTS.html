@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="NMATOPTS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="NMATOPTS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>NMATOPTS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="NMATOPTS"><a name="NMATOPTS"><!-- --></a>
+<h1 class="keyword">NMATOPTS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="nmatopts.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="nmatopts.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1538e45"> x </th>
+
+<th valign="top" id="d1538e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1538e54"> x </th>
+
+<th valign="top" id="d1538e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1538e45 d1538e54 ">  </td>
+
+<td valign="top" headers="d1538e48 d1538e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1538e45 d1538e54 "> x </td>
+
+<td valign="top" headers="d1538e48 d1538e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1538e45 d1538e54 ">  </td>
+
+<td valign="top" headers="d1538e48 d1538e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1538e45 d1538e54 ">  </td>
+
+<td valign="top" headers="d1538e48 d1538e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1538e45 d1538e54 ">  </td>
+
+<td valign="top" headers="d1538e48 d1538e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1538e45 d1538e54 ">  </td>
+
+<td valign="top" headers="d1538e48 d1538e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1538e45 d1538e54 ">  </td>
+
+<td valign="top" headers="d1538e48 d1538e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1538e45 d1538e54 ">  </td>
+
+<td valign="top" headers="d1538e48 d1538e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>For ECLIPSE 100 the keyword is used to control
+options associated with the discretized matrix dual porosity model.
+The model must be activated by including the <a href="NMATRIX.html#NMATRIX"> NMATRIX</a> keyword
+in the <span class="keyword">RUNSPEC</span> section.</p>
+
+<p>For ECLIPSE 300 the keyword means that the
+model (see <a href="../ecl_td/multiporo_Multi_porosity.html#multiporo_multi_porosity">"Multi porosity"</a> in the <cite>ECLIPSE Technical Description</cite>), activated with <span class="keyword">NMATRIX</span>, is assigned grid data automatically (similar to
+the discretized matrix Dual Porosity Model of ECLIPSE 100). This means
+that grid data only needs to be supplied as for a standard dual porosity
+case.</p>
+
+<p>The <span class="keyword">NMATOPTS</span> keyword is optional and should
+be followed by some or all of the following data items, terminated
+by a slash (/).</p>
+
+<ol>
+<li> The assumed geometry of the matrix sub-cells. <p>Either <samp class="codeph">LINEAR</samp>, <samp class="codeph">RADIAL</samp> or <samp class="codeph">SPHERICAL</samp> </p>
+ <p>In ECLIPSE 300 there is an additional
+possibility - <samp class="codeph">UNIFORM</samp>. This produces a uniform grid
+within the matrix cells.</p>
+ <p>A further alternative possibility
+is <samp class="codeph">VERTICAL</samp>, which is used to model gravity drainage,
+whereas the previous options model transient effects in the flow from
+matrix to fracture. <samp class="codeph">VERTICAL</samp> uses the matrix cells
+as a vertical discretization of an individual block of matrix and
+connects them all to the fracture. See <a href="../ecl_td/dualporo_Vertical_Discrete_Matrix_Gravity_Drainage_Model.html#dualporo_vertical_discrete_matrix_gravity_drainage_model">"Vertical discrete
+matrix gravity drainage model"</a> in the <cite>ECLIPSE Technical
+Description</cite>. If this option is used then the keyword <a href="GRAVDRB.html#GRAVDRB"> GRAVDRB</a> must
+have been specified in the <span class="keyword">RUNSPEC</span> section.</p>
+ <p>In ECLIPSE 100, for any discretized matrix
+option, the minimum number of global cells in the X direction (keyword <a href="DIMENS.html#DIMENS"> DIMENS</a>) is 2.</p>
+ <p>In all cases except <samp class="codeph">VERTICAL</samp>, the matrix sub-cells
+only communicate with the fracture system through the outer sub-cell.
+However, the pressure (and saturation) response from the matrix depends
+on the assumed geometry of the system. In the case of <samp class="codeph">VERTICAL</samp> geometry, all matrix sub-cells also connect directly with the fracture,
+and the physical response from the matrix depends on all connections.
+In this case, the geometry is uniform as described in the Technical
+Description.</p>
+ <p>DEFAULT: <samp class="codeph">LINEAR</samp> </p>
+ </li>
+
+<li> The fraction of the fracture pore volume (or matrix block volume
+with ECLIPSE 300 - see item 3) is to be used for the size of the outermost
+matrix sub-cell. It is not used if <samp class="codeph">UNIFORM</samp> or <samp class="codeph">VERTICAL</samp> is selected. <samp class="codeph">VERTICAL</samp> assumes
+uniform distribution of the matrix volume in the same way as <samp class="codeph">UNIFORM</samp>. <p>Once the size of the outermost sub-cell and
+the number of sub-cells in each matrix cell have been defined, ECLIPSE
+automatically generates a logarithmic grid within the matrix cells.
+The maximum and minimum growth factors over the entire model are reported
+as a message.</p>
+ <p>To model accurately the initial pressure transient
+response of the matrix cells, the outermost matrix sub-cell needs
+to be reasonably small compared to the fracture system.</p>
+ <p>DEFAULT:
+0.1</p>
+ </li>
+
+<li> Method for controlling the partitioning
+(ECLIPSE 300). <p>Either <samp class="codeph">FPORV</samp> or <samp class="codeph">MBLKV</samp> </p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">FPORV</samp> </td>
+
+<td valign="top">the fractional value in item 2 is used to construct the size
+of the first partitioned block from the fracture pore volume.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">MBLKV</samp> </td>
+
+<td valign="top"> the fractional value in item 2 is used to construct the size
+of the first partitioned block from the matrix block volume.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>Using the time-dependent sorption model in ECLIPSE 300
+with the <a href="COAL.html#COAL"> COAL</a> option,
+the first pore volume of the matrix sub-grid might be different from
+the given fractional value since only some of the sub-grid cells might
+have a pore volume. When there is no pore volume in the matrix (only
+coal volume) the <samp class="codeph">MBLKV</samp> method will be used instead.</p>
+ <p>DEFAULT: <samp class="codeph">FPORV</samp> </p>
+ </li>
+
+</ol>
+
+<p>For further information see <a href="../ecl_td/dualporo_Discretized_matrix_model__ECLIPSE_100_.html#dualporo_discretized_matrix_model__eclipse_100_">"Discretized matrix
+model (ECLIPSE 100)"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<div class="section" id="nmatopts_example"><a name="nmatopts_example"><!-- --></a><h4 class="sectiontitle">Example</h4>            
+    <pre><code>NMATOPTS
+  RADIAL    0.05   /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

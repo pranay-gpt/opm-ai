@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Solvent model"/>
+<meta name="DC.subject" content="Solvent, Applications"/>
+<meta name="keywords" content="Solvent, Applications"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="solvent_solvent_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Solvent model</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="solvent_solvent_model"><a name="solvent_solvent_model"><!-- --></a>
+<h1 class="keyword">Solvent model</h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="solvent.tab.0009"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="solvent.tab.0009" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> x </td>
+
+<td valign="top"> ECLIPSE 100 </td>
+
+</tr>
+
+<tr>
+<td valign="top">  </td>
+
+<td valign="top"> ECLIPSE 300 </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This chapter describes a four-component extension of the ECLIPSE
+black-oil model. Please refer to <a href="miscfloo_Miscible_Flood_Modeling.html#miscfloo_miscible_flood_modeling"> "Miscible flood modeling"</a> for more detail on the three-component
+modeling. The aim of the extension is to enable modeling of reservoir
+recovery mechanisms in which injected fluids are miscible with the
+hydrocarbons in the reservoir.</p>
+
+<p>An injected fluid sets up a miscible displacement if there is no
+phase boundary or interface between the injected fluid and the reservoir
+oil. A miscible displacement has the advantage over immiscible displacements
+such as water flooding, of enabling very high recoveries. An area
+swept by a miscible fluid typically leaves a very small residual oil
+saturation.</p>
+
+<p>In miscible gas injection processes, total displacement of the
+oil in the swept regions does not guarantee a high overall recovery
+efficiency. This is because the high adverse mobility ratio inherent
+in gas injection means that the flow is unstable and leads to the
+growth of viscous fingers that leave regions of bypassed oil in the
+reservoir at gas breakthrough. Gravitational fingering may also be
+present as a result of the large density differences between the injected
+gas and the in-place oil. The flow is unstable to finger formation
+at mobility ratios greater than unity, or in places where a dense
+fluid overlies a less dense fluid, and the fingers grow rapidly from
+small fluctuations in reservoir homogeneity. Reservoir simulation
+models must account for the growth of fingers whenever they might
+arise in the reservoir.</p>
+
+<p>A further feature of miscible fluid displacement to be included
+in a simulation model is the mixing of the miscible components. Component
+mixing occurs on a microscopic scale and results from molecular diffusion
+and fluid velocity variations within the porous medium on the scale
+of the pore size. The mixing process is represented by a diffusion
+term in the component equations. Correct treatment of this mixing
+effect within the simulation model is important since the mixing term
+exerts a considerable damping effect on the growth of viscous and
+gravity fingers.</p>
+
+<p>The simulation of incompressible miscible displacement was initially
+based on a direct solution of the convection-diffusion equations for
+the local concentration of each of the miscible components. However,
+such models are unreliable unless the fine scale structure of the
+fingers can be resolved, otherwise mixing cell effects will dampen
+the finger growth rates and produce optimistic oil recovery forecasts.
+The numerical diffusion inherent in finite difference models also
+masks the true mixing of the miscible components unless the grid is
+sufficiently fine. The number of grid cells required for accurate
+field-scale study of miscible displacement is unacceptably high and
+the cost of computing time prohibitive.</p>
+
+<div class="section" id="solvent_the_eclipse_implementation"><a name="solvent_the_eclipse_implementation"><!-- --></a><h4 class="sectiontitle">The ECLIPSE
+implementation</h4><p>The model is optionally a four-component
+system consisting of water, oil, reservoir gas and an injected solvent,
+or a three-component system of water, oil and solvent gas or an oil/solvent
+system.</p>
+<p>In regions of the reservoir containing only solvent
+and reservoir oil (possibly containing dissolved gas), the solvent
+and reservoir oil components are assumed to be miscible in all proportions
+and consequently only one hydrocarbon phase exists in the reservoir.
+The relative permeability requirements of the model are those for
+a two-phase system (water/hydrocarbon).</p>
+<p>In regions of the reservoir
+containing only oil and reservoir gas, the gas and oil components
+will be immiscible and will behave in a traditional black oil manner.
+In regions containing both dry gas and solvent, an intermediate behavior
+is assumed to occur. The modeling of the immiscible/miscible transition
+is described in subsequent sections.</p>
+<p>The Todd-Longstaff model
+is an empirical treatment of the effects of physical dispersion between
+the miscible components in the hydrocarbon phase. The model introduces
+an empirical parameter,  <math><mi>ω</mi>
+</math>, whose value lies between 0 and 1, to represent the size
+of the dispersed zone in each grid cell. The value of  <math><mi>ω</mi>
+</math>  thus controls the degree of fluid mixing within each grid
+cell. A value of  <math><mi>ω</mi><mo>=</mo><mn>1</mn></math>  models the case where the size of
+the dispersed zone is much greater than a typical grid cell size and
+the hydrocarbon components can be considered to be fully mixed in
+each cell. In this case the miscible components have the same value
+for the viscosity and density, as given by the appropriate mixing
+rule formulae. A value of  <math><mi>ω</mi><mo>=</mo><mn>0</mn></math>  models the effect of a negligibly
+thin dispersed zone between the gas and oil components, and the miscible
+components should then have the viscosity and density values of the
+pure components. In practical applications an intermediate value of
+ <math><mi>ω</mi>
+</math>  would be needed to model incomplete mixing of the miscible
+components. By default the viscosity and density values will be calculated
+using the same mixing parameter,  <math><mi>ω</mi></math>. However, if the mixing parameter is being
+used as a history matching parameter, it is sometimes useful to specify
+two separate mixing parameters, one for the viscosities and one for
+the densities.</p>
+</div>
+
+<div class="section" id="solvent_applications"><a name="solvent_applications"><!-- --></a><h4 class="sectiontitle">Applications</h4><p>There
+is a wide variety of secondary and tertiary recovery schemes in which
+the aim is to enhance the reservoir sweep by using a miscible injection
+fluid.</p>
+<p>Typically the miscible injection fluid is expensive compared
+with traditional flooding fluids, such as dry gas and water. Miscible
+fluids are often referred to as ‘solvents’; examples of
+solvent schemes are listed below:</p>
+<ul>
+<li>High pressure dry gas processes, in which mass transfer effects
+at the gas-oil contact generate miscible flow conditions between the
+gas and the oil.</li>
+
+<li>A solvent such as LPG or propane may be injected as a ‘slug’
+to be followed by an extended period of lean gas injection. The slug
+fluid is miscible with both the gas and oil, and the success of the
+method depends upon maintenance of both the reservoir pressure and
+the solvent slug itself.</li>
+
+<li>Certain non-hydrocarbon gases such as carbon dioxide produce miscible
+displacement of oil at pressures above a threshold value.</li>
+
+<li>All-liquid miscible displacements by fluids such as alcohol, normally
+injected as a slug between the in-place oil and the injected chase
+water.</li>
+
+</ul>
+<p>In many of the schemes, the cost of the solvent is such that
+the recovery scheme needs to be ‘engineered’ to allow
+enough solvent to be injected to increase the total oil recovery while
+keeping the solvent costs low enough to make the project economic.</p>
+<p>In applications where the reservoir pressure falls below the bubble
+point, and in schemes where a solvent slug is chased by a lean gas
+flood, there is a requirement to model four components within the
+reservoir (water, oil, solvent and lean gas). The solvent model in
+ECLIPSE provides a simple method of modeling these recovery mechanisms.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

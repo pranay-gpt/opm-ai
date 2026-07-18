@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="RSCONST"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="RSCONST"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>RSCONST</title>
+</head>
+<body>
+
+
+<div class="nested0" id="RSCONST"><a name="RSCONST"><!-- --></a>
+<h1 class="keyword">RSCONST</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="rsconst.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="rsconst.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2124e45">                         x                   
+  </th>
+
+<th valign="top" id="d2124e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2124e54">                                             
+ </th>
+
+<th valign="top" id="d2124e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2124e45 d2124e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2124e48 d2124e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2124e45 d2124e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2124e48 d2124e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2124e45 d2124e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2124e48 d2124e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2124e45 d2124e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d2124e48 d2124e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2124e45 d2124e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2124e48 d2124e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2124e45 d2124e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2124e48 d2124e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2124e45 d2124e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2124e48 d2124e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2124e45 d2124e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2124e48 d2124e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword is used to declare that dead oil contains a constant
+and uniform concentration of dissolved gas. This provides a more efficient
+way of modeling black oil systems in which there is no free gas and
+the pressure never falls below the bubble point. The flags for gas
+and dissolved gas in the <span class="keyword">RUNSPEC</span> section should
+not be switched on (keywords <a href="GAS.html#GAS"> GAS</a> and <a href="DISGAS.html#DISGAS"> DISGAS</a>), so that gas is not treated in the model as an active phase. The
+system therefore becomes a two-phase or single-phase model, depending
+on whether or not water is present as well as the oil. The oil should
+be treated as dead oil (using keyword <a href="PVDO.html#PVDO"> PVDO</a> to supply its PVT properties).</p>
+
+<p>The keyword should be followed by a line containing two items of
+data, terminated by a slash (/):</p>
+
+<ol>
+<li>The dissolved gas concentration (R<sub>s</sub>).<p>UNITS: sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), Mscf/stb (<samp class="codeph">FIELD</samp>), scc/scc (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li>The bubble point pressure.<p>The run will terminate if the pressure
+in any grid block falls below this value.</p>
+<p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+</ol>
+
+<p>The keyword causes the oil density to be modified to include the
+dissolved gas, and causes the gas flow rates to be set equal to R<sub>s</sub> * the oil flow rate.</p>
+
+<p>See also keyword <a href="RSCONSTT.html#RSCONSTT"> RSCONSTT</a>.</p>
+
+<div class="section" id="rsconst_example"><a name="rsconst_example"><!-- --></a><h4 class="sectiontitle">Example</h4>             
+   <pre><code>RSCONST
+ 0.37 1015 / </code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

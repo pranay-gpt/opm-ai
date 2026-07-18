@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Control and output of sales gas rate"/>
+<meta name="DC.subject" content="Gas field operations, Sales gas rate, Control, Output, Gas, Rate control, Rate output, Rate sales"/>
+<meta name="keywords" content="Gas field operations, Sales gas rate, Control, Output, Gas, Rate control, Rate output, Rate sales"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gasfieldintro_control_and_output_of_sales_gas_rate1"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Control and output of sales gas rate</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gasfieldintro_control_and_output_of_sales_gas_rate1"><a name="gasfieldintro_control_and_output_of_sales_gas_rate1"><!-- --></a>
+<h1 class="topictitle1">Control and output of sales gas rate</h1>
+
+
+ <div>
+<p>ECLIPSE 100</p>
+
+<p>In ECLIPSE 100 the sales gas rate is defined
+as the <strong>gross</strong> gas production from the formation, <strong>minus</strong> the gas consumption, <strong>plus</strong> any gas imports. Gas can be consumed
+or imported at a specified rate at any group, as requested using the
+keyword <a href="../ecl_rm/GCONSUMP.html#GCONSUMP">GCONSUMP</a>. Gas can also be consumed by an automatic compressor when
+it is operating (see <a href="gasfieldintro_automatic_compressors.html#gasfieldintro_automatic_compressors"> "Automatic compressors"</a>).</p>
+
+<p>ECLIPSE 300          </p>
+
+<p>In ECLIPSE 300 the sales gas rate is defined
+as the <strong>gross</strong> gas production from the formation, <strong>minus</strong> the gas consumption. Gas can be consumed as fuel using the keyword <a href="../ecl_rm/GRUPFUEL.html#GRUPFUEL">GRUPFUEL</a>. Gas may only be imported
+via a gas producing satellite group (see keyword <a href="../ecl_rm/GSATPROD.html#GSATPROD">GSATPROD</a>). Note that advanced
+and make-up gas (see keywords <a href="../ecl_rm/GADVANCE.html#GADVANCE">GADVANCE</a> and <a href="../ecl_rm/GINJGAS.html#GINJGAS">GINJGAS</a>) is only available
+for reinjection and thus does not alter the sales gas rate.</p>
+
+<p>Normally the group and field gas rate targets apply to the gross
+production rate of gas from the formation. But when the gas field
+operations model is in use (triggered by the keyword <a href="../ecl_rm/SWINGFAC.html#SWINGFAC">SWINGFAC</a>), these targets are
+automatically adjusted to allow for the specified consumption and,
+for ECLIPSE 100, import rates. (Gas injection is assumed not to occur,
+so no adjustment is made for it.) Thus the targets now apply to the
+sales gas rate, whether they are set manually using keyword <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a> or <a href="../ecl_rm/GCONPRI.html#GCONPRI">GCONPRI</a>, or set automatically
+according to the DCQ.</p>
+
+<p>ECLIPSE translates a sales gas target for a group into a gross
+gas target by adding the rate of gas consumption at and below the
+group and, for ECLIPSE 100, subtracting any gas import rate at and
+below the group. For ECLIPSE 100, the gas consumption rate may depend
+on whether or not the automatic compressors are operating. The gas
+consumption rate (with or without compression) must be a known fixed
+value. Thus the option to make the consumption rate a given fraction
+of the production rate (a negative value in item 2 of keyword <a href="../ecl_rm/GCONSUMP.html#GCONSUMP">GCONSUMP</a> or a non-zero value
+in item 3 of keyword <a href="../ecl_rm/GRUPFUEL.html#GRUPFUEL">GRUPFUEL</a>) is not allowed when running the gas field operations model.</p>
+
+<p>The production reports show the sales gas rate, and also the gross
+gas rate and consumption/import for any group that has gas consumption
+or import. The sales gas rates and totals can be output to the <span class="keyword">SUMMARY</span> file using the keywords:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"><span class="keyword">FGSR</span></td>
+
+<td valign="top"> Field Gas Sales Rate </td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">GGSR</span></td>
+
+<td valign="top">Group Gas Sales Rate    </td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">FGST</span></td>
+
+<td valign="top">Field Gas Sales Total (cumulative)  </td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">GGST</span></td>
+
+<td valign="top">Group Gas Sales Total (cumulative) </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keywords <span class="keyword">FGPR</span>, <span class="keyword">GGPR</span>, <span class="keyword">FGPT</span>, <span class="keyword">GGPT</span> retain their original meanings
+as the field and group <strong>gross</strong> gas production rates and totals.</p>
+
+<p>Do not use the keywords <a href="../ecl_rm/GCONSALE.html#GCONSALE">GCONSALE</a> or <a href="../ecl_rm/GRUPSALE.html#GRUPSALE">GRUPSALE</a>. These apply to the control of gas production from an oil
+field by reinjecting the surplus gas. It is not appropriate to do
+this when running the gas field operation model.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

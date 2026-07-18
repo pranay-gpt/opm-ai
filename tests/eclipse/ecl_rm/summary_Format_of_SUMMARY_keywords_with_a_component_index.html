@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Format of SUMMARY keywords with a component index"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="summary_format_of_summary_keywords_with_a_component_index"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Format of SUMMARY keywords with a component index</title>
+</head>
+<body>
+
+<div class="nested0" id="summary_format_of_summary_keywords_with_a_component_index"><a name="summary_format_of_summary_keywords_with_a_component_index"><!-- --></a><h1 class="topictitle1">Format of SUMMARY keywords with a component index</h1>
+ <div><p>ECLIPSE 300</p>
+<p>Keywords that provide information at a component
+level must have the component number appended to any other data associated
+with the keyword. For group type keywords a line of data must contain
+a single group name followed by a component number terminated by a
+slash (/). For well type keywords a line of data can either contain
+a single well name or a well name template containing wildcard characters,
+followed by a component number and terminated by a slash (/). If a
+well name template is supplied then it will be matched during the
+simulation period. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+<p>When rates and totals are being reported for groups or wells at
+a component level, they are positive for production and negative for
+injection.</p>
+<p>For example,</p>
+<pre><code>WXMF
+ 'PROD1' 7 /
+ 'PROD2' / -- list all components
+/</code></pre><p>or:</p>
+<pre><code>GXMF
+ 'PLAT1' 7 /
+ 'PLAT1' 8 /
+ 'PLAT2' / -- list all components
+/</code></pre><p>or, to get the 7<sup>th</sup>, 8<sup>th</sup> and 9<sup>th</sup> component values of <span class="keyword">BXMF</span> at grid block (21,7,13)
+and all components of grid block (21,7,14):</p>
+<pre><code>BXMF
+21 7 13 7 /
+21 7 13 8 / 
+21 7 13 9 /
+21 7 14 / -- list all components
+/</code></pre><p>or (note that this format is different from that used for keywords
+beginning with B or W):</p>
+<pre><code>FZMF
+1 /
+FZMF
+2 /
+FZMF
+/ -- list all components</code></pre><p>or:</p>
+<pre><code>CZMF
+ 'PROD1' 7 7 1 7 /
+ 'PROD1' 7 7 1 8 /
+ 'PROD2' 7 7 1 / -- list all components
+/</code></pre><p>or:</p>
+<pre><code>SKFR
+ 'PROD1' 7 1 /
+ 'PROD1' 8 2 /
+ 'PROD2' 3 / -- list all components
+/</code></pre><p>Note that keywords <span class="keyword">FREAC</span> and <span class="keyword">FREAT</span> allow multiple reaction numbers:</p>
+<pre><code>FREAC
+1 2/  -- Reaction rates summed over all cells for reactions 1 and 2
+
+FREAT
+/  -- Reaction totals summed over all cells for all reactions</code></pre><p>For keywords that start with B, C, S, F, G or W the component number
+can be defaulted, in which case all components will be stored in the
+summary file.</p>
+<p>Keywords that begin with A and accept a component number are described
+in <a href="summary_Format_of_SUMMARY_keywords_beginning_with_A.html#summary_format_of_summary_keywords_beginning_with_a"> "Format of SUMMARY keywords beginning with A"</a>.</p>
+<p>Keywords that begin with R and accept a component number are described
+in <a href="summary_Format_of_SUMMARY_keywords_beginning_with_R.html#summary_format_of_summary_keywords_beginning_with_r"> "Format of SUMMARY keywords beginning with R"</a>.</p>
+<p>The mnemonic name written to the Summary file has the component
+index appended after an additional underscore character (for example, <span class="keyword">WXMF_7</span>). In rare cases the underscore will be omitted to
+ensure the composite name does not exceed 8 characters (for example,
+although the molar rate of component 3 in the gas from the 2nd separator
+stage of a well is written as <span class="keyword">WCGMR2_3</span>, the molar
+rate of component 15 has to be written as <span class="keyword">WCGMR215</span>).</p>
+<p>Some of these keywords have
+a shorter form to allow for more than 9 separator stages within the
+character limit. Both forms are listed in the tables, one as suitable
+for separator stages 1–9 and the other as suitable for separator
+stages 1–99.</p>
+<p>Water components</p>
+<p>For the multi-component water option, the water component index
+starts at <em>N</em> <sub>comps</sub>+1 and ends at <em>N</em> <sub>comps</sub>+ <em>N</em> <sub>w</sub> where <em> N</em> <sub>comps</sub> is the number
+of components given by <a href="COMPS.html#COMPS"> COMPS</a> and <em>N</em>  <sub>w</sub> is the number of water components
+given by the <a href="COMPW.html#COMPW"> COMPW</a> keyword. The water component indices can be used for the summary
+mnemonics described in <a href="../ecl_td/watercompintro_Water_component_keywords.html#watercompintro_summary_section_keywords">"SUMMARY section
+keywords"</a> in the <cite>ECLIPSE Technical Description</cite> manual.</p>
+</div>
+</div>
+
+</body>
+</html>

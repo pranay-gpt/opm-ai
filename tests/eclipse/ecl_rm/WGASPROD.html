@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WGASPROD"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WGASPROD"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WGASPROD</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WGASPROD"><a name="WGASPROD"><!-- --></a>
+<h1 class="keyword">WGASPROD</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wgasprod.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wgasprod.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2946e45">                         x                   
+  </th>
+
+<th valign="top" id="d2946e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2946e54">                                             
+ </th>
+
+<th valign="top" id="d2946e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2946e45 d2946e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2946e48 d2946e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2946e45 d2946e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2946e48 d2946e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2946e45 d2946e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2946e48 d2946e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2946e45 d2946e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2946e48 d2946e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2946e45 d2946e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2946e48 d2946e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2946e45 d2946e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2946e48 d2946e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2946e45 d2946e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2946e48 d2946e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2946e45 d2946e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d2946e48 d2946e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword can be used to declare one or more production wells
+to be special gas producers, which are opened from the drilling queue
+in preference to other wells when the sales gas production rate falls
+below the minimum limit (see item 4 of keyword <a href="GCONSALE.html#GCONSALE"> GCONSALE</a>).</p>
+
+<p>The wells must first be declared as shut producers and given any
+other operating constraints with keyword <a href="WCONPROD.html#WCONPROD"> WCONPROD</a>, and placed in the drilling queue
+in the required order with keyword <a href="QDRILL.html#QDRILL"> QDRILL</a>. The wells should be placed under <samp class="codeph">GRAT</samp> control and given a nominal gas rate in item 6 of keyword <span class="keyword">WCONPROD</span>. The nominal gas rate is overridden when the wells
+are opened from the drilling queue, as their gas rate targets are
+set automatically at multiples of the incremental rate set in item
+2 below.</p>
+
+<p>The purpose of special gas producers is to ensure sufficient gas
+to meet sales gas requirements independently of any oil production
+target. You must ensure these wells are completed in a region of the
+field that provides a suitably high GOR. Special gas producers are
+opened from the drilling queue only when the sales gas rate has fallen
+below the minimum requirement, and are not opened as part of normal
+group production control. They are automatically made unavailable
+for group control (equivalent to specifying <samp class="codeph">NO</samp> in
+item 2 of keyword <a href="WGRUPCON.html#WGRUPCON"> WGRUPCON</a>), so that their production will not be reduced if a superior
+group comes under oil rate control. Any limit on the minimum oil saturation
+necessary for a well to be opened (set with keyword <a href="WELSOMIN.html#WELSOMIN"> WELSOMIN</a>) is ignored
+for these wells.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data and terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash.</p>
+
+<ol>
+<li>Well name, well name template, well list or well list template <p>A template enclosed in quotes can be used to refer to multiple wells
+or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+             </li>
+
+<li>Incremental gas production rate                <p>The well’s target
+gas production rate is increased by this amount each time the sales
+gas rate of a superior group falls below the minimum limit, until
+either it reaches the maximum number of increments set in item 3 or
+it becomes constrained by another limit set in <span class="keyword">WCONPROD</span>.</p>
+                <p>This item must be set to a number greater
+than zero.</p>
+<p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), Mscf/day (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li>Maximum permitted number of increments  <p>Once this number of
+increments have been applied to the well, no more increments can be
+applied and the drilling queue is searched for another special gas
+producer to open. Thus, the eventual gas production rate is limited
+to the incremental rate times the maximum number of increments.</p>
+<p>A zero value turns the well back to an ordinary producer.</p>
+</li>
+
+</ol>
+
+<div class="section" id="wgasprod_example"><a name="wgasprod_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>Define the
+wells as shut producers and give them any other operating constraints.
+Place them under gas rate control with a nominal rate limit:</p>
+<pre><code>WCONPROD
+ 'GASWEL*' SHUT  GRAT  2* 1.0 2* 3000 /
+/</code></pre><p>Place the special gas producers in the drilling queue
+along with any other wells:</p>
+<pre><code>QDRILL
+ PROD4  PROD5  PROD6  GASWEL1  GASWEL2  /</code></pre><p>Declare the
+wells as special gas producers and set their incremental rates and
+maximum number of increments:</p>
+<pre><code>WGASPROD
+ GASWEL1  3000 4 /
+ GASWEL2  4000 2 /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

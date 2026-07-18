@@ -1,0 +1,259 @@
+--
+--THIS IS A RUN DEMONSTATING THE GAS CONDENSATE AND SOLUTION
+--OPTIONS IN ECLIPSE. THE RUN IS THREE PHASE AND THREE
+--DIMENSIONAL, STARTING WITH GAS ABOVE THE DEW POINT.
+--A SINGLE GAS PRODUCER LOWERS THE PRESSURE, AND OIL DROPOUT
+--OCCURS. THE RESERVOIR IS DOME SHAPED, WITH A GAS WATER CONTACT
+--AT THE EDGES
+--
+RUNSPEC
+TITLE
+                      GAS CONDENSATE TEST
+
+DIMENS
+    9    9    2  /
+
+NONNC
+
+OIL
+
+WATER
+
+GAS
+
+DISGAS
+
+VAPOIL
+
+METRIC
+
+TABDIMS
+    1    1   20   20    1   15 /
+
+WELLDIMS
+   18    2    2   10 /
+
+NUPCOL
+    4 /
+
+VFPPDIMS
+    7    3    4    2    0    1 /
+
+VFPIDIMS
+    6    3    1 /
+
+START
+   1 'JAN' 1983  /
+
+NSTACK
+    4 /
+
+GRID        ================================================
+
+EQUALS
+     'DX'     400     /
+     'DY'     300     /
+     'DZ'     10      /
+     'PERMX'  400     /
+     'PERMY'  300     /
+     'PERMZ'  30      /
+     'PORO'   0.3     /
+/
+
+BOX
+
+ 1  9  1  9  1  1/
+
+TOPS
+
+ 2202  2145  2105  2080  2072  2080  2105  2145  2202
+ 2170  2113  2073  2049  2041  2049  2073  2113  2170
+ 2147  2090  2050  2026  2018  2026  2050  2090  2147
+ 2133  2077  2037  2013  2005  2013  2037  2077  2133
+ 2129  2072  2032  2008  2000  2008  2032  2072  2129
+ 2133  2077  2037  2013  2005  2013  2037  2077  2133
+ 2147  2090  2050  2026  2018  2026  2050  2090  2147
+ 2170  2113  2073  2049  2041  2049  2073  2113  2170
+ 2202  2145  2105  2080  2072  2080  2105  2145  2202  /
+
+ENDBOX
+
+RPTGRID
+   -- Report Levels for Grid Section Data
+   -- 
+   'DEPTH' 
+ / 
+
+PROPS    ===============================================================
+
+SWFN
+0.2  0   0
+0.6  0.5 0
+1.0  1.0 0 /
+
+SGFN
+0      0   0
+0.35   0   0
+0.575 0.5  0
+0.8   1.0  0  /
+
+SOF3
+
+0     0    0
+0.01  0.0  0.0
+0.8   1.0  1.0 /
+
+PVTW
+306.1  1.03 0.000041    0.3  0  / ( BAR RM3/SM3 1/BAR CP )
+
+ROCK
+306.1     0.000053    /        ( BAR 1/BAR )
+
+DENSITY
+  800   1022  0.9907    /      ( KG/M3 )
+
+--THE GAS PVT DATA-------------------------------------------------
+
+--FOR EACH GAS PRESSURE SPECIFIED IN THE FIRST COLUMN ( 30,60,..)
+--AT LEAST ONE OIL/GAS RATIO (RV) VALUE IS SPECIFIED (0.000132,0.0..)
+--FOR WHICH VAPOUR FORMATION VALUES AND VISCOSITIES ARE GIVEN
+
+--THE FIRST RV VALUE FOR A GIVEN PRESSURE IS ASSUMED TO BE THE
+--SATURATED VALUE ( IE AT THE DEW POINT )
+
+--ANY SUBSEQUENT RV VALUES ARE FOR UNDERSATURATED STATES
+
+PVTG                          ( BAR SM3/SM3 RM3/SM3 CP )
+
+   30  0.000132  0.04234     0.01344
+       0         0.04231     0.01389   /
+   60  0.000124  0.02046     0.01420
+       0         0.02043     0.01450   /
+   90  0.000126  0.01328     0.01526
+       0         0.01325     0.01532   /
+  120  0.000135  0.00977     0.01660
+       0         0.00973     0.01634   /
+  150  0.000149  0.00773     0.01818
+       0         0.00769     0.01752   /
+  180  0.000163  0.006426    0.01994
+       0         0.006405    0.01883   /
+  210  0.000191  0.005541    0.02181
+       0         0.005553    0.02021   /
+  240  0.000225  0.004919    0.02370
+       0         0.004952    0.02163   /
+  270  0.000272  0.004471    0.02559
+       0         0.004511    0.02305   /
+  295  0.000354  0.004194    0.02714
+       0         0.004225    0.02423   /
+  310  0.000403  0.004031    0.02806
+       0.000354  0.004059    0.02768
+       0         0.004081    0.02492   /
+  330  0.000469  0.003878    0.02925
+       0.000354  0.003910    0.02832
+       0         0.003913    0.02583   /
+  530  0.000479  0.003868    0.02935
+       0.000354  0.003900    0.02842
+       0         0.003903    0.02593   /
+    /
+
+--THE OIL PVT DATA------------------------------------------------
+
+--FOR EACH GAS/OIL RATIO (RS) VALUE (2,5...), AT LEAST ONE
+--OIL PRESSURE VALUE MUST BE SPECIFIED (20.0,50.0...)
+--FOR WHICH SOLUTION FORMATION VALUES AND VISCOSITIES ARE GIVEN
+
+--THE FIRST PRESSURE VALUE IS ASSUMED TO BE THE SATURATED (BUBBLE
+--POINT) PRESSURE FOR THAT RS VALUE.
+
+--ANY SUBSEQUENT PRESSURES ARE FOR UNDERSATURATED STATES
+
+PVTO
+       2    20.0 1.02   0.975   /
+       5    50.0 1.03   0.91    /
+      10   100.0 1.04   0.83    /
+      15   200.0 1.05   0.695   /
+      20   250.0 1.06   0.641   /
+      30   300.0 1.07   0.594   /
+      40   400.0 1.08   0.51
+           500.0 1.07   0.549
+           900.0 1.06   0.74    /
+      50   500.7 1.09   0.449
+           900.7 1.08   0.605   /
+/
+
+RPTPROPS
+-- PROPS Reporting Options
+-- 
+/
+
+SOLUTION   =============================================================
+
+-- INITIAL CONDITIONS - 310 BARS AT 2070 METERS, GWC AT 2100 METERS
+-- TILTED BLOCK EQUILIBRATION
+--
+EQUIL      1 TABLES    2 NODES IN EACH           METRIC  11:29 14 OCT 83
+ 2070.00 310.000 2100.00  .00000 2100.00  .00000     1      1      10 /
+
+-- OIL INITIALLY SET SATURATED, ALTHOUGH NO LIQUID OIL IN INITIAL STATE
+
+RSVD       1 TABLES    2 NODES IN EACH           METRIC  11:31 14 OCT 83
+   2000.0   100
+   2500.0   100
+/
+
+-- VAPOUR INITIALLY UNDER-SATURATED WITH RV = 0.00035
+
+RVVD       1 TABLES    2 NODES IN EACH           METRIC  11:31 14 OCT 83
+   2000.0   .00035
+   2500.0   .00035
+/
+--
+-- INITIAL SOLUTION REPORTS
+--
+RPTSOL                                           METRIC  12:45 14 OCT 83
+   -- Initialisation Print Output
+   -- 
+'PRES' 'SWAT' 'SGAS' 'RV' 'FIP=1' 'EQUIL' 'RVVD' /
+--
+
+SUMMARY
+
+ALL
+SEPARATE
+
+MSUMLINS
+
+MSUMNEWT
+
+SCHEDULE  ==========================================================
+--
+-- REPORT SWITCHES
+--
+RPTSCHED                                         METRIC  12:44 14 OCT 83
+   'PRES' 'SOIL' 'SWAT' 'RV' 'RESTART=2' 'FIP=1' 'WELLS=2' 'VFPPROD=1' 'SUMMARY=2' 
+'CPU=2' 'WELSPECS' 'NEWTON=2' /
+--
+-- STEPS TO 1400 DAYS
+--
+WELSPECS
+    'PRODUCER' 'G'    5  5 2000 'GAS'     /
+/
+
+COMPDAT
+    'PRODUCER'   5  5 1  1 'OPEN' 1   -1   0.5  /
+  /
+
+-- PRODUCTION WELL CONTROLS
+--
+--      WELL     OPEN/  CNTL   OIL  WATER   GAS  LIQU   RES   BHP
+--      NAME     SHUT   MODE  RATE   RATE  RATE  RATE  RATE
+
+WCONPROD
+     'PRODUCER' 'OPEN' 'GRAT' 2* 5.0E5  /
+  /
+
+TSTEP                                            METRIC  17:44 17 OCT 83
+ 4*500.0
+/
+--
+END

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Looped flow paths"/>
+<meta name="DC.subject" content="Multisegment wells looped flow paths, Multisegment wells linked segments, Multisegment wells unpacked annulus, Multisegment wells looped flow paths and their impact on the linear equations, Multisegment wells looped flow paths restrictions"/>
+<meta name="keywords" content="Multisegment wells looped flow paths, Multisegment wells linked segments, Multisegment wells unpacked annulus, Multisegment wells looped flow paths and their impact on the linear equations, Multisegment wells looped flow paths restrictions"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="multiseg_looped_flowpaths"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Looped flow paths</title>
+</head>
+<body>
+
+
+<div class="nested0" id="multiseg_looped_flowpaths"><a name="multiseg_looped_flowpaths"><!-- --></a>
+<h1 class="topictitle1">Looped flow paths</h1>
+
+
+ <div>
+<p>The gathering tree topology required by multisegment wells normally
+prevents the formation of looped flow paths within the well itself.
+However, it is possible to add looped flow paths as follows:</p>
+
+<ul>
+<li>The basic topology of the well must be specified in the normal
+manner using the <a href="../ecl_rm/WELSEGS.html#WELSEGS">WELSEGS</a> keyword. One or more pairs of nodes of different segments
+must be made physically coincident. (In practice, this just means
+that the segment nodes should be specified as being at the same true
+vertical depth in the <span class="keyword">WELSEGS</span> keyword.) Note that
+this in itself is not sufficient to form a looped flow path and these
+node pairs will still act as though they are unconnected in any way.</li>
+
+<li>Each such pair of segment nodes must be “linked” using the <a href="../ecl_rm/WSEGLINK.html#WSEGLINK">WSEGLINK</a> keyword. This is the
+key step that instructs each pair of segment nodes to communicate
+and form looped flow paths. At least one of these segments must be
+at the end of a branch.                                          
+           <div class="fignone" id="multiseg.XID-00000092"><a name="multiseg.XID-00000092"><!-- --></a>
+
+ <br/><img src="../img/multiseg5.png" width="540px"/><br/> <br/><span class="figcap">
+           Figure 553.1  Simple looped multisegment well</span></div>
+                                  
+                        </li>
+
+</ul>
+
+<p>A pair of linked segment nodes is shown in the previous figure.
+This link forms a looped flow path between the upper and lower branch
+in this multisegment well. Flow from the lower branch can pass into
+the main stem of the well directly or via the upper branch, and flow
+from the upper branch can pass into the main stem directly or via
+the lower branch. The pressure variations in the upper and lower branches
+will determine the direction of the flow.</p>
+
+<p>The pressure drop equations for the segments whose nodes are linked
+are unaffected, but the material balance equations for one of the
+segments are replaced instead by equations that enforce equality of
+the solution (pressure, flowing fraction of water and flowing fraction
+of gas) at the linked segment nodes.</p>
+
+<div class="section" id="multiseg_handling_of_linked_segment_properties"><a name="multiseg_handling_of_linked_segment_properties"><!-- --></a><h4 class="sectiontitle">Handling of linked segment properties</h4><p>In the <a href="../ecl_rm/WSEGLINK.html#WSEGLINK">WSEGLINK</a> keyword, the first
+segment of each pair specified is known as the <strong>primary linked segment</strong>, while the second segment of the pair is known as the <strong>secondary
+linked segment</strong>. If the first segment of the pair is at the end
+of a branch, but the second is not, then the first segment will be
+treated as the secondary link segment instead. It is the secondary
+linked segment that has its material balance equations replaced by
+the solution equality equations.</p>
+<ul>
+<li>If connection flows or external source /sink flows are specified
+for both the linked segments (using either the <a href="../ecl_rm/COMPSEGS.html#COMPSEGS">COMPSEGS</a> or <a href="../ecl_rm/COMPSEGL.html#COMPSEGL">COMPSEGL</a> keywords), then these
+flows will all be assigned to the primary linked segment (as it is
+the only one of the pair that has the material balance equations which
+incorporate these terms).</li>
+
+<li>Any volume associated with the secondary linked segment will be
+allocated as additional volume in the primary linked segment.</li>
+
+<li> part from the replacement of the material balance equations by
+linked segment node solution equality equations in the secondary linked
+segment, each of these segments is exactly the same as any other segment
+used to define a multisegment well. Hence the pressure drop equation
+in either of the linked segments can be modified in any of the ways
+described in <a href="multiseg_the_pressure_loss_calculation.html#multiseg_the_pressure_loss_calculation"> "The pressure loss calculation"</a>.</li>
+
+</ul>
+</div>
+
+<div class="section" id="multiseg_example_application__modeling_an_unpacked_annulus"><a name="multiseg_example_application__modeling_an_unpacked_annulus"><!-- --></a><h4 class="sectiontitle">Example application: Modeling an unpacked annulus</h4><p>As an example of an application of looped flow paths within multisegment
+wells, consider the modeling of flow in an unpacked annulus.</p>
+<p>One branch of the well can be used to model the tubing and may contain
+multiple segments, each in direct communication with its immediate
+neighbors. This tubing branch is shown as a dashed line in figure <a href="multiseg_Looped_flowpaths.html#multiseg.XID-000000ae">553.2</a>.</p>
+<p>Another branch of the
+well can be used to model the annulus; the segments on this branch
+are also in direct communication with their immediate neighbors. This
+annulus branch is shown as a dotted line in figure <a href="multiseg_Looped_flowpaths.html#multiseg.XID-000000ae">553.2</a>. Flow only enters the well via
+connections at annulus segments.</p>
+<p>Flow can move freely along
+the annulus and pass into the tubing via control valves at intervals
+along the well. Without the ability to model looped flow paths, the
+flow from a certain annulus segment would have been constrained so
+that it would have to flow into the tubing using a specific valve.
+However, due to the presence of looped flow paths, flow in an annulus
+segment is free to pass through any of the valves into the tubing.</p>
+<div class="fignone" id="multiseg.XID-000000ae"><a name="multiseg.XID-000000ae"><!-- --></a>
+
+ <br/><img src="../img/multiseg6.png" width="560px"/><br/> 
+<br/><span class="figcap">
+           Figure 553.2  Schematic of a multisegment well with an unpacked annulus</span></div>
+</div>
+
+<div class="section" id="multiseg_impact_of_looped_flowpaths_on_the_well_linear_equations"><a name="multiseg_impact_of_looped_flowpaths_on_the_well_linear_equations"><!-- --></a><h4 class="sectiontitle">Impact of looped flow paths on the well linear equations</h4><p>From <cite><span> <a href="biblio_Bibliography.html#biblio_79910">Holmes et al (1998)</a> </span></cite>, in the absence of such linked
+segment nodes, the linear system arising from the well equations can
+be solved very efficiently due to the special structure of the well
+matrix. However, as soon as loops are added, this special structure
+is lost and an alternative method for solving the well system must
+be used. ECLIPSE uses an iterative method called GMRES (<cite><span> <a href="biblio_Bibliography.html#biblio_16837">Saad, 1996</a> </span></cite>) to solve the well linear system arising from the presence
+of loops, with an incomplete LU factorization pre-conditioner used
+to accelerate the convergence. If required, the parameters that control
+the GMRES solver and the pre-conditioner can be modified using the <a href="../ecl_rm/WSEGSOLV.html#WSEGSOLV">WSEGSOLV</a> keyword.</p>
+<p> ECLIPSE 100 </p>
+<p>If the pre-conditioned GMRES
+solver fails to converge or encounters serious problems then the system
+will be solved again using a pivoted Gaussian elimination, hereafter
+referred to as a “direct” solution. This is an expensive method both
+in memory and CPU cycles, but is likely to succeed should GMRES fail.
+The simulator will issue warning messages  saying that a direct solution
+had been used; you should alter settings to eliminate these messages
+if possible. The Gaussian elimination <span class="keyword">WSEGSOLV</span> can
+be suppressed by setting <a href="../ecl_rm/OPTIONS.html#options.82">item 182</a> in the <span class="keyword">OPTIONS</span> keyword; in this case the unconverged GMRES result
+will be accepted.</p>
+</div>
+
+<div class="section" id="multiseg_restrictions"><a name="multiseg_restrictions"><!-- --></a><h4 class="sectiontitle">Restrictions</h4><ul>
+<li>One of the segments linked using the <a href="../ecl_rm/WSEGLINK.html#WSEGLINK">WSEGLINK</a> keyword must be at
+the end of a branch.</li>
+
+<li>It is not permissible for the secondary linked segment to have
+zero effective absolute roughness. That is, item 8 in the <a href="../ecl_rm/WELSEGS.html#WELSEGS">WELSEGS</a> record defining the
+secondary linked segment properties must be non-zero.</li>
+
+<li> A segment cannot be both a secondary link segment and a labyrinth
+inflow control device with non-positive configuration number (specified
+using the <a href="../ecl_rm/WSEGLABY.html#WSEGLABY">WSEGLABY</a> keyword). If the need for this particular situation arises,
+the specification of the primary and secondary link segments can be
+reversed in the <span class="keyword">WSEGLINK</span> keyword. </li>
+
+<li> The top segment of the well cannot be part of a loop so it cannot
+appear in a row of the <span class="keyword">WSEGLINK</span> keyword. </li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Automatic compressors"/>
+<meta name="DC.subject" content="Gas field operations, Automatic compressors, Compressors, Automatic"/>
+<meta name="keywords" content="Gas field operations, Automatic compressors, Compressors, Automatic"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gasfieldintro_automatic_compressors"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Automatic compressors</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gasfieldintro_automatic_compressors"><a name="gasfieldintro_automatic_compressors"><!-- --></a>
+<h1 class="topictitle1">Automatic compressors</h1>
+
+
+ <div>
+<p>ECLIPSE 100</p>
+
+<p>The network option can be used with the gas
+field operations model to take account of the pipeline pressure losses
+in the gathering system (see <a href="networkintro_Network_Option.html#networkintro_network_option"> "Network option"</a>). The delivery capacity is determined by
+the need to supply the gas at a specified onshore pressure.</p>
+
+<p>Compressors can be placed in the pipelines to boost the gas flow.
+In the network option, the effects of turning on a compressor can
+be modeled either by switching to an alternative VFP table to calculate
+the pressure losses in the pipeline, or by changing the value of the
+Artificial Lift Quantity that is used to interpolate the table. One
+compressor is allowed in each branch of the network.</p>
+
+<p>When the network option and the gas field operations model are
+used together, a class of compressors called "automatic compressors"
+can be declared. The basic compressor facility available with the
+Standard Network model (keyword <a href="../ecl_rm/GNETPUMP.html#GNETPUMP">GNETPUMP</a>) is not versatile
+enough for the requirements of the gas field operation model, and
+you must use the keyword <a href="../ecl_rm/GASFCOMP.html#GASFCOMP">GASFCOMP</a> instead. This defines a more versatile compressor facility,
+which was designed specifically for the gas field operations model.
+However, the automatic compressor facilities associated with the "extended
+network model" (keyword <a href="../ecl_rm/NETCOMPA.html#NETCOMPA">NETCOMPA</a>) <strong>are</strong> suitable
+for use with the gas field operations model. Thus, when using the
+extended network model, automatic compressors should be defined with
+keyword <span class="keyword">NETCOMPA</span> instead of <span class="keyword">GASFCOMP</span>. In either of the two cases, ECLIPSE switches on compression whenever
+necessary to enable the field to meet its target rate. Compression
+is turned off when not needed (for example, during the summer "low"
+in the seasonality profile).</p>
+
+<p>Each compressor, when operating, can consume a specified rate of
+gas for power. The gas consumption rate of the automatic compressors
+is set in the compressor data keyword (<span class="keyword">GASFCOMP</span> or <span class="keyword">NETCOMPA</span>). Whenever the automatic compressors
+are operating, their gas consumption rate is added to the fixed consumption
+rate (if any) specified in keyword <a href="../ecl_rm/GCONSUMP.html#GCONSUMP">GCONSUMP</a>, and subtracted from
+the gross production to give the sales gas rate.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

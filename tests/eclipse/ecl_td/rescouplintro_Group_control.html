@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Group control"/>
+<meta name="DC.subject" content="Reservoir coupling group control, Group, Control"/>
+<meta name="keywords" content="Reservoir coupling group control, Group, Control"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="rescouplintro_group_control"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Group control</title>
+</head>
+<body>
+
+
+<div class="nested0" id="rescouplintro_group_control"><a name="rescouplintro_group_control"><!-- --></a>
+<h1 class="topictitle1">Group control</h1>
+
+
+ <div>
+<p>The reservoirs are coupled by allocating production and injection
+rate targets to the slave groups, to meet global production and injection
+targets specified in the master reservoir. The allocation is made
+in proportion to the guide rates of the master groups, following the
+normal procedure of guide rate group control. Thus the master groups
+must be given guide rates in the master reservoir’s data file
+for production control and any injected phases. The group guide rates
+may optionally be set as a function of their potential rates (for
+production), or equal to their voidage replacement needs (for injection).</p>
+
+<p>In each slave reservoir, the target rates of the slave groups are
+communicated from the master run. These targets can be allocated to
+subordinate wells or groups by either guide rate control or prioritization.
+Additional constraints may be applied to subordinate groups in the
+usual way. However, any groups in the slave reservoir that are superior
+to the slave groups must not have any constraints on them, as these
+would interfere with the targets of the slave groups.</p>
+
+<p>If the slave reservoirs were previously simulated independently,
+they may already have rate targets for the slave groups set in their
+data files. Accordingly, an option is provided either to ignore any
+limits specified for the slave groups in their data files, or to take
+the minimum of these limits and the targets set by the master. The
+option is independently selectable for each produced and injected
+phase.</p>
+
+<p>If a rate constraint is applied to a phase that is not an active
+phase in the slave run, ECLIPSE transforms it into a constraint on
+an associated phase, using the latest available production ratios.
+This may happen, for example, if gas is an active phase in the master
+run, but not in the slave run, which instead has a constant Rs specified
+with keyword <a href="../ecl_rm/RSCONST.html#RSCONST">RSCONST</a> or <a href="../ecl_rm/RSCONSTT.html#RSCONSTT">RSCONSTT</a>. If the master imposes a gas rate target on a slave group
+in this reservoir, it is transformed into an oil rate target using
+the previously calculated GOR of the group.</p>
+
+<p>Overall rate targets applied to the coupled system in the master
+run will not be met exactly. This is because the master run apportions
+the rate targets among the master groups according to their slave
+groups’ flow capabilities at the <strong>start</strong> of the timestep,
+but the flows are reported at the <strong>end</strong> of the timestep. If the
+flow rate of a slave group changes over the length of the master’s
+timestep, it causes the flow totals in the master reservoir to drift
+away from their targets. Obviously, the amount of drift increases
+with the length of the master run’s timesteps. There is an option
+to limit the master run’s timesteps to keep the expected drift
+within a specified tolerance (see item 4 of keyword <a href="../ecl_rm/GRUPMAST.html#GRUPMAST">GRUPMAST</a>). The drift also occurs
+with reinjection and voidage replacement targets applied in the master
+run. If you wish to impose reinjection or voidage replacement targets
+on a slave reservoir, they will be met more accurately if they are
+imposed directly on the slave groups in the slave reservoir’s
+data file than if they are imposed in the master reservoir.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="DRV"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="DRV"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>DRV</title>
+</head>
+<body>
+
+
+<div class="nested0" id="DRV"><a name="DRV"><!-- --></a>
+<h1 class="keyword">DRV</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="drv.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="drv.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d518e45">                         x                   
+  </th>
+
+<th valign="top" id="d518e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d518e54">                         x                   
+  </th>
+
+<th valign="top" id="d518e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d518e45 d518e54 ">                                             
+ </td>
+
+<td valign="top" headers="d518e48 d518e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d518e45 d518e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d518e48 d518e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d518e45 d518e54 ">                                             
+ </td>
+
+<td valign="top" headers="d518e48 d518e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d518e45 d518e54 ">                                             
+ </td>
+
+<td valign="top" headers="d518e48 d518e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d518e45 d518e54 ">                                             
+ </td>
+
+<td valign="top" headers="d518e48 d518e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d518e45 d518e54 ">                                             
+ </td>
+
+<td valign="top" headers="d518e48 d518e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d518e45 d518e54 ">                                             
+ </td>
+
+<td valign="top" headers="d518e48 d518e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d518e45 d518e54 ">                                             
+ </td>
+
+<td valign="top" headers="d518e48 d518e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword specifies the size of the cells in the radial direction.</p>
+
+<p>The keyword should be followed by up to <samp class="codeph">NDIVIX</samp> positive real numbers, where <samp class="codeph">NDIVIX</samp> is the grid
+radial dimension entered using the <a href="DIMENS.html#DIMENS"> DIMENS</a> keyword in the <span class="keyword">RUNSPEC</span> section.</p>
+
+<p>The I<sup>th</sup> number specifies the size in the radial direction
+of all the grid blocks with the R axis index equal to I. In other
+words, blocks (I, 1- <samp class="codeph">NDIVIY</samp>, 1- <samp class="codeph">NDIVIZ</samp>).</p>
+
+<p><span class="keyword">DRV</span>  causes the <a href="DR.html#DR"> DR</a> value for every grid block in the reservoir to
+be set. Repeat counts may be used for repeated values (for example
+11*208.4). Note that spaces must not be inserted on either side of
+the asterisk.</p>
+
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>),
+cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+
+<p>The data must be terminated by a slash (/).</p>
+
+<div class="section" id="drv_notes"><a name="drv_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li>The inner radius of the innermost column (I = 1) of grid blocks
+must be set. To do this, refer to the <a href="INRAD.html#INRAD"> INRAD</a> keyword, for ECLIPSE 100, and the <a href="RADFIN.html#RADFIN">  RADFIN</a> keyword, for ECLIPSE 300.
+These blocks has an outer radius equal to the sum of the inner radius
+and their <span class="keyword">DRV</span> value.             </li>
+
+<li>If the outer radius is not entered (using the <a href="OUTRAD.html#OUTRAD">  OUTRAD</a> keyword in ECLIPSE 100), a complete
+set (<samp class="codeph">NDIVIX</samp>) of <span class="keyword">DRV</span> values must
+be entered. The outer radius of these blocks is equal to the sum of
+the inner radius and the accumulated <span class="keyword">DRV</span> values.
+            </li>
+
+<li>If keyword <span class="keyword">OUTRAD</span> is entered, it is not necessary
+to specify all (or any) <span class="keyword">DRV</span> values. For ECLIPSE 100,
+any <span class="keyword">DRV</span> values not specified are completed using
+a geometric series (see keyword <span class="keyword">OUTRAD</span>).<p>ECLIPSE 300</p>
+   </li>
+
+<li>This keyword <strong>cannot</strong> be used to specify
+the grid data for a Local Grid Refinement (between the <span class="keyword">RADFIN</span> and <a href="ENDFIN.html#ENDFIN"> ENDFIN</a> pair).</li>
+
+</ul>
+</div>
+
+<div class="section" id="drv_example"><a name="drv_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NDIVIX=11</samp> as specified in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS"> DIMENS</a>:</p>
+<pre><code>DRV
+ 1 2 4 8 16 32 64 128 256 512 1024 /
+INRAD
+ 1 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,239 @@
+--
+-- THIS IS A TWO PHASE 5 BY 3 CROSS SECTION
+-- DEMONSTRATING THE ENTRY PRESSURE OPTION IN ECLIPSE
+--
+RUNSPEC
+TITLE
+ THRESHOLD PRESSURE TEST CASE
+
+DIMENS
+    6    1    3  /
+
+OIL
+
+WATER
+
+FIELD
+
+VE
+'NOCOMP'     /
+
+EQLDIMS
+    4  100    1    1   20 /
+
+EQLOPTS
+                        'THPRES'             /
+
+TABDIMS
+    3    1   13   13    1    5 /
+
+WELLDIMS
+    2   13    1    2 /
+
+GASFIELD
+  'YES'  /
+
+FRICTION
+    1 /
+
+NUPCOL
+    4 /
+
+START
+  26 'APR' 1983  /
+
+NSTACK
+    4 /
+
+GRID      ==============================================================
+
+EQUALS
+ 'DX'      100    /
+ 'DY'      100    /
+ 'DZ'       50    /
+ 'PORO'    0.2    /
+ 'PERMX'    10    /
+ 'PERMY'    10    /
+ 'PERMZ'    10    /
+/
+
+TOPS
+2*4000 2*4005 2*4005
+2*4050 2*4055 2*4055
+2*4100 2*4105 2*4105 /
+
+NEWTRAN
+
+RPTGRID
+-- Report Levels for Grid Section Data
+-- 
+'DX' 
+'DY' 
+'DZ' 
+'PERMX' 
+'PERMY' 
+'MULTX' 
+'MULTY' 
+'PORO' 
+'TOPS' 
+'PORV' 
+'DEPTH' 
+'TRANX' 
+ /
+
+PROPS     ==============================================================
+
+--SET VE FRACTION TO 1 : FULL VE
+
+VEFRAC
+1.0 /
+
+SWFN
+    .2500  .0000  .0
+    .3000  .0200  .0
+    .4000  .0550  .0
+    .5000  .1000  .0
+    .6000  .1450  .0
+    .7000  .2000  .0
+/
+    .2500  .0000  .0
+    .3000  .0200  .0
+    .4000  .0550  .0
+    .5000  .1000  .0
+    .6000  .1450  .0
+    .7000  .2000  .0
+/
+    .2500  .0000  .0
+    .3000  .0200  .0
+    .4000  .0550  .0
+    .5000  .1000  .0
+    .6000  .1450  .0
+    .7000  .2000  .0
+/
+
+SOF2
+    .3000  .0000
+    .4000  .1100
+    .5000  .2400
+    .6000  .4200
+    .7000  .7050
+    .7500  .9200
+/
+    .3000  .0000
+    .4000  .1100
+    .5000  .2400
+    .6000  .4200
+    .7000  .7050
+    .7500  .9200
+/
+    .3000  .0000
+    .4000  .1100
+    .5000  .2400
+    .6000  .4200
+    .7000  .7050
+    .7500  .9200
+/
+
+PVTW
+  .0000000   1.00000    3.03E-06    .50000    0.00E-01 /
+
+PVDO
+  .00000 1.00000 2.00000
+ 8000.00  .92000 2.00000
+/
+
+ROCK
+ 4000.00        .30E-05 /
+
+DENSITY
+ 52.0000  64.0000   .04400 /
+
+RPTPROPS                                         FIELD   15:56 29 NOV 83
+   -- PROPS Reporting Options
+-- 
+'PVTO' 'PVDO' 'PVTW' 'PVTG' 'PVDG' 'DENSITY' 'GRAVITY' 'SDENSITY' 'ROCK' 
+'ROCKTAB' 
+  /
+
+REGIONS    ============================================================
+
+SATNUM
+3*1 3*2 3*1 3*2 3*1 3*2 /
+
+EQLNUM
+2*1 2*2 3 4
+2*1 2*2 3 4
+2*1 2*2 3 4 /
+
+SOLUTION   =============================================================
+
+--NINTH ARGUMENT IN EQUIL KEYWORD IS 0 : REQUESTS EXACT VE EQUILIBRATION
+
+EQUIL
+4000  3960  6000  0   0   0   0   0   0  /
+4000  3970  6000  0   0   0   0   0   0  /
+4000  3980  6000  0   0   0   0   0   0  /
+4000  3985  6000  0   0   0   0   0   0  /
+
+--SET THRESHOLD PRESSURE FROM REGION 1 TO 2 AS 100
+--THRESHOLD PRESSURE FROM REGION 2 TO 3 TO BE FOUND BY PROGRAM
+
+THPRES
+1 2 /
+2 3 /
+3 4 20  /
+/
+
+--THE 22 ND INTEGER OF RPTSOL REQUESTS OUTPUT OF INITIAL OIL-WATER
+--CONTACT DEPTHS
+
+RPTSOL
+ -- Initialisation Print Output
+-- 
+'PRES' 'SOIL' 'SWAT' 'FIP=2' 'EQUIL' 'THPRES' 'POILD' 'WOC' /
+
+SUMMARY
+
+ALL
+
+SEPARATE
+
+MSUMLINS
+
+MSUMNEWT
+
+SCHEDULE   ===========================================================
+
+--THE 22 ND INTEGER OF RPTSOL REQUESTS OUTPUT OF CONTACT DEPTHS
+
+RPTSCHED
+'PRES' 'SWAT' 'FIP=2' 'WELLS=2' 'CPU=2' 'NEWTON=2' 'WOC' /
+
+--RUN 1000 DAYS WITH NO WELLS
+
+TSTEP
+1000 /
+
+WELSPECS
+'I'  'G'   1  1  4100  'WAT'  /
+'P'  'G'   5  1  4000  'OIL'  /
+/
+
+COMPDAT
+'I       '   1   1   3   3 'OPEN'   0  .000000 1.0 /
+'P       '   5   1   1   1 'OPEN'   0  .000000 1.0 /
+/
+
+WCONINJE
+'I       ' 'WAT' 'OPEN' 'RATE' 100.0 /
+/
+
+WCONPROD
+'P       ' 'OPEN' 'LRAT' 3* 105.0 /
+/
+
+TSTEP
+2*100
+/
+
+END

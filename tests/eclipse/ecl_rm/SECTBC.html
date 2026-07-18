@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SECTBC"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SECTBC"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SECTBC</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SECTBC"><a name="SECTBC"><!-- --></a>
+<h1 class="keyword">SECTBC</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="sectbc.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="sectbc.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2246e45">  </th>
+
+<th valign="top" id="d2246e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2246e54"> x </th>
+
+<th valign="top" id="d2246e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2246e45 d2246e54 "> x </td>
+
+<td valign="top" headers="d2246e48 d2246e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2246e45 d2246e54 ">  </td>
+
+<td valign="top" headers="d2246e48 d2246e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2246e45 d2246e54 ">  </td>
+
+<td valign="top" headers="d2246e48 d2246e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2246e45 d2246e54 ">  </td>
+
+<td valign="top" headers="d2246e48 d2246e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2246e45 d2246e54 ">  </td>
+
+<td valign="top" headers="d2246e48 d2246e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2246e45 d2246e54 ">  </td>
+
+<td valign="top" headers="d2246e48 d2246e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2246e45 d2246e54 ">  </td>
+
+<td valign="top" headers="d2246e48 d2246e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2246e45 d2246e54 ">  </td>
+
+<td valign="top" headers="d2246e48 d2246e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is used to specify or create the boundary conditions
+for a <a href="SECTOR.html#SECTOR"> SECTOR</a> run.
+A sector model can be run with either no-flow boundary conditions
+or with flux boundary conditions. Flux boundary conditions can be
+created from existing full field simulation output files.</p>
+
+<p>The keyword contains the following items of data, terminated with
+a slash (/):</p>
+
+<ol>
+<li> The type of boundary conditions 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">NOFLOW</samp> </td>
+
+<td valign="top">No flow on the sector boundaries.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">DUMPFLUX</samp> </td>
+
+<td valign="top"> Generate the fluxes which are stored in a <samp class="codeph">FLUX</samp> file.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">USEFLUX</samp> </td>
+
+<td valign="top">Use fluxes from an existing <samp class="codeph">FLUX</samp> file on the
+sector boundaries.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">NOFLOW</samp> </p>
+</li>
+
+<li> The name of the full field run. This information is not required
+if the first item is <samp class="codeph">NOFLOW</samp>. </li>
+
+</ol>
+
+<p>The no-flow boundary condition can be applied without any extra
+data.</p>
+
+<p>For flux boundary conditions, a flux file must first be generated
+from an existing full field run. This step is performed by running
+a sector model with the <span class="keyword">DUMPFLUX</span> boundary condition.
+The flux file is generated from the full field <samp class="codeph">RESTART</samp> files. (A <samp class="codeph">GRID</samp> or <samp class="codeph">EGRID</samp> file of
+the full field simulation is also required.) This intermediate step
+is relatively quick, since no simulation is performed.</p>
+
+<p>To perform a sector run with flux boundaries, the <span class="keyword">USEFLUX</span> boundary condition should be used. Data from the flux file previously
+created by the <span class="keyword">DUMPFLUX</span> run is read in and interpolated
+between report steps.</p>
+
+<p>Running a sector model with flux boundary conditions is similar
+to the approach using <a href="FLUXNUM.html#FLUXNUM"> FLUXNUM</a> regions, described in <a href="../ecl_td/fluxintro_Flux_Boundary_Conditions.html#fluxintro_flux_boundary_conditions">"Flux boundary conditions"</a> in the <cite>ECLIPSE Technical Description</cite>. There are, however,
+two important differences:</p>
+
+<ul>
+<li> A sector can be specified after a full field simulation has been
+run. Flux files can be generated from a full field run for any number
+of sectors. On the other hand, when flux boundary conditions are generated
+for <span class="keyword">FLUXNUM</span> regions, the regions must be specified
+before the full field run is performed. </li>
+
+<li> The sector flux file only contains data at the report steps of
+the full field run. This is then interpolated during the sector runs.
+Flux files that are created during a full field run for <span class="keyword">FLUXNUM</span> regions contain data for each timestep.</li>
+
+</ul>
+
+<p>These differences mean the sector model is a more flexible method
+than using <span class="keyword">FLUXNUM</span> regions, but slightly less accurate.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The sector flux boundary condition cannot be used together with <span class="keyword">FLUXNUM</span>.</span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The sector boundary should not cross LGRs, when the FLUX boundary
+option is used.</span></div>
+
+<div class="section" id="sectbc_example_with_noflow"><a name="sectbc_example_with_noflow"><!-- --></a><h4 class="sectiontitle">Example with NOFLOW</h4><p>To perform a simulation on an 11 x 11 x 30 sector of a full field
+model, the following keywords can be added to the <span class="keyword">RUNSPEC</span> section of the data set:</p>
+<pre><code>-- Specify sector
+SECTOR 
+   30 40 30 40 1 30 /
+-- No flow boundary conditions
+SECTBC
+   NOFLOW /</code></pre></div>
+
+<div class="section" id="sectbc_example_creating_the_flux_file"><a name="sectbc_example_creating_the_flux_file"><!-- --></a><h4 class="sectiontitle">Example
+creating the FLUX file</h4><p>If a full field model (<samp class="codeph">BASE.DATA</samp>) has been run, a flux file can be generated for a sector of the
+full field. A copy of the full field data file is made, with the following
+keywords added to the RUNSPEC section:</p>
+<pre><code>-- Specify sector
+SECTOR 
+   30 40 30 40 1 30 /
+-- Generate flux file for sector from the full field run
+SECTBC
+   DUMPFLUX BASE /</code></pre><p>When ECLIPSE 300 is run with this data file a
+simulation is not performed. Instead it uses the <samp class="codeph">RESTART</samp> files and the <samp class="codeph">GRID</samp> or <samp class="codeph">EGRID</samp> file
+from the BASE run to produce a flux file:</p>
+<p> <samp class="codeph">BASE30-40X30-40Y.FLUX</samp> (or <samp class="codeph">FFLUX</samp> if using formatted output).</p>
+<p>If the output from the full field
+run is in a different directory, then the path should be specified
+with the file name, for example:</p>
+<pre><code>-- Specify sector
+SECTOR 
+   30 40 30 40 1 30 /
+-- Generate flux file for sector from the full field run
+SECTBC
+   DUMPFLUX ‘../BASE’ /</code></pre><p>A flux file will then be generated in the same directory as the
+full field output:</p>
+<p> <samp class="codeph">../BASE30-40X30-40Y.FLUX</samp> (or <samp class="codeph">FFLUX</samp> if using formatted output).</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The sector size is part of the flux file name, so several flux files
+for different sectors can be present.</span></div>
+</div>
+
+<div class="section" id="sectbc_example_using_the_flux_file"><a name="sectbc_example_using_the_flux_file"><!-- --></a><h4 class="sectiontitle">Example using
+the FLUX file</h4><p>To run a sector model with flux boundary conditions
+a copy of the full field data file is made, with the following keywords
+added to the <span class="keyword">RUNSPEC</span> section:</p>
+<pre><code>-- Specify sector
+SECTOR 
+   30 40 30 40 1 30 /
+-- Use the fluxes on file as boundary conditions for sector
+SECTBC
+   USEFLUX  BASE/</code></pre><p>This will
+take the fluxes from the file</p>
+<p> <samp class="codeph">BASE30-40X30-40Y.FLUX</samp> (or <samp class="codeph">FFLUX</samp> if using formatted input).</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

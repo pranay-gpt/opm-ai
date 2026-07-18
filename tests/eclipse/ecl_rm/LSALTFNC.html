@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="LSALTFNC"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="LSALTFNC"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>LSALTFNC</title>
+</head>
+<body>
+
+
+<div class="nested0" id="LSALTFNC"><a name="LSALTFNC"><!-- --></a>
+<h1 class="keyword">LSALTFNC</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="lsaltfnc.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="lsaltfnc.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1280e45"> x </th>
+
+<th valign="top" id="d1280e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1280e54">  </th>
+
+<th valign="top" id="d1280e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1280e45 d1280e54 ">  </td>
+
+<td valign="top" headers="d1280e48 d1280e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1280e45 d1280e54 ">  </td>
+
+<td valign="top" headers="d1280e48 d1280e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1280e45 d1280e54 ">  </td>
+
+<td valign="top" headers="d1280e48 d1280e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1280e45 d1280e54 "> x </td>
+
+<td valign="top" headers="d1280e48 d1280e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1280e45 d1280e54 ">  </td>
+
+<td valign="top" headers="d1280e48 d1280e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1280e45 d1280e54 ">  </td>
+
+<td valign="top" headers="d1280e48 d1280e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1280e45 d1280e54 ">  </td>
+
+<td valign="top" headers="d1280e48 d1280e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1280e45 d1280e54 ">  </td>
+
+<td valign="top" headers="d1280e48 d1280e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is set to input the weighting factors for the low-salinity
+saturation functions as a function of the salt concentration. The
+data comprises <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a>  (set in the <span class="keyword">TABDIMS</span> keyword) tables,
+each terminated by a slash (/). These coefficients are used in calculating
+the saturation end points, the water and oil relative permeabilities
+and the water-oil capillary pressure when the <a href="LOWSALT.html#LOWSALT"> LOWSALT</a> option is active.</p>
+
+<p>Each table consists of the following columns of data:</p>
+
+<ol>
+<li>Salt concentration <p>Note that the effective salinity from the
+multi-component brine model (keyword <a href="ECLMC.html#ECLMC"> ECLMC</a>) will not be used to provide salinity values
+for this table; <span class="keyword">ECLMC</span> is incompatible with this
+keyword.</p>
+ <p>The values should increase monotonically down the
+column.</p>
+ <p>UNITS: kg/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>),
+lb/stb (<samp class="codeph">FIELD</samp>), gm/scc (<samp class="codeph">LAB</samp>), kg/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+<li>Weighting factor <em>F<sub>1</sub></em> for the low-salinity saturation
+endpoints and the relative permeabilities interpolation. <p>The values
+should decrease monotonically down the column.</p>
+ <p>A value of 0.0
+implies that only the high-salinity saturation functions will be used
+(tables defined by <a href="SATNUM.html#SATNUM"> SATNUM</a>) and a value of 1.0 implies that only low-salinity saturation
+functions will be used (tables defined by <a href="LWSLTNUM.html#LWSLTNUM"> LWSLTNUM</a>).</p>
+ <p>The value should not
+be greater than 1.0 or less than 0.0.</p>
+<p>Individual values may
+be defaulted in this column, and then the most recent value from column
+2 is used for each defaulted item. If the first item is defaulted,
+it is set to 0.0.</p>
+ </li>
+
+<li>Weighting factor <em>F<sub>2</sub></em> for the low-salinity capillary
+pressure interpolation. <p>The values should decrease monotonically
+down the column.</p>
+ <p>A value of 0.0 implies that only the high-salinity
+saturation functions will be used (as defined by <span class="keyword">SATNUM</span>) and a value of 1.0 implies that only low-salinity saturation functions
+will be used (as defined by <span class="keyword">LWSLTNUM</span>).</p>
+ <p>The
+value should not be greater than 1.0 or less than 0.0.</p>
+ <p>This
+column may be defaulted and is then taken to be a copy of the second
+column. It is considered to be defaulted if the first value is defaulted,
+and the whole second column then replaces the whole third column.
+If the first value is not defaulted but some of the other values are
+defaulted, then the most recent value from column 3 is used for each
+defaulted item. It is not possible to copy only some of the values
+from the second column.</p>
+</li>
+
+</ol>
+
+<p>Each table must contain at least two, and no more than <a href="TABDIMS.html#TABDIMS.NSSFUN"> NSSFUN</a> (set
+in the <span class="keyword">TABDIMS</span> keyword) rows. Each row must be
+complete, containing an entry in every column of the table.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> <samp class="codeph">NTSFUN</samp> tables must be supplied; however the <span class="keyword">LWSLTNUM</span> table number is used. A defaulted table after
+the first one is copied from the previous table.</span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">When the <a href="SURFACTW.html#SURFACTW"> SURFACTW</a> option is active, the weighting factors in a <span class="keyword">LWSLTNUM</span> table are used to interpolate between the immiscible oil-wet high-salinity
+curves (<span class="keyword">SATNUM</span> tables) and immiscible oil-wet low-salinity
+curves (<span class="keyword">LWSLTNUM</span> tables). The same factors are
+used to interpolate between the immiscible water-wet high-salinity
+curves (tables defined by <a href="SURFWNUM.html#SURFWNUM"> SURFWNUM</a>) and the immiscible water-wet low-salinity curves (tables
+defined by <a href="LSLTWNUM.html#LSLTWNUM"> LSLTWNUM</a>).</span></div>
+
+<div class="section" id="lsaltfnc_example"><a name="lsaltfnc_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTSFUN</samp> = 4 and <samp class="codeph">NSSFUN</samp> &gt; 2.</p>
+ <pre><code>LSALTFNC
+--unused table
+0   1.0 1*
+20  0.0 1*
+/ 
+-- Second table copied from previous table
+-- factors used for salinity interpolation in region 1
+/
+--unused table
+/
+-- factors used for salinity interpolation in region 2
+0   1.0 1*
+30  0.0 1*
+/
+REGIONS=================================================
+SATNUM
+150*1 150*3 /
+LWSLTNUM
+150*2 150*4 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

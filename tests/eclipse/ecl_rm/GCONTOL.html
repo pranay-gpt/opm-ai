@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GCONTOL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GCONTOL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GCONTOL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GCONTOL"><a name="GCONTOL"><!-- --></a>
+<h1 class="keyword">GCONTOL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gcontol.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gcontol.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d820e45"> x </th>
+
+<th valign="top" id="d820e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d820e54"> x </th>
+
+<th valign="top" id="d820e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d820e45 d820e54 ">  </td>
+
+<td valign="top" headers="d820e48 d820e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d820e45 d820e54 ">  </td>
+
+<td valign="top" headers="d820e48 d820e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d820e45 d820e54 ">  </td>
+
+<td valign="top" headers="d820e48 d820e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d820e45 d820e54 ">  </td>
+
+<td valign="top" headers="d820e48 d820e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d820e45 d820e54 ">  </td>
+
+<td valign="top" headers="d820e48 d820e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d820e45 d820e54 ">  </td>
+
+<td valign="top" headers="d820e48 d820e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d820e45 d820e54 ">  </td>
+
+<td valign="top" headers="d820e48 d820e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d820e45 d820e54 "> x </td>
+
+<td valign="top" headers="d820e48 d820e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword provides a means of controlling the accuracy to which
+group production and injection calculations are performed. There are
+three issues concerning the accuracy:</p>
+
+<ul>
+<li>The number of Newton iterations of each timestep for which the
+well rate targets are calculated to meet the group targets (see notes <a href="GCONTOL.html#gcontol_88403">1</a> and <a href="GCONTOL.html#gcontol_52590">2</a>). </li>
+
+<li> When the injection gas composition in ECLIPSE
+300 depends on the injection rate, the composition must be calculated
+using an accurate estimate of the injection rate (see note <a href="GCONTOL.html#gcontol_33063">3</a>). </li>
+
+<li> The number of injection iterations in ECLIPSE
+300. For example, when the <a href="WAVAILIM.html#WAVAILIM"> WAVAILIM</a> keyword is entered in ECLIPSE 300 and a
+limited source of gas is shared between two or more injection groups,
+the injection calculation may have to be iterated a number of times
+to match the groups’ share of the available gas with their injection
+capability (see note <a href="GCONTOL.html#gcontol_77828">4</a>).</li>
+
+</ul>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> In ECLIPSE 300, the default values for items 3 and 4 are NOT
+the same as the defaults when <span class="keyword">GCONTOL</span> is not included
+in this data set. Use of this keyword with defaults for items 3 and
+4 may change the simulation behavior for both gas and water injection.
+See note <a href="GCONTOL.html#gcontol_68766">5</a> for more details.</span></div>
+
+<p>The keyword is followed by a line containing some or all of the
+following items, terminated with a slash (/).</p>
+
+<ol>
+<li>   <p>ECLIPSE 100</p>
+   <p>Tolerance fraction to which group/field flow targets must be
+met (see note <a href="GCONTOL.html#gcontol_52590">2</a>).</p>
+<p>If a target
+is not met to within the tolerance fraction times the target value,
+when there is sufficient potential to meet the target, the well flow
+rates are recalculated to meet the target regardless of the value
+of <span class="keyword">NUPCOL</span>.</p>
+<p>The tolerance fraction does not
+apply to ECLIPSE 300, which ignores this value and uses a default
+1% tolerance.</p>
+<p>DEFAULT: Infinity.</p>
+ </li>
+
+<li>Value of <span class="keyword">NUPCOL</span>, the number of Newton iterations
+in each timestep during which the well flow rates are recalculated
+to meet any collective control targets (see note <a href="GCONTOL.html#gcontol_88403">1</a>).   <p>A value entered here overrides
+any value entered previously with keyword <span class="keyword">GCONTOL</span> or <a href="NUPCOL.html#NUPCOL"> NUPCOL</a>.</p>
+   <p>DEFAULT: Unchanged.</p>
+ <p>ECLIPSE
+300</p>
+ </li>
+
+<li>    Tolerance fraction to which the most
+rapidly changing well gas injection rate estimate or well available
+gas fraction must be met (see notes <a href="GCONTOL.html#gcontol_33063">3</a> and <a href="GCONTOL.html#gcontol_77828">4</a>).<p>The injection calculation
+is repeated until the largest fractional change of all the well gas
+injection rate estimates lies within this tolerance, or the maximum
+number of iterations is reached (see item 4). If availability limits
+apply (see keyword <span class="keyword">WAVAILIM</span>), this tolerance must
+also be met for the largest change of all the wells' available gas
+fractions.</p>
+<p>DEFAULT: 1.0E-3.</p>
+ <p>ECLIPSE
+300</p>
+</li>
+
+<li>     Maximum number of iterations over the
+injection calculation (see notes <a href="GCONTOL.html#gcontol_33063">3</a> and <a href="GCONTOL.html#gcontol_77828">4</a>).<p>DEFAULT: 5.</p>
+ </li>
+
+</ol>
+
+<div class="section" id="gcontol_notes"><a name="gcontol_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ol>
+<li id="gcontol_88403"><a name="gcontol_88403"><!-- --></a> When any form of group control option is being
+used (for example keywords <a href="GCONPROD.html#GCONPROD">  GCONPROD</a>, <a href="GCONINJE.html#GCONINJE">  GCONINJE</a> and <a href="GCONSALE.html#GCONSALE">  GCONSALE</a>), the flow targets of certain wells are directly influenced by the
+behavior of other wells in the field. For example, the target rates
+of producers under group control must allow for the production from
+wells that are under other modes of control within the group. Also
+injection wells performing reinjection or voidage replacement have
+flow targets that depend on the behavior of the production wells. <p>For the group targets to be met exactly, the flow targets of the
+wells under group control must be recalculated at every Newton iteration.
+But when the well flow targets change at each iteration, the convergence
+rate of the iterations is reduced. This is because the Jacobian matrix
+calculation does not include the terms representing the mutual dependency
+of the well rates.</p>
+ <p>As a compromise, the well flow targets are
+updated in the first <span class="keyword">NUPCOL</span> Newton iterations of
+each timestep, and are kept constant for any subsequent iterations.
+(This can be set at any time in the simulation with the keyword <a href="NUPCOL.html#NUPCOL">  NUPCOL</a> or item 2 of
+keyword <span class="keyword">GCONTOL</span>.) Thus the group/field flow target
+is met exactly if the timestep converges within <span class="keyword">NUPCOL</span> iterations. Any changes in the solution after the first <span class="keyword">NUPCOL</span> iterations may cause the group/field flow rates
+to drift slightly away from their targets. In general, larger values
+of <span class="keyword">NUPCOL</span> result in the group/field flow targets
+being met more accurately, but perhaps at the expense of requiring
+more Newton iterations to achieve convergence.</p>
+ <p>ECLIPSE 100</p>
+</li>
+
+<li id="gcontol_52590"><a name="gcontol_52590"><!-- --></a>The discrepancy between
+a group/field flow target and its actual flow rate can be limited
+to lie within a tolerance fraction set in item 1 of this keyword.
+If at any Newton iteration a flow target is not met to within this
+tolerance, when there is sufficient capacity to meet the target, the
+well flow rates are recalculated to meet that target regardless of
+the value of <span class="keyword">NUPCOL</span>. Since recalculating the well
+targets may retard the convergence of the Newton iterations, it is
+best not to make the tolerance too small. A lower limit of 0.01 is
+suggested.<p>The tolerance fraction does not apply when using the
+prioritization option (see keywords <a href="GCONPRI.html#GCONPRI">  GCONPRI</a> and <a href="PRIORITY.html#PRIORITY">  PRIORITY</a>). Also, the tolerance fraction currently
+does not apply to ECLIPSE 300.</p>
+ <p>ECLIPSE
+300</p>
+</li>
+
+<li id="gcontol_33063"><a name="gcontol_33063"><!-- --></a> The composition of the
+injected gas may vary with the injection rate when advance gas has
+been specified for the source group or well, or make-up gas has been
+specified for the injecting group or well (see keywords <a href="GINJGAS.html#GINJGAS">  GINJGAS</a> and <a href="WINJGAS.html#WINJGAS">  WINJGAS</a>), or when the
+injection gas is made up of a mixture defined by <a href="WINJORD.html#WINJORD">  WINJORD</a>. Thus an estimate of the injection
+rate is required in order to calculate the injection gas composition,
+before the injection calculation is performed. The actual injection
+rate may, in turn, depend on the composition of the gas, and whether
+additional constraints (for example, a well BHP limit) prevent a group
+from achieving its injection target. The injection calculation may
+have to be iterated a number of times until the actual injection rates
+agree with the estimates used to determine the composition, to a tolerance
+fraction specified in item 3. An upper limit to the number of these
+iterations can be set in item 4. An indication that the injection
+calculation has not yet converged would, for example, be a significant
+excess gas rate value reported for a group which is required to inject
+all its produced gas and some make-up gas in order to meet a reinjection
+target. <p>ECLIPSE 300</p>
+</li>
+
+<li id="gcontol_77828"><a name="gcontol_77828"><!-- --></a>An iterative loop over
+the injection calculation is also required to obtain an accurate solution
+when two or more injection groups take their gas from the same source
+and are limited by availability (see keyword <a href="WAVAILIM.html#WAVAILIM">  WAVAILIM</a>). Each injection group is assigned
+a certain fraction of the available gas from the source. These fractions
+are initially calculated in proportion to the groups’ gas injection
+potentials. After each pass through the injection calculation loop,
+these fractions are recalculated using the actual gas injection rates.
+Thus, if a particular injection group injects significantly less than
+its allocated share of available gas, its unused share of available
+gas is reallocated to the other groups. It may take several loops
+around the injection calculation before the available gas fractions
+converge; items 3 and 4 may be used to control this iteration process. </li>
+
+<li id="gcontol_68766"><a name="gcontol_68766"><!-- --></a>In ECLIPSE 300 items 3
+and 4 control how the injection system is solved. The default values
+shown for items 3 and 4 are also the values adopted for the iterative
+loop solving the injection system if <span class="keyword">GCONTOL</span> is
+absent and<ul>
+<li> advance gas is used, or </li>
+
+<li> make-up gas is used, or </li>
+
+<li> a <a href="WINJORD.html#WINJORD">  WINJORD</a> mixture has been specified, or </li>
+
+<li> availability limits have been requested. </li>
+
+</ul>
+ </li>
+
+</ol>
+<p>If none of these conditions are met, the injection calculation
+is only performed once per Newton iteration. If <span class="keyword">GCONTOL</span> items 3 and 4 are defaulted, the limit on the number of Newton iterations
+is increased to 5.</p>
+</div>
+
+<div class="section" id="gcontol_example"><a name="gcontol_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>To set a two percent tolerance on group rate
+targets in ECLIPSE 100:</p>
+<pre><code>GCONTOL
+ 0.02 3 / </code></pre><p>To limit the number
+of injection calculation iterations in ECLIPSE 300 to 2:</p>
+<pre><code>GCONTOL
+ 3* 2 / </code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

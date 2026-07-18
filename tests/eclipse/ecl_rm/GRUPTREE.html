@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GRUPTREE"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GRUPTREE"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GRUPTREE</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GRUPTREE"><a name="GRUPTREE"><!-- --></a>
+<h1 class="keyword">GRUPTREE</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gruptree.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gruptree.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d940e45"> x </th>
+
+<th valign="top" id="d940e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d940e54"> x </th>
+
+<th valign="top" id="d940e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d940e45 d940e54 ">  </td>
+
+<td valign="top" headers="d940e48 d940e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d940e45 d940e54 ">  </td>
+
+<td valign="top" headers="d940e48 d940e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d940e45 d940e54 ">  </td>
+
+<td valign="top" headers="d940e48 d940e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d940e45 d940e54 ">  </td>
+
+<td valign="top" headers="d940e48 d940e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d940e45 d940e54 ">  </td>
+
+<td valign="top" headers="d940e48 d940e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d940e45 d940e54 ">  </td>
+
+<td valign="top" headers="d940e48 d940e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d940e45 d940e54 ">  </td>
+
+<td valign="top" headers="d940e48 d940e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d940e45 d940e54 "> x </td>
+
+<td valign="top" headers="d940e48 d940e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is required only if you need a grouping structure
+with more than three levels in the hierarchy (that is field - groups
+- wells). A multi- level tree structure can be built up by using this
+keyword to specify the immediate parent of each group. The field itself
+occupies the top of the tree (Level 0). The groups immediately subordinate
+to the field are on Level 1. Other groups may be placed on Level 2
+by giving them a parent on Level 1. Groups can be placed on any lower
+level in this way.</p>
+
+<p>The keyword is followed by any number of records, each containing
+two group names and terminated with a slash (/). Group names may have
+up to 8 characters. Name roots (ending with an asterisk) <strong>cannot</strong> be used here.</p>
+
+<ol>
+<li> The name of the child group </li>
+
+<li> The name of its parent group </li>
+
+</ol>
+
+<p>The record declares the second group to be the parent of the first
+group.</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash.</p>
+
+<p>Groups on Level 1 need not have their parent declared, but optionally
+their parent can be declared as <samp class="codeph">FIELD</samp>. Groups without
+a parent are automatically placed on Level 1.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>The group hierarchy can have any number of
+levels. Groups that have other groups as children cannot also have
+wells. (Wells are assigned to groups in the keyword <a href="WELSPECS.html#WELSPECS">  WELSPECS</a>.) Thus a
+group either contains wells (that is a well-group) or has other groups
+as children (that is a node-group).</p>
+
+<p>ECLIPSE 300</p>
+
+<p>The group hierarchy can have any number of
+levels. However, group controls and guide rates can only be assigned
+to a maximum of four levels of groups down any branch of the hierarchy,
+including the <samp class="codeph">FIELD</samp>. A group may have both wells
+and child groups, but this structure is incompatible with that allowed
+in ECLIPSE 100.</p>
+
+<p>Groups can be reassigned to different parents during the simulation,
+and new groups can be inserted into the hierarchy, by using <span class="keyword">GRUPTREE</span> to declare any changes in the parent-child relationships.</p>
+
+<p>If this keyword is omitted, all the groups declared in <span class="keyword">WELSPECS</span> are assigned to Level 1, giving the standard 3-level
+field-group-well hierarchy.</p>
+
+<div class="section" id="gruptree.example"><a name="gruptree.example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>To define
+the hierarchy as shown in figure <a href="GRUPTREE.html#gruptree.XID-0000005a">247.1</a>:</p>
+ <div class="fignone" id="gruptree.XID-0000005a"><a name="gruptree.XID-0000005a"><!-- --></a>
+
+ <br/><img src="../img/5_level_hierarch.png" width="428px"/><br/> 
+<br/><span class="figcap">
+           Figure 247.1  A five level hierarchy</span></div>
+ <p>It is assumed that groups GR-A1, GR-A2, GR-B1, GR-B2, GR-S1
+and GR-S2 have wells declared as belonging to them in <span class="keyword">WELSPECS</span>. PLAT-A and PLAT-B can optionally have <samp class="codeph">FIELD</samp> declared
+as their parent.</p>
+ <pre><code>GRUPTREE
+-- child    parent
+  GR-A1     PLAT-A  /
+  GR-A2     PLAT-A  /
+  GR-B1     PLAT-B  /
+  GR-B2     PLAT-B  /
+  SAT-B     PLAT-B  /
+  GR-S1     SAT-B   /
+  GR-S2     SAT-B   /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

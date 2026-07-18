@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="COMPRPL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="COMPRPL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>COMPRPL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="COMPRPL"><a name="COMPRPL"><!-- --></a>
+<h1 class="keyword">COMPRPL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="comprpl.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="comprpl.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d306e45"> x </th>
+
+<th valign="top" id="d306e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d306e54"> </th>
+
+<th valign="top" id="d306e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d306e45 d306e54 "> </td>
+
+<td valign="top" headers="d306e48 d306e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d306e45 d306e54 "> </td>
+
+<td valign="top" headers="d306e48 d306e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d306e45 d306e54 "> </td>
+
+<td valign="top" headers="d306e48 d306e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d306e45 d306e54 "> </td>
+
+<td valign="top" headers="d306e48 d306e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d306e45 d306e54 "> </td>
+
+<td valign="top" headers="d306e48 d306e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d306e45 d306e54 "> </td>
+
+<td valign="top" headers="d306e48 d306e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d306e45 d306e54 "> </td>
+
+<td valign="top" headers="d306e48 d306e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d306e45 d306e54 "> x </td>
+
+<td valign="top" headers="d306e48 d306e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p> <span class="keyword">COMPRPL</span> is used to rescale the fluid saturations
+at the well connections, to take account of the position of the perforations
+and the distribution of the phases within large grid blocks. The local
+grid well connections must already be defined with the keyword <a href="COMPDATL.html#COMPDATL">  COMPDATL</a>. </p>
+
+<p> <span class="keyword">COMPRPL</span> is followed by any number of records,
+described below, each record terminated by a slash (/). A record may
+be terminated early at any item; the remaining items will assume their
+default values. Defaults can also be specified by a null repeat count
+of the form n*, where n is the number of consecutive items to be defaulted. </p>
+
+<p>Note that, as with the <a href="COMPVEL.html#COMPVEL">  COMPVEL</a> keyword, the <span class="keyword">COMPRPL</span> keyword cannot be
+used in non-VE runs with the Hysteresis option on if the imbibition
+and drainage table numbers are different in any connection. </p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/). </p>
+
+<p>Each record can contain some or all of the following items: </p>
+
+<ol>
+<li id="li_5CF7DF89EE3949A6BFC8843F06806CC4"><a name="li_5CF7DF89EE3949A6BFC8843F06806CC4"><!-- --></a> Well name, well name
+template, well list or well list template <p>A template enclosed in
+quotes can be used to refer to multiple wells or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST">  WLIST</a>. </p>
+ </li>
+
+<li> Name of local grid containing the connections specified in this
+record <p>If the local grid containing the well is not amalgamated
+(using keyword <a href="AMALGAM.html#AMALGAM">  AMALGAM</a>), this item may be defaulted or set to a blank string. The
+local grid name then defaults to the well’s local grid named
+in keyword <a href="WELSPECL.html#WELSPECL">  WELSPECL</a>. </p>
+ </li>
+
+<li> I - location of connecting grid block(s) <p>DEFAULT: 0 (allows
+any I-value) </p>
+ </li>
+
+<li> J - location of connecting grid block(s) <p>DEFAULT: 0 (allows
+any J-value) </p>
+ </li>
+
+<li> K - location of upper connecting block in this set of data <p>DEFAULT: 0 (corresponds to top connection of well) </p>
+ </li>
+
+<li> K - location of lower connecting block in this set of data <p>DEFAULT: 0 (corresponds to bottom connection of well) </p>
+ <p>The
+following rescaling quantities are applied to all the connections
+in the well which match the location indices specified in items 2
+- 5. But if a location index is defaulted to zero, it plays no part
+in selecting which connections use the rescaling data. Thus if the
+I and J location indices are defaulted to zero, the rescaling data
+is applied to all connections in the well that are located between
+layers K1 and K2 specified in items 4 and 5. If all four location
+indices are defaulted, the rescaling data is applied to all the connections
+in the well. </p>
+ </li>
+
+<li> Saturation table number for connection relative permeabilities <p>If the number is zero or positive, it will override the saturation
+table number specified in item 7 of keyword <span class="keyword">COMPDAT</span>. If the number is zero, the relative permeabilities will be calculated
+using the same saturation table as the grid block containing the connection. </p>
+ <p>If the number is negative, the saturation table number will not
+be altered. </p>
+<p>In runs using the hysteresis option (keyword <a href="SATOPTS.html#SATOPTS">  SATOPTS</a> in <span class="keyword">RUNSPEC</span>), the saturation table number entered here will
+apply to both imbibition and drainage processes. Rescaling is not
+allowed if the imbibition and drainage table numbers for the connection
+are different. </p>
+<p>DEFAULT: Negative </p>
+ </li>
+
+<li> <samp class="codeph">SWMIN</samp> Scaled value of the connate water saturation <p>The value is ignored in problems not containing water. </p>
+ <p>DEFAULT:
+S<sub>wco</sub> </p>
+ </li>
+
+<li> <samp class="codeph">SWMAX</samp> Scaled value of the maximum water saturation <p>The value is ignored in problems not containing water. </p>
+ <p>DEFAULT:
+1 - S<sub>owcr</sub> in three-phase or oil-water problems, or 1 -
+S<sub>gcr</sub> in gas-water problems. </p>
+ </li>
+
+<li> <samp class="codeph">SGMIN</samp> Scaled value of the critical gas saturation <p>The value is ignored in problems not containing both gas and oil. </p>
+ <p>DEFAULT: S<sub>gcr</sub> </p>
+ </li>
+
+<li> <samp class="codeph">SGMAX</samp> Scaled value of the maximum gas saturation <p>The value is ignored in problems not containing both gas and oil. </p>
+ <p>DEFAULT: 1 - S<sub>ogcr</sub> - S<sub>wco</sub> </p>
+ </li>
+
+</ol>
+
+<div class="section" id="comprpl_example"><a name="comprpl_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>This example
+scales all connections in well PROD1 located in the local  grid LGR1,
+and scales layer-2 connections in the local grid LGR2 for all wells
+ with names beginning with P. 	</p>
+<pre><code>COMPRPL
+ PROD1 LGR1 4*       3  .39  .63  .15  .29  /
+ 'P*'  LGR2 2*  2 2  1* .39  .63  .15  .29  /
+/</code></pre><p>See the <a href="COMPRP.html#COMPRP"> COMPRP</a> keyword for more details on the saturation scaling calculation. </p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

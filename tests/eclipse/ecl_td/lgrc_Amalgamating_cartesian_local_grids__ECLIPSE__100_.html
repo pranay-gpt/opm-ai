@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Amalgamating Cartesian local grids (ECLIPSE 100)"/>
+<meta name="DC.subject" content="Amalgamation, Cartesian LGRs"/>
+<meta name="keywords" content="Amalgamation, Cartesian LGRs"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrc_amalgamating_cartesian_local_grids__eclipse__100_"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Amalgamating Cartesian local grids (ECLIPSE 100)</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="lgrc_amalgamating_cartesian_local_grids__eclipse__100_"><a name="lgrc_amalgamating_cartesian_local_grids__eclipse__100_"><!-- --></a>
+<h1 class="topictitle1">Amalgamating Cartesian local grids (ECLIPSE 100)</h1>
+
+
+ <div>
+<p>ECLIPSE 300 allows local grids to be placed anywhere in the reservoir
+provided they do not overlap. In ECLIPSE 100 a local grid cannot be
+placed next to another local grid.</p>
+
+<p>It is however possible to amalgamate two or more Cartesian local
+grids into a single entity, by using the keyword <a href="../ecl_rm/AMALGAM.html#AMALGAM">AMALGAM</a>. This facility provides
+a means of completing a well in more than one local grid. Thus the
+grid may be refined more efficiently around a deviated well by employing
+a number of smaller refinements in a zigzag pattern instead of a single
+large refinement.</p>
+
+<p>Local grids within the same amalgamation are allowed to touch,
+but must not overlap. Several geometrical configurations allow amalgamation.
+Using the notation of the drawing below:</p>
+
+<ul>
+<li>Z-direction (A above B): If  <math><msub><mrow><msub>
+<mi>Z</mi><mrow><mn>1</mn><mi>B</mi></mrow></msub>
+<mo>=</mo><mi>Z</mi></mrow><mrow><mn>2</mn><mi>A</mi>
+</mrow></msub><mo>+</mo><mn>1</mn></math>  then an amalgamation
+is defined if  <math>
+<msub><mi>X</mi><mrow><mn>1</mn><mi>B</mi></mrow>
+</msub><mo>≤</mo><msub><mi>X</mi><mrow><mn>2</mn>
+<mi>A</mi></mrow></msub></math>  and  <math><msub><mi>X</mi>
+<mrow><mn>1</mn><mi>A</mi></mrow></msub><mo>≤</mo>
+<msub><mi>X</mi><mrow><mn>2</mn><mi>B</mi></mrow>
+</msub></math>  and  <math><msub><mi>Y</mi>
+<mrow><mn>1</mn><mi>B</mi></mrow></msub><mo>≤</mo>
+<msub><mi>Y</mi><mrow><mn>2</mn><mi>A</mi></mrow>
+</msub></math>  and  <math><msub><mi>Y</mi>
+<mrow><mn>1</mn><mi>A</mi></mrow></msub><mo>≤</mo>
+<msub><mi>Y</mi><mrow><mn>2</mn><mi>B</mi></mrow>
+</msub></math>. This case corresponds to the drawing below. Swap
+indices A and B for the case B above A.</li>
+
+<li> X-direction (B on the right side of A): <math><msub><mrow><msub>
+<mi>X</mi><mrow><mn>1</mn><mi>B</mi></mrow></msub>
+<mo>=</mo><mi>X</mi></mrow><mrow><mn>2</mn><mi>A</mi>
+</mrow></msub><mo>+</mo><mn>1</mn></math>  then an amalgamation
+is defined if  <math>
+<msub><mi>Y</mi><mrow><mn>1</mn><mi>B</mi></mrow>
+</msub><mo>≤</mo><msub><mi>Y</mi><mrow><mn>2</mn>
+<mi>A</mi></mrow></msub></math>  and  <math><msub><mi>Y</mi>
+<mrow><mn>1</mn><mi>A</mi></mrow></msub><mo>≤</mo>
+<msub><mi>Y</mi><mrow><mn>2</mn><mi>B</mi></mrow>
+</msub></math>  in the case where NNCs and NEWTR are set. If no
+NNCs or NEWTR is set, then the following condition on the Z-coordinates
+is used:  <math><msub>
+<mi>Z</mi><mrow><mn>1</mn><mi>B</mi></mrow></msub>
+<mo>≤</mo><msub><mi>Z</mi><mrow><mn>2</mn><mi>A</mi>
+</mrow></msub></math>  and  <math><msub><mi>Z</mi>
+<mrow><mn>1</mn><mi>A</mi></mrow></msub><mo>≤</mo>
+<msub><mi>Z</mi><mrow><mn>2</mn><mi>B</mi></mrow>
+</msub></math>. For B on the left of A swap indices A and B.</li>
+
+<li>Y-direction: same as X-direction.                            
+                  </li>
+
+</ul>
+
+<p>Note that this test is done for all pairs of active LGRs where
+a Flux Boundary (<a href="../ecl_rm/USEFLUX.html#USEFLUX">USEFLUX</a>) is not used. This includes active and inactive cells.</p>
+
+<div class="fignone" id="lgrc.amalg.activeinactivecells"><a name="lgrc.amalg.activeinactivecells"><!-- --></a> <br/><img src="../img/lgrc_grid_test.png" width="430px"/><br/> </div>
+
+<p>Any valid Cartesian grids may be amalgamated, even if they do not
+touch. ECLIPSE treats an amalgamation as a single entity by lumping
+together all its constituent local grids, with non-neighbor connections
+between any adjacent grids in the amalgamation. The amalgamation is
+handled in the same way that ECLIPSE treats a single local grid; thus
+the timestep is synchronized across all the local grids within an
+amalgamation. Use of this facility to mimic nested refinements is
+not encouraged because this leads to a large number of non-neighbor
+connections between local grids. A well may be completed in any local
+grid within the same amalgamation, but may not be completed outside
+its amalgamation. Wells within local grid amalgamations should be
+specified in the usual way with keyword <a href="../ecl_rm/WELSPECL.html#WELSPECL">WELSPECL</a>, naming any of the
+constituent local grids in item 3. The keyword <a href="../ecl_rm/COMPDATL.html#COMPDATL">COMPDATL</a> should be used instead
+of <a href="../ecl_rm/COMPDAT.html#COMPDAT">COMPDAT</a> to specify connection data for wells completed in local grids.</p>
+
+<p>For a well in an amalgamation, keyword <a href="../ecl_rm/COMPLMPL.html#COMPLMPL">COMPLMPL</a> should be used instead
+of <a href="../ecl_rm/COMPLUMP.html#COMPLUMP">COMPLUMP</a> to lump connections for automatic workovers. Similarly, <a href="../ecl_rm/WELOPENL.html#WELOPENL">WELOPENL</a> should be used instead
+of <a href="../ecl_rm/WELOPEN.html#WELOPEN">WELOPEN</a> to open or shut wells or well connections; and <a href="../ecl_rm/WFRICTNL.html#WFRICTNL">WFRICTNL</a> must be used instead
+of <a href="../ecl_rm/WFRICTN.html#WFRICTN">WFRICTN</a> for the ECLIPSE 100 Wellbore Friction option. The '-L' versions
+of the keywords each contain an extra data item to specify which local
+grid the following connection belongs to. Either keyword from each
+pair may be used for wells completed in a single local grid.</p>
+
+<p>For example, consider defining a deviated well in neighboring local
+grids 'WEST' and 'EAST'. The <span class="keyword">GRID</span> section might
+look like:</p>
+
+<pre><code>CARFIN -- NAME    I1-I2  J1-J2  K1-K2 NX NY NZ NWMAX--   'WEST'    3 4    2 3    1 2   8  4  4  1  /
+CARFIN -- NAME    I1-I2  J1-J2  K1-K2 NX NY NZ NWMAX--   'EAST'    4 5    4 5    1 2   8  4  4  1  /
+AMALGAM   'EAST' 'WEST' /  /</code></pre>
+<p>This generates a composite refinement which looks like the following
+figure (in the areal direction).</p>
+
+<div class="fignone" id="lgrc.XID-000001a9"><a name="lgrc.XID-000001a9"><!-- --></a>
+
+ <br/><img src="../img/lgr6.png" width="422px"/><br/> 
+<br/><span class="figcap">
+           Figure 35.2  A composite refinement</span></div>
+
+<p>A well may be specified in the <span class="keyword">SCHEDULE</span> section
+in the following way:</p>
+
+<pre><code>WELSPECL
+ --   WELL  --  GROUP -- LOCAL GRID -- LOCATION --  BHP  -- PREF
+ --   NAME  --  NAME  --    NAME    --   I  J   -- DEPTH -- PHASE
+      'DEV'       'G'       'EAST'        2  2      8000     'OIL'  / 
+/
+COMPDATM
+ -- WELL - LOCAL -   LOCATION   - OPEN - SAT - CONN - WELL - KH  - S - D - PEN -
+ -- NAME - GRID  - I  J  K1  K2 - SHUT - TAB - FACT - DIAM               - DRN -
+   'DEV'   'WEST'  6  3  3  3  'OPEN'   0     -1    0.3    3*            'X' /
+   'DEV'   'WEST'  6  4  2  2  'OPEN'   0     -1    0.3    3*            'X' /
+   'DEV'   'EAST'  2  1  2  2  'OPEN'   0     -1    0.3    3*            'X' /
+   'DEV'   'EAST'  2  2  1  1  'OPEN'   0     -1    0.3    3*            'X' / 
+/</code></pre>
+</div>
+
+</div>
+
+
+</body>
+</html>

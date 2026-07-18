@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ECLIPSE output formats"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="outputfl_eclipse_output_formats"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ECLIPSE output formats</title>
+</head>
+<body>
+
+
+<div class="H1" id="outputfl_eclipse_output_formats"><a name="outputfl_eclipse_output_formats"><!-- --></a>
+<h1 class="topictitle1">ECLIPSE output formats</h1>
+
+
+ <div>
+<p>Output files are written in a general format which consists of
+data arrays, each headed by a data descriptor record. The header record
+consists of:</p>
+
+<ol>
+<li> An 8-character keyword which identifies the data in the block.
+Valid keywords are described in the following chapters. Where appropriate,
+the keyword may be a property, region or solution name. Use of names
+containing embedded blanks is not recommended.             </li>
+
+<li>A 4-byte signed integer defining the number of elements in the
+block. The maximum allowed value is 2<sup>31</sup>-1. Unless the header
+is of type <samp class="codeph">X231</samp>, this value should be non-negative.
+        </li>
+
+<li>A 4-character keyword defining the type of data in the block.
+Possible types are:              </li>
+
+</ol>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">INTE</samp> </td>
+
+<td valign="top"> standard (4 byte) signed integers</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">REAL</samp> </td>
+
+<td valign="top"> single precision (4 byte) floating point reals</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">LOGI</samp> </td>
+
+<td valign="top"> standard (4 byte) logicals</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">DOUB</samp> </td>
+
+<td valign="top"> double precision (8 byte) floating point reals</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">CHAR</samp> </td>
+
+<td valign="top"> characters (handled as 8-character words)</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">C0nn</samp> </td>
+
+<td valign="top"> CHARACTER(len=nn) strings (for example C065 for 65-character
+strings)</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">MESS</samp> </td>
+
+<td valign="top">"Sentinel" header that has no data associated</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">X231</samp> </td>
+
+<td valign="top"> indicates that this array has at least 2<sup>31</sup> elements</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This means that item 2 cannot be used to represent the size of
+the data. Instead a pair of headers is used to communicate the size
+of the array. An <samp class="codeph">X231</samp> header has no associated data
+and item 2 of the header must be a negative value. In addition an <samp class="codeph">X231</samp> header must be followed immediately by another header
+that is not of type <samp class="codeph">X231</samp>. Details on the use of the <samp class="codeph">X231</samp> header can be found in <a href="outputfl_Output_of_Large_Arrays.html#outputfl_output_of_large_arrays"> "Output of Large Arrays"</a>.</p>
+
+<p>If the file is unformatted, the three header items are read as
+a single physical record. If the file is formatted, the following
+Fortran format is used:</p>
+
+<pre><code>(1X, "'", A8, "'", 1X, I11, 1X, "'", A4, "'")                </code></pre>
+<p>In ECLIPSE formatted output files, the character strings are surrounded
+by single quotes (ASCII character decimal 39) for readability.</p>
+
+<p>The data contents follow the descriptor (starting on a new record).
+Numerical arrays are divided into blocks of up to 1000 items each.
+Character data are divided blocks of up to 105 8-character words each.
+For unformatted files, the physical record size is the same as the
+block size. Formatted files consist of 80-character physical records,
+read using the following Fortran formats:</p>
+
+<p>Integer <samp class="codeph"> 6(1X, I11)</samp> </p>
+
+<p>Real <samp class="codeph"> 4(1X, E16.8)</samp> </p>
+
+<p>Logical <samp class="codeph"> 25(1X, L2)</samp> </p>
+
+<p>Double Precision <samp class="codeph"> 3(1X, D22.14)</samp>                </p>
+
+<p>Character(len=8) <samp class="codeph">7(1X, </samp>"<samp class="codeph">'</samp>"<samp class="codeph">, A8, </samp>"<samp class="codeph">'</samp>"<samp class="codeph">)</samp>  </p>
+
+<p>Character(len=nn) (<samp class="codeph">1X, </samp>"<samp class="codeph">'</samp>"<samp class="codeph">, Ann, </samp>"<samp class="codeph">'</samp>"<samp class="codeph">)</samp>, repeated
+if possible within 80 characters</p>
+
+<p>In ECLIPSE formatted output files, the 8-character or nn-character
+strings, are surrounded by single quotes (ASCII character decimal
+39) for readability.</p>
+
+<p>Note that multidimensional arrays are ordered according to the
+Fortran convention, with the left-hand index increasing fastest. For
+example, in a full array of cell values for a grid with dimensions <samp class="codeph">NX*NY*NZ</samp>, the position of cell <samp class="codeph">(IX,IY,IZ)</samp> would be given by:</p>
+
+<pre><code>ICELL = (IZ-1)*NX*NY + (IY-1)*NX + IX</code></pre>
+</div>
+
+</div>
+
+
+</body>
+</html>

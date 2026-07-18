@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Treatment of wells"/>
+<meta name="DC.subject" content="Solution of the linear equations treatment of wells, Solution of the linear equations, Wells"/>
+<meta name="keywords" content="Solution of the linear equations treatment of wells, Solution of the linear equations, Wells"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sollineq_treatment_of_wells"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Treatment of wells</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="sollineq_treatment_of_wells"><a name="sollineq_treatment_of_wells"><!-- --></a>
+<h1 class="topictitle1">Treatment of wells</h1>
+
+
+ <div>
+<p>The strongly coupled fully-implicit treatment of wells in ECLIPSE
+100 extends the linear equations to include the well variables, <em>w</em>, corresponding to the bottom hole flowing pressure, and well
+bore flowing fractions. Thus each well, like each cell, has three
+variables in the three phase case. Including the well terms, the linear
+equations now become</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.XID-000001ac"/>
+ <math><mtable><mtr>
+<mtd><mrow><mi>A</mi><mi>x</mi></mrow><mo>+</mo>
+<mrow><mi>C</mi><mi>w</mi></mrow><mo>=</mo><mi>r</mi>
+</mtd></mtr><mtr><mtd><mrow><mi>R</mi><mi>x</mi>
+</mrow><mo>+</mo><mrow><mi>D</mi><mi>w</mi></mrow>
+<mo>=</mo><mi>u</mi></mtd></mtr></mtable></math> 
+</td><td align="right">[Eq. 679.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+<p> <math><mi>u</mi>
+</math> is the well residuals,</p>
+
+<p>and if there are N grid blocks and L wells:</p>
+
+<p> <math><mi>A</mi>
+</math> is a banded  <math><mtext>N</mtext><mo>×</mo><mtext>N</mtext></math>  matrix (equation <a href="sollineq_Nested_factorization_preconditioning.html#sollineq.Xsollineq.XID-0000005a">674.1</a>),</p>
+
+<p> <math><mi>C</mi>
+</math>  is a sparse  <math><mtext>N</mtext><mo>×</mo><mtext>L</mtext></math>  matrix,</p>
+
+<p> <math><mi>R</mi>
+</math> is a sparse  <math><mtext>L</mtext><mo>×</mo><mtext>N</mtext></math>  matrix,</p>
+
+<p> <math><mi>D</mi>
+</math> is a sparse  <math><mtext>L</mtext><mo>×</mo><mtext>L</mtext></math>  matrix.</p>
+
+<p>Usually D is lower triangular and easily inverted, allowing the
+well terms to be eliminated. Thus the equation for x becomes</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.XID-000001c2"/>
+ <math><mrow><mo>(</mo><mi>A</mi><mrow><mo>-</mo><mrow><mi>C</mi>
+<msup><mi>D</mi><mrow><mo>-</mo><mn>1</mn></mrow>
+</msup><mi>R</mi></mrow></mrow><mo>)</mo><mi>x</mi>
+</mrow><mo>=</mo><mi>r</mi><mrow><mo>-</mo><mrow>
+<mi>C</mi><msup><mi>D</mi><mrow><mo>-</mo><mn>1</mn>
+</mrow></msup><mi>u</mi></mrow></mrow></math> 
+</td><td align="right">[Eq. 679.2]
+              </td></tr></tbody></table>
+<p>which is easily solved by preconditioned Orthomin.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>In ECLIPSE 300, there is a single well variable <em>w</em>, corresponding to well bottom-hole pressure. When an implicit
+treatment of the gravity head for each completion is used, the well
+constraint equations cannot be solved as in equation <a href="sollineq_Treatment_of_wells.html#sollineq.XID-000001ac">679.1</a>. In the case of wells with multi-layer
+completions, extra coupling terms are introduced between all the cells
+on a given well. This is because the required well bottom hole pressure
+is a function of the solution values in each completion and each completion
+flow is a function of this well bottom-hole pressure. An additional
+contribution to the Jacobian is then defined:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.01ca"/>
+ <math><mrow><msub>
+<mrow><mi>J</mi></mrow><mrow><mi>w</mi></mrow></msub>
+<mo>=</mo><mfrac><mrow><msub><mrow><mi>d</mi><mi>Q</mi></mrow><mrow><mi>w</mi></mrow></msub></mrow>
+<mrow><mi>d</mi><mi>X</mi></mrow></mfrac></mrow>
+</math> 
+</td><td align="right">[Eq. 679.3]
+              </td></tr></tbody></table>
+<p>which we include in the matrix <em>A</em> above. The column sum (or
+row sum) of  <math>
+<msub><mi>J</mi><mi>w</mi></msub></math>  is included
+on the diagonal of the pre-conditioning matrix <em>B</em>. When using
+explicit head calculations the well equations do, however, reduce
+to the form of equation <a href="sollineq_Treatment_of_wells.html#sollineq.XID-000001c2">679.2</a>.</p>
+
+<p>See <cite><span> <a href="biblio_Bibliography.html#biblio_30297">Holmes (1983)</a> </span></cite> and <cite><span> <a href="biblio_Bibliography.html#biblio_23542">Cheshire and Pollard (1987)</a> </span></cite> for further information.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

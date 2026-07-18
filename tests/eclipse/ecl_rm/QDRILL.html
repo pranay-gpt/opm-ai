@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="QDRILL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="QDRILL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>QDRILL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="QDRILL"><a name="QDRILL"><!-- --></a>
+<h1 class="keyword">QDRILL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="qdrill.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="qdrill.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1940e45"> x </th>
+
+<th valign="top" id="d1940e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1940e54"> x </th>
+
+<th valign="top" id="d1940e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1940e45 d1940e54 ">  </td>
+
+<td valign="top" headers="d1940e48 d1940e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1940e45 d1940e54 ">  </td>
+
+<td valign="top" headers="d1940e48 d1940e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1940e45 d1940e54 ">  </td>
+
+<td valign="top" headers="d1940e48 d1940e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1940e45 d1940e54 ">  </td>
+
+<td valign="top" headers="d1940e48 d1940e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1940e45 d1940e54 ">  </td>
+
+<td valign="top" headers="d1940e48 d1940e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1940e45 d1940e54 ">  </td>
+
+<td valign="top" headers="d1940e48 d1940e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1940e45 d1940e54 ">  </td>
+
+<td valign="top" headers="d1940e48 d1940e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1940e45 d1940e54 "> x </td>
+
+<td valign="top" headers="d1940e48 d1940e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword should be followed by a list of up to 50 well names,
+terminated with a slash (/).</p>
+
+<p>The wells are placed in the sequential drilling queue, to be opened
+in sequence when they are needed to maintain a group rate target under
+group control by guide rate (<a href="GCONPROD.html#GCONPROD">  GCONPROD</a>, <a href="GCONINJE.html#GCONINJE">  GCONINJE</a>, <a href="GCONSALE.html#GCONSALE">  GCONSALE</a>).
+These wells may also be opened in sequence from the drilling queue
+in ECLIPSE 100 should they be needed to maintain a group’s production
+potential (<a href="GDRILPOT.html#GDRILPOT">  GDRILPOT</a>). If the drilling queue already contains some wells, the new list
+of wells is added to the end of the queue. Note that there is only
+one drilling queue - each time <span class="keyword">QDRILL</span> is entered
+it appends its wells to the end of this queue. Thus, if there are
+more than 50 wells to go into the queue, the remainder can be added
+to the queue by using the keyword a second time. Wells can be removed
+from the drilling queue, if required, by declaring them <samp class="codeph">OPEN</samp> with keyword <a href="WCONPROD.html#WCONPROD">  WCONPROD</a>, <a href="WCONINJE.html#WCONINJE">  WCONINJE</a> or <a href="WELOPEN.html#WELOPEN">  WELOPEN</a>.</p>
+
+<p>If a group (including the field) cannot meet its production target,
+the first production well in the queue that is subordinate to that
+group, and not subordinate to any other group under the same mode
+of production control, is opened automatically. If a group cannot
+meet its injection target, the first injection well in the queue that
+is subordinate to that group, and not subordinate to any other group
+under injection control for the same phase, is opened automatically.</p>
+
+<p>Well opening may be delayed by constraints on the rate of drilling
+new wells (see keyword <a href="WDRILTIM.html#WDRILTIM">  WDRILTIM</a>), the availability of drilling rigs (keyword <a href="GRUPRIG.html#GRUPRIG">  GRUPRIG</a>) and, in ECLIPSE
+100, on the maximum number of open wells in any group (item 9 of keyword <a href="GECON.html#GECON">  GECON</a>). If a well cannot
+currently be drilled because of any of these constraints, the subsequent
+wells in the drilling queue will be examined in turn to see if there
+is another suitable well that can be drilled instead.</p>
+
+<p>An alternative to the sequential drilling queue is the prioritized
+drilling queue, from which wells are opened in decreasing order of
+their drilling priority (see keyword <a href="DRILPRI.html#DRILPRI">  DRILPRI</a>). Wells are placed in the prioritized drilling
+queue using the keyword <a href="WDRILPRI.html#WDRILPRI">  WDRILPRI</a>. Only one type of drilling queue may exist at any given
+time in the run; the two types of queue cannot operate together.</p>
+
+<p>The drilling queue facility should not be confused with the automatic
+opening option (<samp class="codeph">AUTO</samp> in item 2 of keyword <span class="keyword">WCONPROD</span> and item 3 of keyword <span class="keyword">WCONINJE</span> for example). They are two completely separate facilities. Wells
+in the drilling queue are opened only when needed to maintain group
+production and injection targets. Wells on <samp class="codeph">AUTO</samp> will
+be opened as soon as allowed by constraints on drilling rate and number
+of open wells per group, irrespective of group flow rates.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The wells must have been fully specified as shut or stopped
+producers or injectors under independent or group control.</span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The drilling queue is not used for opening wells belonging to
+groups under prioritization group control (keyword <a href="GCONPRI.html#GCONPRI"> GCONPRI</a>), as the prioritization
+algorithm itself handles the opening and closing of these wells. </span></div>
+
+<p>See also keywords <a href="WDRILRES.html#WDRILRES">  WDRILRES</a>, <a href="WELSOMIN.html#WELSOMIN">  WELSOMIN</a>, <a href="PRORDER.html#PRORDER">  PRORDER</a> and <span class="keyword">WDRILPRI</span>.</p>
+
+<div class="section" id="qdrill_example"><a name="qdrill_example"><!-- --></a><h4 class="sectiontitle">Example</h4> <pre><code>QDRILL
+  PROD4  PROD5  PROD6  PROD7  /
+</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

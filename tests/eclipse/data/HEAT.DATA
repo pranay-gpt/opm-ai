@@ -1,0 +1,302 @@
+RUNSPEC
+TITLE
+          Simple Cold Water Injection case
+
+DIMENS
+   20   20    3  /
+
+NONNC
+
+OIL
+
+WATER
+
+GAS
+
+DISGAS
+
+METRIC
+
+TEMP
+
+EQLDIMS
+    1  100   10    1   20 /
+
+TABDIMS
+    1    1   19   15   15   15    1   20 /
+
+REGDIMS
+   15    1    0    0  /
+
+WELLDIMS
+    2    3    1    2 /
+
+NUPCOL
+    4 /
+
+START
+   1 'JAN' 1994  /
+
+NSTACK
+   24 /
+
+
+GRID     ===============================================================
+-------- IN THIS SECTION , THE GEOMETRY OF THE SIMULATION GRID AND THE
+-------- ROCK PERMEABILITIES AND POROSITIES ARE DEFINED.
+------------------------------------------------------------------------
+
+TOPS
+  20*500 20*502 20*505 20*511 20*519 20*529 20*541 20*555 20*571 20*591
+  20*601 20*617 20*631 20*643 20*653 20*661 20*667 20*671 20*674 20*676  /
+DXV
+   10 15 20 30 40 50 60 70 80 100 100 80 70 60 50 40 30 20 15 10 /
+DYV
+   10 15 20 30 40 50 60 70 80 100 100 80 70 60 50 40 30 20 15 10 /
+DZ
+  400*5 400*10 400*18 /
+PORO
+  1200*0.28 /
+PERMX
+  1200*300 /
+PERMY
+  1200*300 /
+PERMZ
+  1200*30  /
+
+--
+-- rock thermal conductivity (optional if the effect is small)
+--
+THCONR
+ 1200*24.0  /
+
+RPTGRID
+ 'PORV' 'TRANX' 'TRANY' 'THCONR' 'TRTHERM' /
+
+PROPS    ===============================================================
+-------- THE PROPS SECTION DEFINES THE REL. PERMEABILITIES, CAPILLARY
+-------- PRESSURES, AND THE PVT PROPERTIES OF THE RESERVOIR FLUIDS
+----------------------------------------------------------------------
+--  SWAT   KRW   PCOW
+SWFN
+
+    0.12  0       0
+    0.2   0.01   0
+    0.3   0.2    0
+    1.0   0.8     0  /
+
+-- SIMILARLY FOR GAS
+--
+--  SGAS   KRG   PCOG
+SGFN
+
+    0     0       0
+    0.02  0       0
+    0.05  0.005   0
+    0.12  0.025   0
+    0.2   0.075   0
+    0.25  0.125   0
+    0.3   0.19    0
+    0.4   0.41    0
+    0.45  0.6     0
+    0.5   0.72    0
+    0.6   0.87    0
+    0.7   0.94    0
+    0.85  0.98    0
+    1.0   1.0     0
+/
+
+-- OIL RELATIVE PERMEABILITY IS TABULATED AGAINST OIL SATURATION
+-- FOR OIL-WATER AND OIL-GAS-CONNATE WATER CASES
+--
+--  SOIL     KROW     KROG
+SOF3
+    0        0        0
+    0.18     0        0
+    0.28     0.0001   0.0001
+    0.38     0.001    0.001
+    0.43     0.01     0.01
+    0.48     0.021    0.021
+    0.58     0.09     0.09
+    0.63     0.2      0.2
+    0.68     0.35     0.35
+    0.76     0.7      0.7
+    0.83     0.98     0.98
+    0.86     0.997    0.997
+    0.879    1        1
+    0.88     1        1    /
+
+
+-- PVT PROPERTIES OF WATER
+--
+--    REF. PRES. REF. FVF  COMPRESSIBILITY  REF VISCOSITY  VISCOSIBILITY
+PVTW
+        3000     1.00341        3.0D-6          0.96             0  /
+
+
+-- ROCK COMPRESSIBILITY
+--
+--    REF. PRES   COMPRESSIBILITY
+ROCK
+         3000          4.0D-6   /
+
+--
+--        OIL   WATER   GAS
+DENSITY
+           45   63.02   0.0702  /
+
+--
+--   PGAS   BGAS   VISGAS
+PVDG
+     14.7 166.666   0.008
+    264.7  12.093   0.0096
+    514.7   6.274   0.0112
+   1014.7   3.197   0.014
+   2014.7   1.614   0.0189
+   2514.7   1.294   0.0208
+   3014.7   1.080   0.0228
+   4014.7   0.811   0.0268
+   5014.7   0.649   0.0309
+   9014.7   0.386   0.047   /
+
+--
+--   RS      POIL  FVFO  VISO
+PVTO
+    0.001    14.7 1.062  1.04    /
+    0.0905  264.7 1.15   0.975   /
+    0.18    514.7 1.207  0.91    /
+    0.371  1014.7 1.295  0.83    /
+    0.636  2014.7 1.435  0.695   /
+    0.775  2514.7 1.5    0.641   /
+    0.93   3014.7 1.565  0.594   /
+    1.270  4014.7 1.695  0.51
+           5014.7 1.671  0.549
+           9014.7 1.579  0.74    /
+    1.618  5014.7 1.827  0.449
+           9014.7 1.726  0.605   /
+/
+
+
+--
+-- Define the fluid specific heats
+--
+SPECHEAT
+   0   0.5 1.5 0.5
+ 100   0.5 1.5 0.5
+/
+--
+--  Define the rock specific heat
+--
+SPECROCK
+   0   35
+ 100   35
+/
+--
+-- Oil/Water Viscosity as a function of temperature
+--
+VISCREF
+ 3014.7 0.93 /
+
+OILVISCT
+ 20  3.0
+ 46  0.594
+/
+
+WATVISCT
+ 20  1.2
+ 46  0.96
+/
+
+
+-- SWITCH ON OUTPUT OF ALL PROPS DATA
+RPTPROPS
+ 'SPECHEAT' /
+
+SOLUTION ===============================================================
+-------- THE SOLUTION SECTION DEFINES THE INITIAL STATE OF THE SOLUTION
+-------- VARIABLES (PHASE PRESSURES, SATURATIONS AND GAS-OIL RATIOS)
+------------------------------------------------------------------------
+-- DATA FOR INITIALISING FLUIDS TO POTENTIAL EQUILIBRIUM
+--
+--    DATUM  DATUM   OWC    OWC    GOC    GOC    RSVD   RVVD   SOLN
+--    DEPTH  PRESS  DEPTH   PCOW  DEPTH   PCOG  TABLE  TABLE   METH
+EQUIL
+        500    3000   600     0      500    0       0      0  /
+
+
+--
+-- Define the initial reservoir temperature
+--
+RTEMP
+ 46 /
+
+-- SWITCH ON OUTPUT OF INITIAL SOLUTION
+RPTSOL                                           FIELD   16:05 12 DEC 88
+ 'PRESSURE' 'SWAT' 'TEMP' 'VOIL' 'VWAT'/
+
+SUMMARY ================================================================
+-------- THIS SECTION SPECIFIES DATA TO BE WRITTEN TO THE SUMMARY FILES
+-------- AND WHICH MAY LATER BE USED WITH THE ECLIPSE GRAPHICS PACKAGE
+------------------------------------------------------------------------
+
+BTCNFHEA
+ 20 20 3 /
+ 19 19 1 /
+/
+SEPARATE
+RUNSUM
+
+ALL
+
+-- MSUMLINS
+
+-- MSUMNEWT
+
+SCHEDULE ===============================================================
+-------- THE SCHEDULE SECTION DEFINES THE OPERATIONS TO BE SIMULATED
+------------------------------------------------------------------------
+-- CONTROLS ON OUTPUT AT EACH REPORT TIME
+
+RPTSCHED
+  'PRESSURE' 'SWAT'  'TEMP'  'RESTART=2' 'CPU=2' 'FIPHEAT' 'VOIL' 'VWAT' /
+
+-- WELL SPECIFICATION DATA
+--
+--     WELL   GROUP LOCATION  BHP   PI
+--     NAME   NAME    I  J   DEPTH DEFN
+WELSPECS                                         FIELD   16:32 18 JAN 85
+'P1','G       ',  1,  1, 1*    ,'OIL' /
+'I1','G       ', 20, 20, 1*    ,'WAT' /
+/
+
+-- COMPLETION SPECIFICATION DATA
+--
+--     WELL     -LOCATION- OPEN/ SAT CONN
+--     NAME     I  J K1 K2 SHUT  TAB FACT
+COMPDAT
+    'P1'  1  1  1  3 'OPEN' 0  1* 0.3 /
+    'I1' 20 20  1  3 'OPEN' 0  1* 0.3 /
+  /
+
+-- PRODUCTION WELL CONTROLS
+--
+--  WELL     OPEN/  CNTL   OIL  WATER   GAS  LIQU   RES   BHP
+--  NAME     SHUT   MODE  RATE   RATE  RATE  RATE  RATE
+WCONPROD
+     'P1'  'OPEN'  'BHP'               5*                1500  /
+  /
+WCONINJE
+     I1 WAT OPEN RATE 4000   /
+  /
+--
+--  Define the injection temperature
+--
+WTEMP
+I1  20 /
+/
+
+TSTEP
+  1 10 100 1000
+/
+
+END

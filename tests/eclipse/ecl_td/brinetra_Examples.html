@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Examples"/>
+<meta name="DC.subject" content="Fluid model, Brine model, Brine tracking examples"/>
+<meta name="keywords" content="Fluid model, Brine model, Brine tracking examples"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="brinetra_examples"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Examples</title>
+</head>
+<body>
+
+
+<div class="nested0" id="brinetra_examples"><a name="brinetra_examples"><!-- --></a>
+<h1 class="topictitle1">Examples</h1>
+
+
+ <div>
+<p>This example shows only sections where data related to the brine
+option are mentioned.</p>
+
+<div class="section" id="brinetra_runspec_example"><a name="brinetra_runspec_example"><!-- --></a><h4 class="sectiontitle">RUNSPEC </h4><pre><code>RUNSPEC
+TITLE
+Example Brine Model
+-- Phases present
+OIL
+WATER
+BRINE
+FIELD
+DIMENS
+15  1  10  /
+START
+1 'JAN' 1983 /
+-- Well dimensions
+WELLDIMS
+2  10  1  2  /
+-- Aquifer dimensions
+AQUDIMS
+0  0  1  36  2  10  /</code></pre></div>
+
+<div class="section" id="brinetra_props_example"><a name="brinetra_props_example"><!-- --></a><h4 class="sectiontitle">PROPS</h4><pre><code>PROPS
+
+-- Rock properties
+ROCK
+4000.0  0.000008  /
+
+-- Fluid densities at surface conditions
+DENSITY
+45  64  0.09  /
+
+-- PVT data for oil
+PVDO
+ 400  1.012  1.160
+ 1200 1.0040 1.164
+ 2000 0.9960 1.167
+ 2800 0.9880 1.172
+ 3600 0.9802 1.177
+ 4400 0.9724 1.181
+ 5200 0.9646 1.185
+ 5600 0.9607 1.190
+/
+
+-- PVT data for water with salt present
+PVTWSALT
+3000.0 /
+ 0.0  1.000  3.0E-6  1.00  1.0E-6
+10.0  0.8    3.0E-6  1.00  1.0E-6  /
+
+
+ -- Saturation functions
+ SWFN
+ 0.20  0.0  0.0
+ 0.40  0.1  0.0
+ 0.80  0.5  0.0
+ 1.0   1.0  0.0
+ /
+
+
+
+SOF2
+ 0.2  0.0
+ 0.4  0.12
+ 0.6  0.35
+ 0.7  0.68
+ 0.8  1.0
+ /</code></pre></div>
+
+<div class="section" id="brinetra_solution_example"><a name="brinetra_solution_example"><!-- --></a><h4 class="sectiontitle">SOLUTION </h4><pre><code>SOLUTION
+
+
+ -- Equilibration data
+EQUIL
+5270  4000.0  5270.0  0.0  400.0  0.0  0  0  5  /
+
+
+-- Salt concentration versus depth table
+SALTVD
+5000.0  9.0
+5500.0  9.0 /
+
+
+
+-- Aquifer data
+AQUFETP
+1  5400  1*  2.0E9  3.0E-5  540.96  1  10.0  /
+/
+
+
+
+AQUCT
+2  5400.0  1*  20.0  0.10  3.0E-5  2400.0  140.0  4.8  1  1  9.5  /
+/
+
+
+AQUANCON
+1  15  15  1  1  1   5  'I+'  /
+2  15  15  1  1  6  10  'I+'  /
+/</code></pre></div>
+
+<div class="section" id="brinetra_summary_example"><a name="brinetra_summary_example"><!-- --></a><h4 class="sectiontitle">SUMMARY </h4><pre><code>SUMMARY
+
+-- Field salt production rates and totals
+FSPR
+FSPT
+
+-- Field salt injection rates and totals
+FSIR
+FSIT
+
+-- Field salt production and injection concentrations
+FSPC
+FSIC
+
+-- Field salt in place
+FSIP
+
+-- Group salt production and injection rates
+GSPR
+'G' /
+GSIR
+'G' /
+
+-- Well salt production and injection rates
+WSPR
+'PRODUCER' /
+WSIR
+'INJECTOR' /
+
+-- Block salt concentration
+BSCN
+1 1 1 /
+/</code></pre></div>
+
+<div class="section" id="brinetra_schedule_example"><a name="brinetra_schedule_example"><!-- --></a><h4 class="sectiontitle">SCHEDULE Example</h4><p><span class="keyword">SCHEDULE</span>    section example</p>
+<pre><code>
+SCHEDULE
+
+
+-- Well specification data
+WELSPECS
+    'PRODUCER'  'G'   1  1  5200  'OIL'  /
+    'INJECTOR'  'G'  14  1  5400  'WAT'  /
+/
+
+COMPDAT
+    'PRODUCER'    1  1  1  10  'OPEN'  1  -1  0.5  /
+    'INJECTOR'   14  1  5  10  'OPEN'  1  -1  0.5  /
+/
+
+WCONPROD
+    'PRODUCER'  'OPEN'  'ORAT'  200.0  4*  1500.0  /
+/
+
+GCONINJE
+    'FIELD'  'WAT'  'VREP'  3*  0.7  /
+/
+
+WCONINJE
+    'INJECTOR'  'WAT'  'OPEN'  'GRUP'  /
+/
+
+-- Salt concentration for injection well
+WSALT
+  'INJECTOR'  1.0  /
+/
+
+-- Timestep data
+TSTEP
+1.0 9.0 90.0 100.0 100.0 100.0 100.0 250.0 250.0 1000.0 1000.0 /
+
+END</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

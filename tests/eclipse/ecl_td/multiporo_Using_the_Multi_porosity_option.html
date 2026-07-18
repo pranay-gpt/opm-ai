@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using the multi porosity option"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="multiporo_using_the_multi_porosity_option"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using the multi porosity option</title>
+</head>
+<body>
+
+
+<div class="nested0" id="multiporo_using_the_multi_porosity_option"><a name="multiporo_using_the_multi_porosity_option"><!-- --></a>
+<h1 class="topictitle1">Using the multi porosity option</h1>
+
+
+ <div>
+<dl>
+
+<dt class="dlterm">RUNSPEC section</dt>
+
+<dd>The number of simulation cells in the Z-direction, as specified
+by the <a href="../ecl_rm/DIMENS.html#DIMENS"> DIMENS</a> keyword, needs to be a multiple of the number of pore systems.
+The number of pore systems is equal to the number of matrix pore systems,
+set by the <a href="../ecl_rm/NMATRIX.html#NMATRIX">NMATRIX</a> keyword, increased by one to account for the fracture system
+(<samp class="codeph">NPOROS </samp> =<span class="keyword">NMATRIX</span>+1).<p>The <a href="../ecl_rm/DUALPORO.html#DUALPORO">DUALPORO</a> keyword is also required.
+If a dual permeability calculation is to be made where matrix to matrix
+connections are also used, then the <a href="../ecl_rm/DUALPERM.html#DUALPERM">DUALPERM</a> keyword is also required.
+For multi-porosity, this will create a multi-permeability model -
+the sub-matrices will also be connected together. In most cases, this
+may not be the required solution, as the primary job of the sub-matrices
+is usually to model transients in the matrix-to-fracture flow.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">It is important to note that the ECLIPSE 300 model requires
+the full grid dimensions to be set by <span class="keyword">DIMENS</span>, unlike
+the discretized matrix model in ECLIPSE 100.  </span></div>
+</dd>
+
+
+<dt class="dlterm">GRID section</dt>
+
+<dd>In order to be compatible with standard dual porosity input, the
+first <span class="keyword">NDIVIZ</span> / <span class="keyword">NPOROS</span> layers
+are associated with the outermost matrix cells connecting to the fractures.
+The next layers are associated with the fracture cells. Thereafter
+the matrix sub cells follow as illustrated in the figure below.<div class="fignone" id="multiporo_grid.threepore"><a name="multiporo_grid.threepore"><!-- --></a>
+
+ <br/><img src="../img/multi1.png" width="454px"/><br/> <br/><span class="figcap">
+           Figure 105.1  Multi porosity example having three pore systems.</span></div>
+<p>The connections between the porosity systems are automatically generated.
+It is possible to supply the grid for the outermost primary matrix
+grid cells only, and using the keyword <a href="../ecl_rm/DPGRID.html#DPGRID"> DPGRID</a> the fracture and sub
+matrix grid are copied from the outermost matrix grid if they are
+not specified. Please note that <a href="../ecl_rm/SIGMAV.html#SIGMAV"> SIGMAV</a> values should be specified for all the matrix subgrid cells,
+including when <span class="keyword">DPGRID</span> is used.</p>
+<p>By default,
+properties such as porosities and permeabilities together with <span class="keyword">SIGMAV</span> should be input for the sub-matrix grid-cells. In
+a multi-permeability model, it is possible to alter the transmissibility
+between the sub-grid cells using the <span class="keyword">MULTX</span>, <span class="keyword">MULTY</span> and <span class="keyword">MULTZ</span> multipliers. This can,
+for example, be useful in order to disable communication between some
+of the matrix sub-grid cells.</p>
+</dd>
+
+</dl>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

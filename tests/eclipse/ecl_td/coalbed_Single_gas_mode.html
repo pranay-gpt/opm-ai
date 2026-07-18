@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Single gas mode"/>
+<meta name="DC.subject" content="Unconventionals, Coal bed methane, Coal bed methane ECLIPSE 100 keywords, Single gas mode, Gas mode, Single, ECLIPSE 100 Equilibration"/>
+<meta name="keywords" content="Unconventionals, Coal bed methane, Coal bed methane ECLIPSE 100 keywords, Single gas mode, Gas mode, Single, ECLIPSE 100 Equilibration"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="coalbed_single_gas_mode"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Single gas mode</title>
+</head>
+<body>
+
+
+<div class="nested0" id="coalbed_single_gas_mode"><a name="coalbed_single_gas_mode"><!-- --></a>
+<h1 class="topictitle1">Single gas mode</h1>
+
+
+ <div>
+<p>The model is activated by specifying the keyword <a href="../ecl_rm/COAL.html#COAL">COAL</a> in the <span class="keyword">RUNSPEC</span> section. The dual porosity model should also be activated with the <span class="keyword">RUNSPEC</span> keyword <a href="../ecl_rm/DUALPORO.html#DUALPORO">DUALPORO</a>, and the program should be run in gas-only or gas-water mode
+(<a href="../ecl_rm/OIL.html#OIL">OIL</a> may not be specified in <span class="keyword">RUNSPEC</span>).</p>
+
+<div class="section" id="coalbed_grid_data"><a name="coalbed_grid_data"><!-- --></a><h4 class="sectiontitle">Grid data</h4><p>The first <samp class="codeph">NDIVIZ</samp> /2 layers of the model represent the coal matrix,
+and the second <samp class="codeph">NDIVIZ</samp> /2 layers represent the fracture
+system. It is possible to have active fracture cells with no corresponding
+matrix cell; however, all active matrix cells require a corresponding
+active fracture cell. The data required for the coal matrix consists
+of:</p>
+ <dl>
+
+<dt class="dlterm">Geometry</dt>
+
+<dd>Either <a href="../ecl_rm/DX.html#DX">DX</a> / <a href="../ecl_rm/DY.html#DY">DY</a> / <a href="../ecl_rm/DZ.html#DZ">DZ</a> or <a href="../ecl_rm/ZCORN.html#ZCORN">ZCORN</a> / <a href="../ecl_rm/COORD.html#COORD">COORD</a> </dd>
+
+
+<dt class="dlterm"> Porosity </dt>
+
+<dd>This is used to calculate the coal volume, and is taken to represent
+the fraction of the volume occupied by coal. (The porosity can be
+defaulted, in which case it is set to 1 - fracture porosity.)</dd>
+
+
+
+<dt class="dlterm">Net-to-Gross</dt>
+
+<dd>Optional, defaults to 1.0</dd>
+
+
+<dt class="dlterm">Coal region number </dt>
+
+<dd> <a href="../ecl_rm/COALNUM.html#COALNUM">COALNUM</a>. This is optional and defaults to 1 for all the matrix cells.
+Note that for a matrix cell given a zero value, the cell is taken
+as a normal pore volume cell and porosities and permeabilities need
+to be assigned. The number of coal regions should be set by item 6
+of <a href="../ecl_rm/REGDIMS.html#REGDIMS">REGDIMS</a> (default =1).</dd>
+
+</dl>
+ <p>The grid block coal volumes can be output using the '<samp class="codeph">PORV</samp>' mnemonic in the <a href="../ecl_rm/RPTGRID.html#RPTGRID">RPTGRID</a> keyword. Note that
+region and field coal volumes are printed out on the fluid-in-place
+balance sheets (mnemonic '<samp class="codeph">FIP</samp>' in <a href="../ecl_rm/RPTSOL.html#RPTSOL">RPTSOL</a> and <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a>).</p>
+<p>The matrix-fracture
+connection factor, sigma, needs to be supplied using either the <a href="../ecl_rm/SIGMA.html#SIGMA">SIGMA</a> or <a href="../ecl_rm/SIGMAV.html#SIGMAV">SIGMAV</a> keywords.</p>
+</div>
+
+<div class="section" id="coalbed_properties_data"><a name="coalbed_properties_data"><!-- --></a><h4 class="sectiontitle">Properties data</h4><p>Gas and water PVT and relative permeability data need to be supplied
+in the usual way.</p>
+<p>In addition the following keywords must be
+supplied:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d180e212">Keyword</th>
+
+<th valign="top" id="d180e215">Description</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d180e212 "> <a href="../ecl_rm/LANGMUIR.html#LANGMUIR"> LANGMUIR</a> </td>
+
+<td valign="top" headers="d180e215 ">Inputs tables of surface gas concentration versus pressure. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d180e212 "> <a href="../ecl_rm/DIFFCOAL.html#DIFFCOAL"> DIFFCOAL</a> </td>
+
+<td valign="top" headers="d180e215 ">Inputs the diffusion coefficient and the re-adsorption factor. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>It is possible to scale the tables of surface gas concentration
+versus pressure on a cell-by-cell basis using the <a href="../ecl_rm/MLANG.html#MLANG"> MLANG</a> keyword. This keyword
+is optional, and if it is omitted the raw table data is used.</p>
+</div>
+
+<div class="section" id="coalbed_equilibration"><a name="coalbed_equilibration"><!-- --></a><h4 class="sectiontitle">Equilibration</h4><p>If the model is equilibrated using the <a href="../ecl_rm/EQUIL.html#EQUIL"> EQUIL</a> keyword, no extra data
+is required. In this case the initial coal gas concentration is set
+to the equilibrium concentration at the prevailing fracture pressure.
+Two optional keywords are available to set the initial coal gas concentration
+manually:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d180e281">Keyword</th>
+
+<th valign="top" id="d180e284">Description</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d180e281 "> <a href="../ecl_rm/GASCONC.html#GASCONC"> GASCONC</a> </td>
+
+<td valign="top" headers="d180e284 ">Inputs the coal gas concentration on a block-by-block basis.
+ </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d180e281 "> <a href="../ecl_rm/GCVD.html#GCVD"> GCVD</a> </td>
+
+<td valign="top" headers="d180e284 ">Inputs the coal gas concentration as a function of depth.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>Care should be taken when using non-equilibrium starts.
+ECLIPSE prints a warning if the coal gas concentration exceeds the
+equilibrium value in any grid block.</p>
+<p>For enumerated starts,
+one of the above two keywords must be present.</p>
+</div>
+
+<div class="section" id="coalbed_summary_data"><a name="coalbed_summary_data"><!-- --></a><h4 class="sectiontitle">Summary data</h4><p>Three
+extra <span class="keyword">SUMMARY</span> section keywords are available to
+output the coal gas concentration on a field, region and block basis:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d180e345">Keyword</th>
+
+<th valign="top" id="d180e348">Description</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d180e345 "><span class="keyword">FCGC</span></td>
+
+<td valign="top" headers="d180e348 ">Field coal gas concentration.</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d180e345 "><span class="keyword">RCGC</span></td>
+
+<td valign="top" headers="d180e348 "> Region coal gas concentration.</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d180e345 "><span class="keyword">BCGC</span></td>
+
+<td valign="top" headers="d180e348 "> Block coal gas concentration.</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d180e345 "><span class="keyword">BPORVMOD</span></td>
+
+<td valign="top" headers="d180e348 ">Block pore volume multiplier, rock compaction models.</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d180e345 "><span class="keyword">BPERMMOD</span></td>
+
+<td valign="top" headers="d180e348 ">Block permeability multiplier, rock compaction models.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

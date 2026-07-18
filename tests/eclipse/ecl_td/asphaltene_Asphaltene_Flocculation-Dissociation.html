@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Asphaltene flocculation-dissociation"/>
+<meta name="DC.subject" content="Fluid model, Asphaltene formation pre-2011.1 model flocculation-dissociation, Asphaltene formation pre-2011.1 model flocculation-dissociation data input"/>
+<meta name="keywords" content="Fluid model, Asphaltene formation pre-2011.1 model flocculation-dissociation, Asphaltene formation pre-2011.1 model flocculation-dissociation data input"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="asphaltene_asphaltene_flocculation-dissociation"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Asphaltene flocculation-dissociation</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="asphaltene_asphaltene_flocculation-dissociation"><a name="asphaltene_asphaltene_flocculation-dissociation"><!-- --></a>
+<h1 class="topictitle1">Asphaltene flocculation-dissociation</h1>
+
+
+ <div>
+<p>Flocculation is the process whereby fines obtained from the precipitation
+process aggregate to form bigger particles referred to as flocs. This
+process is modeled by a set of two kinetic reactions to allow reversibility
+(partial or total) between aggregation of the fines into flocs and
+dissociation of the flocs into fines.</p>
+
+<p>Let  <math><msub><mi>C</mi>
+<mi>i</mi></msub></math>  denote the concentration of the
+fines coming from component <em>i</em> and  <math><msub>
+<mi>C</mi><mi>a</mi></msub></math>  the concentration
+of the flocs. Once precipitation occurs, the aggregation rate of the
+fines <em> i</em> into flocs <em>a</em> is modeled by:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="asphaltene.equ.013a"/>
+ <math><mstyle><mrow><msub>
+<mstyle><mrow><mi>R</mi></mrow></mstyle><mrow><mi>a</mi></mrow></msub><mo>=</mo><mfrac><mrow><mi>∂</mi>
+<msub><mrow><mi>C</mi></mrow><mrow><mi>a</mi></mrow>
+</msub></mrow><mrow><mi>∂</mi><mi>t</mi></mrow>
+</mfrac><mo>=</mo><mrow><msub><mrow><mi>r</mi></mrow>
+<mrow><mi>i</mi><mi>a</mi></mrow></msub><msub><mrow>
+<mi>C</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>-</mo><msub><mrow><mi>r</mi></mrow><mrow><mi>a</mi>
+<mi>i</mi></mrow></msub><msub><mrow><mi>C</mi></mrow>
+<mrow><mi>a</mi></mrow></msub></mrow></mrow></mstyle>
+</math> 
+</td><td align="right">[Eq. 240.1]
+              </td></tr></tbody></table>
+<p>where  </p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>r</mi>
+<mrow><mi>i</mi><mi>a</mi></mrow></msub></math> </td>
+
+<td valign="top"> is the flocculation rate coefficient of the fines</td>
+
+</tr>
+
+<tr>
+<td valign="top">and  <math><msub><mi>r</mi>
+<mrow><mi>a</mi><mi>i</mi></mrow></msub></math> </td>
+
+<td valign="top"> is the dissociation rate coefficient of the flocs.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The range of components that precipitate and the flocs component <math><mrow><mi>a</mi>
+</mrow></math> are specified by the <a href="../ecl_rm/ASPFLOC.html#ASPFLOC">ASPFLOC</a> keyword. This keyword
+is used in conjunction with the <a href="../ecl_rm/ASPFLRT.html#ASPFLRT">ASPFLRT</a> keyword that specifies
+rates  <math><msub><mi>r</mi>
+<mrow><mi>i</mi><mi>a</mi></mrow></msub></math>  and
+ <math><msub><mi>r</mi>
+<mrow><mi>a</mi><mi>i</mi></mrow></msub></math>. This
+process is depicted in the figure below.</p>
+
+<p>In the case where the asphaltene is seen as single pure component,
+this flocculation reduces to two kinetic reactions only.</p>
+
+<p> <br/><div class="imagebreak"><img src="../img/aspha3.png" width="263px"/></div><br/> </p>
+
+<div class="section" id="asphaltene_data_input"><a name="asphaltene_data_input"><!-- --></a><h4 class="sectiontitle">Data input</h4><p>The
+flocculation-Dissociation process can generate significant changes
+in the composition, which may result in un-physical behavior if data
+input is not carefully set up. Given that the flocs component is a
+result of the flocculation process, it is expected that the flocs
+properties (molar weight, critical properties, and other EOS parameters)
+to be some average values of the components that precipitate. These
+average values should also take into account the flocculation rates
+to have the right weight contribution of the different components
+that precipitate.</p>
+<p>You should provide  flocculation properties
+ that are consistent with the components that precipitate.  A helpful
+tool to provide an estimate of the flocculation properties would be
+a PVT package with a grouping capability that derives the properties
+of a pseudo-component from its parts.</p>
+<p>As the composition of
+the oil can be changed by the flocculation and/or deposition process(es),
+the oil/gas densities will change, and therefore the pressure too.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

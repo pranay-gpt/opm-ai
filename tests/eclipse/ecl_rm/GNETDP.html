@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GNETDP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GNETDP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GNETDP</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GNETDP"><a name="GNETDP"><!-- --></a>
+<h1 class="keyword">GNETDP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gnetdp.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gnetdp.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d866e45"> x </th>
+
+<th valign="top" id="d866e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d866e54">  </th>
+
+<th valign="top" id="d866e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d866e45 d866e54 ">  </td>
+
+<td valign="top" headers="d866e48 d866e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d866e45 d866e54 ">  </td>
+
+<td valign="top" headers="d866e48 d866e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d866e45 d866e54 ">  </td>
+
+<td valign="top" headers="d866e48 d866e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d866e45 d866e54 ">  </td>
+
+<td valign="top" headers="d866e48 d866e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d866e45 d866e54 ">  </td>
+
+<td valign="top" headers="d866e48 d866e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d866e45 d866e54 ">  </td>
+
+<td valign="top" headers="d866e48 d866e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d866e45 d866e54 ">  </td>
+
+<td valign="top" headers="d866e48 d866e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d866e45 d866e54 "> x </td>
+
+<td valign="top" headers="d866e48 d866e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword may be used to adjust the pressure of a fixed-pressure
+group or node in the network option (see <a href="../ecl_td/networkintro_Network_Option.html#networkintro_network_option">"Network option"</a> in the <cite>ECLIPSE Technical Description</cite>), with the aim
+of maintaining its production flow rate within specified maximum and
+minimum limits. Whenever the flow into the fixed-pressure group or
+node falls below the minimum rate specified in item 3, ECLIPSE adjusts
+its pressure value by subtracting a pressure increment specified in
+item 5, then rebalances the network. This process continues until
+either the flow exceeds the minimum value or the pressure falls to
+the minimum allowed pressure specified in item 7. Similarly, whenever
+the flow into the fixed-pressure group or node rises above the maximum
+rate specified in item 4, ECLIPSE adjusts its pressure value by adding
+a pressure increment specified in item 6, then rebalances the network.
+This process continues until either the flow falls below the maximum
+value or the pressure increases to the maximum allowed pressure specified
+in item 8.</p>
+
+<p>The facility is available with both the Standard Network Model
+(for fixed-pressure groups) and the Extended Network Model (for fixed-pressure
+nodes). Subordinate groups or nodes cannot have their pressure adjusted
+with this facility.</p>
+
+<p>This facility predates automatic chokes (see <a href="../ecl_td/extended_Automatic_chokes.html#extended_automatic_chokes">"Automatic chokes"</a> in the <cite>ECLIPSE Technical Description</cite>), which offer
+a more versatile means of controlling a group’s flow rate by adjusting
+the network nodal pressures. However, automatic chokes are available
+only in the Extended Network Model (see <a href="../ecl_td/extended_The_extended_network_model.html#extended_the_extended_network_model">"The extended network
+model"</a> in the <cite>ECLIPSE Technical Description</cite>).</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).
+The set of records must end with a blank record, containing only a
+slash (/).</p>
+
+<ol>
+<li> Name of the fixed-pressure group, for a standard production network, <p>or</p>
+ <p>name of the fixed-pressure node, for an extended network</p>
+ </li>
+
+<li> Phase whose rates items 3 and 4 refer to <p> <samp class="codeph">OIL</samp>, <samp class="codeph">WAT</samp>, <samp class="codeph">GAS</samp>, or <samp class="codeph">LIQ</samp> </p>
+ <p>DEFAULT: <samp class="codeph">GA</samp> </p>
+ </li>
+
+<li> Minimum rate (into the group/node of item 1) that triggers a
+pressure adjustment when violated. <p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), stb/day for oil, water or liquid (<samp class="codeph">FIELD</samp>), Mscf/day for gas (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 0.0
+(there will be no pressure adjustment to increase the flow)</p>
+ </li>
+
+<li> Maximum rate (into the group/node of item 1) that triggers a
+pressure adjustment when violated. <p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), stb/day for oil, water or liquid (<samp class="codeph">FIELD</samp>), Mscf/day for gas (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: infinity
+(1.0E20) (there will be no pressure adjustment to decrease the flow)</p>
+ </li>
+
+<li> Pressure increment to be <strong>subtracted</strong> from the fixed pressure
+when the flow rate falls below the minimum in item 3. <p>UNITS: bars
+(<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 0.0</p>
+ </li>
+
+<li> Pressure increment to be <strong>added</strong> to the fixed pressure when
+the flow rate exceeds the maximum in item 4. <p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 0.0</p>
+ </li>
+
+<li> Minimum allowable pressure at the group/node. <p>The pressure
+is not adjusted below this value.</p>
+ <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma
+(<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.0</p>
+ </li>
+
+<li> Maximum allowable pressure at the group/node. <p>The pressure
+is not adjusted above this value.</p>
+ <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma
+(<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: Infinity (1.0E20)</p>
+</li>
+
+</ol>
+
+<p>End data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> The network has to be rebalanced each time the pressure is
+adjusted so that the flows may be recalculated at the new pressure.
+The smaller the increment sizes are in items 5 and 6, the number of
+times the pressure is adjusted is correspondingly greater, increasing
+the computing time. If both minimum and maximum rate limits are set
+in items 3 and 4, the pressure increments must be made small enough
+to find pressure values at which the rate lies between these limits.
+The minimum and maximum limits must not lie too close together. </span></div>
+
+<div class="section" id="gnetdp_example"><a name="gnetdp_example"><!-- --></a><h4 class="sectiontitle">Example</h4> <pre><code>GNETDP
+-- Node    Phase    Min      Max      DP     DP     Min    Max
+-- Name             Rate     Rate    Subt    Add    Pres   Pres 
+  FIELD    GAS     5000.0   15000.0  10.0    10.0   300.0  600.0 /
+/</code></pre> <p>In this example the fixed pressure group/node FIELD
+has its fixed pressure changed according to how much gas is flowing
+into it. If the rate falls below 5000 then the fixed pressure is reduced
+in increments of 10 psi until the constraint is satisfied. If the
+rate goes above 15000 then the fixed pressure is raised in increments
+of 10 psi until the constraint is satisfied. The fixed pressure is
+not allowed to fall below 300 psi, or rise above 600 psi, regardless
+of the rates into the group/node.</p>
+ </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

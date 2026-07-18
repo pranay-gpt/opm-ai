@@ -1,0 +1,319 @@
+DEBUG
+ 0 0 0 0 0  0 0 0 0 0
+ 0 0 0 0 0  0 0 0 0 0
+ 0 0 0 0 0  0 0 0 0 0
+ 0 0 0 0 0  0 0 0 0 0
+ 0 0 0 0 0  0 0 0 0 0 /
+-- =====================================================================
+-- Multiple Reservoir Test case.
+-- =====================================================================
+RUNSPEC
+TITLE
+   ISOLNUM test case
+
+DIMENS
+    4    4   24  /
+
+OIL
+
+WATER
+
+GAS
+
+DISGAS
+
+FIELD
+
+EQLDIMS
+    1  100   10    1   20 /
+
+TABDIMS
+    1    1   16   12    1   12 /
+
+REGDIMS
+    1    1    5    0 /
+
+WELLDIMS
+   10    4    5    2 /
+
+START
+  19 'OCT' 1982  /
+
+NSTACK
+   24 /
+
+FMTOUT
+
+FMTIN
+
+GRID    ================================================================
+--     ARRAY  VALUE     ------- BOX ------
+EQUALS
+      'DX'    100        /
+      'DY'    200        /
+      'PORO'  0.3       /
+      'TOPS'  8325   1 4 1 4 1 1   /
+      'DZ'    30        /
+      'PERMX' 500       /
+      'PERMY' 50        /
+      'PERMZ' 5000      /
+       'PORO' 0.0      1 4  1 4  5 5 /
+       'PORO' 0.0      1 4  1 4  10 10 /
+       'PORO' 0.0      1 4  1 4  15 15 /
+       'PORO' 0.0      1 4  1 4  20 20 /
+/
+-- OUTPUT OF DX, DY, DZ, PERMX, PERMY, PERMZ, MULTZ, PORO AND TOPS DATA
+-- IS REQUESTED, AND OF THE CALCULATED PORE VOLUMES AND X, Y AND Z
+-- TRANSMISSIBILITIES
+RPTGRID
+  -- Report Levels for Grid Section Data
+  -- 
+  'DX' 
+  'DY' 
+  'DZ' 
+  'PERMX' 
+  'PERMY' 
+  'PERMZ' 
+  'MULTZ' 
+  'PORO' 
+  'TOPS' 
+  'PORV' 
+  'TRANX' 
+  'TRANY' 
+  'TRANZ' 
+  'FLUXNUM' 
+  'ISOLNUM' 
+ / 
+
+ISOLNUM
+ 80*1
+ 80*2
+ 80*3
+ 80*4
+ 64*5  /
+
+
+PROPS    ===============================================================
+-------- THE PROPS SECTION DEFINES THE REL. PERMEABILITIES, CAPILLARY
+-------- PRESSURES, AND THE PVT PROPERTIES OF THE RESERVOIR FLUIDS
+----------------------------------------------------------------------
+-- WATER RELATIVE PERMEABILITY AND CAPILLARY PRESSURE ARE TABULATED AS
+-- A FUNCTION OF WATER SATURATION.
+--
+--  SWAT   KRW   PCOW
+SWFN
+    0.12  0       0
+    1.0   0.00001 0  /
+-- SIMILARLY FOR GAS
+--
+--  SGAS   KRG   PCOG
+SGFN
+    0     0       0
+    0.02  0       0
+    0.05  0.005   0
+    0.12  0.025   0
+    0.2   0.075   0
+    0.25  0.125   0
+    0.3   0.19    0
+    0.4   0.41    0
+    0.45  0.6     0
+    0.5   0.72    0
+    0.6   0.87    0
+    0.7   0.94    0
+    0.85  0.98    0
+    1.0   1.0     0
+/
+-- OIL RELATIVE PERMEABILITY IS TABULATED AGAINST OIL SATURATION
+-- FOR OIL-WATER AND OIL-GAS-CONNATE WATER CASES
+--
+--  SOIL     KROW     KROG
+SOF3
+    0        0        0
+    0.18     0        0
+    0.28     0.0001   0.0001
+    0.38     0.001    0.001
+    0.43     0.01     0.01
+    0.48     0.021    0.021
+    0.58     0.09     0.09
+    0.63     0.2      0.2
+    0.68     0.35     0.35
+    0.76     0.7      0.7
+    0.83     0.98     0.98
+    0.86     0.997    0.997
+    0.879    1        1
+    0.88     1        1    /
+-- PVT PROPERTIES OF WATER
+--
+--    REF. PRES. REF. FVF  COMPRESSIBILITY  REF VISCOSITY  VISCOSIBILITY
+PVTW
+       4014.7     1.029        3.13D-6           0.31            0 /
+-- ROCK COMPRESSIBILITY
+--
+--    REF. PRES   COMPRESSIBILITY
+ROCK
+        14.7          3.0D-6          /
+-- SURFACE DENSITIES OF RESERVOIR FLUIDS
+--
+--        OIL   WATER   GAS
+DENSITY
+         49.1   64.79  0.06054  /
+-- PVT PROPERTIES OF DRY GAS (NO VAPOURISED OIL)
+-- WE WOULD USE PVTG TO SPECIFY THE PROPERTIES OF WET GAS
+--
+--   PGAS   BGAS   VISGAS
+PVDG
+     14.7 166.666   0.008
+    264.7  12.093   0.0096
+    514.7   6.274   0.0112
+   1014.7   3.197   0.014
+   2014.7   1.614   0.0189
+   2514.7   1.294   0.0208
+   3014.7   1.080   0.0228
+   4014.7   0.811   0.0268
+   5014.7   0.649   0.0309
+   9014.7   0.386   0.047   /
+-- PVT PROPERTIES OF LIVE OIL (WITH DISSOLVED GAS)
+-- WE WOULD USE PVDO TO SPECIFY THE PROPERTIES OF DEAD OIL
+--
+-- FOR EACH VALUE OF RS THE SATURATION PRESSURE, FVF AND VISCOSITY
+-- ARE SPECIFIED. FOR RS=1.27 AND 1.618, THE FVF AND VISCOSITY OF
+-- UNDERSATURATED OIL ARE DEFINED AS A FUNCTION OF PRESSURE. DATA
+-- FOR UNDERSATURATED OIL MAY BE SUPPLIED FOR ANY RS, BUT MUST BE
+-- SUPPLIED FOR THE HIGHEST RS (1.618).
+--
+--   RS      POIL  FVFO  VISO
+PVTO
+    0.001    14.7 1.062  1.04    /
+    0.0905  264.7 1.15   0.975   /
+    0.18    514.7 1.207  0.91    /
+    0.371  1014.7 1.295  0.83    /
+    0.636  2014.7 1.435  0.695   /
+    0.775  2514.7 1.5    0.641   /
+    0.93   3014.7 1.565  0.594   /
+    1.270  4014.7 1.695  0.51
+           5014.7 1.671  0.549
+           9014.7 1.579  0.74    /
+    1.618  5014.7 1.827  0.449
+           9014.7 1.726  0.605   /
+/
+-- OUTPUT CONTROLS FOR PROPS DATA
+-- ACTIVATED FOR SOF3, SWFN, SGFN, PVTW, PVDG, DENSITY AND ROCK KEYWORDS
+RPTPROPS
+-- PROPS Reporting Options
+-- 
+'PVTW' 'PVTG' 'PVDG' 'DENSITY' 'GRAVITY' 'SDENSITY' 'ROCK' 'ROCKTAB' 
+/
+SOLUTION ===============================================================
+-------- THE SOLUTION SECTION DEFINES THE INITIAL STATE OF THE SOLUTION
+-------- VARIABLES (PHASE PRESSURES, SATURATIONS AND GAS-OIL RATIOS)
+------------------------------------------------------------------------
+-- DATA FOR INITIALISING FLUIDS TO POTENTIAL EQUILIBRIUM
+--
+--    DATUM  DATUM   OWC    OWC    GOC    GOC    RSVD   RVVD   SOLN
+--    DEPTH  PRESS  DEPTH   PCOW  DEPTH   PCOG  TABLE  TABLE   METH
+EQUIL
+       8400   4800   8500    0     8200    0      1      0       0  /
+-- VARIATION OF INITIAL RS WITH DEPTH
+--
+--    DEPTH    RS
+RSVD
+       8200  1.270
+       8500  1.270  /
+-- OUTPUT CONTROLS (SWITCH ON OUTPUT OF INITIAL GRID BLOCK PRESSURES)
+RPTSOL
+/
+
+SUMMARY
+
+ALL
+
+MSUMLINS
+
+MSUMNEWT
+
+SEPARATE
+
+SCHEDULE ===============================================================
+-------- THE SCHEDULE SECTION DEFINES THE OPERATIONS TO BE SIMULATED
+------------------------------------------------------------------------
+-- CONTROLS ON OUTPUT AT EACH REPORT TIME
+RPTSCHED                                         FIELD   10:29 13 JUN 85
+ 'CPU=2' 'NEWTON=2' /
+TUNING
+ 1* 10 /
+/
+/
+-- SET 'NO RESOLUTION' OPTION
+DRSDT
+      0  /
+-- WELL SPECIFICATION DATA
+--
+--     WELL   GROUP LOCATION  BHP   PI
+--     NAME   NAME    I  J   DEPTH DEFN
+WELSPECS
+    'PROD1' 'G1'    4  4    8400 'OIL'  /
+    'INJ1'  'G1'    1  1    8335 'GAS'  /
+    'PROD2' 'G2'    4  4    8400 'OIL'  /
+    'INJ2'  'G2'    1  1    8335 'GAS'  /
+    'PROD3' 'G3'    4  4    8400 'OIL'  /
+    'INJ3'  'G3'    1  1    8335 'GAS'  /
+    'PROD4' 'G4'    4  4    8400 'OIL'  /
+    'INJ4'  'G4'    1  1    8335 'GAS'  /
+    'PROD5' 'G5'    4  4    8400 'OIL'  /
+    'INJ5'  'G5'    1  1    8335 'GAS'  /
+/
+-- COMPLETION SPECIFICATION DATA
+--
+--     WELL     -LOCATION- OPEN/ SAT CONN  WELL
+--     NAME     I  J K1 K2 SHUT  TAB FACT  DIAM
+COMPDAT
+    'PROD1'   4  4    4  4 'OPEN' 0   -1   0.5  /
+    'INJ1'    1  1    2  2 'OPEN' 1   -1   0.5  /
+    'PROD2'   4  4    9  9 'OPEN' 0   -1   0.5  /
+    'INJ2'    1  1    7  7 'OPEN' 1   -1   0.5  /
+    'PROD3'   4  4   14 14 'OPEN' 0   -1   0.5  /
+    'INJ3'    1  1   12 12 'OPEN' 1   -1   0.5  /
+    'PROD4'   4  4   19 19 'OPEN' 0   -1   0.5  /
+    'INJ4'    1  1   17 17 'OPEN' 1   -1   0.5  /
+    'PROD5'   4  4   24 24 'OPEN' 0   -1   0.5  /
+    'INJ5'    1  1   22 22 'OPEN' 1   -1   0.5  /
+  /
+-- PRODUCTION WELL CONTROLS
+--
+--      WELL     OPEN/  CNTL   OIL  WATER   GAS  LIQU   RES   BHP
+--      NAME     SHUT   MODE  RATE   RATE  RATE  RATE  RATE
+WCONPROD
+     'PROD1'    'OPEN' 'ORAT' 20000  4*                      1000 /
+     'PROD2'    'OPEN' 'ORAT' 2000   4*                      2000 /
+     'PROD3'    'OPEN' 'ORAT' 1000   4*                      2000 /
+     'PROD4'    'OPEN' 'ORAT' 200    4*                      2000 /
+     'PROD5'    'OPEN' 'ORAT' 10000  4*                      2000 /
+  /
+-- GROUP INJECTION CONTROLS
+--
+--
+--  GROUP    INJ      INJ     VOIDAGE 
+--   NAME   TYPE     CNTL     FRACTION
+GCONINJE
+     'G1'   'GAS'  'VREP' 3*  1.0  /
+     'G2'   'GAS'  'VREP' 3*  1.0  /
+     'G3'   'GAS'  'VREP' 3*  1.0  /
+     'G4'   'GAS'  'VREP' 3*  1.0  /
+     'G5'   'GAS'  'VREP' 3*  1.0  /
+ /
+-- INJECTION WELL CONTROLS
+--
+--      WELL     INJ   OPEN/  CNTL    FLOW
+--      NAME    TYPE   SHUT   MODE    RATE
+WCONINJE
+     'INJ1'    'GAS'  'OPEN'  'GRUP'   1*  /
+     'INJ2'    'GAS'  'OPEN'  'GRUP'   1*  /
+     'INJ3'    'GAS'  'OPEN'  'GRUP'   1*  /
+     'INJ4'    'GAS'  'OPEN'  'GRUP'   1*  /
+     'INJ5'    'GAS'  'OPEN'  'GRUP'   1*  /
+  /
+-- SPECIFY A SERIES OF 10 REPORTS AT 1 YEAR INTERVALS
+TSTEP
+ 0.1 10.0 100.0
+  /
+END     ================================================================

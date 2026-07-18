@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="LSLTWNUM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="LSLTWNUM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>LSLTWNUM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="LSLTWNUM"><a name="LSLTWNUM"><!-- --></a>
+<h1 class="keyword">LSLTWNUM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="lsltwnum.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="lsltwnum.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1286e45"> x </th>
+
+<th valign="top" id="d1286e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1286e54">  </th>
+
+<th valign="top" id="d1286e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1286e45 d1286e54 ">  </td>
+
+<td valign="top" headers="d1286e48 d1286e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1286e45 d1286e54 ">  </td>
+
+<td valign="top" headers="d1286e48 d1286e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1286e45 d1286e54 ">  </td>
+
+<td valign="top" headers="d1286e48 d1286e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1286e45 d1286e54 ">  </td>
+
+<td valign="top" headers="d1286e48 d1286e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1286e45 d1286e54 "> x </td>
+
+<td valign="top" headers="d1286e48 d1286e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1286e45 d1286e54 ">  </td>
+
+<td valign="top" headers="d1286e48 d1286e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1286e45 d1286e54 ">  </td>
+
+<td valign="top" headers="d1286e48 d1286e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1286e45 d1286e54 ">  </td>
+
+<td valign="top" headers="d1286e48 d1286e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword should be followed by one integer for every grid block
+specifying the low-salinity water-wet saturation function region to
+which it belongs. The region number should not be less than 1 or greater
+than <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a> 
+(set in the <span class="keyword">TABDIMS</span> keyword). The data must
+be terminated by a slash (/).</p>
+
+<p>The low salinity water-wet saturation function region number specifies
+the saturation table (input using <a href="SWFN.html#SWFN"> SWFN</a>, <a href="SOF3.html#SOF3"> SOF3</a> and
+related keywords, in the <span class="keyword">PROPS</span> section) to be used
+to calculate relative permeabilities and capillary pressures in each
+grid block.</p>
+
+<p>The water-wet curves are computed as a weighted average between
+the low salinity water-wet saturation functions (<span class="keyword">LSLTWNUM</span> region number) and the high salinity water-wet saturation functions
+(<a href="SURFWNUM.html#SURFWNUM"> SURFWNUM</a> region
+number). The low-salinity weighting factors are taken from the <span class="keyword">LWSLTNUM</span> table in the <a href="LSALTFNC.html#LSALTFNC"> LSALTFNC</a> keyword.</p>
+
+<p>This keyword can be used only if the <a href="SURFACTW.html#SURFACTW"> SURFACTW</a> and <a href="LOWSALT.html#LOWSALT"> LOWSALT</a> keywords have been entered in the <span class="keyword">RUNSPEC</span> section to initialize the modeling of the low salinity
+effects in the brine model, and the surfactant change to wettability.</p>
+
+<div class="p">Grid blocks are ordered with the X-axis index cycling fastest,
+followed by the Y- and Z-axis indices. Repeat counts may be used for
+repeated values (for example 115*2). Note that spaces must not be
+inserted on either side of the asterisk.<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> The <span class="keyword">LSLTWNUM</span> keyword or its alias <a href="LSNUM.html#LSNUM"> LWSNUM</a> must be specified if the <a href="LOWSALT.html#LOWSALT"> LOWSALT</a> and <a href="SURFACTW.html#SURFACTW"> SURFACTW</a> options have been specified.</span></div>
+</div>
+
+<div class="section" id="lsltwnum_example"><a name="lsltwnum_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTSFUN</samp> = 4 specified in the <span class="keyword">TABDIMS</span> keyword 
+and <samp class="codeph">NDIVIX</samp> = 8, <samp class="codeph">NDIVIY</samp> = 6 and 
+ <samp class="codeph">NDIVIZ</samp> = 5 specified in the <span class="keyword">DIMENS</span> 
+keyword:</p>
+ <pre><code>LSLTWNUM
+ 144*3 96*4 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

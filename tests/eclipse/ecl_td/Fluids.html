@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Fluid models"/>
+<meta name="DC.subject" content="Building a simulation model, fluids, Fluid modeling"/>
+<meta name="keywords" content="Building a simulation model, fluids, Fluid modeling"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Introductory"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="component" content="Fluid model"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="fluids"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Fluid models</title>
+</head>
+<body>
+
+
+<div class="nested0" id="fluids"><a name="fluids"><!-- --></a>
+<h1 class="topictitle1">Fluid models</h1>
+
+
+ <div>
+<p>Fluid models are used to model the dynamic behavior of the hydrocarbons
+and other fluids inside the reservoir during the life cycle of the
+field.</p>
+
+<p>To describe the behavior of hydrocarbons, it is important to represent
+		the pressure volume temperature (PVT) characteristics of the fluids
+within the simulation. This means defining how the volumes (and hence
+saturations) of the 		fluids vary with changing pressure and temperature.
+Three different types of 		fluid models can be used to define the
+PVT behavior:  	 </p>
+
+<ul>
+<li>Black oil		</li>
+
+<li>Compositional 		</li>
+
+<li>Thermal		</li>
+
+</ul>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">In both the <cite>Black oil</cite> and  <cite>Compositional</cite> fluid models, any variation in the temperature of the grid cell
+is assumed to have little impact on the PVT behavior of the fluid
+and remains fixed during the simulation.  	 </span></div>
+
+<p>The results of fluid measurements are drawn on a phase diagram
+which shows where the fluids are liquids (above the bubble point line),
+where they are gases (below the dew point line) and where they are
+mixed liquid/gas (within the phase envelope enclosed by the bubble
+and dew point lines). By plotting the reservoir and surface conditions
+on a phase diagram, you can characterize your reservoir fluids and
+determine whether to use a black oil or compositional model.</p>
+
+<div class="section" id="FluidModels.blackoil"><a name="FluidModels.blackoil"><!-- --></a><h4 class="sectiontitle">Black oil</h4><p>In a
+ 		<cite>Black oil</cite> representation there are two hydrocarbon
+components, a liquid 'oil' phase and a vapor 'gas' phase. The model
+uses PVT tables to define the variation of physical properties such
+as density, viscosity and compressibility with temperature and pressure.
+They also contain data that relate the surface and reservoir volumes
+of the oil and gas components, including the oil and gas formation
+volume factors, the amount of solution (dissolved) gas, the solution
+gas/oil ratio (the ratio of dissolved gas to oil) and the gas/oil
+ratio (the ratio of all gas to oil). Similar PVT properties are defined
+for a single water component. The tables are obtained either 		from
+laboratory experiments, correlations, or a matched equation of state
+(EoS). The model assumes that there are no compositional changes with
+pressure and temperature. However, by including some variation in
+gas/oil and oil/gas ratios in the model, you can mimic compositional
+changes. For more information on the equations used in black oil modeling,
+see <a href="formulate_Formulation_of_the_Equations.html#formulate_formulation_of_the_equations"> Formulation
+of the equations</a>.</p>
+<p>ECLIPSE provides some extensions to
+the basic black oil model:</p>
+<p>The <a href="apitrack_API_Tracking.html#apitrack_api_tracking"> API tracking</a> facility enables
+ECLIPSE to model the mixing of different types of oil, which have
+different PVT properties. </p>
+<p>The <a href="gipscomp_Gi_pseudo-compositional_model.html#gipscomp"> Gi pseudo-compositional
+model</a> extends the black-oil model for use in gas condensate
+or volatile oil reservoirs to take account of fluid property changes
+during gas injection. The conventional model ignores the effect of
+light liquid components being stripped into the vapor phase during
+gas injection. The Gi parameter in the extended model accounts for
+this behavior.</p>
+</div>
+
+<div class="section" id="FluidModels.compositional"><a name="FluidModels.compositional"><!-- --></a><h4 class="sectiontitle">Compositional</h4><p>In a <cite>Compositional</cite> representation, the fluid model
+is defined by 		an equation of state and its critical parameters.
+These parameters are entered for each component, allowing the liquid
+and vapor phases to be broken down into 		their constituent components.
+This makes it possible, for example, to determine 		the percentage
+of methane that constitutes the gas phase. A  		<cite>compositional</cite> fluid model is more computationally expensive 		to solve but allows
+the hydrocarbons of different compositions to mix during 		the simulation.
+ 	 </p>
+<p>A compositional model typically specifies the properties
+of the lighter hydrocarbon components and then creates a single pseudo-component,
+or lumped component for the C<sub>7</sub>+ or C<sub>10</sub>+ components
+(those containing seven or more, or ten or more carbon atoms). This
+pseudo-component is defined by its apparent molecular weight and specific
+gravity. The model can also specify the properties of non-hydrocarbons
+such an nitrogen and sulfur dioxide. You can also use a multi-component
+water model where the water in different parts of the reservoir contains
+different dissolved compounds.</p>
+<p>For more information on the ECLIPSE
+compositional modeling, see the <a href="equ_state_Equations_of_state.html#equ_state_equations_of_state"> Equations of state</a>.
+You may want to model more than one fluid, for example where you have
+two separate reservoirs coupled by the production system. In this
+case you can assign different equations of state to different sets
+of grid cells in your model as described in <a href="eos_regions_Equations_of_State_Regions.html#eos_regions_equations_of_state_regions"> Equations of state
+regions</a>.</p>
+</div>
+
+<div class="section" id="FluidModels.thermal"><a name="FluidModels.thermal"><!-- --></a><h4 class="sectiontitle">Thermal</h4><p>The  		<cite>Thermal</cite> fluid representation allows the temperature as well
+		as the pressures to vary during the simulation, for example where
+steam or hot water is injected into the reservoir to increase production.
+This models accounts for the effects of 		water evaporating into steam
+and for the changes in physical properties such as oil density and
+viscosity at different temperatures. The thermal model is also useful
+for modeling the recovery of heavy oil using thermal techniques such
+as steam assisted gravity drainage, which uses heat to reduce oil
+viscosity and gravity to collect the lighter oil components as they
+fall through the reservoir.  	 </p>
+<p>For information on the ECLIPSE
+thermal modeling, see the <a href="temperat_Temperature_option.html#temperat_temperature_option"> Temperature option</a> and the <a href="thermalintro_Thermal_Option.html#thermalintro_thermal_option"> Thermal model</a>.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

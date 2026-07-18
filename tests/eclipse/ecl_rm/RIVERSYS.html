@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="RIVERSYS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="RIVERSYS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>RIVERSYS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="RIVERSYS"><a name="RIVERSYS"><!-- --></a>
+<h1 class="keyword">RIVERSYS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="riversys.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="riversys.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2008e45"> x </th>
+
+<th valign="top" id="d2008e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2008e54">  </th>
+
+<th valign="top" id="d2008e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2008e45 d2008e54 ">  </td>
+
+<td valign="top" headers="d2008e48 d2008e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2008e45 d2008e54 ">  </td>
+
+<td valign="top" headers="d2008e48 d2008e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2008e45 d2008e54 ">  </td>
+
+<td valign="top" headers="d2008e48 d2008e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2008e45 d2008e54 ">  </td>
+
+<td valign="top" headers="d2008e48 d2008e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2008e45 d2008e54 ">  </td>
+
+<td valign="top" headers="d2008e48 d2008e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2008e45 d2008e54 "> x </td>
+
+<td valign="top" headers="d2008e48 d2008e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2008e45 d2008e54 ">  </td>
+
+<td valign="top" headers="d2008e48 d2008e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2008e45 d2008e54 "> x </td>
+
+<td valign="top" headers="d2008e48 d2008e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is used to define the branch structure of a river
+and the boundary conditions to be associated with those branches,
+if any. This keyword has the effect of introducing the river.</p>
+
+<p>The keyword can only be used on one river at a time, so it must
+be specified more than once if there is more than one river.</p>
+
+<p>The keyword is followed by a number of data records to describe
+the reach properties and geometry of the (possibly multi-branched)
+river. Each record is terminated with a slash (/), and the set of
+records must end with an additional blank record containing just a
+slash.</p>
+
+<p>The data items in each record are:</p>
+
+<div class="section" id="riversys_record_1"><a name="riversys_record_1"><!-- --></a><h4 class="sectiontitle">Record 1</h4><ol>
+<li> Name of the river.  </li>
+
+<li> Equation set to be solved  
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">‘KINEMATI’</td>
+
+<td valign="top">Kinematic wave equations</td>
+
+</tr>
+
+<tr>
+<td valign="top">‘DIFFUSIV’</td>
+
+<td valign="top">Diffusive wave equations</td>
+
+</tr>
+
+<tr>
+<td valign="top">‘STEADYST’</td>
+
+<td valign="top">Steady-state wave equations</td>
+
+</tr>
+
+<tr>
+<td valign="top">‘STVENANT’</td>
+
+<td valign="top">Time-dependent St. Venant equations</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: No default.</p>
+ </li>
+
+</ol>
+<p>End the data record with a slash (/). 				  </p>
+</div>
+
+<div class="section" id="riversys_each_subsequent_record"><a name="riversys_each_subsequent_record"><!-- --></a><h4 class="sectiontitle">Each subsequent
+record</h4><p>The subsequent records define the branch names.</p>
+<ol>
+<li>Branch number. <p>An integer between 1 and <samp class="codeph">MXBRRI</samp>. Branch 1 is reserved for main river, or assigned to a channel that
+is the same as main river.</p>
+ </li>
+
+<li>Branch name, used for further referencing of branches. <p>DEFAULT:
+If defaulted the branch will be given a name that is the branch number
+concatenated  with ‘BRANCH’. For example, branch number 7 would be
+given a branch name ‘BRANCH07’. Do not default branch names with branch
+numbers greater than 99.</p>
+ <p>The main channel/river must have a
+branch number of 1. Lateral branches should be numbered between 2
+and  <samp class="codeph">MXBRRI</samp>. Lateral branches may also have subordinate
+branches; in this case each branch must have a higher branch number
+than its parent branch.</p>
+<p>The remaining items in this record set
+the boundary conditions for this branch,  if any, and can be entered
+in any order.</p>
+ </li>
+
+</ol>
+<p>If the branch has a downstream boundary condition then one
+of the following can be input:</p>
+<ul>
+<li>DOWNSTREAM DEPTH TABLE=n (see keyword <a href="DEPTHTAB.html#DEPTHTAB">  DEPTHTAB</a>)</li>
+
+<li>DOWNSTREAM RATING TABLE=n,m (see keyword <a href="QHRATING.html#QHRATING">  QHRATING</a>, n is the table number to use
+when dh/dl &gt; 0 and m is the table number to use when dh/dl &lt; 0.
+In this release they must be equal) </li>
+
+<li>DOWNSTREAM UNIFORM_FLOW (This boundary condition requires no data
+and assumes uniform flow conditions at outflow.) </li>
+
+</ul>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">There must be no spaces around the ‘=’ or the ‘,’ and the
+‘_’ is significant.</span></div>
+<p>If the branch has an upstream boundary
+condition then one of the following may be input:</p>
+<ul>
+<li>UPSTREAM MASSFLOW TABLE=n (see keyword <a href="MASSFLOW.html#MASSFLOW">  MASSFLOW</a>)</li>
+
+</ul>
+<p>End the data record with a slash (/).</p>
+<p>End the set of
+data records with a slash.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

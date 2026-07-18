@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PMAX"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PMAX"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PMAX</title>
+</head>
+<body>
+
+
+<div class="nested0" id="PMAX"><a name="PMAX"><!-- --></a>
+<h1 class="keyword">PMAX</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="pmax.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="pmax.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1856e45"> x </th>
+
+<th valign="top" id="d1856e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1856e54"> x </th>
+
+<th valign="top" id="d1856e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1856e45 d1856e54 ">  </td>
+
+<td valign="top" headers="d1856e48 d1856e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1856e45 d1856e54 ">  </td>
+
+<td valign="top" headers="d1856e48 d1856e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1856e45 d1856e54 ">  </td>
+
+<td valign="top" headers="d1856e48 d1856e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1856e45 d1856e54 "> x </td>
+
+<td valign="top" headers="d1856e48 d1856e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1856e45 d1856e54 ">  </td>
+
+<td valign="top" headers="d1856e48 d1856e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1856e45 d1856e54 ">  </td>
+
+<td valign="top" headers="d1856e48 d1856e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1856e45 d1856e54 ">  </td>
+
+<td valign="top" headers="d1856e48 d1856e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1856e45 d1856e54 ">  </td>
+
+<td valign="top" headers="d1856e48 d1856e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword should be followed by some or all of the following
+items, indicating the maximum pressure likely to be reached during
+the simulation and additional information governing total compressibility
+checks. The record should be followed by a slash (/).</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">In ECLIPSE 300, this keyword is active
+only for Black oil and Thermal Black-oil runs with dissolved gas (RS)
+or vaporized oil (RV).</span></div>
+
+<ol>
+<li> The maximum pressure likely to be reached during the simulation <div class="note"><span class="notetitle">Note:</span> <span class="notebody">This item is ignored in ECLIPSE 300.</span></div>
+ <p>This value is used only if live oil PVT properties are entered using
+keyword <a href="PVCO.html#PVCO"> PVCO</a>. The
+information is used for two purposes. Firstly, the undersaturated
+parts of the oil PVT tables are automatically filled out in the form
+of the <a href="PVTO.html#PVTO"> PVTO</a> keyword,
+up to the pressure entered in <span class="keyword">PMAX</span>. Secondly, ECLIPSE
+carries out a check to see if compressibilities are changing too rapidly
+with Pbub so that the curves of undersaturated oil formation volume
+factor for two different values of R<sub>s </sub>cross each other.
+A warning is printed if they cross at a pressure below the maximum
+pressure entered in <span class="keyword">PMAX</span>.</p>
+ <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: ERROR: this item
+must be entered with <span class="keyword">PVCO</span> tables.</p>
+ </li>
+
+<li> Maximum pressure value to extend the range of pressures for checking
+total compressibility of the system. <p>By default the total compressibility
+of the gas-oil system is checked across the range of pressures spanned
+by the bubble point pressures in the <span class="keyword">PVTO</span> (or <span class="keyword">PVCO</span>) tables (or plain pressure nodes in a <a href="PVDO.html#PVDO"> PVDO</a> table) in dead oil
+cases; and by the range of dew point pressures in the <a href="PVTG.html#PVTG"> PVTG</a> tables (or plain <a href="PVDG.html#PVDG"> PVDG</a> tables) in dry gas
+cases. The upper pressure limit for the total compressibility checks
+is then set to the maximum of the value entered here and the maximum
+saturation pressure specified in the input tables. This could be useful
+to check total compressibility errors arising from extrapolation above
+the highest entered R<sub>s</sub> value in the <span class="keyword">PVTO</span> table which would cause convergence difficulties. It is not necessary
+to use <span class="keyword">PVCO</span> to enable this checking, as this also
+applies to <span class="keyword">PVTO</span> tables. See <a href="../ecl_td/totalcmp_Total_Compressibility_Checks.html#totalcmp_total_compressibility_checks">"Total compressibility
+checks"</a> in the <cite>ECLIPSE Technical Description</cite> for
+more information</p>
+ <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia
+(<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 0.0 barsa</p>
+ </li>
+
+<li> Minimum pressure value to extend the lower range of pressures
+for checking total compressibility of the system. <p>By default the
+total compressibility of the gas-oil system is checked across the
+range of pressures spanned by the bubble point pressures in the <span class="keyword">PVTO</span> (or <span class="keyword">PVCO</span>) tables (or plain pressure
+nodes in a <span class="keyword">PVDO</span> table) in dead oil cases; and by
+the range of dew point pressures in the <span class="keyword">PVTG</span> tables
+(or plain <span class="keyword">PVDG</span> tables) in dry gas cases. The lower
+pressure limit for the total compressibility checks is then set to
+the minimum of the value entered here and the minimum saturation pressure
+specified in the input tables.</p>
+ <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma
+(<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 1.0E+20 barsa</p>
+ </li>
+
+<li> <p>The number of nodes used to span the range of pressures for
+checking total compressibility. See <a href="../ecl_td/totalcmp_Total_Compressibility_Checks.html#totalcmp_total_compressibility_checks">"Total Compressibility
+Checks"</a> in the <cite>ECLIPSE Technical Description</cite> for
+more information. Up to 100 nodes may be used.</p>
+ <p>DEFAULT: 30</p>
+ </li>
+
+</ol>
+
+<div class="section" id="pmax_example"><a name="pmax_example"><!-- --></a><h4 class="sectiontitle">Example</h4>                 <pre><code>PMAX
+ 7000 8000 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

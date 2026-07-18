@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WH3NUM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WH3NUM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WH3NUM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WH3NUM"><a name="WH3NUM"><!-- --></a>
+<h1 class="keyword">WH3NUM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wh3num.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wh3num.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2954e45"> x </th>
+
+<th valign="top" id="d2954e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2954e54"> x </th>
+
+<th valign="top" id="d2954e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2954e45 d2954e54 ">  </td>
+
+<td valign="top" headers="d2954e48 d2954e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2954e45 d2954e54 ">  </td>
+
+<td valign="top" headers="d2954e48 d2954e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2954e45 d2954e54 ">  </td>
+
+<td valign="top" headers="d2954e48 d2954e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2954e45 d2954e54 ">  </td>
+
+<td valign="top" headers="d2954e48 d2954e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2954e45 d2954e54 "> x </td>
+
+<td valign="top" headers="d2954e48 d2954e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2954e45 d2954e54 ">  </td>
+
+<td valign="top" headers="d2954e48 d2954e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2954e45 d2954e54 ">  </td>
+
+<td valign="top" headers="d2954e48 d2954e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2954e45 d2954e54 ">  </td>
+
+<td valign="top" headers="d2954e48 d2954e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">WH3NUM</span> saturation function region number
+specifies which set of water saturation functions (input using <a href="SWOF.html#SWOF"> SWOF</a>, <a href="SWFN.html#SWFN"> SWFN</a> and related keywords in the <span class="keyword">PROPS</span> section) should be used for the three-phase water
+relative permeabilities associated with the WAG hysteresis option
+specified via the <a href="WAGHYSTR.html#WAGHYSTR"> WAGHYSTR</a> keyword.</p>
+
+<p>The keyword should be followed by one integer for every grid block
+in the current input box specifying the saturation function region
+to which it belongs. The region number should not be less than 1 or
+greater than <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a> 
+(set in the <span class="keyword">TABDIMS</span> keyword). The data must
+be terminated by a slash (/).</p>
+
+<p>Grid blocks are ordered with the X axis index cycling fastest,
+followed by the Y and Z axis indices. Repeat counts may be used for
+repeated values (for example 115*2). Note that spaces must not be
+inserted on either side of the asterisk.</p>
+
+<p>This keyword is optional if the <span class="keyword">WAGHYSTR</span> keyword
+has been specified. If omitted, the region numbers will default to
+those assigned to the <a href="IMBNUM.html#IMBNUM"> IMBNUM</a> keyword. If specified, for grid blocks where the region number
+specified by <span class="keyword">WH3NUM</span> is different to that specified
+by <span class="keyword">IMBNUM</span>, the WAG hysteresis three-phase water
+relative permeability functions will be taken from the <span class="keyword">WH3NUM</span> table for saturation regions for which WAG hysteresis has been applied
+to the water phase.</p>
+
+<p>For more information on the saturation keywords, see the <a href="SWFN.html#SWFN"> SWFN</a> and <a href="SWOF.html#SWOF"> SWOF</a> keywords in the <span class="keyword">PROPS</span> section. The WAG hysteresis models are described in more detail
+under <a href="../ecl_td/wag_Hysteresis_in_WAG_Floods.html#wag_hysteresis_in_wag_floods">"Hysteresis in WAG
+floods"</a> in the <cite>ECLIPSE Technical Description</cite> </p>
+
+<div class="section" id="wh3num_example"><a name="wh3num_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NTSFUN</samp> = 2 specified in the <span class="keyword">TABDIMS</span> keyword; 
+ <samp class="codeph">NDIVIX</samp> = 8, <samp class="codeph">NDIVIY</samp> = 6 and 
+ <samp class="codeph">NDIVIZ</samp> = 5 specified in  the <span class="keyword">DIMENS</span> keyword; 
+no input <span class="keyword">BOX</span> is set.</p>
+
+<pre><code>WH3NUM
+ 144*1 96*2 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

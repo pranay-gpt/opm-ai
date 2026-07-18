@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Rock compaction"/>
+<meta name="DC.subject" content="Unconventionals, Coal bed methane, Coal bed methane rock compaction, Rock compaction, Coal bed methane"/>
+<meta name="keywords" content="Unconventionals, Coal bed methane, Coal bed methane rock compaction, Rock compaction, Coal bed methane"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="coalbed_rock_compaction"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Rock compaction</title>
+</head>
+<body>
+
+
+<div class="nested0" id="coalbed_rock_compaction"><a name="coalbed_rock_compaction"><!-- --></a>
+<h1 class="topictitle1">Rock compaction</h1>
+
+
+ <div>
+<p>There are several models available in order to model the compression
+and expansion of the pore volumes and the effect on permeability for
+a coal bed methane reservoir.</p>
+
+<p>A Palmer-Mansoori model (<cite><span> <a href="biblio_Bibliography.html#biblio_22980">Palmer and Mansoori, 1998</a> </span></cite>) is available using the <a href="../ecl_rm/ROCKPAMA.html#ROCKPAMA">ROCKPAMA</a> keyword.</p>
+
+<p>Options for the <span class="keyword">ROCKPAMA</span> and <a href="../ecl_rm/ROCKPAME.html#ROCKPAME">ROCKPAME</a> models can be activated
+by using <a href="../ecl_rm/CBMOPTS.html#CBMOPTS">CBMOPTS</a> items 4-9.</p>
+
+<p>For <span class="keyword">ROCKPAMA</span>, this includes modeling the sorption
+induced strain term as a function of the actual adsorbed gas concentration,
+while by default this is estimated using an instant adsorption assumption.
+This option in <span class="keyword">CBMOPTS</span> is important if the diffusion
+process of the sorption process is so that the standard Palmer-Mansoori
+model would predict swelling/shrinkage due to the instant adsorption
+assumption, without the support of gas exchange. For cases where the
+standard Palmer-Mansoori model predicts a reduction in pore volume
+for increased pressure, this needs to be supported by gas adsorbing
+into the coal.</p>
+
+<p>It is possible to tabulate the sorption induced strain term versus
+the coal gas concentration using the keywords <a href="../ecl_rm/TPAMEPS.html#TPAMEPS">TPAMEPS</a> and <a href="../ecl_rm/TPAMEPSS.html#TPAMEPSS">TPAMEPSS</a>. This also means that <span class="keyword">ROCKPAMA</span> can be used for multi-components.</p>
+
+<p>For the rock models <span class="keyword">ROCKPAMA</span> and <span class="keyword">ROCKPAME</span> it is possible to output the number of passes through the rebound
+pressure for each grid cell. The rebound pressure is when the pressure
+derivative of the pore volume changes sign. This output is made possible
+using <samp class="codeph">NPMREB </samp> with <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a> and <a href="../ecl_rm/RPTRST.html#RPTRST">RPTRST</a>, and activating the
+output using <span class="keyword">CBMOPTS</span> item 4.</p>
+
+<p>ECLIPSE 300 </p>
+
+<p>Another extension for multi-component gases is available by specifying
+the <span class="keyword">ROCKPAME</span> keyword. This enables the modeling
+of coal swelling and shrinkage as a function of both composition and
+pressure, but assumes an instant adsorption process for the sorption
+induced strain term.</p>
+
+<p>For more information see <a href="rockcomp_Rock_Compaction.html#rockcomp_rock_compaction"> "Rock
+compaction"</a>.</p>
+
+<p>The effect of compaction is only modeled in the pore volume. The
+coal volume of a simulation cell and its adsorbed contents are related
+to the surface gas volume per unit coal volume. For example, if <a href="../ecl_rm/ROCKTAB.html#ROCKTAB">ROCKTAB</a> or <a href="../ecl_rm/ROCKTABH.html#ROCKTABH">ROCKTABH</a> keyword is defined,
+the pore volume multiplier (as a function of block pressure – same
+for fracture and matrix cell) is not applied to the matrix volume
+of coal cells.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Automatic cutback of flow rate"/>
+<meta name="DC.subject" content="Well modeling automatic cutback of flow rate, Well modeling of coning, Well, Coning"/>
+<meta name="keywords" content="Well modeling automatic cutback of flow rate, Well modeling of coning, Well, Coning"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wellmode_automatic_cut-back_of_flow_rate"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Automatic cutback of flow rate</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wellmode_automatic_cut-back_of_flow_rate"><a name="wellmode_automatic_cut-back_of_flow_rate"><!-- --></a>
+<h1 class="topictitle1">Automatic cutback of flow rate</h1>
+
+
+ <div>
+<p>There is an indirect way of controlling the following production
+ratios of individual wells subject to gas or water coning:</p>
+
+<ul>
+<li>Water cut</li>
+
+<li>Gas-oil ratio</li>
+
+<li>Gas-liquid ratio</li>
+
+<li>Water-gas ratio.</li>
+
+</ul>
+
+<p>Upper limits for one or more of these quantities can be set using
+the keyword <a href="../ecl_rm/WCUTBACK.html#WCUTBACK">WCUTBACK</a>. Whenever one of these limits is exceeded, the well’s
+production rate is cut back to a specified fraction of its current
+value. The rate will be cut back successively at each timestep until
+the limit is no longer exceeded. The rate cutback is performed at
+the end of the timestep in which the limit is exceeded. However, if
+the limit is exceeded by proportionately more than the tolerance fraction
+entered with keyword <a href="../ecl_rm/WLIMTOL.html#WLIMTOL">WLIMTOL</a> (see above), the timestep will be repeated with the well
+flowing at the reduced rate. The timestep will only be repeated once;
+if the limit is still exceeded at the end of the repeated timestep,
+the well’s flow rate will be reduced again for the next timestep.</p>
+
+<p>This facility is useful for determining the production rate necessary
+to keep water or gas coning in a well down to an acceptable level.</p>
+
+<p>The <span class="keyword">WCUTBACK</span> keyword can also supply a minimum
+pressure value for the grid blocks in which the well is completed.
+If the pressure falls below this value, the well’s production
+rate is cut back to the specified fraction of its current value. This
+facility can be useful for limiting the decline of grid block pressure
+at the wells.</p>
+
+<p>For each of the five cutback limits, there is a corresponding limit
+that reverses the cutback process. For example, the gas-oil ratio
+could have a cutback limit of 5.0 Mscf/stb and a cutback reversal
+limit of 3.0 Mscf/stb. If the GOR increases above 5.0 Mscf/stb, the
+production rate will be cut back until the GOR falls below this limit.
+If subsequently the GOR falls below 3.0 Mscf/stb while the well is
+operating at the reduced flow rate, the rate will be allowed to increase
+again, reversing the cutback process. Cutback limits and their corresponding
+reversal limits are therefore a useful way of making wells operate
+within a given band of conditions.</p>
+
+<p>The <span class="keyword">WCUTBACK</span> keyword can also apply to injection
+wells, in which case the production ratio limits are ignored, the
+cutback pressure limit is a maximum value, and the cutback reversal
+pressure limit is a minimum value.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

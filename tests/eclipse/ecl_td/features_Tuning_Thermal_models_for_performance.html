@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Tuning thermal models for performance"/>
+<meta name="DC.subject" content="Thermal model tuning"/>
+<meta name="keywords" content="Thermal model tuning"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="features_tuning_thermal_models_for_performance"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Tuning thermal models for performance</title>
+</head>
+<body>
+
+
+<div class="nested0" id="features_tuning_thermal_models_for_performance"><a name="features_tuning_thermal_models_for_performance"><!-- --></a>
+<h1 class="topictitle1">Tuning thermal models for performance</h1>
+
+
+ <div>
+<p>The additional dependence of the reservoir properties on temperature,
+as modeled with the Thermal option, can make models significantly
+more computationally expensive to run. In general, the default tuning
+is found to be the best compromise across a wide range of models and
+it is recommended that all Thermal models are run without any additional
+tuning initially to establish a baseline. This is particularly relevant
+if the model predates the introduction of the JALS linear solver (default
+in 2009.1) which was found to significantly improve the performance
+of many models and render previous tuning redundant and sometimes
+detrimental. However, obtaining accurate and reliable performance
+timings for simulations, especially on clusters, is not trivial and
+it is advised that the trend in elapsed time is also compared with
+the total number of linear iterations (MSUMLINS) since these two quantities
+are usually closely correlated. Having established a baseline there
+are a number of non-default performance options which can be trialed
+for better performance if necessary.</p>
+
+<p> <a href="../ecl_rm/OPTIONS3.html#options3.61"> Item 161</a> of the <span class="keyword">OPTIONS3</span> keyword can be used to activate an alternative
+linear algebra procedure for simulations with rock-filled cells. In
+a thermal simulation, for cells with zero pore volume, only the energy
+conservation equation has to be solved. By employing a slightly different,
+but mathematically identical, lineup of equations and variables it
+is possible to eliminate some of the variables from the linear system.
+With this approach the size of the system passed to the linear solver
+is reduced by one set of variables and hence can prove to generate
+a noticeable reduction in simulation time. However, the system passed
+to the linear solver may also prove to be numerically less favorable
+so an improvement in performance is not always seen. This option is
+only worth pursuing if the model contains one or more rock-filled
+cells.</p>
+
+<p> <a href="../ecl_rm/TSCRIT.html#TSCRIT">TSCRIT</a> item 11 can be used to increase the maximum length of timestep
+after a well modification, and is active due to the well control modifications
+or a well opening/closing. Prior to the 2012.1 software release, the
+default value was set to a low value for thermal simulations (0.5
+days) since in some processes the state of the near well zone is very
+sensitive to the manner in which the well is operating. Short timesteps
+assist in resolving these features as well as others, including simulation
+models containing complex geometry and/or heterogeneity (where timesteps
+less than 0.5 day may be required). However, this constraint can be
+over cautious especially when using the <a href="../ecl_rm/JALS.html#JALS">JALS</a> solver (the default solver)
+for simulations where the well modifications are relatively smooth
+or have less of an impact on the reservoir conditions. The default
+value for <span class="keyword">TSCRIT</span> item 11 has now increased to 5
+days.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

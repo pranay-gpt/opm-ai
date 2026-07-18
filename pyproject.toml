@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "opm-ai"
+version = "0.1.0"
+description = "AI-assisted reservoir simulation workbench for petroleum engineering education"
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic>=2.13",
+    "pydantic-settings>=2.0",
+    "click>=8.1",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.34",
+    "groq>=1.5",
+    "openai>=2.44",
+    "jinja2>=3.1",
+    "pandas>=3.0",
+    "numpy>=2.5",
+    "plotly>=6.8",
+    "loguru>=0.7",
+    "python-dotenv>=1.0",
+    "resfo>=5.0",
+    "rips",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.1",
+]
+
+[project.scripts]
+opm-ai = "opm_ai.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["opm_ai*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "-v --strict-markers --tb=short"
+markers = [
+    "slow: marks tests as slow",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]

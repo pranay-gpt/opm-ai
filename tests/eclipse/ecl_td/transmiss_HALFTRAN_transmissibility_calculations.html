@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="HALFTRAN transmissibility calculations (ECLIPSE 100)"/>
+<meta name="DC.subject" content="Transmissibility calculations, HALFTRAN"/>
+<meta name="keywords" content="Transmissibility calculations, HALFTRAN"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="transmiss_halftran_transmissibility_calculations"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>HALFTRAN transmissibility calculations (ECLIPSE 100) </title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="transmiss_halftran_transmissibility_calculations"><a name="transmiss_halftran_transmissibility_calculations"><!-- --></a>
+<h1 class="topictitle1">HALFTRAN transmissibility calculations (ECLIPSE 100) </h1>
+
+
+ <div>
+<p>By observing that the transmissibility between cells i and j in
+the <span class="keyword">NEWTRAN</span> formulation is composed of a harmonic
+average between half block transmissibilities  <math><msub>
+<mi>T</mi><mi>i</mi></msub></math>  and  <math><msub><mi>T</mi>
+<mi>j</mi></msub></math>, we have rather more freedom than
+just using a single permeability value for each cell.</p>
+
+<p>In fact, there are six possible permeability values associated
+with each cell in the half block transmissibilities. For instance,
+in cell i, half block x-direction permeabilities Kxil, Kxir contribute
+to the two x-direction transmissibilities affecting cell i. Similarly
+in the Y- and Z-directions we can use Kyil, Kyir and Kzil, Kzir.</p>
+
+<p>The use of extra half block permeabilities provides a more accurate
+upscaling of permeability while retaining the same computational grid.</p>
+
+<p>Within ECLIPSE 100, the <a href="../ecl_rm/HALFTRAN.html#HALFTRAN">HALFTRAN</a> keyword activates the half block transmissibility calculation.</p>
+
+<p>By writing the half block transmissibilities as</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="transmiss.equ.011a"/>
+ <math><mrow><msub>
+<mrow><mover><mrow><mi>T</mi></mrow><mrow><mo> ¯</mo>
+</mrow></mover></mrow><mrow><mi>i</mi><mi>r</mi>
+</mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext>
+<msub><mrow><mi>K</mi><mi>x</mi></mrow><mrow><mi>i</mi><mi>r</mi></mrow></msub><mo>⋅</mo><msub><mrow>
+<mi>R</mi><mi>N</mi><mi>T</mi><mi>G</mi></mrow>
+<mrow><mi>i</mi></mrow></msub><mo>⋅</mo><mfrac><mrow>
+<mi>A</mi><msub><mrow><mo>⋅</mo><mi>D</mi></mrow>
+<mrow><mi>i</mi></mrow></msub></mrow><mrow><msub>
+<mrow><mi>D</mi></mrow><mrow><mi>i</mi></mrow></msub>
+<mo>⋅</mo><msub><mrow><mi>D</mi></mrow><mrow><mi>i</mi></mrow></msub></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 15.1]
+              </td></tr></tbody></table>
+<p>and</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="transmiss.equ.011e"/>
+ <math><mrow><msub>
+<mrow><mover><mrow><mi>T</mi></mrow><mrow><mo> ¯</mo>
+</mrow></mover></mrow><mrow><mi>j</mi><mi>l</mi>
+</mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext>
+<msub><mrow><mi>K</mi><mi>x</mi></mrow><mrow><mi>j</mi><mi>l</mi></mrow></msub><mo>⋅</mo><msub><mrow>
+<mi>R</mi><mi>N</mi><mi>T</mi><mi>G</mi></mrow>
+<mrow><mi>j</mi></mrow></msub><mo>⋅</mo><mfrac><mrow>
+<mi>A</mi><msub><mrow><mo>⋅</mo><mi>D</mi></mrow>
+<mrow><mi>j</mi></mrow></msub></mrow><mrow><msub>
+<mrow><mi>D</mi></mrow><mrow><mi>j</mi></mrow></msub>
+<mo>⋅</mo><msub><mrow><mi>D</mi></mrow><mrow><mi>j</mi></mrow></msub></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 15.2]
+              </td></tr></tbody></table>
+<p>it is apparent that in terms of the normal <span class="keyword">NEWTRAN</span> calculation, then</p>
+
+<p> <math><mrow><msub>
+<mrow><mover><mrow><mi>T</mi></mrow><mrow><mo> ¯</mo>
+</mrow></mover></mrow><mrow><mi>i</mi><mi>r</mi>
+</mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext>
+<msub><mrow><mi>λ</mi></mrow><mrow><mi>i</mi>
+<mi>r</mi></mrow></msub><msub><mrow><mi>T</mi></mrow>
+<mrow><mi>i</mi></mrow></msub></mrow></math> </p>
+
+<p>and</p>
+
+<p> <math><mrow><msub>
+<mrow><mover><mrow><mi>T</mi></mrow><mrow><mo> ¯</mo>
+</mrow></mover></mrow><mrow><mi>j</mi><mi>l</mi>
+</mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext>
+<msub><mrow><mi>λ</mi></mrow><mrow><mi>j</mi>
+<mi>l</mi></mrow></msub><msub><mrow><mi>T</mi></mrow>
+<mrow><mi>j</mi></mrow></msub></mrow></math> </p>
+
+<p>with</p>
+
+<p>              <math><msub><mi>λ</mi>
+<mrow><mi>i</mi><mi>r</mi></mrow></msub><mo>=</mo>
+<mrow><mi>K</mi><msub><mi>x</mi><mrow><mi>i</mi><mi>r</mi></mrow></msub></mrow><mo>/</mo><mrow><mi>K</mi>
+<msub><mi>x</mi><mi>i</mi></msub></mrow></math>  and
+ <math><msub><mi>λ</mi>
+<mrow><mi>j</mi><mi>l</mi></mrow></msub><mo>=</mo>
+<mrow><mi>K</mi><msub><mi>x</mi><mrow><mi>j</mi><mi>l</mi></mrow></msub></mrow><mo>/</mo><mrow><mi>K</mi>
+<msub><mi>x</mi><mi>j</mi></msub></mrow></math>.</p>
+
+<p>When <span class="keyword">HALFTRAN</span> is used, ECLIPSE 100 requires
+the <a href="../ecl_rm/MULTX.html#MULTX">MULTX</a> and  <a href="../ecl_rm/MULTX-.html#MULTX-">MULTX-</a> values to be supplied equal to  <math><msub>
+<mi>λ</mi><mrow><mi>i</mi><mi>r</mi></mrow>
+</msub></math>  and  <math><msub><mi>λ</mi>
+<mrow><mi>j</mi><mi>l</mi></mrow></msub></math>.</p>
+
+<p>At present, the FloGrid program carries out the half-block upscaling
+and present the modified <span class="keyword">MULTX</span> and <span class="keyword">MULTX-</span> data to the simulator in order to effect the half block transmissibility
+calculation. The <a href="../ecl_rm/PERMX.html#PERMX">PERMX</a> etc. values should be entered as normal. The half block
+permeabilities are then obtained by multiplying <span class="keyword">PERMX</span> by <span class="keyword">MULTX</span> or <span class="keyword">MULTX-</span> etc. The
+connection factors are calculated as usual using Peaceman’s
+formula for the block center permeability <span class="keyword">PERMX</span> etc.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

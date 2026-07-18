@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Block to block transmissibility calculations"/>
+<meta name="DC.subject" content="Grid and reservoir modeling, Dual porosity, Transmissibility calculations"/>
+<meta name="keywords" content="Grid and reservoir modeling, Dual porosity, Transmissibility calculations"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="dualporo_block_to_block_transmissibility_calculations"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Block to block transmissibility calculations</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="dualporo_block_to_block_transmissibility_calculations"><a name="dualporo_block_to_block_transmissibility_calculations"><!-- --></a>
+<h1 class="topictitle1">Block to block transmissibility calculations</h1>
+
+
+ <div>
+<p>It is now also possible to represent re-imbibition from a fracture
+cell by the matrix cell below it. In this case the transmissibility
+between the matrix and fracture cells is a conventional spatial one,
+since the two cells are not superimposed on one another, and the properties
+of the two cells contribute to the transmissibility in exactly the
+same way as for the transmissibility between two neighboring fracture
+cells, or two neighboring matrix cells. See <a href="transmiss_Transmissibility_calculations1.html#transmiss_transmissibility_calculations1"> "Transmissibility calculations"</a> for the details of this calculation.
+This modeling is most appropriate when the physical matrix block size
+(<math><msub><mi>l</mi><mi>z</mi></msub></math>  as used in the Kazemi formula
+for the usual matrix-fracture transmissibility multiplier represented
+by the <a href="../ecl_rm/SIGMA.html#SIGMA">SIGMA</a> and <a href="../ecl_rm/SIGMAV.html#SIGMAV">SIGMAV</a> keywords) is comparable to the size of the grid cell rather
+than significantly different from it, so that the environment of a
+lower matrix physical block also comprises neighboring fracture cells
+rather than just its own fracture cell.</p>
+
+<div class="fignone" id="dualporo.XID-0000008c"><a name="dualporo.XID-0000008c"><!-- --></a>
+
+ <br/><img src="../img/dualporosity3.png" width="493px"/><br/> 
+<br/><span class="figcap">
+           Figure 76.1  Physical view of the matrix and fracture cells for the block
+to block connection</span></div>
+
+<p> Figure <a href="dualporo_Block_to_block_transmissibility_calculations.html#dualporo.XID-0000008c">76.1</a>  shows this
+new transmissibility on a picture of the two physical cells (that
+is the matrix and fracture cells occupy the same physical location.)
+This figure appears to show the lower matrix disconnected from the
+upper fracture by its own surrounding fracture, but this is only for
+presentation purposes: there will always be some contact between the
+upper fracture and lower matrix. This is schematically represented
+in figure <a href="dualporo_Block_to_block_transmissibility_calculations.html#dualporo.XID-00000093">76.2</a>, where the lower
+matrix and fracture are shown as single adjacent blocks, but the upper
+matrix is split in two, one half abutting the lower matrix (a disconnection
+in dual porosity but a connection in dual permeability) and one half
+abutting the lower fracture (not represented in the model, but conceptually
+possible). The upper fracture contacts both lower fracture and lower
+matrix.</p>
+
+<div class="fignone" id="dualporo.XID-00000093"><a name="dualporo.XID-00000093"><!-- --></a>
+
+ <br/><img src="../img/dualporosity.png" width="467px"/><br/> 
+<br/><span class="figcap">
+           Figure 76.2  Schematic view of the contacts between the upper and lower
+cells of the two porosity systems</span></div>
+
+<p>The extent of the contact between the upper fracture and lower
+matrix is a variable of the model, and hence a new multiplier is applied
+to the transmissibility between these cells, to represent this effective
+contact area between the matrix and the fracture, which will be different
+from the contact area between the two vertically neighboring fracture
+cells, or two vertically neighboring matrix cells. This contact area
+multiplier is specified by the keywords <a href="../ecl_rm/BTOBALFA.html#BTOBALFA">BTOBALFA</a> or <a href="../ecl_rm/BTOBALFV.html#BTOBALFV">BTOBALFV</a>; the former specifies
+a single value for the whole grid, while the latter specifies it cell
+by cell. The presence of these keywords also activates these additional
+transmissibilities, which will otherwise not be present.</p>
+
+<p>  ECLIPSE 100</p>
+
+<p>In ECLIPSE 100, block-to-block connections
+between LGRs and their parents or adjacent LGRS are only supported
+for in-place LGRs.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Block to block connections cannot be made when a multi porosity
+model is specified (<a href="../ecl_rm/NMATRIX.html#NMATRIX">NMATRIX</a> or <a href="../ecl_rm/TRPLPORO.html#TRPLPORO">TRPLPORO</a>).                      </span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

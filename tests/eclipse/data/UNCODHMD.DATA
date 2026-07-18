@@ -1,0 +1,445 @@
+
+RUNSPEC
+TITLE 
+  Test 
+
+HMDIMS 
+  1 1 1 0 0 0 0 0 /
+
+MONITOR
+
+UNIFOUT
+
+FMTOUT
+
+FMTHMD
+
+UNCODHMD
+
+RPTHMD 
+   0 0 0 1 0 1 /
+
+DIMENS
+   25    1    3  /
+
+E100
+
+OIL
+
+WATER
+
+GAS
+
+DISGAS
+
+METRIC
+
+ENDSCALE
+  /
+
+TABDIMS
+    2    1   20   20    1   20 /
+
+REGDIMS
+    1    1    0    0  /
+
+WELLDIMS
+    2
+    3
+    1
+    2
+/
+
+START
+   1 'JAN' 1988  /
+
+------------------------
+--  RUNSPEC COMPLETED --
+------------------------
+
+ 
+GRID
+
+RPTGRID
+  -- Report Levels for Grid Section Data
+  -- 
+  'DX' 
+  'DY' 
+  'DZ' 
+  'PERMX' 
+  'PERMY' 
+  'PERMZ' 
+  'MULTX' 
+  'MULTY' 
+  'MULTZ' 
+  'PORO' 
+  'NTG' 
+  'TOPS' 
+  'PORV' 
+  'DEPTH' 
+  /
+
+INIT
+
+DX
+  300.0 200.0 8*100.0 12*50.0 3*100.0
+  300.0 200.0 8*100.0 12*50.0 3*100.0
+  300.0 200.0 8*100.0 12*50.0 3*100.0 /
+
+DY
+  75*200.0 /
+
+DZ
+  25*20.0 25*20.0 25*120.0  /
+
+BOX
+      1 25 1 1 1 1 /
+BOX
+       1 25 1 1 1 1 /
+TOPS
+      3450.00 3414.87 3393.79 3379.74 3365.69
+      3351.64 3337.59 3323.54 3309.49 3295.44
+      3284.90 3277.87 3270.84 3263.81 3256.78
+      3249.75 3242.72 3235.69 3228.66 3221.63
+      3214.60 3207.57 3197.03 3182.98 3168.93
+   /
+BOX
+      1 25 1 1 1 3 /
+PORO
+  50*0.22 25*0.16
+   /
+PERMX
+ 50*480.0 25*30.0
+   /
+PERMY
+ 50*480.0 25*30.0
+   /
+PERMZ
+ 50*144.0 25*3.0
+   /
+
+GRIDFILE
+ 0 1 /
+ 
+---------------------
+--  GRID COMPLETED --
+---------------------
+ 
+EDIT
+
+BOX
+ 1 25 1 1 1 3 /
+HMMULTPV
+75*.11D1 
+/
+ENDBOX
+
+ 
+PROPS
+
+
+RPTPROPS
+  -- PROPS Reporting Options
+-- 
+'PVTO' 'PVDO' 'PVTW' 'PVTG' 'PVDG' 'DENSITY' 'GRAVITY' 'SDENSITY' 'ROCK' 
+'ROCKTAB' 
+ /
+
+DENSITY
+  836.0  1015.0  2.0  /  Oil Water Gas densities.
+
+ROCK
+  200.0  5.5E-05  /
+--  500.0  5.5E-05  /  Constant rock compressibility.
+--
+-- See  p.3-43 Diagram - Entry for Oil & Dissolved Gas, Dry-Gas and Wate
+--     Rs    Pbub   Bo     Mo
+PVTO
+      0.1    2.0   1.02   0.290 /
+    100.0  200.0   1.78   0.280
+           250.0   1.738  0.288
+           300.0   1.706  0.300
+           350.0   1.682  0.309
+           400.0   1.665  0.323
+           450.0   1.653  0.344
+           500.0   1.642  0.369 /
+    300.0  500.0   1.900  0.250
+           501.0   1.899  0.251 /
+
+  / null record terminates table.
+
+--      Pg    Bg    Mg
+PVDG
+       2.0   2.8137    0.01
+      10.0   0.56104   0.011
+     200.0   0.02808   0.021 /
+
+--      Pw     Bw    Cp   Mw   dMw/dPw
+PVTW
+        200.0  1.025   0.0  0.35   0.0  /
+--      500.0  1.025   0.0  0.35   0.0  /
+
+--     Sg    Krg    Krog  Pcog
+SGOF
+
+      0.0    0.0    1.0   0.0
+      0.85   1.0    0.0   0.0    / Table TRT1
+
+      0.0    0.0    1.0   0.0
+      0.65   1.0    0.0   0.0    / Table TRT4
+
+--
+STONE1
+--
+
+--    Sw     Krw      Krow   Pcow
+SWOF
+     0.126   0.0      1.0    0.0
+     0.2     0.0075   0.91   0.0
+     0.3     0.03     0.776  0.0
+     0.4     0.064    0.54   0.0
+     0.5     0.098    0.28   0.0
+     0.6     0.124    0.095  0.0
+     0.65    0.139    0.038  0.0
+     0.725   0.17     0.0    0.0
+     1.0     0.17     0.0    0.0 / Table TRT1
+
+     0.32    0.0      1.0    0.0
+     0.4     0.0091   0.76   0.0
+     0.5     0.038    0.4    0.0
+     0.6     0.085    0.092  0.0
+     0.665   0.134    0.0    0.0
+     1.0     0.134    0.0    0.0  / Table TRT4
+
+
+
+----------------------
+--  PROPS COMPLETED --
+----------------------
+
+
+
+ 
+REGIONS
+
+BOX
+ 1 25 1 1 1 3 /
+HMPORVM
+75*1 /
+ENDBOX
+
+SATNUM
+       50*1 25*2 /
+
+
+------------------------
+--  REGIONS COMPLETED --
+------------------------
+
+
+
+ 
+SOLUTION
+
+
+
+RPTRST
+   -- Restart File Output Control
+   -- 
+   'NOGRAD' /
+    
+RPTSOL
+   -- 
+   -- Initialisation Print Output
+   -- 
+'PRES' 'SOIL' 'SWAT' 'SGAS' 'RESTART=2' 'FIP=1' /
+
+EQUIL
+--    Datum depth  Pressure@datum  OWC    Pow   GOC    Pog  Table
+          3178        449.0       3330.0  0.0  2000.0  0.0   1     1* 0 /
+
+
+--    Depth   Pbub
+PBVD
+      2000.0  200.0
+      4000.0  200.0  /
+
+
+-------------------------
+--  SOLUTION COMPLETED --
+-------------------------
+
+
+
+ 
+SUMMARY
+
+WWCT
+  'PRO'
+/
+WBP
+  'PRO'
+/
+GWCT
+  'FIELD'
+  'GROUP1'
+/
+
+FOPR
+
+FOPT
+
+GOPT
+/
+
+WBHP
+  'PRO'
+/
+
+WOPR
+  'PRO'
+/
+
+WTHP
+/
+
+RUNSUM
+
+ALL
+
+SEPARATE
+
+MSUMLINS
+
+MSUMNEWT
+
+SCHEDULE
+
+RPTHMW
+  'PRO'  ON   /
+/
+GRADWELL
+  'WWCT' /
+  'WBP' /
+/
+RPTHMG
+  'FIELD'  ON  /
+  'GROUP1'  ON  /
+/
+GRADGRUP
+  'GWCT' /
+/
+
+
+RPTRST
+'BASIC=2' /
+ 
+  
+RPTSCHED
+'PRES' 'SOIL' 'SWAT' 'SGAS' 'RESTART=1' 'FIP=1' 'WELLS=1' 'SUMMARY=1' 'CPU=1' 
+/
+
+
+WELSPECS
+         'INJ'  'GROUP1'  7   1   3350.0   'WATER' /
+         'PRO'  'GROUP1'  17  1   3342.72  'OIL'   /
+  /
+
+
+COMPDAT
+         'INJ'   7   1   1  3  'SHUT'  0  100.0   /
+         'PRO'  17   1   2  2  'OPEN'  0  100.0   /
+  /
+
+
+WCONPROD
+         'PRO'  'OPEN'  'RESV'  4*  700.0 /
+  /
+
+
+WCONINJE
+          'INJ'   'WATER'  'SHUT'  'RATE'  0.0 1*  500.0  /
+  /
+
+
+DATES
+         31 'JAN' 1988  /
+         29 'FEB' 1988  /
+         31 'MAR' 1988  /
+         30 'APR' 1988  /
+         31 'MAY' 1988  /
+         30 'JUN' 1988  /
+/
+
+
+COMPDAT
+         'INJ'   7   1   1  3  'OPEN'  0  100.0   /
+  /
+WCONINJE
+          'INJ'   'WATER'  'OPEN'  'RATE'  700.0 1*  500.0  /
+  /
+
+
+DATES
+         31 'JUL' 1988  /
+         31 'AUG' 1988  /
+         30 'SEP' 1988  /
+         31 'OCT' 1988  /
+         30 'NOV' 1988  /
+         31 'DEC' 1988  /
+--
+         31 'JAN' 1989  /
+         28 'FEB' 1989  /
+         31 'MAR' 1989  /
+         30 'APR' 1989  /
+         31 'MAY' 1989  /
+         30 'JUN' 1989  /
+         31 'JUL' 1989  /
+         31 'AUG' 1989  /
+         30 'SEP' 1989  /
+         31 'OCT' 1989  /
+         30 'NOV' 1989  /
+         31 'DEC' 1989  /
+--
+         31 'JAN' 1990  /
+         28 'FEB' 1990  /
+         31 'MAR' 1990  /
+         30 'APR' 1990  /
+         31 'MAY' 1990  /
+         30 'JUN' 1990  /
+         31 'JUL' 1990  /
+         31 'AUG' 1990  /
+         30 'SEP' 1990  /
+         31 'OCT' 1990  /
+         30 'NOV' 1990  /
+         31 'DEC' 1990  /
+--
+         31 'JAN' 1991  /
+         28 'FEB' 1991  /
+         31 'MAR' 1991  /
+         30 'APR' 1991  /
+         31 'MAY' 1991  /
+         30 'JUN' 1991  /
+         31 'JUL' 1991  /
+         31 'AUG' 1991  /
+         30 'SEP' 1991  /
+         31 'OCT' 1991  /
+         30 'NOV' 1991  /
+         31 'DEC' 1991  /
+--
+         31 'JAN' 1992  /
+         29 'FEB' 1992  /
+         31 'MAR' 1992  /
+         30 'APR' 1992  /
+         31 'MAY' 1992  /
+         30 'JUN' 1992  /
+         31 'JUL' 1992  /
+         31 'AUG' 1992  /
+         30 'SEP' 1992  /
+         31 'OCT' 1992  /
+         30 'NOV' 1992  /
+         31 'DEC' 1992  /
+ /
+
+
+END

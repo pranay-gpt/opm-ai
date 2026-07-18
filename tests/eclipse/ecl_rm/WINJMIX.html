@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WINJMIX"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WINJMIX"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WINJMIX</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WINJMIX"><a name="WINJMIX"><!-- --></a>
+<h1 class="keyword">WINJMIX</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="winjmix.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="winjmix.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2968e45">  </th>
+
+<th valign="top" id="d2968e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2968e54"> x </th>
+
+<th valign="top" id="d2968e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2968e45 d2968e54 ">  </td>
+
+<td valign="top" headers="d2968e48 d2968e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2968e45 d2968e54 ">  </td>
+
+<td valign="top" headers="d2968e48 d2968e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2968e45 d2968e54 ">  </td>
+
+<td valign="top" headers="d2968e48 d2968e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2968e45 d2968e54 ">  </td>
+
+<td valign="top" headers="d2968e48 d2968e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2968e45 d2968e54 ">  </td>
+
+<td valign="top" headers="d2968e48 d2968e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2968e45 d2968e54 ">  </td>
+
+<td valign="top" headers="d2968e48 d2968e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2968e45 d2968e54 ">  </td>
+
+<td valign="top" headers="d2968e48 d2968e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2968e45 d2968e54 "> x </td>
+
+<td valign="top" headers="d2968e48 d2968e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p><span class="keyword">WINJMIX</span> specifies a number of fluid sources
+to be used to define an injection stream. The contribution of each
+fluid to the mixed injection stream is defined by a mixing fraction.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the items of data described below, and each terminated with a slash
+(/). Each record defines a single fluid in a mixture.</p>
+
+<p>The records can be terminated early with a slash, the remaining
+items taking default values. Defaults can also be specified by a null
+repeat count of the form <samp class="codeph">n*</samp>, where n is the number
+of consecutive items to be defaulted.</p>
+
+<p>The set of records is ended by a blank record, containing only
+a slash.</p>
+
+<ol>
+<li> The name of the mixture. <p>The maximum number of mixtures is
+set in <a href="WELLDIMS.html#WELLDIMS"> WELLDIMS</a> item 7 and is defaulted to 5.</p>
+ </li>
+
+<li> The mixture contribution index of the fluid defined below. <p>The maximum number of mixture fluids is set in <span class="keyword">WELLDIMS</span> item 9 and is defaulted to 3. The contribution index must be an
+integer between 1 and this number.</p>
+ <p>Note that the calculation
+of the injection mixture is not dependent on the order in which the
+mixture sources are specified.</p>
+ </li>
+
+<li> The fraction of this fluid in the mixture. <p>This fraction multiplies
+the molar composition of this fluid in the mixture.</p>
+ </li>
+
+<li id="winjmix_48073"><a name="winjmix_48073"><!-- --></a>The nature of this fluid. <p>The fluid type
+must be one of the following:</p>
+ 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">GAS</samp> </td>
+
+<td valign="top">The composition of the fluid is set to that of the field separator
+gas. However, it is generally better to specify the injected gas composition
+more precisely.<p>From 2007.1, <samp class="codeph">GAS</samp> is internally
+converted to <samp class="codeph">GV</samp> (for the field separator) which has
+better reinjection and gas accounting behavior. <a href="OPTIONS3.html#options3.113">Item 113</a> in <span class="keyword">OPTIONS3</span> can be used to recover the pre-2007.1 behavior.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">STREAM</samp> </td>
+
+<td valign="top">The molar composition of the fluid is defined using the <a href="WELLSTRE.html#WELLSTRE"> WELLSTRE</a> keyword. The
+name of the stream must be entered in item 5.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">GV</samp> </td>
+
+<td valign="top">The fluid is taken from the vapor production of a nominated
+group. The name of the group must be entered in item 5.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WV</samp> </td>
+
+<td valign="top">The fluid is taken from the vapor production of a nominated
+well. The name of the well must be entered in item 5.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>Only the first two characters are significant.</p>
+ </li>
+
+<li id="winjmix_91671"><a name="winjmix_91671"><!-- --></a>A character string is required if the fluid
+was specified as <samp class="codeph">STREAM</samp>, <samp class="codeph">WV</samp> or <samp class="codeph">GV</samp>. <p>In these cases this item specifies the name of the
+wellstream, well or group that defines the fluid’s composition.</p>
+ </li>
+
+<li id="winjmix_96709"><a name="winjmix_96709"><!-- --></a>The stage of the separator that defines the
+fluid composition. <p>The vapor from any stage of the separator may
+act as a source of injection fluid. The default value of 0 results
+in the use of the vapor from the whole separator as the injection
+fluid.</p>
+ <p>Note that the choice of separator stage also affects
+the available produced gas supply rate from the source group or well
+(item 5) if the source is <samp class="codeph">GV</samp> or <samp class="codeph">WV</samp> (item 4).</p>
+<p>DEFAULT: 0</p>
+ </li>
+
+</ol>
+
+<div class="section" id="winjmix_notes"><a name="winjmix_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li>If the <span class="keyword">WINJMIX</span> keyword contains only well or
+group vapor sources and the <a href="WAVAILIM.html#WAVAILIM"> WAVAILIM</a> keyword is present, the injection rate of the mixture is
+limited to the sum of the well and group vapor production. However,
+availability does not extend to items within the mixture; if a mixture
+fraction is set that requires a well or group to provide more vapor
+than it produces, then that well or group over-injects and a negative
+excess will be set in the gas accounting tables. Essentially, <span class="keyword">WINJMIX</span> provides a mixture whose composition is independent
+of the injection rate. If you wish to honor the availability of individual
+items within the mixture, <a href="WINJORD.html#WINJORD"> WINJORD</a> should be used instead.</li>
+
+<li>Prior to 2008.1 if a mixture contained a well or group vapor item
+and this well or group had advanced gas associated with it, then the
+advanced gas was combined with the available produced gas of that
+well or group. The advanced gas and the available produced gas were
+treated as one item in the mixture; note that the advanced gas was <strong>not</strong> used before the produced gas in this case, regardless of
+the setting of <a href="OPTIONS3.html#options3.30">item 30</a> in <span class="keyword">OPTIONS3</span> item 30. From 2008.1 this behavior
+was altered so that advanced gas is injected before the mixture gas
+in the same manner as other reinjection sources. The pre-2008.1 behavior
+may be recovered using <a href="OPTIONS3.html#options3.139">item
+139</a> of <span class="keyword">OPTIONS3</span>.</li>
+
+<li>If a stream is present as an item in the mixture, this effectively
+has an infinite supply and thus the availability of the mixture is
+infinite. The well injection fraction table (if present) will show
+values that do not sum to unity; the difference is accounted for by
+the stream item in the mixture. Note that the composition of the mixture
+is independent of the injection rate, and that the availability of
+individual <samp class="codeph">GV</samp> or <samp class="codeph">WV</samp> items also present
+in the mixture are not honored, which could therefore over inject
+and show a negative excess in the gas accounting tables. This situation
+is handled better using <span class="keyword">WINJORD</span> instead.</li>
+
+<li>For accurate group gas accounting, there is a limitation that
+reinjection control and any sales gas or fuel gas requirements must
+all be specified for the same group, usually the FIELD group, and
+not split across the group hierarchy. This limitation only applies
+if the injection mixture contains a group vapor item, with the vapor
+taken from a separator stage (that is not from the whole separator).</li>
+
+</ul>
+</div>
+
+<div class="section" id="winjmix_example"><a name="winjmix_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WINJMIX
+ MIXA 1 0.4 WV P1  /
+ MIXA 2 0.4 WV P2  /
+ MIXA 3 0.2 ST ST1 /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

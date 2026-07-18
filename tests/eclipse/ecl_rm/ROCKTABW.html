@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ROCKTABW"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ROCKTABW"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ROCKTABW</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ROCKTABW"><a name="ROCKTABW"><!-- --></a>
+<h1 class="keyword">ROCKTABW</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="rocktabw.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="rocktabw.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2060e45"> x </th>
+
+<th valign="top" id="d2060e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2060e54">  </th>
+
+<th valign="top" id="d2060e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2060e45 d2060e54 ">  </td>
+
+<td valign="top" headers="d2060e48 d2060e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2060e45 d2060e54 ">  </td>
+
+<td valign="top" headers="d2060e48 d2060e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2060e45 d2060e54 ">  </td>
+
+<td valign="top" headers="d2060e48 d2060e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2060e45 d2060e54 "> x </td>
+
+<td valign="top" headers="d2060e48 d2060e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2060e45 d2060e54 ">  </td>
+
+<td valign="top" headers="d2060e48 d2060e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2060e45 d2060e54 ">  </td>
+
+<td valign="top" headers="d2060e48 d2060e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2060e45 d2060e54 ">  </td>
+
+<td valign="top" headers="d2060e48 d2060e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2060e45 d2060e54 ">  </td>
+
+<td valign="top" headers="d2060e48 d2060e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data comprises <samp class="codeph">NTROCC</samp> (see keyword <a href="ROCKCOMP.html#ROCKCOMP">  ROCKCOMP</a> in the <span class="keyword">RUNSPEC</span> section) tables of water induced compaction data,
+each terminated by a slash (/).</p>
+
+<p>Each table consists of the following columns of data:</p>
+
+<ol>
+<li>The water saturation increase from initial value. <p>Values should
+increase monotonically down the column.</p>
+</li>
+
+<li>The corresponding pore volume multiplier. <p>Values should be
+level or decreasing down the column.</p>
+</li>
+
+<li>The corresponding transmissibility multiplier.</li>
+
+</ol>
+
+<p>Each table must contain at least two, and no more than <a href="TABDIMS.html#TABDIMS.NSSFUN"> NSSFUN</a> (set in the <span class="keyword">TABDIMS</span> keyword) rows. Each row must be complete, containing an entry in every column of the table.</p>
+
+<p>The <samp class="codeph">NTROCC</samp> records correspond to the rock compaction
+table region numbers, which are set using <a href="ROCKNUM.html#ROCKNUM">  ROCKNUM</a>.</p>
+
+<p>The <span class="keyword">ROCKTABW</span> keyword should be used in conjunction
+with either the <a href="ROCK.html#ROCK">  ROCK</a>, <a href="ROCKTAB.html#ROCKTAB">  ROCKTAB</a> or <a href="ROCKTABH.html#ROCKTABH">  ROCKTABH</a> keywords
+which specify the compaction as a function of pressure. The overall
+multipliers applied to the pore volume, and the transmissibility will
+be the product of the pressure induced compaction multipliers and
+the water induced compaction multipliers. Alternatively the overall
+compaction multipliers can be entered as a two-dimensional table in
+pressure and water saturation using the <a href="ROCKWNOD.html#ROCKWNOD">  ROCKWNOD</a>, <a href="ROCK2D.html#ROCK2D">  ROCK2D</a> and <a href="ROCK2DTR.html#ROCK2DTR">  ROCK2DTR</a> keywords.</p>
+
+<p>The water saturation used when looking up the table is the maximum
+attained water saturation for a grid block minus the water saturation
+at the start of the run. Thus the water induced compaction is assumed
+to be irreversible and is tabulated relative to the change in water
+saturation rather than the absolute saturation. See <a href="../ecl_td/rockcomp_Rock_Compaction.html#rockcomp_rock_compaction">"Rock compaction"</a> in the <cite>ECLIPSE Technical Description</cite> for details.</p>
+
+<p>See also keywords <span class="keyword">ROCKTAB</span>, <span class="keyword">ROCKTABH</span>, <span class="keyword">ROCK2D</span>, <span class="keyword">ROCK2DTR</span> and <span class="keyword">ROCKWNOD</span>.</p>
+
+<div class="section" id="rocktabw_example"><a name="rocktabw_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTROCC</samp> = 2 and <samp class="codeph">NSSFUN</samp> = 4.</p>
+ <pre><code>ROCKTABW
+ 0.0  1.0   1.0
+ 0.3  1.0   1.0
+ 0.4  0.93  0.98
+ 1.0  0.93  0.96 /
+ 0.0  1.0   1.0
+ 0.3  1.0   1.0
+ 0.4  0.90  0.98
+ 1.0  0.90  0.96 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

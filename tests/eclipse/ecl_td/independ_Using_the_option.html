@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using the ISOLNUM option (ECLIPSE 100 only)"/>
+<meta name="DC.subject" content="Independent reservoir regions"/>
+<meta name="keywords" content="Independent reservoir regions"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="independ_using_the_option"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using the ISOLNUM option (ECLIPSE 100 only)</title>
+</head>
+<body>
+
+
+<div class="nested0" id="independ_using_the_option"><a name="independ_using_the_option"><!-- --></a>
+<h1 class="topictitle1">Using the ISOLNUM option (ECLIPSE 100 only)</h1>
+
+
+ <div>
+<p>The independent reservoir region facility allows the efficient
+simulation of models containing two or more reservoirs that only communicate
+with each other through the well controls.</p>
+
+<p>If there are no flow connections between the two reservoirs (through
+normal transmissibility, non-neighbor connections, wells, or aquifers),
+the linear equations solved by ECLIPSE 100 for the two reservoirs
+are independent. The solution of the two sets of linear equations
+in general require different numbers of linear iterations.</p>
+
+<p>The Independent reservoir option allows ECLIPSE 100 to utilize
+this potential efficiency gain.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">This option is not compatible with the parallel option.    
+       </span></div>
+
+<ol>
+<li> Set <samp class="codeph">NRFREG</samp> (the maximum number of independent
+reservoir regions) in item 3 of the <span class="keyword">RUNSPEC</span> section
+keyword <a href="../ecl_rm/REGDIMS.html#REGDIMS"> REGDIMS</a>. </li>
+
+<li> Use the <a href="../ecl_rm/ISOLNUM.html#ISOLNUM"> ISOLNUM</a> keyword in the <span class="keyword">GRID</span> section to establish
+the separate regions. <p>There must be at least one active cell allocated
+to each reservoir region between 1 and <samp class="codeph">NRFREG </samp>. Any
+cells given a reservoir region number of 0 or &gt; <samp class="codeph"> NRFREG </samp> are treated as inactive.</p>
+ <p>The <span class="keyword">ISOLNUM</span> data
+can be written out to the debug file for an existing model by using
+the <a href="../ecl_rm/RPTISOL.html#RPTISOL"> RPTISOL</a> keyword in the <span class="keyword">GRID</span> section. The <span class="keyword">ISOLNUM</span> array can be subsequently added to the data set.</p>
+ </li>
+
+<li> The <span class="keyword">ISOLNUM</span> array can be output to the <samp class="codeph">PRINT</samp> file using the mnemonic <span class="keyword">ISOLNUM</span> in the <a href="../ecl_rm/RPTGRID.html#RPTGRID"> RPTGRID</a> keyword. </li>
+
+<li> If the mnemonic <span class="keyword">NEWTON</span> in the <a href="../ecl_rm/RPTSCHED.html#RPTSCHED"> RPTSCHED</a> keyword is activated,
+a separate summary line for each reservoir is printed at each Newton
+iteration. </li>
+
+</ol>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

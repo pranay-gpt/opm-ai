@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Estimation of delivery capacity"/>
+<meta name="DC.subject" content="Gas field operations, Delivery capacity estimation"/>
+<meta name="keywords" content="Gas field operations, Delivery capacity estimation"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gasfieldintro_estimation_of_delivery_capacity1"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Estimation of delivery capacity</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gasfieldintro_estimation_of_delivery_capacity1"><a name="gasfieldintro_estimation_of_delivery_capacity1"><!-- --></a>
+<h1 class="topictitle1">Estimation of delivery capacity</h1>
+
+
+ <div>
+<p>At the start of each timestep, ECLIPSE calculates the delivery
+capacity of the field. The delivery capacity is defined as the sales
+gas production rate that would ensue immediately after the removal
+of all group and field gas rate targets and limits, at the current
+grid block conditions. You can specify (with the keyword <a href="../ecl_rm/GASFDELC.html#GASFDELC">GASFDELC</a>) whether any group
+or field oil or water rate limits, and any rate limits on the wells
+themselves, should remain in operation.</p>
+
+<p>The delivery capacity is calculated at every timestep after the
+first entry of the <a href="../ecl_rm/SWINGFAC.html#SWINGFAC">SWINGFAC</a> keyword (which effectively turns this facility on), irrespective
+of whether <a href="../ecl_rm/GASYEAR.html#GASYEAR">GASYEAR</a>, <a href="../ecl_rm/GASPERIO.html#GASPERIO">GASPERIO</a>, <a href="../ecl_rm/DATES.html#DATES">DATES</a>, <a href="../ecl_rm/TIME.html#TIME">TIME</a> or <a href="../ecl_rm/TSTEP.html#TSTEP">TSTEP</a> is used to advance the simulation. When the option for automatic
+DCQ adjustment is in use (see <a href="gasfieldintro_swing_factor_and_dcq_adjustment.html#gasfieldintro_swing_factor_and_dcq_adjustment"> "Swing factor
+and DCQ adjustment"</a>) the delivery capacity is calculated during
+the second pass of the contract period. In ECLIPSE 100 the delivery
+capacities of the field and each group are printed in the Production
+Reports in the right hand column. The well delivery capacities are
+also printed in ECLIPSE 100 if their drainage radii are set negative
+in item 7 of keyword <a href="../ecl_rm/WELSPECS.html#WELSPECS">WELSPECS</a> (otherwise their productivity indices will be printed instead).
+The group and well delivery capacities are respectively the sales
+gas rate of each group and the gas production rate of each well when
+the field operates at its delivery capacity. The field, group and
+well delivery capacities can also be output to the <samp class="codeph">SUMMARY</samp> file using the keywords <span class="keyword">FGDC</span>, <span class="keyword">GGDC</span> and <span class="keyword">WGDC</span>.</p>
+
+<p>The delivery capacity calculated at each timestep is not exact;
+in fact it is somewhat optimistic. There are two reasons for this.
+Firstly, it is calculated at the start of the timestep, using the
+grid block conditions existing at that time. It does not take into
+account the changes in grid block pressure and saturation that occur
+during the timestep. Thus at the end of the timestep (when the delivery
+capacity is in fact reported) it is actually smaller than the value
+calculated at the start of the timestep. Secondly, the grid block
+conditions used in the calculations are those that exist when the
+field produces at the required offtake rate, not when it produces
+at full capacity. If the offtake rate were actually to increase to
+full capacity, the grid block pressures would decrease and thus decrease
+the delivery capacity. In fact, you may notice the delivery capacity
+increasing slightly when the offtake rate decreases in spring and
+summer. This is due to the buildup of grid block pressure that follows
+a decrease in production rate. The rate-dependence of the reported
+delivery capacity is more pronounced at low permeabilities, or if
+the grid blocks containing the well connections are small. The delivery
+capacity should therefore be regarded as an instantaneous transient
+value rather than a sustainable one.</p>
+
+<p>ECLIPSE 100      </p>
+
+<p>When the gas field operations model is used
+in conjunction with the network option, the delivery capacity calculation
+takes account of the higher flows along the network branches when
+the field is producing at full capacity. Thus the network is balanced
+twice at the start of each timestep: first with the field operating
+at full capacity, then with the field producing at the required offtake
+rate. If a balancing interval &gt; 0.0 is entered in keyword <a href="../ecl_rm/NETBALAN.html#NETBALAN">NETBALAN</a> it is ignored, because
+the network has to be balanced at each timestep.</p>
+
+<p>The delivery capacity should not be confused with the production
+potential. The potential of a production well is defined as the flow
+rate it would immediately have if, at the current grid block conditions,
+its only constraints were its THP and BHP limits. The field and group
+potentials are just the sum of the well potentials multiplied by their
+efficiency factors. The main differences between the delivery capacity
+and the potential are</p>
+
+<ul>
+<li>A well's production potential honors only its THP and BHP
+limits. The delivery capacity will honor all the well's rate
+constraints too, unless keyword <a href="../ecl_rm/GASFDELC.html#GASFDELC">GASFDELC</a> has been used to disable
+them.             </li>
+
+<li>The group production potential takes no account of any limits
+on group flow rate. The delivery capacity honors all group and field
+limits except on the gas production rate, unless keyword  <span class="keyword">GASFDELC</span>   has been used to disable them.             </li>
+
+<li>The delivery capacity is adjusted to allow for gas consumption
+and, in ECLIPSE 100, gas imports, while the potential is not.<p>ECLIPSE 100 </p>
+                 </li>
+
+<li> When using the network option, the delivery capacity is calculated
+with the network balanced at the capacity flow rates. The potential
+is calculated using the THP limits obtained from the nodal pressures
+of the network balanced at the required offtake rate. Thus the potentials
+do not account for the increased wellhead pressures that would result
+when the flows increase to capacity. </li>
+
+</ul>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

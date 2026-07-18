@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Notes"/>
+<meta name="DC.subject" content="ACTIONX"/>
+<meta name="keywords" content="ACTIONX"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="actionx_notes"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Notes</title>
+</head>
+<body>
+
+
+<div class="nested0" id="actionx_notes"><a name="actionx_notes"><!-- --></a>
+<h1 class="topictitle1">Notes</h1>
+
+
+ <div>
+<ul>
+<li> The order of the items in the quantities is similar to the way
+summary mnemonics are defined, that is the mnemonic is the first item
+and it is then followed by a well or group name for example. This
+is to be contrasted with the order of these items in the <a href="ACTION.html#ACTION">  ACTION</a> (<a href="ACTIONG.html#ACTIONG">  ACTIONG</a>, <a href="ACTIONR.html#ACTIONR">  ACTIONR</a>, <a href="ACTIONW.html#ACTIONW">  ACTIONW</a>, <a href="ACTIONS.html#ACTIONS">  ACTIONS</a>) type keywords. </li>
+
+<li> A condition consisting of constant quantities on the left and
+right hand sides is not permitted. A condition may, however, consist
+of a constant quantity on the left hand side and a variable quantity
+on the right hand side. </li>
+
+<li> No checks are in place on the type of quantities that are compared
+in a condition. So for example, a condition on a region’s pressure
+being less than a connection’s water cut would be allowed. </li>
+
+<li> If sufficient conditions are met for the <span class="keyword">ACTIONX</span> keyword to trigger the processing of its set of <span class="keyword">SCHEDULE</span> section keywords, then details of those conditions that are true
+will be written to the print file. </li>
+
+<li> <p>ECLIPSE 300</p>
+<p>Combined rates, totals and ratios for all the wells in a well list
+may be written to the summary file using an appropriate group <span class="keyword">SUMMARY</span> keyword followed by the well list name.</p>
+ </li>
+
+<li> If a well keyword (for example <a href="WELTARG.html#WELTARG">  WELTARG</a>) is placed between <span class="keyword">ACTIONX</span> and <a href="ENDACTIO.html#ENDACTIO">  ENDACTIO</a>, instead of entering the name of a specific well in the keyword
+you may enter a question mark (<samp class="codeph">?</samp>). ECLIPSE then applies
+the keyword data to whichever well (or wells) are involved in triggering
+the action. See <a href="actionx_Examples.html#actionx_examples"> "Examples"</a>. <p>If there is more than one condition in the action that concerns
+wells, different sets of wells may trigger different conditions. These
+set of triggering wells are combined logically in the same manner
+as the conditions themselves. The question mark in the well keywords
+will then apply to this combined set of wells. Note that if conditions
+are combined with logical AND operators, there may be no wells that
+trigger every condition and thus the well keywords will not have any
+effect, even though the overall action has been triggered.</p>
+<p>Where
+more than one well triggers a condition, only one of them — the last
+one found — will be reported as the triggering well. If there are
+multiple conditions, this may be a different well for each condition.
+This limited reporting is purely for clarity and the keyword data
+will be applied to all wells fulfilling all the conditions.</p>
+ </li>
+
+<li> Full checking of the keywords entered with an action keyword
+cannot be performed until the action is actually implemented, since
+it is possible to use wild cards in many of the keywords. However,
+before a simulation run is attempted the data can be run in <a href="NOSIM.html#NOSIM">  NOSIM</a> mode. This then
+does whatever checks it can on the keywords within any action keyword
+blocks that have been defined. All the most common types of ‘grammatical’
+and typographical errors will be found, but errors resulting from
+wild cards feeding inappropriate well/group names to keywords are
+not found. </li>
+
+<li> An action may be triggered on a grid block quantity by defining
+a region to consist of one grid block (keyword <a href="FIPNUM.html#FIPNUM">  FIPNUM</a>) and selecting a region quantity
+in a condition. </li>
+
+<li>To replicate the ECLIPSE 100 functionality of region 0 representing
+the whole field with ECLIPSE 300, use the corresponding field quantity.</li>
+
+</ul>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

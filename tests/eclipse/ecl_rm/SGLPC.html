@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SGLPC"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SGLPC"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SGLPC</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SGLPC"><a name="SGLPC"><!-- --></a>
+<h1 class="keyword">SGLPC</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="sglpc.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="sglpc.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2270e45"> x </th>
+
+<th valign="top" id="d2270e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2270e54">  </th>
+
+<th valign="top" id="d2270e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2270e45 d2270e54 ">  </td>
+
+<td valign="top" headers="d2270e48 d2270e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2270e45 d2270e54 ">  </td>
+
+<td valign="top" headers="d2270e48 d2270e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2270e45 d2270e54 ">  </td>
+
+<td valign="top" headers="d2270e48 d2270e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2270e45 d2270e54 "> x </td>
+
+<td valign="top" headers="d2270e48 d2270e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2270e45 d2270e54 ">  </td>
+
+<td valign="top" headers="d2270e48 d2270e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2270e45 d2270e54 ">  </td>
+
+<td valign="top" headers="d2270e48 d2270e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2270e45 d2270e54 ">  </td>
+
+<td valign="top" headers="d2270e48 d2270e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2270e45 d2270e54 ">  </td>
+
+<td valign="top" headers="d2270e48 d2270e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">SGLPC</span> and <span class="keyword">ISGLPC</span> keywords
+scales the connate gas end point of the gas-oil capillary pressure
+curves without scaling the corresponding oil relative permeability
+curves.</p>
+
+<p>The <span class="keyword">SGLPC</span> keyword should not be used unless
+gas is present in the model (keyword <a href="GAS.html#GAS"> GAS</a> in the <span class="keyword">RUNSPEC</span> section).
+The keyword <a href="ENDSCALE.html#ENDSCALE"> ENDSCALE</a> should be specified in the <span class="keyword">RUNSPEC</span> section.</p>
+
+<p>The <span class="keyword">SGLPC</span> keyword should be followed by one
+real number for each grid block in the current input box, specifying
+the connate gas saturation within the grid block. The saturation should
+be in the range 0.0 to 1.0 inclusive. The data must be terminated
+by a slash (/).</p>
+
+<p>Grid blocks are ordered with the X-axis index cycling fastest followed
+by the Y and Z indices. Repeat counts may be used for repeated values
+(for example 10*0.21). Note that spaces must not be inserted on either
+side of the asterisk.</p>
+
+<p>If <span class="keyword">SGLPC</span> is not specified, the gas-oil capillary
+pressure scaling is performed using the connate gas saturation specified
+with the <a href="sgl_SGL_ISGL.html#sgl_sgl_isgl"> SGL</a> family of keywords (<span class="keyword">SGL</span>, <span class="keyword">SGLX</span>, <span class="keyword">SGLX-</span>, <span class="keyword">SGLY</span>, <span class="keyword">SGLY-</span>, <span class="keyword">SGLZ</span>, <span class="keyword">SGLZ-</span>). If in turn
+any of the keywords <span class="keyword">SGL</span>, <span class="keyword">SGLX</span>, <span class="keyword">SGLX-</span>, <span class="keyword">SGLY</span>, <span class="keyword">SGLY-</span>, <span class="keyword">SGLZ</span>, <span class="keyword">SGLZ-</span> are omitted,
+then the connate gas saturation for a gas-oil capillary pressure calculation
+defaults to the value used in the appropriate gas saturation function
+table.</p>
+
+<p>If the hysteresis model (switch '<span class="keyword">HYSTER</span>' in
+keyword <a href="SATOPTS.html#SATOPTS"> SATOPTS</a>) is active then the <span class="keyword">SGLPC</span> data will scale the
+drainage curve. The imbibition curve can be scaled by using the equivalent
+ <span class="keyword">ISGLPC</span> keyword.</p>
+
+<p>See also keywords <span class="keyword">SGL</span> and <a href="ENPTVD.html#ENPTVD"> ENPTVD</a> in the <span class="keyword">PROPS</span> section.</p>
+
+<div class="section" id="sglpc_example"><a name="sglpc_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <span class="keyword">ENDSCALE</span> in <span class="keyword">RUNSPEC</span>; and <samp class="codeph">NDIVIX=1</samp>, <samp class="codeph">NDIVIY=7</samp> and <samp class="codeph">NDIVIZ=3</samp> specified
+in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS"> DIMENS</a>:</p>
+ <pre><code>SGLPC
+ 7*0.0 7*0.02 7*0.0 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Facilities specific to dual porosity runs"/>
+<meta name="DC.subject" content="Grid and reservoir modeling, Dual porosity, FLUXNUM, MULTNUM, OPERNUM, SIGMA, Specific facilities"/>
+<meta name="keywords" content="Grid and reservoir modeling, Dual porosity, FLUXNUM, MULTNUM, OPERNUM, SIGMA, Specific facilities"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="dualporo_facilities_specific_to_dual_porosity_runs"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Facilities specific to dual porosity runs</title>
+</head>
+<body>
+
+
+<div class="nested0" id="dualporo_facilities_specific_to_dual_porosity_runs"><a name="dualporo_facilities_specific_to_dual_porosity_runs"><!-- --></a>
+<h1 class="topictitle1">Facilities specific to dual porosity runs</h1>
+
+
+ <div>
+<div class="section" id="dualporo_fracture_permeabilities"><a name="dualporo_fracture_permeabilities"><!-- --></a><h4 class="sectiontitle">Fracture permeabilities</h4><p>It is necessary to be clear about what the input fracture permeability
+represents. By default ECLIPSE multiplies the input fracture permeabilities
+by the fracture porosity to generate an effective permeability. If
+the input fracture permeabilities themselves represent the effective
+value, then the <a href="../ecl_rm/NODPPM.html#NODPPM">NODPPM</a> keyword should be used in the <span class="keyword">GRID</span> section.</p>
+</div>
+
+<div class="section" id="dualporo_matrix-fracture_relative_permeabilities"><a name="dualporo_matrix-fracture_relative_permeabilities"><!-- --></a><h4 class="sectiontitle">Matrix-fracture relative permeabilities</h4><p>Usually two sets
+of saturation functions (relative permeabilities and capillary pressures)
+are supplied, one for the matrix cells and one for the fracture cells.
+The <a href="../ecl_rm/SATNUM.html#SATNUM">SATNUM</a> keyword in the <span class="keyword">REGIONS</span> section is used
+to associate the tables with the appropriate grid blocks. As ECLIPSE
+‘upwinds’ the flows, a phase flow from matrix to fracture takes the
+relative permeability calculated from the phase saturation in the
+matrix using the matrix table. Flow from the fracture to the matrix
+uses the fracture saturation and table.</p>
+<p>ECLIPSE 100 </p>
+<p>If a separate relative permeability
+table is required for the matrix/fracture flow, this can be specified
+using the <a href="../ecl_rm/KRNUMMF.html#KRNUMMF">  KRNUMMF</a> keyword in the <span class="keyword">REGIONS</span> section. If the
+Hysteresis option is active, then a corresponding keyword <a href="../ecl_rm/IMBNUMMF.html#IMBNUMMF">IMBNUMMF</a> can be used to specify
+the imbibition relative permeability table.</p>
+<p>When flow occurs
+from fracture to matrix it may be more reasonable to regard the maximum
+relative permeability as the matrix relative permeability at the residual
+saturation of the displaced phase. This effect can be easily achieved
+without specifying separate matrix-fracture tables (<span class="keyword">KRNUMMF</span>), by scaling the fracture relative permeability. This scaling can
+be activated by using the third data item in the <a href="../ecl_rm/DPKRMOD.html#DPKRMOD">DPKRMOD</a> keyword.</p>
+</div>
+
+<div class="section" id="dualporo_simplified_grid_input"><a name="dualporo_simplified_grid_input"><!-- --></a><h4 class="sectiontitle">Simplified grid
+input</h4><p>The keyword <a href="../ecl_rm/DPGRID.html#DPGRID">DPGRID</a> may be used to simplify the construction of grids for dual
+porosity runs. This keyword enables grid data to be entered for the
+matrix cells only (the first <samp class="codeph">NDIVIZ</samp> /2 layers), the
+missing values for the remaining fracture layers being obtained from
+the corresponding matrix cell.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Only certain keywords can
+be copied to the fracture in this way. Check the <span class="keyword">DPGRID</span> keyword for the complete list</span></div>
+</div>
+
+<div class="section" id="dualporo_use_of_fluxnum_multnum_or_opernum"><a name="dualporo_use_of_fluxnum_multnum_or_opernum"><!-- --></a><h4 class="sectiontitle">Use
+of FLUXNUM or MULTNUM or OPERNUM</h4><p>The use of these keywords
+differs between ECLIPSE 100 and ECLIPSE 300.</p>
+<p> ECLIPSE 100</p>
+<p>Only the matrix cells need
+to be input. ECLIPSE 100 will copy these values to the fracture cells
+automatically. If both matrix and fracture cells are given, a warning
+message would be output complaining about too much data. If you want
+to specify matrix cells and fracture cells separately, then set <a href="../ecl_rm/OPTIONS.html#options.117">item 117</a> of the <span class="keyword">OPTIONS</span> keyword
+to be greater than 1.</p>
+<p>ECLIPSE 300 </p>
+<p>Both matrix and fracture cells should be
+provided. <a href="../ecl_rm/FLUXNUM.html#FLUXNUM">FLUXNUM</a> and <a href="../ecl_rm/MULTNUM.html#MULTNUM">MULTNUM</a> use with <a href="../ecl_rm/MULTREGT.html#MULTREGT">MULTREGT</a> or <a href="../ecl_rm/MULTREGP.html#MULTREGP">MULTREGP</a>, will automatically copy all matrix cells to the corresponding
+fracture cells, so dummy fracture values could be input. For <a href="../ecl_rm/OPERNUM.html#OPERNUM">OPERNUM</a> use, and other <span class="keyword">FLUXNUM</span> and <span class="keyword">MULTNUM</span> uses, there is no
+copying of data from the matrix to fracture cells.</p>
+</div>
+
+<div class="section" id="dualporo_partially_fractured_reservoirs"><a name="dualporo_partially_fractured_reservoirs"><!-- --></a><h4 class="sectiontitle">Partially
+fractured reservoirs</h4><p>In a dual-porosity single-permeability
+run, the simulation model may be specified to be dual porosity only
+in part of the reservoir, using the keyword <a href="../ecl_rm/DPNUM.html#DPNUM">DPNUM</a>. ECLIPSE treats the rest
+of the reservoir as in a conventional single porosity run. In this
+case, the single porosity cells are taken to be matrix cells for input
+purposes, and any data input for fracture cells in the single porosity
+region is ignored.</p>
+</div>
+
+<div class="section" id="dualporo_diffusion1"><a name="dualporo_diffusion1"><!-- --></a><h4 class="sectiontitle">Diffusion</h4><p>The Molecular
+Diffusion option can be limited to calculate only the matrix/fracture
+diffusive terms, by using the <a href="../ecl_rm/DIFFDP.html#DIFFDP">  DIFFDP</a> keyword. The assumption is that diffusion in the fracture
+system is negligible compared to the fracture flows. The matrix/fracture
+diffusivity can be modified using the <a href="../ecl_rm/DIFFMMF.html#DIFFMMF">DIFFMMF</a> keyword in the <span class="keyword">GRID</span> and <span class="keyword">SCHEDULE</span> sections.</p>
+</div>
+
+<div class="section" id="dualporo_modifying_the_recovery_versus_time_response"><a name="dualporo_modifying_the_recovery_versus_time_response"><!-- --></a><h4 class="sectiontitle">Modifying the recovery versus time response</h4><p>ECLIPSE 100 </p>
+<p>The
+shape of the recovery versus time response can be modified by changing
+the matrix relative permeability curves. ECLIPSE provides a simplified
+method of changing the input relative permeabilities using only a
+single parameter. Typically this is useful when matching a dual porosity
+cell to a finely gridded single porosity model. The facility is described
+in more detail in a subsequent section and is activated with the <a href="../ecl_rm/DPKRMOD.html#DPKRMOD">DPKRMOD</a> keyword.</p>
+</div>
+
+<div class="section" id="dualporo_integrated_capillary_pressure_option"><a name="dualporo_integrated_capillary_pressure_option"><!-- --></a><h4 class="sectiontitle">Integrated capillary pressure option</h4><p>This option automatically
+generates a modified capillary pressure function with the aim of improving
+the prediction of final recovery from a matrix cell. The option is
+described in detail in a subsequent section and is activated with
+the <a href="../ecl_rm/INTPC.html#INTPC">INTPC</a> keyword.</p>
+</div>
+
+<div class="section" id="dualporo_calculating_sigma_from_the_matrix_dimensions"><a name="dualporo_calculating_sigma_from_the_matrix_dimensions"><!-- --></a><h4 class="sectiontitle">Calculating SIGMA from the matrix dimensions</h4><p>ECLIPSE 100 </p>
+<p>If the
+Viscous Displacement option has been used, the representative matrix
+block sizes will have to be entered using the <a href="../ecl_rm/LX.html#LX">LX</a>, <a href="../ecl_rm/LY.html#LY">LY</a> and <a href="../ecl_rm/LZ.html#LZ">LZ</a> keywords. It is possible to calculate the <a href="../ecl_rm/SIGMA.html#SIGMA">SIGMA</a> value from these block
+dimensions by specifying the <a href="../ecl_rm/LTOSIGMA.html#LTOSIGMA">LTOSIGMA</a> keyword. Note that if this keyword is used then any input <span class="keyword">SIGMA</span> values are ignored.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

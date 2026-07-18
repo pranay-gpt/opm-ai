@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Treatment of wells in local grids"/>
+<meta name="DC.subject" content="Local grid refinement treatment of wells, Local grid refinement well restrictions, Well, Local grids, Local grid refinement, Restrictions, Group, Controls, Economic limit, Automatic workover, Workover"/>
+<meta name="keywords" content="Local grid refinement treatment of wells, Local grid refinement well restrictions, Well, Local grids, Local grid refinement, Restrictions, Group, Controls, Economic limit, Automatic workover, Workover"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrc_treatment_of_wells_in_local_grids"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Treatment of wells in local grids</title>
+</head>
+<body>
+
+
+<div class="nested0" id="lgrc_treatment_of_wells_in_local_grids"><a name="lgrc_treatment_of_wells_in_local_grids"><!-- --></a>
+<h1 class="topictitle1">Treatment of wells in local grids</h1>
+
+
+ <div>
+<p>Wells are placed in local grids by using keywords <a href="../ecl_rm/WELSPECL.html#WELSPECL">WELSPECL</a> and <a href="../ecl_rm/COMPDATL.html#COMPDATL">COMPDATL</a> instead of <a href="../ecl_rm/WELSPECS.html#WELSPECS">WELSPECS</a> and <a href="../ecl_rm/COMPDAT.html#COMPDAT">COMPDAT</a>. The I, J and K locations
+of the wellhead and connections refer to the cell coordinates within
+the well’s refined grid system. In ECLIPSE 100 a well cannot be completed
+in any other cells outside its local refined grid or outside its amalgamation.</p>
+
+<p>ECLIPSE 100                </p>
+
+<p>In other keywords relating to well connections,
+apart from <a href="../ecl_rm/COMPLUMP.html#COMPLUMP">COMPLUMP</a>, <a href="../ecl_rm/COMPLMPL.html#COMPLMPL">COMPLMPL</a>, <a href="../ecl_rm/WELOPEN.html#WELOPEN">WELOPEN</a>, <a href="../ecl_rm/WELOPENL.html#WELOPENL">WELOPENL</a>, <a href="../ecl_rm/WPIMULT.html#WPIMULT">WPIMULT</a>, <a href="../ecl_rm/WPIMULTL.html#WPIMULTL">WPIMULTL</a>, <a href="../ecl_rm/COMPRPL.html#COMPRPL">COMPRPL</a>, <a href="../ecl_rm/COMPVEL.html#COMPVEL">COMPVEL</a>, <a href="../ecl_rm/WFRICTN.html#WFRICTN">WFRICTN</a> and <a href="../ecl_rm/WFRICTNL.html#WFRICTNL">WFRICTNL</a>, the coordinates of the host cells in the global grid must
+be used. The data specified for each connection in the global grid
+will be applied to all the well’s connections in the refined grid
+cells contained within the global grid connection cell.</p>
+
+<p>ECLIPSE 300                    </p>
+
+<p>In contrast to the above, ECLIPSE 300 permits
+specialized LGR keywords (ending in ‘L’) to be used when well connections
+need to be specified. The exception to this is when all the connection
+values are defaulted and the action of the keyword applies to all
+the well connections.</p>
+
+<p>For wells in local grids, keywords <span class="keyword">COMPLMPL</span>, <span class="keyword">WELOPENL</span>, <span class="keyword">WPIMULTL</span> and <span class="keyword">WFRICTNL</span> should be used respectively to lump connections, open and close
+connections, apply PI multipliers to connections, and define friction
+wells. (In fact, the keywords <span class="keyword">COMPLUMP</span>, <a href="../ecl_rm/WELOPEN.html#WELOPEN">WELOPEN</a>, <span class="keyword">WPIMULT</span> and <span class="keyword">WFRICTN</span> may also be used for wells in single
+local grids, but they cannot be used for wells in amalgamated local
+grids.) In runs employing the Vertical Equilibrium option, well connection
+depth data should be set, if required, using keyword <span class="keyword">COMPVEL</span> rather than <a href="../ecl_rm/COMPVE.html#COMPVE"> COMPVE</a>. In each of these keywords, I, J and K coordinates within
+the respective local grid systems should be used to identify the connections.</p>
+
+<p>Group control is applied to wells in the usual way when the global
+grid is advanced through each global timestep. When using local timestepping,
+the target rates allocated to the wells under group control are then
+held fixed while each local grid system is advanced to the end of
+the global timestep. If the flow rate of any local grid well changes
+over the length of the global timestep, the target rates of the other
+wells cannot be adjusted to accommodate the change. Thus the group
+flow target is not met exactly. The group flow discrepancy may be
+significant if a local grid well changes its flow rate significantly
+over the length of the global timestep. If this occurs, possible remedies
+are to limit the size of the global timesteps, use Coarsening instead
+of Local Grid Refinement, or run LGR in-place for those local grids
+containing wells that contribute to the group flow discrepancy.</p>
+
+<p>ECLIPSE 100                    </p>
+
+<p>When local timestepping is employed, economic
+limits applied to local wells and their connections (<a href="../ecl_rm/WECON.html#WECON">WECON</a> and <a href="../ecl_rm/CECON.html#CECON">CECON</a>) are checked at the end
+of each local timestep in the local grid system, and workovers for
+example, are performed as required. Group economic limits (<a href="../ecl_rm/GECON.html#GECON">GECON</a>) and rate limits involving
+workovers (<a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a>) are checked at the end of each global timestep. These may
+result in more workovers to local wells.</p>
+
+<p>In automatic workovers, connections are closed one at a time. This
+may be on too fine a scale for a well in a refined grid. In particular,
+a well in a 3-D radial refinement could have one of its connections
+on a given layer closed while the other connections on that layer
+remain open - not a realistic situation. It is therefore advisable
+to lump the connections together into sets (or completions), which
+are the smallest unit that can be closed in an automatic workover.
+When a workover limit is exceeded, the program searches for the worst-offending
+completion, and close all its connections together. Keyword <span class="keyword">COMPLMPL</span> may be used to lump the connections into completions.
+For example, consider the well ‘PRODUCER’ that is completed in layers
+9 - 11 in the 3-D radial refined grid. To lump the four connections
+on each layer into one completion (making three completions in total),
+use:</p>
+
+<pre><code>COMPLMPL
+-- WELL ---- LOCAL GRID ---- LOCATION ---- COMPLETION
+-- NAME ----    NAME    --- I  J  K1 K2 -- NUMBER
+ 'PRODUCER'      1*         2*    9  9       1      /
+ 'PRODUCER'      1*         2*   10 10       2      /  
+ 'PRODUCER'      1*         2*   11 11       3      / 
+/</code></pre>
+<div class="section" id="lgrc_current_restrictions_with_local_grid_wells"><a name="lgrc_current_restrictions_with_local_grid_wells"><!-- --></a><h4 class="sectiontitle">Current restrictions with local grid wells</h4><ul>
+<li> <p>ECLIPSE 100</p>
+               <p>The keyword <a href="../ecl_rm/GCONTOL.html#GCONTOL">GCONTOL</a> cannot be used in
+local grid refinement runs.</p>
+<p>ECLIPSE 100
+                     </p>
+</li>
+
+<li>Keyword <a href="../ecl_rm/WLIMTOL.html#WLIMTOL">WLIMTOL</a> only works for economic
+limit checks on wells in active local grids. It is ignored in all
+other limit violation checks.<p>ECLIPSE 100 </p>
+</li>
+
+<li>In parallel runs, LGRs cannot be switched on (using the <a href="../ecl_rm/LGRON.html#LGRON">LGRON</a> keyword) after they have
+been switched off.<p> ECLIPSE 100</p>
+</li>
+
+<li>In parallel runs, wells cannot be declared inside of LGRs (using
+the <a href="../ecl_rm/WELSPECL.html#WELSPECL">WELSPECL</a> keyword) after LGRs have been switched off.</li>
+
+</ul>
+</div>
+
+<div class="section" id="lgrc_other_problems_with_local_grid_wells"><a name="lgrc_other_problems_with_local_grid_wells"><!-- --></a><h4 class="sectiontitle">Other
+problems with local grid wells</h4><ul>
+<li>When a well is under rate control, its potential flow rate in
+a local grid system can be much larger than it would be in the unrefined
+global grid. This is because the connecting grid blocks, whose pressures
+are used in the potential calculation, are much smaller in the local
+grid system. In calculating the potential, the assumption is made
+that the pressures in the connecting grid blocks does not change if
+the well flow rate increases from its current value to its potential
+value. While this may be a reasonable assumption in the global grid,
+it is not true for highly refined local grids. The smaller the connecting
+grid blocks are, the more optimistic will be the potential.<p>ECLIPSE 100   </p>
+</li>
+
+<li>When group control targets are applied, there
+may be significant discrepancies between the actual group flow rate
+and the imposed rate target when local timestepping is employed. This
+is because group control is applied while solving the global grid,
+but not while solving the local grids. Group control is applied to
+wells in the usual way while solving the global grid. The target rates
+allocated to the wells under group control are then held fixed while
+each local grid system is advanced to the end of the global timestep.
+If the flow rate of any local grid well changes over the length of
+the global timestep, the target rates of the other wells cannot be
+adjusted to accommodate the change. Thus the group flow target is
+not met exactly. The group flow discrepancy may be significant if
+a local grid well changes its flow rate significantly over the length
+of the global timestep. If this occurs, possible remedies are to limit
+the size of the global timesteps, use Coarsening instead of Local
+Grid Refinement, or run all those local grids containing wells in
+the offending group(s) as in-place LGRs using keyword <a href="../ecl_rm/LGRLOCK.html#LGRLOCK">LGRLOCK</a>.</li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Simulating with multiple contract groups"/>
+<meta name="DC.subject" content="Gas field operations, Fixed-DCQ contract groups, Multiple variable-DCQ contract groups, Group, Multiple, Contract, Simulating"/>
+<meta name="keywords" content="Gas field operations, Fixed-DCQ contract groups, Multiple variable-DCQ contract groups, Group, Multiple, Contract, Simulating"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gasfieldintro_simulating_with_multiple_contract_groups"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Simulating with multiple contract groups</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gasfieldintro_simulating_with_multiple_contract_groups"><a name="gasfieldintro_simulating_with_multiple_contract_groups"><!-- --></a>
+<h1 class="topictitle1">Simulating with multiple contract groups</h1>
+
+
+ <div>
+<p>The keyword <a href="../ecl_rm/GASYEAR.html#GASYEAR">GASYEAR</a> or <a href="../ecl_rm/GASPERIO.html#GASPERIO">GASPERIO</a> is still used to advance the simulator through an integral
+number of contract periods. ECLIPSE assumes that all contract groups
+start their contract periods at the same time, and the contract period
+length is the same for each group. However, each contract group generally
+has a different DCQ. So item 2 in keyword <span class="keyword">GASYEAR</span> or item 3 in <span class="keyword">GASPERIO</span> (the initial DCQ) is ignored,
+and instead the initial DCQ of each contract group must be entered
+with the keyword <a href="../ecl_rm/GDCQ.html#GDCQ">GDCQ</a>. The remaining items in keyword <span class="keyword">GASYEAR</span> or <span class="keyword">GASPERIO</span> are applied to all contract groups.</p>
+
+<p>When you set the initial DCQ of each contract group with keyword <span class="keyword">GDCQ</span>, you should state whether the DCQ is variable or must
+remain fixed at the specified value. Variable DCQs are adjusted automatically
+as necessary to obey the group’s swing requirement, depending
+on the option selected in item 3 of keyword <span class="keyword">GASYEAR</span> or item 4 of <span class="keyword">GASPERIO</span>. Fixed DCQs remain at their
+specified values until reset in a subsequent <span class="keyword">GDCQ</span> keyword.</p>
+
+<div class="section" id="gasfieldintro_fixed-dcq_contract_groups"><a name="gasfieldintro_fixed-dcq_contract_groups"><!-- --></a><h4 class="sectiontitle">Fixed-DCQ
+contract groups</h4><p>If gas produced by other operators is fed
+into the same network that you use, you may wish to determine the
+DCQ which your group is able to supply against assumed production
+profiles from the other operators’ groups. In this situation,
+you could model the other operators’ groups as fixed-DCQ contract
+groups, and your own group as a variable-DCQ contract group. The group
+DCQ values can be written to the <span class="keyword">SUMMARY</span> file with
+the <span class="keyword">SUMMARY</span> section mnemonic <samp class="codeph">GGDCQ</samp> (Group Gas DCQ).</p>
+<p>When there is only one variable-DCQ group
+in the problem, the simulation process is exactly the same as for
+the single contract group case described in Section 2, except that
+the swing requirement and DCQ adjustment is applied to the variable
+DCQ group instead of the FIELD, and gas from the other fixed-DCQ groups
+also enters the network. All the options in item 3 of the <a href="../ecl_rm/GASYEAR.html#GASYEAR">GASYEAR</a> keyword or item 4 of <a href="../ecl_rm/GASPERIO.html#GASPERIO">GASPERIO</a> are available for
+the variable-DCQ group.</p>
+<p>The flow targets applied to the fixed-DCQ
+groups are equivalent to the target rate applied to the variable-DCQ
+group. In the first pass of the contract period each group has a target
+rate equal to its DCQ × Swing Factor; or its DCQ × Profile
+Factor if the '<samp class="codeph">PRO</samp>' option is selected. In the second
+pass of the contract period, the flow target is its DCQ × Profile
+Factor. But in contrast to the variable-DCQ group, if a fixed-DCQ
+group cannot achieve its flow target its DCQ is not reduced. A missed
+flow target indicates that its specified DCQ is too high, so you should
+either give it a lower DCQ or model it as a variable-DCQ group. The
+group sales gas rates and delivery capacities can be written to the <span class="keyword">SUMMARY</span> file with the mnemonics <samp class="codeph">GGSR</samp> and <samp class="codeph">GGDC</samp>.</p>
+<p>Fixed-DCQ groups have two choices for calculating
+delivery capacities. The first choice (<span class="keyword">FIX1</span>) has
+each contract group operating at its full delivery capacity. The delivery
+capacity of the variable-DCQ contract group is therefore determined
+at a time when the other groups are also producing at their full capacities
+into the network. The second choice (<span class="keyword">FIX2</span>) imposes
+a maximum rate of DCQ × Swing Factor on each fixed-DCQ group.
+Then the delivery capacity of the variable-DCQ contract group will
+be determined at a time when the other groups are producing at DCQ
+× Swing. The network pressures in the <span class="keyword">FIX2</span> case are lower than those in the <span class="keyword">FIX1</span> case, so
+the delivery capacity of the variable-DCQ group is higher. Again,
+you should ensure that the fixed-DCQ groups are able to make their
+delivery capacity targets, as otherwise it implies that their specified
+DCQs are too high.</p>
+</div>
+
+<div class="section" id="gasfieldintro_multiple_variable-dcq_contract_groups"><a name="gasfieldintro_multiple_variable-dcq_contract_groups"><!-- --></a><h4 class="sectiontitle">Multiple variable-DCQ contract groups</h4><p>When you wish
+to predict the future DCQs of two or more groups with independent
+gas supply contracts, you should model them as variable-DCQ contract
+groups. ECLIPSE will test each variable-DCQ contract group against
+its own swing requirement, and reduce its DCQ as necessary. The DCQ
+values of the contract groups can be written to the <span class="keyword">SUMMARY</span> file with the <span class="keyword">SUMMARY</span> section keyword <span class="keyword">GGDCQ</span> (Group Gas DCQ).</p>
+<p>The simulation method for
+multiple variable-DCQ contract groups is equivalent to the method
+for a single contract at the FIELD group. If automatic DCQ reduction
+is requested in keyword <a href="../ecl_rm/GASYEAR.html#GASYEAR"> GASYEAR</a> or <a href="../ecl_rm/GASPERIO.html#GASPERIO">GASPERIO</a>, each contract period is solved in two passes. During the
+first pass, the contract groups aim to produce at their DCQ ×
+Swing Factor. If a contract group cannot make its swing requirement,
+its DCQ is reduced accordingly. During the second pass of the contract
+period, the contract groups have their flow targets set equal to their
+DCQ values multiplied by their monthly profile factors. The group
+rate targets are met by Guide Rate Control, unless Prioritization
+is requested with the keyword <a href="../ecl_rm/GCONPRI.html#GCONPRI">GCONPRI</a>.</p>
+<p>When there is more than one contract group with variable
+DCQ, item 3 in keyword <span class="keyword">GASYEAR</span> or item 4 in <span class="keyword">GASPERIO</span> (the swing requirement) is restricted to two choices:</p>
+<ul>
+<li> <samp class="codeph">YEAR </samp> or <samp class="codeph">PER</samp> or <samp class="codeph">YES</samp>    <p>For automatic DCQ reduction, with the production target set
+at DCQ × swing factor for the whole contract period in the first
+pass</p>
+</li>
+
+<li>  <samp class="codeph">NO</samp> <p>For no automatic DCQ reduction.</p>
+ </li>
+
+</ul>
+<p>The other options (<samp class="codeph">ACQ</samp> and <samp class="codeph">PRO </samp> for example) are disabled to avoid problems with the contract groups
+interacting through the network. (The delivery capacity of each group
+varies with the flow rates of the other groups, so the flow rates
+of all the contract groups must be defined for the whole contract
+period while the swing requirement is being tested.) The <samp class="codeph">YEAR</samp> or <samp class="codeph">PER</samp> option is most suitable for cases where
+the monthly swing factors are the same as the profile factors. For
+cases where the swing factors exceed the profile factors, you could
+reduce them to the profile factor value in all but two months - at
+the end of the peak flow period and at the end of the contract period.</p>
+<p>The delivery capacity is calculated in the usual way, by removing
+the constraints on gas production rate. The delivery capacity reported
+for the individual contract groups will be their production capacity
+while all other groups are producing at their full capacity. Because
+of the coupling through the network, a group may possibly achieve
+a higher rate than its reported delivery capacity when the others
+are producing at the smaller rate of DCQ × Profile.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Notes on local grid refinement"/>
+<meta name="DC.subject" content="Grid data"/>
+<meta name="keywords" content="Grid data"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="grid_notes_on_local_grid_refinement"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Notes on local grid refinement</title>
+</head>
+<body>
+
+
+<div class="nested0" id="grid_notes_on_local_grid_refinement"><a name="grid_notes_on_local_grid_refinement"><!-- --></a>
+<h1 class="topictitle1">Notes on local grid refinement</h1>
+
+
+ <div>
+<ol>
+<li> Cell numbers in a local grid are counted independently, starting
+from 1. </li>
+
+<li> Note that radial LGR coordinates are stored in R, Theta, Z units,
+where Theta is the azimuthal angle measured clockwise in degrees. </li>
+
+<li> The following numbering convention is used for local radial grids
+contained in a single column of host cells: <div class="fignone">
+
+ <br/><img src="../img/loc_rad_grid_single_col.png" width="282px"/><br/> <br/><span class="figcap">
+           Figure 18.1  Numbering convention used for local radial grids contained
+in a single column of host cells</span></div>
+ <ol type="a">
+<li>The radial cells are numbered so that Theta increases in an anti-clockwise
+direction. </li>
+
+</ol>
+  </li>
+
+<li> The following numbering convention is used for local radial grids
+contained in a box of 4 host columns:   <div class="fignone">
+
+ <br/><img src="../img/loc_rad_grid_four_cols.png" width="284px"/><br/> <br/><span class="figcap">
+           Figure 18.2  Numbering convention used for local radial grids contained
+in a box of four host columns</span></div>
+ <ol type="a">
+<li> The LGR center is taken as the coordinate line at the center
+of the box of host cells. </li>
+
+</ol>
+  </li>
+
+<li> For a single-column radial refinement, the number of cells in
+the Theta-direction must be set to 1 or 4. A radial refinement in
+4 host columns must be specified with 4 or 8 sectors. <div class="note"><span class="notetitle">Note:</span> <span class="notebody">If a radial
+LGR is constructed in a corner-point host grid, ECLIPSE will fill
+in the maximum number of corners to fully define the local grid. For
+example, a radial LGR in a block of 4 columns with NTHETA=4 will be
+written to the grid file with NY=8. The correct value for NTHETA will
+be written to the LGRILG array and the corresponding solution data
+arrays will be dimensioned according to NTHETA.</span></div>
+ </li>
+
+<li> For an LGR in a dual porosity grid, the position of the LGR is
+described in terms of the global matrix block. </li>
+
+</ol>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

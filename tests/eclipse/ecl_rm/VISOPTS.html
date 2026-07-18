@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="VISOPTS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="VISOPTS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>VISOPTS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="VISOPTS"><a name="VISOPTS"><!-- --></a>
+<h1 class="keyword">VISOPTS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="visopts.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="visopts.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2790e45"> x </th>
+
+<th valign="top" id="d2790e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2790e54"> x </th>
+
+<th valign="top" id="d2790e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2790e45 d2790e54 ">  </td>
+
+<td valign="top" headers="d2790e48 d2790e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2790e45 d2790e54 ">  </td>
+
+<td valign="top" headers="d2790e48 d2790e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2790e45 d2790e54 ">  </td>
+
+<td valign="top" headers="d2790e48 d2790e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2790e45 d2790e54 ">  </td>
+
+<td valign="top" headers="d2790e48 d2790e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2790e45 d2790e54 ">  </td>
+
+<td valign="top" headers="d2790e48 d2790e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2790e45 d2790e54 "> x </td>
+
+<td valign="top" headers="d2790e48 d2790e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2790e45 d2790e54 ">  </td>
+
+<td valign="top" headers="d2790e48 d2790e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2790e45 d2790e54 ">  </td>
+
+<td valign="top" headers="d2790e48 d2790e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">This keyword is for use only with the Petrel Reservoir Geomechanics
+module and you must not add it to ECLIPSE datasets. The information
+about the keyword is for reference only. </span></div>
+
+<p>The workflow is described in the <a href="../ecl_td/geomechn_Geomechanics.html#geomechn_geomechanics">"Geomechanics"</a> section of the <cite>ECLIPSE Technical Description</cite>. In this
+workflow, the Petrel Reservoir Geomechanics module couples the VISAGE
+and ECLIPSE simulators, using the ECLIPSE fluid simulation results
+to compute the geomechanical response of the reservoir to changes
+in pressure, fluid saturations/composition and temperature. These
+calculations are performed at particular report steps in the simulation
+called coupled timesteps. </p>
+
+<p>The Petrel Reservoir Geomechanics module activates the workflow
+by adding the <a href="VISAGE.html#VISAGE"> VISAGE</a> keyword to the <span class="keyword">RUNSPEC</span> section. It uses the <span class="keyword">VISOPTS</span> keyword to control the interaction with ECLIPSE.</p>
+
+<p>The data consists of some or all of the following items. The data
+must be terminated by a slash (/).</p>
+
+<ol>
+<li id="visopts_88513"><a name="visopts_88513"><!-- --></a>Whether this is a workflow initialization run.
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top">GRID, INIT and initial restart data are output, and the run
+is switched to NOSIM with the report steps that would be performed
+written to the EDESC communication file.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top">Output of GRID, INIT and initial restart data is not required,
+and only coupled timesteps are written to the VDESC communication
+file.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>DEFAULT: <samp class="codeph">NO</samp> </p>
+ </li>
+
+<li id="visopts_61980"><a name="visopts_61980"><!-- --></a>Whether the run is to exit at the next coupled
+timestep encountered. 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top">Exit the simulation when the next coupled timestep is encountered.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top">Continue the simulation when the next coupled timestep is encountered.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">NO</samp> </p>
+ </li>
+
+<li id="visopts_16413"><a name="visopts_16413"><!-- --></a>Whether the dynamic coupled timestep mechanism
+is active. 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top">If the field pressure has changed by more than the relative
+tolerance in item 4 since the last coupled timestep, then the next
+report step will be treated as a coupled timestep.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top">There are no dynamic coupled timesteps.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">NO</samp> </p>
+ </li>
+
+<li id="visopts_40719"><a name="visopts_40719"><!-- --></a>The relative tolerance on the field pressure
+for a dynamic coupled timestep. This must not be a negative value. <p>When the change in field pressure since the previous coupled timestep
+(or since the beginning of the simulation if there have been no coupled
+timesteps) divided by the pressure at the previous coupled timestep
+(or initial pressure if there have been no coupled timesteps) exceeds
+this tolerance, a dynamic coupled timestep will be triggered as long
+as item 3 of this keyword is set to ‘ <samp class="codeph">YES</samp> ’.</p>
+ <p>DEFAULT: 0.05</p>
+ </li>
+
+<li> Not used in this release </li>
+
+<li id="visopts_36625"><a name="visopts_36625"><!-- --></a>Whether the existing restart frequency is to
+be maintained.
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top">If there are <span class="keyword">RPTRST</span> requests to reduce the
+frequency of the restart files, then these should be honored in the
+current run.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top">The workflow default restart frequency (<span class="keyword">RPTRST</span> argument <samp class="codeph">BASIC=2</samp>) should be used.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>DEFAULT: <samp class="codeph">NO</samp> </p>
+ </li>
+
+<li id="visopts_91139"><a name="visopts_91139"><!-- --></a>Whether the existing restart content is to
+be maintained. 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top">If there are additional <span class="keyword">RPTRST</span> contents
+over and above those required for the workflow (mnemonics <samp class="codeph">BASIC=2</samp> and <samp class="codeph">ROCKC</samp>), then these should be
+honored in the current run.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top">Only the content required for the workflow should be output
+to the restart files.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">NO</samp> </p>
+ </li>
+
+<li> Whether it is an error or a warning to not re-specify well connections
+(which are required in order to recompute well connection factors
+after a change of permeability) before the first timestep when performing
+a restart. 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">ERROR</samp> (or <samp class="codeph">E</samp>)</td>
+
+<td valign="top"> It is an error, and no simulation will be performed.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WARN</samp> (or <samp class="codeph">W</samp>) </td>
+
+<td valign="top">It is a warning, and simulation will proceed using the well
+connection factors from the restart file.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>DEFAULT: <samp class="codeph">ERROR</samp> </p>
+ </li>
+
+</ol>
+
+<div class="section" id="visopts_example"><a name="visopts_example"><!-- --></a><h4 class="sectiontitle">Example</h4>             
+   <p>The example below is not a workflow initialization run and it
+will stop when it next encounters a coupled timestep. It has the dynamic
+coupled timestep mechanism active and it will treat a report step
+as a coupled timestep if the relative change in the field pressure
+since the last coupled timestep is greater than 0.1 (that is 10%).
+Any inputs specified by the Petrel Reservoir Geomechanics module for
+restart frequency and content will be honored in this run. If well
+connections have not been re-specified before the first timestep,
+it will produce an error.</p>
+          <pre><code>VISOPTS
+ NO YES YES 0.10 1* YES YES ERROR/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

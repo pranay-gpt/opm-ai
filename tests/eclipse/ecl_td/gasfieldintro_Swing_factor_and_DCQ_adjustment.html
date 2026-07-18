@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Swing factor and DCQ adjustment"/>
+<meta name="DC.subject" content="Swing factor adjustment, DCQ adjustment, Swing factor"/>
+<meta name="keywords" content="Swing factor adjustment, DCQ adjustment, Swing factor"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gasfieldintro_swing_factor_and_dcq_adjustment"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Swing factor and DCQ adjustment</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gasfieldintro_swing_factor_and_dcq_adjustment"><a name="gasfieldintro_swing_factor_and_dcq_adjustment"><!-- --></a>
+<h1 class="topictitle1">Swing factor and DCQ adjustment</h1>
+
+
+ <div>
+<p>A flag in the keyword <a href="../ecl_rm/GASYEAR.html#GASYEAR">GASYEAR</a> or <a href="../ecl_rm/GASPERIO.html#GASPERIO">GASPERIO</a> can be set to allow the DCQ to be adjusted automatically
+at the start of each Contract Period to obey a Swing Factor Requirement,
+that is, that the field should be able to produce at a rate equal
+to the DCQ multiplied by the swing factor. If the field cannot produce
+at this rate, the DCQ is reduced to a value that enables the requirement
+to be obeyed.</p>
+
+<p>If automatic DCQ adjustment is requested, each contract period
+is solved in two passes.</p>
+
+<ul>
+<li>The first pass is a test calculation, which has the purpose of
+deciding how much the DCQ needs to be reduced in order to obey the
+swing requirement for the current contract period. If requested, ECLIPSE
+may perform a number of iterations of the first pass, with different
+DCQ values, to determine the highest DCQ that obeys the swing requirement
+for the period, to a specified accuracy.  </li>
+
+<li> The second pass simulates the actual performance of the field,
+with the sales gas rate target set each month to the new value of
+the DCQ multiplied by the monthly Profile Factor. The <span class="keyword">RESTART</span> and <span class="keyword">SUMMARY</span> files are written as required during
+this pass. </li>
+
+</ul>
+
+<p>The swing factor is specified separately for each month for flexibility.
+The monthly swing factors are entered along with the profile factors
+using the keyword <a href="../ecl_rm/SWINGFAC.html#SWINGFAC">SWINGFAC</a>. For example, the monthly swing factors could be set equal
+to the profile factors, in which case the Swing Factor Requirement
+causes the DCQ to be adjusted each period so that the seasonality
+profile fits inside the delivery capacity decline curve. Alternatively
+the swing factors could all be set to the same value each month. A
+check is made to ensure the profile factor does not exceed the swing
+factor during any month, otherwise obeying the Swing Factor Requirement
+may not guarantee the field could produce its target rate profile.</p>
+
+<p>The keyword <span class="keyword">FGDCQ</span> (which stands for Field Gas
+DCQ) outputs the current value of the DCQ to the <span class="keyword">SUMMARY</span> file.</p>
+
+<p>ECLIPSE 100  </p>
+
+<p>By default, ECLIPSE 100 adjusts the DCQ downwards.
+If the field has more capacity than is required to meet the swing
+requirement with the current value of the DCQ, ECLIPSE 100 does not
+automatically increase the DCQ. If you wish to increase the DCQ during
+a simulation, this may be done manually by resetting the initial DCQ
+in item 2 of the <span class="keyword">GASYEAR</span> keyword (or item 3 of <span class="keyword">GASPERIO</span>) at the appropriate time. Alternatively, the accelerated
+iteration scheme may be used by setting item 2 in the <a href="../ecl_rm/GASFIELD.html#GASFIELD">GASFIELD</a> keyword. This permits
+the DCQ to increase again if appropriate, up as far as its initial
+value.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>ECLIPSE 300 has the accelerated scheme enabled
+by default, and so after any initial reduction, the DCQ may increase
+up as far as its initial value should the gas delivery capacity of
+the field permit this. This scheme cannot be switched off in ECLIPSE
+300.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

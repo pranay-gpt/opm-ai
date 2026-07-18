@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="DPNUM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="DPNUM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>DPNUM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="DPNUM"><a name="DPNUM"><!-- --></a>
+<h1 class="keyword">DPNUM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="dpnum.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="dpnum.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d494e45">                         x                   
+  </th>
+
+<th valign="top" id="d494e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d494e54">                         x                   
+  </th>
+
+<th valign="top" id="d494e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d494e45 d494e54 ">                                             
+ </td>
+
+<td valign="top" headers="d494e48 d494e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d494e45 d494e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d494e48 d494e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d494e45 d494e54 ">                                             
+ </td>
+
+<td valign="top" headers="d494e48 d494e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d494e45 d494e54 ">                                             
+ </td>
+
+<td valign="top" headers="d494e48 d494e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d494e45 d494e54 ">                                             
+ </td>
+
+<td valign="top" headers="d494e48 d494e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d494e45 d494e54 ">                                             
+ </td>
+
+<td valign="top" headers="d494e48 d494e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d494e45 d494e54 ">                                             
+ </td>
+
+<td valign="top" headers="d494e48 d494e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d494e45 d494e54 ">                                             
+ </td>
+
+<td valign="top" headers="d494e48 d494e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">DPNUM</span> keyword may be used for a dual porosity,
+single permeability run to specify regions within the reservoir to
+be treated as single porosity only.</p>
+
+<p>The keyword should be followed by the integer 0 or 1 for each grid
+block in the first <samp class="codeph">NDIVIZ</samp> /2 layers, to indicate whether
+the grid block should be modeled as single porosity (0) or dual porosity
+(1). Any grid blocks that do not have a <span class="keyword">DPNUM</span> value
+entered default to dual porosity (1).</p>
+
+<p>Grid blocks are ordered with the X axis index cycling fastest,
+followed by the Y and Z axis indices. Repeat counts may be used for
+repeated values (for example 115*0). Note that spaces must not be
+inserted on either side of the asterisk.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> Grid data for single porosity cells is only required in the
+first <samp class="codeph">NDIVIZ</samp> /2 layers. That is the grid block properties
+are only required for the matrix cells; the fracture cells are made
+inactive and ignored. Within single porosity regions, flow is between
+matrix blocks. Wells may only connect with the matrix blocks in single
+porosity regions.</span></div>
+
+<p>The keyword is ignored unless dual porosity, single permeability
+is enabled in the <span class="keyword">RUNSPEC</span> section using keyword <a href="DUALPORO.html#DUALPORO"> DUALPORO</a>. Single porosity
+regions specified by the keyword <span class="keyword">DPNUM</span> are not
+allowed in a dual permeability run, so the keyword <a href="DUALPERM.html#DUALPERM">  DUALPERM</a> must not be
+specified in this case.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>This keyword is not permitted if multi porosity
+is specified, either as a general multi porosity run using <a href="NMATRIX.html#NMATRIX"> NMATRIX</a> with value greater
+than 1, or as a triple porosity run using <a href="TRPLPORO.html#TRPLPORO"> TRPLPORO</a>.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>There are technical problems if all the <span class="keyword">DPNUM</span> values in the grid are set to zero, so this is prohibited;
+it is not possible to use <span class="keyword">DPNUM</span> in this way to
+switch between single and dual porosity.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>For LGRs all the <span class="keyword">DPNUM</span> values
+in the local grid must be the same, so that the LGR is either single
+or dual porosity. The values are specified for the region of the global
+grid occupied by the LGR, not in the <a href="CARFIN.html#CARFIN"> CARFIN</a> or <a href="RADFIN.html#RADFIN"> RADFIN</a> block.</p>
+
+<p>ECLIPSE 300</p>
+
+<p><span class="keyword">DPNUM</span> cannot be used when
+alternative transmissibility multipliers are used, that is, when the
+first item of the <a href="GRIDOPTS.html#GRIDOPTS"> GRIDOPTS</a> keyword is set to <samp class="codeph">‘YES’</samp>.</p>
+
+<div class="section" id="dpnum_example"><a name="dpnum_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>To specify an
+8 x 4 x 4 run as dual porosity in half of the reservoir, specify <span class="keyword">DUALPORO</span> in <span class="keyword">RUNSPEC</span>, and add the following
+in the <span class="keyword">GRID</span> section:</p>
+<pre><code>DPNUM
+ 4*0 4*1 4*0 4*1
+ 4*0 4*1 4*0 4*1
+ 4*0 4*1 4*0 4*1
+ 4*0 4*1 4*0 4*1 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

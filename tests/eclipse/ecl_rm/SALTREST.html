@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SALTREST"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SALTREST"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SALTREST</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SALTREST"><a name="SALTREST"><!-- --></a>
+<h1 class="keyword">SALTREST</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="saltrest.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="saltrest.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2178e45"> x </th>
+
+<th valign="top" id="d2178e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2178e54">   </th>
+
+<th valign="top" id="d2178e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2178e45 d2178e54 ">  </td>
+
+<td valign="top" headers="d2178e48 d2178e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2178e45 d2178e54 ">   </td>
+
+<td valign="top" headers="d2178e48 d2178e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2178e45 d2178e54 ">  </td>
+
+<td valign="top" headers="d2178e48 d2178e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2178e45 d2178e54 ">  </td>
+
+<td valign="top" headers="d2178e48 d2178e57 ">   PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2178e45 d2178e54 ">  </td>
+
+<td valign="top" headers="d2178e48 d2178e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2178e45 d2178e54 "> x </td>
+
+<td valign="top" headers="d2178e48 d2178e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2178e45 d2178e54 ">   </td>
+
+<td valign="top" headers="d2178e48 d2178e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2178e45 d2178e54 ">  </td>
+
+<td valign="top" headers="d2178e48 d2178e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p> This keyword defines the salt
+concentration value for the reservoir for restart runs where the base
+run water properties were specified with no salinity dependence, for
+example when specified using the <a href="PVTW.html#PVTW"> PVTW</a> keyword. This allows you to introduce salinity dependent
+water properties on restart, using, for example,  <a href="PVTWSALT.html#PVTWSALT"> PVTWSALT</a> with  <a href="LOWSALT.html#LOWSALT"> LOWSALT</a> or <a href="BRINE.html#BRINE"> BRINE</a>.</p>
+
+<p>The keyword should be followed
+by one real number specifying the "initial" and assumed homogeneous
+salt concentration.   The data field should be terminated by a slash
+(/).</p>
+
+<p>UNITS: kg/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), lb/stb (<samp class="codeph">FIELD</samp>), gm/scc (<samp class="codeph">LAB</samp>)</p>
+
+<div class="section" id="saltrest_notes"><a name="saltrest_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li>The <span class="keyword">SALTREST</span> keyword allows you to simulate the impact of salinity variation
+upon restart for a certain class of cases, such as when the base simulation
+contains no salt tracking functionality because the salinity variation
+had little physical impact and therefore the salt concentration was
+assumed to remain constant up to the point of restart. This might
+be because the reservoir contained water with homogeneous salinity
+and injected water was of a very similar salinity to the initial reservoir
+water. If these conditions were not met, it is strongly advised that
+the base model is rerun with the <span class="keyword">BRINE</span> and/or <span class="keyword">LOWSALT</span> options active from the start, allowing the simulation
+to more accurately represent the salinity, water density and possibly
+pressure distributions inside the reservoir. </li>
+
+<li>Using <span class="keyword">SALTREST</span> properly involves defining a saline water model consistent with
+the water model defined in the original black oil case. To do this: <ul>
+<li>When replacing <span class="keyword">PVTW</span> by <span class="keyword">PVTWSALT</span>. The lines corresponding to the salinity introduced in <span class="keyword">SALTREST</span> should have the same definition as the water properties
+from the <span class="keyword">PVTW</span> keyword in the base case. This ensures
+consistency between models for water properties like compressibility
+and viscosity.</li>
+
+<li>If <span class="keyword">LOWSALT</span> is used, the <a href="LSALTFNC.html#LSALTFNC"> LSALTFNC</a> keyword should have a value of
+0 for the salinity entered in <span class="keyword">SALTREST</span>. This ensures
+consistency between models for the relative permeabilities used. Failure
+to do so can lead to unstable situations and possible convergence
+problems.</li>
+
+</ul>
+</li>
+
+</ul>
+</div>
+
+<div class="section" id="saltrest_example"><a name="saltrest_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>SALTREST
+ 30 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

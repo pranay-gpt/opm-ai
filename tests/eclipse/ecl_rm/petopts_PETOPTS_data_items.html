@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PETOPTS data items"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="petopts_petopts_data_items"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PETOPTS data items</title>
+</head>
+<body>
+
+
+<div class="nested0" id="petopts_petopts_data_items"><a name="petopts_petopts_data_items"><!-- --></a>
+<h1 class="topictitle1">PETOPTS data items</h1>
+
+
+ <div>
+<div class="section" id="petopts_simulator_input_options"><a name="petopts_simulator_input_options"><!-- --></a><h4 class="sectiontitle">Simulator
+input options</h4>                  <div class="note"><span class="notetitle">Note:</span> <span class="notebody">The following options affect simulator
+input. They must correspond with the contents of the geometry file
+in order for the simulator to function correctly. <strong>They should never
+be added or removed manually.</strong> </span></div>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">LGRSIMGD</samp> </td>
+
+<td valign="top"> The geometry file imported using the <a href="PETGRID.html#PETGRID"> PETGRID</a> keyword contains local grid refinements.
+This mnemonic is necessary for the simulators to read and process
+the local grid data during the pre-sweep of all the keywords in the
+entire data file. Without it, the simulators will fail to process
+the LGR data correctly, resulting in error messages and failure to
+simulate.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">TRANPORV</samp> </td>
+
+<td valign="top">The geometry file(s) imported from Petrel contains transmissibilities
+and pore volumes, and also non-neighbor connections due to faults
+and pinchouts. For ECLIPSE Thermal models, rock volumes, heat transmissibilities
+and thermal conductive non-neighbor connections will also be exported,
+and for models using the molecular diffusion option, diffusivities
+will be exported. The <samp class="codeph">TRANPORV</samp> mnemonic will be output
+by Petrel if curved or listric pillars are exported in the <samp class="codeph">.GSG</samp> file. Typically, this geometry is complex so Petrel
+is best placed to define the necessary non-neighbor connections, transmissibilities,
+pore volumes (and rock volumes). For simpler corner point geometries,
+this mnemonic is not needed as the simulators are able to calculate
+all the essential grid geometry and grid cell volume information needed.
+However, the more complex geometries (curved or listric pillars) may
+cause ECLIPSE to miscalculate these quantities. It is recommended
+that the <a href="RPTGRID.html#RPTGRID"> RPTGRID</a> and <a href="RPTGRIDL.html#RPTGRIDL"> RPTGRIDL</a> keywords are used with mnemonics <samp class="codeph">ALLNNC</samp>, <samp class="codeph">PORV</samp>, <samp class="codeph">TRANX</samp> / <samp class="codeph">TRANY</samp> / <samp class="codeph">TRANZ</samp>, <samp class="codeph">DIFFX</samp> / <samp class="codeph">DIFFY</samp> / <samp class="codeph">DIFFZ</samp>, <samp class="codeph">ROCKV</samp> and <samp class="codeph">HEATTX</samp> / <samp class="codeph">HEATTY</samp> / <samp class="codeph">HEATTZ</samp> for further investigation.<p>It is not possible to supply some of these values but have ECLIPSE
+calculate others, but you can supply required values in keyword form
+where it is not possible to add them to the <samp class="codeph">.GSG</samp> file.</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+<div class="section" id="petopts_simulator_output_options"><a name="petopts_simulator_output_options"><!-- --></a><h4 class="sectiontitle">Simulator
+output options</h4>                  <div class="note"><span class="notetitle">Note:</span> <span class="notebody">The following options affect
+simulator output and you can be specify them as required.</span></div>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">   
+<tbody>
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">INITNNC</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> By default, the simulators will <strong>not</strong> output any kind
+of grid file if the <a href="PETGRID.html#PETGRID"> PETGRID</a> keyword is used. If the run contains non-neighbor connections, <samp class="codeph">INITNNC</samp> enables the NNC index information to be defined
+in the <samp class="codeph">.INIT</samp> file together with the <samp class="codeph">TRANNNC</samp> information and the <samp class="codeph">CORSNUM</samp> information. If you
+have chosen a combination of settings which mean that a grid file
+is being output, then this information will be defined both in it
+and in the <samp class="codeph">.INIT</samp> file.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">TINYINIT</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Output only the pore volume array and the transmissibility
+arrays (and the non-neighbor connection information if requested by <samp class="codeph">INITNNC</samp>) to the <samp class="codeph">.INIT</samp> file. If this option
+is not specified, the output to the <samp class="codeph">.INIT</samp> file will
+remain unchanged.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">EDITSUPP</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Suppress warning messages that could be output due to non-neighbor
+connections not being found while reading <a href="EDITNNC.html#EDITNNC"> EDITNNC</a> or <a href="EDITNNCR.html#EDITNNCR"> EDITNNCR</a> data.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">NEWTRAN</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Force ECLIPSE 300 to use a corner-point type calculation of
+transmissibilities. This is equivalent to the ECLIPSE 100 <a href="NEWTRAN.html#NEWTRAN"> NEWTRAN</a> keyword, and
+is intended to allow calculation of X and Y fault transmissibilities
+in coarsened regions. In ECLIPSE 100, this mnemonic is permitted but
+has no effect.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 300</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">OLDORNNC</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Within the <samp class="codeph">.INIT</samp> file, output the data for
+non-neighbor connections between global cells in the order used pre-2010.1.
+If this option is omitted, then the order matches that used in the
+restart and <samp class="codeph">.FLUX</samp> files.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">NOCOMPIN</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Output values for all grid blocks to the <samp class="codeph">.INIT</samp> file, not just active grid blocks.<div class="note"><span class="notetitle">Note:</span> <span class="notebody">When
+this mnemonic is specified in ECLIPSE 100, the simulator will run
+in <samp class="codeph">NOSIM</samp> mode with all cells treated as active cells
+in order to generate the required <samp class="codeph">.INIT</samp> file. If
+other output files are required, save the uncompressed <samp class="codeph">.INIT</samp> file, remove the <samp class="codeph">NOCOMPIN</samp> mnemonic, and rerun.</span></div>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">NOSWATIN</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Suppress the output of the <a href="SWATINIT.html#SWATINIT"> SWATINIT</a> array to the  if this array is not specified
+in the input data file. By default this array is written to the <samp class="codeph">.INIT</samp> file as undefined values if not specified in the input
+data file.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+                                                         
+                                   <p>DEFAULT: None of the above</p>
+       </div>
+
+<div class="section" id="petopts_obsolete_options"><a name="petopts_obsolete_options"><!-- --></a><h4 class="sectiontitle">Obsolete options</h4>                  <p>The following options are obsolete and should not be
+added to data sets:</p>
+         <ul>
+<li> <samp class="codeph">NOFLTNNC</samp>: Simulator fault non-neighbor connection
+calculations are always suppressed if the <samp class="codeph">TRANPORV</samp> mnemonic is specified.</li>
+
+<li> <samp class="codeph">NOPINCHC</samp>: Simulator pinchout non-neighbor connection
+calculations are always suppressed if the <samp class="codeph">TRANPORV</samp> mnemonic is specified.</li>
+
+</ul>
+       </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

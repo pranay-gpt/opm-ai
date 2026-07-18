@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Specification file"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="summary_specification_file"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Specification file</title>
+</head>
+<body>
+
+
+<div class="H1" id="summary_specification_file"><a name="summary_specification_file"><!-- --></a>
+<h1 class="topictitle1">Specification file</h1>
+
+
+ <div>
+<p>The summary specification file must be available, for a post-processor
+to read ECLIPSE summary files. The following table lists the keywords
+used in the Specification file:</p>
+
+
+<div class="tablenoborder"><a name="summary.XID-0000000a"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="summary.XID-0000000a" frame="border" border="1" rules="all"><caption>
+           Table 12.1  Specification file keywords</caption>    
+<thead align="left">
+<tr>
+<th valign="top" id="d112e49">Keyword</th>
+
+<th valign="top" id="d112e52">No. of Items</th>
+
+<th valign="top" id="d112e55"> Data Type</th>
+
+<th valign="top" id="d112e58">Contents</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">INTEHEAD</span></td>
+
+<td valign="top" headers="d112e52 ">Specified in header</td>
+
+<td valign="top" headers="d112e55 ">INTE</td>
+
+<td valign="top" headers="d112e58 ">Integer header array<p>This array is optional but if present
+should contain the following items:</p>
+<p>Item 1 – units type: 1 –
+METRIC, 2 – FIELD, 3 –LAB, 4 - PVT-M</p>
+<p>Item 2 – simulation program
+identifier:</p>
+<p>100 – ECLIPSE 100</p>
+<p>300 – ECLIPSE 300</p>
+<p>500 – ECLIPSE 300 (thermal option)</p>
+<p>700 – INTERSECT</p>
+<p>800
+- FrontSim </p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">RESTART</span> </td>
+
+<td valign="top" headers="d112e52 ">Specified in header   </td>
+
+<td valign="top" headers="d112e55 ">CHAR       </td>
+
+<td valign="top" headers="d112e58 ">Root name of restart file from which this run
+originated (if any), up to 132 characters (in INTERSECT, up to 72
+characters) divided into 8-character words.<p>The number of items
+is always either 9 (for names up to and including 72 characters) or
+17 (for names between 73 and 132 characters long). For INTERSECT,
+the value is always 9.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">DIMENS</span> </td>
+
+<td valign="top" headers="d112e52 ">6       </td>
+
+<td valign="top" headers="d112e55 ">  INTE     </td>
+
+<td valign="top" headers="d112e58 ">Item 1 - NLIST = number of data vector parameters
+stored at each timestep    <p>Item 2 - NDIVIX = number of cells in
+X-direction</p>
+<p>Item 3 - NDIVIY = number of cells in Y-direction</p>
+<p>Item 4 - NDIVIZ = number of cells in Z-direction</p>
+<p>Item 5
+- Dummy</p>
+<p>Item 6 - ISTAR = report step number of restart file
+used to start this run (if any)</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">KEYWORDS</span> </td>
+
+<td valign="top" headers="d112e52 "> NLIST </td>
+
+<td valign="top" headers="d112e55 ">CHAR</td>
+
+<td valign="top" headers="d112e58 ">The mnemonic keyword associated with each data
+vector </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">WGNAMES</span> </td>
+
+<td valign="top" headers="d112e52 ">NLIST</td>
+
+<td valign="top" headers="d112e55 ">CHAR       </td>
+
+<td valign="top" headers="d112e58 ">The well or group name associated with each data
+vector</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">NAMES</span> </td>
+
+<td valign="top" headers="d112e52 ">NLIST</td>
+
+<td valign="top" headers="d112e55 ">C0nn </td>
+
+<td valign="top" headers="d112e58 ">Alternative to <span class="keyword">WGNAMES</span> for
+models where the standard short naming convention is not used. For
+more information see <a href="summary_Vector_naming_convention.html#summary_vector_naming_convention"> "Vector naming convention"</a>. <p>Note: This keyword is not output
+by either ECLIPSE 100 or ECLIPSE 300.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">NUMS</span> </td>
+
+<td valign="top" headers="d112e52 ">NLIST</td>
+
+<td valign="top" headers="d112e55 ">INTE</td>
+
+<td valign="top" headers="d112e58 ">The integer cell or region number associated with
+each data vector       </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">LGRS</span> </td>
+
+<td valign="top" headers="d112e52 ">NLIST</td>
+
+<td valign="top" headers="d112e55 ">CHAR</td>
+
+<td valign="top" headers="d112e58 ">* The LGR name associated with each data vector
+(for runs with local grid refinement) </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">NUMLX</span> </td>
+
+<td valign="top" headers="d112e52 ">NLIST</td>
+
+<td valign="top" headers="d112e55 ">INTE</td>
+
+<td valign="top" headers="d112e58 ">* For local block or completion data vectors,
+the I-position in the local grid.   </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">NUMLY</span> </td>
+
+<td valign="top" headers="d112e52 ">NLIST</td>
+
+<td valign="top" headers="d112e55 ">INTE</td>
+
+<td valign="top" headers="d112e58 ">* For local block or completion data vectors,
+the J-position in the local grid.</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">NUMLZ</span> </td>
+
+<td valign="top" headers="d112e52 ">NLIST</td>
+
+<td valign="top" headers="d112e55 ">INTE</td>
+
+<td valign="top" headers="d112e58 ">* For local block or completion data vectors,
+the K-position in the local grid.</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">LENGTHS</span> </td>
+
+<td valign="top" headers="d112e52 ">NLIST</td>
+
+<td valign="top" headers="d112e55 "> REAL       </td>
+
+<td valign="top" headers="d112e58 ">* For horizontal well data, the length along the
+well associated with each summary item (that is distance from bottom-
+hole reference point to completion)       </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">LENUNITS</span> </td>
+
+<td valign="top" headers="d112e52 ">1       </td>
+
+<td valign="top" headers="d112e55 ">CHAR</td>
+
+<td valign="top" headers="d112e58 ">* The units used for horizontal well lengths </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">MEASRMNT</span> </td>
+
+<td valign="top" headers="d112e52 ">nblock* NLIST       </td>
+
+<td valign="top" headers="d112e55 ">CHAR</td>
+
+<td valign="top" headers="d112e58 ">Measurements associated with each vector.  “nblock”
+is an integer that can be obtained by dividing the provided number
+of elements of this record by “NLIST”. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">UNITS</span> </td>
+
+<td valign="top" headers="d112e52 ">NLIST       </td>
+
+<td valign="top" headers="d112e55 ">CHAR</td>
+
+<td valign="top" headers="d112e58 ">Units associated with each vector, used when assigning
+axes to a line graph       </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">STARTDAT</span> </td>
+
+<td valign="top" headers="d112e52 "> 6       </td>
+
+<td valign="top" headers="d112e55 ">INTE</td>
+
+<td valign="top" headers="d112e58 ">The date of the run start <p>(a) Day (1-31)</p>
+<p>(b) Month (1-12)</p>
+<p>(c) Year (as four digits, for example 1952)</p>
+<p>(d) Hour (0-23)</p>
+<p>(e) Minute (0-59)</p>
+<p>(f) Second (expressed
+in microseconds, 0-59,999,999)</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">LGRNAMES</span> </td>
+
+<td valign="top" headers="d112e52 ">NLGR       </td>
+
+<td valign="top" headers="d112e55 ">CHAR </td>
+
+<td valign="top" headers="d112e58 ">* The names of the local grids defined for this
+run, if any. (NLGR = number of local grids)              <p>Note:
+This keyword is not output by ECLIPSE 300.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">LGRVEC</span> </td>
+
+<td valign="top" headers="d112e52 ">NLGR       </td>
+
+<td valign="top" headers="d112e55 ">INTE</td>
+
+<td valign="top" headers="d112e58 "> * The number of summary vectors associated with
+each LGR<p>Note: This keyword is not output by ECLIPSE 300.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">LGRTIMES</span> </td>
+
+<td valign="top" headers="d112e52 "> NLGR </td>
+
+<td valign="top" headers="d112e55 ">INTE</td>
+
+<td valign="top" headers="d112e58 ">* Total number of local ministeps associated with
+each LGR<p>Note: This keyword is not output by ECLIPSE 300.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">RUNTIMEI</span> </td>
+
+<td valign="top" headers="d112e52 ">50       </td>
+
+<td valign="top" headers="d112e55 ">  INTE </td>
+
+<td valign="top" headers="d112e58 ">  ** Integer data used for run-time monitoring <p>Item 1: 2 if the simulation is finished, 1 otherwise</p>
+<p>Item 2:
+initial report number</p>
+<p>Item 3: current report number</p>
+<p>Items
+4 to 9: initial clock date and time as YYYY, MM, DD, HH, MM, SS</p>
+<p>Items 10 to 15: most recent clock date and time as YYYY, MM, DD,
+HH, MM, SS</p>
+<p>Item 35: value assigned to “BASIC” mnemonic in the <span class="keyword">RPTRST</span> keyword</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">RUNTIMED</span> </td>
+
+<td valign="top" headers="d112e52 ">5       </td>
+
+<td valign="top" headers="d112e55 ">DOUB       </td>
+
+<td valign="top" headers="d112e58 ">** Double precision data used for run-time monitoring </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">STEPRESN</span> </td>
+
+<td valign="top" headers="d112e52 ">30       </td>
+
+<td valign="top" headers="d112e55 ">CHAR       </td>
+
+<td valign="top" headers="d112e58 ">* Character mnemonics describing the reasons for
+selecting timestep lengths in the simulation run (corresponding to
+integer values of the summary vector STEPTYPE, see "Simulator performance
+keywords" in the <cite>ECLIPSE Reference Manual</cite>).  </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">XCOORD</span>  </td>
+
+<td valign="top" headers="d112e52 ">NLIST       </td>
+
+<td valign="top" headers="d112e55 ">REAL       </td>
+
+<td valign="top" headers="d112e58 ">Completion coordinates for use with the OFM program <p>Note:
+This keyword is not output by ECLIPSE 300.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "> <span class="keyword">YCOORD</span>   </td>
+
+<td valign="top" headers="d112e52 ">NLIST       </td>
+
+<td valign="top" headers="d112e55 ">REAL       </td>
+
+<td valign="top" headers="d112e58 ">Completion coordinates for use with the OFM program <p>Note:
+This keyword is not output by ECLIPSE 300.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d112e49 "><span class="keyword">TIMESTMP</span> </td>
+
+<td valign="top" headers="d112e52 ">6       </td>
+
+<td valign="top" headers="d112e55 ">INTE  </td>
+
+<td valign="top" headers="d112e58 ">* Integer data to timestamp the summary files
+in the format YYYY, MM, DD, HH, MM, SS. This keyword is optional and
+maybe added or modified by the simulator or post-processing applications. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>After the <span class="keyword">NUMS</span> keyword, the keywords are in
+no particular order.</p>
+
+<p>The naming conventions for identifying data vectors are outlined
+in <a href="summary_Vector_naming_convention.html#summary_vector_naming_convention"> "Vector naming
+convention"</a>.</p>
+
+<p>Keywords marked * are optional, depending on the options used in
+the simulation run. Keywords marked ** are required in ECLIPSE Office.</p>
+
+<p>If an array is present, it must be complete. Data items for which
+no values are defined may be set to zero (or a blank character string).</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Where defaults are used in summary vector specifications in
+ECLIPSE 100 or ECLIPSE 300, any associated <span class="keyword">NUMS</span>, <span class="keyword">NUMLX</span>, <span class="keyword">NUMLY</span> and <span class="keyword">NUMLZ</span> values will be negative, and <span class="keyword">WGNAMES</span> will contain a placeholder string, until they are defined during
+simulation, at which point the correct values will be inserted into
+the correct position in the specification file. NLIST in these cases
+is determined at the start of simulation by the maximum number of
+values permitted by the dimensioning keywords in the dataset. Items
+which are never defined (for instance, if a connection vector is requested
+for all connections in all wells and some wells have more connections
+than others) will contain these placeholder values even when the run
+is complete.</span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

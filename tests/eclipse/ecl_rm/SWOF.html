@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SWOF"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SWOF"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SWOF</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="SWOF"><a name="SWOF"><!-- --></a>
+<h1 class="keyword">SWOF</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="swof.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="swof.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2524e45"> x </th>
+
+<th valign="top" id="d2524e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2524e54"> x </th>
+
+<th valign="top" id="d2524e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2524e45 d2524e54 ">  </td>
+
+<td valign="top" headers="d2524e48 d2524e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2524e45 d2524e54 ">  </td>
+
+<td valign="top" headers="d2524e48 d2524e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2524e45 d2524e54 ">  </td>
+
+<td valign="top" headers="d2524e48 d2524e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2524e45 d2524e54 "> x </td>
+
+<td valign="top" headers="d2524e48 d2524e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2524e45 d2524e54 ">  </td>
+
+<td valign="top" headers="d2524e48 d2524e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2524e45 d2524e54 ">  </td>
+
+<td valign="top" headers="d2524e48 d2524e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2524e45 d2524e54 ">  </td>
+
+<td valign="top" headers="d2524e48 d2524e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2524e45 d2524e54 ">  </td>
+
+<td valign="top" headers="d2524e48 d2524e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">SWOF</span> keyword may be used in runs containing
+both oil and water as active phases, to input tables of water relative
+permeability, oil-in-water relative permeability and water-oil capillary
+pressure as functions of the water saturation. If gas is also an active
+phase in the run, the gas/oil saturation functions must be input with
+either keyword <a href="SGOF.html#SGOF"> SGOF</a> or <a href="SLGOF.html#SLGOF"> SLGOF</a>.</p>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a>  (set in the <span class="keyword">TABDIMS</span> keyword)
+tables of water/oil saturation functions, each terminated by a slash
+(/).</p>
+
+<p>Each table consists of the following columns of data:</p>
+
+<ol>
+<li>The water saturation.<p>Values should be between 0 and 1 and should
+increase monotonically down the column.</p>
+<p>The first value in the
+column is interpreted as the connate water saturation. The last value
+in the column is interpreted as S<sub>w</sub> = 1 - S<sub>or</sub>.</p>
+</li>
+
+<li>The corresponding water relative permeability.<p>Values should
+be between 0 and 1 and should be level or increasing down the column.</p>
+<p>The first value in the column must be 0 (zero).</p>
+</li>
+
+<li>The corresponding oil relative permeability when only oil and
+water are present.<p>Values should be between 0 and 1 and should be
+level or decreasing down the column.</p>
+<p>If gas is also present
+in the run, the first value in the column (that is k<sub>row</sub>  at  <math><msub><mi>S</mi>
+<mi>o</mi></msub><mo>=</mo><msub><mi>S</mi><mrow>
+<mi>o</mi><mi>m</mi><mi>a</mi><mi>x</mi></mrow>
+</msub><mo>=</mo><mn>1</mn><mrow><mo>-</mo><msub>
+<mi>S</mi><mrow><mi>w</mi><mi>c</mi><mi>o</mi>
+</mrow></msub></mrow></math>) must be the same as   k<sub>rowg</sub>  at  S<sub>g</sub> = 0  set in keyword <span class="keyword">SGOF</span> or <span class="keyword">SLGOF</span>. The last value in the column must be
+zero. </p>
+</li>
+
+<li>The corresponding water-oil capillary pressure.<p>Values should
+be level or decreasing down the column.</p>
+<p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+</ol>
+
+<p>Default values (represented by 1*) may be inserted as required
+in columns 2, 3 and 4. When the table is read in, defaults are replaced
+by values computed by linear interpolation.</p>
+
+<p>Each table must contain at least two, and no more than <a href="TABDIMS.html#TABDIMS.NSSFUN"> NSSFUN</a> (set
+in the <span class="keyword">TABDIMS</span> keyword) rows. Each row must be
+complete, containing an entry in every column of the table.</p>
+
+<p>The entire table may be defaulted provided the table is not the
+first. Defaulted tables are replaced with a copy of the previous table.</p>
+
+<p>The keyword families</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">(i)</samp> </td>
+
+<td valign="top"><span class="keyword">SWOF</span>, <a href="SGOF.html#SGOF"> SGOF</a> and <a href="SLGOF.html#SLGOF"> SLGOF</a> </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">(ii)</samp> </td>
+
+<td valign="top"> <a href="SWFN.html#SWFN"> SWFN</a>, <a href="SGFN.html#SGFN"> SGFN</a>, <a href="SGWFN.html#SGWFN"> SGWFN</a>, <a href="SOF2.html#SOF2"> SOF2</a> and <a href="SOF3.html#SOF3"> SOF3</a> </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>provide two alternative formats for inputting the saturation functions.
+Do not mix keywords from the two families in the same run. In gas-water
+runs, or if you are using the ECLIPSE 100 miscible flood or solvent
+options, the saturation functions must be input with keywords from
+family (ii).</p>
+
+<p>For two dimensional tables the following keywords can also be used: <a href="SOF32D.html#SOF32D"> SOF32D</a>, <a href="SGF32D.html#SGF32D"> SGF32D</a>, <a href="SWF32D.html#SWF32D"> SWF32D</a>.</p>
+
+<p>See <a href="../ecl_td/satfunct_Saturation_Functions.html#satfunct_saturation_functions">"Saturation functions"</a> in the <cite>ECLIPSE Technical Description</cite> for more information,
+and a description of the methods used to compute three phase relative
+permeabilities.</p>
+
+<div class="section" id="swof_notes"><a name="swof_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li>The critical saturation for each relative permeability function
+is established by determining the highest saturation in the table
+for which the relative permeability is notionally zero, that is, less
+than a small threshold value. Relative permeability values which are
+lower than this threshold value will be treated as zero. For ECLIPSE
+100 and ECLIPSE 300 the default threshold values are 1.0 x 10<sup>-6</sup>  and 1.0 x 10<sup>-20</sup> respectively. These values may
+be modified using the <a href="TOLCRIT.html#TOLCRIT"> TOLCRIT</a> keyword.<p>ECLIPSE 300</p>
+</li>
+
+<li>When saturation functions are defined using
+keywords from the first keyword family, these are converted internally
+into the equivalent keywords in the second keyword family before any
+consistency checks are performed. Hence any consistency warnings or
+errors will be reported in terms of the second family of keywords.
+For example, if the keywords <span class="keyword">SWOF</span> and <a href="SGOF.html#SGOF"> SGOF</a> are specified, any
+consistency warnings or errors will be reported in terms of the <a href="SWFN.html#SWFN"> SWFN</a>, <a href="SGFN.html#SGFN"> SGFN</a> and <a href="SOF3.html#SOF3"> SOF3</a> keywords.</li>
+
+</ul>
+</div>
+
+<div class="section" id="swof_example"><a name="swof_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTSFUN</samp> = 2 and <samp class="codeph">NSSFUN</samp> = 8:</p>
+ <pre><code>SWOF
+-- Sw      Krw      Krow      Pcow
+    .2200   .0000   1.0000    7.0000
+    .3000   .0700   0.4000    4.0000
+    .4000   .1500   0.1250    3.0000
+    .5000  1*       0.0649    1*
+    .6000   .3300   0.0048    2.0000
+    .8000   .6500   0.0       1.0000
+    .9000   .8300   0.0       1*
+   1.0000  1.0000   0.0        .0000   / table 1
+    .18     .00     1.00      0
+    .32     .07     0.38      0
+    .50     .31     0.05      0
+    .60     .38     0.004     0
+    .80     .57     0.0       0
+   1.00    1.00     0.0       0        / table 2</code></pre> <div class="note"><span class="notetitle">Note:</span> <span class="notebody">Slow run times may result if the relative permeability changes abruptly
+over a small saturation interval, especially if IMPES is used. ECLIPSE
+honors the data input and does not attempt to overcome convergence
+problems by retabulating over equally spaced saturation intervals.
+If chopped relative permeability data is used to minimize dispersion,
+ECLIPSE performs best in fully-implicit mode if the relative permeability
+rises steeply from zero (immobility) rather than from a small value.</span></div>
+ </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

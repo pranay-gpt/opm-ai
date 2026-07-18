@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Examples"/>
+<meta name="DC.subject" content="DYNAMICR"/>
+<meta name="keywords" content="DYNAMICR"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="dynamicr_examples"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Examples</title>
+</head>
+<body>
+
+
+<div class="nested0" id="dynamicr_examples"><a name="dynamicr_examples"><!-- --></a>
+<h1 class="topictitle1">Examples</h1>
+
+
+ <div>
+<p>Only simple right hand conditions have been used here to demonstrate
+the use of the new <span class="keyword">DYNAMICR</span> facilities. For examples
+of more complex conditions, please see the <a href="ACTIONX.html#ACTIONX">  ACTIONX</a> examples.</p>
+
+<div class="section" id="dynamicr.eg1"><a name="dynamicr.eg1"><!-- --></a><h4 class="sectiontitle">Example 1</h4>  <p>This sets
+up a dynamic region family FIPYYY for which region 1 is initially
+identical to region 1of the region family FIPXXX. Region 2 contains
+all those cells which are in either FIPXXX regions 2 or 3. Region
+3 consists of all those grid blocks with block oil in place less than
+or equal to 500,000. Note that any cells which fulfil none of the
+conditions will be in region 1 by default. This dynamic region will
+not be updated.</p>
+ <pre><code>DYNAMICR
+   FIPYYY   1  /
+      "IN" FIPXXX 1 /
+/
+   FIPYYY   2  /
+      "ALL" FIPXXX 2 FIPXXX 3 /
+/
+   FIPYYY   3  /
+       BOIP &lt;= 500000 /
+/ENDDYN</code></pre> </div>
+
+<div class="section" id="dynamicr.eg2"><a name="dynamicr.eg2"><!-- --></a><h4 class="sectiontitle">Example 2</h4>  <p>The dynamic
+region family FIPYYY is set up exactly as in the previous example.
+However, due to being wrapped in an <a href="ACTIONX.html#ACTIONX">  ACTIONX</a> keyword with the <samp class="codeph">ALWAYS</samp> condition, the region numbers for each cell will be recalculated
+every timestep.</p>
+ <pre><code>ACTIONX
+ ACT2 10000 /
+"ALWAYS"/
+/
+
+DYNAMICR
+   FIPYYY   1  /
+      "IN" FIPXXX 1 /
+/
+   FIPYYY   2  /
+      "ALL" FIPXXX 2 FIPXXX 3 /
+/
+   FIPYYY   3  /
+      BOIP &lt;= 500000 /
+/
+ENDDYN
+ENDACTIO</code></pre> </div>
+
+<div class="section" id="dynamicr.eg3"><a name="dynamicr.eg3"><!-- --></a><h4 class="sectiontitle">Example 3</h4> <p>This sets up
+the same dynamic region family FIPYYY as example 1. Then, after a
+time interval of 10, all grid blocks with BOIP less than 400000 are
+added to region 3.</p>
+<p>Note that no other grid blocks will have
+their region values changed at all - any grid block which was previously
+part of region 3 will remain part of it, even if its BOIP value is
+now greater than 400,000. To remove cells which no longer fit the
+condition, the second <span class="keyword">DYNAMICR</span> keyword would have
+to also recompute regions 1 and 2.</p>
+<pre><code>DYNAMICR
+   FIPYYY   1  /
+      "IN" FIPXXX 1 /
+/
+   FIPYYY   2  /
+      "ALL" FIPXXX 2 FIPXXX 3 /
+/
+   FIPYYY   3  /
+      BOIP &lt;= 500000 /
+/
+ENDDYN
+
+TSTEP
+10 /
+
+DYNAMICR
+   FIPYYY   3  /
+      BOIP &lt;= 400000 /
+/
+ENDDYN</code></pre> </div>
+
+<div class="section" id="dynamicr.eg4"><a name="dynamicr.eg4"><!-- --></a><h4 class="sectiontitle">Example 4</h4> <p>These two uses
+of the <span class="keyword">DYNAMICR</span> keyword produce exactly the same
+region values, but the first one is to be greatly preferred as only
+half as many distance calculations are required.</p>
+<p>Dynamic region
+family FIPYYY is set up so that all grid blocks are in region 2 except
+for those which are closer to grid block 3,3,2 than to grid block
+5,5,1.</p>
+<pre><code>DYNAMICR
+   FIPYYY 2/
+      "ALL" /
+/
+FIPYYY 1/
+"DIST_TO_GRIDBLOCK" 3 3 2 &lt;= "DIST_TO_GRIDBLOCK" 5 5 1/
+/
+ENDDYN
+
+DYNAMICR
+FIPYYY 1/
+"DIST_TO_GRIDBLOCK" 3 3 2 &lt;= "DIST_TO_GRIDBLOCK" 5 5 1/
+/
+FIPYYY 2/
+"DIST_TO_GRIDBLOCK" 3 3 2 &gt; "DIST_TO_GRIDBLOCK" 5 5 1/
+/
+ENDDYN</code></pre> </div>
+
+<div class="section" id="dynamicr.eg5"><a name="dynamicr.eg5"><!-- --></a><h4 class="sectiontitle">Example 5</h4> <p>This demonstrates
+the use of the <samp class="codeph">DIST_TO_WELLNAME</samp> mnemonic.</p>
+<p>Dynamic
+region family FIPYYY is set up so that all grid blocks are in region
+2 except for those which are within 10 of the second connection of
+well INJ.</p>
+<p>This will give exactly the same results as using the <samp class="codeph">DIST_TO_GRIDBLOCK</samp> mnemonic with the x,y,z indexes of connection
+2.</p>
+<pre><code>DYNAMICR
+   FIPYYY 2/
+      "ALL" /
+/
+   FIPYYY 1/
+      "DIST_TO_WELLNAME" INJ 2 &lt;= 10 /
+/
+ENDDYN</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

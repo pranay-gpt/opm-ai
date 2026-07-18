@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GASBEGIN"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GASBEGIN"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GASBEGIN</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GASBEGIN"><a name="GASBEGIN"><!-- --></a>
+<h1 class="keyword">GASBEGIN</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gasbegin.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gasbegin.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d770e45"> x </th>
+
+<th valign="top" id="d770e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d770e54"> x </th>
+
+<th valign="top" id="d770e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d770e45 d770e54 ">  </td>
+
+<td valign="top" headers="d770e48 d770e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d770e45 d770e54 ">  </td>
+
+<td valign="top" headers="d770e48 d770e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d770e45 d770e54 ">  </td>
+
+<td valign="top" headers="d770e48 d770e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d770e45 d770e54 ">  </td>
+
+<td valign="top" headers="d770e48 d770e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d770e45 d770e54 ">  </td>
+
+<td valign="top" headers="d770e48 d770e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d770e45 d770e54 ">  </td>
+
+<td valign="top" headers="d770e48 d770e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d770e45 d770e54 ">  </td>
+
+<td valign="top" headers="d770e48 d770e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d770e45 d770e54 "> x </td>
+
+<td valign="top" headers="d770e48 d770e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p> <span class="keyword">GASBEGIN</span> denotes the start of the set of keywords
+to be placed in the annual scheduling file, for use with the gas field
+operations model (see <a href="../ecl_td/gasfieldintro_Gas_Field_Operations_Model.html#gasfieldintro_gas_field_operations_model">"Gas field operations
+model"</a> in the <cite>ECLIPSE Technical Description</cite>).
+This keyword has no associated data.</p>
+
+<p>All keywords entered between the keywords <span class="keyword">GASBEGIN</span> and <a href="GASEND.html#GASEND">  GASEND</a> are
+placed on the Annual Scheduling File. If the <span class="keyword">GASBEGIN</span> - <span class="keyword">GASEND</span> pair are subsequently entered again,
+the contents of the Annual Scheduling file is replaced with the new
+set of intervening keywords. The Annual Scheduling file can be emptied
+by following immediately with <span class="keyword">GASEND</span>.</p>
+
+<div class="section" id="gasbegin_the_annual_scheduling_file"><a name="gasbegin_the_annual_scheduling_file"><!-- --></a><h4 class="sectiontitle">The annual
+scheduling file</h4><p>The annual scheduling file is designed for
+use with the Gas Field Operations Model, to enable the engineer to
+change well controls and request printed reports during the year,
+at times other than the start or end of a contract period.</p>
+<p>The
+keywords <a href="GASYEAR.html#GASYEAR"> GASYEAR</a> and <a href="GASPERIO.html#GASPERIO"> GASPERIO</a> advance the simulation through one or more complete contract years
+or contract periods. Well operations can be performed in the usual
+manner at the end of a contract period, and a printed report is generated
+at the end of each contract period depending on the <a href="RPTSCHED.html#RPTSCHED"> RPTSCHED</a> switches.
+But in order to perform well operations or request printed reports
+during a contract period, an annual scheduling file must be set up.</p>
+<p>To set up an annual scheduling file, enter the keywords defining
+the required operations before the <span class="keyword">GASYEAR</span>  or <span class="keyword">GASPERIO</span> keyword on the input data file, bracketed with
+the keywords <span class="keyword">GASBEGIN</span> and <span class="keyword">GASEND</span>. When ECLIPSE reads the keyword <span class="keyword">GASBEGIN</span>  during
+the simulation, it copies the subsequent keywords up to <span class="keyword">GASEND</span> to a separate file that it sets up automatically. It does not read
+the keyword data and perform the appropriate actions until it reads
+the <span class="keyword">GASYEAR</span> or <span class="keyword">GASPERIO</span>  keyword.
+The keywords in the annual scheduling file is then read and processed
+each year while the simulation is being advanced with the <span class="keyword">GASYEAR</span> or <span class="keyword">GASPERIO</span> keyword. The contents
+of the file are ignored if the simulation is being advanced with a <span class="keyword">DATES</span>, <span class="keyword">TIME</span>  or <span class="keyword">TSTEP</span> keyword.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> Please ensure that the keyword data (but not
+the keyword itself) is indented by at least one space from the left
+hand margin. </span></div>
+<p>When the <span class="keyword">GASYEAR</span> or <span class="keyword">GASPERIO</span> keyword instructs ECLIPSE to advance the simulation
+through a contract year or period, ECLIPSE reads the keyword data
+on the annual scheduling file and performs the required actions at
+the appropriate times. The actions can be requested at the beginning
+of each month named with the keyword <a href="GASMONTH.html#GASMONTH"> GASMONTH</a>. If the contract period is solved in two
+or more passes (to work out the DCQ), the Annual Scheduling file is
+rewound and read from the beginning of the period again at the start
+of each pass.</p>
+<p>Once an Annual Scheduling file has been set up,
+ECLIPSE reads its keywords and perform the required actions during <strong>every</strong> subsequent contract period specified with a <span class="keyword">GASYEAR</span> or <span class="keyword">GASPERIO</span> keyword. Thus if the same actions
+are to be performed every year, the Annual Scheduling file need only
+be set up once. But if the actions must be changed during the simulation,
+a new annual scheduling file must be set up. The new file is set up
+in the same way as before; bracketing the required keywords with <span class="keyword">GASBEGIN</span>  and <a href="GASEND.html#GASEND"> GASEND</a>. The contents of the original file are erased, and replaced
+with the new set of keywords. If no more actions are required, the
+Annual Scheduling file can be emptied by following <span class="keyword">GASBEGIN</span>  immediately with <span class="keyword">GASEND</span>.</p>
+<p>In a restart
+run, the annual scheduling file must be set up again using <span class="keyword">GASBEGIN</span> and <span class="keyword">GASEND</span>; it is <strong>not</strong> automatically carried over in the Restart file. If you forget to
+do this, ECLIPSE issues an error message, as it detects that the base
+run had an Annual Scheduling file but there was no such file in the
+restart run. If you no longer need an Annual Scheduling file in the
+restart run, you must still set up an empty one.</p>
+</div>
+
+<div class="section" id="gasbegin_allowed_keywords_for_the_annual_scheduling_file"><a name="gasbegin_allowed_keywords_for_the_annual_scheduling_file"><!-- --></a><h4 class="sectiontitle">Allowed keywords for the annual scheduling file</h4><p>Only a subset of the ECLIPSE keywords is allowed on the Annual Scheduling
+file. These are:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">   
+<thead align="left">
+<tr>
+<th valign="top" width="33.33333333333333%" id="d770e304">Restriction</th>
+
+<th valign="top" width="33.33333333333333%" id="d770e307">Keyword</th>
+
+<th valign="top" width="33.33333333333333%" id="d770e310">Description</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="BRANPROP.html#BRANPROP">  BRANPROP</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 "> to change branch properties when using the extended network
+model</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">ECLIPSE 100</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="DEBUG.html#DEBUG">  DEBUG</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 "> to change debug switches.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">ECLIPSE 300</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="DEBUG3.html#DEBUG3">  DEBUG3</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 "> to change debug switches.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">Compulsory</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="GASEND.html#GASEND">  GASEND</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 ">to mark the end of the annual scheduling file.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="GASMONTH.html#GASMONTH">  GASMONTH</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 ">to indicate the time of the next set of operations.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="GCONPRI.html#GCONPRI">  GCONPRI</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 "> to change group limits under prioritization group control.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="GCONPROD.html#GCONPROD">  GCONPROD</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 "> to change group limits and group guide rates under guide rate
+group control.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">ECLIPSE 100</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="GCONSUMP.html#GCONSUMP">  GCONSUMP</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 "> to change group gas consumption rates.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">ECLIPSE 300</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="GRUPFUEL.html#GRUPFUEL">  GRUPFUEL</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 "> to change group gas fuel rates.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="GRUPNET.html#GRUPNET">  GRUPNET</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 ">to change the VFP table or ALQ value on network branches, or
+to change the pressure of an existing fixed pressure node.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="GRUPTARG.html#GRUPTARG">  GRUPTARG</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 "> to change individual group rate limits or guide rates.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="GRUPTREE.html#GRUPTREE">  GRUPTREE</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 ">to change the group hierarchy</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="GSATINJE.html#GSATINJE">  GSATINJE</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 "> to change injection rates of satellite groups.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="GSATPROD.html#GSATPROD">  GSATPROD</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 ">to change production rates of satellite groups.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">ECLIPSE 100</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="NCONSUMP.html#NCONSUMP">  NCONSUMP</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 ">to change gas consumption at nodes in the extended network
+model.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="NEXTSTEP.html#NEXTSTEP">  NEXTSTEP</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 ">to limit the length of the next timestep, for example to reduce
+it after some wells have been opened.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="NODEPROP.html#NODEPROP">  NODEPROP</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 ">to change nodal properties in the extended network model.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">ECLIPSE 300</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="RPTPRINT.html#RPTPRINT">  RPTPRINT</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 "> to change switches for printed reports.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">ECLIPSE 100</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="RPTSCHED.html#RPTSCHED">  RPTSCHED</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 "><p> to change switches for printed reports. The following report
+switches will be ignored here:</p>
+<ul>
+<li> '<samp class="codeph">RESTART</samp>' - restart files are only written at
+the end of a contract period </li>
+
+<li> '<samp class="codeph">CPU</samp>' - the timer switch setting must not be
+altered within the annual scheduling file. </li>
+
+</ul>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">ECLIPSE 300</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="TSCRIT.html#TSCRIT">  TSCRIT</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 ">to modify timestepping criteria.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="TUNING.html#TUNING">  TUNING</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 "> to modify tuning parameters, for example maximum step size.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="WEFAC.html#WEFAC">  WEFAC</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 "> to change well efficiency factors.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="WELDEBUG.html#WELDEBUG">  WELDEBUG</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 "> to change well debug switches.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="WELOPEN.html#WELOPEN">  WELOPEN</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 "> to open or close wells or connections.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="WELPRI.html#WELPRI">  WELPRI</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 "> to change well priorities for prioritization group control.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="WELTARG.html#WELTARG">  WELTARG</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 ">to change well operating limits.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%" headers="d770e304 ">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e307 "> <a href="WGRUPCON.html#WGRUPCON">  WGRUPCON</a> </td>
+
+<td valign="top" width="33.33333333333333%" headers="d770e310 "> to change well guide rates for guide rate group control.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+<div class="section" id="gasbegin_example"><a name="gasbegin_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>For a contract
+year beginning on 1<sup>st</sup> September</p>
+<p>Start the set of
+keywords to be placed on the annual scheduling file</p>
+<pre><code>GASBEGIN</code></pre><p>Remove the summer downtime factor on well
+P2</p>
+<pre><code>WEFAC
+ P2 1.0 /
+/</code></pre><p>Set output switches so that only a well report will
+be generated</p>
+<pre><code>RPTSCHED
+ 'WELLS=2'  'SUMMARY=2'  'WELSPECS'  /</code></pre><p>Advance the simulation
+to 1<sup>st</sup> Jan., and request a report</p>
+<pre><code>GASMONTH
+ JAN  YES /</code></pre><p>Advance the simulation to 1<sup>st</sup> June, without a report</p>
+<pre><code>GASMONTH
+ JUN  NO /</code></pre><p>From 1<sup>st</sup> June, impose a summer
+downtime factor on well P2</p>
+<pre><code>WEFAC
+ P2  0.8 /
+/</code></pre><p>Restore pressure and saturation switches for the end
+of contract year report</p>
+<pre><code>RPTSCHED
+ 'PRES'  'SWAT'  'SGAS'  'WELLS=2'  'SUMMARY=2'
+ 'WELSPECS'  </code></pre><p>End the annual scheduling file</p>
+<pre><code>GASEND</code></pre><p>Simulate 3 contract years using this annual
+scheduling file</p>
+<pre><code>GASYEAR
+ 3  100000  ACQ /</code></pre><p>Subsequent years do not have the summer
+downtime factor on well P2, but still require a report on 1<sup>st</sup> January.</p>
+<p>First remove the summer downtime factor imposed in
+the last contract</p>
+<pre><code>WEFAC
+ P2  1.0 /
+/</code></pre><p>Set up a new annual scheduling file with just the
+winter report</p>
+<pre><code>GASBEGIN
+RPTSCHED
+ 'WELLS=2'  'SUMMARY=2'  'WELSPECS'  /
+GASMONTH
+ JAN  YES /
+RPTSCHED
+ 'PRES'  'SWAT'  'SGAS'  'WELLS=2'  'SUMMARY=2'
+ 'WELSPECS'  /
+GASEND</code></pre><p>Simulate 4 more contract years using the new
+annual scheduling file</p>
+<pre><code>GASYEAR
+ 4  1*  ACQ /
+END</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

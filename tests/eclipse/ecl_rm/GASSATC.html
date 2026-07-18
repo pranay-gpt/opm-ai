@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GASSATC"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GASSATC"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GASSATC</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GASSATC"><a name="GASSATC"><!-- --></a>
+<h1 class="keyword">GASSATC</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gassatc.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gassatc.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d792e45"> x </th>
+
+<th valign="top" id="d792e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d792e54"> x </th>
+
+<th valign="top" id="d792e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d792e45 d792e54 ">  </td>
+
+<td valign="top" headers="d792e48 d792e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d792e45 d792e54 ">  </td>
+
+<td valign="top" headers="d792e48 d792e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d792e45 d792e54 ">  </td>
+
+<td valign="top" headers="d792e48 d792e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d792e45 d792e54 ">  </td>
+
+<td valign="top" headers="d792e48 d792e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d792e45 d792e54 ">  </td>
+
+<td valign="top" headers="d792e48 d792e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d792e45 d792e54 "> x </td>
+
+<td valign="top" headers="d792e48 d792e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d792e45 d792e54 ">  </td>
+
+<td valign="top" headers="d792e48 d792e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d792e45 d792e54 ">  </td>
+
+<td valign="top" headers="d792e48 d792e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword should be followed by one real number for every matrix
+grid block, specifying the initial saturated gas concentration in
+the coal. The data field should be terminated by a slash (/).</p>
+
+<p>UNITS: sm<sup>3</sup>/m<sup>3</sup> (<samp class="codeph">METRIC</samp>),
+Mscf/ft<sup>3</sup> (<samp class="codeph">FIELD</samp>), scc/cc (<samp class="codeph">LAB</samp>)</p>
+
+<p>Grid blocks are ordered with the X axis index cycling fastest (from
+1 to <samp class="codeph">NDIVIX</samp>), followed by the Y axis index (from
+1 to <samp class="codeph">NDIVIY</samp>), and finally the Z axis index (from
+1 to <samp class="codeph">NDIVIZ</samp>). <samp class="codeph">NDIVIX</samp>, <samp class="codeph">NDIVIY</samp> and <samp class="codeph">NDIVIZ</samp> are specified in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS">  DIMENS</a>. Repeat counts may be used for repeated values (for example 115*0.22).
+Note that spaces must not be inserted on either side of the asterisk
+(*). Data need only be supplied for the matrix cells, that is the
+upper half of the grid.</p>
+
+<p>In ECLIPSE 100. This information is used to
+scale the Langmuir isotherm, as specified by the <a href="LANGMUIR.html#LANGMUIR">  LANGMUIR</a> keyword,
+at the initial pressure in the reservoir. This is an alternative to
+the <a href="MLANG.html#MLANG">  MLANG</a> keyword,
+which provides scaling of the Langmuir isotherm at the maximum fracture
+pressure entry in each of the <span class="keyword">LANGMUIR</span> tables.
+Both <span class="keyword">GASSATC</span> and <span class="keyword">MLANG</span> are entirely
+optional. If neither of these keywords is present, the information
+provided in the <span class="keyword">LANGMUIR</span> keyword is used without
+any scaling.</p>
+
+<p>In ECLIPSE 300. This information is used to
+scale the Langmuir isotherm, as specified by the <a href="LANGMEXT.html#LANGMEXT">  LANGMEXT</a> or <span class="keyword">LANGMUIR</span> keyword, at the initial pressure and composition
+in the reservoir for one chosen component. The component used is specified
+by the <a href="GASCCMP.html#GASCCMP">  GASCCMP</a> keyword. The same scaling factor is used for all the components.
+For the general case the keyword <a href="GASADEC.html#GASADEC">  GASADEC</a> can be used.</p>
+
+<p>Note that the keyword cannot be used together with <a href="LANGMULT.html#LANGMULT">  LANGMULT</a>, <a href="LANGMULC.html#LANGMULC">  LANGMULC</a> or <span class="keyword">GASADEC</span>.</p>
+
+<p>Only values for coal cells are used. Note that the composition
+(<span class="keyword">YMF</span>) and pressure value of the coal cell is used
+and not the connected pore volume (fracture) composition and pressure.</p>
+
+<div class="section" id="gassatc_example"><a name="gassatc_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NDIVIX=8</samp>, <samp class="codeph">NDIVIY=6</samp>, <samp class="codeph">NDIVIZ=10</samp> specified in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS"> DIMENS</a>:</p>
+<pre><code>GASSATC
+ 48*89.1 48*87.3 48*85.1 48*85.0 48*85.0 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

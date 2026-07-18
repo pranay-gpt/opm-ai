@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="LYFIN"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="LYFIN"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>LYFIN</title>
+</head>
+<body>
+
+
+<div class="nested0" id="LYFIN"><a name="LYFIN"><!-- --></a>
+<h1 class="keyword">LYFIN</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="lyfin.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="lyfin.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1344e45"> x </th>
+
+<th valign="top" id="d1344e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1344e54"> x </th>
+
+<th valign="top" id="d1344e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1344e45 d1344e54 ">  </td>
+
+<td valign="top" headers="d1344e48 d1344e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1344e45 d1344e54 "> x </td>
+
+<td valign="top" headers="d1344e48 d1344e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1344e45 d1344e54 ">  </td>
+
+<td valign="top" headers="d1344e48 d1344e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1344e45 d1344e54 ">  </td>
+
+<td valign="top" headers="d1344e48 d1344e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1344e45 d1344e54 ">  </td>
+
+<td valign="top" headers="d1344e48 d1344e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1344e45 d1344e54 ">  </td>
+
+<td valign="top" headers="d1344e48 d1344e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1344e45 d1344e54 ">  </td>
+
+<td valign="top" headers="d1344e48 d1344e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1344e45 d1344e54 ">  </td>
+
+<td valign="top" headers="d1344e48 d1344e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">LYFIN</span> keyword can be used to generate a logarithmic
+assignment of the number of LGR cells between the host global grid
+cells, and logarithmic sizing of the LGR cells within each global
+grid host cell, in the y-direction. The keyword should be placed after
+the keyword <a href="CARFIN.html#CARFIN"> CARFIN</a> introducing the local grid, and before the local grid data is terminated
+with <a href="ENDFIN.html#ENDFIN"> ENDFIN</a>. </p>
+
+<p>The keyword should be followed by some or all of the following
+items, which define the central cell (fracture) thickness in the y-direction
+and the method used to calculate relative cell sizes for LGR cells
+in each global host cell. The data record should be terminated by
+a slash (/).</p>
+
+<ol>
+<li>Central cell thickness.<p>UNITS: m (<samp class="codeph">METRIC</samp>),
+ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 1.0 (all unit sets)</p>
+</li>
+
+<li>Option controlling relative sizes of LGR cells within each global
+host cell.
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">LINEAR</samp> </td>
+
+<td valign="top">The LGR cell sizes are calculated to increase logarithmically,
+with the scale factor determined by the central cell thickness and
+the number of LGR cells in the central global host cell.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">UNIFORM</samp> </td>
+
+<td valign="top">The LGR cell sizes are the same within each global host cell,
+with the exception of the central LGR cell which has thickness determined
+by item 1.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+                <p>DEFAULT: <samp class="codeph">LINEAR</samp> </p>
+</li>
+
+</ol>
+
+<p><span class="keyword">LYFIN</span> can only be used in local grids with an
+odd number of cells in the y-direction. In addition, the algorithm
+requires that the central global host cell contains at least three
+LGR cells and all other global host cells contain at least one LGR
+cell. The minimum number of LGR cells in the y-direction is therefore
+ J2-J1+3. In order to generate an LGR which doesn't have outer cells
+where global host cells contain only one LGR cell in the y-direction,
+it is 2*(J2-J1)+3.</p>
+
+<p>If it is possible to generate a grid where no global grid host
+cell only contains one LGR cell (i.e. at least 2*(J2-J1)+3), this
+is done. If it is not possible, the same algorithm is used but with
+the number of LGR cells in the outer global host cells set to 1.</p>
+
+<p>In ECLIPSE, it is not possible to have an LGR cell which overlaps
+a boundary between global grid cells. The algorithm for assigning
+the number of LGR cells in each global grid host cell is therefore
+an integer algorithm and, especially for small numbers of LGR cells
+per host cell, it may not produce smoothly increasing LGR cell sizes.
+The relative sizes of the global grid host cells is not considered
+in determining how many LGR cells each will contain.</p>
+
+<p>To determine the logarithmic growth factor, the specified central
+cell thickness is compared with DY for the central global host cell.
+This factor is then used for the entire LGR. The global grid geometry
+must therefore be defined before a local grid using <span class="keyword">LYFIN</span> is specified.</p>
+
+<p><span class="keyword">LYFIN</span> does not apply to radial refinements introduced
+with <a href="RADFIN.html#RADFIN"> RADFIN</a>, and
+cannot be used in a nested LGR, an LGR which spans an even number
+of global grid cells in the y-direction, or in the same LGR as either <a href="NYFIN.html#NYFIN"> NYFIN</a> or <a href="HYFIN.html#HYFIN"> HYFIN</a>.</p>
+
+<p>ECLIPSE will output its internally calculated values  for equivalent <span class="keyword">NYFIN</span> and <span class="keyword">HYFIN</span> keywords in the PRT
+file. To make minor adjustments to the cell sizes, edit the values
+and use the modified keywords to replace <span class="keyword">LYFIN</span> in
+the data file.   </p>
+
+<p>Local grid refinement is described in <a href="../ecl_td/lgrc_Local_Grid_Refinement_and_Coarsening.html#lgrc_local_grid_refinement_and_coarsening">"Local grid refinement
+and coarsening"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<div class="section" id="lyfin_example"><a name="lyfin_example"><!-- --></a><h4 class="sectiontitle">Example</h4>               
+ <pre><code>CARFIN
+-- NAME   I1 I2  J1 J2 K1 K2 NX NY NZ
+   LGR2   3  4   1  3  5  6  2 15  4 /
+--Three global cells in y-direction to become 15 local cells
+--Eclipse will determine how many are in each of the three global cells
+--Cell sizes will increase logarithmically within each global cell
+LYFIN
+ 1.5 LINEAR /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Standard gravity drainage model (GRAVDR)"/>
+<meta name="DC.subject" content="Grid and reservoir modeling, Dual porosity, Gravity drainage"/>
+<meta name="keywords" content="Grid and reservoir modeling, Dual porosity, Gravity drainage"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="dualporo_standard_gravity_drainage_model__gravdr_"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Standard gravity drainage model (GRAVDR)</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="dualporo_standard_gravity_drainage_model__gravdr_"><a name="dualporo_standard_gravity_drainage_model__gravdr_"><!-- --></a>
+<h1 class="topictitle1">Standard gravity drainage model (GRAVDR)</h1>
+
+
+ <div>
+<p>The illustration shows a typical block of matrix material containing
+oil and water. The fractional height of the water table in the fracture
+is  <math><msub><mi>X</mi>
+<mi>W</mi></msub></math>  and the fractional height of the
+water displacement front in the block of matrix material is  <math><msub><mi>X</mi>
+<mi>w</mi></msub></math>.</p>
+
+<div class="fignone" id="blockmatrix_oil_water"><a name="blockmatrix_oil_water"><!-- --></a>
+
+ <br/><img src="../img/dualporosity4.png" width="364px"/><br/> <br/><span class="figcap">
+           Figure 78.1  A typical block of matrix material containing oil and water</span></div>
+
+<p>The pressure difference due to gravity alone is</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.00c9"/>
+ <math><mrow><mi>Δ</mi>
+<mi>P</mi></mrow><mo>=</mo><mrow><mi>D</mi><msub>
+<mi>Z</mi><mrow><mi>m</mi><mi>a</mi><mi>t</mi>
+</mrow></msub><mo>(</mo><msub><mi>X</mi><mi>W</mi>
+</msub><mrow><mo>-</mo><msub><mi>X</mi><mi>w</mi>
+</msub></mrow><mo>)</mo><mo>(</mo><msub><mi>ρ</mi>
+<mi>w</mi></msub><mrow><mo>-</mo><msub><mi>ρ</mi>
+<mi>o</mi></msub></mrow><mo>)</mo><mi>g</mi></mrow>
+</math> 
+</td><td align="right">[Eq. 78.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>ρ</mi>
+<mi>w</mi></msub></math> </td>
+
+<td valign="top"> is the density of water</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>ρ</mi>
+<mi>o</mi></msub></math> </td>
+
+<td valign="top"> is the density of oil at reservoir conditions.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p> <samp class="codeph">DZ</samp> <sub>mat</sub> is the same as l<sub>z</sub> in
+Kazemi's formula.</p>
+
+<p>Integrating  <math><mrow><mi>Δ</mi>
+<mi>P</mi></mrow></math> over all blocks of matrix material
+within a reservoir simulation cell leads to the same formula for  <math><mrow><mi>Δ</mi>
+<mi>P</mi></mrow></math>, except that it now represents the
+gravitational pressure difference between reservoir simulation fracture
+and matrix cells, and  <math><msub><mi>X</mi>
+<mi>W</mi></msub></math>  and  <math><msub>
+<mi>X</mi><mi>w</mi></msub></math>  are the partial volumes
+of mobile water in the simulation fracture and matrix cells. In ECLIPSE,
+the effect is modeled by introducing additional pseudo capillary pressures,
+ <math><msub><mi>P</mi>
+<mi>S</mi></msub></math> </p>
+
+<p>              <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>S</mi><mi>c</mi><mi>o</mi>
+<mi>w</mi></mrow></msub><mo>=</mo><msub><mrow><mtext>DZ</mtext></mrow><mrow><mi>m</mi><mi>a</mi><mi>t</mi>
+</mrow></msub><mo>⋅</mo><mrow><msub><mrow><mi>X</mi>
+</mrow><mrow><mi>W</mi></mrow></msub><mrow><mo>(</mo>
+<msub><mrow><mi>ρ</mi></mrow><mrow><mi>o</mi>
+</mrow></msub><mrow><mo>-</mo><msub><mrow><mi>ρ</mi>
+</mrow><mrow><mi>w</mi></mrow></msub></mrow><mo>)</mo>
+</mrow><mi>g</mi></mrow></mrow></math> (fracture cells)</p>
+
+<p>              <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>S</mi><mi>c</mi><mi>o</mi>
+<mi>w</mi></mrow></msub><mo>=</mo><msub><mrow><mtext>DZ</mtext></mrow><mrow><mi>m</mi><mi>a</mi><mi>t</mi>
+</mrow></msub><mo>⋅</mo><mrow><msub><mrow><mi>X</mi>
+</mrow><mrow><mi>w</mi></mrow></msub><mrow><mo>(</mo>
+<msub><mrow><mi>ρ</mi></mrow><mrow><mi>o</mi>
+</mrow></msub><mrow><mo>-</mo><msub><mrow><mi>ρ</mi>
+</mrow><mrow><mi>w</mi></mrow></msub></mrow><mo>)</mo>
+</mrow><mi>g</mi></mrow></mrow></math> (matrix cells)</p>
+
+<p>              <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>S</mi><mi>c</mi><mi>o</mi>
+<mi>g</mi></mrow></msub><mo>=</mo><msub><mrow><mtext>DZ</mtext></mrow><mrow><mi>m</mi><mi>a</mi><mi>t</mi>
+</mrow></msub><mo>⋅</mo><mrow><msub><mrow><mi>X</mi>
+</mrow><mrow><mi>G</mi></mrow></msub><mrow><mo>(</mo>
+<msub><mrow><mi>ρ</mi></mrow><mrow><mi>o</mi>
+</mrow></msub><mrow><mo>-</mo><msub><mrow><mi>ρ</mi>
+</mrow><mrow><mi>g</mi></mrow></msub></mrow><mo>)</mo>
+</mrow><mi>g</mi></mrow></mrow></math> (fracture cells)</p>
+
+<p>              <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>S</mi><mi>c</mi><mi>o</mi>
+<mi>g</mi></mrow></msub><mo>=</mo><msub><mrow><mtext>DZ</mtext></mrow><mrow><mi>m</mi><mi>a</mi><mi>t</mi>
+</mrow></msub><mo>⋅</mo><mrow><msub><mrow><mi>X</mi>
+</mrow><mrow><mi>g</mi></mrow></msub><mrow><mo>(</mo>
+<msub><mrow><mi>ρ</mi></mrow><mrow><mi>o</mi>
+</mrow></msub><mrow><mo>-</mo><msub><mrow><mi>ρ</mi>
+</mrow><mrow><mi>g</mi></mrow></msub></mrow><mo>)</mo>
+</mrow><mi>g</mi></mrow></mrow></math> (matrix cells)</p>
+
+<p>              <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>S</mi><mi>c</mi><mi>w</mi>
+<mi>g</mi></mrow></msub><mo>=</mo><msub><mrow><mtext>DZ</mtext></mrow><mrow><mi>m</mi><mi>a</mi><mi>t</mi>
+</mrow></msub><mo>⋅</mo><mrow><msub><mrow><mi>X</mi>
+</mrow><mrow><mi>G</mi></mrow></msub><mrow><mo>(</mo>
+<msub><mrow><mi>ρ</mi></mrow><mrow><mi>w</mi>
+</mrow></msub><mrow><mo>-</mo><msub><mrow><mi>ρ</mi>
+</mrow><mrow><mi>g</mi></mrow></msub></mrow><mo>)</mo>
+</mrow><mi>g</mi></mrow></mrow></math> (fracture cells)</p>
+
+<p>              <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>S</mi><mi>c</mi><mi>w</mi>
+<mi>g</mi></mrow></msub><mo>=</mo><msub><mrow><mtext>DZ</mtext></mrow><mrow><mi>m</mi><mi>a</mi><mi>t</mi>
+</mrow></msub><mo>⋅</mo><mrow><msub><mrow><mi>X</mi>
+</mrow><mrow><mi>g</mi></mrow></msub><mrow><mo>(</mo>
+<msub><mrow><mi>ρ</mi></mrow><mrow><mi>w</mi>
+</mrow></msub><mrow><mo>-</mo><msub><mrow><mi>ρ</mi>
+</mrow><mrow><mi>g</mi></mrow></msub></mrow><mo>)</mo>
+</mrow><mi>g</mi></mrow></mrow></math> (matrix cells)</p>
+
+<p>Thus, the flow of oil and gas from a fracture to a matrix cell
+in a gas oil system is computed as</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.00e8"/>
+ <math><mrow><mtable>
+<mtr><mtd><msub><mrow><mi>F</mi></mrow><mrow><mi>g</mi><mo>⁢</mo><mo>=</mo><mtext> </mtext><mstyle><mrow><mstyle><mrow>
+<mstyle><mrow><mi>T</mi><mi>R</mi>
+<mo>⋅</mo><mi>G</mi><mi>M</mi><mi>O</mi><mi>B</mi>
+</mrow></mstyle></mrow></mstyle></mrow></mstyle><mo>×</mo></mrow></msub><mo>(</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>o</mi><mi>f</mi></mrow></msub>
+<mrow><mo>-</mo><msub><mrow><mi>P</mi></mrow><mrow>
+<mi>o</mi><mi>m</mi></mrow></msub></mrow><mo>+</mo>
+<mrow><msub><mrow><mi>d</mi></mrow><mrow><mi>f</mi>
+<mi>m</mi></mrow></msub><msub><mrow><mi>ρ</mi>
+</mrow><mrow><mi>g</mi></mrow></msub><mi>g</mi></mrow>
+<mo>+</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>g</mi><mi>f</mi></mrow></msub>
+<mrow><mo>-</mo><msub><mrow><mi>P</mi></mrow><mrow>
+<mi>c</mi><mi>o</mi><mi>g</mi><mi>m</mi></mrow>
+</msub></mrow><mo>+</mo><mfrac><mrow><msub><mrow>
+<mtext>DZ</mtext></mrow><mrow><mi>m</mi><mi>a</mi><mi>t</mi></mrow></msub><mo>(</mo><msub><mrow><mi>X</mi>
+</mrow><mrow><mi>G</mi></mrow></msub><mrow><mo>-</mo>
+<msub><mrow><mi>X</mi></mrow><mrow><mi>g</mi></mrow>
+</msub></mrow><mo>)</mo><mo>(</mo><msub><mrow><mi>ρ</mi></mrow><mrow><mi>o</mi></mrow></msub><mrow>
+<mo>-</mo><msub><mrow><mi>ρ</mi></mrow><mrow><mi>g</mi></mrow></msub></mrow><mo>)</mo><mi>g</mi>
+</mrow><mrow><mn>2</mn></mrow></mfrac><mo>)</mo></mtd>
+</mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 78.2]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.00e8b"/>
+ <math><mrow><mtable>
+<mtr><mtd><msub><mrow><mi>F</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>=</mo><mstyle>
+<mrow><mtext>TR</mtext></mrow></mstyle><mo>⋅</mo><mrow>
+<mstyle><mrow><mtext>OMOB</mtext></mrow>
+</mstyle><mo>(</mo><msub><mrow><mi>P</mi></mrow><mrow>
+<mi>o</mi><mi>f</mi></mrow></msub><mrow><mo>-</mo>
+<msub><mrow><mi>P</mi></mrow><mrow><mi>o</mi><mi>m</mi></mrow></msub></mrow><mo>+</mo><mrow><msub>
+<mrow><mi>d</mi></mrow><mrow><mi>f</mi><mi>m</mi>
+</mrow></msub><msub><mrow><mi>ρ</mi></mrow><mrow>
+<mi>o</mi></mrow></msub><mi>g</mi><mo>-</mo><mfrac>
+<mrow><msub><mrow><mtext>DZ</mtext></mrow><mrow><mi>m</mi><mi>a</mi><mi>t</mi></mrow></msub><mo>(</mo>
+<msub><mrow><mi>X</mi></mrow><mrow><mi>G</mi></mrow>
+</msub><mrow><mo>-</mo><msub><mrow><mi>X</mi></mrow>
+<mrow><mi>g</mi></mrow></msub></mrow><mo>)</mo><mo>(</mo><msub><mrow><mi>ρ</mi></mrow><mrow><mi>o</mi></mrow></msub><mrow><mo>-</mo><msub><mrow><mi>ρ</mi></mrow><mrow><mi>g</mi></mrow></msub></mrow>
+<mo>)</mo><mi>g</mi></mrow><mrow><mn>2</mn></mrow>
+</mfrac></mrow><mo>)</mo></mrow></mtd></mtr></mtable>
+</mrow></math> 
+</td><td align="right">[Eq. 78.3]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">TR </td>
+
+<td valign="top">is the transmissibility between the fracture and matrix cells,</td>
+
+</tr>
+
+<tr>
+<td valign="top">GMOB </td>
+
+<td valign="top">is the gas mobility in the (upstream) fracture cell,</td>
+
+</tr>
+
+<tr>
+<td valign="top">OMOB</td>
+
+<td valign="top">is the oil mobility in the (upstream) fracture cell,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>P</mi>
+<mrow><mi>o</mi><mi>f</mi></mrow></msub></math> </td>
+
+<td valign="top"> is the oil phase pressure in the fracture cell,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>P</mi>
+<mrow><mi>o</mi><mi>m</mi></mrow></msub></math> </td>
+
+<td valign="top">is the oil phase pressure in the matrix cell,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>d</mi>
+<mrow><mi>f</mi><mi>m</mi></mrow></msub></math> </td>
+
+<td valign="top"> is the difference in depth between the fracture and matrix
+cells (usually zero),</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>ρ</mi>
+<mi>g</mi></msub></math> </td>
+
+<td valign="top">is the density of gas at reservoir conditions,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>ρ</mi>
+<mi>o</mi></msub></math> </td>
+
+<td valign="top">is the density of oil at reservoir conditions,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>g</mi></math> </td>
+
+<td valign="top">  is the acceleration due to gravity,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>o</mi><mi>g</mi><mi>f</mi>
+</mrow></msub></math> </td>
+
+<td valign="top"> is the capillary pressure of gas in the fracture cell (normally
+zero)</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>o</mi><mi>g</mi><mi>m</mi>
+</mrow></msub></math> </td>
+
+<td valign="top">is the capillary pressure of gas in the matrix cell.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The gravity drainage head  <math><mrow>
+<msub><mtext>DZ</mtext><mrow><mi>m</mi><mi>a</mi><mi>t</mi></mrow></msub><mo>(</mo><msub><mi>X</mi><mi>G</mi></msub><mrow><mo>-</mo><msub><mi>X</mi><mi>g</mi></msub></mrow><mo>)</mo><mo>(</mo><msub><mi>ρ</mi><mi>o</mi></msub><mrow><mo>-</mo><msub><mi>ρ</mi><mi>g</mi></msub></mrow><mo>)</mo><mi>g</mi>
+</mrow></math>  has been split between the two phases.</span></div>
+
+<p>In dual porosity / dual permeability models in which the gravity
+imbibition / drainage mechanism is active, the calculation of the
+initial reservoir state (see <a href="initial_Initializing_the_Study.html#initial_initializing_the_study"> "Initializing the study"</a>) occurs independently of the value
+of <math><mrow><msub>
+<mrow><mi>D</mi><mi>Z</mi></mrow><mrow><mi>m</mi>
+<mi>a</mi><mi>t</mi></mrow></msub></mrow></math> that
+is the reservoir is initialized without regard for the gravity imbibition
+/ drainage forces acting between the matrix and fracture cells. When
+the simulation begins, the gravity imbibition / drainage forces may
+cause fluid movement between matrix cells and their corresponding
+fracture cells due to the different fluid levels in the matrix / fracture
+cells. If the redistribution of fluids causes a significant transient
+when the simulation is started, you can overcome this by activating <a href="../ecl_rm/OPTIONS.html#options.11">item 11</a> of the <span class="keyword">OPTIONS</span> keyword.
+If this switch is activated, the effect is to cause modifications
+to the phase pressures to make the initial solution a true steady
+state. These phase pressure modifications are applied for the duration
+of the run.</p>
+
+<p>ECLIPSE 300 </p>
+
+<p>In ECLIPSE 300, a different value of the  <math><mi>σ</mi>
+</math>  coupling may be specified for gravity drainage by using
+the <a href="../ecl_rm/SIGMAGD.html#SIGMAGD">SIGMAGD</a> keyword. If the values entered with <a href="../ecl_rm/SIGMA.html#SIGMA">SIGMA</a> and <span class="keyword">SIGMAGD</span>, [denoted  <math><mi>σ</mi>
+</math>  and  <math><msub><mi>σ</mi>
+<mrow><mi>g</mi><mi>d</mi></mrow></msub></math>  respectively]
+differ, the program uses an interpolated  <math><mi>σ</mi></math>  value for each phase which depends on the
+relative strengths of the capillary pressure and gravity drainage
+terms:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.Xdualporo.equ.0115"/>
+ <math><mrow><msup><mrow>
+<msub><mrow><mi>σ</mi></mrow><mrow><mi>p</mi>
+</mrow></msub></mrow><mrow><mtext>eff</mtext></mrow>
+</msup><mo>=</mo><msub><mrow><mi>f</mi></mrow><mrow>
+<mi>p</mi></mrow></msub><mo>⋅</mo><mi>σ</mi><mo>+</mo><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub>
+<mrow><mi>f</mi></mrow><mrow><mi>p</mi></mrow></msub>
+</mrow><mo>)</mo><mo>⋅</mo><msub><mrow><mi>σ</mi>
+</mrow><mrow><mi>g</mi><mi>d</mi></mrow></msub></mrow>
+</math> 
+</td><td align="right">[Eq. 78.4]
+              </td></tr></tbody></table>
+<p>where  <math><mi>p</mi></math> =oil, gas, water, and</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.011a"/>
+ <math><mrow><msub><mrow>
+<mi>f</mi></mrow><mrow><mi>p</mi></mrow></msub><mo>=</mo><mfrac><mrow><mrow><mo>|</mo><mo>Δ</mo>
+<msub><mrow><mi>P</mi></mrow><mrow><mi>p</mi></mrow>
+</msub><mo>|</mo></mrow></mrow><mrow><mrow><mo>|</mo>
+<mo>Δ</mo><msub><mrow><mi>P</mi></mrow><mrow>
+<mi>p</mi></mrow></msub><mo>|</mo></mrow><mo>+</mo>
+<mrow><mo>|</mo><mo>Δ</mo><msub><mrow><mi>P</mi>
+</mrow><mrow><mi>p</mi><mi>g</mi><mi>d</mi></mrow>
+</msub><mo>|</mo></mrow></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 78.5]
+              </td></tr></tbody></table>
+<p>              <math><mo>Δ</mo>
+<msub><mi>P</mi><mrow><mi>p</mi><mi>i</mi><mi>j</mi>
+</mrow></msub></math>  is the usual potential difference term
+between two cells  <math><mi>i</mi></math>  and  <math><mi>j</mi></math>:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.0121"/>
+ <math><mrow><mi>Δ</mi><msub><mrow><mi>P</mi>
+</mrow><mrow><mi>p</mi><mi>i</mi><mi>j</mi></mrow>
+</msub><mo>=</mo><msub><mrow><mi>P</mi></mrow><mrow>
+<mi>p</mi><mi>i</mi></mrow></msub><mo>−</mo>
+<msub><mrow><mi>P</mi></mrow><mrow><mi>p</mi><mi>j</mi></mrow></msub><mo>+</mo><msub><mrow><mi>P</mi>
+</mrow><mrow><mi>p</mi><mi>c</mi><mi>i</mi></mrow>
+</msub><mo>−</mo><msub><mrow><mi>P</mi></mrow>
+<mrow><mi>p</mi><mi>c</mi><mi>j</mi></mrow></msub>
+<mo>−</mo><mi>g</mi><msub><mrow><mover><mrow>
+<mi>ρ</mi></mrow><mrow><mo> ¯</mo></mrow>
+</mover></mrow><mrow><mi>p</mi></mrow></msub><mi>Δ</mi><mi>d</mi></mrow></math> 
+</td><td align="right">[Eq. 78.6]
+              </td></tr></tbody></table>
+<p>where  </p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mo>(</mo><msub>
+<mi>P</mi><mrow><mi>p</mi><mi>i</mi></mrow></msub>
+<mo>,</mo><msub><mi>P</mi><mrow><mi>p</mi><mi>j</mi>
+</mrow></msub><mo>)</mo></math> </td>
+
+<td valign="top">are the cell pressures,  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mo>(</mo><msub>
+<mi>P</mi><mrow><mi>p</mi><mi>c</mi><mi>i</mi>
+</mrow></msub><mo>,</mo><msub><mi>P</mi><mrow><mi>p</mi><mi>c</mi><mi>j</mi></mrow></msub><mo>)</mo>
+</math> </td>
+
+<td valign="top"> are the cell capillary pressures,  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><mi>Δ</mi>
+<mi>d</mi></mrow></math> </td>
+
+<td valign="top"> is the height difference between the cells,  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><mi>g</mi>
+</mrow></math> </td>
+
+<td valign="top"> is the acceleration due to gravity</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mover><mrow><mi>ρ</mi></mrow><mrow>
+<mo> ¯</mo></mrow></mover></mrow><mrow><mi>p</mi>
+</mrow></msub></mrow></math> </td>
+
+<td valign="top"> is the saturation weighted average density of phase  <math><mi>p</mi></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mo>Δ</mo>
+<msub><mi>P</mi><mrow><mi>g</mi><mi>d</mi></mrow>
+</msub></math> </td>
+
+<td valign="top">is the gravity drainage term, which depends on the phase:</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.012d"/>
+ <math><mrow><mi>Δ</mi><msub><mrow><mi>P</mi>
+</mrow><mrow><mi>o</mi></mrow></msub><mo>=</mo><mrow>
+<mo>-</mo><mrow><mfrac><mrow><mn>1</mn></mrow><mrow>
+<mn>2</mn></mrow></mfrac><mo>(</mo><mo>Δ</mo>
+<msubsup><mrow><mi>P</mi></mrow><mrow><mi>g</mi><mi>d</mi></mrow><mrow><mi>o</mi><mi>g</mi></mrow>
+</msubsup><mo>+</mo><mo>Δ</mo><msubsup><mrow><mi>P</mi></mrow><mrow><mi>g</mi><mi>d</mi></mrow><mrow>
+<mi>o</mi><mi>w</mi></mrow></msubsup><mo>)</mo></mrow>
+</mrow></mrow></math> 
+</td><td align="right">[Eq. 78.7]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.0130"/>
+ <math><mrow><mi>Δ</mi><msub><mrow><mi>P</mi>
+</mrow><mrow><mi>g</mi></mrow></msub><mo>=</mo><mrow>
+<mfrac><mrow><mn>1</mn></mrow><mrow><mn>2</mn></mrow>
+</mfrac><mo>Δ</mo><msubsup><mrow><mi>P</mi></mrow>
+<mrow><mi>g</mi><mi>d</mi></mrow><mrow><mi>o</mi>
+<mi>g</mi></mrow></msubsup></mrow></mrow></math> 
+</td><td align="right">[Eq. 78.8]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.0133"/>
+ <math><mrow><mi>Δ</mi><msub><mrow><mi>P</mi>
+</mrow><mrow><mi>w</mi></mrow></msub><mo>=</mo><mrow>
+<mfrac><mrow><mn>1</mn></mrow><mrow><mn>2</mn></mrow>
+</mfrac><mo>Δ</mo><msubsup><mrow><mi>P</mi></mrow>
+<mrow><mi>g</mi><mi>d</mi></mrow><mrow><mi>o</mi>
+<mi>w</mi></mrow></msubsup></mrow></mrow></math> 
+</td><td align="right">[Eq. 78.9]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.0136"/>
+ <math><mrow><mi>Δ</mi><msubsup><mrow><mi>P</mi>
+</mrow><mrow><mi>g</mi><mi>d</mi></mrow><mrow><mi>o</mi><mi>g</mi></mrow></msubsup><mo>=</mo><mi>g</mi>
+<mo>×</mo><msub><mrow><mi>D</mi><mi>Z</mi>
+</mrow><mrow><mi>m</mi><mi>a</mi><mi>t</mi></mrow>
+</msub><mrow><mo>(</mo><msub><mrow><mover><mrow><mi>ρ</mi></mrow><mrow><mo>−</mo></mrow></mover>
+</mrow><mrow><mi>o</mi></mrow></msub><mo>−</mo>
+<msub><mrow><mover><mrow><mi>ρ</mi></mrow><mrow>
+<mo>−</mo></mrow></mover></mrow><mrow><mi>g</mi>
+</mrow></msub><mo>)</mo></mrow><mrow><mo>(</mo><msub>
+<mrow><mi>X</mi></mrow><mrow><mi>i</mi><mi>g</mi>
+</mrow></msub><mo>−</mo><msub><mrow><mi>X</mi>
+</mrow><mrow><mi>j</mi><mi>g</mi></mrow></msub><mo>)</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 78.10]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.0139"/>
+ <math><mrow><mi>Δ</mi><msubsup><mrow><mi>P</mi>
+</mrow><mrow><mi>g</mi><mi>d</mi></mrow><mrow><mi>o</mi><mi>w</mi></mrow></msubsup><mo>=</mo><mi>g</mi>
+<mo>×</mo><msub><mrow><mi>D</mi><mi>Z</mi>
+</mrow><mrow><mi>m</mi><mi>a</mi><mi>t</mi></mrow>
+</msub><mrow><mo>(</mo><msub><mrow><mover><mrow><mi>ρ</mi></mrow><mrow><mo>−</mo></mrow></mover>
+</mrow><mrow><mi>w</mi></mrow></msub><mo>−</mo>
+<msub><mrow><mover><mrow><mi>ρ</mi></mrow><mrow>
+<mo>−</mo></mrow></mover></mrow><mrow><mi>o</mi>
+</mrow></msub><mo>)</mo></mrow><mrow><mo>(</mo><msub>
+<mrow><mi>X</mi></mrow><mrow><mi>i</mi><mi>w</mi>
+</mrow></msub><mo>−</mo><msub><mrow><mi>X</mi>
+</mrow><mrow><mi>j</mi><mi>w</mi></mrow></msub><mo>)</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 78.11]
+              </td></tr></tbody></table>
+<p>where  <math><msub><mi>X</mi>
+<mi>g</mi></msub></math>  and  <math><msub>
+<mi>X</mi><mi>w</mi></msub></math>  are the fractions
+of the cell containing mobile gas and water respectively. These are
+estimated from the cell saturation using a vertical equilibrium model.
+If the gravity drainage term is dominant,  <math><msub>
+<mi>f</mi><mi>p</mi></msub><mo>→</mo><mn>0</mn>
+</math>  and  <math><msub><mi>σ</mi>
+<mtext>eff</mtext></msub><mo>→</mo><msub><mi>σ</mi>
+<mrow><mi>g</mi><mi>d</mi></mrow></msub></math>.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>Note that in ECLIPSE 100, the <span class="keyword">SIGMAGD</span> keyword has a different function, and is used to differentiate oil-gas
+and oil-water mechanisms. See <a href="dualporo_variation_of_the_sigma_factor_with_drainage_process.html#dualporo_variation_of_the_sigma_factor_with_drainage_process"> "Variation of the sigma factor with drainage process"</a>.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

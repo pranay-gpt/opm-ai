@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="VE relative permeabilities and capillary pressures"/>
+<meta name="DC.subject" content="Vertical equilibrium relative permeability and capillary pressure, Vertical equilibrium, Relative permeabilities, Capillary pressures"/>
+<meta name="keywords" content="Vertical equilibrium relative permeability and capillary pressure, Vertical equilibrium, Relative permeabilities, Capillary pressures"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ve_ve_relative_permeabilities_and_capillary_pressures"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>VE relative permeabilities and capillary pressures</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="ve_ve_relative_permeabilities_and_capillary_pressures"><a name="ve_ve_relative_permeabilities_and_capillary_pressures"><!-- --></a>
+<h1 class="topictitle1">VE relative permeabilities and capillary pressures</h1>
+
+
+ <div>
+<p>In the ECLIPSE VE algorithm, the current best solution to the non-linear
+fluid flow equations is held as a set of cell saturations. The current
+contact levels are calculated from the saturations using the models
+for the segregated fluid distributions described in the previous section.
+(The lowest and highest levels, Z<sub>l</sub> and Z<sub>h</sub>, are
+stored as arrays, and will affect the relationship between the saturation
+and current contact values). Once the contact depths have been obtained,
+the relative permeability values over the cell faces and a ‘pseudo
+capillary pressure’ can be evaluated.</p>
+
+<p>These calculations require a knowledge of the cell geometry, obtained
+by an analysis at the start of the run. For each cell a table of fractional
+volumes below each distinct depth is stored, a distinct depth being
+one at which one or more cell corners exist. These fractional volumes
+are obtained using a linear interpolation of the horizontal cross-sectional
+areas of the cell at each distinct depth. A similar table of fractional
+areas below depths is kept for each cell face. With these tables it
+is possible to obtain effective relative permeability values by integration
+over depth, weighting the appropriate relative permeability values
+implied by the saturation distributions in each interval. The different
+depths of block faces are thus correctly accounted for in corner point
+geometry.</p>
+
+<p>The ‘pseudo capillary pressure’ is due to the difference
+in hydrostatic head between two phases, and is a function of the distance
+between the cell center and the current contact depth. In the oil
+water case it is given by:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="ve.equ.0104"/>
+ <math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>o</mi><mi>w</mi></mrow></msub>
+<mo>=</mo><mrow><mi>g</mi><mo>(</mo><msub><mi>ρ</mi>
+<mi>w</mi></msub><mrow><mo>-</mo><msub><mi>ρ</mi>
+<mi>o</mi></msub></mrow><mo>)</mo><mo>(</mo><msub>
+<mi>Z</mi><mrow><mi>o</mi><mi>w</mi><mi>c</mi>
+</mrow></msub><mrow><mo>-</mo><msub><mi>Z</mi><mtext>center</mtext></msub></mrow><mo>)</mo></mrow></math> 
+</td><td align="right">[Eq. 122.1]
+              </td></tr></tbody></table>
+<p>where  </p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>ρ</mi>
+<mi>w</mi></msub></math>  and  <math><msub>
+<mi>ρ</mi><mi>o</mi></msub></math> </td>
+
+<td valign="top"> are the phase densities</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>g</mi></mrow></math> </td>
+
+<td valign="top">is the acceleration due to gravity constant</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Similarly, for the gas phase, the pseudo capillary pressure is
+given by:</p>
+
+<p>              <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>g</mi>
+</mrow></msub><mo>=</mo><mrow><mi>g</mi><mo>(</mo>
+<msub><mrow><mi>ρ</mi></mrow><mrow><mi>o</mi>
+</mrow></msub><mrow><mo>-</mo><msub><mrow><mi>ρ</mi>
+</mrow><mrow><mi>g</mi></mrow></msub></mrow><mo>)</mo>
+<mo>(</mo><msub><mrow><mi>Z</mi></mrow><mrow><mi>g</mi><mi>o</mi><mi>c</mi></mrow></msub><mrow><mo>-</mo><msub><mrow><mi>Z</mi></mrow><mrow><mtext>center</mtext>
+</mrow></msub></mrow><mo>)</mo></mrow></mrow></math>         </p>
+
+<p>The densities are calculated at the end of each timestep and then
+held constant over the next timestep. If water is not present in a
+cell, or has a saturation value lower than connate, then the water-oil
+contact Z<sub>owc</sub> is set to the lowest depth in the cell. This
+effectively introduces a cutoff in the pseudo capillary pressure,
+although in cases where this occurs, the water would be immobile.
+In a similar manner, if gas is absent, the contact Z<sub>goc</sub> is set to the top of the cell.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

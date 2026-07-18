@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using the WAG hysteresis option"/>
+<meta name="DC.subject" content="Hysteresis in WAG floods, Using"/>
+<meta name="keywords" content="Hysteresis in WAG floods, Using"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wag_using_the_wag_hysteresis_option"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using the WAG hysteresis option</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wag_using_the_wag_hysteresis_option"><a name="wag_using_the_wag_hysteresis_option"><!-- --></a>
+<h1 class="topictitle1">Using the WAG hysteresis option</h1>
+
+
+ <div>
+<p>The WAG hysteresis model is activated by using the <a href="../ecl_rm/WAGHYSTR.html#WAGHYSTR"> WAGHYSTR</a> keyword. The hysteresis
+option must be enabled in the <span class="keyword">RUNSPEC</span> section by
+specifying the item <samp class="codeph">HYSTER</samp> in the <a href="../ecl_rm/SATOPTS.html#SATOPTS">SATOPTS</a> keyword. The model
+is only available in 3-phase runs.</p>
+
+<p>The <span class="keyword">WAGHYSTR</span> keyword requires a record of data
+for each saturation region (<a href="../ecl_rm/SATNUM.html#SATNUM"> SATNUM</a>). For each region the first data item, Land’s parameter,
+must be specified to describe the imbibition curves. The second data
+item is the reduction factor used to describe the secondary drainage
+curve for the non-wetting phase (gas). The keyword in addition selects
+which models are active, enables the Carlson model to be modified
+to prevent infinite gradients in the imbibition relative permeabilities,
+and controls the threshold for moving from the two-phase model to
+the three-phase model.</p>
+
+<p>The <a href="../ecl_rm/EHYSTR.html#EHYSTR"> EHYSTR</a> keyword can be used alongside the <span class="keyword">WAGHYSTR</span> keyword to control the standard two-phase hysteresis models.</p>
+
+<p>Both the eventual trapped gas saturation (the saturation that would
+be trapped if a water/oil flood continued) and the dynamic trapped
+gas saturation (the saturation deemed to be trapped at a given saturation
+state) can be output to the <samp class="codeph">PRINT</samp>, <samp class="codeph">RESTART</samp> and <samp class="codeph">SUMMARY</samp> files. The <span class="keyword">SGTRAP</span> mnemonic in the <a href="../ecl_rm/RPTSCHED.html#RPTSCHED"> RPTSCHED</a> keyword requests output of both arrays to the Print file.
+The equivalent arrays are output to the <samp class="codeph">RESTART</samp> file
+provided a full (not graphics only) <samp class="codeph"> RESTART </samp> file
+is requested. The <span class="keyword">SUMMARY</span> keywords <span class="keyword">BGTRP</span> and <span class="keyword">BGTPD</span> output grid block values to the <samp class="codeph">SUMMARY</samp> files.</p>
+
+<p>In ECLIPSE 100, <span class="keyword">WAGHYSTR</span> cannot be specified
+in a restart run unless it has been specified in the base run and
+any intermediate restart runs.</p>
+
+<p>In ECLIPSE 300, <span class="keyword">WAGHYSTR</span> can be specified in
+a restart run without having been specified in a previous base or
+restart run. However, this facility should only be used after carefully
+considering the efficacy of such an approach, for example, in situations
+where the restart containing the first <span class="keyword">WAGHYSTR</span> keyword corresponds to the commencement of a WAG injection process,
+this may be an appropriate course of action. However, the results
+for simulations where WAG hysteresis has been modeled from the outset
+will be different from those where WAG hysteresis is commenced at
+some subsequent time thereafter because the hysteretic treatments
+prior to this time will be different. Moreover, the saturation history
+used by the WAG hysteresis model will only have been initiated upon
+the first occurrence of the <span class="keyword">WAGHYSTR</span> keyword. This
+saturation history will also be lost if the <span class="keyword">WAGHYSTR</span> keyword is not specified in all successive restarts following its
+first occurrence.</p>
+
+<p>In ECLIPSE 300, from 2014.1 onwards, an alternative WAG hysteresis
+model is available. This is selected by including the keyword <a href="../ecl_rm/WAGHALT.html#WAGHALT"> WAGHALT</a> in the  <span class="keyword">RUNSPEC</span> section. This alternative model seeks to replicate
+more closely the behavior of the ECLIPSE 100 WAG hysteresis model,
+both in terms of the change in saturation direction decisions and
+in the modeling of conventional hysteresis for those phases not subject
+to WAG hysteresis. The restart records written and read by this alternative
+WAG hysteresis model are not compatible with the default model; if
+the WAG hysteresis model  is changed in a restart run, the previous
+WAG saturation history will not be preserved nor utilized.</p>
+
+<p>It is important to note that the modeling of a WAG injection process
+does not of itself mandate that WAG hysteresis should also be modeled.
+If reservoir core measurements or simulations indicate significant
+hysteretic characteristics, it may be advisable firstly to establish
+which of the conventional or WAG hysteresis effects in the gas and
+or water phases are more significant before deciding which hysteresis
+model to select. Conventional hysteresis can be modeled in conjunction
+with WAG hysteresis and will be applied to the oil phase and also
+the gas and/or water phases (if these are not subject to WAG hysteresis)
+according to the options selected using the <span class="keyword">EHYSTR</span>  keyword.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

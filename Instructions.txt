@@ -1,0 +1,705 @@
+
+Use agentic mode to build this project from scratch! Read 4 section (**GUIDE**) to understand the structure.
+Go through all these files, plan and take longer and build this. UltraThink step by step and implement. /superpowers:brainstorming
+
+
+**GUIDE 1**: { 
+OPM-AI is an AI-assisted reservoir simulation workbench designed for petroleum engineering education. It lowers the barrier to entry by allowing users to describe reservoirs in plain English, which the system converts into simulation decks, runs simulations using the open-source OPM Flow simulator, and provides interactive visual results and educational explanations.
+
+The system integrates Large Language Models (LLMs) for natural language processing, a modular Python codebase for simulation workflow, the OPM Flow engine for core simulation computations and ResInsight for visual generation using API.
+
+```mermaid
+graph TD
+    A[User] --> B[React Web UI]
+    B --> C{Function Selector}
+    C -->|Chat| D [Chat Interface]
+    C -->|Deck Builder| E[Deck Builder]
+    C -->|Run Simulation| F[Simulation Runner]
+    C -->|Results| G[Results Viewer]
+    C -->|Explain| H[Concept Explainer]
+    C -->|Settings| I[Settings]
+    
+    D --> J[LLM Router]
+    E --> K[Deck Builder Engine]
+    F --> L[OPM Flow Runner]
+    G --> M[Results Processor]
+    H --> N[RAG Explainer]
+    I --> O[Configuration Manager]
+    
+    K --> P[Natural Language -> Deck Conversion]
+    K --> Q[Deck Linter]
+    P --> R[Reservoir Description]
+    R --> S[PVT Property Calculator]
+    S --> JINJA[Jinja2 Template Renderer]
+    JINJA --> T[OPM Deck]
+    T --> Q
+    Q --> U[Linted Deck]
+    U --> L
+    L --> V[Simulation Results]
+    V --> M
+    M --> W[KPIs & Plots]
+    W --> G
+    
+    N --> X[Knowledge Base]
+    N --> Y[LLM Explanation]
+    X --> Z[Petroleum Engineering Knowledge]
+    
+    subgraph External Systems
+        AA[OPM Flow Simulator]
+        AB[ResInsight (via rips API)]
+        AC[LLM Providers: Groq/NVIDIA NIM/OpenAI/Custom Api (address and auth key)]
+    end
+    
+    L --> AA
+    M --> AB
+    J --> AC
+    Y --> AC
+```
+
+## Module Descriptions
+
+### 1. `opm_ai.chat` -  Web Interface
+- **Purpose**: Main user interface built with React
+- **Components**:
+  - Sidebar navigation for selecting function (Chat, Results, Deck Builder, Run Simulation, Explain, Settings)
+  - Chat interface with streaming LLM responses
+  - Deck builder with syntax highlighting
+  - Results viewer with KPIs and interactive plots
+  - Settings panel for API keys and configuration
+- **Key Features**:
+  - Theme switching (Dark Void, etc.)
+  - Provider selection (Groq, NVIDIA NIM, OpenAI etc)
+  - Context-aware panels based on selected function
+
+### 2. `opm_ai.builder` - Natural Language to Deck Conversion
+- **Purpose**: Converts plain-English reservoir descriptions into executable OPM deck files
+- **Three-stage pipeline**:
+  1. **LLM Extraction**: Uses Groq to parse description into structured `ReservoirDescription` dataclass and using fixed data (SPE1, SPE9 etc) make .DATA (high accuracy required). Final linter will not use LLM for correction. Need to extract information form manual and preset database as guides.
+  2. **PVT Calculation**: Computes fluid properties using preset database empirical correlations via `resdata`/`resfo`. Ask user option if multiple coorelation available.
+  3. **Template Rendering**: Uses Jinja2 to populate `base.j2` template with reservoir data
+- **Integration**: Automatically runs the linter on generated decks
+- **Key Classes**:
+  - `ReservoirDescription`, `WellSpec`, `FluidSystem` (data models)
+  - `build_deck()`: Main public API
+  - `_llm_extract_parameters()`: LLM-powered parsing
+  - `_populate_pvt()`: PVT property calculation
+  - `_render_template()`: Jinja2 rendering
+
+### 3. `opm_ai.linter` - AI-Powered Deck Validation
+- **Purpose**: Validates OPM decks and provides human-readable feedback
+- **Two-stage pipeline**:
+  1. **Static Rule Engine**: Fast, offline validation using predefined rules (1st priority, will generate most deck using this and reference dataset)
+  2. **LLM Enhancement** (Optional): Adds plain-English explanations and fix suggestions via Groq
+- **Output**: `LintResult` containing:
+  - List of `DeckDiagnostic` objects (keyword, severity, message)
+  - Boolean `is_runnable` flag
+  - Optional LLM-generated summary (comment at top of deck)
+- **Key Features**:
+  - Works offline without API key (rule engine only)
+  - Provides actionable feedback for fixing deck errors
+  - Integrates with builder and runner modules
+
+### 4. `opm_ai.runner` - OPM Flow Execution Engine
+- **Purpose**: Executes OPM Flow simulations and captures results
+- **Key Responsibilities**:
+  - Locates OPM Flow binary (configurable via environment)
+  - Builds command-line arguments (note: omits `--threads` flag due to compatibility issues)
+  - Runs subprocess with timeout handling
+  - Parses OPM output for errors and warnings
+  - Locates output files (`.SMSPEC`, `.UNRST`)
+  - Returns structured `SimulationResult`
+- **Data Models**:
+  - `SimulationJob`: Input parameters (deck path, timeout, etc.)
+  - `SimulationResult`: Output status, files, timing, crash reports
+  - `CrashReport`: Parsed OPM error/warning messages
+
+### 5. `opm_ai.preprocess` - PVT and Property Generation
+- **Purpose**: Computes fluid properties and rock properties for reservoir simulation
+- **Key Components**:
+  - `pvt_builder.py`: Calculates PVT tables from empirical correlations
+  - Uses `resdata` and `resfo` libraries for OPM-compatible output formats
+  - Handles oil-water and oil-water-gas fluid systems
+  - Considers input parameters: API gravity, gas specific gravity, salinity, temperature, pressure
+- **Integration**: Called by builder during deck generation
+
+### 6. `opm_ai.postprocess` - Results Processing and Visualization
+- **Purpose**: Extracts insights from simulation results and generates visualizations
+- **Key Components**:
+  - `resinsight_bridge.py`: Interface to ResInsight via `rips` Python API
+  - `kpi_extractor.py`: Calculates key performance indicators (oil rate, water cut, GOR, etc.)
+  - `plot_engine.py`: Creates interactive Plotly charts for production profiles, pressure maps, etc.
+- **Integration**: Consumes output from runner and feeds results to UI
+
+### 7. `opm_ai.explainer` - Educational RAG System
+- **Purpose**: Provides educational explanations of simulation concepts and results
+- **Status**: Planned (not yet implemented as of current codebase)
+- **Planned Approach**:
+  - Retrieval-Augmented Generation (RAG) pipeline
+  - Vector database for petroleum engineering knowledge base
+  - LLM-generated explanations with citations to textbook material
+  - Context-aware questioning based on simulation results
+
+### 8. `opm_ai.settings` - Configuration Management
+- **Purpose**: Handles application configuration and environment variables
+- **Managed Settings**:
+  - LLM API keys (GROQ_API_KEY, NVIDIA_NIM_API)
+  - OPM Flow binary path
+  - Default models and parameters
+  - UI themes and preferences
+- **Implementation**: Uses `python-dotenv` to load `.env` file
+
+## Data Flow
+
+### Typical User Workflow: Chat → Deck Builder → Simulation → Results
+
+1. **User Input**: User types a reservoir description in the chat interface
+2. **LLM Routing**: Request sent to LLM router which selects appropriate provider
+3. **Deck Building**:
+   - Description sent to builder module
+   - LLM extracts reservoir parameters (dimensions, fluids, wells, etc.)
+   - PVT properties calculated using empirical correlations
+   - Jinja2 template generates OPM deck file
+   - Deck automatically linted for validity
+4. **Simulation Execution**:
+   - Validated deck passed to runner module
+   - OPM Flow executed as subprocess
+   - Output parsed for errors/warnings and file locations
+5. **Result Processing**:
+   - Output files processed by postprocess module
+   - KPIs extracted and plots generated
+   - Results sent back to UI for display
+6. **Optional Explanation**: User can ask "why" questions to trigger explainer module (planned)
+
+### Alternative Workflows
+- **Direct Deck Building**: User can use Deck Builder tab to create decks from descriptions without chat
+- **Linter Only**: User can paste existing deck into linter for validation
+- **Simulation Only**: User can provide deck file directly to runner (give browse button for loading user deck)
+
+## Technology Stack
+
+### Core Technologies
+- **Language**: Python 3.12+
+- **Framework**: React (v1.35.0+) for web UI
+- **LLM Integration**: 
+  - Groq (Llama-3.3-70B-versatile)
+  - NVIDIA NIM (via OpenAI-compatible API)
+  - OpenAI GPT models
+- **Simulation Engine**: 
+  - OPM Flow (open-source reservoir simulator)
+  - ResInsight (visualization via `rips` Python API)
+- **Data Handling**:
+  - Pandas/NumPy for data manipulation
+  - resdata/resfo for OPM file format support
+  - Pydantic for data validation
+- **Templating**: Jinja2 for deck generation
+- **Logging**: Loguru
+- **Environment**: Python-dotenv for configuration management
+
+### AI/ML Components
+- **Language Understanding**: LLMs for natural language to structured data conversion
+- **Retrieval-Augmented Generation**: Planned for educational explainer (using ChromaDB or LlamaIndex)
+- **Rule-Based Validation**: Custom rule engine for deck linting
+
+### Dependencies (from `pyproject.toml`)
+```toml
+dependencies = [
+    "groq>=0.9.0",
+    "openai>=1.0.0",
+    "langchain>=0.2.0",
+    "langchain-community>=0.2.0",
+    "chromadb>=0.5.0",
+    "llama-index>=0.10.0",
+    "tavily-python>=0.3.0",
+    "resdata>=5.0.0",
+    "resfo>=4.4",
+    "rips>=2025.4.0",
+    "pydantic>=2.0.0",
+    "jinja2>=3.1.0",
+    "React>=1.35.0",
+    "pandas>=2.0.0",
+    "numpy>=1.26.0",
+    "plotly>=5.20.0",
+    "matplotlib>=3.8.0",
+    "python-dotenv>=1.0.0",
+    "loguru>=0.7.0",
+]
+```
+
+## Design Decisions and Patterns
+
+### 1. Modular Architecture
+- **Separation of Concerns**: Each major function (building, linting, running, explaining) is encapsulated in its own module
+- **Loose Coupling**: Modules communicate through well-defined data structures (Pydantic models, dataclasses)
+- **High Cohesion**: Each module has a single responsibility
+
+### 2. Pipeline-Based Processing
+- **Builder**: Multi-stage pipeline (LLM data extraction from description → RUNSPEC → GRID → PROPS & PVT calculation → REGIONS → SOLUTION → SUMMARY → SCHEDULE → putting of deck together)
+- **Linter**: Two-stage pipeline (static rules → LLM enhancement)
+- This approach allows for independent development and testing of each stage
+
+### 3. Fault Tolerance
+- **Graceful Degradation**: Linter can operate offline using only rule engine
+- **Error Containment**: Runner never raises exceptions; returns structured error objects
+- **Fallback Mechanisms**: Builder has default parameter generation when LLM unavailable
+
+### 4. Extensibility
+- **Provider Abstraction**: LLM router allows easy addition of new LLM providers
+- **Template System**: Jinja2 templates enable easy modification of deck format
+- **Plugin-Ready**: Clear module boundaries facilitate adding new capabilities
+
+### 5. Educational Focus
+- **Chat-First Interface**: Natural language interaction lowers barrier to entry
+- **Planned Explainer**: RAG system will provide educational context
+- **Visual Results**: Integration with ResInsight provides intuitive 3D visualization
+- **Immediate Feedback**: Real-time linting helps users learn correct syntax
+
+## Deployment
+
+### Local Development
+1. **Prerequisites**:
+   - Docker & Docker Compose (for easy setup)
+   - Ubuntu 22.04/24.04 (for OPM Flow packages)
+   - Groq API key (free tier available)
+2. **Setup**:
+   ```bash
+   git clone --recurse-submodules https://github.com/pranay-gpt/opm-ai.git
+   cd opm-ai
+   cp .env.example .env
+   # Edit .env to add GROQ_API_KEY
+   cd docker && docker compose up --build
+   ```
+3. **Access**: http://localhost:8555
+
+### Production Considerations
+- **Scaling**: React applications are typically single-user; for multi-user deployment consider:
+  - React Community Cloud
+  - Custom authentication layers
+  - Horizontal scaling via container orchestration
+- **Performance**: 
+  - LLM calls are the primary latency factor
+  - Simulation time depends on model complexity and available hardware
+  - Consider caching frequent operations
+- **Security**:
+  - API keys stored in environment variables
+  - Sandboxed execution of OPM Flow (subprocess with timeout)
+  - Input validation and sanitization
+
+## Future Enhancements
+
+Based on the repository roadmap and current implementation:
+
+1. **Educational Explainer (Part 7)**: Implement RAG-based question answering system
+2. **Enhanced Linter**: Expand rule set and improve LLM explanations
+3. **Advanced Visualization**: Add more sophisticated plots and custom dashboard capabilities
+4. **Collaboration Features**: User accounts, project sharing, version control for decks
+5. **Cloud Deployment**: Optimize for cloud deployment scenarios (AWS, Azure, GCP)
+6. **Performance Optimization**: Caching, asynchronous processing, model quantization
+
+## Conclusion
+
+OPM-AI represents a modern approach to petroleum engineering education by combining natural language processing, modular simulation workflow, and educational technologies. Its clean architecture separates concerns while maintaining integration ease, and its focus on usability through chat-driven interaction makes reservoir simulation accessible to learners without requiring mastery of complex simulator syntax.
+
+The system leverages proven open-source technologies (OPM Flow, ResInsight, React) and augmentes them with AI capabilities to create an intuitive learning environment. The modular design ensures maintainability and provides a clear path for future enhancements.
+}
+
+**GUIDE 2**: {Here are the core, operator-style rules for how to call OPM Flow and ResInsight (rips Python API) across different Eclipse deck formats and workflows, distilled from the official manuals and examples.[opm-project]
+ 
+1. General OPM Flow calling rules
+OPM Flow is designed to run Eclipse-style reservoir simulation decks (e.g. black-oil, compositional) via the flow executable.[darts.citg.tudelft]
+1.1 Basic command-line pattern
+•	Single-processor run, default settings:
+flow CASE.DATA
+where CASE.DATA is the Eclipse input deck (RUNSPEC, GRID, PROPS, REGIONS, SOLUTION, SUMMARY, SCHEDULE).[pkirkham.github]
+•	With explicit output directory and restart handling (typical safe pattern):
+flow CASE.DATA --output-dir=RESULTS_CASE --enable-num-threads=8
+The manual documents all flags; common ones include output directory, thread count, restart handling, and verbosity.[opm-project]
+•	MPI / parallel run:
+mpirun -np N flow CASE.DATA
+where N is number of MPI processes; use threads per process via --enable-num-threads to tune performance.[resinsight]
+1.2 Deck compatibility & cleaning rules
+Official guidance for running Eclipse models on Flow:[opm-project]
+•	Only keywords supported by OPM Flow (as listed in the reference manual) will run; unsupported keywords must be removed or replaced with equivalent supported functionality.
+•	Use decks from opm-data and opm-tests as reference for supported syntax and keyword combinations.
+•	For older Eclipse decks, systematically:
+o	Strip unsupported options (e.g. rare vendor-specific keywords).
+o	Convert schedule controls to the supported set (WCONPROD, WCONINJE, etc.).
+o	Ensure units and phases line up with Flow’s RUNSPEC expectations (METRIC, FIELD, SI).[darts.citg.tudelft]
+ 
+2. Rules per drive mechanism & deck “type”
+Flow does not have explicit “drive mechanism modes”; instead, the mechanism is encoded in RUNSPEC + PROPS + SCHEDULE. The way you call Flow is the same, but your validation plots and keywords differ.
+2.1 Depletion / solution gas drive (OIL + dissolved gas)
+Typical Eclipse deck: SPE1/SPE3-style black-oil case.[pkirkham.github]
+•	RUNSPEC: OIL, GAS, kids of black-oil keywords; no aquifer or water influx.
+•	PROPS: Standard PVT (PVTO, PVDG, PVTW) and relperm without aquifer functions.
+•	SCHEDULE: Producers with BHP or rate controls; no injectors.
+Calling Flow:
+•	flow SPE3CASE1.DATA (single-core test).[pkirkham.github]
+•	For performance runs: mpirun -np 8 flow SPE3CASE1.DATA with --enable-num-threads as needed.[resinsight]
+Deck rules:
+•	Make sure SUMMARY section requests primary depletion diagnostics (GOR, BHP, FOPT, FGPT, reservoir pressure).
+•	Avoid compositional-only keywords; stick to the black-oil subset documented in the Flow manual.[opm-project]
+2.2 Gas-cap drive (OIL + gas cap)
+Similar black-oil deck but with initial gas cap and appropriate relperm tables.[darts.citg.tudelft]
+Deck rules:
+•	RUNSPEC includes both oil and gas phases; initial conditions specify gas cap region.
+•	PROPS: Relperm curves must reflect gas cap behavior; gravity terms usually active.
+•	SCHEDULE: Gas production and pressure maintenance must be consistent; BHP controls chosen to keep gas cap realistic.
+Calling Flow:
+•	Same as depletion: flow CASE.DATA or mpirun -np N flow CASE.DATA.[darts.citg.tudelft]
+•	Summary keywords must include gas-cap-sensitive outputs (gas rate, gas-oil contact movements via zonal pressures/contacts).
+2.3 Water-drive (OIL/gas + water)
+Decks that represent aquifer or water influx (edge-drive / bottom-water).[darts.citg.tudelft]
+Deck rules:
+•	RUNSPEC: OIL, GAS, WATER enabled.
+•	PROPS: Aquifer keywords or connection to water influx region (depending on deck style).
+•	SCHEDULE: Injectors or aquifer parameters must be supported; avoid vendor-specific aquifer keywords not documented in Flow.[opm-project]
+Calling Flow:
+•	flow CASE.DATA with summary requests for BHP, water production, field pressure, water cut (FWCT).[pkirkham.github]
+•	For MPI: mpirun -np 8 flow CASE.DATA --output-dir=RESULTS and validate water-drive behavior in ResInsight.[resinsight]
+2.4 Combination drive
+Combination decks mix solution gas, gas cap, and water influx.[darts.citg.tudelft]
+Deck rules:
+•	PROPS must consistently represent both gas and water drives; avoid mixing incompatible aquifer models and capillary entries.
+•	SUMMARY must include combined diagnostics: GOR, FWCT, BHP, reservoir pressure.
+Calling Flow:
+•	Same CLI; focus is on cleaning unsupported keywords and verifying all relevant SUMMARY vectors exist for later plotting.[opm-project]
+2.5 Gravity drainage
+Gravity-dominated decks typically emphasize vertical heterogeneity and high density contrasts.[darts.citg.tudelft]
+Deck rules:
+•	GRID: Fine vertical discretization; gravity terms active.
+•	PROPS: Density differences (oil/gas/water) tuned to highlight gravity segregation.
+•	SCHEDULE: Minimal external drive; results are dominated by gravity segregation and internal GOR behavior.
+Calling Flow:
+•	flow CASE.DATA; then inspect vertical profiles (e.g. layer pressures, saturations) via ResInsight.[resinsight]
+ 
+3. IOR and EOR decks
+These are “one step beyond primary drive”; Flow supports many but not all Eclipse EOR options.[opm-project]
+3.1 IOR (e.g., waterflood)
+Waterflood decks: injectors + producers in black-oil settings.[pkirkham.github]
+Deck rules:
+•	SCHEDULE: WCONINJE, WCONPROD, flood pattern defined in SCHEDULE.
+•	SUMMARY: Request recovery efficiency vectors (FOPT, FOIP, FWIT, etc.).
+Calling Flow:
+•	flow WATERFLOOD.DATA or MPI variant.[pkirkham.github]
+•	Use reference waterflood examples from opm-tests/opm-data to check keyword correctness.[opm-project]
+3.2 EOR (chemical/thermal, miscible)
+Flow supports selected Eclipse EOR features; you must stay inside the documented keyword subset.[opm-project]
+Deck rules:
+•	Only use EOR keywords explicitly listed in the Flow manual; unsupported thermal or chemical keywords must be removed.[opm-project]
+•	Validate PVT and relative permeability tables against EOR modes (miscible, polymer, surfactant, etc.) as described in the reference manual.[opm-project]
+Calling Flow:
+•	Same flow CASE.DATA pattern, but for EOR runs parameters like timesteps, solver tolerances, and controls may need to be tuned as documented in the manual’s EOR chapter.[opm-project]
+ 
+4. ResInsight + OPM Flow integration rules
+ResInsight is the primary post-processing / visualization front-end, and its Python API (rips) lets you automate both Flow runs and result analysis.[github]
+4.1 ResInsight configuration for Flow
+From the official OPM Flow–ResInsight integration guide:[resinsight]
+•	Install OPM Flow (version ≥ 2025.04) following the Flow installation instructions.[resinsight]
+•	In ResInsight preferences:
+o	Path to OPM Flow Executable: set full path to flow (inside WSL on Windows or standard path on Linux).
+o	Use WSL to run OPM Flow: enable if running via WSL; choose correct distribution.
+o	Enable MPI: turn on to run Flow in parallel; specify full path to mpirun.
+o	Default command line settings: define default CLI flags ResInsight passes to Flow (output dir, threads, etc.).
+Once configured, ResInsight can create “OPM Flow jobs” and run simulations directly from the UI, using those defaults, with per-job overrides as needed.[resinsight]
+4.2 ResInsight Python API (rips) usage patterns
+The ResInsight Python API (rips) connects to a running ResInsight instance and automates deck loading, Flow running, and plotting.[youtube][api.resinsight]
+Typical workflow (conceptual, not full code):
+1.	Start ResInsight (manually or via Python):
+o	The ResInsight API can start or attach to an instance; if none is found, it launches one using a configured path.[api.resinsight][youtube]
+2.	Load a case / deck:
+o	Use API calls to import the Eclipse .DATA or result .egrid / .UNRST files into ResInsight.[youtube][github]
+3.	Create an OPM Flow job:
+o	Define the input deck, output directory, MPI/process settings, and default Flow command-line parameters.[youtube][resinsight]
+4.	Run Flow via ResInsight:
+o	The API triggers the job; ResInsight calls flow with the configured executable path and parameters.[youtube][resinsight]
+5.	Extract results:
+o	Use rips to query vectors (e.g. BHP, rates, saturations) and build interactive plots or export time-series to pandas.[api.resinsight][youtube]
+ 
+5. Deck-based test philosophy (datasets)
+The manuals and example repositories recommend testing Flow and ResInsight setups on well-known decks before using your custom models:[opm-project]
+•	SPE3CASE1.DATA: classical black-oil depletion case; simple call flow SPE3CASE1.DATA verifies installation and basic output.[pkirkham.github]
+•	Norne field (NORNE_ATW2013.DATA): realistic waterflood; mpirun -np 8 flow NORNE_ATW2013.DATA tests MPI and complex deck handling.[pkirkham.github]
+•	Additional examples in opm-data/opm-tests cover gas-cap, water-drive, combination-drive, and EOR-style decks; they are used by the project itself for continuous regression testing.[opm-project]
+Running these reference cases and viewing results in ResInsight is the recommended way to verify:
+•	Flow executable and MPI configuration.
+•	ResInsight path-to-flow and default CLI settings.
+•	Your local ResInsight API setup (rips) for loading decks and plotting key drive-mechanism diagnostics.[api.resinsight][youtube][resinsight]
+ 
+If you want, I can next outline very concrete rips Python pseudo-code for: (1) running Flow on a SPE3 depletion deck, (2) running a Norne waterflood job, and (3) auto-generating drive-mechanism-specific plots for each.
+
+}
+
+**GUIDE 3**: {Reservoir Simulator AI - OPM-ai
+Complete Task Breakdown for opm-ai
+The AIM (verbatim from your document): "To create an AI layer on top of open source reservoir simulators that will help academic students, researchers and faculty to understand and teach reservoir simulation in the most efficient and fun way using simple chats. There will be pre and post processing layers/workflow. It should be open source and useable by anyone using GitHub."[1]
+ 
+Stated Goal in Engineering Terms
+You are building opm-ai — a Python-native, open-source module that wraps OPM Flow (physics), ResInsight (visualisation), and a set of LLM APIs (intelligence) into a single chat-driven educational workbench. A user types plain English; the system builds, runs, visualises, and explains a reservoir simulation. No license. No SLB login. One docker compose up.[1]
+ 
+The 8 Parts — Build Order and Full Breakdown
+The parts are ordered by dependency — each builds on the one before it. Parts 1–3 + Part 8 are v1 hard requirements. Parts 4–7 are v1.1 (ship after user feedback).[1]
+ 
+Part 1 — OPM Engine Wrapper (opm_runner)
+What it does: Provides a clean Python API that accepts a deck (file path or string), fires OPM Flow, and returns structured result objects — SimulationJob, SimulationResult, SummaryVector, GridSnapshot. It also catches all OPM crash messages and maps them to human-readable errors.
+Prerequisites & Tools:
+•	python3-opm-simulators Python bindings (direct API, no subprocess needed)[2]
+•	python3-opm-common for binary output reading (.SMSPEC/.UNSMRY/.UNRST)[3]
+•	opm-tests repo cloned as test fixtures — SPE1, SPE9, Norne as known-good decks[4]
+•	Docker (for isolated run environment) + mpi-default-bin for parallel runs[1]
+	
+1. How to achieve it	Define Python dataclasses for SimulationJob and SimulationResult. Use opm-simulators Python bindings to call Flow directly; fall back to subprocess for MPI parallel runs. Map OPM stderr crash lines to a CrashReport(keyword, line, message) object. Validate against 5 SPE test cases from opm-tests.
+2. Human strength	Only you can verify that the runner is passing the correct MPI flags, deck paths, and output directory structure. You alone know which OPM crash messages are fatal vs. warnings. You decide which output summary vectors matter educationally (WOPR, WWCT, BHP, FPR) vs. are noise.
+3. AI capability	Generate all boilerplate: dataclass definitions, file I/O wrappers, subprocess error parsing, unit test scaffolding from SPE1 expected outputs, Docker run command generation.
+4. Collaboration impact	You write the API contract (method signatures + return types) as a 1-page spec. AI writes the full implementation. You review every method that touches deck structure or output parsing — this 2-hour review session is the highest-leverage collaboration point in Part 1.
+
+ 
+Part 2 — AI Deck Linter (opm_linter)
+What it does: Reads any Eclipse/OPM deck and returns a structured LintReport — missing sections, cross-reference errors (well in SCHEDULE not in WELSPECS), physically implausible values, missing / terminators, keyword-section mismatch. An LLM then converts each structured error into plain-English explanation with a suggested fix.
+Prerequisites & Tools:
+•	opm-common keyword schema JSON (authoritative keyword rules)[3]
+•	opm-flow-editor-support diagnostic rules in scripts/ — seed your linter from here, don't start from scratch[5]
+•	opm-flow-editor-support keyword reference Markdown output — seed of your RAG context[5]
+•	Groq API or OpenAI-compatible LLM (for plain-English explanation generation)
+•	opm-tests known-good decks for regression testing
+	
+1. How to achieve it	Port the existing diagnostic rules from opm-flow-editor-support/scripts/ into Python as LintRule functions, each returning LintIssue(severity, section, keyword, line, message). Add 20–30 domain-specific rules that the VS Code extension doesn't have (e.g., WELSPECS AUTO group without GRUPTREE, WCONPROD ORAT with no WCONINJE, negative PERMX values). Chain with an LLM call that formats LintIssue list into readable prose with fixes.
+2. Human strength	This is your single highest-value contribution to the entire project. Only a 6+ year Eclipse/OPM veteran can write the "hidden failure" rules that junior engineers and AI miss — WELSPECS AUTO + no GRUPTREE, inconsistent WELOPEN dates, INCLUDE path depth traps, PVTO/PVDO mismatch with RUNSPEC phases. You encode field-earned expertise as reusable Python functions once; they run forever.
+3. AI capability	Fuzzy keyword matching (WELSPCES → did you mean WELSPECS?). Generating plain-English explanation text for each LintIssue. Auto-generating unit test cases from the opm-tests decks. Suggesting fixes with correct syntax examples.
+4. Collaboration impact	You dictate rules in plain English ("if WELSPECS lists a group as AUTO but there is no GRUPTREE keyword anywhere in the deck, flag it as ERROR"). AI writes the Python rule function. This dictation→code loop is the fastest way to encode 50+ rules — budget a focused 2-day session.
+
+ 
+Part 3 — Description-to-Deck Builder (opm_builder)
+What it does: User types: "10×10×3 grid, one injector one producer, 5-year waterflood, API 35 oil". The system extracts parameters via LLM into a typed ModelSpec JSON, maps it to the closest Jinja2 template, renders a valid deck, auto-lints it, and returns it ready to run.
+Prerequisites & Tools:
+•	opm-tests decks as the base for Jinja2 templates (SPE1 → simple depletion, SPE9 → waterflood patterns)[4]
+•	Jinja2 Python library for parametric deck rendering
+•	LLM function-calling (OpenAI-style tool use) for NL → ModelSpec extraction
+•	Part 2 (Linter) — every generated deck must pass before returning to user
+•	Pydantic for ModelSpec schema validation (hard types prevent hallucination)
+	
+1. How to achieve it	Design 8–12 canonical scenario templates from opm-tests base decks: (1) single-well depletion, (2) 5-spot waterflood, (3) line-drive injector-producer, (4) WAG, (5) pressure buildup test, (6) gas cap expansion, (7) CO2 store (bonus), (8) multilayer heterogeneous. Each is a Jinja2 .DATA template. LLM extracts NL input into a ModelSpec Pydantic object with strict field types. Python renders template → linter validates → return or ask user to clarify.
+2. Human strength	Designing what goes into each template — what constitutes a "canonical waterflood deck" that teaches the right physics? What simplifications are pedagogically correct vs. misleading? What parameters must the user always provide explicitly (rel-perm, PVT) vs. can be defaulted? Only you know where the line is.
+3. AI capability	NL parameter extraction (grid dimensions, fluid API, well count, schedule duration, GOR). Detecting when the user's description is ambiguous and generating the right clarifying question. Suggesting the closest template when input doesn't exactly match any scenario.
+4. Collaboration impact	You write one complete, commented Jinja2 template (the waterflood case) as a reference. AI generates the other 7–11 templates by analogy. You QA each template against its opm-tests reference case — if the rendered deck produces the same results, the template is valid. This QA session is the highest-value human touchpoint.
+
+ 
+Part 4 — Pre-Processing Pipeline (opm_preprocess)
+What it does: Handles all inputs before simulation — PVT table generation from correlation (Standing, Vasquez-Beggs, Al-Marhoun), rel-perm tables from Corey/LET endpoint data, simple grid property mapping, and an AI advisor that recommends the right correlation given a fluid description. Output: ready-to-paste PVTO/PVDO/SWOF/SGOF table blocks.
+Prerequisites & Tools:
+•	numpy, scipy for correlation math
+•	pvtpy or fluids Python libraries (existing PVT correlation implementations)
+•	LLM for correlation recommendation and explanation
+•	opm-common Python API to validate generated PVT tables against OPM's expected format
+	
+1. How to achieve it	Implement each PVT correlation (Standing for solution GOR, Vasquez-Beggs for FVF, Al-Marhoun for undersaturated oil) as a Python function with clear input/output. Implement Corey and LET rel-perm as functions from endpoint Sw, So, Sg + curvature exponents. Build an AI advisor: given user's API gravity + GOR + reservoir temperature + region, LLM picks the best correlation and explains why. Output formatted PVTO/SWOF tables that paste directly into an OPM deck section.
+2. Human strength	Knowing which correlations are appropriate for which geographies and fluid types (Middle East heavy oil vs. North Sea volatile oil vs. Gulf of Mexico condensate). Validating smoothness of generated PVT tables — Bo must be monotonic, Rs must be non-negative. These "does this make physical sense" checks cannot be automated.
+3. AI capability	Correlation recommendation from fluid descriptor. Generating educational explanations of what each PVT parameter controls in the simulation. Spotting outlier values in user-provided lab data before fitting.
+4. Collaboration impact	This is the best module for a junior contributor. You write the API spec and validation rules; AI + juniors implement the correlation math from the original papers; you QA outputs against published worked examples from Ahmed's Reservoir Engineering Handbook.
+
+ 
+Part 5 — Post-Processing & ResInsight Bridge (opm_postprocess)
+What it does: After Flow finishes, this module reads summary and grid output files, extracts KPIs (UR, WCT onset, plateau duration, sweep efficiency), and drives ResInsight via the rips Python API to generate plots and 3D views programmatically. No custom rendering code — ResInsight does all the heavy lifting.
+Prerequisites & Tools:
+•	rips Python package (pip install rips) — ResInsight's gRPC Python client[2]
+•	ResInsight ≥ 2025.04 installed (from Ubuntu PPA)[5]
+•	python3-opm-common for binary output reading (fallback/KPI extraction)
+•	ecl2df (Equinor's Eclipse dataframe library) for summary vector → pandas DataFrame
+	
+1. How to achieve it	Use rips to: load a completed OPM case, trigger summary plots (WOPR, WWCT, BHP), generate 3D saturation/pressure snapshots at user-specified timesteps, export PNG/HTML. Read summary vectors via ecl2df into pandas to compute KPIs. The AI narration module (Part 7) receives these KPIs as structured data and generates the "what happened" explanation.
+2. Human strength	Deciding the canonical plot set that every simulation result should produce. Only a reservoir engineer knows that "recovery efficiency vs. PV injected" is the first plot a waterflood engineer checks — ResInsight won't show this automatically. You define the required KPI list and diagnostic plot set.
+3. AI capability	Generating the "result narrator" text from KPI values — "Your WCT broke through at year 3.2, earlier than expected for this kv/kh ratio. This suggests channelling or high permeability streaks." Suggesting follow-up sensitivity runs.
+4. Collaboration impact	The rips automation scripts for each standard plot type are an excellent AI code-generation task. You describe "open case, plot WOPR vs time, export PNG at 1200×800" — AI writes the rips Python script. You test it against a known Norne or SPE9 result.
+
+ 
+Part 6 — Conversational AI Layer — The Chat Brain (opm_chat)
+What it does: The single user-facing interface. All user interaction flows through here. An agentic LLM router receives the user's message and decides which module to invoke: build a deck → Part 3, lint a deck → Part 2, explain results → Part 7, trigger a visualisation → Part 5. Maintains session state so follow-up questions work correctly ("now increase permeability by 10x and re-run").
+Prerequisites & Tools:
+•	LLM with function-calling: Groq (Llama-3.3-70B, free tier, fast) or OpenAI API
+•	langchain or bare OpenAI function-calling schema for tool routing
+•	React for the chat UI (simple, fast, zero frontend experience needed)
+•	Session state management (in-memory dict, no localStorage — Docker container handles persistence)
+•	All Parts 1–5 must be importable as Python functions with clear signatures
+	
+1. How to achieve it	Define each module function (run_simulation, lint_deck, build_deck, get_kpis, open_resinsight_plot) as an OpenAI-style tool definition with JSON schema. The LLM sees the user message + tool list + session state and picks which tool to call with which parameters. React renders the chat + embedded ResInsight screenshots side by side.
+2. Human strength	Writing the system prompt is your most irreplaceable contribution to this module. A system prompt that captures reservoir engineering domain knowledge — what "reasonable GOR" means, what a WBHP limit of 50 bar implies, what "tight gas" vs "conventional" changes in simulation setup — cannot be written by anyone without field experience. This document is a domain artefact that will outlast the code.
+3. AI capability	Everything else: routing logic, response generation, follow-up question generation, session summarisation, ambiguity detection ("did you mean injector rate or producer rate?"), multi-turn context management.
+4. Collaboration impact	Write the system prompt as a 500–800 word document in plain English describing what opm-ai is, what each tool does, what constitutes a physically valid reservoir model, and how to handle ambiguous requests. This is a 1-day focused writing session and is the single document that determines the intelligence quality of the entire product.
+
+ 
+Part 7 — Educational Explainer & RAG Engine (opm_explainer)
+What it does: Given any simulation result or concept, this module explains it at the user's chosen level — Beginner (plain English, no equations), Intermediate (concepts + equations), Advanced (numerical methods + solver details). It cites real textbook sources using RAG over an embedded knowledge base. It can generate quiz questions, "teaching moments" for professors, and homework problem variations.
+Prerequisites & Tools:
+•	RAG stack: LlamaIndex or LangChain + chromadb (local vector store, no cloud needed)
+•	Knowledge base seeds: opm-flow-editor-support keyword reference Markdown, opm-tests deck comments, open-access SPE papers, Craft & Hawkins excerpts (public domain sections)
+•	LLM (same Groq/OpenAI as Part 6)
+•	opm-tests scenario descriptions as pre-written teaching cases
+	
+1. How to achieve it	Chunk and embed the keyword reference Markdown from opm-flow-editor-support + OPM documentation pages into chromadb. On every "explain" request, retrieve top-5 relevant chunks, pass to LLM with level selector prompt, generate explanation with citations. Add a quiz-generator prompt that takes a simulation scenario and generates 3 multiple-choice questions. Ship the vector DB pre-built in the Docker image so users don't wait for embedding on first run.
+2. Human strength	Curating the knowledge base — which textbook chapters, which SPE papers, which OPM documentation pages are worth embedding. Writing the "teaching moment" templates that transform a KPI result into a classroom exercise. Deciding what a "good" explanation at each level looks like — this requires knowing what students misunderstand most.
+3. AI capability	Generating explanations, analogies, and multi-level breakdowns at scale. Auto-generating quiz questions and homework variations. Adapting explanation depth based on follow-up questions. Summarising a full simulation session into a structured "learning report" the student can save.
+4. Collaboration impact	This module has the highest LinkedIn visibility of all 8 parts. A 30-second screen recording of "Student asks why watercut spiked → gets a Dake-cited, level-3 explanation with quiz questions" is the demo that drives GitHub stars and academic adoption. The collaboration point: you write 5 gold-standard explanation examples (one per scenario type) that become the LLM few-shot examples — these 5 examples calibrate the quality of every explanation thereafter.
+
+ 
+Part 8 — Deployment & GitHub Packaging (docker/, README.md)
+What it does: Makes everything work with git clone && docker compose up. Ships with a React UI, pre-built vector DB, OPM Flow + ResInsight installed in the container, and a quickstart that a student with zero OPM experience can follow in 10 minutes.
+Prerequisites & Tools:
+•	Docker + Docker Compose
+•	Ubuntu 22.04 base image (OPM PPA available)
+•	React (UI)
+•	GitHub Actions for CI (auto-test on push using opm-tests SPE1 case)
+	
+1. How to achieve it	Dockerfile: Ubuntu 22.04 base → add OPM PPA → install libopm-simulators-bin python3-opm-common python3-opm-simulators resinsight → pip install rips React langchain chromadb groq pydantic jinja2 ecl2df. docker-compose.yml: opm-ai service (React on port 8501) + volume mounts for decks and results + env vars for LLM API keys. Pre-build the chromadb vector store in the Docker image.
+2. Human strength	Writing the README — specifically the architecture diagram and the "what can this do" section. You know what confuses a student seeing OPM for the first time. The troubleshooting section (common OPM crash messages + fixes) requires domain knowledge no AI can reliably generate.
+3. AI capability	Generating the Dockerfile, compose config, GitHub Actions CI workflow, and boilerplate documentation. Creating the animated GIF from a screen recording of the demo flow.
+4. Collaboration impact	The GitHub README + a 30-second demo GIF is your #1 LinkedIn asset. A well-written repo with a clear quickstart and real demo drives academic adoption and LinkedIn visibility. Invest a full focused day here.
+
+ 
+Build Order Summary
+Phase 1 — v1 (Ship this first)
+  Part 8 (skeleton repo + Docker)   ← Set up the house first
+  Part 1 (OPM Runner)               ← Prove simulation works
+  Part 2 (Linter)                   ← Your domain expertise encoded
+  Part 3 (Deck Builder)             ← The WOW demo feature
+  Part 8 (README + demo GIF)        ← LinkedIn moment
+
+Phase 2 — v1.1 (After first GitHub feedback)
+  Part 5 (ResInsight Bridge)        ← Visual upgrade
+  Part 6 (Chat UI)                  ← Full conversational experience
+  Part 4 (Pre-Processing)           ← Completeness
+
+Phase 3 — v1.2 (Academic adoption)
+  Part 7 (Educational Explainer)    ← Highest academic value
+
+ 
+Where Your 6+ Years of Field Experience Matters Most
+Ranked by irreplaceability:[1]
+1.	Part 2 Linter rules — only you can encode hidden failure modes from real field experience
+2.	Part 6 System prompt — only you can define what "physically valid" means in reservoir context
+3.	Part 3 Template design — what a "canonical waterflood" should teach
+4.	Part 7 Knowledge base curation — which textbooks, which chapters, which SPE papers
+5.	Part 5 KPI selection — which plots a reservoir engineer actually uses vs. noise
+Everything else — boilerplate code, Docker config, LLM calls, test scaffolding, documentation — is AI territory.[1]
+ 
+Ready to move to Step 3 — where we go task by task and begin actual implementation, starting with Part 8 (repo skeleton + Docker) followed by Part 1 (OPM Runner)?
+⁂
+ 
+1.	AI-res-sim.pdf      
+2.	https://www.youtube.com/watch?v=r1hL1lvwG9c  
+3.	https://opm-project.org/?page_id=245  
+4.	https://github.com/OPM/opm-output  
+5.	https://resinsight.org/opm-flow-integration/opmflowpreferences/index.html   
+}
+
+
+**GUIDE 4** : {Now I have a complete picture of all installed components, their paths, and APIs. Here is the full reference table:
+
+usr is “parallels” and project home directory is “cd opm-ai”
+ 
+OPM + Related Modules on Your Ubuntu — Wrapper Reference
+This is your canonical reference for building opm-ai. Every component installed via the one-liner PPA command is listed below with its exact Ubuntu path, API surface, and a focused wrapper-building description.
+ 
+Core Simulation Engine
+flow (OPM Flow Simulator)
+	
+Binary	/usr/bin/flow
+Config/Data	/usr/share/opm/
+Official link	opm-project.org · GitHub
+
+API surface	CLI: flow DECK.DATA --output-dir=./results; Python: python3-opm-simulators bindings; PYACTION keyword for mid-simulation callbacks
+Fully implicit black-oil reservoir simulator accepting Eclipse-format .DATA decks. Supports CO₂/H₂ storage, thermal, solvent, polymer, WAG. Core physics engine of opm-ai — all simulation calls route here. Python bindings allow direct invocation without subprocess.[opm-project]
+ 
+python3-opm-simulators (Flow Python Bindings)
+	
+Module path	/usr/lib/python3/dist-packages/opm/simulators/
+Import	from opm.simulators import BlackOilSimulator
+Official link	PyPI: opm · GitHub
+
+API surface	BlackOilSimulator(deck, state) → .step(), .run(), .currentTime(), .getCellData()
+Python bindings to run Flow programmatically — no subprocess needed. Exposes simulation stepping, cell-level data access, and schedule control directly from Python. Your opm_runner module's primary interface. Enables PYACTION callbacks mid-simulation.[pypi]
+ 
+Deck Parsing & I/O
+python3-opm-common / opm PyPI package
+	
+Module path	/usr/lib/python3/dist-packages/opm/
+Import	import opm.io
+Official link	PyPI: opm · GitHub · Debian pkg
+
+API surface	opm.io.Parser() → parse .DATA files; opm.io.EclFile() → read .UNRST/.SMSPEC/.INIT; opm.io.Schedule, opm.io.EclipseGrid, opm.io.SummaryState
+The core Eclipse deck parser and binary I/O library. Parses every keyword/section into Python objects. Reads binary output files (restart, summary, init). The foundation of your deck linter and output KPI extractor — every keyword's schema (type, dimensionality, allowed values) lives here.[packages.debian]
+ 
+Visualisation Engine
+resinsight (GUI Application)
+	
+Binary	/usr/bin/ResInsight
+Config	~/.config/Ceetron/ResInsight.ini
+Official link	resinsight.org · GitHub
+
+API surface	GUI (native); gRPC server on port 50051 (when launched with --server); Octave plugin (/usr/share/octave/packages/)
+Open-source 3D reservoir visualisation and post-processing suite. Natively opens OPM Flow output (.EGRID, .UNRST, .SMSPEC). Handles all 3D grids, saturation/pressure maps, well logs, flow diagnostics, DCA, ensemble plots. opm-ai drives it entirely via rips — zero custom rendering needed.[resinsight]
+ 
+rips (ResInsight Python Client)
+	
+Module path	~/.local/lib/python3.x/site-packages/rips/ (pip install)
+Install	pip3 install rips
+Official link	PyPI: rips · API docs · GitHub docs
+
+API surface	rips.Instance.launch() or .find(); .loadCase(path), .plots, .views, .exportSnapshots(), .summaryPlot(), .wellLogPlot(), case.grid(0).cellCount()
+gRPC-based Python client that talks to a running ResInsight instance. Lets opm-ai programmatically load simulation cases, create and export plots (production rates, watercut, BHP, saturation maps), read back cell-level data, and trigger flow diagnostics — all from Python without touching the GUI. Your post-processing bridge.[api.resinsight]
+ 
+Grid Infrastructure
+libopm-grid / opm-grid
+	
+Shared lib	/usr/lib/x86_64-linux-gnu/libopm-grid*.so
+Headers	/usr/include/opm/grid/
+Official link	GitHub
+
+API surface	C++ only: Opm::CpGrid, Opm::PolyhedralGrid; DUNE grid interface; exposed indirectly via opm-simulators Python bindings
+Corner-point and polyhedral grid library — handles SPECGRID/COORD/ZCORN structures. No direct Python API, but defines what grid geometries Flow accepts. Critical reference for your deck builder's grid constraint validation (what NX×NY×NZ combos and fault geometries are physically valid).[opm-project]
+ 
+Editor & Linting Support
+opm-flow-editor-support (VS Code Extension)
+	
+Install	VS Code Marketplace: opm.opm-flow-editor-support
+Scripts path	~/.vscode/extensions/opm.opm-flow-editor-support-*/scripts/
+Official link	GitHub · VS Code Marketplace
+
+API surface	Python scripts/ folder: diagnostic functions, keyword schema JSON; Generate Keyword Reference command → exports full Markdown keyword index
+VS Code extension with Eclipse keyword diagnostics, autocomplete, and hover docs. Its scripts/ Python diagnostic rules are the seed for your opm_linter — port these directly rather than writing from scratch. The Generate Keyword Reference Markdown export is your RAG knowledge base seed for the educational explainer.[opm-project]
+ 
+Test Data & Reference Cases
+opm-tests (Reference Deck Library)
+	
+Clone path	~/opm/opm-tests/ (manual clone)
+Install	git clone https://github.com/OPM/opm-tests
+Official link	GitHub
+
+API surface	Raw .DATA deck files organised by scenario; used as pytest fixtures
+60+ ready-to-run OPM decks covering SPE1–10, Norne, Drogon, CO₂ storage, gas lift, polymer, tracers, MSW, PYACTION. Your Jinja2 template base cases, linter regression test suite, and RAG knowledge base decks all come from here. Clone as a Git submodule into opm-ai.[pypi]
+ 
+Companion Python Libraries (pip install)
+ecl2df
+	
+Install	pip3 install ecl2df
+Official link	PyPI · GitHub: equinor/ecl2df
+
+API surface	ecl2df.summary.df(case, column_keys=["WOPR","WWCT"]) → pandas DataFrame; submodules for grid, pvt, satfunc, rft, wcon
+Equinor's library converting Eclipse binary output directly into pandas DataFrames. Reads .UNSMRY summary vectors, grid properties, PVT tables, saturation functions, and well constraints. Your KPI extraction engine in the post-processor — pipe DataFrames straight to the AI narrator.[pypi]
+ 
+Quick Directory Cheatsheet
+text
+/usr/bin/flow                          ← OPM Flow simulator binary
+/usr/bin/ResInsight                    ← ResInsight GUI binary
+/usr/share/opm/                        ← OPM shared data/config
+/usr/lib/x86_64-linux-gnu/libopm-*.so ← OPM C++ shared libraries
+/usr/include/opm/                      ← OPM C++ headers
+/usr/lib/python3/dist-packages/opm/   ← python3-opm-common + opm-simulators bindings
+~/.local/lib/python3.x/site-packages/rips/   ← rips (pip)
+~/.local/lib/python3.x/site-packages/ecl2df/ ← ecl2df (pip)
+~/.vscode/extensions/opm.opm-flow-editor-support-*/scripts/ ← linter seed rules
+~/opm/opm-tests/                       ← reference decks (manual clone)
+~/.config/Ceetron/ResInsight.ini       ← ResInsight user config
+ 
+This gives you everything you need to write the wrapper layer. The three modules you'll import every single day in opm-ai are opm.io (deck parsing), opm.simulators (run Flow), and rips (drive ResInsight). Everything else feeds into those three.[pypi]
+Ready to move to Step 3 — actual implementation, starting with the repo skeleton and Part 1 OPM Runner wrapper?
+
+}

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PARAOPTS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PARAOPTS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PARAOPTS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="PARAOPTS"><a name="PARAOPTS"><!-- --></a>
+<h1 class="keyword">PARAOPTS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="paraopts.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="paraopts.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1720e45">                         x </th>
+
+<th valign="top" id="d1720e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1720e54"> </th>
+
+<th valign="top" id="d1720e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1720e45 d1720e54 "> </td>
+
+<td valign="top" headers="d1720e48 d1720e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1720e45 d1720e54 ">                         x </td>
+
+<td valign="top" headers="d1720e48 d1720e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1720e45 d1720e54 "> </td>
+
+<td valign="top" headers="d1720e48 d1720e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1720e45 d1720e54 "> </td>
+
+<td valign="top" headers="d1720e48 d1720e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1720e45 d1720e54 "> </td>
+
+<td valign="top" headers="d1720e48 d1720e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1720e45 d1720e54 "> </td>
+
+<td valign="top" headers="d1720e48 d1720e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1720e45 d1720e54 "> </td>
+
+<td valign="top" headers="d1720e48 d1720e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1720e45 d1720e54 "> </td>
+
+<td valign="top" headers="d1720e48 d1720e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword is used to control a number of options that may improve
+performance in parallel runs.</p>
+
+<p>The keyword should be followed by one record. The record contains
+one character string and a number of integers that allow some tuning
+of the parallel domain decomposition option (see <a href="../ecl_td/parallel_Options_to_improve_performance.html#parallel_options_to_improve_performance">"Options to improve
+performance"</a> in the <cite>ECLIPSE Technical Description</cite>). The data should be terminated with a slash (/).</p>
+
+<ol>
+<li>Method used for global reduction operations.<p>Either <samp class="codeph">TREE</samp> or <samp class="codeph">T</samp> caused a hypercube algorithm
+to be used for global sums and maximum operations.</p>
+           
+    <p>Any other character string will cause the data to be collected
+on one processor and the sum computed there.</p>
+ <p>DEFAULT: <samp class="codeph">TREE</samp>                </p>
+             </li>
+
+<li>Determines whether parallel code generates one Print (<span class="keyword">PRT</span>) file for the run or one per slave. The same applies
+to debug (<span class="keyword">DBG</span>), log (<span class="keyword">LOG</span>) and
+message (<span class="keyword">MSG</span>) files. The log file contains output
+that would otherwise be output to the screen on the master process.
+If one file is produced for each type some output from processes other
+than process 1 may be lost.    
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">0</td>
+
+<td valign="top"> produces one file of each stated type. However, if one or
+several slave processes encounter an error or a bug condition, or
+a stop limit imposed by keyword <a href="MESSAGES.html#MESSAGES"> MESSAGES</a>, the files for each process will be created.
+Note that these files may not contain some initial information, in
+which case setting this item to 1 as explained below is still useful.</td>
+
+</tr>
+
+<tr>
+<td valign="top">1</td>
+
+<td valign="top"> produces a file of each stated type for each process. No log
+file is produced for process 1 as this is the output that is sent
+directly to the screen.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: 0</p>
+             </li>
+
+<li>  Sets the size (<strong>in a whole number of Megabytes</strong>) for the
+message passing buffers used in the MPI version.  <p>ECLIPSE 100 will always use at least 10 Megabytes. Therefore,
+values less than 10 will have no effect. Very large values are unlikely
+to improve performance and may cause problems with memory availability.</p>
+                <p>DEFAULT: 0</p>
+</li>
+
+<li>Sets the number of buffers to be used for sending messages in
+the MPI version.<p> ECLIPSE 100 will always use
+at least 2 buffers.</p>
+   <p>DEFAULT: 2 </p>
+             </li>
+
+<li>Values greater than 0 may reduce the memory required for tracer
+calculations. Currently disabled.     <p>DEFAULT: 0</p>
+          
+  </li>
+
+<li>Values greater than 0 cause coarsenings that cross domain boundaries
+to be split, and the cells in the shared plane left uncoarsened. 
+ <p>DEFAULT: 0</p>
+ </li>
+
+<li>Values greater than 0 cause the inlining of NNCs in the outer
+solver direction to be turned off. <p>DEFAULT: 0</p>
+             </li>
+
+<li>Values greater than 0 cause the reports in the PRT file controlled
+by the RPT keywords to be produced. In extreme cases not producing
+these reports may save memory and decrease execution time. <p>DEFAULT: 1</p>
+             </li>
+
+<li>Reserved.</li>
+
+</ol>
+
+<div class="section" id="paraopts_example"><a name="paraopts_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>PARAOPTS
+ 2* 10 3 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

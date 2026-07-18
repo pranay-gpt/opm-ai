@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="DISPERSE"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="DISPERSE"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>DISPERSE</title>
+</head>
+<body>
+
+
+<div class="nested0" id="DISPERSE"><a name="DISPERSE"><!-- --></a>
+<h1 class="keyword">DISPERSE</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="disperse.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="disperse.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d480e45">                         x                   
+  </th>
+
+<th valign="top" id="d480e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d480e54">                                             
+ </th>
+
+<th valign="top" id="d480e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d480e45 d480e54 ">                                             
+ </td>
+
+<td valign="top" headers="d480e48 d480e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d480e45 d480e54 ">                                             
+ </td>
+
+<td valign="top" headers="d480e48 d480e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d480e45 d480e54 ">                                             
+ </td>
+
+<td valign="top" headers="d480e48 d480e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d480e45 d480e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d480e48 d480e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d480e45 d480e54 ">                                             
+ </td>
+
+<td valign="top" headers="d480e48 d480e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d480e45 d480e54 ">                                             
+ </td>
+
+<td valign="top" headers="d480e48 d480e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d480e45 d480e54 ">                                             
+ </td>
+
+<td valign="top" headers="d480e48 d480e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d480e45 d480e54 ">                                             
+ </td>
+
+<td valign="top" headers="d480e48 d480e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data comprises <samp class="codeph">MXDIST</samp> (see item 1 in keyword <a href="DISPDIMS.html#DISPDIMS">  DISPDIMS</a> in the <span class="keyword">RUNSPEC</span> section) tables of dispersion coefficients (see <a href="TRDIS.html#TRDIS"> TRDIS</a>). A single table
+consists of at least 2 and up to <samp class="codeph">MXVVPT</samp> (item 2 in
+keyword <span class="keyword">DISPDIMS</span>) records, each terminated by a
+slash (/). A table is terminated by a null record (that is a record
+with no data before the terminating slash). Most records contain the
+following items of data, terminating with a slash.</p>
+
+<ol>
+<li>Velocity (absolute value)<p>The values must be monotonically increasing.</p>
+<p>UNITS: m/day (<samp class="codeph">METRIC</samp>), ft/day (<samp class="codeph">FIELD</samp>), cm/hr (<samp class="codeph">LAB</samp>)</p>
+</li>
+
+<li>Tracer concentration</li>
+
+<li>Dispersion coefficient.<p>UNITS: m<sup>2</sup>/day (<samp class="codeph">METRIC</samp>), ft<sup>2</sup>/day (<samp class="codeph">FIELD</samp>), cm<sup>2</sup>/hr
+(<samp class="codeph">LAB</samp>)</p>
+</li>
+
+</ol>
+
+<p>The first velocity in the table must be zero.</p>
+
+<p>However, some records (optionally all) contain additional data
+that defines the dispersion coefficient, at a given velocity, as a
+function of tracer concentration. For each velocity the first tracer
+concentration value must always be zero. The additional data takes
+the form of 2 columns which continue from items 2 and 3 above. There
+can only be a maximum of <samp class="codeph">MXCVPV</samp> (item 3 in keyword <samp class="codeph">DISPDIMS</samp>) concentration nodes per velocity node. The concentration
+values must be monotonically increasing.</p>
+
+<div class="section" id="disperse_notes"><a name="disperse_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li>For a brine tracer, item 2 can be replaced with water density
+if the <a href="DSPDEINT.html#DSPDEINT"> DSPDEINT</a> keyword is used.</li>
+
+<li>There is no need for the dispersion coefficient to be monotonically
+increasing or decreasing, and it is perfectly allowable to use constant
+values (two velocity nodes will still be needed). A particularly common
+table will have 2 velocity nodes, both with a zero dispersion coefficient
+to effectively turn off certain terms (see <samp class="codeph">TRDIS</samp>).
+Non-zero constants can be used to enable heterogeneous diffusion.
+If dispersion is only being used to enable a non-homogeneous diffusion
+then the calculations can be significantly speeded up by using the <a href="TRNHD.html#TRNHD"> TRNHD</a> keyword.</li>
+
+</ul>
+</div>
+
+<div class="section" id="disperse_example"><a name="disperse_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>DISPERSE
+   0  0.0  0.000523   
+      1.0  0.000521     /
+  90  0.0  0.000132   
+      1.0  0.000131    /
+ 150  0.0  0.0000877  
+      1.0  0.0000861    /
+ 210  0.0  0.0000554  
+      1.0  0.0000555    /
+ 270  0.0  0.0000417  
+      1.0  0.0000421    /
+ 330  0.0  0.0000357  
+      1.0  0.0000361   /
+ 530  0.0  0.0000356  
+      1.0  0.0000360    /
+ / null record to terminate table 1
+  0   0.0  0.000523     /
+ 120  0.0  0.000132    /
+ 180  0.0  0.0000877    /
+ 240  0.0  0.0000554    /
+ 300  0.0  0.0000417    /
+ 360  0.0  0.000000357    /
+ 560  0.0  0.00356     / No dependence on concentration
+ / null record to terminate table 2</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using the VE option"/>
+<meta name="DC.subject" content="Vertical equilibrium"/>
+<meta name="keywords" content="Vertical equilibrium"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ve_using_the_ve_option"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using the VE option</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ve_using_the_ve_option"><a name="ve_using_the_ve_option"><!-- --></a>
+<h1 class="topictitle1">Using the VE option</h1>
+
+
+ <div>
+<p>The vertical equilibrium option in ECLIPSE 100 is enabled by including
+the keyword <a href="../ecl_rm/VE.html#VE">VE</a> in the <span class="keyword">RUNSPEC</span> section.</p>
+
+<p>There is a set of four keywords (<a href="../ecl_rm/VEFRAC.html#VEFRAC">VEFRAC</a>, <a href="../ecl_rm/VEFRACV.html#VEFRACV">VEFRACV</a>, <a href="../ecl_rm/VEFRACP.html#VEFRACP">VEFRACP</a>, <a href="../ecl_rm/VEFRACPV.html#VEFRACPV">VEFRACPV</a>) which are specific
+to VE. These keywords enable you to specify either dispersed (rock
+curve) or segregated (VE) saturation functions, or a weighted average
+of the two, for calculating relative permeabilities and capillary
+pressures. <span class="keyword">VEFRAC</span> gives the VE relative permeability
+fraction, and <span class="keyword">VEFRACP</span> the VE capillary pressure
+fraction, for the whole field. <span class="keyword">VEFRACV</span> and <span class="keyword">VEFRACPV</span> allow the specification of <span class="keyword">VEFRAC</span> and <span class="keyword">VEFRACP</span> values on a cell-by-cell basis. The
+values of <span class="keyword">VEFRAC</span> and <span class="keyword">VEFRACP</span> should lie in the range 0.0 to 1.0. For example, using the following:</p>
+
+<pre><code>VEFRAC
+ 0.8 /
+VEFRACP
+ 0.8 /</code></pre>
+<p>will specify 80% VE and 20% rock curves for both relative permeability
+and capillary pressure. The default is a <span class="keyword">VEFRAC</span> and <span class="keyword">VEFRACP</span> value of 1.0. If the VE option is
+not required, omit the keyword <span class="keyword">VE</span> from <span class="keyword">RUNSPEC</span>, rather than use a <span class="keyword">VEFRAC</span> value
+of 0.0 everywhere.</p>
+
+<p>If <span class="keyword">VE</span> is specified, and the ninth argument of
+the <a href="../ecl_rm/EQUIL.html#EQUIL">EQUIL</a> keyword data is set to zero, then a method of equilibration
+specific to VE is used, which ensures that the initial contact depths
+are exactly matched by the initial saturations, and which yields a
+static initial solution. If this ninth argument is not zero, then
+a normal ECLIPSE fine grid equilibration is performed using the rock
+curves.</p>
+
+<p>The latter method is only likely to be useful if a non-default <span class="keyword">VEFRAC</span> value is used; for a pure VE run, the former option
+is best.</p>
+
+<p>To obtain a printed output of the contact depths at each report
+step, use the arguments <span class="keyword">OWC</span> and/or <span class="keyword">GOC</span> in the <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a> keyword. These control the output of the oil water and gas
+oil contact depths respectively.</p>
+
+<p>The vertical equilibrium option cannot be used in combination with
+the Hysteresis option in the same run.</p>
+
+<p>The endpoint scaling option/initial mobile fluid end point correction
+should not be used with the vertical equilibrium option.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WWPAVE"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WWPAVE"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WWPAVE</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WWPAVE"><a name="WWPAVE"><!-- --></a>
+<h1 class="keyword">WWPAVE</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wwpave.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wwpave.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d3116e45"> x </th>
+
+<th valign="top" id="d3116e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d3116e54"> x </th>
+
+<th valign="top" id="d3116e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d3116e45 d3116e54 ">  </td>
+
+<td valign="top" headers="d3116e48 d3116e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3116e45 d3116e54 ">  </td>
+
+<td valign="top" headers="d3116e48 d3116e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3116e45 d3116e54 ">  </td>
+
+<td valign="top" headers="d3116e48 d3116e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3116e45 d3116e54 ">  </td>
+
+<td valign="top" headers="d3116e48 d3116e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3116e45 d3116e54 ">  </td>
+
+<td valign="top" headers="d3116e48 d3116e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3116e45 d3116e54 ">  </td>
+
+<td valign="top" headers="d3116e48 d3116e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3116e45 d3116e54 ">  </td>
+
+<td valign="top" headers="d3116e48 d3116e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3116e45 d3116e54 "> x </td>
+
+<td valign="top" headers="d3116e48 d3116e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword controls the calculation of well block average pressures
+for individual wells. The well block average pressures are computed
+using the same formulae as those employed by the <a href="WPAVE.html#WPAVE"> WPAVE</a> keyword. They represent the average
+pressure of the grid blocks containing connections to a given well,
+and optionally their adjacent and diagonal neighbors. Neighbor contributions
+can be weighted according to either the connection transmissibility
+factors or the grid block pore volumes. The <span class="keyword">WWPAVE</span> keyword overwrites any current controls specified by the <span class="keyword">WPAVE</span> keyword and in turn can be overwritten by any subsequent
+use of the <span class="keyword">WPAVE</span> keyword.</p>
+
+<p>The average pressures can be written to the Summary file using
+the <span class="keyword">SUMMARY</span> section keywords <span class="keyword">WBP</span>, <span class="keyword">WBP4</span>, <span class="keyword">WBP5</span> and <span class="keyword">WBP9</span>. Well PIs based on these average pressures can also can be written
+to the Summary file using the <span class="keyword">SUMMARY</span> section keywords <span class="keyword">WPI1</span>, <span class="keyword">WPI4</span>, <span class="keyword">WPI5</span> and <span class="keyword">WPI9</span> (see <a href="SUMMARY.html#SUMMARY"> "SUMMARY section"</a>).</p>
+
+<p>The averages relate to a Cartesian grid and should not be used
+in a radial grid. The averages are used for reporting purposes only,
+and will not affect any other results.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li> Well name, well name template, well list or well list template <p>A template enclosed in quotes can be used to refer to multiple wells
+or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+ </li>
+
+<li> F1, the weighting factor between the inner block and the outer
+ring of neighboring blocks, in the connection factor weighted average. <p>If the value lies between 0.0 and 1.0, the average is calculated
+by equation <a href="wpave_Calculation_of_well_block_average_pressures.html#wpave.Xwpave.equ.00bd">247.3</a>. 
+The value 1.0 gives total weighting to the inner
+blocks, containing the well connections. The value 0.0 gives total
+weighting to the 4 or 8 blocks neighboring each inner block.</p>
+ <p>A value of F1 &lt; 0.0 is used to indicate that the pressure of the
+inner block and its outer ring of neighboring blocks should be averaged
+according to their pore volumes. The average block pressure for each
+connection is calculated by equation <a href="wpave_Calculation_of_well_block_average_pressures.html#wpave.Xwpave.equ.00c8">247.4</a>.</p>
+
+<p>DEFAULT: 0.5</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">For one-block averages
+(<span class="keyword">WBP</span>) F1 is effectively 1.0, whatever the value
+entered here.</span></div>
+ </li>
+
+<li> F2, the weighting factor between the connection factor weighted
+average and the pore volume weighted average, used by <a href="wpave_Calculation_of_well_block_average_pressures.html#wpave.Xwpave.equ.00ad">247.1</a>. 
+<p>The value should lie between 0.0 and 1.0.
+The value 1.0 gives a purely connection factor weighted average, and
+0.0 gives a purely pore volume weighted average.</p>
+<p>DEFAULT: 1.0</p>
+ </li>
+
+<li> Depth correction flag <p>This flag controls how the grid block
+pressures are corrected to the well’s bottom hole reference depth
+(see item 5 in keyword <a href="WELSPECS.html#WELSPECS"> WELSPECS</a>), or to an alternative reference depth if specified in keyword <a href="WPAVEDEP.html#WPAVEDEP"> WPAVEDEP</a>, by applying
+a hydrostatic head between each grid block center and the well’s reference
+depth.</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">WELL</samp> </td>
+
+<td valign="top"> The hydrostatic head is calculated using the density of the
+fluid in the wellbore at the well connections.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">RES</samp> </td>
+
+<td valign="top"> The hydrostatic head is calculated using a representative
+density for the fluid in the reservoir. This density is calculated
+by averaging over fluid density for all the grid blocks associated
+with the well’s connections. The average over phases is weighted by
+the phase saturation, and the average over grid blocks is weighted
+by pore volume. Whether the averaging is performed over all grid blocks
+with declared connections to the well or only those with currently
+open connections is determined by item 4.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NONE</samp> </td>
+
+<td valign="top"> Grid block pressures are not depth corrected.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>DEFAULT: <samp class="codeph">WELL</samp> </p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The wellbore fluid
+density is set to zero whenever the well is shut. Thus if <samp class="codeph">WELL</samp> is selected there is a discontinuity in the reported
+pressure average when the well’s status changes between shut and open/stopped.</span></div>
+ </li>
+
+<li> Well connection flag <p>This flag controls whether the grid blocks
+associated with <strong>all</strong> the well’s declared connections contribute
+to the average pressure, or just those associated with the currently <strong>open</strong> connections.</p>
+ 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">OPEN</samp> </td>
+
+<td valign="top">Only grid blocks associated with currently open connections
+are included in the averaging calculation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">ALL</samp> </td>
+
+<td valign="top"> Grid blocks associated with all currently defined connections
+(whether open or closed) are included in the averaging calculation.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">OPEN</samp> </p>
+ <div class="note"><span class="notetitle">Note:</span> <span class="notebody">If <samp class="codeph">OPEN</samp> is selected there is a discontinuity in the reported pressure average
+whenever new connections are opened or existing ones are closed. This
+may be avoided by selecting <samp class="codeph">ALL</samp> and defining all
+the well’s connections at the start of the run (whether initially
+open or closed).</span></div>
+ <p>If this keyword is not present, all items
+assume their default values, giving a connection factor weighted average,
+evenly weighted between the inner blocks and the outer ring of neighbors.
+The depth correction uses the wellbore density and only grid blocks
+associated with currently open well connections are included in the
+average.</p>
+ <div class="note"><span class="notetitle">Note:</span> <span class="notebody">In dual porosity runs the wells are completed in
+the fracture system. A WBPn average reports the average pressure in
+the surrounding fracture cells.</span></div>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="section" id="wwpave_example"><a name="wwpave_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WWPAVE
+ PROD1   1*   0.0   1*   ALL /
+ PROD2   1*   0.0   1*   ALL /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

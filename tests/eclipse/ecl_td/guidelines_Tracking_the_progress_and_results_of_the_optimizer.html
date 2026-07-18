@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Tracking the progress and results of the optimizer"/>
+<meta name="DC.subject" content="Reservoir optimization progress and results"/>
+<meta name="keywords" content="Reservoir optimization progress and results"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="guidelines_tracking_the_progress_and_results_of_the_optimizer"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Tracking the progress and results of the optimizer</title>
+</head>
+<body>
+
+
+<div class="nested0" id="guidelines_tracking_the_progress_and_results_of_the_optimizer"><a name="guidelines_tracking_the_progress_and_results_of_the_optimizer"><!-- --></a>
+<h1 class="topictitle1">Tracking the progress and results of the optimizer</h1>
+
+
+ <div>
+<p>If you have a feasible starting point, and you are happy with your
+choice of parameters, then you should change the limits on the number
+of iterations and simulations given in the <a href="../ecl_rm/OPTDIMS.html#OPTDIMS">OPTDIMS</a> keyword. The new values
+you choose will be largely dependent on the time your model takes
+to simulate.</p>
+
+<div class="tip"><span class="tiptitle">Tip:</span> A reasonable choice for the first optimization attempt
+is a limit of ten on each number.             </div>
+
+<p>Then you run the simulation model with the Reservoir Optimization
+feature. Essentially, this performs a sequence of simulations for
+you, calculating new gradient directions and performing line-searches
+when deemed necessary by the optimizer.</p>
+
+<p>You can check the progress of the optimizer in the PRT file. At
+the end of each simulation, the following information in output:</p>
+
+<pre><code>===================================================
+Optimization Iteration:   1 Simulation No:  1
+Current    Objective Function value:     2702118.0    
+Prev Valid Objective Function value:     1986265.8    
+Best Valid Objective Function value:     2702118.0  (at Itn: 1 Sim:  1)
+Tolerance in Objective Function    :     0.1000E-05
+===================================================</code></pre>
+<p>This output tells you how many simulations and gradient calculations
+have been performed so far. It also tells you the current and previous
+objective function values, the best valid objective function (that
+is, the largest value for which no constraints have been violated)
+and the iteration and simulation at which it occurred.</p>
+
+<p>During line-searches, it is possible for the optimizer to step
+too far in the search direction and hence violate a constraint. If
+this happens, you will see text such as:</p>
+
+<pre><code>Constraints have been overshot using Alpha =  512.00000
+Backtracking Alpha to honor constraints.
+Proceeding with new Line Search Alpha value =  259.17128 </code></pre>
+<p>The status of any active constraints are reported in a table under
+the text:</p>
+
+<pre><code>|==Optimization: Constraints========================================|</code></pre>
+<p>This table lists the constraints that we are sufficiently close
+to so that we can consider we are actually on the constraint (that
+is, have an activity ratio with an absolute value of less than unity).</p>
+
+
+<div class="tablenoborder"><a name="guidelines.tab.00dc"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="guidelines.tab.00dc" frame="border" border="1" rules="all">     
+<thead align="left">
+<tr>
+<th valign="top" id="d736e86">Active Constraint</th>
+
+<th valign="top" id="d736e89">Report Index</th>
+
+<th valign="top" id="d736e92">Current Value</th>
+
+<th valign="top" id="d736e95">Limiting Value</th>
+
+<th valign="top" id="d736e98">Activity Ratio</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d736e86 "> <samp class="codeph">FWPR</samp> <samp class="codeph">FIELD</samp> </td>
+
+<td valign="top" headers="d736e89 "> <samp class="codeph">14</samp> </td>
+
+<td valign="top" headers="d736e92 "> <samp class="codeph">0.1443E+03</samp> </td>
+
+<td valign="top" headers="d736e95 "> <samp class="codeph">0.1500E+03</samp> </td>
+
+<td valign="top" headers="d736e98 "> <samp class="codeph">-0.763</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d736e86 "> <samp class="codeph">FWPR</samp> <samp class="codeph">FIELD</samp> </td>
+
+<td valign="top" headers="d736e89 "> <samp class="codeph">15</samp> </td>
+
+<td valign="top" headers="d736e92 "> <samp class="codeph">0.1501E+03</samp> </td>
+
+<td valign="top" headers="d736e95 "> <samp class="codeph">0.1500E+03</samp> </td>
+
+<td valign="top" headers="d736e98 "> <samp class="codeph">+0.019</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d736e86 "> <samp class="codeph">FWPR</samp> <samp class="codeph">FIELD</samp> </td>
+
+<td valign="top" headers="d736e89 "> <samp class="codeph">16</samp> </td>
+
+<td valign="top" headers="d736e92 "> <samp class="codeph">0.1555E+03</samp> </td>
+
+<td valign="top" headers="d736e95 "> <samp class="codeph">0.1500E+03</samp> </td>
+
+<td valign="top" headers="d736e98 "> <samp class="codeph">+0.737</samp> </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>At each simulation, the parameter values (and the update in these
+values from the previous simulation) are output in a table after the
+text:</p>
+
+<pre><code>=Optimization Parameter Update======================================</code></pre>
+<p>At the end of the optimization, the parameter values that were
+used in the simulation that gave the best objective function and did
+not violate the constraints are given in a table after the text:</p>
+
+<pre><code>=Optimization Parameters For Best Valid Iteration=====</code></pre>
+<p>The reason that the optimizer terminated is reported at the end
+of the <samp class="codeph">PRT</samp> file:</p>
+
+<pre><code>===================================================
+Optimization Terminating:</code></pre>
+<p>This will be one of the following:</p>
+
+<ol>
+<li>Objective function has converged  <p>This means that the relative
+change in the objective function over the last two simulations is
+less than the tolerance specified in the <a href="../ecl_rm/OPTTUNE.html#OPTTUNE">OPTTUNE</a> keyword</p>
+       
+        </li>
+
+<li>Objective function has zero gradient<p>This means that the average
+gradient of the objective function with respect to the control parameters
+is less than the tolerance specified in the <span class="keyword">OPTTUNE</span> keyword</p>
+                </li>
+
+<li>Control parameters have converged <p>This means that the average
+relative parameter change over the control parameters is less than
+the tolerance specified in the <span class="keyword">OPTTUNE</span> keyword</p>
+                </li>
+
+<li>No control parameters are active</li>
+
+<li>Maximum number of optimization iterations reached.<p>This means
+that we have reached the limit on the number of optimization iterations
+specified in the <a href="../ecl_rm/OPTDIMS.html#OPTDIMS">OPTDIMS</a> keyword</p>
+</li>
+
+<li> Maximum number of optimization simulation reached    <p>This
+means that we have reached the limit on the number of optimization
+iterations specified in the <span class="keyword">OPTDIMS</span> keyword</p>
+ </li>
+
+</ol>
+
+<p>If you ran the optimizer using the <samp class="codeph">SEPARATE</samp> mnemonic
+in the <a href="../ecl_rm/RPTOPT.html#RPTOPT">RPTOPT</a> keyword, then the Reservoir Optimization produces separate
+results files for each iteration in the optimization. These results
+files have names of the form <samp class="codeph">BASE_01.xxx</samp>, <samp class="codeph">BASE_02.xxx</samp> and so on where <samp class="codeph">BASE.DATA</samp> is
+the base data-set, and <samp class="codeph">_01</samp>, <samp class="codeph">_O2</samp> and
+so on label the optimization iteration. You can track the progress
+of the objective function, constraints and parameters at each optimization
+iteration by plotting their equivalent summary vectors (if you have
+requested these) in Results Viewer in ECLIPSE Office. If you intend
+to view the results in this way, then you should also specify the <samp class="codeph">CLRFILES</samp> mnemonic in the <span class="keyword">RPTOPT</span> keyword
+so that the results files from any previous optimizations are removed
+before starting this optimization, otherwise the presence of these
+old results files can cause confusion.</p>
+
+<p><cite><span> <a href="biblio_Bibliography.html#biblio_57386">De
+Montleau et al (2006)</a> </span></cite> gives some examples of reservoir
+optimization studies.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

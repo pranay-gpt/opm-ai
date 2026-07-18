@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="NWATREM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="NWATREM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>NWATREM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="NWATREM"><a name="NWATREM"><!-- --></a>
+<h1 class="keyword">NWATREM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="nwatrem.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="nwatrem.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1610e45">                         x </th>
+
+<th valign="top" id="d1610e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1610e54">                         x </th>
+
+<th valign="top" id="d1610e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1610e45 d1610e54 "> </td>
+
+<td valign="top" headers="d1610e48 d1610e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1610e45 d1610e54 "> </td>
+
+<td valign="top" headers="d1610e48 d1610e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1610e45 d1610e54 "> </td>
+
+<td valign="top" headers="d1610e48 d1610e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1610e45 d1610e54 "> </td>
+
+<td valign="top" headers="d1610e48 d1610e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1610e45 d1610e54 "> </td>
+
+<td valign="top" headers="d1610e48 d1610e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1610e45 d1610e54 "> </td>
+
+<td valign="top" headers="d1610e48 d1610e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1610e45 d1610e54 "> </td>
+
+<td valign="top" headers="d1610e48 d1610e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1610e45 d1610e54 ">                         x </td>
+
+<td valign="top" headers="d1610e48 d1610e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword can be used in the extended network (constructed with
+keywords <a href="BRANPROP.html#BRANPROP"> BRANPROP</a> and <a href="NODEPROP.html#NODEPROP"> NODEPROP</a>, with keyword <a href="NETWORK.html#NETWORK">  NETWORK</a> present in the <span class="keyword">RUNSPEC</span> section) to remove
+water from the network at a specified node. The amount of water to
+be removed can be expressed as either a constant rate or a fraction
+of the rate flowing through that node. The removal of water affects
+the pressure loss in the downstream network branches as their VFP
+tables are looked up with a smaller water fraction. However, this
+is the <strong>only</strong> effect that it has. It does <strong>not</strong> affect the
+reported group production rates or the operation of any group water
+rate targets/limits, reinjection or group economic limits; the <strong>group</strong> water rate still represents the rate of water produced
+from the formation.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li>Node name           </li>
+
+<li>Maximum rate of water removal from the node <p>The specified rate
+of water is removed, subject to a maximum fraction of the node’s water
+flow entered in item 3.</p>
+                <p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), stb/day (<samp class="codeph">FIELD</samp>),
+scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+                <p>DEFAULT: Infinity</p>
+             </li>
+
+<li>   Maximum fraction of the node’s water flow to be removed  <p>The specified fraction of the node’s water flow is removed, subject
+to a maximum rate entered in item 2.</p>
+                <p>DEFAULT:
+1.0</p>
+ </li>
+
+</ol>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The defaults in items 2 and 3 only apply to nodes that have
+been named in item 1 of this keyword. All other nodes retain their
+initial values of 0.0 for both quantities, so that no water is removed
+from them.</span></div>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> Since water removal <strong>only</strong> affects the pressure
+losses in the downstream branches, an error is reported if the node
+in item 1 has no outflow branch.</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

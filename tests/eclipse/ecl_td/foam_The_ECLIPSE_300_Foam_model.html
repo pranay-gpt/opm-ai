@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The ECLIPSE 300 foam model"/>
+<meta name="DC.subject" content="Enhanced oil recovery, Foam transport, Foam adsorption, Foam decay, Foam gas mobility reduction, Foam ECLIPSE 100 and 300 comparison, Foam output controls, Foam, ECLIPSE 300"/>
+<meta name="keywords" content="Enhanced oil recovery, Foam transport, Foam adsorption, Foam decay, Foam gas mobility reduction, Foam ECLIPSE 100 and 300 comparison, Foam output controls, Foam, ECLIPSE 300"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="foam_the_eclipse_300_foam_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The ECLIPSE 300 foam model</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="foam_the_eclipse_300_foam_model"><a name="foam_the_eclipse_300_foam_model"><!-- --></a>
+<h1 class="topictitle1">The ECLIPSE 300 foam model</h1>
+
+
+ <div>
+<div class="section" id="foam_transport"><a name="foam_transport"><!-- --></a><h4 class="sectiontitle">Transport</h4><p>In the ECLIPSE
+300 Foam Model, surfactant is transported in the water phase as a
+separate water component. See <a href="watercompintro_Water_components.html#watercompintro_water_components"> "Water components"</a>. The surfactant component properties (such
+as molecular weight) must be specified using the relevant water component
+keywords. Water components that behave as foam surfactants are defined
+using the <a href="../ecl_rm/CWTYPE.html#CWTYPE">CWTYPE</a> keyword.</p>
+</div>
+
+<div class="section" id="foam_adsorption1"><a name="foam_adsorption1"><!-- --></a><h4 class="sectiontitle">Adsorption</h4><p>Foam adsorption
+and desorption can be modeled using chemical reactions. See <a href="reactionsintro_Chemical_Reactions.html#reactionsintro_chemical_reactions"> "Chemical Reactions"</a>, <a href="solidintro_Solid_Phase.html#solidintro_solid_phase"> "Solid Phase"</a> and <a href="solidintro_Adsorption_of_dissolved_water_components.html#solidintro_adsorption_of_dissolved_water_components"> "Adsorption of dissolved water components"</a>.</p>
+<p>The equilibrium
+between the waterborne surfactant component and the adsorbed solid
+component occurs when the concentrations are such that the two reaction
+rates are equal. If the reaction rates are linear functions of the
+concentrations, then the adsorbed (solid) concentration will be proportional
+to the surfactant concentration times the ratio of the adsorption
+and desorption reaction rates                  <math><msub><mi>R</mi>
+<mi>a</mi></msub><mo>/</mo><msub><mi>R</mi><mi>d</mi>
+</msub></math>.          </p>
+<p>An example of using reactions
+to model adsorption is given in <a href="foam_example_data_set_for_eclipse_300.html#foam_example_data_set_for_eclipse_300"> "Example data set
+for ECLIPSE 300"</a>.</p>
+</div>
+
+<div class="section" id="foam_decay"><a name="foam_decay"><!-- --></a><h4 class="sectiontitle">Decay</h4><p>Foam decay can be
+modeled using a chemical reaction to convert the surfactant component
+to water. For example, a foam with a half life of                
+ <math><msub><mi>T</mi><mrow><mn>1</mn><mo>/</mo><mn>2</mn></mrow>
+</msub></math>  days can be modeled with a reaction in which the
+foam surfactant decays to water at a rate of  <math><mrow><mo>(</mo>
+<mrow><mi>ln</mi><mn>2</mn></mrow><mo>)</mo><mo>/</mo><msub><mrow><mi>T</mi></mrow><mrow><mn>1</mn>
+<mo>/</mo><mn>2</mn></mrow></msub></mrow></math> times
+the surfactant concentration.</p>
+<p>It is not possible to vary the
+reaction rate as a function of the oil or water saturations directly,
+as done in the ECLIPSE 100 using the <a href="../ecl_rm/FOAMDCYO.html#FOAMDCYO">FOAMDCYO</a> and <a href="../ecl_rm/FOAMDCYW.html#FOAMDCYW">FOAMDCYW</a> keywords. However,
+it is possible to make the reaction rate depend on the concentration
+of a particular component (for example water) using the <a href="../ecl_rm/REACCORD.html#REACCORD">REACCORD</a> keyword, or on the
+concentration of a tracer using the <a href="../ecl_rm/REACTRAC.html#REACTRAC">REACTRAC</a> keyword. See <a href="reactionsintro_Chemical_Reactions.html#reactionsintro_chemical_reactions"> "Chemical reactions"</a> for more details of chemical reactions.</p>
+<p>An example of using reactions to model foam decay is given in <a href="foam_example_data_set_for_eclipse_300.html#foam_example_data_set_for_eclipse_300"> "Example data set
+for ECLIPSE 300"</a>.</p>
+</div>
+
+<div class="section" id="foam_gas_mobility_reduction1"><a name="foam_gas_mobility_reduction1"><!-- --></a><h4 class="sectiontitle">Gas mobility reduction</h4><p>ECLIPSE 100 gas mobility function keywords (see <a href="foam_Using_the_ECLIPSE_100_Foam_Model.html#foam.tab.017e">481.3</a>) can be used to specify
+the gas mobility multiplier for the ECLIPSE 300 Foam Model. The surfactant
+concentration is calculated by summing the mass of all surfactant
+components in the cell and dividing by the water volume at surface
+conditions. The gas-water surface tension is then calculated the <a href="../ecl_rm/FOAMFST.html#FOAMFST">FOAMFST</a> keyword. This is then
+used to determine the capillary number, which can be used to modify
+the mobility with the <a href="../ecl_rm/FOAMFCN.html#FOAMFCN">FOAMFCN</a> keyword. The capillary number is calculated in different
+ways in the two simulators. This is discussed further in <a href="velocity_Capillary_Number.html#velocity_capillary_number"> "Capillary
+number"</a>.</p>
+</div>
+
+<div class="section" id="foam_comparison_with_eclipse_100"><a name="foam_comparison_with_eclipse_100"><!-- --></a><h4 class="sectiontitle">Comparison with
+ECLIPSE 100</h4><p>If the surfactant component is given the same
+properties as the water component it will act as a tracer, as in the
+ECLIPSE 100 model. The foam volume will not be modeled, but its effect
+on the gas mobility will be. The ECLIPSE 300 Foam Model should therefore
+behave in a similar manner to the ECLIPSE 100 Foam Model, when that
+is used with water-phase transport and the functional gas mobility
+model (keyword <a href="../ecl_rm/FOAMOPTS.html#FOAMOPTS">FOAMOPTS</a> items 1 and 2 set to <samp class="codeph">WATER</samp> and <samp class="codeph">FUNC</samp>).</p>
+</div>
+
+<div class="section" id="foam_output_controls1"><a name="foam_output_controls1"><!-- --></a><h4 class="sectiontitle">Output controls</h4><p>The relevant water component output mnemonics and keywords (and
+reaction / solid keywords if used) can be used to output information
+on the surfactant component. In addition the following foam mnemonics
+/ keywords can be used:</p>
+
+<div class="tablenoborder"><a name="foam.tab.0226"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="foam.tab.0226" frame="border" border="1" rules="all"><caption>
+           Table 482.1  Output controls</caption>   
+<thead align="left">
+<tr>
+<th valign="top" id="d524e237">Description                      </th>
+
+<th valign="top" id="d524e240"> RPTSOL / RPTSCHED / RPTRST arguments</th>
+
+<th valign="top" id="d524e243">SUMMARY keyword                      </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d524e237 ">  Surfactant concentration                   
+                      </td>
+
+<td valign="top" headers="d524e240 "> <samp class="codeph">FOAM</samp>   </td>
+
+<td valign="top" headers="d524e243 "><span class="keyword">BFOAM</span>                   </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d524e237 ">Gas-water surface tension                    
+                         </td>
+
+<td valign="top" headers="d524e240 "> <samp class="codeph">FOAMST</samp>   </td>
+
+<td valign="top" headers="d524e243 "><span class="keyword">BFOAMST</span>                   
+  </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d524e237 ">Capillary number                             
+                </td>
+
+<td valign="top" headers="d524e240 "> <samp class="codeph">FOAMCNM</samp>  </td>
+
+<td valign="top" headers="d524e243 "><span class="keyword">BFOAMCNM</span>  </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d524e237 ">The gas mobility reduction factor   </td>
+
+<td valign="top" headers="d524e240 "> <samp class="codeph">FOAMMOB</samp> </td>
+
+<td valign="top" headers="d524e243 "> <span class="keyword">BFOAMMOB</span>                 
+    </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

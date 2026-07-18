@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The CFLLIMIT option for AIM and IMPES runs"/>
+<meta name="DC.subject" content="Formulation and solution of the equations"/>
+<meta name="keywords" content="Formulation and solution of the equations"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="formulate_the_cfllimit_option_for_aim_and_impes_runs"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The CFLLIMIT option for AIM and IMPES runs</title>
+</head>
+<body>
+
+
+<div class="nested0" id="formulate_the_cfllimit_option_for_aim_and_impes_runs"><a name="formulate_the_cfllimit_option_for_aim_and_impes_runs"><!-- --></a>
+<h1 class="topictitle1">The CFLLIMIT option for AIM and IMPES runs</h1>
+
+
+ <div>
+<p>ECLIPSE 300</p>
+
+<p>This option is based on the paper “IMPES
+Stability: The Stable Step” <cite><span> <a href="biblio_Bibliography.html#biblio_91173">Coats (2001)</a> </span></cite>. The reader is referred there for all technical points. By
+default, AIM and IMPES runs choose the implicit cells/timestep by
+looking at throughput and/or solution change. Whilst this usually
+works it is not a rigorous procedure, and in some situations, such
+as when there are large capillary forces, it can make the wrong choice.</p>
+
+<p>The <a href="../ecl_rm/CFLLIMIT.html#CFLLIMIT">CFLLIMIT</a> option places the timestep selection and implicit cell choice
+on a much more rigorous footing based on the maximum <strong>stable</strong> timestep allowed in the <strong>explicit</strong> cells. This timestep can
+be calculated from conditions given in the above paper. Due to the
+robustness of this approach when it is used there is no limit placed
+on the maximum rate of change of capillary pressure. See keyword <a href="../ecl_rm/DPCDT.html#DPCDT">DPCDT</a> and compare with the
+usual default for AIM or IMPES runs.</p>
+
+<p> <strong>For those runs where this option does make a difference</strong>:
+aside from differences caused by strictly honoring the rate of change
+of capillary pressure, you may notice the following:</p>
+
+<div class="section" id="formulate_impes_runs"><a name="formulate_impes_runs"><!-- --></a><h4 class="sectiontitle">IMPES runs</h4><p>The
+run takes longer due to smaller, in some cases substantially smaller,
+timesteps being taken. The advantage is that oscillations in the results
+virtually disappear.</p>
+</div>
+
+<div class="section" id="formulate_aim_runs"><a name="formulate_aim_runs"><!-- --></a><h4 class="sectiontitle">AIM runs</h4><p>Times can
+actually improve as now the ‘right’ cells have been chosen to be implicit,
+which can lead to fewer convergence problems. In some cases, because
+the correct cells are being treated implicitly and the timestep has
+been chosen to be stable for the remaining explicit cells, a significant
+improvement in performance and results are experienced.</p>
+<p>There
+are also cases where performance is severely degraded, although results
+are not. This occurs when the case can run, with no obvious ill-effects,
+with timesteps very much larger than those required by stability considerations.
+There is usually some benefit to be seen in a close examination of
+the results, but if these benefits do not justify a large increase
+in CPU time, or indeed if the increase makes running the problem uneconomic,
+then there are two courses of action.</p>
+<ul>
+<li>items 2 to 4 of the <span class="keyword">CFLLIMIT</span> keyword can be
+altered to allow timesteps that are theoretically unstable </li>
+
+<li>not to use this keyword, but to use the default <a href="../ecl_rm/AIM.html#AIM">AIM</a>   settings, and perhaps use <a href="../ecl_rm/TUNING.html#TUNING">TUNING</a> to prevent the default <span class="keyword">AIM</span> settings from selecting some of the larger timesteps. </li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

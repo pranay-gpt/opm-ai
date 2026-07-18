@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Asphaltene formation: three-component model"/>
+<meta name="DC.subject" content="Fluid model, Asphaltene formation three-component model characterization, Asphaltene formation three-component model precipitation and dissolution, Asphaltene formation three-component model flocculation and dissociation"/>
+<meta name="keywords" content="Fluid model, Asphaltene formation three-component model characterization, Asphaltene formation three-component model precipitation and dissolution, Asphaltene formation three-component model flocculation and dissociation"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="asphaltene_asphaltene_formation__three-component_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Asphaltene formation: three-component model</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="asphaltene_asphaltene_formation__three-component_model"><a name="asphaltene_asphaltene_formation__three-component_model"><!-- --></a>
+<h1 class="topictitle1">Asphaltene formation: three-component model</h1>
+
+
+ <div>
+<div class="section" id="asphaltene_characterization"><a name="asphaltene_characterization"><!-- --></a><h4 class="sectiontitle">Characterization</h4><p>Three special components can be defined using the <a href="../ecl_rm/CATYPE.html#CATYPE">CATYPE</a> keyword:</p>
+<ul>
+<li>A precipitation component. This component represents the oil components
+that can become asphaltene. A fraction of the component concentration
+is identified as being precipitated fines.</li>
+
+<li>A floc component.</li>
+
+<li> A deposited asphaltene component. This component must also be
+a solid component, see <a href="solidintro_Solid_Phase.html#solidintro_solid_phase"> "Solid Phase"</a>. This component is only required if asphaltene deposition is modeled.</li>
+
+</ul>
+</div>
+
+<div class="section" id="asphaltene_precipitation.dissolution"><a name="asphaltene_precipitation.dissolution"><!-- --></a><h4 class="sectiontitle">Precipitation
+- dissolution</h4><p>The asphaltene precipitation component can
+be either dissolved in oil or precipitated as a fine. The <a href="../ecl_rm/ASPREWG.html#ASPREWG">ASPREWG</a> or <a href="../ecl_rm/ASPPW2D.html#ASPPW2D">ASPPW2D</a> keyword can be used
+to define the maximum amount of the asphaltene that can be dissolved
+ <math><msub><mi>W</mi>
+<mrow><mi>l</mi><mi>i</mi><mi>m</mi></mrow></msub>
+</math>, which is expressed as the weight of the precipitation component
+in oil as a percentage of the total weight of oil. This can be expressed
+as a limit on the mole fraction of the precipitation component dissolved
+in oil:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="asphaltene.equ.0058"/>
+ <math><mrow><msub><mrow>
+<mi>x</mi></mrow><mrow><mi>l</mi><mi>i</mi><mi>m</mi>
+</mrow></msub><mo>=</mo><mfrac><mrow><msub><mrow><mi>W</mi></mrow><mrow><mi>l</mi><mi>i</mi><mi>m</mi>
+</mrow></msub></mrow><mrow><mn>100</mn></mrow></mfrac>
+<mo>⋅</mo><mfrac><mrow><msub><mrow><mi>m</mi></mrow>
+<mrow><mi>w</mi><mi>o</mi><mi>i</mi><mi>l</mi>
+</mrow></msub></mrow><mrow><msub><mrow><mi>m</mi>
+</mrow><mrow><mi>w</mi><mi>p</mi></mrow></msub></mrow>
+</mfrac></mrow></math> 
+</td><td align="right">[Eq. 236.1]
+              </td></tr></tbody></table><p>where <math>
+<mrow><msub><mrow><mi>m</mi></mrow><mrow><mi>w</mi>
+<mi>o</mi><mi>i</mi><mi>l</mi></mrow></msub><mo>=</mo><mo>∑</mo><msub><mrow><mi>m</mi>
+</mrow><mrow><mi>w</mi><mi>i</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi>x</mi></mrow><mrow><mi>i</mi>
+</mrow></msub></mrow></math> is the molecular weight of the
+oil.</p>
+<p>If the mole fraction of the precipitation component is
+less than this value,  <math><msub><mrow><msub>
+<mi>x</mi><mi>p</mi></msub><mo>&lt;</mo><mi>x</mi>
+</mrow><mrow><mi>l</mi><mi>i</mi><mi>m</mi></mrow>
+</msub></math>, the precipitation component will be totally dissolved
+and there will be no fines. If the mole fraction of the precipitation
+component exceeds this value,  <math><msub>
+<mrow><msub><mi>x</mi><mi>p</mi></msub><mo>&gt;</mo>
+<mi>x</mi></mrow><mrow><mi>l</mi><mi>i</mi><mi>m</mi>
+</mrow></msub></math>, the dissolved and fine fractions of the
+precipitation component are given by:</p>
+<p>              <math><msub><mi>x</mi>
+<mrow><mi>p</mi><mi>d</mi></mrow></msub><mo>=</mo>
+<msub><mi>x</mi><mrow><mi>l</mi><mi>i</mi><mi>m</mi>
+</mrow></msub></math> </p>
+<p> <math><msub>
+<mi>x</mi><mrow><mi>p</mi><mi>f</mi></mrow></msub>
+<mo>=</mo><msub><mi>x</mi><mi>p</mi></msub><mrow>
+<mo>-</mo><msub><mi>x</mi><mrow><mi>l</mi><mi>i</mi>
+<mi>m</mi></mrow></msub></mrow></math> </p>
+<p>The fines
+take part in the flocculation process.</p>
+</div>
+
+<div class="section"><h4 class="sectiontitle">Flocculation - dissociation</h4><p>Flocculation
+and dissociation are modeled by two reactions. In the flocculation
+reaction the fines are converted into the flocculation component,
+with a rate given by:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="asphaltene.equ.0067"/>
+ <math><mrow><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>f</mi></mrow></msub><mo>=</mo><msub><mrow><msub><mrow><mi>V</mi></mrow><mrow>
+<mi>f</mi></mrow></msub><mo>⋅</mo><mi>r</mi></mrow>
+<mrow><mi>f</mi></mrow></msub><mo>⋅</mo><mfrac><mrow>
+<msub><mrow><mi>m</mi></mrow><mrow><mi>w</mi><mi>p</mi></mrow></msub></mrow><mrow><msub><mrow><mi>m</mi></mrow><mrow><mi>w</mi><mi>o</mi><mi>i</mi>
+<mi>l</mi></mrow></msub></mrow></mfrac><mo>⋅</mo>
+<msub><mrow><mi>C</mi></mrow><mrow><mi>p</mi><mi>f</mi></mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 236.2]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>V</mi></mrow><mrow><mi>f</mi></mrow></msub><mo>=</mo><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>s</mi></mrow></msub>
+</mrow><mo>)</mo><mo>⋅</mo><msub><mrow><mi>V</mi>
+</mrow><mrow><mi>p</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the fluid volume</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>V</mi>
+<mi>p</mi></msub></math> </td>
+
+<td valign="top">is the pore volume</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>S</mi>
+<mi>s</mi></msub></math> </td>
+
+<td valign="top"> is the solid saturation, representing the fraction of the
+pore volume filled with asphaltene deposit</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>C</mi></mrow><mrow><mi>p</mi><mi>f</mi></mrow>
+</msub><mo>=</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>o</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi>B</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>⋅</mo>
+<msub><mrow><mi>x</mi></mrow><mrow><mi>p</mi><mi>f</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the concentration of the fines in the oil phase</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>S</mi>
+<mi>o</mi></msub></math> </td>
+
+<td valign="top">is the oil saturation</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>B</mi>
+<mi>o</mi></msub></math> </td>
+
+<td valign="top">is the oil molar density</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>r</mi>
+<mi>f</mi></msub></math> </td>
+
+<td valign="top">  is the flocculation rate specified by the <a href="../ecl_rm/ASPFLRT.html#ASPFLRT">ASPFLRT</a> keyword.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>In the dissociation reaction, the flocculation component
+is converted into fines, with a rate given by:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="asphaltene.equ.007b"/>
+ <math><mrow><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>d</mi><mi>i</mi><mi>s</mi>
+</mrow></msub><mo>=</mo><msub><mrow><msub><mrow><mi>V</mi></mrow><mrow><mi>f</mi></mrow></msub><mo>⋅</mo>
+<mi>r</mi></mrow><mrow><mi>d</mi><mi>i</mi><mi>s</mi>
+</mrow></msub><mo>⋅</mo><msub><mrow><mi>C</mi></mrow>
+<mrow><mi>f</mi></mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 236.3]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>C</mi></mrow><mrow><mi>f</mi></mrow></msub><mo>=</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi>
+</mrow></msub><mo>⋅</mo><msub><mrow><mi>B</mi></mrow>
+<mrow><mi>o</mi></mrow></msub><mo>⋅</mo><msub><mrow>
+<mi>x</mi></mrow><mrow><mi>f</mi></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">is the concentration of the flocs in the oil phase</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>r</mi>
+<mrow><mi>d</mi><mi>i</mi><mi>s</mi></mrow></msub>
+</math> </td>
+
+<td valign="top">is the dissociation rate specified by the <span class="keyword">ASPFLRT</span> keyword.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

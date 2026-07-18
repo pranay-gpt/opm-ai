@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Use with the gas field operations model"/>
+<meta name="DC.subject" content="Gas calorific value control"/>
+<meta name="keywords" content="Gas calorific value control"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gcalvalusing_use_with_the_gas_field_operations_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Use with the gas field operations model</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gcalvalusing_use_with_the_gas_field_operations_model"><a name="gcalvalusing_use_with_the_gas_field_operations_model"><!-- --></a>
+<h1 class="topictitle1">Use with the gas field operations model</h1>
+
+
+ <div>
+<p>The <a href="../ecl_rm/GCONCAL.html#GCONCAL"> GCONCAL</a> keyword may be used in combination with the Gas Field Operations
+Model, if required (see <a href="gasfieldintro_Gas_Field_Operations_Model.html#gasfieldintro_gas_field_operations_model"> "Gas field operations model"</a>). It should only be applied to
+contract groups, and the contract groups must be under guide rate
+control rather than prioritization. There is no need to use <a href="../ecl_rm/GCONPROD.html#GCONPROD"> GCONPROD</a> to place contract
+groups under guide rate control; this is done automatically when their
+swing and profile factors are entered, as long as <a href="../ecl_rm/GCONPRI.html#GCONPRI"> GCONPRI</a> is not used.</p>
+
+<p>If the delivery contract is expressed in terms of energy production
+rate, instead of gas flow rate, use the <a href="../ecl_rm/DCQDEFN.html#DCQDEFN"> DCQDEFN</a> keyword in the <span class="keyword">SCHEDULE</span> section.</p>
+
+<pre><code>DCQDEFN
+  ENERGY /</code></pre>
+<p>This tells ECLIPSE that the DCQ values entered in keyword <a href="../ecl_rm/GASYEAR.html#GASYEAR"> GASYEAR</a>, <a href="../ecl_rm/GASPERIO.html#GASPERIO"> GASPERIO</a> or <a href="../ecl_rm/GDCQ.html#GDCQ"> GDCQ</a> refer to a daily contracted
+quantity of <strong>energy </strong> instead of flow rate. You may then enter
+the energy rate DCQ values in place of the gas rate DCQ values, in
+the units appropriate to energy production rate: kJ/day (<samp class="codeph">METRIC</samp>), Btu/day (<samp class="codeph">FIELD</samp>), J/hr (<samp class="codeph">LAB</samp>).
+If the <a href="../ecl_rm/DCQDEFN.html#DCQDEFN"> DCQDEFN</a> keyword is used it <strong>must</strong> be entered before any other
+Gas Field Operations keyword, including the <a href="../ecl_rm/SWINGFAC.html#SWINGFAC"> SWINGFAC</a> and <a href="../ecl_rm/GSWINGF.html#GSWINGF"> GSWINGF</a> keywords. ECLIPSE
+gives the contract groups a <a href="../ecl_rm/GCONENG.html#GCONENG"> GCONENG</a> target equal to the energy DCQ multiplied by the month's
+swing or profile factor.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

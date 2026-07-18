@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Flowlines and surface networks"/>
+<meta name="DC.subject" content="Reservoir coupling flowlines and surface networks, Flowlines, Reservoir coupling, Surface networks, Network"/>
+<meta name="keywords" content="Reservoir coupling flowlines and surface networks, Flowlines, Reservoir coupling, Surface networks, Network"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="rescouplintro_flowlines_and_surface_networks"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Flowlines and surface networks</title>
+</head>
+<body>
+
+
+<div class="nested0" id="rescouplintro_flowlines_and_surface_networks"><a name="rescouplintro_flowlines_and_surface_networks"><!-- --></a>
+<h1 class="topictitle1">Flowlines and surface networks</h1>
+
+
+ <div>
+<p>If the coupled reservoirs produce into the same flowline or surface
+network, the reservoir coupling facility can be used in conjunction
+with the network option to include the network conditions in the constraints
+that couple the reservoirs (see <a href="networkintro_Network_Option.html#networkintro_network_option"> "Network option"</a>). Specifically, the networks in each of the
+reservoirs are coupled by including the <strong>nodal pressures</strong> of
+the master groups in the set of constraints passed by the master to
+the slave reservoirs.</p>
+
+<p>The global network should be constructed as follows:</p>
+
+<ul>
+<li>The master reservoir should contain a representation of the global
+network down to the master groups (and its own well groups also, if
+the master represents an actual reservoir).</li>
+
+<li>In each slave reservoir, the slave groups should be defined as
+fixed pressure nodes, and the network extended down from them to the
+well groups. Any groups superior to the slave groups should not be
+part of the network in the slave reservoirs.</li>
+
+</ul>
+
+<p>The master and each slave may use either the Standard Network model
+or the Extended Network model, which allows the network structure
+to differ from the <a href="../ecl_rm/GRUPTREE.html#GRUPTREE">GRUPTREE</a> hierarchy (see <a href="extended_The_extended_network_model.html#extended_the_extended_network_model"> "The extended network model"</a>). The Extended Network structure
+and the <span class="keyword">GRUPTREE</span> hierarchy must however coincide
+at the master groups (in the master reservoir) and the slave groups
+(in the slave reservoir). Specifically, the requirements for the Extended
+Network structure are:</p>
+
+<ul>
+<li>If the master reservoir uses the Extended Network model, the master
+groups must coincide with source nodes in the network. For each master
+group there must be a corresponding network source node with the same
+name.</li>
+
+<li>If a slave reservoir uses the Extended Network model, the slave
+groups must coincide with fixed-pressure nodes in the network. For
+each slave group there must be a corresponding network fixed-pressure
+node with the same name.</li>
+
+</ul>
+
+<p>The networks in each reservoir should be set up to be balanced
+at each timestep (which is the default in keyword <a href="../ecl_rm/NETBALAN.html#NETBALAN">NETBALAN</a>). Thus all networks
+will be balanced simultaneously at each timestep of the master process.
+At each iteration of the network balancing calculation in the master:</p>
+
+<ol>
+<li>The master sends the nodal pressures of the master groups to the
+respective slave groups in the slave reservoirs.</li>
+
+<li>The slave reservoirs balance their own networks, using the nodal
+pressures passed from the master as the “fixed” pressures
+of the slave groups.</li>
+
+<li>The slave processes send back to the master the flows of the slave
+groups at the current conditions.</li>
+
+<li>The master sums the flows up to its FIELD level, and updates the
+pressures in the nodes of its network in the usual way.</li>
+
+</ol>
+
+<p>Note that at each balancing iteration in the master run, the slaves
+balance their own networks to convergence.</p>
+
+<p>If the slave reservoirs take more than one timestep to advance
+to the end of the master timestep, they will rebalance their own networks
+at each step. However, the “fixed” pressures of the slave
+groups will remain constant until they are updated again at the next
+master timestep.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

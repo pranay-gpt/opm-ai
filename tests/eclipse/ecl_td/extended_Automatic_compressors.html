@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Automatic compressors"/>
+<meta name="DC.subject" content="Automatic compressors, Compressors, Automatic, Network, Artificial lift quantity, Multi-level compression"/>
+<meta name="keywords" content="Automatic compressors, Compressors, Automatic, Network, Artificial lift quantity, Multi-level compression"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="extended_automatic_compressors"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Automatic compressors</title>
+</head>
+<body>
+
+
+<div class="nested0" id="extended_automatic_compressors"><a name="extended_automatic_compressors"><!-- --></a>
+<h1 class="topictitle1">Automatic compressors</h1>
+
+
+ <div>
+<p>ECLIPSE 100                      </p>
+
+<p>Automatic compressors or pumps are defined
+with keyword <a href="../ecl_rm/NETCOMPA.html#NETCOMPA">NETCOMPA</a> instead of <a href="../ecl_rm/GNETPUMP.html#GNETPUMP">GNETPUMP</a>. Each is located at a specified branch of the network. They
+offer a much wider range of features than the <span class="keyword">GNETPUMP</span> compressors of the standard network model. Their principal features
+are:</p>
+
+<dl>
+
+<dt class="dlterm"><a name="extended_activation_by_group_target"><!-- --></a>Activation by group target</dt>
+
+<dd>Each compressor (or pump) is turned on whenever a nominated group
+fails to meet its gas (or oil) production rate target, which is specified
+with keyword <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a> or <a href="../ecl_rm/GCONPRI.html#GCONPRI">GCONPRI</a> as usual. If the nominated group does not have a target set,
+but has a guide rate defined in <span class="keyword">GCONPROD</span> and is
+under '<samp class="codeph">FLD </samp>' control from a higher level group, then
+the compressor is turned on when the nominated group cannot make its
+share of the higher level group’s production target.</dd>
+
+
+
+<dt class="dlterm"><a name="extended_compressor_switching_sequence"><!-- --></a>Compressor switching sequence</dt>
+
+<dd>It is possible for more than one compressor to support the same
+group. Each compressor can be given a sequence number, and when the
+group fails to meet its production target the compressor with the
+lowest sequence number that responds to the group will be activated.
+If the group still cannot meet its target, but has other compressors
+that respond to it, these other compressors are turned on in an increasing
+order of their sequence number. All compressors in the network that
+share the same sequence number are turned on simultaneously.</dd>
+
+
+
+<dt class="dlterm"><a name="extended_production_rule_order"><!-- --></a>Production rule order</dt>
+
+<dd>If there is a drilling queue (keyword <a href="../ecl_rm/QDRILL.html#QDRILL">QDRILL</a>), by default ECLIPSE
+scans it for a suitable well to open in preference to switching on
+a compressor when a group cannot make its production target. However,
+by using the <a href="../ecl_rm/PRORDER.html#PRORDER">PRORDER</a> keyword to define the order in which various actions are
+taken to increase group production, compressor switching can be prioritized
+with respect to the other possible actions. For example, if '<span class="keyword">COMP</span>' is placed before '<span class="keyword">DRILL</span>', ECLIPSE
+activates the automatic compressors before looking for a new well
+to open.</dd>
+
+
+<dt class="dlterm"><a name="extended_multi-level_compression"><!-- --></a>Multilevel compression</dt>
+
+<dd>Multilevel compressors can be defined. Compression is increased
+one level at a time until the nominated group can meet its production
+target. The ALQ, and the gas consumption rate if there is any, increase
+linearly with the level number to their “full on” values.
+Any number of levels may be requested, but having a large number of
+levels slows the run down as each level must be tried in turn while
+rebalancing the network.</dd>
+
+
+<dt class="dlterm"><a name="extended_turning_compression_off"><!-- --></a>Turning compression off</dt>
+
+<dd>Compressors can be turned off (or reset to zero compression) manually
+at any time by using the <a href="../ecl_rm/COMPOFF.html#COMPOFF">COMPOFF</a> keyword. They are turned on automatically again as soon
+as they are needed. For example, the <span class="keyword">COMPOFF</span> keyword
+can be entered whenever the target production rate is reduced, or
+when extra production capacity is added. (When using the gas field
+operations model, the compressors are turned off automatically whenever
+the contract group’s target rate decreases.)</dd>
+
+</dl>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

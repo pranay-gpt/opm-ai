@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Water, steam and gas injection"/>
+<meta name="DC.subject" content="Thermal water, steam and gas injection features"/>
+<meta name="keywords" content="Thermal water, steam and gas injection features"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="features_water__steam_and_gas_injection"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Water, steam and gas injection</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="features_water__steam_and_gas_injection"><a name="features_water__steam_and_gas_injection"><!-- --></a>
+<h1 class="topictitle1">Water, steam and gas injection</h1>
+
+
+ <div>
+<p>An injection fluid made up of water, steam, gas, oil or a mixture
+of these, can be specified with the <a href="../ecl_rm/WCONINJE.html#WCONINJE">WCONINJE</a> keyword.</p>
+
+<p>If the injection fluid contains hydrocarbon gas, the <a href="../ecl_rm/WINJGAS.html#WINJGAS">WINJGAS</a> keyword can be used
+to specify the gas composition, and if the injection fluid contains
+hydrocarbon oil, the <a href="../ecl_rm/WINJOIL.html#WINJOIL">WINJOIL</a> keyword can be used to specify the oil composition.</p>
+
+<p>The enthalpy of the injected fluid is calculated from data entered
+using the <a href="../ecl_rm/WINJTEMP.html#WINJTEMP">WINJTEMP</a> keyword.</p>
+
+<p>If the injection fluid contains just steam or water there are four
+ways of entering the data:</p>
+
+<ol>
+<li>Specify the steam quality                        <math><msub><mi>Q</mi>
+<mi>i</mi></msub></math>  and temperature  <math><msub><mi>T</mi>
+<mi>i</mi></msub></math>, pressure derived from the temperature.</li>
+
+<li> Specify the steam quality                        <math><msub><mi>Q</mi>
+<mi>i</mi></msub></math>  and pressure  <math><msub><mi>P</mi>
+<mi>i</mi></msub></math>, temperature derived from the pressure. </li>
+
+<li>Specify the pressure                        <math><msub><mi>P</mi>
+<mi>i</mi></msub></math>  and temperature  <math><msub><mi>T</mi>
+<mi>i</mi></msub></math>.                            </li>
+
+<li>Specify the enthalpy                        <math><msub><mi>H</mi>
+<mi>i</mi></msub></math>  and pressure  <math><msub><mi>P</mi>
+<mi>i</mi></msub></math>. </li>
+
+</ol>
+
+<p>The first two methods can be used for injection of two-phase saturated
+water and steam when the steam quality is between 0 and 1. The enthalpy
+of each phase is set to the saturated value at the specified temperature
+or pressure, and the injection fluid enthalpy is then calculated by
+interpolation:</p>
+
+<p>                                          <math><mrow>
+<msub><mrow><mi>H</mi></mrow><mrow><mi>i</mi></mrow>
+</msub><mo>=</mo><msub><mrow><mi>Q</mi></mrow><mrow>
+<mi>i</mi></mrow></msub><mo>⋅</mo><mrow><msubsup>
+<mrow><mi>H</mi></mrow><mrow><mi>s</mi></mrow><mrow>
+<mi>s</mi><mi>a</mi><mi>t</mi></mrow></msubsup><mrow>
+<mo>(</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>⁢</mo><mtext> </mtext><mo>,</mo><msub><mrow><mi>T</mi></mrow><mrow><mi>i</mi>
+</mrow></msub><mo>)</mo></mrow></mrow><mo>+</mo><mrow>
+<mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>Q</mi></mrow><mrow><mi>i</mi></mrow></msub></mrow>
+<mo>)</mo></mrow><mo>⋅</mo><mrow><msubsup><mrow><mi>H</mi></mrow><mrow><mi>w</mi></mrow><mrow><mi>s</mi>
+<mi>a</mi><mi>t</mi></mrow></msubsup><mrow><mo>(</mo>
+<msub><mrow><mi>P</mi></mrow><mrow><mi>i</mi></mrow>
+</msub><mo>,</mo><msub><mrow><mi>T</mi></mrow><mrow>
+<mi>i</mi></mrow></msub><mo>)</mo></mrow></mrow>
+</mrow></math>                                  </p>
+
+<p>where</p>
+
+<p>                                          <math><msub>
+<mi>P</mi><mi>i</mi></msub><mo>=</mo><mrow><msub>
+<mi>P</mi><mrow><mi>s</mi><mi>a</mi><mi>t</mi>
+</mrow></msub><mo>(</mo><msub><mi>T</mi><mi>i</mi>
+</msub><mo>)</mo></mrow></math>  and  <math><msub><mi>T</mi>
+<mi>i</mi></msub><mo>=</mo><mrow><msub><mi>T</mi>
+<mrow><mi>s</mi><mi>a</mi><mi>t</mi></mrow></msub>
+<mo>(</mo><msub><mi>P</mi><mi>i</mi></msub><mo>)</mo>
+</mrow></math>                                   </p>
+
+<p>The third method can be used for injection of single phase water
+or steam. The enthalpy is determined from steam tables</p>
+
+<p>                                          <math><msub>
+<mi>H</mi><mi>i</mi></msub><mo>=</mo><mrow><msub>
+<mi>H</mi><mi>w</mi></msub><mo>(</mo><msub><mi>P</mi>
+<mi>i</mi></msub><mo>,</mo><msub><mi>T</mi><mi>i</mi>
+</msub><mo>)</mo></mrow></math>  if  <math><msub>
+<mi>P</mi><mi>i</mi></msub><mo>&gt;</mo><mrow><msub>
+<mi>P</mi><mrow><mi>s</mi><mi>a</mi><mi>t</mi>
+</mrow></msub><mo>(</mo><msub><mi>T</mi><mi>i</mi>
+</msub><mo>)</mo></mrow></math>,                </p>
+
+<p>or</p>
+
+<p>                                          <math><msub>
+<mi>H</mi><mi>i</mi></msub><mo>=</mo><mrow><msub>
+<mi>H</mi><mi>s</mi></msub><mo>(</mo><msub><mi>P</mi>
+<mi>i</mi></msub><mo>,</mo><msub><mi>T</mi><mi>i</mi>
+</msub><mo>)</mo></mrow></math>  if  <math><msub>
+<mi>P</mi><mi>i</mi></msub><mo>&lt;</mo><mrow><msub>
+<mi>P</mi><mrow><mi>s</mi><mi>a</mi><mi>t</mi>
+</mrow></msub><mo>(</mo><msub><mi>T</mi><mi>i</mi>
+</msub><mo>)</mo></mrow></math>.                </p>
+
+<p>This method should not be used for two-phase injection, since the
+enthalpy of a saturated fluid is not uniquely defined by the pressure
+and temperature.</p>
+
+<p>The fourth method can be used in both one-phase and two-phase 
+ cases.</p>
+
+<p>If steam and gas are injected together then the same four ways
+can be  used to specify the enthalpy. In methods 1,2 and 3 the enthalpy
+of  the gas is calculated from the pressure and temperature and added
+ to the steam enthalpy. If method 4 is used, the specified enthalpy
+ is taken to be the enthalpy of the fluid.</p>
+
+<p>If hydrocarbon gas is injected without steam then only methods
+3 and 4 should be used to specify the fluid enthalpy.</p>
+
+</div>
+
+<div class="nested1" id="features_water__steam_and_gas_injection.tempatbottomhole"><a name="features_water__steam_and_gas_injection.tempatbottomhole"><!-- --></a>
+<h2 class="topictitle2">Temperature at the bottom hole pressure</h2>
+
+ <div>
+<p>At the bottom hole pressure                        <math><msub><mi>P</mi>
+<mi>w</mi></msub></math>, the injection enthalpy is equal
+to the enthalpy specified by the <a href="../ecl_rm/WINJTEMP.html#WINJTEMP">WINJTEMP</a> keyword. Therefore
+the temperature of the well  <math><msub><mi>T</mi>
+<mi>w</mi></msub></math>  can be found by solving        
+       </p>
+
+<p>                                          <math><mrow>
+<mi>H</mi><mo>(</mo><msub><mi>P</mi><mi>w</mi>
+</msub><mo>,</mo><msub><mi>T</mi><mi>w</mi></msub>
+<mo>)</mo></mrow><mo>=</mo><mrow><msub><mi>H</mi>
+<mi>i</mi></msub><mo>(</mo><msub><mi>P</mi><mi>i</mi>
+</msub><mo>,</mo><msub><mi>T</mi><mi>i</mi></msub>
+<mo>)</mo></mrow></math>                                 
+ </p>
+
+<p>The well temperature will only be equal to the temperature specified
+using the  <span class="keyword">WINJTEMP</span> keyword,                  
+     <math><msub><mi>T</mi>
+<mi>i</mi></msub></math>, if the pressure  <math><msub><mi>P</mi>
+<mi>i</mi></msub></math> is equal to the bottom hole pressure
+ <math><msub><mi>P</mi>
+<mi>w</mi></msub></math>. </p>
+
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

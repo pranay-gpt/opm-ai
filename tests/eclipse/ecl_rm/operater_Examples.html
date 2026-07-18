@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Examples"/>
+<meta name="DC.subject" content="OPERATER"/>
+<meta name="keywords" content="OPERATER"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="operater_examples"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Examples</title>
+</head>
+<body>
+
+
+<div class="nested0" id="operater_examples"><a name="operater_examples"><!-- --></a>
+<h1 class="topictitle1">Examples</h1>
+
+
+ <div>
+<div class="section" id="operater.eg1"><a name="operater.eg1"><!-- --></a><h4 class="sectiontitle">Example 1</h4>              
+   <p>Set <span class="keyword">DY</span> equal to <span class="keyword">DX</span>:</p>
+          <pre><code>OPERATER
+--result region  operate  param 
+  DY       2     'COPY'    DX   / 
+/</code></pre>	   	  </div>
+
+<div class="section" id="operater.eg2"><a name="operater.eg2"><!-- --></a><h4 class="sectiontitle">Example 2</h4>              
+  <p>Implement correlations over different regions of the grid:</p>
+          <pre><code>OPERATER
+PERMX   1  'MULTA'  PORO   .444 .5555 /
+PERMX   2  'POLY'   PERMX  .234   2   /
+PERMX   2  'POLY'   PERMX  .034   3   /
+PERMX   2  'POLY'   PERMX  .004   4   /
+PERMX   1  'SLOG'   PERMX  .000   1.0 /
+PERMX   1  'MULTX'  PERMX  2.44       /
+PERMZ   3  'COPY'   PERMX             / 
+/</code></pre>	   	  </div>
+
+<div class="section" id="operater.eg3"><a name="operater.eg3"><!-- --></a><h4 class="sectiontitle">Example 3</h4>              
+  <p>In the <span class="keyword">REGIONS</span> section:</p>
+          <pre><code>OPERATER
+ SATNUM 2 COPY FIPNUM /
+/
+
+</code></pre>	   	  </div>
+
+<div class="section" id="operater.eg4"><a name="operater.eg4"><!-- --></a><h4 class="sectiontitle">Example 4</h4>              
+  <p>Use of work arrays (item 8 of <a href="REGDIMS.html#REGDIMS">  REGDIMS</a> must be appropriately specified).</p>
+  
+       <pre><code>--result reg   operate  arg   param
+OPERATER
+WORK1     1    'MULTX'    PORO   .45 /
+WORK2     1    'LOG10'    PERMX /
+WORK2     1    'MULTIPLY'  WORK1 /
+PERMY     1    'ABS'      WORK2 /
+ /
+
+--result box   operate  argument  param
+OPERATER
+IWORK1    1    'MULTX'     SATNUM   2 /
+FIPNUM    1    'ADDX'     IWORK1   1 /
+ /</code></pre>          <p>For the example above, since two double
+precision work arrays (WORK1, WORK2) are used, item 8 of <span class="keyword">REGDIMS</span> should be set to 2; and since only 1 integer work
+array (IWORK1) is needed, then item 9 of <span class="keyword">REGDIMS</span> should be set to 1.</p>
+</div>
+
+<div class="section" id="operater.eg5"><a name="operater.eg5"><!-- --></a><h4 class="sectiontitle">Example 5</h4>                 <p>Set <span class="keyword">SATNUM</span> to 2 in <span class="keyword">OPERNUM</span> region 1 cells
+with <span class="keyword">PORO</span> &lt; 0.1:</p>
+          <pre><code>OPERATER
+--result box  operate  param 
+  SATNUM    1   'IFLT'    PORO 0.1 2   / 
+ /</code></pre>	   	  </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

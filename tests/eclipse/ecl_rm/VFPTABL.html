@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="VFPTABL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="VFPTABL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>VFPTABL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="VFPTABL"><a name="VFPTABL"><!-- --></a>
+<h1 class="keyword">VFPTABL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="vfptabl.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="vfptabl.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2778e45"> x </th>
+
+<th valign="top" id="d2778e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2778e54">  </th>
+
+<th valign="top" id="d2778e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2778e45 d2778e54 ">  </td>
+
+<td valign="top" headers="d2778e48 d2778e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2778e45 d2778e54 ">  </td>
+
+<td valign="top" headers="d2778e48 d2778e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2778e45 d2778e54 ">  </td>
+
+<td valign="top" headers="d2778e48 d2778e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2778e45 d2778e54 ">  </td>
+
+<td valign="top" headers="d2778e48 d2778e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2778e45 d2778e54 ">  </td>
+
+<td valign="top" headers="d2778e48 d2778e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2778e45 d2778e54 ">  </td>
+
+<td valign="top" headers="d2778e48 d2778e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2778e45 d2778e54 ">  </td>
+
+<td valign="top" headers="d2778e48 d2778e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2778e45 d2778e54 "> x </td>
+
+<td valign="top" headers="d2778e48 d2778e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>By default, VFP tables are interpolated linearly in all variables
+(FLOW, THP, WFR, GFR, ALQ). However, there is an option to apply cubic
+spline interpolation for the ALQ (Artificial Lift Quantity) variable.
+This option is primarily intended to be useful for the gas lift optimization
+facility (see <a href="../ecl_td/gasliftintro_Introduction.html#gasliftintro_gas_lift_optimization">"Gas lift optimization"</a> in the <cite>ECLIPSE Technical Description</cite>), in which the
+gradient of the wells’ performance with reference to the lift gas
+injection rate is important for deciding which wells could gain the
+most benefit from an increased lift gas supply.</p>
+
+<p>With linear interpolation, the gradient of the wells’ performance
+with respect to the ALQ value can change abruptly at each tabulated
+ALQ point. This may result in the optimal lift gas allocation rate
+to each well being biased towards the tabulated ALQ values in the
+VFP table. Interpolation based on cubic splines causes the gradient
+to change more smoothly over the table, while still honoring the values
+at the tabulated points.</p>
+
+<div class="p">The <span class="keyword">VFPTABL</span> keyword is followed by a single
+integer (either 1 or 2), terminated with a slash (/).<ol>
+<li>Use linear interpolation for all variables in the VFP tables.</li>
+
+<li>Use cubic spline interpolation for the ALQ variable in the production
+well VFP tables, and linear interpolation for the other variables.
+If there are more than 20 ALQ values in a table, linear interpolation
+is used for this table regardless of the method requested.</li>
+
+</ol>
+</div>
+
+<p>If this keyword is not present, linear interpolation is used for
+all variables.</p>
+
+<div class="section" id="vfptabl_example"><a name="vfptabl_example"><!-- --></a><h4 class="sectiontitle">Example</h4>             
+   <pre><code>VFPTABL
+2 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

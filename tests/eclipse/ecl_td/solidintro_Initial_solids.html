@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Initial solids"/>
+<meta name="DC.subject" content="Solid phase initial solids, Solid phase initial porosity, Solid phase initial energy"/>
+<meta name="keywords" content="Solid phase initial solids, Solid phase initial porosity, Solid phase initial energy"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="solidintro_initial_solids"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Initial solids</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="solidintro_initial_solids"><a name="solidintro_initial_solids"><!-- --></a>
+<h1 class="topictitle1">Initial solids</h1>
+
+
+ <div>
+<p>Initial values for fluid components can be determined in three
+ways:</p>
+
+<ul>
+<li>explicitly user-defined</li>
+
+<li>calculated by the simulator from equilibrium conditions</li>
+
+<li>read from restart files</li>
+
+</ul>
+
+<p>In restart runs, initial values of solid components are read from
+the restart file.</p>
+
+<p>For solid components, explicit initialization is used in cases
+1 and 2. This is because the solid components do not affect the flash
+and therefore do not affect the equilibration. The molar concentration
+of component                        <math><mi>c</mi></math>  is given by                </p>
+
+<p><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="solidintro.Xsolidintro.XID-00000352"/>
+ <math><mrow><msup><mrow>
+<mi>m</mi></mrow><mrow><mi>c</mi></mrow></msup><mo>=</mo><mo>(</mo><msub><mrow><mn>1</mn><mo>-</mo>
+<mover><mrow><mi>S</mi></mrow><mrow><mo>^</mo></mrow>
+</mover></mrow><mrow><mi>s</mi></mrow></msub><mo>)</mo>
+<mo>⋅</mo><msubsup><mrow><mi>m</mi></mrow><mrow><mi>f</mi><mi>l</mi></mrow><mrow><mi>c</mi></mrow>
+</msubsup><mo>+</mo><msub><mrow><mover><mrow><mi>S</mi>
+</mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow>
+<mi>s</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi>b</mi></mrow><mrow><mi>s</mi></mrow></msub><mo>⋅</mo>
+<msubsup><mrow><mi>x</mi></mrow><mrow><mi>s</mi>
+</mrow><mrow><mi>c</mi></mrow></msubsup></mrow></math> 
+</td><td align="right">[Eq. 285.1]
+              </td></tr></tbody></table>             </p>
+
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mover><mrow><mi>S</mi></mrow><mrow><mo>^</mo></mrow>
+</mover></mrow><mrow><mi>s</mi></mrow></msub></mrow>
+</math> </td>
+
+<td valign="top">is the initial solid saturation, defined by keyword <a href="../ecl_rm/SSOLID.html#SSOLID">SSOLID</a> </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msubsup><mi>x</mi>
+<mi>s</mi><mi>c</mi></msubsup></math> </td>
+
+<td valign="top">   is the initial solid molar fraction, defined by keyword <a href="../ecl_rm/SMF.html#SMF">SMF</a> </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msubsup><mi>m</mi>
+<mrow><mi>f</mi><mi>l</mi></mrow><mi>c</mi></msubsup>
+</math> </td>
+
+<td valign="top"> is the concentration of the fluid components, set either explicitly
+or by equilibration.       </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>For solid components the initial fluid concentration (which can
+be specified by <a href="../ecl_rm/ZI.html#ZI">ZI</a>, <a href="../ecl_rm/ZMFVD.html#ZMFVD">ZMFVD</a>, <a href="../ecl_rm/COMPVD.html#COMPVD">COMPVD</a>, <a href="../ecl_rm/XMF.html#XMF">XMF</a>, <a href="../ecl_rm/YMF.html#YMF">YMF</a>, <a href="../ecl_rm/ZMF.html#ZMF">ZMF</a> or <a href="../ecl_rm/NEI.html#NEI">NEI</a>) should be zero. For fluid components the initial solid concentration
+should be zero.</p>
+
+<p>If the initial solid saturation is not defined then a default value
+of zero is used and equation <a href="solidintro_Initial_solids.html#solidintro.Xsolidintro.XID-00000352">285.1</a>  becomes:</p>
+
+<p>                                          <math><msup>
+<mi>m</mi><mi>c</mi></msup><mo>=</mo><msubsup><mi>m</mi><mrow><mi>f</mi><mi>l</mi></mrow><mi>c</mi>
+</msubsup></math>                                   </p>
+
+<div class="section" id="solidintro_initial_porosity"><a name="solidintro_initial_porosity"><!-- --></a><h4 class="sectiontitle">Initial porosity</h4><p>The terms   <math>
+<mrow><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mrow><mover><mrow><mi>S</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>s</mi></mrow>
+</msub></mrow><mo>)</mo></mrow></mrow></math> and  <math><mrow><msub><mrow>
+<mover><mrow><mi>S</mi></mrow><mrow><mo>^</mo></mrow>
+</mover></mrow><mrow><mi>s</mi></mrow></msub></mrow>
+</math> in equation <a href="solidintro_Initial_solids.html#solidintro.Xsolidintro.XID-00000352">285.1</a>  represent the fractions of the pore-volume initially containing
+fluid and solid. The initial pore volume, which is usually calculated
+from the porosity  <math><mi>θ</mi>
+</math>  should therefore include both a fluid volume and a solid
+volume:          </p>
+<p>                              <math><mi>θ</mi><mo>=</mo><mfrac><mrow><msub><mi>V</mi><mi>f</mi></msub>
+<mo>+</mo><msub><mi>V</mi><mi>s</mi></msub></mrow>
+<mrow><msub><mi>V</mi><mi>f</mi></msub><mo>+</mo>
+<msub><mi>V</mi><mi>s</mi></msub><mo>+</mo><msub>
+<mi>V</mi><mi>r</mi></msub></mrow></mfrac></math> 
+                     </p>
+<p>where                  <math><msub><mi>V</mi>
+<mi>r</mi></msub></math>  is the rock volume.          </p>
+<p>In some circumstances the measured porosity                  <math><mi>θ′</mi>
+</math>  may only take into account the initial fluid volume   
+      </p>
+<p>                              <math><mrow>
+<mi>θ′</mi><mo>=</mo><mfrac><mrow><msub>
+<mrow><mi>V</mi></mrow><mrow><mi>f</mi></mrow></msub>
+</mrow><mrow><msub><mrow><mi>V</mi></mrow><mrow><mi>f</mi></mrow></msub><mo>+</mo><msub><mrow><mi>V</mi>
+</mrow><mrow><mi>s</mi></mrow></msub><mo>+</mo><msub>
+<mrow><mi>V</mi></mrow><mrow><mi>r</mi></mrow></msub>
+</mrow></mfrac><mo>=</mo><mi>θ</mi><mo>⋅</mo>
+<mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub>
+<mrow><mover><mrow><mi>S</mi></mrow><mrow><mo>^</mo>
+</mrow></mover></mrow><mrow><mi>s</mi></mrow></msub>
+</mrow><mo>)</mo></mrow></mrow></math>               
+      </p>
+<p>If these values are used to define the porosity (<a href="../ecl_rm/PORO.html#PORO">PORO</a>) then the initial pore
+volumes should in theory be multiplied by a factor               
+  <math><mrow><mn>1</mn>
+<mo>/</mo><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mrow><mover><mrow><mi>S</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>s</mi></mrow>
+</msub></mrow><mo>)</mo></mrow></mrow></math> using <a href="../ecl_rm/MULTPV.html#MULTPV">MULTPV</a>. However if the initial
+solid saturations are small or zero this term can be neglected.  
+       </p>
+</div>
+
+<div class="section" id="solidintro_initial_energy"><a name="solidintro_initial_energy"><!-- --></a><h4 class="sectiontitle">Initial energy</h4><p>Thermal only     </p>
+<p>In thermal runs
+the initial energy density                  <math><mi>e</mi></math>  is calculated from:          <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="solidintro_Initial_45798"/>
+ <math><mrow><msub><mrow>
+<mi>V</mi></mrow><mrow><mi>b</mi></mrow></msub><mo>⋅</mo><mi>e</mi><mo>=</mo><msub><mrow><mi>V</mi>
+</mrow><mrow><mi>p</mi></mrow></msub><mo>⋅</mo><mo>(</mo><mrow><mo>(</mo><msub><mrow><mn>1</mn><mo>-</mo><mover><mrow><mi>S</mi></mrow><mrow><mo>^</mo>
+</mrow></mover></mrow><mrow><mi>s</mi></mrow></msub>
+<mo>)</mo></mrow><mo>⋅</mo><msub><mrow><mi>e</mi>
+</mrow><mrow><mi>f</mi><mi>l</mi></mrow></msub><mo>+</mo><msub><mrow><mover><mrow><mi>S</mi></mrow>
+<mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>s</mi>
+</mrow></msub><mo>⋅</mo><msub><mrow><mi>b</mi></mrow>
+<mrow><mi>s</mi></mrow></msub><mo>⋅</mo><msub><mrow>
+<mi>e</mi></mrow><mrow><mi>s</mi></mrow></msub><mo>)</mo><mo>+</mo><msub><mrow><mi>V</mi></mrow><mrow>
+<mi>r</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi>e</mi></mrow><mrow><mi>r</mi></mrow></msub></mrow>
+</math> 
+</td><td align="right">[Eq. 285.2]
+              </td></tr></tbody></table></p>
+<p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>V</mi>
+<mi>b</mi></msub></math> </td>
+
+<td valign="top">, is the bulk volume  <math><msub><mi>V</mi>
+<mi>b</mi></msub><mo>=</mo><msub><mi>V</mi><mi>p</mi>
+</msub><mo>+</mo><msub><mi>V</mi><mi>r</mi></msub>
+</math>    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>e</mi>
+<mrow><mi>f</mi><mi>l</mi></mrow></msub></math> </td>
+
+<td valign="top">  is the fluid energy density  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>e</mi>
+<mi>s</mi></msub></math> </td>
+
+<td valign="top">  is the solid energy density,  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>e</mi>
+<mi>r</mi></msub></math> </td>
+
+<td valign="top">is the rock energy density.     </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

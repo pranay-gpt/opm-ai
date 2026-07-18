@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="MINPV"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="MINPV"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>MINPV</title>
+</head>
+<body>
+
+
+<div class="nested0" id="MINPV"><a name="MINPV"><!-- --></a>
+<h1 class="keyword">MINPV</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="minpv.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="minpv.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1386e45">                         x                   
+  </th>
+
+<th valign="top" id="d1386e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1386e54">                         x                   
+  </th>
+
+<th valign="top" id="d1386e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1386e45 d1386e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1386e48 d1386e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1386e45 d1386e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d1386e48 d1386e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1386e45 d1386e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1386e48 d1386e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1386e45 d1386e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1386e48 d1386e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1386e45 d1386e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1386e48 d1386e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1386e45 d1386e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1386e48 d1386e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1386e45 d1386e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1386e48 d1386e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1386e45 d1386e54 ">                                             
+ </td>
+
+<td valign="top" headers="d1386e48 d1386e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword is used to declare a threshold pore volume that a cell
+must exceed or it will made inactive.</p>
+
+<p>The keyword should be followed by a single positive real number,
+the minimum pore volume of an active cell, in the current units.</p>
+
+<p>UNITS: rm<sup>3</sup> (<samp class="codeph">METRIC</samp>), rb (<samp class="codeph">FIELD</samp>), rcc (<samp class="codeph">LAB</samp>), rm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+
+<p>DEFAULT 0.000001 (all unit sets)</p>
+
+<p>The data must be terminated by a slash (/).</p>
+
+<p>The keyword causes any cell with a pore volume less than the input
+value to become inactive.</p>
+
+<p>An inactive cell does not contribute to the total volume of the
+system, and is treated by default as a barrier. In order for non-neighbor
+connections to be established between adjoining cells across an inactive
+cell, pinchouts must be enabled using the keyword <a href="PINCH.html#PINCH"> PINCH</a> or <a href="PINCHOUT.html#PINCHOUT"> PINCHOUT</a>, and non-neighbor connections must be enabled
+(which is done by default unless keyword <a href="NONNC.html#NONNC"> NONNC</a> is encountered in the <span class="keyword">RUNSPEC</span> section).</p>
+
+<p>Cells that have been set inactive using the <a href="ACTNUM.html#ACTNUM"> ACTNUM</a> keyword remain so even if their
+pore volume exceeds the threshold; using <span class="keyword">MINPV</span> only
+affects active cells.</p>
+
+<p>In the absence of <span class="keyword">MINPV</span>, the default minimum
+pore volume is 1.0E-6 (in the current units). With this keyword, values
+down to 1.0E-20 can be specified, but care should be taken as active
+cells with very tiny pore volumes can cause serious convergence issues.</p>
+
+<p>In ECLIPSE 100, the sum of the total pore
+volume removed from the grid is output, along with the total number
+of cells removed. A list of all the cells that are made inactive can
+be obtained by setting switch 35 of the <a href="RPTGRID.html#RPTGRID"> RPTGRID</a> keyword &gt; 0 (mnemonic <span class="keyword">MINPV</span>).</p>
+
+<p>In ECLIPSE 100, values of <samp class="codeph">MINPV</samp> set for global grid cells will be copied to any LGR cells which
+they contain. This may cause smaller LGR cells to be deactivated and,
+if this is not the desired behavior, more suitable values should be
+provided by specifying <span class="keyword">MINPV</span> or <span class="keyword">MINPVV</span> between <a href="CARFIN.html#CARFIN"> CARFIN</a> (or other local grid-defining keyword) and <a href="ENDFIN.html#ENDFIN"> ENDFIN</a>. </p>
+
+<p>In ECLIPSE 300, values of <samp class="codeph">MINPV</samp> set for global grid cells will <strong>not</strong> be copied to any LGR cells
+which they contain. This may cause LGR cells to remain active when
+their global host cell was intended to be inactive, and more suitable
+values should be provided by specifying <span class="keyword">MINPV</span> or <span class="keyword">MINPVV</span> between <a href="CARFIN.html#CARFIN"> CARFIN</a> (or other local grid-defining keyword) and <a href="ENDFIN.html#ENDFIN"> ENDFIN</a>. </p>
+
+<p>See also keyword <a href="MINPVV.html#MINPVV"> MINPVV</a>.</p>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> Cells which have been deactivated by the <a href="ACTNUM.html#ACTNUM"> ACTNUM</a> keyword will remain
+inactive even if the cell volume is greater than the minimum set by <span class="keyword">MINPV</span>. Cells which have been left active by the <span class="keyword">ACTNUM</span> keyword will be made inactive if the cell volume
+is less than the minimum set by <span class="keyword">MINPV</span>.</div>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> In ECLIPSE 100, using the <a href="PORV.html#PORV"> PORV</a> keyword in the <span class="keyword">EDIT</span> section, to reset the pore volumes to greater than the minimum value
+will reactivate an inactive cell regardless of how it was deactivated,
+whether by <a href="ACTNUM.html#ACTNUM"> ACTNUM</a> or by <span class="keyword">MINPV</span>. However in ECLIPSE 300 this reactivation
+will not take place.</div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">In a <span class="keyword">THERMAL</span> simulation a cell will only
+be set inactive if the rock volume is also less than the minimum rock
+volume specified with the <a href="MINROCKV.html#MINROCKV"> MINROCKV</a> keyword.</span></div>
+
+<div class="section" id="minpv_example"><a name="minpv_example"><!-- --></a><h4 class="sectiontitle">Example</h4>               
+ <pre><code>MINPV
+ 4500 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

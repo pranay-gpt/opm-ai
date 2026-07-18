@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ROCKTRMX"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ROCKTRMX"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ROCKTRMX</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="ROCKTRMX"><a name="ROCKTRMX"><!-- --></a>
+<h1 class="keyword">ROCKTRMX</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="rocktrmx.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="rocktrmx.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2064e45">                                             
+ </th>
+
+<th valign="top" id="d2064e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2064e54">                         x                   
+  </th>
+
+<th valign="top" id="d2064e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2064e45 d2064e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2064e48 d2064e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2064e45 d2064e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2064e48 d2064e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2064e45 d2064e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2064e48 d2064e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2064e45 d2064e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d2064e48 d2064e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2064e45 d2064e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2064e48 d2064e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2064e45 d2064e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2064e48 d2064e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2064e45 d2064e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2064e48 d2064e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2064e45 d2064e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2064e48 d2064e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword allows you to input transmissibility variation parameters
+for each grid cell in the X-direction.</p>
+
+<p>Currently, ECLIPSE 300 allows the transmissibility to vary along
+with pore volume as a function of pressure (for instance,  <a href="ROCKTAB.html#ROCKTAB"> ROCKTAB</a> and  <a href="ROCKTABH.html#ROCKTABH"> ROCKTABH</a> keyword input).
+This approach is quite simplified as it does not take into account
+various important aspects:</p>
+
+<ul>
+<li>The transmissibility value in a cell which has a high porosity
+value would change differently to a cell which has a low porosity
+value.</li>
+
+<li>Some cells, around the well for instance, may require different
+modifications to be applied to them for history matching.</li>
+
+</ul>
+
+<p>The information provided with this keyword will be used if you
+set <a href="ROCKCOMP.html#ROCKCOMP"> ROCKCOMP</a> 
+keyword item 4 to <samp class="codeph">EXP</samp>, which will define the transmissibility
+as an exponential function of porosity, given by the following expression:</p>
+
+<p> <math><mrow>
+<mfrac><mrow><mi>κ</mi></mrow><mrow><msub><mrow><mi>κ</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow>
+</mfrac><mo>=</mo><mrow><msup><mrow><mi>e</mi></mrow>
+<mrow><mo>[</mo><mrow><msub><mrow><mi>κ</mi></mrow>
+<mrow><mtext>mult</mtext></mrow></msub><mo>(</mo><mfrac>
+<mrow><mi>φ</mi><mrow><mo>-</mo><msub><mrow><mi>φ</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow>
+</mrow><mrow><mn>1</mn><mrow><mo>-</mo><msub><mrow>
+<mi>φ</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow>
+</mrow></mfrac><mo>)</mo></mrow><mo>]</mo></mrow>
+</msup></mrow></mrow></math> </p>
+
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub>
+<mi>κ</mi><mn>0</mn></msub></math> </td>
+
+<td valign="top">  is the initial transmissibility,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub>
+<mi>φ</mi><mn>0</mn></msub></math> </td>
+
+<td valign="top">  is the initial porosity and</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub>
+<mi>κ</mi><mtext>mult</mtext></msub></math> </td>
+
+<td valign="top"> is the user-defined multiplier factor defined by the <span class="keyword">ROCKTRMX</span> keyword.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Any transmissibility multiplier previously set using the <span class="keyword">ROCKTAB</span> or <span class="keyword">ROCKTABH</span> keywords will be
+ignored if the <span class="keyword">ROCKTRMX</span> keyword is defined.</p>
+
+<p>The transmissibility multipliers are also applied to the well connection
+factors and to non-neighbor connections.</p>
+
+<p>This keyword is not compatible with the <a href="NINEPOIN.html#NINEPOIN"> NINEPOIN</a> and <a href="MPFA.html#MPFA"> MPFA</a> keywords.</p>
+
+<p>Values entered using this keyword should range from 0 to 1E10.
+The default value will be set to 0 which corresponds to no transmissibility
+variation with fluid porosity.</p>
+
+<p>The keyword should be followed by one real number for every grid
+block in the current input box, specifying the required water saturation.
+The data field should be terminated by a slash (/).</p>
+
+<p>Grid blocks are ordered with the X-axis index cycling fastest (from
+1 to <samp class="codeph">NDIVIX</samp>), followed by the Y-axis index (from
+1 to <samp class="codeph">NDIVIY</samp>), and finally the Z-axis index (from
+1 to <samp class="codeph">NDIVIZ</samp>). <samp class="codeph">NDIVIX</samp>, <samp class="codeph">NDIVIY</samp> and <samp class="codeph">NDIVIZ</samp> are specified in <span class="keyword">RUNSPEC</span> keyword  <a href="DIMENS.html#DIMENS"> DIMENS</a>.</p>
+
+<p>Repeat counts may be used for repeated values (for example 115*0.22).
+Note that spaces must not be inserted on either side of the asterisk
+(*).</p>
+
+<div class="section" id="rocktrmx_example"><a name="rocktrmx_example"><!-- --></a><h4 class="sectiontitle">Example</h4>            
+    <p>With <samp class="codeph">NDIVIX=20</samp>, <samp class="codeph">NDIVIY=6</samp> and <samp class="codeph">NDIVIZ=5</samp> specified in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS">  DIMENS</a>:</p>
+          <pre><code>ROCKTRMX
+ 120*0
+ 120*0.1
+ 120*0.5
+ 120*0.7
+ 120*1      /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

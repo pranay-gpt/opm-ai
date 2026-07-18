@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Optimizing gas lift within a network"/>
+<meta name="DC.subject" content="Gas lift optimization, Network"/>
+<meta name="keywords" content="Gas lift optimization, Network"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gasliftintro_optimizing_gas_lift_within_a_network"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Optimizing gas lift within a network</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gasliftintro_optimizing_gas_lift_within_a_network"><a name="gasliftintro_optimizing_gas_lift_within_a_network"><!-- --></a>
+<h1 class="topictitle1">Optimizing gas lift within a network</h1>
+
+
+ <div>
+<p>ECLIPSE 100</p>
+
+<p>The problem becomes much more complicated
+when the group belongs to a production network, with a flowline to
+a higher level group (see <a href="networkintro_Network_Option.html#networkintro_network_option"> "Network option"</a>). Here, the wells’ THP limits increase
+as the group’s production rate increases. Adding a small amount
+of lift gas to a particular well may increase its flow rate, but the
+consequent increase in the THP of all the other wells in the group
+will reduce the overall benefit of the extra lift gas. If the lift
+gas is required to flow through the flowline together with the produced
+fluids, the extra friction pressure drop it creates could more than
+cancel out the extra production from the well. (Lift gas can be included
+in the network branch flows by setting item 6 in keyword <a href="../ecl_rm/GRUPNET.html#GRUPNET">GRUPNET</a> or item 4 in keyword <a href="../ecl_rm/NODEPROP.html#NODEPROP">NODEPROP</a>.)</p>
+
+<p>The optimization procedure in a network is essentially the same
+as that described in the previous section, except that whenever a
+lift gas increment is added or subtracted, the incremental and decremental
+gradients must be recalculated for all the wells in the field. This
+is because a change in a well’s production rate will affect
+the THP limits of the other wells in the network. Moreover, each time
+an incremental or decremental gradient is calculated, the whole network
+must be rebalanced with the appropriate lift gas rate in order to
+work out the consequent change in the field’s oil production
+rate. This makes the computation time increase sharply according to
+the square of the number of wells in the field multiplied by the number
+of lift gas increments added and subtracted.</p>
+
+<p>gas lift optimization should therefore be used with care in conjunction
+with the Network option. It will be slow if applied to full-field
+studies with many wells. It is best applied to simple network systems,
+such as optimizing gas lift to a group of wells flowing into a common
+subsea manifold connected to the surface by a flowline. The choice
+of increment size is important also. A small increment size increases
+the required computation time because more increments need to be added
+and subtracted. Moreover, a small increment size may produce inaccurate
+estimates of the incremental and decremental gradients if the magnitude
+of the resulting change in the flow rate is comparable with the specified
+tolerance in the network balancing iterations. It is recommended that
+the <a href="../ecl_rm/NETBALAN.html#NETBALAN">NETBALAN</a> keyword is used to decrease the network convergence tolerance
+by a factor of 10 (item 2), and to increase the number of iterations
+in the balancing calculation (item 3).</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

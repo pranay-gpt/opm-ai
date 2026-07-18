@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="MULTFLT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="MULTFLT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>MULTFLT</title>
+</head>
+<body>
+
+
+<div class="nested0" id="MULTFLT"><a name="MULTFLT"><!-- --></a>
+<h1 class="keyword">MULTFLT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="multflt.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="multflt.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1436e45"> x </th>
+
+<th valign="top" id="d1436e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1436e54"> x </th>
+
+<th valign="top" id="d1436e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1436e45 d1436e54 ">  </td>
+
+<td valign="top" headers="d1436e48 d1436e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1436e45 d1436e54 "> x </td>
+
+<td valign="top" headers="d1436e48 d1436e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1436e45 d1436e54 "> x </td>
+
+<td valign="top" headers="d1436e48 d1436e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1436e45 d1436e54 ">  </td>
+
+<td valign="top" headers="d1436e48 d1436e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1436e45 d1436e54 ">  </td>
+
+<td valign="top" headers="d1436e48 d1436e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1436e45 d1436e54 ">  </td>
+
+<td valign="top" headers="d1436e48 d1436e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1436e45 d1436e54 ">  </td>
+
+<td valign="top" headers="d1436e48 d1436e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1436e45 d1436e54 "> x </td>
+
+<td valign="top" headers="d1436e48 d1436e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">MULTFLT</span> keyword can be used to modify the
+transmissibility (and diffusivity) across a fault previously defined
+using the <a href="FAULTS.html#FAULTS"> FAULTS</a> keyword.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/):</p>
+
+<ol>
+<li>Fault name (up to 8 characters) <p>(as specified in the <span class="keyword">FAULTS</span> keyword)</p>
+ <p>A fault root name, ending with an
+asterisk (*) can also be used to refer to several faults in one record.</p>
+</li>
+
+<li>Transmissibility multiplier <p>DEFAULT: 1.0</p>
+</li>
+
+<li>Diffusivity multiplier <p>(used only if the Diffusion option is
+enabled with the <a href="DIFFUSE.html#DIFFUSE"> DIFFUSE</a> keyword in the <span class="keyword">RUNSPEC</span> section)</p>
+ <p>DEFAULT: 1.0</p>
+</li>
+
+</ol>
+
+<p>The set of records must end with a blank record containing only
+a slash (/).</p>
+
+<div class="section" id="multflt_notes"><a name="multflt_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4> <ul>
+<li> If a fault is referred to twice in one or more <span class="keyword">MULTFLT</span> keywords, the transmissibility multiplier is taken from the last
+entry. </li>
+
+<li>If a fault is specified twice in one or more <span class="keyword">FAULTS</span> keywords, the transmissibility multiplier will be applied twice.
+In ECLIPSE 300, this behavior can be turned off by setting <a href="OPTIONS3.html#options3.248">item 248</a> of the <span class="keyword">OPTIONS3</span> keyword to 1.</li>
+
+<li>If the fault has been specified with a face <samp class="codeph">X</samp>, <samp class="codeph">Y</samp> or <samp class="codeph">Z</samp> in the <a href="FAULTS.html#FAULTS">  FAULTS</a> keyword, then
+using the <span class="keyword">MULTFLT</span> keyword in the <span class="keyword">GRID</span> section modifies the <a href="MULTX.html#MULTX"> MULTX</a>, <a href="MULTY.html#MULTY"> MULTY</a> and <a href="MULTZ.html#MULTZ"> MULTZ</a> arrays along the
+fault trajectory. If the <span class="keyword">MULTX</span>,  <span class="keyword">MULTY</span> or <span class="keyword">MULTZ</span> keyword is used for some cells, in addition
+to the <span class="keyword">MULTFLT</span> keyword, then the resultant transmissibility
+multiplier is the product of the two input multipliers. <p>Similarly,
+if negative direction transmissibility multipliers are enabled (using
+the <a href="GRIDOPTS.html#GRIDOPTS"> GRIDOPTS</a> keyword
+in the <span class="keyword">RUNSPEC</span> section), and if the fault has been
+specified with a face X-, Y- or Z- in the <span class="keyword">FAULTS</span> keyword, then using the <span class="keyword">MULTFLT</span> keyword in the <span class="keyword">GRID</span> section modifies the <a href="MULTX-.html#MULTX-"> MULTX-</a>, <a href="MULTY-.html#MULTY-"> MULTY-</a> and <a href="MULTZ-.html#MULTZ-"> MULTZ-</a> arrays along the fault trajectory. If the <span class="keyword">MULTX-</span>, <span class="keyword">MULTY-</span> or <span class="keyword">MULTZ-</span> keyword
+is used for some cells, in addition to the <span class="keyword">MULTFLT</span> keyword, then the resultant transmissibility multiplier is the product
+of the two input multipliers.</p>
+</li>
+
+<li>Use of the <span class="keyword">MULTFLT</span> keyword in the <span class="keyword">EDIT</span> section multiplies the transmissibilities along fault
+trajectories specified by the <span class="keyword">FAULTS</span> keyword in
+the <span class="keyword">GRID</span> section. The transmissibilities for any
+non-neighbor connections across such a fault are also modified to
+reflect the multiplier analogously to the use of <span class="keyword">MULTX</span>, <span class="keyword">MULTY</span> or <span class="keyword">MULTZ</span>. <p>Similarly,
+with the <span class="keyword">MULTX-</span>, <span class="keyword">MULTY-</span>, <span class="keyword">MULTZ-</span> keywords.</p>
+</li>
+
+<li>If two faults with different names run along the same face of
+a cell, then both transmissibility multipliers are applied.</li>
+
+<li>Refer also to the keywords, <span class="keyword">FAULTS</span> and <a href="RPTGRID.html#RPTGRID"> RPTGRID</a>.</li>
+
+<li>The <span class="keyword">MULTFLT</span> keyword can be used in the <span class="keyword">SCHEDULE</span> section to modify the transmissibilities along
+the fault trajectory during the run. The effect of this keyword in
+the <span class="keyword">SCHEDULE</span> section is cumulative, so every time
+the <span class="keyword">MULTFLT</span> keyword is encountered, it multiplies
+the current transmissibility across a specific face.</li>
+
+<li>The modified transmissibilities can be output to the Print file
+by using the mnemonic <samp class="codeph">MULT</samp> in the <a href="RPTSCHED.html#RPTSCHED"> RPTSCHED</a> keyword.</li>
+
+<li>If the transmissibilities have been imported from a GSG file rather
+than calculated (by using the <samp class="codeph">TRANPORV</samp> mnemonic in
+the <a href="PETOPTS.html#PETOPTS"> PETOPTS</a> keyword) <span class="keyword">MULTFLT</span> will be ignored in the <span class="keyword">GRID</span> section
+and must be specified in the <span class="keyword">EDIT</span> section instead
+if required.</li>
+
+<li>If <a href="TRANX.html#TRANX"> TRANX</a>, <a href="TRANY.html#TRANY"> TRANY</a> or <a href="TRANZ.html#TRANZ"> TRANZ</a> keywords are used
+then <span class="keyword">MULTFLT</span> should appear after these keywords
+in the <span class="keyword">EDIT</span> section. Otherwise, as <span class="keyword">TRANX</span>, <span class="keyword">TRANY</span> and <span class="keyword">TRANZ</span> set transmissibility
+explicitly, they will selectively override <span class="keyword">MULTFLT</span> for neighboring connections.</li>
+
+<li>When specified in the <span class="keyword">EDIT</span> section, in  ECLIPSE
+300, <span class="keyword">MULTFLT</span> is applied before <a href="EDITNNCR.html#EDITNNCR"> EDITNNCR</a>. This means
+that if the same fault NNC is edited in both, the effects of <span class="keyword">MULTFLT</span> will be overwritten for that NNC. In ECLIPSE 100, <span class="keyword">MULTFLT</span> is applied after <span class="keyword">EDITNNCR</span>. Using
+both keywords to modify NNCs in the same fault is not recommended.</li>
+
+</ul>
+ </div>
+
+<div class="section" id="multflt_example"><a name="multflt_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>Refer to
+the <a href="FAULTS.html#FAULTS"> FAULTS</a> keyword
+example:</p>
+ <pre><code>MULTFLT
+-- Multiplier (no diffusion)
+ zigzag 0.2 /
+ block  1.4 /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

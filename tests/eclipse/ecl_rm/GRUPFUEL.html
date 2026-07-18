@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GRUPFUEL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GRUPFUEL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GRUPFUEL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GRUPFUEL"><a name="GRUPFUEL"><!-- --></a>
+<h1 class="keyword">GRUPFUEL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="grupfuel.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="grupfuel.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d918e45">  </th>
+
+<th valign="top" id="d918e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d918e54"> x </th>
+
+<th valign="top" id="d918e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d918e45 d918e54 ">  </td>
+
+<td valign="top" headers="d918e48 d918e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d918e45 d918e54 ">  </td>
+
+<td valign="top" headers="d918e48 d918e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d918e45 d918e54 ">  </td>
+
+<td valign="top" headers="d918e48 d918e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d918e45 d918e54 ">  </td>
+
+<td valign="top" headers="d918e48 d918e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d918e45 d918e54 ">  </td>
+
+<td valign="top" headers="d918e48 d918e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d918e45 d918e54 ">  </td>
+
+<td valign="top" headers="d918e48 d918e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d918e45 d918e54 ">  </td>
+
+<td valign="top" headers="d918e48 d918e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d918e45 d918e54 "> x </td>
+
+<td valign="top" headers="d918e48 d918e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword specifies the amount of gas produced from a group
+that is burnt for fuel. This reduces the gas available for reinjection.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the items of data described below, and each terminated with a slash
+(/). The set of records is ended by a blank record, containing only
+a slash.</p>
+
+<ol>
+<li> Group name or name root <p>or <samp class="codeph">FIELD</samp> (to set
+the field fuel rate)</p>
+<p>A group name root, enclosed in quotes and
+ending with an asterisk (*), can be used to refer to several groups
+in one record.</p>
+</li>
+
+<li> The constant usage rate. This is summed with the quantity specified
+using item 3 to give the overall gas fuel requirement. A user-defined
+argument can be set with keywords <a href="UDQ.html#UDQ"> UDQ</a> and <a href="UDADIMS.html#UDADIMS"> UDADIMS</a>. <p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), Mscf/day
+(<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.0</p>
+</li>
+
+<li> The fractional gas rate. This is a fraction of the total gas
+production from the group (before any fuel, sales and re-injection
+requirements have been taken). This fractional part is calculated
+at each timestep and then summed with the quantity specified using
+item 2 to give the overall gas fuel requirement. A user-defined argument
+can be set with keywords <span class="keyword">UDQ</span> and <span class="keyword">UDADIMS</span>. <p>DEFAULT: 0.0</p>
+</li>
+
+<li> The component template. <p>This may be used to alter the composition
+of the gas removed for fuel.</p>
+<p>One value is required for each
+component, the default being 1. If a value less than one is specified,
+the amount of that component used for fuel will be correspondingly
+reduced.</p>
+<p>The method used to determine the amount of fuel burnt
+is:</p>
+<ul>
+<li> Sum the fuel requirements from any subgroups. </li>
+
+<li> If a fractional usage rate is defined (item 3), add the specified
+fraction of the remaining gas from the group, multiplying the volume
+rate of each component by its template value. Note that the template
+can alter the overall volume rate of gas used for fuel when a fractional
+usage rate is specified. </li>
+
+<li> If a constant usage rate is defined (item 2), add this to the
+fuel usage, subject to an upper limit equal to the remaining gas rate.
+The component template is used to multiply the contribution from each
+component. Note that the component template does not alter the constant
+usage rate, as the component volume rates are normalized again to
+obey the specified constant rate. </li>
+
+<li> The component rates used for fuel are now subtracted from the
+gas available for subsequent requests such as sales or reinjection.
+Note that using a component template can alter the composition of
+the remaining available gas. </li>
+
+</ul>
+</li>
+
+</ol>
+
+<p>In a multilevel group hierarchy the remaining available gas is
+reduced for all children of the group concerned. The same reduction
+fraction is used for all children as for the group concerned - the
+gas used for fuel is assumed to be evenly taken from the gas produced
+by the group.</p>
+
+<p>By default, the group fuel requirement is satisfied prior to the
+sales requirement. This ordering may be changed using the <a href="WTAKEGAS.html#WTAKEGAS"> WTAKEGAS</a> keyword.</p>
+
+<p>The fuel requirements are satisfied from the bottom of the group
+hierarchy to the top.</p>
+
+<p>See also <a href="../ecl_td/wellmode_Group_injection_control_options.html#wellmode_group_injection_control_options">"Group injection
+control options"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> For accurate group gas accounting, there is a limitation that
+reinjection control and any sales gas or fuel gas requirements must
+all be specified for the same group, usually the FIELD group, and
+not split across the group hierarchy. This limitation only applies
+if the injection gas contains group vapor, with the vapor taken from
+a separator stage (that is not from the whole separator). </span></div>
+
+<div class="section" id="grupfuel.example"><a name="grupfuel.example"><!-- --></a><h4 class="sectiontitle">Example</h4> <p>Set field
+gas fuel rate of 1000 Mscf/day:</p>
+ <pre><code>GRUPFUEL
+ FIELD  1000 /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

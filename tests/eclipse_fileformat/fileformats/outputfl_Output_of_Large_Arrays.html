@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Output of Large Arrays"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="outputfl_output_of_large_arrays"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Output of Large Arrays</title>
+</head>
+<body>
+
+
+<div class="Heading2" id="outputfl_output_of_large_arrays"><a name="outputfl_output_of_large_arrays"><!-- --></a>
+<h1 class="topictitle1">Output of Large Arrays</h1>
+
+
+ <div>
+<p>Output of arrays having 2<sup>31</sup> elements or more is facilitated
+by using a pair of headers. The first header should have the name
+of the data and the type X231. The second header should follow immediately
+after the first, have the same name, but the type of the header should
+reflect the type of the data, for example INTE. The total size of
+the array is encoded between the two headers as follows:</p>
+
+<ul>
+<li>The upper part of the total size, calculated as total array size
+divided by 2<sup>31</sup> and written with a negative sign as item
+2 of the <samp class="codeph">X231</samp> header.</li>
+
+<li> The lower part of the total size, calculated as the remainder
+when divided by 2<sup>31</sup> and written with a positive sign as
+item 2 of the second header.</li>
+
+</ul>
+
+<p>So for example to output an array called 'ACTNUM' of 5,000,000,000
+integers in a formatted file the following pair of headers would be
+required.</p>
+
+<pre><code>'ACTNUM  '          -2 'X231'
+'ACTNUM  '   705032704 'INTE'</code></pre>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The large array format extension (<samp class="codeph">X231</samp> header)
+is not yet supported by the ECLIPSE Suite or Petrel, and is defined
+for use in future releases.</span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

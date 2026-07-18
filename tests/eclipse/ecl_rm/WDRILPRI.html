@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WDRILPRI"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WDRILPRI"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WDRILPRI</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WDRILPRI"><a name="WDRILPRI"><!-- --></a>
+<h1 class="keyword">WDRILPRI</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wdrilpri.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wdrilpri.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2854e45">                         x                   
+  </th>
+
+<th valign="top" id="d2854e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2854e54">                         x                   
+  </th>
+
+<th valign="top" id="d2854e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2854e45 d2854e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2854e48 d2854e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2854e45 d2854e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2854e48 d2854e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2854e45 d2854e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2854e48 d2854e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2854e45 d2854e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2854e48 d2854e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2854e45 d2854e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2854e48 d2854e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2854e45 d2854e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2854e48 d2854e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2854e45 d2854e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2854e48 d2854e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2854e45 d2854e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d2854e48 d2854e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is used to put wells into the prioritized drilling
+queue and to define their drilling priority values and drilling unit
+numbers. The drilling priority values set here will override the values
+calculated using the drilling priority equation (see keyword <a href="DRILPRI.html#DRILPRI"> DRILPRI</a>).</p>
+
+<p>The wells are opened in decreasing order of their drilling priority
+when they are needed to maintain a group rate target under group control
+by guide rate (<a href="GCONPROD.html#GCONPROD"> GCONPROD</a>, <a href="GCONINJE.html#GCONINJE"> GCONINJE</a>, <a href="GCONSALE.html#GCONSALE"> GCONSALE</a>) or
+when needed to maintain a group’s production potential (<a href="GDRILPOT.html#GDRILPOT"> GDRILPOT</a>). If a group
+(including the field) cannot meet its production target, the production
+well with the highest drilling priority that is subordinate to that
+group, and not subordinate to any other group under the same mode
+of production control, are opened automatically. If a group cannot
+meet its injection target, the injection well with the highest drilling
+priority that is subordinate to that group, and not subordinate to
+any other group under injection control for the same phase, will be
+opened automatically.</p>
+
+<p>Well opening may be delayed by constraints on the rate of drilling
+new wells (see keyword <a href="WDRILTIM.html#WDRILTIM"> WDRILTIM</a>), the availability of drilling rigs (keyword <a href="GRUPRIG.html#GRUPRIG"> GRUPRIG</a>) and, in ECLIPSE
+100, on the maximum number of open wells in any group (item 9 of keyword <a href="GECON.html#GECON"> GECON</a>). If a well cannot
+currently be drilled because of any of these constraints, wells with
+lower drilling priority in the queue are examined in decreasing priority
+order to see if there is another suitable well that can be drilled
+instead.</p>
+
+<p>An alternative to the prioritized drilling queue is the sequential
+drilling queue, from which wells are opened in the sequence in which
+they are placed in the queue. Wells are placed in the sequential drilling
+queue using the keyword <a href="QDRILL.html#QDRILL"> QDRILL</a>. Only one type of drilling queue may exist at any given time
+in the run; the two types of queue cannot operate together.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>The drilling queue facility should not be
+confused with the automatic opening option ('<samp class="codeph">AUTO</samp>' in item 2 of keyword <a href="WCONPROD.html#WCONPROD"> WCONPROD</a> and item 3 of keyword <a href="WCONINJE.html#WCONINJE"> WCONINJE</a> for example). They are two completely separate
+facilities. Wells in the drilling queue are opened only when needed
+to maintain group production and injection targets. Wells on ‘ <samp class="codeph">AUTO</samp> ’ are opened as soon as allowed by constraints on drilling
+rate and number of open wells per group, irrespective of group flow
+rates.</p>
+
+<p>The <span class="keyword">WDRILPRI</span> keyword is followed by any number
+of records, each containing the following items of data, and each
+terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li>Well name, well name template, well list or well list template
+. <p>A template enclosed in quotes can be used to refer to multiple
+wells or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+             </li>
+
+<li>Drilling priority value for the well(s).<p>If the priority is
+zero the well is removed from the drilling queue.</p>
+            
+   <p>If the priority is greater than zero, the well’s drilling priority
+remains fixed at this value.</p>
+<p>If the priority is negative, the
+well’s drilling priority is calculated at specified intervals (see
+keyword <span class="keyword">DRILPRI</span>) from its potential rates. For
+producers, it is calculated from the priority equation defined with
+keyword <span class="keyword">DRILPRI</span>. For injectors the drilling priority
+is set equal to their injection potentials.</p>
+<p>DEFAULT: Negative</p>
+<p>Priority values do not have any units.</p>
+</li>
+
+<li>Drilling unit number (ECLIPSE 100)<p>If set
+&gt; 0 all wells with this particular drilling unit number is drilled
+at the same time. Also their drilling priorities (either calculated
+or user-specified) are added together when the drilling queue is scanned
+for the highest priority value, so that the most productive unit overall
+is selected if the well priorities reflect their production potentials.
+This facility allows, for example, wells in the same locality to be
+drilled consecutively once it has been decided to send a drilling
+rig there.</p>
+<p>Once a unit has been selected for drilling, the drilling
+process for <strong>all</strong> its wells begins immediately. The drilling
+rig is logged as busy for the sum of the wells’ drilling times (keyword <a href="WDRILTIM.html#WDRILTIM"> WDRILTIM</a> item 2). However,
+all the wells begin flowing immediately unless they are flagged as
+closed while being drilled (<span class="keyword">WDRILTIM</span> item 3). In
+that case each well is given a zero efficiency factor until its drilling
+process is finished, and each well is drilled consecutively in the
+order in which they were first declared with the <a href="WELSPECS.html#WELSPECS"> WELSPECS</a> keyword. If
+more than one rig is available, the drilling process is shared between
+them.</p>
+<p>DEFAULT: 0</p>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The drilling queue is <strong>not</strong> used for opening wells belonging
+to groups under prioritization group control (keyword <a href="GCONPRI.html#GCONPRI"> GCONPRI</a>), as the prioritization
+algorithm itself handles the opening and closing of these wells. Drilling
+priorities should not be confused with well priorities set with keywords <a href="PRIORITY.html#PRIORITY"> PRIORITY</a> and <a href="WELPRI.html#WELPRI"> WELPRI</a>.</span></div>
+
+<p>See also keywords <a href="DRILPRI.html#DRILPRI"> DRILPRI</a>, <a href="WDRILRES.html#WDRILRES"> WDRILRES</a>, <a href="WELSOMIN.html#WELSOMIN"> WELSOMIN</a>, <a href="PRORDER.html#PRORDER"> PRORDER</a> and <a href="QDRILL.html#QDRILL"> QDRILL</a>.</p>
+
+<div class="section" id="wdrilpri_example"><a name="wdrilpri_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WDRILPRI
+ 'PROD*' -1.0 /
+ PROD1   1000.0 /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

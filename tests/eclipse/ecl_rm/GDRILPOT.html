@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GDRILPOT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GDRILPOT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GDRILPOT</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GDRILPOT"><a name="GDRILPOT"><!-- --></a>
+<h1 class="keyword">GDRILPOT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gdrilpot.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gdrilpot.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d838e45"> x </th>
+
+<th valign="top" id="d838e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d838e54"> x </th>
+
+<th valign="top" id="d838e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d838e45 d838e54 ">  </td>
+
+<td valign="top" headers="d838e48 d838e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d838e45 d838e54 ">  </td>
+
+<td valign="top" headers="d838e48 d838e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d838e45 d838e54 ">  </td>
+
+<td valign="top" headers="d838e48 d838e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d838e45 d838e54 ">  </td>
+
+<td valign="top" headers="d838e48 d838e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d838e45 d838e54 ">  </td>
+
+<td valign="top" headers="d838e48 d838e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d838e45 d838e54 ">  </td>
+
+<td valign="top" headers="d838e48 d838e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d838e45 d838e54 ">  </td>
+
+<td valign="top" headers="d838e48 d838e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d838e45 d838e54 "> x </td>
+
+<td valign="top" headers="d838e48 d838e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword specifies a minimum potential flow rate for a group
+(see <a href="../ecl_td/potential_Well_potentials.html#potential_well_potentials">"Well potentials"</a> in the <cite>ECLIPSE Technical Description</cite>). If the group’s
+production or injection potential falls below this limit the drilling
+queue (set up with either keyword <a href="QDRILL.html#QDRILL">  QDRILL</a> or <a href="WDRILPRI.html#WDRILPRI">  WDRILPRI</a>) will be scanned for a new well, of the appropriate type,
+to open to restore the group’s potential.</p>
+
+<p>This feature allows the drilling process to be started in good
+time before the well is required to maintain a group production or
+injection target set with keyword <a href="GCONPROD.html#GCONPROD">  GCONPROD</a> or <a href="GCONINJE.html#GCONINJE">  GCONINJE</a>, by setting the group’s minimum
+potential rate sufficiently greater than its actual flow target, if
+the well has a non-zero drilling time set in item 2 of keyword <a href="WDRILTIM.html#WDRILTIM">  WDRILTIM</a>.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> If wells are treated as closed while being drilled (see item
+3 of keyword <span class="keyword">WDRILTIM</span>), ECLIPSE continues to drill
+new wells because the group potential will not increase immediately.
+This can be avoided by using the <span class="keyword">QDRILL</span> option
+in the <span class="keyword">WDRILTIM</span> keyword. </span></div>
+
+<p>The <span class="keyword">GDRILPOT</span> keyword is followed by any number
+of records, each containing the following items of data, and each
+terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li> Group name or group name root <p>or <samp class="codeph">FIELD</samp> (for
+field minimum potential rates)</p>
+ <p>A group name root, enclosed
+in quotes and ending with an asterisk (*), can be used to refer to
+several groups in one record.</p>
+ </li>
+
+<li> Quantity to which the rate in item 3 applies 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">   
+<tbody>
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">OPR</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Oil production potential</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">WPRD</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Water production potential</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GPRD</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Gas production potential</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">OINJ</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Oil injection potential</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">WINJ</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Water injection potential</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GINJ</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Gas injection potential</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> Only one production quantity can be active at any one
+time for each group, but injection limits may be defined simultaneously
+by entering multiple records for the same group. </span></div>
+ </li>
+
+<li> Minimum potential rate of the quantity in item 2 <p>The value
+must be greater than or equal to zero.</p>
+ <p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), stb/day for oil or water (<samp class="codeph">FIELD</samp>), Mscf/day for gas (<samp class="codeph">FIELD</samp>), scc/hr
+(<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: Zero</p>
+<p>A zero or negative value implies that
+there is no minimum potential rate, for the quantity specified in
+item 2, applying to this group.</p>
+ </li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="section" id="gdrilpot_example"><a name="gdrilpot_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>GDRILPOT
+-- group                  
+-- name    phase    rate   
+  GR-A     OPRD     7520    /
+  GS-A     GPRD     17760    /
+  GR-A     WINJ     3000     / 
+  GR-A     GINJ     35000     / 
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

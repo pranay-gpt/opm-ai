@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WTEST"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WTEST"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WTEST</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="WTEST"><a name="WTEST"><!-- --></a>
+<h1 class="keyword">WTEST</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wtest.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wtest.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d3104e45">                         x                   
+  </th>
+
+<th valign="top" id="d3104e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d3104e54">                         x                   
+  </th>
+
+<th valign="top" id="d3104e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d3104e45 d3104e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3104e48 d3104e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3104e45 d3104e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3104e48 d3104e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3104e45 d3104e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3104e48 d3104e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3104e45 d3104e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3104e48 d3104e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3104e45 d3104e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3104e48 d3104e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3104e45 d3104e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3104e48 d3104e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3104e45 d3104e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3104e48 d3104e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3104e45 d3104e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d3104e48 d3104e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).
+The set of records must end with a blank record, containing only a
+slash (/).</p>
+
+<ol>
+<li>Well name, well name template, well list or well list template <p>A template enclosed in quotes can be used to refer to multiple wells
+or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+             </li>
+
+<li><p>Testing interval </p>
+<p>This must be greater than zero. (ECLIPSE
+100)</p>
+<p>If this is less than or equal to zero, the well will be
+tested at every timestep. (ECLIPSE 300)</p>
+<p>UNITS: day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+<p>The well is tested at the beginning
+of the first timestep that starts after the specified interval has
+elapsed since it was closed. Subsequent tests are performed at each
+timestep that starts after the specified interval has elapsed since
+the previous test.</p>
+<p>If the testing interval is very small (for
+example, 1 day), the well is tested at the beginning of each timestep
+(unless of course the timesteps are smaller than this).</p>
+</li>
+
+<li>Closure reason(s) valid for testing  <p>A string of up to 5 characters.</p>
+    
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">   
+<tbody>
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%">If the string contains a P:</td>
+
+<td valign="top" width="33.33333333333333%">The well is tested if it has been closed for any <strong>physical</strong> reason (for example failure to operate at its BHP or THP limit).
+It is opened if the test shows that it can operate again.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%">If the string contains an E:</td>
+
+<td valign="top" width="33.33333333333333%">The well is tested if it has been closed due to an <strong>economic</strong> limit set in the keywords <a href="WECON.html#WECON"> WECON</a>, <a href="CECON.html#CECON"> CECON</a> or,
+for ECLIPSE 100, <a href="WECONINJ.html#WECONINJ"> WECONINJ</a>. If it has at least one open connection, the well is opened
+if it obeys all the limits set in <span class="keyword">WECON</span>. Any closed
+connections will not be reopened. However, if the well has no open
+connections, it must have been closed after a workover resulting from
+a water cut, GOR or WGR limit violation. In this case, all connections
+that were closed by automatic workovers are tested individually. A
+connection is reopened if its water cut, GOR and WGR do not exceed
+the limits set in <span class="keyword">WECON</span> and <span class="keyword">CECON</span>. Connections that were closed manually are not tested. The well
+is opened if at least one connection is reopened.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%">If the string contains a G:</td>
+
+<td valign="top" width="33.33333333333333%">The well is opened if it has been closed due to a <samp class="codeph">GROUP</samp> or <samp class="codeph">FIELD</samp> limit set in keyword <a href="GECON.html#GECON"> GECON</a> or the <span class="keyword">GCON----</span>family. The well is opened unconditionally, since it cannot be tested
+in isolation. If it causes a group or field limit to be broken, the
+remedial action is performed at the end of the timestep in the usual
+manner. If the well has no open connections, all connections closed
+by automatic workovers are reopened.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%">If the string contains a D:</td>
+
+<td valign="top" width="33.33333333333333%">The well is tested if it has been closed on exceeding its maximum
+THP design limit set in keyword <a href="WTHPMAX.html#WTHPMAX"> WTHPMAX</a>. It is reopened if its THP has fallen below
+a maximum limit for reopening, when flowing at a specified rate (subject
+to obeying its other rate and pressure limits). The rate limit applied
+for the test, and the maximum THP for reopening, are set in keyword <span class="keyword">WTHPMAX</span>.</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%">If the string contains a C:</td>
+
+<td valign="top" width="33.33333333333333%">Connections closed in automatic workovers are tested individually
+for reopening <strong>while the well is still open</strong>. A connection is
+reopened if it does not violate any of the limits set in <a href="WECON.html#WECON"> WECON</a> or <a href="CECON.html#CECON"> CECON</a>. Any connections
+that were closed manually are not reopened. The difference between
+this type of test and the test triggered by an E is that the E test
+is only performed after the whole well has been closed by an economic
+limit, while the C test is performed while one or more connections
+have been closed but the well is still producing through other connections.
+The testing interval (item 2) prevents testing until the specified
+number of days have elapsed since the most recent automatic closure
+of <strong>any</strong> connection in that well. Since the well itself does
+not have to be reopened after a successful C test, the start-up time
+(item 5) does not apply.<p>Wells (and, with the C option, connections)
+that were closed manually are not tested.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: ' ' (an empty string, which turns off the testing
+process for the well)</p>
+</li>
+
+<li>Number of times the well can be tested  <p>An integer between
+0 and 32767</p>
+                <p>After the well has been tested this
+number of times (regardless of whether any tests are successful),
+it is not tested any more unless this item is reset in a subsequent
+use of the <span class="keyword">WTEST</span> keyword.</p>
+<p>A value of 0 allows
+the well to be tested an unlimited number of times.</p>
+<p>DEFAULT:   0</p>
+ </li>
+
+<li><p>ECLIPSE 100</p>
+ 
+              <p>Start-up time</p>
+<p>The well’s efficiency factor
+is steadily ramped up over the specified start-up time when it is
+reopened after a successful test. During each timestep after reopening,
+its efficiency factor is multiplied by the quantity</p>
+<p>       
+                                  <math><mrow>
+<mo>(</mo><mi>T</mi><mrow><mo>-</mo><msub><mrow><mi>T</mi></mrow><mrow><mi>o</mi></mrow></msub></mrow>
+<mo>)</mo><mo>/</mo><mo>(</mo><mtext>start-up time</mtext>
+<mo>)</mo></mrow></math>  </p>
+<p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>T</mi>
+<mtext> </mtext></msub></math> </td>
+
+<td valign="top"> is the time at the end of the timestep  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>T</mi>
+<mi>o</mi></msub></math> </td>
+
+<td valign="top">is the time the well was reopened    </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>for as long as                        <math><mrow><mi>T</mi>
+<mrow><mo>-</mo><msub><mrow><mi>T</mi></mrow><mrow>
+<mi>o</mi></mrow></msub></mrow><mo>&lt;</mo><mtext>start-up time</mtext></mrow></math>.  </p>
+<p>Thus if the start-up
+time is large compared to the timestep size, the well is brought on
+gradually, avoiding the timestep convergence difficulties sometimes
+observed when a high-rate well is suddenly opened.</p>
+<p>The start-up
+time also applies to wells turned on by automatic cycling (see keyword <a href="WCYCLE.html#WCYCLE"> WCYCLE</a>).</p>
+<p>UNITS:
+day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT:   0.0,
+  which gives an instantaneous start-up.</p>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record containing just a slash.</p>
+
+<div class="section" id="wtest_example"><a name="wtest_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WTEST
+ 'PROD*' 100   PE  /
+  W1     150   P   10 /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

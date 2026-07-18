@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Gas field operations model"/>
+<meta name="DC.subject" content="Seasonality profile, Daily Contracted Quantity (DCQ), DCQ adjustment for swing, Sales gas rate control and output, Sales gas delivery capacity, Automatic compressor operation, Gas field operations"/>
+<meta name="keywords" content="Seasonality profile, Daily Contracted Quantity (DCQ), DCQ adjustment for swing, Sales gas rate control and output, Sales gas delivery capacity, Automatic compressor operation, Gas field operations"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gasfieldintro_gas_field_operations_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Gas field operations model</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gasfieldintro_gas_field_operations_model"><a name="gasfieldintro_gas_field_operations_model"><!-- --></a>
+<h1 class="keyword">Gas field operations model</h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gasfieldintro.tab.0009"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gasfieldintro.tab.0009" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">                         x                   
+  </td>
+
+<td valign="top">                         ECLIPSE 100         
+            </td>
+
+</tr>
+
+<tr>
+<td valign="top">                         x     
+                </td>
+
+<td valign="top">                         ECLIPSE 300         
+            </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The gas field operations model is a special extension to both ECLIPSE
+100 and ECLIPSE 300. It contains a set of facilities designed to model
+gas field production constraints and operations. The principal features
+in this set are:</p>
+
+<div class="section" id="gasfieldintro_seasonality_profile"><a name="gasfieldintro_seasonality_profile"><!-- --></a><h4 class="sectiontitle">Seasonality
+profile</h4><p>The required rate of gas production is not constant
+throughout the year, but varies from month to month to reflect the
+annual pattern of demand. To generate this varying production rate,
+you enter an annual profile made up of monthly multipliers to the
+mean rate or DCQ (Daily Contracted Quantity). The field’s gas
+production rate target for each month will be set equal to the DCQ
+multiplied by the month’s profile factor.</p>
+</div>
+
+<div class="section" id="gasfieldintro_adjustment_of_dcq_to_allow_for_swing"><a name="gasfieldintro_adjustment_of_dcq_to_allow_for_swing"><!-- --></a><h4 class="sectiontitle">Adjustment of DCQ to allow for swing</h4><p>A typical gas sales
+contract requires that the field should be able to produce at a rate,
+which is a given multiple of the DCQ. The given multiple is the swing
+factor, which for example may have a value of 1.67. A suitable value
+of the DCQ must be calculated that is valid over the period of each
+contract, depending on the deliverability of the field over the period.
+The DCQ may be reviewed on an annual basis (contract years) or more
+frequently (contract quarters, for example). ECLIPSE can determine
+a suitable value of the DCQ for each contract period by solving the
+period in two passes. In the first pass, ECLIPSE tests whether the
+field can produce at the rate of DCQ × Swing Factor, with the
+DCQ set at the current value. If the field cannot produce at this
+rate, ECLIPSE works out how much the DCQ should be reduced to make
+this target sustainable. If requested, ECLIPSE may perform a number
+of iterations of the first pass, with different DCQ values, to determine
+the highest DCQ that obeys the swing requirement over the period,
+to a specified accuracy. In the second pass, the field is produced
+at the rate of DCQ (reduced if necessary) × profile factor,
+to model the actual production profile over the contract period. Note
+that, because each contract period must be simulated at least twice,
+use of the DCQ adjustment option requires a corresponding increase
+in CPU time.</p>
+</div>
+
+<div class="section" id="gasfieldintro_control_and_output_of_sales_gas_rate"><a name="gasfieldintro_control_and_output_of_sales_gas_rate"><!-- --></a><h4 class="sectiontitle">Control and output of sales gas rate</h4><p>Sales gas is what
+is left over after taking account of gas consumption at each group
+(known as gas fuel usage in ECLIPSE 300). For ECLIPSE 100, the sales
+gas rate can also include gas imported at a specified rate from outside
+the field. ECLIPSE normally applies the group or field gas rate targets
+to the <strong>gross</strong> production rate (that is the gas extracted from
+the formation). But when the gas field operation model is in use,
+the targets are applied to the sales gas rate (that is the gas sent
+to shore). The sales gas rates and totals are included in the production
+reports, and can be output to the <span class="keyword">SUMMARY</span> file.</p>
+</div>
+
+<div class="section" id="gasfieldintro_estimation_of_delivery_capacity"><a name="gasfieldintro_estimation_of_delivery_capacity"><!-- --></a><h4 class="sectiontitle">Estimation of delivery capacity</h4><p>As well as modeling the
+actual performance of the field at the demanded rate, it is useful
+to have an idea of its delivery capacity. This is defined as the sales
+gas production rate that would ensue immediately after the removal
+of all group and field gas rate targets and limits, at the current
+grid block conditions. You can specify whether any group limits for
+other phases, and any rate limits on the wells themselves, should
+remain in operation. The delivery capacity is calculated at the start
+of each timestep, and can be output to the <span class="keyword">SUMMARY</span> file.</p>
+</div>
+
+<div class="section" id="gasfieldintro_automatic_compressor_operation"><a name="gasfieldintro_automatic_compressor_operation"><!-- --></a><h4 class="sectiontitle">Automatic compressor operation</h4><p>ECLIPSE
+100 </p>
+<p>When the gas field operations model is used in conjunction
+with the network option, gas compressors in the pipelines can be switched
+on and off automatically as required. The compressors may consume
+gas at a specified rate for power, which will be added to the gas
+consumption rate whenever the compressors are operating. The simplest
+option has two states: either "compression on" or "compression off".
+A more versatile option switches on a series of compressors in a predefined
+sequence, and allows each compressor to have up to five levels of
+compression.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

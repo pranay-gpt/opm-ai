@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Each subsequent record"/>
+<meta name="DC.subject" content="WFRICTN"/>
+<meta name="keywords" content="WFRICTN"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wfrictn_each_subsequent_record"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Each subsequent record</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wfrictn_each_subsequent_record"><a name="wfrictn_each_subsequent_record"><!-- --></a>
+<h1 class="topictitle1">Each subsequent record</h1>
+
+
+ <div>
+<p>The subsequent records set the start and end of each connection’s
+perforations in terms of distance along the tubing from the well’s
+bottom hole reference point. These distances are required by the frictional
+pressure drop calculation, which treats each connection’s flow as
+entering the tubing half way between the start and end of the perforations
+in the grid block. The bottom hole reference point should be downstream
+for a producer (upstream for an injector) of all the perforations.
+A suitable position is at the start of the perforations (the end nearest
+the wellhead). The order in which these records are entered is used
+to determine the structure of the well (see <a href="../ecl_td/wbfrictusing_Multi-lateral_wells.html#wbfrictusing_multi-lateral_wells">"Multilateral wells"</a> in the <cite>ECLIPSE Technical Description</cite>). For standard
+horizontal wells, the connections should be entered in order of increasing
+distance from the bottom hole reference point, that is from the heel
+out to the toe.</p>
+
+<p>The connections may either be specified individually, or in one
+or more “ranges”. A range is a contiguous row or column of grid blocks
+that are fully penetrated by the well. The well is assumed to penetrate
+a range perpendicularly through the center of each grid block in the
+specified direction. The distance along the tubing to the start and
+end of each connection in the range is determined by summing the DX,
+DY or DZ thicknesses of the grid blocks in the range. All connections
+in the well must have their tubing distances set, either individually
+or within a range, working from the connection nearest the well’s
+bottom hole reference point out to the furthest connection of the
+well.</p>
+
+<p>For a standard horizontal well, each connection should be referenced
+by this keyword just once, either individually or as part of a range.
+For multilateral wells, the topology of the branches is defined by
+referencing specific connections again at each branch point. If a
+connection is referenced again in <span class="keyword">WFRICTN</span> after
+its first entry, either singly or as the <strong>first</strong> connection of
+a range, then it is taken to indicate that the subsequent connections
+form a branch that joins the well at this location. The connections
+in this branch should be ordered from the join out towards its toe.
+The properties of branch point connections are defined by items 4
+- 8 of the record in which they are first referenced; these items
+are ignored when a connection is referenced again. All connections
+must of course have been defined initially in keyword <a href="COMPDAT.html#COMPDAT"> COMPDAT</a>. Note that there
+must therefore be a connection defined at each branch point. However,
+if the well is not actually perforated within these grid blocks the
+connection should be declared as <samp class="codeph">SHUT</samp> in keyword <span class="keyword">COMPDAT</span>. The maximum number of branches emanating from
+any one connection must be entered in keyword <a href="FRICTION.html#FRICTION"> FRICTION</a> in the <span class="keyword">RUNSPEC</span> section. See <a href="../ecl_td/wbfrictusing_Multi-lateral_wells.html#wbfrictusing_multi-lateral_wells">"Multilateral wells"</a> in the <cite>ECLIPSE Technical Description</cite> for further details
+and examples.</p>
+
+<ol>
+<li> I - location of the individual connection, or the connection
+at the <strong>start</strong> of the range (nearest the well’s bottom hole reference
+point) </li>
+
+<li> J - location of the individual connection, or the connection
+at the <strong>start</strong> of the range (nearest the well’s bottom hole reference
+point) </li>
+
+<li> K - location of the individual connection, or the connection
+at the <strong>start</strong> of the range (nearest the well’s bottom hole reference
+point) </li>
+
+<li> Distance down the tubing from the well’s bottom hole reference
+point to the <strong>start</strong> of the perforations in <strong>this grid block</strong> <p>This item must not be negative.</p>
+ <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: Zero, for the first of these records,
+or the distance to the end of the previous connection or range, for
+subsequent records</p>
+ </li>
+
+<li> Distance down the tubing from the well’s bottom hole reference
+point to the <strong>end</strong> of the perforations in <strong>this grid block</strong> <p>This item, if set, must be greater than item 4.</p>
+ <p>UNITS:
+m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: Value of
+item 4 + thickness of the grid block in the direction of penetration</p>
+ </li>
+
+<li> Direction of penetration through the grid block or the range:
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">X</samp> or <samp class="codeph">I</samp> </td>
+
+<td valign="top">for horizontal penetration in the x-direction</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">Y</samp> or <samp class="codeph">J</samp> </td>
+
+<td valign="top">for horizontal penetration in the y-direction</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">Z</samp> or <samp class="codeph">K</samp> </td>
+
+<td valign="top">for vertical penetration</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>This item is used for calculating the distance to the end
+of the perforations in the connection (or the connections in the range),
+where it defines which component of the grid block size to add (<samp class="codeph">DX</samp>, <samp class="codeph">DY</samp> or <samp class="codeph">DZ</samp>). The item
+must be set if item 5 is defaulted, or if a range is specified in
+item 7. Otherwise it may be defaulted as it is not required.</p>
+ </li>
+
+<li> Grid block I, J, or K coordinate at the <strong>end</strong> of the range,
+depending on the direction of penetration set in item 6. (For example
+the I-coordinate of the grid block at the end of the range, if the
+well penetrates in the I-direction.) <p>This may be greater than,
+or less than, the corresponding grid block coordinate in item 1, 2
+or 3, depending on whether the well penetrates out towards the positive
+or negative I, J or K direction.</p>
+ <p>If this item is set, the tubing
+lengths are calculated for all the well’s connections that lie within
+the range. Should the range pass through an inactive grid block ECLIPSE
+prints a warning message and assume a zero thickness for that cell.
+If this is not appropriate, the range should be split and the thickness
+of the inactive grid block accounted for by explicitly defining the
+tubing lengths in items 4 and 5.</p>
+<p>If this item is defaulted,
+this record sets the tubing lengths for the single connection identified
+by items 1, 2 and 3.</p>
+ </li>
+
+<li> Tubing internal diameter for this connection, or range of connections. <p>A value entered here is used instead of the value entered in item
+2 of <a href="wfrictn.html#wfrictn_record_1"> "Record 1"</a>.
+This allows, for example, branches in multilateral wells to have different
+diameters.</p>
+ <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: The value entered in item 2 of Record 1.</p>
+ </li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of data records with a slash.</p>
+
+<div class="section" id="wfrictn_Each_subsequent_record.notes"><a name="wfrictn_Each_subsequent_record.notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li>Friction wells must use the segmented density calculation for
+the hydrostatic head (<samp class="codeph">SEG</samp> in item 12 of keyword <a href="WELSPECS.html#WELSPECS"> WELSPECS</a>).  </li>
+
+<li>Multilateral well data can be complicated to enter. It is advisable
+to check your data by examining the output generated by <a href="RPTSCHED.html#RPTSCHED"> RPTSCHED</a> keyword switch
+14 (mnemonic <span class="keyword">WELSPECS</span>).</li>
+
+<li>Friction wells must not have connections in coarsened grid cells.</li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

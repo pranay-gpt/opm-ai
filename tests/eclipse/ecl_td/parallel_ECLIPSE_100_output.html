@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Output (ECLIPSE 100)"/>
+<meta name="DC.subject" content="ECLIPSE 100 parallel partitioning output"/>
+<meta name="keywords" content="ECLIPSE 100 parallel partitioning output"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="parallel_eclipse_100_output"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Output (ECLIPSE 100)</title>
+</head>
+<body>
+
+
+<div class="nested0" id="parallel_eclipse_100_output"><a name="parallel_eclipse_100_output"><!-- --></a>
+<h1 class="topictitle1">Output (ECLIPSE 100)</h1>
+
+
+ <div>
+<p>When running the parallel option in ECLIPSE 100, output may appear
+in a different file location than in serial. For each processor, additional
+files are created to store the output from that processor. Additionally,
+terminal output for processors other than the master are written to
+a separate log file. All of these files have the same file types as
+the main output files but have the processor number appended after
+the file root and before the file type. No additional files are created
+for processor number 1, the master processor. An example of the files
+output in parallel is:</p>
+
+
+<div class="tablenoborder"><a name="parallel_eclipse_100_output.tbl.files"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="parallel_eclipse_100_output.tbl.files" frame="border" border="1" rules="all"><caption>
+           Table 771.1  Example of the files output in ECLIPSE 100 when using the parallel
+option.</caption>   
+<thead align="left">
+<tr>
+<th valign="top" id="d1054e53">  File type                       </th>
+
+<th valign="top" id="d1054e56"> Main output file                      </th>
+
+<th valign="top" id="d1054e59">Output file for processor <samp class="codeph">n</samp> </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1054e53 "> Print                         </td>
+
+<td valign="top" headers="d1054e56 "> <samp class="codeph">BASE.PRT</samp>                    
+  </td>
+
+<td valign="top" headers="d1054e59 "> <samp class="codeph">BASE.n.PRT</samp>                      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1054e53 "> Debug                        </td>
+
+<td valign="top" headers="d1054e56 ">  <samp class="codeph">BASE.DBG</samp>                  
+   </td>
+
+<td valign="top" headers="d1054e59 "> <samp class="codeph">BASE.n.DBG</samp>                      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1054e53 ">Message     </td>
+
+<td valign="top" headers="d1054e56 "> <samp class="codeph">BASE.MSG</samp>                    
+ </td>
+
+<td valign="top" headers="d1054e59 "> <samp class="codeph">BASE.n.MSG</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1054e53 ">Log                        </td>
+
+<td valign="top" headers="d1054e56 "> Output to terminal                       </td>
+
+<td valign="top" headers="d1054e59 "> <samp class="codeph">BASE.n.LOG</samp>  </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>At the end of a successful run, output files other than the master
+are deleted. The additional files are retained if either a bug or
+error occurs or if item 2 of the <a href="../ecl_rm/PARAOPTS.html#PARAOPTS">PARAOPTS</a> keyword is set to
+1. Output controlled by keywords beginning <span class="keyword">RPT</span> may
+also not be output in parallel unless item 8 of the <span class="keyword">PARAOPTS</span> keyword is set to 1.</p>
+
+<p>Messages, comments, warnings, errors and bugs from all processors
+are included in the main output files in parallel. In the main output
+files, the number of the processor that produced a message is included
+in the message header. For example:</p>
+
+<pre><code> @--MESSAGE  ON PROCESSOR 1 AT TIME        0.0   DAYS    (1-JAN-2000):
+ @           THE MEMORY REQUIRED TO PROCESS THE SOLUTION SECTION IS          
+ @                 1679 MBYTES  PROCESSOR   1                                
+ @                 1329 MBYTES  PROCESSOR   2                                
+ @                 1284 MBYTES  PROCESSOR   3                                
+ @                 1261 MBYTES  PROCESSOR   4 </code></pre>
+<p>If identical messages are repeated simultaneously across processors
+then the message will only be output once in the main output files.
+If a very large number of messages are output in short succession
+then the parallel message buffer may become full. If this happens,
+the buffer size will be increased automatically. If insufficient memory
+is available then the code will exit. This issue can be avoided by
+reducing the maximum number of messages output using the <a href="../ecl_rm/MESSAGES.html#MESSAGES">MESSAGES</a> keyword</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

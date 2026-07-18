@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Data"/>
+<meta name="DC.subject" content="ZIPPY2"/>
+<meta name="keywords" content="ZIPPY2"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="zippy2_data"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Data</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="zippy2_data"><a name="zippy2_data"><!-- --></a>
+<h1 class="topictitle1">Data</h1>
+
+
+ <div>
+<p>These options determine the amount of data to be used in approximating
+the cost function. These options can only be used with ECLIPSE 100.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>Use of ‘ <samp class="codeph">NPTS</samp> ’ is compulsory</p>
+
+<p>ECLIPSE 100</p>
+
+<p>Use of ‘ <samp class="codeph">PARTITION</samp> ’ is optional.</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+ 
+<tbody>
+<tr>
+<td valign="top"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top">‘ <samp class="codeph">NPTS</samp> = <em>integer</em> ’</td>
+
+<td valign="top"> Number of different timesteps for which data is stored.</td>
+
+</tr>
+
+<tr>
+<td valign="top"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top">‘ <samp class="codeph">PARTITION</samp> = <em>integer</em> ’ </td>
+
+<td valign="top">Number of data partitions.<p>Partitions the data into the specified
+number of groups by size of timestep. New data overwrites the oldest
+data in the group to which it belongs. This can stop or delay the
+loss of data for large timesteps because of being overwritten by newer
+small timestep data and vice versa.</p>
+<p>DEFAULT: <samp class="codeph">1</samp> Definition of the cost</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>These options define the cost function (measure of efficiency of
+a timestep) to be used. These options can only be used with ECLIPSE
+100.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>Use of either ‘ <samp class="codeph">CPU</samp> ’ or ‘ <samp class="codeph">SOLVER</samp> ’ is compulsory.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>Use of <samp class="codeph">SPRING</samp> is optional.</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">‘ <samp class="codeph">CPU</samp> ’</td>
+
+<td valign="top"> Uses CPU times from the machine.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> This is the true cost of a timestep and in many
+ways must therefore be preferred. However, the CPU time ‘flutters’,
+which then feeds into the timestep selection. If this cost function
+is used, results are <strong>not</strong> repeatable, because different timesteps
+will be used in each run.</div>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">   
+<tbody>
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%">‘ <samp class="codeph">SOLVER</samp> = <em>integer1</em>, <em>integer2</em> ’</td>
+
+<td valign="top" width="33.33333333333333%">Uses <samp class="codeph">Cost = integer1*number of newtons + integer2*number
+of linears.</samp> <p>The CPU cost, apart from very small problems,
+is dominated by the time spent calculating the Jacobian terms for
+the Newton iteration and solving the resulting linear system. Using
+this cost function does mean that the same timestepping can be repeated
+between two runs. Also note that the integer values <strong>do not</strong> have
+to be chosen so that cost equals CPU cost; it only needs to be proportional.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%">‘ <samp class="codeph">SPRING</samp> = <em>real</em>, <em>integer</em> ’</td>
+
+<td valign="top" width="33.33333333333333%">Multiplies the cost function by an additional, newton-weighted,
+factor.<p>The cost of the timestep, as defined by one of the means
+above, is multiplied by the following function:</p>
+<p>           
+                  <math><mrow><mo>(</mo>
+<mn>1</mn><mo>+</mo><mrow><mstyle>
+<mi>r</mi><mi>e</mi><mi>a</mi><mi>l</mi></mstyle>
+<msup><mrow><mo>(</mo><mfrac><mrow><mi>N</mi><mi>E</mi><mi>W</mi><mi>T</mi></mrow><mrow><mi>N</mi>
+<mi>E</mi><mi>W</mi><mi>T</mi><mi>M</mi><mi>X</mi>
+</mrow></mfrac><mo>)</mo></mrow><mrow><mi>i</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>g</mi><mi>e</mi><mi>r</mi></mrow></msup></mrow><mo>)</mo></mrow></math>                     </p>
+<p>where NEWT is the number of Newtons used
+for this timestep and NEWTMX is the maximum number of Newtons allowed.
+This non-linearly penalizes timesteps that use more Newton iterations.
+The situations when this might be useful are described below.</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<div class="section" id="zippy2_fitting_function_type"><a name="zippy2_fitting_function_type"><!-- --></a><h4 class="sectiontitle">Fitting function
+type</h4><p>These keywords define how the cost function, defined
+above, is going to be approximated based on the discrete data (defined
+by data keywords) that has been stored about it. These keywords can
+only be used with ECLIPSE 100</p>
+<p>Use of <strong>one</strong> of the following
+is compulsory.</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">'<span class="keyword">BEZIER</span>= <em>integer</em>'</td>
+
+<td valign="top"> Uses a Bezier polynomial with <em>integer</em> coefficients
+to fit the data.             <p>Note that <em>integer</em> coefficients
+means that the resulting polynomial is of degree <em>integer-1</em>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top">'<span class="keyword">BEZIER2</span>= <em>integer</em>'</td>
+
+<td valign="top"> Uses a Bezier polynomial with <em>integer</em> coefficients
+to fit the data. The coefficients are constrained to be positive.
+            <p>Note that <em>integer</em> coefficients means that the
+resulting polynomial is of degree <em>integer-1</em>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top">'<span class="keyword">POLY</span>= <em>integer</em>' </td>
+
+<td valign="top">Uses a polynomial with <em>integer</em> coefficients to fit the
+data.             <p>Note that <em>integer</em> coefficients means that
+the resulting polynomial is of degree <em>integer-1</em>.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top">'<span class="keyword">PADE</span>= <em>integer</em>' </td>
+
+<td valign="top">Uses a Padé polynomial with <em>integer</em> coefficients
+to fit the data.             <p>The Padé approximation used
+is not totally general, in that the same degree polynomial is used
+in the numerator and the denominator. The integer value supplied must
+be of the form 2n+1.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top">'<span class="keyword">OTW</span>= <em>integer</em> ’</td>
+
+<td valign="top"> For developer use only.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+<div class="section" id="zippy2_discussion_and_recommendations"><a name="zippy2_discussion_and_recommendations"><!-- --></a><h4 class="sectiontitle">Discussion
+and recommendations</h4><p>It has already been stated that <span class="keyword">ZIPPY2</span> is not capable of speeding up all runs and is most
+effective for those that chop repeatedly. <span class="keyword">ZIPPY2</span> can, however, be used when only a small part of the run is affected.</p>
+<dl>
+
+<dt class="dlterm">Cosmetic Improvements</dt>
+
+<dd>As an alternative to using <a href="TUNING.html#TUNING"> TUNING</a> to reduce the maximum timestep before a problem starts and
+then untuning it afterwards, the <span class="keyword">ZIPPY2</span> keyword
+can be used to achieve a similar effect without the need to know what
+a workable maximum timestep is. For this situation the recommendation
+is simply to use Example 1 above.</dd>
+
+</dl>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Converting PVTW data to water component data"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="watercompintro_converting_pvtw_data_to_water_component_data"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Converting PVTW data to water component data</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="watercompintro_converting_pvtw_data_to_water_component_data"><a name="watercompintro_converting_pvtw_data_to_water_component_data"><!-- --></a>
+<h1 class="topictitle1">Converting PVTW data to water component data</h1>
+
+
+ <div>
+<p>In standard simulations, water is modeled as a single component,
+with properties specified by the <a href="../ecl_rm/PVTW.html#PVTW">PVTW</a> and <a href="../ecl_rm/DENSITY.html#DENSITY">DENSITY</a> keywords. This case can also be modeled using the multiple
+component water option, with a single water component. Table <a href="watercompintro_Converting_PVTW_data_to_water_component_data.html#watercompintro.XID-00000278">254.1</a>  gives values for the water
+component keywords, derived from the <span class="keyword">PVTW</span> and <span class="keyword">DENSITY</span> data.</p>
+
+
+<div class="tablenoborder"><a name="watercompintro.XID-00000278"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="watercompintro.XID-00000278" frame="border" border="1" rules="all"><caption>
+           Table 254.1  Water component values</caption>  
+<thead align="left">
+<tr>
+<th valign="top" id="d1776e62">  Keyword                        </th>
+
+<th valign="top" id="d1776e65">Value                         </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1776e62 "> <a href="../ecl_rm/MWW.html#MWW">MWW</a> </td>
+
+<td valign="top" headers="d1776e65 ">18.015             </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1776e62 "> <a href="../ecl_rm/PREFW.html#PREFW">PREFW</a> </td>
+
+<td valign="top" headers="d1776e65 "> Item 1 of <a href="../ecl_rm/PVTW.html#PVTW">PVTW</a> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1776e62 "> <a href="../ecl_rm/DREFW.html#DREFW">DREFW</a> </td>
+
+<td valign="top" headers="d1776e65 "> <math><mrow><mrow><mi>D</mi><mi>E</mi><mi>N</mi><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>w</mi></mrow></msub></mrow><mo>/</mo>
+<mrow><mi>B</mi><msub><mrow><mi>W</mi></mrow><mrow>
+<mi>r</mi><mi>e</mi><mi>f</mi></mrow></msub></mrow>
+</mrow></math>  where                            <p> <math><mrow><mi>D</mi>
+<mi>E</mi><mi>N</mi><msub><mi>S</mi><mi>w</mi>
+</msub></mrow></math>   is Item 2 of <a href="../ecl_rm/DENSITY.html#DENSITY">DENSITY</a> </p>
+<p> <math><mrow><mi>B</mi>
+<msub><mi>W</mi><mrow><mi>r</mi><mi>e</mi><mi>f</mi>
+</mrow></msub></mrow></math>   is Item 2 of <span class="keyword">PVTW</span></p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1776e62 "> <a href="../ecl_rm/CREFW.html#CREFW">CREFW</a> </td>
+
+<td valign="top" headers="d1776e65 ">Item 3 of <span class="keyword">PVTW</span></td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1776e62 "> <a href="../ecl_rm/VREFW.html#VREFW">VREFW</a> </td>
+
+<td valign="top" headers="d1776e65 ">Items 4 and 5 of <span class="keyword">PVTW</span>     
+                   </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>In addition, in standard simulations the water moles
+are converted to surface volumes using a factor based on the water
+molecular weight, 18.015, and the water density as specified by <span class="keyword">DENSITY</span> item 2. In a water component model, this factor
+is calculated based on the water composition as defined by equations <a href="watercompintro_Water_component_properties.html#watercompintro.equ.0214">253.1</a>  and <a href="watercompintro_Water_component_properties.html#watercompintro.XID-00000219">253.2</a>  where surface properties should be specified as in Table <a href="watercompintro_Converting_PVTW_data_to_water_component_data.html#watercompintro.surfacevalues">254.2</a>.</p>
+
+
+<div class="tablenoborder"><a name="watercompintro.surfacevalues"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="watercompintro.surfacevalues" frame="border" border="1" rules="all"><caption>
+           Table 254.2  Surface water component values</caption>  
+<thead align="left">
+<tr>
+<th valign="top" id="d1776e258"> Keyword </th>
+
+<th valign="top" id="d1776e261">Value</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1776e258 "><p> <a href="../ecl_rm/MWWS.html#MWWS">MWWS</a> </p>
+</td>
+
+<td valign="top" headers="d1776e261 "><p>18.015</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1776e258 "><p> <a href="../ecl_rm/PREFWS.html#PREFWS">PREFWS</a> </p>
+</td>
+
+<td valign="top" headers="d1776e261 "><p> Item 2 of <a href="../ecl_rm/STCOND.html#STCOND">STCOND</a> </p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1776e258 "><p> <a href="../ecl_rm/DREFWS.html#DREFWS">DREFWS</a> </p>
+</td>
+
+<td valign="top" headers="d1776e261 "><p>Item 2 of <a href="../ecl_rm/DENSITY.html#DENSITY">DENSITY</a> </p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<div class="section" id="watercompintro_converting_pvtw_data_to_water_component_data.notes"><a name="watercompintro_converting_pvtw_data_to_water_component_data.notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li><span class="keyword">PVTW</span> and <span class="keyword">DENSITY</span> data are
+specified for each PVT region, while water component data is specified
+for each EOS region, so the two models can produce different answers
+if the regions do not match.</li>
+
+<li>If more than one water component is specified in the model but
+only one is actually present in the reservoir, use the last water
+component in the model to represent the one in the reservoir. This
+improves the numerical stability when solving the equations. See <a href="formulate_ECLIPSE_300_compositional.html#formulate_eclipse_300_compositional"> "Formulation of the equations"</a>. Failing to do so may introduce
+some noise in very sensitive decks.</li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

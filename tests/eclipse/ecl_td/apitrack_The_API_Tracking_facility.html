@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The API tracking facility"/>
+<meta name="DC.subject" content="Fluid model, API tracking PVT properties, API tracking PVT regions, API tracking initial conditions, API tracking calculation, API tracking in wells, API tracking in wet gas systems, VFP tables"/>
+<meta name="keywords" content="Fluid model, API tracking PVT properties, API tracking PVT regions, API tracking initial conditions, API tracking calculation, API tracking in wells, API tracking in wet gas systems, VFP tables"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="apitrack_the_api_tracking_facility"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The API tracking facility</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="apitrack_the_api_tracking_facility"><a name="apitrack_the_api_tracking_facility"><!-- --></a>
+<h1 class="topictitle1">The API tracking facility</h1>
+
+
+ <div>
+<div class="section" id="apitrack_pvt_properties"><a name="apitrack_pvt_properties"><!-- --></a><h4 class="sectiontitle">PVT properties</h4><p>Two or more sets of PVT tables should be supplied, each set being
+associated with a particular value of the API. The oil property tables
+are entered in the usual way (with keywords <a href="../ecl_rm/PVTO.html#PVTO">PVTO</a> or <a href="../ecl_rm/PVCO.html#PVCO">PVCO</a> for live oil problems,
+or keyword <a href="../ecl_rm/PVDO.html#PVDO">PVDO</a> for dead oil problems), but with the requirement that all
+the <span class="keyword">PVTO</span> or <span class="keyword">PVCO</span> tables must
+have the same upper and lower R<sub>s</sub> values. From these tables,
+ECLIPSE constructs a set of internal tables that have a common set
+of R<sub>s</sub> nodes, which includes the R<sub>s</sub> nodes of
+all the input tables. This allows ECLIPSE to use an efficient method
+of interpolating between tables, for intermediate values of the API.
+The restriction that the upper and lower R<sub>s</sub> values must
+be the same for each table prevents extrapolation of the input data
+during this process, which may cause unphysical behavior.</p>
+<p>The
+API values associated with each PVT table are set using the keyword <a href="../ecl_rm/GRAVITY.html#GRAVITY">GRAVITY</a>, which inputs the oil,
+water and gas gravities for each PVT table number. The API values
+are converted internally to oil surface densities, using the formula
+given in <a href="units_Conversion_factors.html#units_conversion_factors"> "Conversion
+factors"</a>. The oil API values must <strong>decrease</strong> monotonically
+with the table number. Alternatively, the surface densities associated
+with each table number can be input directly using the keyword <a href="../ecl_rm/DENSITY.html#DENSITY">DENSITY</a>. In this case the oil
+surface densities must <strong>increase</strong> monotonically with the table
+number.</p>
+<p>The PVT properties of water and gas are not affected
+by the API Tracking option. The same number of tables must be entered
+in all the PVT data keywords and the <a href="../ecl_rm/ROCK.html#ROCK">ROCK</a> keyword, but normally only the first table is actually used
+in all, except the oil PVT data. The unused PVT and rock compressibility
+tables can be defaulted by typing a single slash (/) on a new line
+for each unused table in the keyword.</p>
+</div>
+
+<div class="section" id="apitrack_grouping_tables_into_pvt_regions"><a name="apitrack_grouping_tables_into_pvt_regions"><!-- --></a><h4 class="sectiontitle">Grouping
+tables into PVT regions</h4><p>The API Tracking facility overrides
+the concept of PVT table regions for oil. The tables used to determine
+the oil PVT properties are selected according to the surface density
+of the oil in the grid block, instead of the block’s PVT region
+number. Thus, the <a href="../ecl_rm/PVTNUM.html#PVTNUM">PVTNUM</a> keyword in the <span class="keyword">REGIONS</span> section is not
+normally required with the API Tracking facility.</p>
+<p>If, however,
+the concept of PVT regions for different types of oil is still required
+in an API Tracking run, the oil PVT tables can be partitioned into
+groups for use in different regions of the reservoir. To accomplish
+this, the keyword <a href="../ecl_rm/APIGROUP.html#APIGROUP">APIGROUP</a> must be entered to specify the maximum number of groups
+of oil PVT tables. The grouping of the oil PVT tables is then determined
+by the order in which they are entered. Within each group, the oil
+API gravities should decrease (or the oil surface densities should
+increase) monotonically with the table number. A break in the required
+monotonicity indicates that the subsequent tables belong to the next
+API group. An error is flagged if the total number of API groups exceeds
+the maximum specified in the <span class="keyword">APIGROUP</span> keyword.</p>
+<p>The separate groups of oil PVT tables can then be used in different
+areas of the reservoir. The <span class="keyword">REGIONS</span> section keyword <span class="keyword">PVTNUM</span> is used to specify which API group is used for each
+grid block. For example, a cell in <span class="keyword">PVTNUM</span> region
+2 uses the second API group to obtain the oil properties.</p>
+<p>For
+water and gas PVT properties, the <span class="keyword">PVTNUM</span> regions
+correspond to the actual table numbers, which is similar to runs that
+do not use API Tracking. For instance, a cell in <span class="keyword">PVTNUM</span> region 2 still uses table number 2 for its water and gas properties.</p>
+</div>
+
+<div class="section" id="apitrack_setting_the_initial_conditions"><a name="apitrack_setting_the_initial_conditions"><!-- --></a><h4 class="sectiontitle">Setting
+the initial conditions</h4><p>The initial API distribution throughout
+the reservoir is specified in the <span class="keyword">SOLUTION</span> section.</p>
+<p>If the initial conditions are determined by equilibration, the
+API can vary with depth independently in each equilibration region.
+Keyword <a href="../ecl_rm/APIVD.html#APIVD">APIVD</a> supplies a table of API values versus depth for each equilibration
+region.</p>
+<p>When setting the initial conditions by enumeration (keywords <a href="../ecl_rm/PRESSURE.html#PRESSURE">PRESSURE</a> and <a href="../ecl_rm/SWAT.html#SWAT">SWAT</a> for example), the keyword <a href="../ecl_rm/OILAPI.html#OILAPI">OILAPI</a> is used to supply the
+initial API values for each grid block.</p>
+</div>
+
+<div class="section" id="apitrack_the_api_tracking_calculation"><a name="apitrack_the_api_tracking_calculation"><!-- --></a><h4 class="sectiontitle">The API
+tracking calculation</h4><p>The initial API values in the grid
+blocks are immediately converted into oil surface density. The hydrostatic
+pressure gradient calculation takes account of the varying surface
+density of the oil. The variation of other PVT properties with surface
+density (bubble point pressure, formation volume factor and viscosity)
+is handled by interpolating between PVT tables. The two adjacent PVT
+tables whose oil surface densities straddle the oil surface density
+value in the grid block are located, and their properties <math><mrow><mo>(</mo>
+<mn>1</mn><mo>/</mo><msub><mrow><mi>B</mi></mrow>
+<mrow><mi>o</mi></mrow></msub><mo>,</mo><mtext> </mtext>
+<mn>1</mn><mo>/</mo><mo>(</mo><msub><mrow><mi>B</mi>
+</mrow><mrow><mi>o</mi></mrow></msub><msub><mrow><mi>μ</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>)</mo><mo>)</mo></mrow></math> are interpolated linearly
+in oil surface density. </p>
+<p>To calculate the bubble point, the
+two PVT tables corresponding to oil surface gravities either side
+of the current grid block API value are located. The bubble point
+is then obtained by linearly interpolating between the bubble points
+in these PVT tables at the given grid block dissolved gas-oil ratio.</p>
+<p>The oil surface density in each grid block and well is held constant
+over the timestep. When a converged solution for the timestep has
+been found, and the inter-block flows determined, a mass conservation
+equation is solved to update the oil surface densities. The new densities
+are used in the next timestep.</p>
+<p>The oil surface densities are
+converted back into API values for the output reports. The mnemonic <samp class="codeph">OILAPI</samp> in the <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a> keyword provides an output of the grid block API values,
+and the well reports include the API values in the wells.</p>
+<p>The <a href="../ecl_rm/APILIM.html#APILIM">APILIM</a> keyword can be used
+to monitor the numbers of grid blocks with API values that are outside
+specified limits and additionally to constrain the API values to within
+these limits.</p>
+</div>
+
+<div class="section" id="apitrack_api_tracking_in_wells"><a name="apitrack_api_tracking_in_wells"><!-- --></a><h4 class="sectiontitle">API tracking in
+wells</h4><p>The oil surface density in each well is calculated
+at the end of the timestep to reflect a flow-weighted average surface
+density of the inflowing oil. A crossflowing well reinjects oil of
+this average surface density back into the formation. However, the
+hydrostatic head calculation in the wellbore is based on a (more accurate)
+flow-weighted average of <strong>upstream</strong> connection inflows if <a href="../ecl_rm/WELSPECS.html#WELSPECS">WELSPECS</a> item 12 is ‘ <samp class="codeph">SEG</samp> ’, allowing the oil density to vary with position
+in the wellbore. (If required, the pre-98A treatment of wellbore hydrostatic
+head, which uses the well’s average oil surface density, can
+be restored by setting <a href="../ecl_rm/OPTIONS.html#options.35">item 35</a> in the <span class="keyword">OPTIONS</span> keyword.)</p>
+<p>If the well uses a VFP table to
+calculate the tubing pressure losses, this should be calculated using
+a suitable value of the oil surface density. However, it is possible
+to take account of the variation of the well’s producing API
+over time by defining the fifth lookup variable, the ALQ, to represent
+the surface density of the produced oil (see keyword <a href="../ecl_rm/WALQCALC.html#WALQCALC">WALQCALC</a>). The VFP table should
+be prepared using the same definition of the ALQ, with values spanning
+the expected range of oil surface densities. The VFP <em>i</em> program
+contains an option to prepare tables with variable oil surface density.</p>
+</div>
+
+<div class="section" id="apitrack_behavior_in_wet_gas_systems"><a name="apitrack_behavior_in_wet_gas_systems"><!-- --></a><h4 class="sectiontitle">Behavior
+in wet gas systems</h4><p>By default, in wet gas systems, the surface
+density property (API) of the oil is transported in both the oil and
+gas phases. In other words, the API is interpreted as a property of
+the oil component rather than the liquid oil phase. However, it is
+the API in the liquid oil phase that is used in subsequent calculations
+involving the surface density of oil.</p>
+<p>By using <a href="../ecl_rm/OPTIONS.html#options.58">item 58</a> of the <span class="keyword">OPTIONS</span> keyword
+this behavior can be modified. When the item is set greater than zero,
+the API property is only transported in the liquid oil phase. In this
+case, the API property can be thought of as a heavy component that
+does not vaporize. However, some care needs to be taken when using
+this option as it is possible to vaporize all the oil in a cell, leading
+to high surface densities and negative API values.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

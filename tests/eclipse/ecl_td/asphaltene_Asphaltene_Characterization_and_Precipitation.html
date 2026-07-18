@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Asphaltene characterization and precipitation"/>
+<meta name="DC.subject" content="Fluid model, Asphaltene formation characterization and precipitation in the pre-2011.1 model, Asphaltene formation characterization and precipitation asphaltene as percentage weight pre-2011.1 model, Asphaltene formation characterization and precipitation example pre-2011.1 model"/>
+<meta name="keywords" content="Fluid model, Asphaltene formation characterization and precipitation in the pre-2011.1 model, Asphaltene formation characterization and precipitation asphaltene as percentage weight pre-2011.1 model, Asphaltene formation characterization and precipitation example pre-2011.1 model"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="asphaltene_asphaltene_characterization_and_precipitation"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Asphaltene characterization and precipitation</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="asphaltene_asphaltene_characterization_and_precipitation"><a name="asphaltene_asphaltene_characterization_and_precipitation"><!-- --></a>
+<h1 class="topictitle1">Asphaltene characterization and precipitation</h1>
+
+
+ <div>
+<p>The precipitation, flocculation, deposition and damage processes
+are modeled using separate keywords. The basis of this model is that
+asphaltene is characterized by the weight percentage of component(s)
+making up the asphaltene that can remain dissolved in the oil as a
+function of pressure.</p>
+
+<div class="section" id="asphaltene_asphaltene_as_weight_percentage"><a name="asphaltene_asphaltene_as_weight_percentage"><!-- --></a><h4 class="sectiontitle">Asphaltene
+as weight percentage</h4><p>In this approach the asphaltene is
+defined as a set of component(s) that can precipitate depending on
+their percentage molar weight in the solution. You define the percentage
+ limit as a function of pressure using the <a href="../ecl_rm/ASPREWG.html#ASPREWG">ASPREWG</a> keyword.</p>
+<p>This
+limit can be set against the pressure or temperature or molar fraction
+of a specified component using the <a href="../ecl_rm/ASPP1P.html#ASPP1P"> ASPP1P</a> keyword. The default
+setting is against pressure.</p>
+<p>This limit can also be set as a
+function of two variables chosen from pressure (P), temperature (T)
+and molar fraction (Z). This is specified using keywords <a href="../ecl_rm/ASPP2P.html#ASPP2P">ASPP2P</a> and <a href="../ecl_rm/ASPPW2D.html#ASPPW2D">ASPPW2D</a>. Keyword <span class="keyword">ASPP2P</span> sets the variables (P,T) or (P,Z) or (T,Z). If the molar fraction
+Z is chosen the 3rd argument of <span class="keyword">ASPP2P</span> must be
+the component number. Keyword <span class="keyword">ASPPW2D</span> takes a 2D
+table where the first row represents the temperature if (P,T) is chosen,
+and the molar fraction if (P,Z) or (T,Z) is chosen. The first column
+of the 2D table represents the pressure if (P,T) or (P,Z) is chosen
+and the temperature if (T,Z) is chosen.</p>
+<p>Note that the temperature
+can be used as a precipitation triggering variable only in thermal
+runs.</p>
+<p>The amount of precipitate corresponds to the excess of
+a specified component in the oil phase with respect to the limit that
+you define.</p>
+ <p>The <span class="keyword">ASPREWG</span> keyword like the <span class="keyword">ASPPW2D</span> keyword is used in conjunction with the <a href="../ecl_rm/ASPFLOC.html#ASPFLOC">ASPFLOC</a> keyword, which is used
+to specify the range of components that can precipitate. You can use
+ this approach to model some aspects of the polydispersivity that
+have been reported in the literature. You can also interpret it to
+some extent as a dissolution model, where the oil phase can only dissolve
+a certain amount of asphaltene component(s) at a given pressure, temperature
+or molar fraction.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The precipitation process does not change
+the fluid composition. It only flags the fraction of a precipitate
+component that will contribute to the flocculation process.</span></div>
+<p>The list of components is enumerated as <em> 1,2,...,i,i+1,...j,...k,...,
+N</em>. If the first component number to precipitate is <em>i,</em> the
+last component is <em>j</em>, and <em>k</em> is the flocs component then
+the dissolved fraction of asphaltene is simply:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="asphaltene.equ.0106"/>
+ <math><mrow><msub><mrow>
+<mi>w</mi></mrow><mrow><mi>a</mi><mi>d</mi><mi>i</mi>
+<mi>s</mi></mrow></msub><mo>=</mo><mfrac><mrow>
+<msubsup><mrow><mo>∑</mo>
+</mrow><mrow><mi>l</mi><mo>=</mo><mi>i</mi></mrow>
+<mrow><mi>j</mi></mrow></msubsup><mrow><msub><mrow>
+<mi>m</mi></mrow><mrow><mi>w</mi><mi>l</mi></mrow>
+</msub><msub><mrow><mi>x</mi></mrow><mrow><mi>l</mi>
+</mrow></msub></mrow></mrow><mrow><msubsup><mrow><mo>∑</mo></mrow><mrow><mi>l</mi>
+<mo>=</mo><mn>1</mn></mrow><mrow><mi>N</mi></mrow>
+</msubsup><mrow><msub><mrow><mi>m</mi></mrow><mrow>
+<mi>w</mi><mi>l</mi></mrow></msub><msub><mrow><mi>x</mi></mrow><mrow><mi>l</mi></mrow></msub></mrow>
+</mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 239.1]
+              </td></tr></tbody></table><p>and the total fraction of asphaltene (dissolved and
+flocs) is calculated as:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="asphaltene.equ.010a"/>
+ <math><msub><mi>w</mi>
+<mrow><mi>a</mi><mi>p</mi><mi>r</mi><mi>e</mi>
+</mrow></msub><mo>=</mo><mfrac><mrow><mrow><msub><mi>m</mi><mrow><mi>w</mi><mi>k</mi></mrow></msub><msub>
+<mi>x</mi><mi>k</mi></msub></mrow><mo>+</mo><mrow>
+<msubsup><mo>∑</mo><mrow><mi>l</mi><mo>=</mo><mi>i</mi></mrow><mi>j</mi></msubsup>
+<mrow><msub><mi>m</mi><mrow><mi>w</mi><mi>l</mi>
+</mrow></msub><msub><mi>x</mi><mi>l</mi></msub></mrow>
+</mrow></mrow><mrow><mrow><msubsup><mo>∑</mo><mrow><mi>l</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></msubsup><mrow><msub><mi>m</mi><mrow><mi>w</mi><mi>l</mi></mrow></msub><msub>
+<mi>x</mi><mi>l</mi></msub></mrow></mrow></mrow>
+</mfrac></math> 
+</td><td align="right">[Eq. 239.2]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>m</mi>
+<mrow><mi>w</mi><mi>l</mi></mrow></msub></math> </td>
+
+<td valign="top"> is the molecular weight of component <math><mrow><mi>l</mi>
+</mrow></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>x</mi>
+<mi>l</mi></msub></math> </td>
+
+<td valign="top"> is the liquid fraction of component <math><mrow><mi>l</mi>
+</mrow></math>  </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>At a given pressure, temperature or concentration the precipitate
+fraction coming out from the dissolved asphaltene gives the excess
+of  <math><msub><mi>w</mi>
+<mrow><mi>a</mi><mi>d</mi><mi>i</mi><mi>s</mi>
+</mrow></msub></math>  with respect to user limit input entered
+using <span class="keyword">ASPREWG</span> keyword, as:</p>
+<p>             
+   <math><mrow><mi>E</mi>
+<mo>=</mo><msub><mrow><mi>w</mi></mrow><mrow><mi>a</mi><mi>d</mi><mi>i</mi><mi>s</mi></mrow></msub>
+<mrow><mo>-</mo><mrow><mi>a</mi><mi>s</mi><msub>
+<mrow><mi>p</mi></mrow><mrow><mstyle>
+<mi>lim</mi></mstyle><mo>⁡</mo></mrow></msub><mrow>
+<mo>(</mo><mi>P</mi><mo>)</mo></mrow></mrow></mrow>
+</mrow></math>            </p>
+<p>The  <math><mrow>
+<mi>a</mi><mi>s</mi><msub><mrow><mi>p</mi></mrow>
+<mrow><mi>l</mi><mi>i</mi><mi>m</mi></mrow></msub>
+<mrow><mo>(</mo><mi>P</mi><mo>)</mo></mrow></mrow>
+</math> limit is interpreted as a fraction of asphaltene component(s):</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="asphaltene.equ.011b"/>
+ <math><mrow><msub><mrow>
+<mi>a</mi><mi>s</mi><mi>p</mi></mrow><mrow><mi>l</mi>
+<mi>i</mi><mi>m</mi></mrow></msub><mo>(</mo><mi>P</mi><mo>)</mo></mrow><mo>=</mo><mfrac><mrow><mrow>
+<mrow><msubsup><mo>∑</mo><mrow>
+<mi>l</mi><mo>=</mo><mi>i</mi></mrow><mi>j</mi>
+</msubsup><mrow><msub><mi>m</mi><mrow><mi>w</mi><mi>l</mi></mrow></msub><msubsup><mi>x</mi><mi>l</mi><mi>a</mi></msubsup></mrow></mrow></mrow></mrow><mrow>
+<mrow><msubsup><mo>∑</mo><mrow>
+<mi>l</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi>
+</msubsup><mrow><msub><mi>m</mi><mrow><mi>w</mi><mi>l</mi></mrow></msub><msub><mi>x</mi><mi>l</mi></msub>
+</mrow></mrow></mrow></mfrac></math> 
+</td><td align="right">[Eq. 239.3]
+              </td></tr></tbody></table><p>and the composition of the precipitate is calculated
+by assuming that  <math><msubsup><mi>x</mi>
+<mi>l</mi><mi>a</mi></msubsup></math>  is the same for
+all the asphaltene component(s), which means that</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="asphaltene.equ.0120"/>
+ <math><mrow><msubsup><mrow>
+<mi>x</mi></mrow><mrow><mi>l</mi></mrow><mrow><mi>a</mi></mrow></msubsup><mo>=</mo><mrow><mi>a</mi><mi>s</mi><msub><mrow><mi>p</mi></mrow><mrow><mi>l</mi>
+<mi>i</mi><mi>m</mi></mrow></msub><mrow><mo>(</mo>
+<mi>P</mi><mo>)</mo></mrow><mfrac><mrow><msubsup>
+<mrow><mo>∑</mo></mrow><mrow>
+<mi>l</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>N</mi>
+</mrow></msubsup><mrow><msub><mrow><mi>m</mi></mrow>
+<mrow><mi>w</mi><mi>l</mi></mrow></msub><msub><mrow>
+<mi>x</mi></mrow><mrow><mi>l</mi></mrow></msub></mrow>
+</mrow><mrow><msubsup><mrow><mo>∑</mo></mrow><mrow><mi>l</mi><mo>=</mo><mi>i</mi>
+</mrow><mrow><mi>j</mi></mrow></msubsup><msub><mrow>
+<mi>m</mi></mrow><mrow><mi>w</mi><mi>l</mi></mrow>
+</msub></mrow></mfrac></mrow></mrow></math> 
+</td><td align="right">[Eq. 239.4]
+              </td></tr></tbody></table><p>Hence the fraction of precipitate from the dissolved
+asphaltene writes:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="asphaltene.equ.0124"/>
+ <math><mi>E</mi><mo>=</mo>
+<mfrac><mrow><mrow><mrow><msubsup><mo>∑</mo><mrow><mi>l</mi><mo>=</mo><mi>i</mi></mrow><mi>j</mi></msubsup><mrow><msub><mi>m</mi><mrow><mi>w</mi><mi>l</mi></mrow></msub><mo>(</mo><msub><mi>x</mi><mi>l</mi></msub><mrow><mo>-</mo><msubsup><mi>x</mi><mi>l</mi><mi>a</mi>
+</msubsup></mrow><mo>)</mo></mrow></mrow></mrow></mrow>
+<mrow><mrow><msubsup><mo>∑</mo>
+<mrow><mi>l</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi>
+</msubsup><mrow><msub><mi>m</mi><mrow><mi>w</mi><mi>l</mi></mrow></msub><msub><mi>x</mi><mi>l</mi></msub>
+</mrow></mrow></mrow></mfrac></math> 
+</td><td align="right">[Eq. 239.5]
+              </td></tr></tbody></table><p>The second argument of <span class="keyword">ASPREWG</span> can
+take values from 0 (no dissolved asphaltene component(s)) to 100 (no
+precipitate), however the actual upper can be estimated from the expression
+of  <math><msub><mi>w</mi>
+<mrow><mi>a</mi><mi>d</mi><mi>i</mi><mi>s</mi>
+</mrow></msub></math>  if the molar fraction(s) of the precipitating
+component(s) is known. The  <math><mrow><mi>a</mi>
+<mi>s</mi><msub><mrow><mi>p</mi></mrow><mrow><mi>l</mi><mi>i</mi><mi>m</mi></mrow></msub><mrow><mo>(</mo><mi>P</mi><mo>)</mo></mrow></mrow></math> limit
+and  <math><msub><mi>w</mi>
+<mrow><mi>a</mi><mi>d</mi><mi>i</mi><mi>s</mi>
+</mrow></msub></math>  can be output to check out the evolution
+of precipitate fraction. A list of outputs for the precipitation process
+is provided in <a href="asphaltene_Outputs.html#asphaltene_outputs"> "Outputs"</a>.</p>
+</div>
+
+<div class="section" id="asphaltene_an_example"><a name="asphaltene_an_example"><!-- --></a><h4 class="sectiontitle">An example</h4><p>Let
+consider a case with 5 components, and assume component 4 is precipitating
+and component 5 is the flocs component, then the amount of precipitate
+is calculated as depicted below:</p>
+<p> <br/><div class="imagebreak"><img src="../img/aspha2.png" width="439px"/></div><br/> </p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,308 @@
+--
+-- THIS IS A GAS-WATER QUARTER FIVE SPOT.
+-- 2008.1 E100 Sustainable capacity test
+-- New keyword GSSCPTST is implemented in ECLIPSE2008.1. 
+-- The keyword causes a sustainable capacity to be carried out. 
+-- The model is saved, and then run forward to establish whether a group of wells 
+-- could sustain a certain gas production rate for a certain period of time. 
+-- Depending on the options selected, the test will then try to establish the maximum possible 
+-- production rate sustainable for the test period by attempting to simulate the test period 
+-- with different group production rates.  After the test has been completed ECLIPSE will run 
+-- on from the reservoir state before the test began
+RUNSPEC
+TITLE
+ GAS-WATER TEST CASE
+
+DIMENS
+   20   20    4  /
+
+WATER
+
+GAS
+
+FIELD
+VFPPDIMS
+    3    3    1    1    1    3 /
+
+TABDIMS
+    1    1   20   20    1   20 /
+
+WELLDIMS
+    10    5    5    10 /
+
+START
+   1 'JAN' 1983  /
+UNIFOUT
+UNIFIN
+
+GRID      ==============================================================
+INIT
+DXV
+  20*75.0 /
+
+DYV
+  20*75.0 /
+
+DZ
+ 1600*30.0 /
+
+TOPS
+  400*4000.0 /
+
+PORO
+ 1600*0.2 /
+
+PERMX
+ 1600*50.0 /
+
+PERMY
+ 1600*50.0 /
+
+PERMZ
+ 1600*50.0 /
+
+PROPS     ==============================================================
+
+RVCONST
+ 0.01 /
+
+SWFN
+    .25    .0    0.0
+    .7    1.0    0.0
+/
+
+
+SGFN
+    .3     .0    0.0
+    .75   1.0    0.0
+/
+
+
+
+PVTW
+  .0  1.0  3.03E-06  .5  0.0 /
+
+PVDG
+  .0     1.0     2.0
+ 8000.0   .92    2.0
+/
+
+ROCK
+ 4000.0         .30E-05 /
+
+DENSITY
+ 52.0000  64.0000   .04400 /
+
+RPTPROPS
+     /
+
+
+SOLUTION   =============================================================
+
+
+SWAT
+ 1600*0.25 /
+
+PRVD
+ 4000  4000
+ 4300  4150 /
+
+
+
+RPTSOL
+-- 
+-- Initialisation Print Output
+-- 
+'PRES' 'SWAT' 'RESTART=2' /
+
+RPTRST
+ BASIC=2 /
+
+SUMMARY   ==============================================================
+ 
+SEPARATE
+
+
+FGDCQ
+ 
+FGSR
+ 
+FGDC
+ 
+FGPR
+ 
+FGPT
+ 
+FGSTP
+
+FGSPR
+
+FGSSP
+
+FGSRU
+
+FGSRL
+ 
+GGSTP
+GA /
+
+GGSPR
+GA /
+
+GGSSP
+GA /
+
+GGSRU
+GA /
+
+GGSRL
+GA /
+ 
+GGDC
+/
+
+GPRFP
+/ 
+
+GPR
+/
+
+GGPR
+/
+
+GGPRNBFP
+/
+
+GGPRNB
+/
+
+WGPP
+/
+ 
+WMCTL
+/
+
+WGPRFP
+/
+
+WGPR
+/
+
+WTHPFP
+/
+
+WTHP
+/
+
+WBHPFP
+/
+
+WBHP
+/
+
+
+ALL
+
+SEPARATE
+RUNSUM
+ 
+MSUMLINS
+
+MSUMNEWT
+
+SCHEDULE  ==============================================================
+ 
+-- SKIPREST
+ 
+RPTSCHED
+   'BASIC=2' 'PRES' 'RESTART=2' 'WELLS=2' 'SUMMARY=2' 'WELSPECS' 'CPU=2' /
+ 
+VFPPROD
+-- WELL TABLE
+1  7025  'GAS'  'WGR'  'OGR'  /
+10  20000  /
+100  600  /
+0.0  /
+0.0  /
+0.0  /
+1 1 1 1   800  1200  /
+2 1 1 1  1300  1700  /
+ 
+VFPPROD
+-- COMPRESSOR INLET - COMPRESSION OFF
+2 0  'GAS'  'WGR'  'OGR'  /
+10  100000 /
+50 /
+0.0  /
+0.0  /
+0.0  /
+1 1 1 1   600  600  /
+ 
+VFPPROD
+-- COMPRESSOR INLET - COMPRESSION ON
+3 0  'GAS'  'WGR'  'OGR'  /
+10  100000 /
+50 /
+0.0  /
+0.0  /
+0.0  /
+1 1 1 1   100  100  /
+ 
+WELSPECS
+--  WELL    GROUP    LOCATION     BHP    PREF    DRAIN  GAS    SHUT/
+--  NAME    NAME       I  J      DEPTH   PHAS     RAD   INFL   STOP
+   'PA1'   'GA'        1  1       1*     'G'      -1    'N'    'SH'  /
+   'PB1'   'GB'        2  2       1*     'G'      -1    'N'    'SH'  /
+   'PC1'   'GC'        5  2       1*     'G'      -1    'N'    'SH'  /
+   'PA2'   'GA'        1  4       1*     'G'      -1    'N'    'SH'  /
+   'PB2'   'GB'        3  3       1*     'G'      -1    'N'    'SH'  /
+   'PC2'   'GC'        4  1       1*     'G'      -1    'N'    'SH'  /
+/
+ 
+COMPDAT
+-- WELL   -LOCATION-  OPEN/   SAT  CONN  BORE  EFF  SKIN     D
+-- NAME   I  J K1-K2  SHUT    TAB  FACT  DIAM  KH   FACT   FACT
+   '*'    2*   1  4   3*                 0.25  1*    5     1E-3  /
+/
+ 
+WCONPROD
+-- WELL   OPEN/   CNTL   OIL   WAT   GAS   LIQ   VOI   BHP   THP   VFP
+-- NAME   SHUT    MODE   RAT   RAT   RAT   RAT   RAT               TAB
+   'P*'    'OPEN'  'GRUP' 2*           1*   2*          100    1*    1  /
+/ 
+GRUPTREE
+ 'GA'     'COMP'  /
+ 'GB'     'COMP'  /
+ 'GC'     'COMP'  /
+ 'COMP'  'FIELD'  /
+/
+ 
+GCONPROD
+ 'GA'  'FLD'  4*  'NONE'  'YES'  100  'GAS'  /
+ 'GB'  'FLD'  4*  'NONE'  'YES'  200  'GAS'  /
+ 'GC'  'FLD'  4*  'NONE'  'YES'  100  'GAS'  /
+ 'FIELD'  GRAT 2* 1000 /
+/ 
+
+TSTEP
+10*18 /
+--GCONPROD
+-- 'GA'  'FLD'  4*  'NONE'  'YES'  100  'GAS'  /
+-- 'GB'  'FLD'  4*  'NONE'  'YES'  200  'GAS'  /
+-- 'GC'  'FLD'  4*  'NONE'  'YES'  100  'GAS'  /
+-- 'FIELD'  GRAT 2* 2000 /
+--/ 
+
+NUPCOL
+4 /
+
+GSSCPTST
+Field GRAT 2000.0 180.0 1 10.0 12 /
+ 
+NUPCOL
+3 /
+
+TSTEP
+10*18 /
+
+END

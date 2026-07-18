@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="RVCONST"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="RVCONST"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>RVCONST</title>
+</head>
+<body>
+
+
+<div class="nested0" id="RVCONST"><a name="RVCONST"><!-- --></a>
+<h1 class="keyword">RVCONST</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="rvconst.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="rvconst.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2152e45">                         x                   
+  </th>
+
+<th valign="top" id="d2152e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2152e54">                                             
+ </th>
+
+<th valign="top" id="d2152e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2152e45 d2152e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2152e48 d2152e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2152e45 d2152e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2152e48 d2152e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2152e45 d2152e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2152e48 d2152e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2152e45 d2152e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d2152e48 d2152e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2152e45 d2152e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2152e48 d2152e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2152e45 d2152e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2152e48 d2152e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2152e45 d2152e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2152e48 d2152e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2152e45 d2152e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2152e48 d2152e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword is used to declare that dry gas contains a constant
+and uniform concentration of vaporized oil. This provides a more efficient
+way of modeling gas condensate systems in which there is no free oil
+and the pressure never falls below the dew point. The flags for oil
+and vaporized oil should not be switched on (keywords <a href="OIL.html#OIL"> OIL</a> and <a href="VAPOIL.html#VAPOIL"> VAPOIL</a> in the <span class="keyword">RUNSPEC</span> section), so that oil is not treated in the model as an active phase.
+The system therefore becomes a two-phase or single-phase model, depending
+on whether or not water is present as well as the gas. The gas should
+be treated as dry gas (using keyword <a href="PVDG.html#PVDG"> PVDG</a> to supply its PVT properties).</p>
+
+<p>The keyword should be followed by a line containing two items of
+data, terminated by a slash (/):</p>
+
+<ol>
+<li>The vaporized oil concentration (R<sub>v</sub>). <p>UNITS: sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), stb/Mscf (<samp class="codeph">FIELD</samp>), scc/scc (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li>The dew point pressure. <p>DEFAULT: 0.0</p>
+ <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+</ol>
+
+<p>The run terminates if the pressure in any grid block falls below
+this value.</p>
+
+<p>The keyword causes the gas density to be modified to include the
+vaporized oil, and causes the oil flow rates to be set equal to R<sub>v</sub> * the gas flow rate.</p>
+
+<p>See also keyword <a href="RVCONSTT.html#RVCONSTT"> RVCONSTT</a>.</p>
+
+<div class="section" id="rvconst_example"><a name="rvconst_example"><!-- --></a><h4 class="sectiontitle">Example</h4>       <pre><code>RVCONST
+ 0.00047   330   /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WELSPECS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WELSPECS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WELSPECS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WELSPECS"><a name="WELSPECS"><!-- --></a>
+<h1 class="keyword">WELSPECS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="welspecs.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="welspecs.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2932e45">                         x </th>
+
+<th valign="top" id="d2932e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2932e54">                         x </th>
+
+<th valign="top" id="d2932e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2932e45 d2932e54 "> </td>
+
+<td valign="top" headers="d2932e48 d2932e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2932e45 d2932e54 "> </td>
+
+<td valign="top" headers="d2932e48 d2932e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2932e45 d2932e54 "> </td>
+
+<td valign="top" headers="d2932e48 d2932e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2932e45 d2932e54 "> </td>
+
+<td valign="top" headers="d2932e48 d2932e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2932e45 d2932e54 "> </td>
+
+<td valign="top" headers="d2932e48 d2932e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2932e45 d2932e54 "> </td>
+
+<td valign="top" headers="d2932e48 d2932e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2932e45 d2932e54 "> </td>
+
+<td valign="top" headers="d2932e48 d2932e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2932e45 d2932e54 ">                         x </td>
+
+<td valign="top" headers="d2932e48 d2932e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword introduces a new well, defining its name, the position
+of the wellhead, its bottom hole reference depth and other specification
+data.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The records may be terminated early with a slash (/); the remaining
+items will assume their default values. Default values can also be
+specified before the slash by a null repeat count of the form n*,
+where n is the number of consecutive items to be defaulted.</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li>Well name  <p>(Up to 8 characters)</p>
+ </li>
+
+<li id="welspecs_52950"><a name="welspecs_52950"><!-- --></a>Name of the group to which the well belongs<p>(Up to 8 characters)</p>
+                <p>ECLIPSE 100</p>
+<p>The name <samp class="codeph">FIELD</samp> cannot be used as a group name here. Also, node-groups defined with
+keyword <a href="GRUPTREE.html#GRUPTREE">  GRUPTREE</a> cannot contain wells. <strong>It is strongly recommended that this item
+is not defaulted in ECLIPSE 100</strong>.</p>
+<p>A well can be re-assigned
+to a different group during the simulation, if required, by re-entering
+its <span class="keyword">WELSPECS</span> data with the new group name.</p>
+<p>ECLIPSE 300</p>
+<p>DEFAULT: <samp class="codeph">FIELD</samp> </p>
+</li>
+
+<li> I - location of well head or heel </li>
+
+<li>J - location of well head or heel <p>For horizontal wells, items
+3 and 4 define the location of the heel of the well, which ECLIPSE
+may use to determine the order of the connections (see the <a href="COMPORD.html#COMPORD"> COMPORD</a> keyword). If
+all connections are vertical, items 3 and 4 are used for reporting
+purposes only; the well can still connect with grid blocks having
+different I- and J- locations.</p>
+             </li>
+
+<li id="welspecs_89000"><a name="welspecs_89000"><!-- --></a>Reference depth for bottom hole pressure  <p>This should be situated in the vicinity of the perforations. A recommended
+location is the topmost perforation of the well.</p>
+ <p>In multisegment
+wells the bottom hole reference depth is set equal to the depth of
+the well’s top segment node entered in record 1 of keyword <a href="WELSEGS.html#WELSEGS">  WELSEGS</a>.</p>
+<p>DEFAULT:
+If this quantity is defaulted or given a negative value, the reference
+depth is set equal to the center depth of the grid block containing
+the first connection in the well as defined by <span class="keyword">COMPORD</span>.</p>
+<p>ECLIPSE 100</p>
+<p>If the grid has one or more cells above sea level, then a negative
+value is taken as a reference depth.</p>
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li id="welspecs_30415"><a name="welspecs_30415"><!-- --></a>Preferred phase for the well 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">OIL</samp> </td>
+
+<td valign="top"> The well is primarily an oil well</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WATER</samp> </td>
+
+<td valign="top">The well is primarily a water well</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">GAS</samp> </td>
+
+<td valign="top">The well is primarily a gas well</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">LIQ</samp> </td>
+
+<td valign="top"> May be used to output the oil + water phase P.I.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>This information is used to determine the worst offending
+well or connection for closure when a group production rate limit
+is exceeded in <a href="GCONPROD.html#GCONPROD"> GCONPROD</a> (see item 7) and <a href="GCONPRI.html#GCONPRI"> GCONPRI</a> (see item 3).</p>
+<p>ECLIPSE 100</p>
+<p>This information is also used to define the
+productivity/injectivity index of the well, or its potential flow
+rate (see item 7).</p>
+</li>
+
+<li id="welspecs_32717"><a name="welspecs_32717"><!-- --></a>Drainage radius for productivity/injectivity
+index calculation.<p>The instantaneous productivity/injectivity index
+is printed in the well reports. It is calculated from a steady-state
+relationship, which is described in <a href="../ecl_td/wellinfl_The_productivity_index.html#wellinfl_the_productivity_index">"The productivity
+index"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+                <p>If a zero value is specified, the pressure equivalent
+radius of the grid blocks containing the well connections is used.
+The productivity/injectivity index is then equal to the sum over the
+connections of the product of the connection factor and the local
+mobility of the preferred phase specified in item 6.</p>
+<p>ECLIPSE 100</p>
+<p>If a
+negative value is specified, the well’s potential flow rate of the
+preferred phase is printed in the well reports instead of the productivity/injectivity
+index. The well’s potential rate is the flow rate it would achieve
+in the absence of any rate constraint, limited only by its BHP and/or
+THP constraint, at the current grid block conditions - see <a href="../ecl_td/potential_Well_potentials.html#potential_well_potentials">"Well potentials"</a> in the <cite>ECLIPSE Technical Description</cite>. (When running
+the Gas Field Operations Model, the well’s gas delivery capacity is
+printed instead, for a production well.)</p>
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.0</p>
+             </li>
+
+<li id="welspecs_38648"><a name="welspecs_38648"><!-- --></a> Flag for use of a special inflow equation
+to model the flow of gas between the completed grid blocks and the
+well completions 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">   
+<tbody>
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">STD</samp> or <samp class="codeph">NO</samp> </td>
+
+<td valign="top" width="33.33333333333333%">The standard inflow equation will be used</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">R-G</samp> or <samp class="codeph">YES</samp> </td>
+
+<td valign="top" width="33.33333333333333%">The Russell-Goodrich equation</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">P-P</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> The dry gas pseudo-pressure equation<p>(This option is not
+available in gas condensate runs.)</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GPP</samp> </td>
+
+<td valign="top" width="33.33333333333333%">The generalized pseudo-pressure equation.<p>(This option may
+be used by gas condensate producers. See also keywords <a href="PICOND.html#PICOND"> PICOND</a> and <a href="WPICOND.html#WPICOND"> WPICOND</a>.)</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>The Russell-Goodrich and dry gas pseudo-pressure equations
+just alter the free gas mobility to take account of its pressure dependence
+between the grid block pressure and the connection pressure. The generalized
+pseudo-pressure equation alters both the gas and oil mobilities, and
+takes account also of the effects of condensate dropout. See <a href="../ecl_td/wellinfl_Special_inflow_equations.html#wellinfl_special_inflow_equations">"Special inflow
+equations"</a> in the <cite>ECLIPSE Technical Description</cite> for a description of these options.</p>
+<p>ECLIPSE 300</p>
+<p>The generalized pseudo-pressure
+method may be activated for all wells by entering the keyword <a href="PSEUPRES.html#PSEUPRES"> PSEUPRES</a> early in the <span class="keyword">SCHEDULE</span> section. This will override item 8 above. The <a href="WPICOND.html#WPICOND"> WPICOND</a> keyword may also
+be used to specify the generalized pseudo-pressure calculations on
+a per well basis.</p>
+<p>DEFAULT: <samp class="codeph">STD</samp> </p>
+</li>
+
+<li id="welspecs_48961"><a name="welspecs_48961"><!-- --></a>Instructions for automatic shut-in  
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">STOP</samp> </td>
+
+<td valign="top"> Stop well above formation (allowing crossflow)</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">SHUT</samp> </td>
+
+<td valign="top">Isolate well from the formation.<p>The well can be automatically
+shut or stopped if a well or group economic limit, or a group flow
+limit, is violated.</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">SHUT</samp>  </p>
+  </li>
+
+<li id="welspecs_16678"><a name="welspecs_16678"><!-- --></a> Crossflow ability flag  
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top">Crossflow allowed in the well</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top"> Crossflow not allowed; the connections act as one-way valves,
+preventing flow if there is a reverse drawdown</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">YES</samp> </p>
+ </li>
+
+<li id="welspecs_95724"><a name="welspecs_95724"><!-- --></a>Pressure table number for wellbore fluid properties <p>(This governs the calculation of wellbore hydrostatic head at formation
+level, and the relation between surface rates and reservoir fluid
+volume rate)</p>
+                <p>ECLIPSE 100</p>
+ <p>If a zero value is entered, the pressure
+table number is set equal to the PVT region number of the lowest grid
+block in which the well is completed.</p>
+<p>ECLIPSE 300</p>
+<p>If a zero value is entered,
+the pressure table number is set equal to the PVT region number of
+first grid block in which the well is completed.</p>
+<p>DEFAULT: 0</p>
+</li>
+
+<li id="welspecs_26061"><a name="welspecs_26061"><!-- --></a>Type of density calculation for the wellbore
+hydrostatic head 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">SEG</samp> </td>
+
+<td valign="top">Segmented density calculation.<p>The flowing mixture density
+is calculated between each adjacent pair of connections, and depends
+on the relative quantities of the phases flowing in these particular
+sections of the wellbore. This calculation is more accurate than the
+other choice if different mixtures of fluids enter the well through
+each connection, but it is treated <strong>explicitly</strong> in the numerical
+scheme.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">AVG</samp> </td>
+
+<td valign="top">Averaged density calculation.<p>The flowing mixture density
+is treated as uniform throughout the wellbore at formation level,
+and depends on the total inflow rates of each phase and the well’s
+bottom hole pressure. This calculation is performed <strong>implicitly</strong> in the numerical scheme.</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+   <p>It is usually best to use <samp class="codeph">SE</samp>, for its
+greater accuracy, and change to <samp class="codeph">AVG</samp> only if the explicit
+calculation causes stability problems.</p>
+<p>The hydrostatic heads
+calculated using segmented densities in the wellbore are damped to
+reduce the likelihood of stability problems by combining values from
+the previous timestep with those of the current timestep in a weighted
+average.</p>
+<ul>
+<li>ECLIPSE 100: The damping is only applied
+to stopped wells or wells with a zero rate target, and the weighting
+used in the damping is calculated internally.</li>
+
+<li>ECLIPSE 300: The damping is applied to both
+open and stopped wells, and the weighting used in the damping can
+be adjusted using <a href="OPTIONS3.html#options3.44">item 44</a> in the <a href="OPTIONS3.html#OPTIONS3"> OPTIONS3</a> keyword. </li>
+
+</ul>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">An error in the damping algorithm has been identified and
+fixed in the 2010.1 version of the simulators. This fix has not been
+made to the default behavior as it may change simulation results.
+To use the correct damping, use <a href="OPTIONS.html#options.145">item 145</a> in the <span class="keyword">OPTIONS</span> keyword in ECLIPSE
+100, and <a href="OPTIONS3.html#options3.213">item 213</a> of
+the <span class="keyword">OPTIONS3</span> keyword in ECLIPSE 300.    </span></div>
+<p>This item is ignored for multisegment wells (see <a href="../ecl_td/multisegintro_Multi-segment_Wells.html#multisegintro_multi-segment_wells">"Multisegment wells"</a> in the <cite>ECLIPSE Technical Description</cite>). In these wells
+the average mixture density is calculated implicitly within each segment.</p>
+<p>DEFAULT: <samp class="codeph">SEG</samp> </p>
+<p>ECLIPSE
+300</p>
+<p>The default density calculation may
+be changed using <a href="OPTIONS3.html#options3.65">item 65</a> in the <span class="keyword">OPTIONS3</span> keyword</p>
+ </li>
+
+<li id="welspecs_61731"><a name="welspecs_61731"><!-- --></a>Fluids-in-place region number supplying the
+reservoir conditions used in calculating the well’s reservoir fluid
+volume rate. <p>(The reservoir fluid volume rate is based on the volume
+that the produced or injected mixture would occupy at the average
+conditions - hydrocarbon pressure, R<sub>s</sub>, R<sub>v</sub> -
+within the specified fluids-in-place region).</p>
+<p>If a zero value
+is entered, the average hydrocarbon conditions in the field is used.</p>
+<p>If a negative value is entered, the region number is set equal
+to the fluids-in-place region number of the lowest grid block in which
+the well is completed.</p>
+<p>If a positive value is entered, it is
+interpreted as the required fluids-in-place region number. A warning
+message is printed if the well is not completed in a grid block within
+that region.</p>
+<p>DEFAULT: 0</p>
+</li>
+
+<li>Reserved for use by FrontSim. </li>
+
+<li>Reserved for use by FrontSim.<p>ECLIPSE
+300</p>
+               </li>
+
+<li>Specify the type of well model:
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">STD</samp> </td>
+
+<td valign="top"> The standard well model.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">HMIW</samp> </td>
+
+<td valign="top">High mobility injection wells. An average completion pressure
+is considered, this is to overcome convergence problems when the completion
+mobilities in the injection wells are high. See <a href="../ecl_td/wellinfl_High_mobility_injection_wells.html#wellinfl_high_mobility_injection_wells">"High mobility injection
+wells"</a> in the <cite>ECLIPSE Technical Description</cite></td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">STD</samp> </p>
+<p>ECLIPSE 100</p>
+</li>
+
+<li>Polymer mixing table number for wellbore
+fluid properties.<p>This determines how polymer affects wellbore fluid
+viscosity for friction wells and multisegment wells. It has no effect
+for standard wells and no effect if <a href="POLYMER.html#POLYMER"> POLYMER</a> has not been activated.</p>
+<p>If a zero
+value is entered, the polymer mixing table number is set equal to
+the <a href="PLMIXNUM.html#PLMIXNUM"> PLMIXNUM</a> table
+number of the lowest grid block in which the well is completed.</p>
+ </li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<p>ECLIPSE 300</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Remember to specify the well separator
+conditions with <a href="WSEPCOND.html#WSEPCOND">   WSEPCOND</a> when using <span class="keyword">WELSPECS</span>. </span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

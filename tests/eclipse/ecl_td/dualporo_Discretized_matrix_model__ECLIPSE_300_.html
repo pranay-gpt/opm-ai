@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Discretized matrix model (ECLIPSE 300)"/>
+<meta name="DC.subject" content="Grid and reservoir modeling, Dual porosity, Discretized matrix model"/>
+<meta name="keywords" content="Grid and reservoir modeling, Dual porosity, Discretized matrix model"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="dualporo_discretized_matrix_model__eclipse_300_"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Discretized matrix model (ECLIPSE 300)</title>
+</head>
+<body>
+
+
+<div class="nested0" id="dualporo_discretized_matrix_model__eclipse_300_"><a name="dualporo_discretized_matrix_model__eclipse_300_"><!-- --></a>
+<h1 class="topictitle1">Discretized matrix model (ECLIPSE 300)</h1>
+
+
+ <div>
+<p>The discretized matrix model can be invoked in ECLIPSE 300 in a
+similar way to ECLIPSE 100. However there are some differences in
+the setup as the ECLIPSE 300 model is based on the multi-porosity
+options described in <a href="multiporo_multi_porosity.html#multiporo_multi_porosity"> "Multi
+porosity"</a>. The <a href="../ecl_rm/DIMENS.html#DIMENS">DIMENS</a> keyword needs to include all porosities in the Z-direction.</p>
+
+<p>The model generates new <a href="../ecl_rm/SIGMAV.html#SIGMAV">SIGMAV</a> values for the connections between the matrix sub-grid cells,
+following the geometric partitioning as described for ECLIPSE 100.
+The input primary (outer) matrix block volumes, pore volumes and rock
+volumes, are partitioned between the matrix sub-grid cells. Both transmissibilities
+and diffusivities are then generated from the new <span class="keyword">SIGMA</span> values, the block volumes, pore volumes and rock volumes (the rock
+volumes are only used if the rock contains adsorbed gas). Permeabilities,
+for the transmissibilities as given by <a href="../ecl_rm/PERMX.html#PERMX">PERMX</a> or <a href="../ecl_rm/PERMMF.html#PERMMF">PERMMF</a>, are by default copied
+from the primary matrix grid cells if unspecified.</p>
+
+<p>The geometrical partitioning is done in the same way as for ECLIPSE
+100 for <samp class="codeph">LINEAR</samp>, <samp class="codeph">RADIAL</samp> and <samp class="codeph">SPHERICAL</samp> discretization methods. In addition the <samp class="codeph">UNIFORM</samp> and <samp class="codeph">VERTICAL</samp> methods are available
+in ECLIPSE 300. For information, see the <a href="../ecl_rm/NMATOPTS.html#NMATOPTS">NMATOPTS</a> keyword.</p>
+
+<p>The volumes of the partitioned outer matrix grid cells, that connect
+to the fracture grid cells, can be set either</p>
+
+<ul>
+<li>to match a fraction of the fracture pore volume using <span class="keyword">NMATOPTS</span> item 3 set to <samp class="codeph">FPORV</samp>, or  </li>
+
+<li>to match a fraction of the matrix bulk volume using <span class="keyword">NMATOPTS</span> item 3 set to <samp class="codeph">MBLKV</samp>.  </li>
+
+</ul>
+
+<p>When the feature is used with coal or shale gas, the definition
+of volumes with adsorbed gas needs to be considered. For information
+on this, see <a href="shalegas_Shale_Gas.html#shalegas_shale_gas"> "Shale Gas"</a>. It is recommended that the keyword <a href="../ecl_rm/ROCKFRAC.html#ROCKFRAC">ROCKFRAC</a> is used to set the
+input rock fractions and that the <a href="../ecl_rm/PORO.html#PORO">PORO</a> keyword is used to set the input porosity fractions. This
+makes it easier to switch between the instant adsorption model and
+the time-dependent sorption model, since the inputs for setting rock
+and pore volumes are compatible. Only the input from the primary matrix
+grid cells are used to generate the partitioned matrix volumes.</p>
+
+<p>Further information about the ECLIPSE 300 matrix discretization
+model can be found in <a href="multiporo_multi_porosity.html#multiporo_multi_porosity"> "Multi
+porosity"</a>.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

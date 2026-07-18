@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Calculation of phase states"/>
+<meta name="DC.subject" content="Fluid modeling, Equations of state, Phase states, Equations of state"/>
+<meta name="keywords" content="Fluid modeling, Equations of state, Phase states, Equations of state"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="equ_state_calculation_of_phase_states"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Calculation of phase states</title>
+</head>
+<body>
+
+
+<div class="nested0" id="equ_state_calculation_of_phase_states"><a name="equ_state_calculation_of_phase_states"><!-- --></a>
+<h1 class="topictitle1">Calculation of phase states</h1>
+
+
+ <div>
+<p>A cell in a compositional simulation may be either water-filled,
+or in a single-phase or two-phase hydrocarbon state. The single-phase
+states may possess a saturation pressure, usually lower than the current
+pressure, at which a second hydrocarbon phase appears. For temperatures
+above the cricondentherm however, such a pressure does not exist,
+and the cell composition leads to a single-phase hydrocarbon at all
+pressures.</p>
+
+<p>The appearance of a two-phase state is detected by application
+of the Michelsen stability test (<a href="biblio_Bibliography.html#biblio_67182">Michelsen, 1982</a>). This is carried out anew at each timestep, and does not involve
+assumptions concerning the state of the cell carried over from previous
+steps.</p>
+
+<p>By default ECLIPSE 300 uses the stability test for all cells, avoiding
+saturation pressure tracking altogether.</p>
+
+<p>The Michelsen stability test involves the minimization of a function
+G*, as a function of a trial phase composition Y, starting from both
+liquid and vapor-like initial estimates. If a non-trivial minimum
+can be found with G* &lt; 0 the hydrocarbon mixture is unstable, and
+a flash calculation may be performed to establish the phase split.</p>
+
+<p>It is possible to cast the Michelsen stability test in a residual
+form and use a Newtonian method, but this is not entirely suitable,
+as:</p>
+
+<ul>
+<li> There are generally two minima to G*, and the Newton method can
+converge towards a local maximum as easily as a minimum. </li>
+
+<li> Newton’s method involves order N<sup>3</sup>  operations per
+iteration, due to the matrix operations involved. As a number of iterations
+are required from each initial Y, this becomes expensive. </li>
+
+</ul>
+
+<p>A better method, which also yields quadratic convergence near the
+solution, is the BFGS iteration (<a href="biblio_Bibliography.html#biblio_91076">Dennis and Schnabel, 1996</a>). This is a minimization method which uses an approximate Hessian
+that is constrained to be symmetric and positive definite. In the
+early stages of the iteration an accelerated successive substitution
+method, which uses a two-point GDEM technique (<a href="biblio_Bibliography.html#biblio_79363">Crowe and Nishio, 1975</a>), is effective.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

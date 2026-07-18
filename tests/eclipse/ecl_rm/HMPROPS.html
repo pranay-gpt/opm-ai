@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="HMPROPS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="HMPROPS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>HMPROPS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="HMPROPS"><a name="HMPROPS"><!-- --></a>
+<h1 class="keyword">HMPROPS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="hmprops.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="hmprops.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1036e45"> x </th>
+
+<th valign="top" id="d1036e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1036e54">  </th>
+
+<th valign="top" id="d1036e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1036e45 d1036e54 ">  </td>
+
+<td valign="top" headers="d1036e48 d1036e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1036e45 d1036e54 ">  </td>
+
+<td valign="top" headers="d1036e48 d1036e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1036e45 d1036e54 ">  </td>
+
+<td valign="top" headers="d1036e48 d1036e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1036e45 d1036e54 "> x </td>
+
+<td valign="top" headers="d1036e48 d1036e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1036e45 d1036e54 "> x </td>
+
+<td valign="top" headers="d1036e48 d1036e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1036e45 d1036e54 ">  </td>
+
+<td valign="top" headers="d1036e48 d1036e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1036e45 d1036e54 ">  </td>
+
+<td valign="top" headers="d1036e48 d1036e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1036e45 d1036e54 ">  </td>
+
+<td valign="top" headers="d1036e48 d1036e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is used to supply modifiers to the end-points by the
+SimOpt program.</p>
+
+<p>The keyword acts as a section heading, and must occur just before
+the <span class="keyword">SOLUTION</span> section (that is at the end of the <span class="keyword">REGIONS</span> section, or at the end of the <span class="keyword">PROPS</span> section when there is no <span class="keyword">REGIONS</span> keyword). (Clearly,
+modifiers can only be supplied once the <span class="keyword">SATNUM</span> values
+are known from the regions section and after all end-point arrays
+have been specified in the <span class="keyword">PROPS</span> section; hence <span class="keyword">HMPROPS</span> should occur after reading <span class="keyword">PROPS</span> and <span class="keyword">REGIONS</span> data.)</p>
+
+<p><span class="keyword">HMPROPS</span> directs ECLIPSE to treat ensuing keywords
+as modifiers to any allowable <a href="hmxxxxxx.html#HMxxxxxx"> HMxxxxxx</a> keywords pertaining to end-points. The modifier keywords <a href="BOX.html#BOX"> BOX</a>, <a href="EQUALS.html#EQUALS"> EQUALS</a>, <a href="COPY.html#COPY"> COPY</a>, <a href="MINVALUE.html#MINVALUE"> MINVALUE</a>, <a href="MAXVALUE.html#MAXVALUE"> MAXVALUE</a> and <a href="ADD.html#ADD"> ADD</a> may be used
+with the <span class="keyword">HMxxxxxx</span> keywords.</p>
+
+<p>When the keyword to be modified occurs without the <span class="keyword">ADD</span>, <span class="keyword">COPY</span>, <span class="keyword">MINVALUE</span>, or <span class="keyword">MAXVALUE</span> qualifiers, the initial two letters direct ECLIPSE
+whether to add or multiply the given array: keywords beginning with
+HM are multiplied, while those beginning with HA are added.</p>
+
+<p>When using Local Grid Refinement, modifiers can be specified between
+the <a href="REFINE.html#REFINE"> REFINE</a> / <a href="ENDFIN.html#ENDFIN"> ENDFIN</a> pairs for local
+grids. By default, ECLIPSE takes the endpoints from the host global
+cells unless specified for local cells.</p>
+
+<p>The processed end-points can be output using mnemonics <span class="keyword">SWCR</span> and <span class="keyword">SOWCR</span>, for example in the <a href="RPTSOL.html#RPTSOL"> RPTSOL</a> keyword in the <span class="keyword">SOLUTION</span> section.</p>
+
+<p>The allowable HA array keywords that may occur in the <span class="keyword">HMPROPS</span> section are of the form <span class="keyword">HASWCR</span> and <span class="keyword">HASOWCR</span> for example. Generally, any keyword
+of the form <a href="HAxxxxxx.html#HAxxxxxx"> HAxxxxxx</a> can be used where <span class="keyword">xxxxxx</span> 
+is an allowable saturation end point (such as <span class="keyword">SWCR</span> or <span class="keyword">SOWCR</span>).</p>
+
+<p>The allowable HM array keywords that may occur in the <span class="keyword">HMPROPS</span> section are in the form <span class="keyword">HMKRW</span> and <span class="keyword">HMKRG</span>. Generally, any keyword of the form <span class="keyword">HMxxxxxx</span> can be used where <span class="keyword">xxxxxx</span> is
+an allowable relative permeability end point (such as <span class="keyword">KRW</span> or <span class="keyword">KRG</span>). For instance,</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"><span class="keyword">HASOWCR</span></td>
+
+<td valign="top"> Specifies critical oil-in-water saturation modifiers.</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">HASOGCR</span></td>
+
+<td valign="top"> Specifies critical oil-in-gas saturation modifiers.</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">HASWL</span></td>
+
+<td valign="top"> Specifies connate water saturation modifiers.</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">HMKRW</span></td>
+
+<td valign="top"> Specifies maximum water relative permeability modifiers.</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">HMKRG</span> </td>
+
+<td valign="top">Specifies maximum gas relative permeability modifier.</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">HMKRO</span> </td>
+
+<td valign="top">Specifies maximum oil relative permeability modifier.</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">HMKRWR</span></td>
+
+<td valign="top"> Specifies maximum displacing water relative permeability modifier.</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">HMKRGR</span></td>
+
+<td valign="top"> Specifies maximum displacing gas relative permeability modifier.</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">HMKRORG</span></td>
+
+<td valign="top"> Specifies maximum displacing oil-in-gas relative permeability
+modifier.</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">HMKRORW</span></td>
+
+<td valign="top"> Specifies maximum displacing oil-in-water relative permeability
+modifier.</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">HASWLPC</span></td>
+
+<td valign="top"> Specifies modifier on lower water saturation used for water
+capillary pressure.</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">HASGLPC</span></td>
+
+<td valign="top"> Specifies modifier on lower gas saturation used for gas capillary
+pressure.</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">HMPCW</span></td>
+
+<td valign="top"> Specifies modifier on water capillary pressure.</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">HMPCG</span></td>
+
+<td valign="top"> Specifies modifier on gas capillary pressure.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<div class="section" id="hmprops_example"><a name="hmprops_example"><!-- --></a><h4 class="sectiontitle">Example</h4>             
+   <pre><code>PROPS
+--Define properties and optional end points 
+REGIONS
+--Regions data 
+EQUALS
+  'HMSOWCR'  1   1 10 1 10 4 5 /
+  'HMSOWCR' 2   1 10 1 10 6 7 /
+/
+--Supply modifiers to SOWCR (these modify values of SOWCR entered in 
+--the PROPS section, else add to values specified in the SOF2/SOF3/SWOF 
+--tables if SOWCR has not previously been input for the given boxes).
+HMPROPS
+--Method (a)
+ADD
+  'HMSOWCR' 0.05 1 10 1 10 4 5 /
+  'HMSOWCR' 0.12 1 10 1 10 6 7 /
+/
+MULTIPLY
+  'HMKRWR' 1.2 1 10 1 10 4 5 /
+  'HMKRW' 1.5 1 10 1 10 6 7 /
+/
+--end method (a)
+
+--Method (b): equivalent to method (a), but using HAxxxxxx and HMxxxxxx 
+--keywords.
+BOX
+ 1 10 1 10 4 5 /
+HASOWCR
+2100*0.05 /
+ENDBOX
+BOX
+ 1 10 1 10 6 7 /
+HASOWCR
+  100*0.05 /
+HMKRW
+  100*1.5 /
+ENDBOX
+--Additional data for local grids
+REFINE
+ 'OSEBERG' /
+BOX
+ 1 3 1 4 1 6 /
+HMKRO
+ 72*1.1 /
+ENDFIN
+--end method (b)
+SOLUTION
+--Solution data</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

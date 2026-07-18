@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Multiple flux regions"/>
+<meta name="DC.subject" content="Running the simulator, Flux boundary conditions, FLUX file reduced runs, Using, Flux region, Multiple"/>
+<meta name="keywords" content="Running the simulator, Flux boundary conditions, FLUX file reduced runs, Using, Flux region, Multiple"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="fluxintro_multiple_flux_regions"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Multiple flux regions</title>
+</head>
+<body>
+
+
+<div class="nested0" id="fluxintro_multiple_flux_regions"><a name="fluxintro_multiple_flux_regions"><!-- --></a>
+<h1 class="topictitle1">Multiple flux regions</h1>
+
+
+ <div>
+<p>Several flux regions may be defined and all relevant flows stored
+in the <samp class="codeph">FLUX</samp> file. For example, 9 separate regions
+may be defined by setting <samp class="codeph">NTFREG</samp> = 9 in the <span class="keyword">RUNSPEC</span> section keyword <a href="../ecl_rm/REGDIMS.html#REGDIMS">REGDIMS</a> and using keywords <a href="../ecl_rm/DUMPFLUX.html#DUMPFLUX">DUMPFLUX</a> and <a href="../ecl_rm/FLUXNUM.html#FLUXNUM">FLUXNUM</a> in the <span class="keyword">GRID</span> section.</p>
+
+<pre><code>DUMPFLUX
+FLUXNUM
+ 1 1 2 2
+ 1 1 2 2
+ 3 3 3 3
+ 4 4 4 4
+ 5 5 5 5
+ 6 7 8 8
+ 6 7 8 8
+ 6 7 8 8
+ 9 9 9 9
+ 9 9 9 9
+ 9 9 9 9
+ 9 9 9 9
+/</code></pre>
+<div class="section" id="fluxintro_using_the_flux_file_in_reduced_runs1"><a name="fluxintro_using_the_flux_file_in_reduced_runs1"><!-- --></a><h4 class="sectiontitle">Using the FLUX file in reduced runs</h4><p>To perform a reduced
+run on a sector of the field defined by the 3 regions 2, 3 and 5:</p>
+<p>ECLIPSE 100</p>
+<ol>
+<li>Set <samp class="codeph">NTFREG</samp> = 9 in item 4 of the <span class="keyword">RUNSPEC</span> section keyword <span class="keyword">REGDIMS</span>.             </li>
+
+<li>Use the <a href="../ecl_rm/USEFLUX.html#USEFLUX">USEFLUX</a>, <a href="../ecl_rm/FLUXNUM.html#FLUXNUM">FLUXNUM</a> and <a href="../ecl_rm/FLUXREG.html#FLUXREG">FLUXREG</a> keywords in the <span class="keyword">GRID</span> section. The <span class="keyword">FLUXREG</span> keyword tells ECLIPSE which flux regions are active
+in the reduced run. The <span class="keyword">FLUXNUM</span> keyword must be
+exactly the same as in the full field run. The <span class="keyword">FLUXREG</span> and <span class="keyword">FLUXNUM</span> keywords should follow the <span class="keyword">USEFLUX</span> keyword.   </li>
+
+</ol>
+<pre><code>USEFLUX 
+ 'ROOT' /
+FLUXREG
+ 2 3 5 /
+FLUXNUM
+ 1 1 2 2
+ 1 1 2 2
+ 3 3 3 3
+ 4 4 4 4
+ 5 5 5 5
+ 6 7 8 8
+ 6 7 8 8
+ 6 7 8 8
+ 9 9 9 9
+ 9 9 9 9
+ 9 9 9 9
+ 9 9 9 9  /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

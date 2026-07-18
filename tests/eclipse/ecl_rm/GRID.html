@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GRID section"/>
+<meta name="DC.subject" content="GRID section basic grid dimensions, GRID section essential keywords, GRID section net-to-gross ratio, GRID section cell porosities, GRID section pore volumes"/>
+<meta name="keywords" content="GRID section basic grid dimensions, GRID section essential keywords, GRID section net-to-gross ratio, GRID section cell porosities, GRID section pore volumes"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GRID"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GRID section</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="GRID"><a name="GRID"><!-- --></a>
+<h1 class="topictitle1">GRID section</h1>
+
+
+ <div>
+<p>The <span class="keyword">GRID</span> section determines the basic geometry
+of the simulation grid and various rock properties (porosity, absolute
+permeability, net-to-gross ratios) in each grid cell. From this information,
+the program calculates the grid block pore volumes, mid-point depths
+and inter-block transmissibilities.</p>
+
+<p>The actual keywords used depend upon the use of the radial or Cartesian
+geometry options. The program accepts the radial form in a Cartesian
+run and vice versa, but issues a warning.</p>
+
+<p>The expressions used to calculate quantities related to grid geometry
+and rock properties are described in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<div class="section" id="grid_specifying_the_basic_grid_dimensions"><a name="grid_specifying_the_basic_grid_dimensions"><!-- --></a><h4 class="sectiontitle">Specifying
+the basic grid dimensions</h4><p>The reservoir geometry may be
+set using keywords <a href="CART.html#CART"> CART</a> or <a href="RADIAL.html#RADIAL"> RADIAL</a> in the <span class="keyword">RUNSPEC</span> section to either</p>
+<ul>
+<li>Cartesian (X,Y,Z)</li>
+
+<li>Radial (R, Theta, Z)</li>
+
+</ul>
+<div class="p">and may be specified in either of two ways:<dl>
+
+<dt class="dlterm">Block Centered Geometry</dt>
+
+<dd>Where the blocks are horizontal and all eight corners are right
+angles. Each block is defined by the dimensions of its three sides
+and the depth of the top surface.</dd>
+
+
+<dt class="dlterm">Corner Point Geometry</dt>
+
+<dd>Where the locations of all the eight corners are provided independently
+and there is no requirement that all the angles of the block are right
+angles.</dd>
+
+</dl>
+</div>
+<p>The program recognizes that the keywords <a href="COORD.html#COORD"> COORD</a> and <a href="ZCORN.html#ZCORN"> ZCORN</a> specify Corner Point
+Geometry. Any other specification of the grid block sizes results
+in Block Centered Geometry.</p>
+<p>For complete flexibility, the <a href="GDFILE.html#GDFILE"> GDFILE</a> keyword may be
+used to specify all the corner point positions of each cell independently.</p>
+<p>In addition, Petrel software can export various types of grid
+geometry (straight pillars, curved pillars or listric pillars) using
+the Generic Simulation Grid (GSG) file which can be imported using
+keyword <a href="PETGRID.html#PETGRID"> PETGRID</a>.</p>
+<p>Since corner point geometry data is usually very voluminous,
+and difficult to enter by hand, it is recommended that a pre-processor
+(for example Petrel) is used to construct it. When data is prepared
+in this way, a <a href="SPECGRID.html#SPECGRID"> SPECGRID</a> keyword is included, which is read and checked, to confirm
+that the dimensions used by the pre-processor and simulator agree.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Block centered and corner point geometry may not be mixed.</span></div>
+<p>The number of grid blocks in each direction in the model (<span class="keyword">NX</span>, <span class="keyword">NY</span>, <span class="keyword">NZ</span>) is set
+by the keyword <a href="DIMENS.html#DIMENS"> DIMENS</a> in the <span class="keyword">RUNSPEC</span> section.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The X and R
+directions have index I, the Y and Theta directions have index J,
+and the Z direction has index K.</span></div>
+<p>All depths and thicknesses
+are measured along the Z axis, which is taken to be vertical, with
+larger values indicating greater depths.</p>
+<p>The origin in Cartesian
+geometry is the top left back corner. Coordinates on the X axis are
+taken to increase from left to right, and on the Y axis from back
+to front.</p>
+<p>In radial geometry, the origin is the center of the
+model, where usually a well is located. The inner radius of the reservoir
+must be provided. Refer to keywords <a href="INRAD.html#INRAD"> INRAD</a> and <a href="RADFIN.html#RADFIN"> RADFIN</a> for more information. R increases towards the right for Theta
+= 0; Theta increases in the clockwise direction.</p>
+<p>The input is
+such that data specified using <span class="keyword">GRID</span> and <span class="keyword">EDIT</span> section keywords is entered always in natural order,
+the I-index changing most quickly, then the J-index, and the K-index
+most slowly. This enables the data to be read from the top left corner
+of a page along a line (I), then next line (J), then turn the page
+for the next layer (K).</p>
+<p>The shape, size, bulk volume and position
+of each block is determined by block centered or corner point geometry.
+All other properties of the grid are the average values for the block
+irrespective of its geometry. Each grid block must have a porosity
+and a permeability in all directions where there is more than one
+grid block.</p>
+<p>Data may be input as arrays with a value for each
+of the <samp class="codeph">NX*NY*NZ</samp> grid blocks, or for all blocks in
+a part of the grid defined by the keyword <a href="BOX.html#BOX"> BOX</a>. A box exists until a new <span class="keyword">BOX</span> is defined, or the keyword <a href="ENDBOX.html#ENDBOX"> ENDBOX</a> is read. The default <span class="keyword">BOX</span> is the whole
+model. The areal dimensions X, Y, R, Theta may be input as vectors
+such as <span class="keyword">DXV</span>(I) where <span class="keyword">DX</span> varies
+only with I (see, for example, keyword <a href="DXV.html#DXV"> DXV</a>).</p>
+<p>Alternatively, data may be set to constant
+values using the <a href="EQUALS.html#EQUALS"> EQUALS</a> keyword, and manipulated with keywords <a href="ADD.html#ADD"> ADD</a>, <a href="MULTIPLY.html#MULTIPLY"> MULTIPLY</a>, <a href="COPY.html#COPY"> COPY</a>, <a href="MINVALUE.html#MINVALUE"> MINVALUE</a> and <a href="MAXVALUE.html#MAXVALUE"> MAXVALUE</a>. Data can also be edited by flux region, <a href="MULTNUM.html#MULTNUM"> MULTNUM</a> region or <a href="OPERNUM.html#OPERNUM"> OPERNUM</a> region with the keywords <a href="ADDREG.html#ADDREG"> ADDREG</a>, <a href="EQUALREG.html#EQUALREG"> EQUALREG</a>, <a href="COPYREG.html#COPYREG"> COPYREG</a> and <a href="MULTIREG.html#MULTIREG">  MULTIREG</a>. The flux
+regions are defined with keyword <a href="FLUXNUM.html#FLUXNUM"> FLUXNUM</a>.</p>
+<p>In block centered geometry, the dimensions
+of every grid block are specified using the keywords in table <a href="GRID.html#grid.Xgrid.tab.0052">13.1</a>. In radial geometry, the outer
+radius may be specified (using the <a href="OUTRAD.html#OUTRAD"> OUTRAD</a> keyword in ECLIPSE 100, or the <span class="keyword">RADFIN</span> keyword in ECLIPSE 300) instead of specifying <a href="DR.html#DR"> DR</a>, and the program automatically
+generates spaced grid blocks in the radial direction, geometrically
+(for ECLIPSE 100), or logarithmically (for ECLIPSE 300).
+The depth of the top of each grid block is specified using the <a href="TOPS.html#TOPS"> TOPS</a> keyword.</p>
+</div>
+
+<div class="section" id="grid_essential_keywords"><a name="grid_essential_keywords"><!-- --></a><h4 class="sectiontitle">Essential keywords</h4>
+<div class="tablenoborder"><a name="grid.Xgrid.tab.0052"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="grid.Xgrid.tab.0052" frame="border" border="1" rules="all"><caption>
+           Table 13.1  Essential GRID section keywords used to specify basic grid
+dimensions</caption>   
+<thead align="left">
+<tr>
+<th valign="top" id="d910e326">Block centered — Cartesian</th>
+
+<th valign="top" id="d910e329">Block centered - Radial</th>
+
+<th valign="top" id="d910e332">Corner point</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d910e326 ">&nbsp;</td>
+
+<td valign="top" headers="d910e329 "><span class="keyword">INRAD</span></td>
+
+<td valign="top" headers="d910e332 ">&nbsp;</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d910e326 "><span class="keyword">DXV</span> or <span class="keyword">DX</span></td>
+
+<td valign="top" headers="d910e329 "><span class="keyword">DRV</span> or <span class="keyword">DR</span> or <span class="keyword">OUTRAD</span></td>
+
+<td valign="top" headers="d910e332 "><span class="keyword">COORD</span> and <span class="keyword">ZCORN</span></td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d910e326 "><span class="keyword">DYV</span> or <span class="keyword">DY</span></td>
+
+<td valign="top" headers="d910e329 "><span class="keyword">DTHETAV</span> or <span class="keyword">DTHETA</span></td>
+
+<td valign="top" headers="d910e332 ">or <span class="keyword">GDFILE or</span></td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d910e326 "><span class="keyword">DZ</span></td>
+
+<td valign="top" headers="d910e329 "><span class="keyword">DZ</span></td>
+
+<td valign="top" headers="d910e332 "><span class="keyword">PETGRID</span></td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d910e326 "><span class="keyword">TOPS</span> </td>
+
+<td valign="top" headers="d910e329 ">  <span class="keyword">TOPS</span>                    
+ </td>
+
+<td valign="top" headers="d910e332 ">&nbsp;</td>
+ 
+</tr>
+
+<tr>
+<td valign="top" headers="d910e326 "><span class="keyword">PORO</span></td>
+
+<td valign="top" headers="d910e329 "><span class="keyword">PORO</span></td>
+
+<td valign="top" headers="d910e332 "><span class="keyword">PORO</span></td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d910e326 "><span class="keyword">PERMX</span></td>
+
+<td valign="top" headers="d910e329 "><span class="keyword">PERMR</span></td>
+
+<td valign="top" headers="d910e332 "><span class="keyword">PERMX</span>/<span class="keyword">PERMR</span></td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d910e326 "><span class="keyword">PERMY</span></td>
+
+<td valign="top" headers="d910e329 "><span class="keyword">PERMTHT</span></td>
+
+<td valign="top" headers="d910e332 "><span class="keyword">PERMY</span>/<span class="keyword">PERMTHT</span></td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d910e326 "><span class="keyword">PERMZ</span></td>
+
+<td valign="top" headers="d910e329 "><span class="keyword">PERMZ</span></td>
+
+<td valign="top" headers="d910e332 "><span class="keyword">PERMZ</span></td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>An example for a simple two layer grid 10 by 10 by 2 grid,
+with 200 ft. by 200 ft. by 10 ft. cells in the top layer and 200 ft.
+by 200 ft. by 50 ft. cells in the bottom layer would be:</p>
+<pre><code>DX
+200*200 /
+DY
+200*200 /
+DZ
+100*10 100*50 /</code></pre> <p>or, equivalently:</p>
+ <pre><code>DXV
+10*200 /
+DYV
+10*200 /
+DZV
+10 50 /</code></pre> <p>If corner point geometry is not being
+used, the depth as well as the dimensions of each cell must be entered.
+This may be done using <a href="TOPS.html#TOPS"> TOPS</a> (to specify the cell top depths) or <a href="MIDS.html#MIDS"> MIDS</a> (ECLIPSE 300 - to specify the
+cell mid-point depths). In either case only the cells in the top layer
+need be specified; the depth of cells below may be calculated from
+the thickness of the cell and that of the cell above.</p>
+<p>ECLIPSE 300</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"><span class="keyword">MIDS</span> should not be confused with <a href="DEPTH.html#DEPTH">  DEPTH</a>, used to override cell center depths
+after calculation in the <span class="keyword">GRID</span> section, and described
+in the <a href="EDIT.html#EDIT"> EDIT</a> section
+overview.</span></div>
+<p>In the radial case one further item of geometry
+information is required, namely, the inner grid block radius. This
+can be specified using with the <a href="INRAD.html#INRAD"> INRAD</a> keyword, or for ECLIPSE 300, the <a href="RADFIN.html#RADFIN"> RADFIN</a> keyword.</p>
+</div>
+
+<div class="section" id="grid_net-to-gross_ratios"><a name="grid_net-to-gross_ratios"><!-- --></a><h4 class="sectiontitle">Net-to-gross ratios</h4><p>The <a href="NTG.html#NTG">  NTG</a> keyword
+may be used to enter net-to-gross ratios for each cell. Alternatively, <a href="DZNET.html#DZNET"> DZNET</a> may be used to enter
+net ratios, and the program will calculate net-to-gross thicknesses
+as <math><mtext>NTG</mtext>
+<mo>=</mo><mtext>DZNET</mtext><mo>/</mo><mtext>DZ</mtext>
+</math>  for each cell.</p>
+</div>
+
+<div class="section" id="grid_cell_porosities_and_pore_volumes"><a name="grid_cell_porosities_and_pore_volumes"><!-- --></a><h4 class="sectiontitle">Cell porosities
+and pore volumes</h4><p>Cell porosities must be entered in all
+runs, and are used to calculate cell pore volumes. The default porosity
+is zero. Cells with zero pore volume are deemed inactive, and do not
+occupy storage during the simulation section. Porosities are entered
+with the <a href="PORO.html#PORO">  PORO</a> keyword.
+Note that porosities are entered as fractions rather than percentages.</p>
+<p>Any method that results in a zero pore volume renders a cell inactive.
+Optionally, the <a href="ACTNUM.html#ACTNUM"> ACTNUM</a> keyword may be used to enter a 0 or 1 for each block, a 0 making
+the cell inactive. The criterion for an inactive cell may be reset
+using <a href="MINPORV.html#MINPORV"> MINPORV</a> (or <a href="MINPV.html#MINPV"> MINPV</a>), to set the minimum
+pore volume allowed:</p>
+<ul>
+<li> <a href="MINDZNET.html#MINDZNET"> MINDZNET</a> may be used to specify a minimum cell thickness allowed for
+an active cell. (ECLIPSE 300)</li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

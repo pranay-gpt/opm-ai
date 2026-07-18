@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PLYVISC"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PLYVISC"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PLYVISC</title>
+</head>
+<body>
+
+
+<div class="nested0" id="PLYVISC"><a name="PLYVISC"><!-- --></a>
+<h1 class="keyword">PLYVISC</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="plyvisc.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="plyvisc.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1846e45"> x </th>
+
+<th valign="top" id="d1846e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1846e54"> x </th>
+
+<th valign="top" id="d1846e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1846e45 d1846e54 ">  </td>
+
+<td valign="top" headers="d1846e48 d1846e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1846e45 d1846e54 ">  </td>
+
+<td valign="top" headers="d1846e48 d1846e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1846e45 d1846e54 ">  </td>
+
+<td valign="top" headers="d1846e48 d1846e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1846e45 d1846e54 "> x </td>
+
+<td valign="top" headers="d1846e48 d1846e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1846e45 d1846e54 ">  </td>
+
+<td valign="top" headers="d1846e48 d1846e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1846e45 d1846e54 ">  </td>
+
+<td valign="top" headers="d1846e48 d1846e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1846e45 d1846e54 ">  </td>
+
+<td valign="top" headers="d1846e48 d1846e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1846e45 d1846e54 "> x </td>
+
+<td valign="top" headers="d1846e48 d1846e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTPVT"> NTPVT</a>  (set in the <span class="keyword">TABDIMS</span> keyword)
+tables of polymer viscosity multiplier functions, each terminated
+by a slash (/), describing the effect on the viscosity of pure water
+of increasing the concentration of polymer in solution. Each table
+consists of 2 columns of data:</p>
+
+<ol>
+<li> The polymer concentration in the solution. <p>The values should
+increase monotonically down the column.</p>
+ <p>The first entry should
+be 0.0</p>
+ <p>UNITS: kg/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>),
+lb/stb (<samp class="codeph">FIELD</samp>), gm/scc (<samp class="codeph">LAB</samp>), kg/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+<li> The corresponding factor by which the water viscosity (entered
+using the <span class="keyword">PVTW</span> keyword in ECLIPSE 100 or the corresponding <a href="../ecl_td/watercompintro_Converting_PVTW_data_to_water_component_data.html#watercompintro_converting_pvtw_data_to_water_component_data">"Water components"</a> keywords in ECLIPSE 300) has to be multiplied to give the viscosity
+of the solution.<p>The first entry should be 1.0.</p>
+<p>ECLIPSE 100</p>
+<p>The values
+should be level or monotonically increasing down the column.</p>
+ </li>
+
+</ol>
+
+<p>ECLIPSE 100</p>
+
+<p>This keyword should only be used for polymer
+studies where the salt-sensitivity option has not been activated (using
+keyword <a href="BRINE.html#BRINE">  BRINE</a> in <span class="keyword">RUNSPEC</span>). However, if multi-component brine option is activated
+(using both <span class="keyword">BRINE</span> and <a href="ECLMC.html#ECLMC"> ECLMC</a> keywords in the <span class="keyword">RUNSPEC</span> section), then the keyword <span class="keyword">PLYVISC</span> should
+be used as Multi-Component Brine model cannot currently be used with
+salt-sensitive Polymer model. </p>
+
+<p>ECLIPSE 100</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If the surfactant option is active, the
+viscosity multiplier applies to the water viscosity supplied in the <a href="SURFVISC.html#SURFVISC"> SURFVISC</a> keyword.</span></div>
+
+<p>The keyword may be used in the <span class="keyword">SCHEDULE</span> section
+where the effect of polymer on viscosity may change during the simulation,
+for example when considering thermal degradation but should be used
+with care. The keyword must first have been defined in the <span class="keyword">PROPS</span> section before it can be used in the <span class="keyword">SCHEDULE</span> section. In addition, the keyword will affect all polymer in the
+reservoir, not just polymer injected after the keyword has been used.</p>
+
+<p>Each table must contain at least two, and no more than <a href="TABDIMS.html#TABDIMS.NPPVT"> NPPVT</a> (set
+in the <span class="keyword">TABDIMS</span> keyword) rows. Each row must be
+complete, containing an entry in every column of the table.</p>
+
+<p>See <a href="../ecl_td/polymer_Polymer_Flood_Model.html#polymer_polymer_flood_model">"Polymer flood model"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.</p>
+
+<div class="section" id="plyvisc_example"><a name="plyvisc_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTPVT</samp> = 1 and <samp class="codeph">NPPVT</samp> ≥ 5:</p>
+ <pre><code>PLYVISC
+ .0000   1.0
+ .0003  10.0
+ .0005  25.0
+ .0008  50.0
+ .0010  80.0  /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ENKRVC"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ENKRVC"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ENKRVC</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ENKRVC"><a name="ENKRVC"><!-- --></a>
+<h1 class="keyword">ENKRVC</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="enkrvc.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="enkrvc.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d596e45">  </th>
+
+<th valign="top" id="d596e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d596e54"> x </th>
+
+<th valign="top" id="d596e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d596e45 d596e54 ">  </td>
+
+<td valign="top" headers="d596e48 d596e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d596e45 d596e54 ">  </td>
+
+<td valign="top" headers="d596e48 d596e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d596e45 d596e54 ">  </td>
+
+<td valign="top" headers="d596e48 d596e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d596e45 d596e54 "> x </td>
+
+<td valign="top" headers="d596e48 d596e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d596e45 d596e54 ">  </td>
+
+<td valign="top" headers="d596e48 d596e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d596e45 d596e54 ">  </td>
+
+<td valign="top" headers="d596e48 d596e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d596e45 d596e54 ">  </td>
+
+<td valign="top" headers="d596e48 d596e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d596e45 d596e54 ">  </td>
+
+<td valign="top" headers="d596e48 d596e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data consists of tables of relative permeabilities versus composition,
+one for each saturation table region, as specified in <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a> (set in the <span class="keyword">TABDIMS</span> keyword). Each
+table consists of 8 columns of data (described below), and must be
+terminated by a slash (/).</p>
+
+<p>Column</p>
+
+<ol>
+<li>Molar concentration of the component identified with the <a href="EPSCOMP.html#EPSCOMP">  EPSCOMP</a> keyword (moles
+per reservoir volume). Values should increase monotonically down the
+column. Component molar concentrations can be output in the <span class="keyword">SUMMARY</span> section using the  <span class="keyword">BMLSC</span>  and
+ <span class="keyword">BMWAT</span>  keywords, and in the  <span class="keyword">SOLUTION</span>  and  <span class="keyword">SCHEDULE</span>  section using the  <span class="keyword">MLSC</span>  and  <span class="keyword">MWAT</span>  mnemonics in the <a href="RPTRST.html#RPTRST">  RPTRST</a>, <a href="RPTSOL.html#RPTSOL">  RPTSOL</a> and <a href="RPTSCHED.html#RPTSCHED">  RPTSCHED</a> keywords. <p>UNITS: kg-M/rm<sup>3</sup> (METRIC), lb-M/rb (FIELD), gm-M/rcc (LAB), kg-M/rm<sup>3</sup> (PVT-M)</p>
+</li>
+
+<li>Maximum water relative permeability. </li>
+
+<li>Maximum gas relative permeability. </li>
+
+<li>Maximum oil relative permeability. </li>
+
+<li>Water relative permeability at critical oil saturation </li>
+
+<li>Gas relative permeability at critical oil saturation </li>
+
+<li>Oil relative permeability at an oil saturation = 1 - minimum water
+saturation - critical gas saturation.</li>
+
+<li>Oil relative permeability at an oil saturation = 1 - critical
+water saturation - minimum gas saturation. </li>
+
+</ol>
+
+<p>There must be the same number of entries in each column of a given
+table. The number of rows should not exceed the maximum number of
+entries in a quantity versus composition table, <a href="EQLDIMS.html#EQLDIMS">  EQLDIMS</a> item 3.</p>
+
+<p>If all the permeability values in a column are defaulted then the
+values will be taken from the corresponding saturation function table.
+However, if a permeability value is defaulted whilst for other molar
+densities in the column values have been specified, the defaulted
+points will be filled via linear interpolation within the table and
+constant extrapolation at the ends.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The  <span class="keyword">ENKRVC</span>  keyword is only allowed in compositional
+simulations. </span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">By default, only one of the following end-point scaling methods
+can be used within a simulation: conventional end-point scaling initiated
+with the <a href="ENDSCALE.html#ENDSCALE">  ENDSCALE</a> keyword, temperature dependent end-point scaling or composition
+dependent end-point scaling. This behavior can be controlled using
+argument 5 of the  <span class="keyword">ENDSCALE</span>  keyword. </span></div>
+
+<div class="section" id="enkrvc_example"><a name="enkrvc_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NTSFUN</samp> = 1, reducing the oil relative permeability in the
+presence of the nominated component.</p>
+<pre><code>ENKRVC
+0.0  5*  1.0 1.0
+1.0  5*  0.5 0.5 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

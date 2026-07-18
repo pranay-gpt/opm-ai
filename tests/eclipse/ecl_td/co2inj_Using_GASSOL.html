@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using GASSOL"/>
+<meta name="DC.subject" content="Enhanced oil recovery, CO2 injection, CO2SOL/H2SSOL/GASSOL keywords"/>
+<meta name="keywords" content="Enhanced oil recovery, CO2 injection, CO2SOL/H2SSOL/GASSOL keywords"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="co2inj_using_gassol"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using GASSOL</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="co2inj_using_gassol"><a name="co2inj_using_gassol"><!-- --></a>
+<h1 class="topictitle1">Using GASSOL</h1>
+
+
+ <div>
+<div class="section" id="co2inj_runspec_section2"><a name="co2inj_runspec_section2"><!-- --></a><h4 class="sectiontitle">RUNSPEC section</h4><p>This option is switched on using the <a href="../ecl_rm/GASSOL.html#GASSOL">GASSOL</a> keyword. Unlike in the <a href="../ecl_rm/CO2STORE.html#CO2STORE">CO2STORE</a> option, water is not
+defined as a component in <a href="../ecl_rm/COMPS.html#COMPS">COMPS</a> and <a href="../ecl_rm/CNAMES.html#CNAMES">CNAMES</a>, as it is absent in the oil and gas phases.</p>
+<p>The <a href="../ecl_rm/DIFFUSE.html#DIFFUSE">DIFFUSE</a> option allows for the
+molecular diffusion of gases. See also <a href="gaswat_GASWAT_Option.html#gaswat_gaswat_option"> "GASWAT option"</a>.</p>
+</div>
+
+<div class="section" id="co2inj_props_section2"><a name="co2inj_props_section2"><!-- --></a><h4 class="sectiontitle">PROPS section</h4><p>The gas relative permeability and oil-gas capillary pressure are
+input using the <a href="../ecl_rm/SGFN.html#SGFN">SGFN</a> keyword, while the water relative permeability and the gas-water
+capillary pressure are entered using the <a href="../ecl_rm/SWFN.html#SWFN">SWFN</a> keyword. Oil relative
+permeabilities are defined with the <a href="../ecl_rm/SOF3.html#SOF3">SOF3</a> keyword.</p>
+<p>Fluid component properties can be generated
+from the PVT <em>i</em> database. The dissolved gas components must be
+present in <a href="../ecl_rm/CNAMES.html#CNAMES">CNAMES</a>.</p>
+<p>The initial concentrations of dissolved gases may
+be specified as a function of depth using the <a href="../ecl_rm/RSWVD.html#RSWVD">RSWVD</a> keyword.</p>
+<p>The <a href="../ecl_rm/SOLUAQA.html#SOLUAQA">SOLUAQA</a> keyword allows you
+ to enter a solubility data set as a function of reservoir pressure.
+The reservoir temperature is taken from the <a href="../ecl_rm/RTEMP.html#RTEMP">RTEMP</a> keyword. Note that the
+solubility data may be defaulted for any given soluble component.
+In such a case, a default set of pressures and corresponding solubilities
+is generated. If the solubilities for all soluble components are defaulted,
+then each table comprises twenty rows of data. If the solubilities
+for some (but not all) soluble components are defaulted, then the
+number of rows in the defaulted solubility table(s) equals the maximum
+number of rows from the remaining input solubility tables. Since the
+default solubilities depend strongly on the data entered in the <span class="keyword">PROPS</span> section, this may lead to unrealistic values if the
+component data is not accurate enough. After computing the dissolving
+hydrocarbons’ mole fraction in the aqueous phase using the phase
+equilibrium algorithm mentioned previously, the water density and
+the water viscosity                  <math><msub>
+<mi>μ</mi><mrow><mi>s</mi><mi>a</mi><mi>t</mi>
+</mrow></msub></math>  can be calculated using the Ezrokhi data
+specified using <a href="../ecl_rm/DENAQA.html#DENAQA">DENAQA</a> and <a href="../ecl_rm/VISCAQA.html#VISCAQA">VISCAQA</a>, respectively.          </p>
+<p>The coefficients for molecular
+diffusion must be set with <a href="../ecl_rm/DIFFCGAS.html#DIFFCGAS"> DIFFCGAS</a> if the <a href="../ecl_rm/DIFFUSE.html#DIFFUSE">DIFFUSE</a> option is used.</p>
+<dl>
+
+<dt class="dlterm">Initial state constructed by equilibration</dt>
+
+<dd>If an initial oil-gas contact exists within the reservoir, you
+can specify either the vapor or the liquid phase composition at the
+contact, using <a href="../ecl_rm/ZMFVD.html#ZMFVD">ZMFVD</a> or <a href="../ecl_rm/COMPVD.html#COMPVD">COMPVD</a>.<p>If only a single phase is present, the composition may
+be entered using <a href="../ecl_rm/ZI.html#ZI">ZI</a> or (with respect to depth) using <span class="keyword">ZMFVD</span>.</p>
+</dd>
+
+</dl>
+</div>
+
+<div class="section" id="co2inj_solution_section2"><a name="co2inj_solution_section2"><!-- --></a><h4 class="sectiontitle">SOLUTION section</h4><p>The <a href="../ecl_rm/EQUIL.html#EQUIL">EQUIL</a> keyword is used for equilibration.</p>
+<ul>
+<li>Initial state set by enumeration.</li>
+
+<li>The oil phase composition is set with <a href="../ecl_rm/XMF.html#XMF">XMF</a>, the gas phase composition with <a href="../ecl_rm/YMF.html#YMF">YMF</a>, water composition with <a href="../ecl_rm/AMF.html#AMF">AMF</a> and the total oil and gas composition
+with <a href="../ecl_rm/ZMF.html#ZMF">ZMF</a>. Aqueous phase content
+can be defined by <a href="../ecl_rm/RSW.html#RSW">RSW</a> or <a href="../ecl_rm/RSWVD.html#RSWVD">RSWVD</a>.</li>
+
+</ul>
+</div>
+
+<div class="section" id="co2inj_schedule_section2"><a name="co2inj_schedule_section2"><!-- --></a><h4 class="sectiontitle">SCHEDULE section</h4><p>The composition of the injected gas can be specified using the
+keyword <a href="../ecl_rm/WINJGAS.html#WINJGAS">WINJGAS</a>.</p>
+<p>The aqueous mole fractions of dissolved gas components
+can be output by adding the mnemonic <span class="keyword">AMF</span> in <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a>.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

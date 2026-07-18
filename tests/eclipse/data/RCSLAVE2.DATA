@@ -1,0 +1,258 @@
+RUNSPEC
+TITLE
+  MULTI-LEVEL GROUP CONTROL IN COUPLED RESERVOIRS - SLAVE2
+
+DIMENS
+    3    9    3  /
+
+OIL
+
+WATER
+
+FIELD
+
+TABDIMS
+    1    1   16   15    3   15 /
+
+REGDIMS
+    3    1    0    0  /
+
+WELLDIMS
+   10    3    4    6 /
+
+START
+   1 'MAR' 1994  /
+
+NSTACK
+    4 /
+
+GRID    ================================================================
+
+EQUALS
+     'DX'     1000    /
+     'DY'     2000    /
+     'DZ'     20      /
+     'PERMX'  300     /
+     'PERMY'  300     /
+     'PERMZ'  30      /
+     'PORO'   0.3     /
+     'TOPS'   7000      1  3  1  1  1  1   /
+     'TOPS'   7020      1  3  2  2  1  1   /
+     'TOPS'   7040      1  3  3  3  1  1   /
+     'TOPS'   7060      1  3  4  4  1  1   /
+     'TOPS'   7080      1  3  5  5  1  1   /
+     'TOPS'   7100      1  3  6  6  1  1   /
+     'TOPS'   7120      1  3  7  7  1  1   /
+     'TOPS'   7140      1  3  8  8  1  1   /
+     'TOPS'   7160      1  3  9  9  1  1   /
+/
+
+NOGGF
+
+RPTGRID
+    /
+
+PROPS    ===============================================================
+
+SWFN
+
+  0.22  0     7
+  0.3   0.07  4
+  0.4   0.15  3
+  0.5   0.24  2.5
+  0.6   0.33  2
+  0.8   0.65  1
+  0.9   0.83  0.5
+  1     1     0      /
+
+SOF2
+
+0        0
+0.2      0
+0.38     0.00432
+0.4      0.0048
+0.48     0.05288
+0.5      0.0649
+0.58     0.11298
+0.6      0.125
+0.68     0.345
+0.7      0.4
+0.74     0.7
+0.78     1         /
+
+PVTW
+3000  1.00341  3.0D-6  0.96  0  /
+
+ROCK
+3600    4.0D-6   /
+
+DENSITY
+45   63.02   0.0702  /
+
+PVDO
+ 1400    1.05    1.0
+ 7200    1.01    1.0  /
+
+RSCONST
+ 1.2  3100  /
+
+RPTPROPS
+     /
+
+SOLUTION    ============================================================
+
+--   DATUM  DATUM   OWC    OWC    GOC    GOC   RSVD   RVVD   SOLN
+--   DEPTH  PRESS  DEPTH   PCOW  DEPTH   PCOG  TABLE  TABLE  METH
+
+EQUIL
+     7010   4000   9000    0.0   7010    0.0    0      0       5  /
+
+RPTSOL
+   -- Initialisation Print Output
+   -- 
+'PRES' 'SWAT' 'RS' 'FIP=2' 'EQUIL' 'RSVD' /
+
+SUMMARY   =============================================================
+
+FOPR
+
+FWPR
+
+FLPR
+
+FVPR
+
+GOPR
+ 'GR-B1'  'GR-B2' /
+
+GWPR
+ 'GR-B1'  'GR-B2' /
+
+FWIR
+
+FVIR
+
+GMCTP
+ 'GR-B1'  'GR-B2' /
+
+GMCTW
+ 'GR-B2' /
+
+WMCTL
+/
+
+FMWPR
+
+FMWIN
+
+DATE
+
+RUNSUM
+
+SCHEDULE  =============================================================
+
+SKIPREST
+
+DRSDT
+1E20 /
+
+RPTSCHED
+ 'WELLS=2' 'SUMMARY=2' 'CPU=2' 'WELSPECS' /
+
+
+WELSPECS
+--   WELL    GROUP     LOCATION    BHP   PREF   DRAIN  BACK   SHUT/
+--   NAME    NAME        I  J     DEPTH  PHAS    RAD   PRES   STOP
+    'PB1'   'GR-B1'      3  2      1*    'OIL'  -1.0   'NO'   'SH' /
+    'PB2'   'GR-B1'      1  3      1*    'OIL'  -1.0   'NO'   'SH' /
+    'PB3'   'GR-B1'      2  4      1*    'OIL'  -1.0   'NO'   'SH' /
+    'PB4'   'GR-B2'      2  7      1*    'OIL'  -1.0   'NO'   'SH' /
+    'PB5'   'GR-B2'      1  6      1*    'OIL'  -1.0   'NO'   'SH' /
+    'PB6'   'GR-B2'      3  5      1*    'OIL'  -1.0   'NO'   'SH' /
+    'IWB1'  'GR-B2'      1  9      1*    'WAT'  -1.0  /
+    'IWB2'  'GR-B2'      2  9      1*    'WAT'  -1.0  /
+    'IWB3'  'GR-B2'      3  9      1*    'WAT'  -1.0  /
+/
+
+GRUPSLAV
+ 'GR-B1'  /
+ 'GR-B2'  /
+/
+
+
+COMPDAT
+--  WELL    -LOCATION-  OPEN/  SAT  CONN  BORE   KH   SKIN
+--  NAME    I  J K1-K2  SHUT   TAB  FACT  DIAM
+   'P*'     0  0  1  3  'OPEN'  0    0.0  0.333  /
+   'IW*'    0  0  2  3  'OPEN'  0    0.0  0.333  1*    -3  /
+/
+
+
+WCONPROD
+--  WELL    OPEN/  CNTL   OIL   WATER  GAS   LIQU  VOID  BHP
+--  NAME    SHUT   MODE   RATE  RATE   RATE  RATE  RATE
+   'P*'    'SHUT' 'GRUP'   3*                 2*         2000 /
+/
+
+WELOPEN
+ 'PB1'  /
+ 'PB2'  /
+ 'PB4'  /
+/
+
+
+WCONINJE
+--  WELL   INJ   OPEN/   CNTL   FLOW   RESV  BHP
+--  NAME   TYPE  SHUT    MODE   RATE   RATE
+   'IW*'   'WAT' 'OPEN' 'GRUP'   2*          6000  /
+   'IWB2'  'WAT' 'SHUT' 'GRUP'   2*          6000  /
+/
+
+QDRILL
+'PB3'   'PB5'   'PB6'   'IWB2'   /
+
+
+WECON
+--   WELL   MIN   MIN   MAX   MAX   MAX   WORK   END
+--   NAME   OIL   GAS   WCT   GOR   WGR   OVER   RUN
+     'P*'   500    1*   0.7   10.0   1*   'CON'  'NO'  /
+/
+
+GCONPROD
+--  GROUP      CNTL   OIL   WATER  GAS   LIQU   LIMIT    AVAIL  GUID
+--  NAME       MODE   RATE  RATE   RATE  RATE   ACTION   FLD    RATE
+   'GR-*'     'ORAT'  10     3*                 'RATE'   'NO' /
+/
+
+GCONINJE
+--  GROUP    PHASE    CNTL   SRAT VRAT REIN VREP AVAIL GUID  GRAT
+--  NAME      INJ     MODE                        FLD  RATE  DEFN
+   'GR-B2'   'WAT'   'RESV'   1*   10  /
+/
+
+DATES
+ 11  'MAR'  1994  /
+  1  'MAY'  1994  /
+  1  'JLY'  1994  /
+  1  'OCT'  1994  /
+/
+
+--RESTART FILE DUMP
+RPTSCHED
+'RESTART=2' 'WELLS=2' 'SUMMARY=2' 'CPU=2' 'WELSPECS' /
+
+DATES
+  1  'JAN'  1995  /
+/
+
+RPTSCHED
+ 'WELLS=2' 'SUMMARY=2' 'CPU=2' 'WELSPECS' /
+
+DATES
+  1  'APR'  1995  /
+  1  'JLY'  1995  /
+  1  'OCT'  1995  /
+  1  'JAN'  1996  /
+/
+
+END

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Reducing the THP limit"/>
+<meta name="DC.subject" content="Group production rules"/>
+<meta name="keywords" content="Group production rules"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="groupprd_reducing_the_thp_limit"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Reducing the THP limit</title>
+</head>
+<body>
+
+
+<div class="nested0" id="groupprd_reducing_the_thp_limit"><a name="groupprd_reducing_the_thp_limit"><!-- --></a>
+<h1 class="topictitle1">Reducing the THP limit</h1>
+
+
+ <div>
+<p>Each production well can be given a secondary THP limit in item
+8 of keyword <a href="../ecl_rm/WLIFT.html#WLIFT">WLIFT</a> (which should be lower than the limit currently specified
+in <a href="../ecl_rm/WCONPROD.html#WCONPROD">WCONPROD</a> or <a href="../ecl_rm/WELTARG.html#WELTARG">WELTARG</a>). A decrement value may also be set in item 11 of <span class="keyword">WLIFT</span>, in which case ECLIPSE reduces the THP to its secondary
+limit in stages, a decrement at a time. When a group cannot achieve
+its target rate of the required phase, ECLIPSE examines each open
+production well in turn, rejecting the well if:</p>
+
+<ul>
+<li>it has no secondary THP limit, or the THP has already been reduced
+to its secondary limit</li>
+
+<li>it is currently operating under a control mode other than THP
+control</li>
+
+<li>it is not subordinate to the group that is unable to achieve its
+production target</li>
+
+<li>it is subordinate to an intermediate level group that is already
+operating at its target or limiting rate for the required phase, and
+so cannot increase its flow further.</li>
+
+</ul>
+
+<p>For each well that survives all these tests, ECLIPSE obtains an
+estimate of its possible increase in production rate resulting from
+a reduction in THP by its next decrement (or to its secondary limit
+if no decrements are specified), using the current values of the phase
+mobilities at its connections. The well with the highest estimated
+increase multiplied by its efficiency factor will have its THP reduced
+by the next decrement. If no decrements are specified for the well,
+or if its next decrement would cross the secondary THP limit, the
+THP is reduced to its secondary limit.</p>
+
+<p>Thus the wells have their THPs reduced in decreasing order of the
+resulting increase in production rate. The THP switching process is
+treated as instantaneous, and there is no limit on the rate at which
+wells can be switched.</p>
+
+<p>Secondary THP limits should not be set for wells whose group is
+part of a network (see <a href="networkintro_Network_Option.html#networkintro_network_option"> "Network option"</a>), as the wells' THP limits are set
+by their group's nodal pressure in the network. THP switching
+will not be performed on any such wells.</p>
+
+<p>Note that wells also switch to their secondary THP limits if their
+production rate falls below a specified value (keyword <span class="keyword">WLIFT</span> item 2), or if their water cut or gas-liquid ratio exceeds a specified
+limit (keyword <span class="keyword">WLIFT</span> items 7 and 9), or if the
+well dies under THP control. This triggers the switch according to
+the behavior of the individual wells, irrespective of whether or not
+group targets are being met. If you wish the secondary THP values
+to be applied only using the group production rules to help meet a
+group target, or if the well dies under THP control, then you must
+give the rate, water cut and GLR limits in items 2, 7 and 9 of keyword <span class="keyword">WLIFT</span> a default, zero or negative value.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

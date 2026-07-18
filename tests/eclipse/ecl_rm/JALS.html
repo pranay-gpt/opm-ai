@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="JALS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="JALS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>JALS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="JALS"><a name="JALS"><!-- --></a>
+<h1 class="keyword">JALS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="jals.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="jals.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1164e45"> </th>
+
+<th valign="top" id="d1164e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1164e54"> x </th>
+
+<th valign="top" id="d1164e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1164e45 d1164e54 "> x </td>
+
+<td valign="top" headers="d1164e48 d1164e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1164e45 d1164e54 "> </td>
+
+<td valign="top" headers="d1164e48 d1164e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1164e45 d1164e54 "> </td>
+
+<td valign="top" headers="d1164e48 d1164e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1164e45 d1164e54 "> </td>
+
+<td valign="top" headers="d1164e48 d1164e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1164e45 d1164e54 "> </td>
+
+<td valign="top" headers="d1164e48 d1164e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1164e45 d1164e54 "> </td>
+
+<td valign="top" headers="d1164e48 d1164e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1164e45 d1164e54 "> </td>
+
+<td valign="top" headers="d1164e48 d1164e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1164e45 d1164e54 "> </td>
+
+<td valign="top" headers="d1164e48 d1164e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword controls the JALS linear solver that can dramatically
+reduce CPU times of thermal runs. The JALS linear solver is the default
+for thermal simulations. The use of the JALS linear solver is most
+likely to have a benefit for ‘harder’ problems. </p>
+
+<p>The JALS linear solver employs the constrained pressure residual
+(CPR) technique in which an approximate pressure system is solved
+for each outer iteration. The solution of the pressure system is referred
+to as the inner iteration. The GMRES algorithm is used for both the
+outer and inner iteration. The GMRES algorithm is similar to the ORTHOMIN
+algorithm and requires storing a set of search directions. </p>
+
+<p>The JALS solver can be enabled in two modes. In mode 2, the solver
+is generally more accurate and the simulation should require less
+linear iterations. However, the cost per linear iteration is higher
+in mode 2 than in mode 1. Since the total CPU time of a simulation
+is a product of both the number of linear iterations required and
+the CPU cost per linear iteration there may be circumstances where
+the model will run faster in mode 1. </p>
+
+<p>With the JALS solver, the memory location for these search directions
+can either be the heap or the stack. By default, the storage location
+is the heap since this ensures a stable executable. Placing the search
+directions on the stack can yield a performance increase since memory
+allocation and access to the stack is generally faster. However, if
+the capacity of the stack is exceeded ECLIPSE will abort. On the Windows
+system, the size of the stack is fixed. On Linux systems, the stack
+size can often be configured and set unlimited. Please consult your
+systems administrator. It is recommended that initial runs are performed
+using the <samp class="codeph">HEAP</samp> options. </p>
+
+<p>By default, the JALS solver uses 20 outer iterations, 4 CPR iterations
+and no residual check (item 4 of <span class="keyword">JALS</span> set to “OFF”).
+For some models, 20 iterations may not be enough. Setting item 4 of
+this keyword to “ON” will set the same number of iterations, but turn
+the residual check on so that an extra 20 iterations are allowed in
+any timestep where this check is triggered. Since this switch is checking
+that the linearized version of the problem has converged residuals,
+this forces additional non-linear iterations which may slow down a
+simulation run. </p>
+
+<p>The keyword should be followed by up to four items, and must be
+terminated by a slash (/). </p>
+
+<ol>
+<li> Switch for JALS solver 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">2</td>
+
+<td valign="top">Enabled in mode 2 </td>
+
+</tr>
+
+<tr>
+<td valign="top">1</td>
+
+<td valign="top"> Enabled in mode 1 </td>
+
+</tr>
+
+<tr>
+<td valign="top">0</td>
+
+<td valign="top">Off </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: 2 </p>
+ </li>
+
+<li> Memory location for inner iteration search directions 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">HEAP</samp> </td>
+
+<td valign="top">On the heap </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">STACK</samp> </td>
+
+<td valign="top"> On the stack </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">HEAP</samp> </p>
+ </li>
+
+<li> Memory location for outer iteration search directions 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">HEAP</samp> </td>
+
+<td valign="top">On the heap </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">STACK</samp> </td>
+
+<td valign="top"> On the stack </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">HEAP</samp> </p>
+ </li>
+
+<li> Use of residual check, or switch to previous version of JALS
+(either 2009.1or 2008.3)
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">ON</samp> </td>
+
+<td valign="top">Residual check turned on </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">OFF</samp> </td>
+
+<td valign="top">Residual check turned off </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>DEFAULT: <samp class="codeph">OFF</samp> </p>
+ </li>
+
+</ol>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">It is currently not possible to use the JALS solver in a thermal
+dual porosity (or dual permeability) run containing local grid refinements. </span></div>
+
+<div class="section" id="jals_example"><a name="jals_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <pre><code>JALS
+2 HEAP HEAP OFF /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

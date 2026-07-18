@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PLYTRRF"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PLYTRRF"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PLYTRRF</title>
+</head>
+<body>
+
+
+<div class="nested0" id="PLYTRRF"><a name="PLYTRRF"><!-- --></a>
+<h1 class="keyword">PLYTRRF</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="plytrrf.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="plytrrf.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1842e45"> x </th>
+
+<th valign="top" id="d1842e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1842e54">  </th>
+
+<th valign="top" id="d1842e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1842e45 d1842e54 ">  </td>
+
+<td valign="top" headers="d1842e48 d1842e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1842e45 d1842e54 ">  </td>
+
+<td valign="top" headers="d1842e48 d1842e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1842e45 d1842e54 ">  </td>
+
+<td valign="top" headers="d1842e48 d1842e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1842e45 d1842e54 "> x </td>
+
+<td valign="top" headers="d1842e48 d1842e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1842e45 d1842e54 ">  </td>
+
+<td valign="top" headers="d1842e48 d1842e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1842e45 d1842e54 ">  </td>
+
+<td valign="top" headers="d1842e48 d1842e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1842e45 d1842e54 ">  </td>
+
+<td valign="top" headers="d1842e48 d1842e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1842e45 d1842e54 ">  </td>
+
+<td valign="top" headers="d1842e48 d1842e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword should only be used for polymer studies. It describes
+the temperature dependence of the residual resistance factor given
+by the second data item of keyword <a href="PLYROCK.html#PLYROCK"> PLYROCK</a> or by <a href="PLYKRRF.html#PLYKRRF"> PLYKRRF</a>.</p>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a> 
+(set in the <span class="keyword">TABDIMS</span> keyword) tables of polymer residual resistance factor multiplier functions,
+each terminated by a slash (/), describing the effect on the residual
+resistance factor for adsorbed polymer due to increasing temperature.
+Each table consists of 2 columns of data:</p>
+
+<ol>
+<li> Temperature. <p>The values should increase monotonically down
+the column.</p>
+ <p>UNITS: °C (<samp class="codeph">METRIC</samp>), °F (<samp class="codeph">FIELD</samp>), °C (<samp class="codeph">LAB</samp>)</p>
+ </li>
+
+<li> The corresponding factor by which the residual resistance factor
+(entered using the <span class="keyword">PLYROCK</span> or <span class="keyword">PLYKRRF</span> keywords) has to be multiplied to give the temperature-dependent
+residual resistance factor of adsorbed polymer. </li>
+
+</ol>
+
+<p>If <a href="PLYTRRFA.html#PLYTRRFA"> PLYTRRFA</a> is specified, then for a given grid cell temperature T, the value
+of the temperature multiplier will be the value in column 2 for the
+first temperature in column 1 that is equal to or below T. Otherwise,
+the multiplier will be linearly interpolated as usual between the
+column 2 values for the column 1 temperatures that form the range
+containing T.</p>
+
+<p>Each table must contain at least two, and no more than <a href="TABDIMS.html#TABDIMS.NSSFUN"> NSSFUN</a> (set in the <span class="keyword">TABDIMS</span> keyword) rows. Each row must be complete, containing an entry in every column of the table. If <span class="keyword">PLYTRRFA</span> is specified, then this number should also be one more than the value specified first argument of <span class="keyword">PLYTRRFA</span>.</p>
+
+<p>See <a href="../ecl_td/polymer_Polymer_Flood_Model.html#polymer_polymer_flood_model">"Polymer flood model"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.</p>
+
+<div class="section" id="plytrrf_example"><a name="plytrrf_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTSFUN</samp> = 1 
+and <samp class="codeph">NSSFUN</samp> = 5.</p>
+ <pre><code>PLYTRRF
+  20.0    0.1
+  50.0    0.5
+ 100.0    2.5
+ 150.0   10.0
+ 200.0   20.0  /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

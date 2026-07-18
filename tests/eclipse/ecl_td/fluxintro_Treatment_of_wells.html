@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Treatment of wells"/>
+<meta name="DC.subject" content="Running the simulator, Flux boundary conditions, Wells, Well"/>
+<meta name="keywords" content="Running the simulator, Flux boundary conditions, Wells, Well"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="fluxintro_treatment_of_wells"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Treatment of wells</title>
+</head>
+<body>
+
+
+<div class="nested0" id="fluxintro_treatment_of_wells"><a name="fluxintro_treatment_of_wells"><!-- --></a>
+<h1 class="topictitle1">Treatment of wells</h1>
+
+
+ <div>
+<p>In the full field run, the oil, water, gas and reservoir fluid
+volume rates of each well are written to the FLUX file at each timestep
+in ECLIPSE 100. The oil, water, gas, voidage, wet gas and component
+well rates are written to the flux file at each timestep in ECLIPSE
+300.</p>
+
+<p>In the reduced run, the wells are sorted into two categories: those
+completed inside the flux boundary and those completed outside it.
+An error is flagged if a well has completions on both sides of the
+flux boundary. The wells outside the boundary are essentially ignored
+in the simulation, except that their flow rates are read from the <samp class="codeph">FLUX</samp> file and added to the group and field totals. These
+wells are omitted from the well reports.</p>
+
+<p>Because the wells outside the flux boundary do not exist as part
+of the simulation model, the ways in which they can influence the
+behavior of the wells inside the boundary are very limited. Essentially,
+if a group contains wells on both sides of the boundary (the FIELD
+will probably do so), then the only group control or constraint that
+can be applied to it is control of the group flow rate. The wells
+outside the boundary are treated as unavailable for group control,
+and their flows are read from the flux file and summed. The wells
+inside the boundary then make up the rest of the group’s target rate.
+Other group constraints (for example economic limits, rate limits
+resulting in workovers, workover rig availability, artificial lift
+capacity, limits on the number of open wells) should not be applied
+to groups containing wells on both sides of the boundary, as events
+happening outside the flux boundary are not taken into account. If
+the drilling queue contains wells both inside and outside the flux
+boundary, drilling events outside the boundary are only visible by
+the additional contribution of the new wells in the flux file at the
+end of the corresponding timestep of the full-field run. If the group
+falls short of its production target before the full contribution
+of the newly-drilled wells outside the boundary is seen, wells inside
+the flux boundary may be drilled prematurely in the <span class="keyword">USEFLUX</span> run. It is best therefore to avoid using a drilling queue in these
+circumstances.</p>
+
+<p>The well's reservoir fluid volume rate is by default calculated
+based on the average field hydrocarbon pressure. </p>
+
+<p>ECLIPSE 100</p>
+
+<p>The reservoir fluid volume rate
+calculated in the full field run will use the average hydrocarbon
+pressure over the whole reservoir and will be stored in the <samp class="codeph">FLUX</samp> file. During the reduced run, the average pressure
+is read from the <samp class="codeph">FLUX</samp> file at every timestep for
+the calculation of the reservoir volume rate in the well model.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>The reservoir fluid volume rate
+calculated in the full field run will use the average hydrocarbon
+pressure over the whole reservoir while in the reduced run the average
+pressure is calculated based on the hydrocarbons inside the <span class="keyword">FLUXNUM</span> region. However, you can specify that the well's
+reservoir fluid rate is calculated using the same average hydrocarbon
+pressure to avoid discrepancies between the full field and the reduced
+runs. To do this, define a <a href="../ecl_rm/FIPNUM.html#FIPNUM">FIPNUM</a> region equivalent to the <span class="keyword">FLUXNUM</span> region
+in the full field run and set item 13 of the <a href="../ecl_rm/WELSPECS.html#WELSPECS">WELSPECS</a> keyword to that <span class="keyword">FIPNUM</span> region.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Combined grid-block and temperature-dependent table end-points"/>
+<meta name="DC.subject" content="End-point scaling, Saturation table scaling"/>
+<meta name="keywords" content="End-point scaling, Saturation table scaling"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sattabsc_combined_grid-block_and_temperature-dependent_table_end-points"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Combined grid-block and temperature-dependent table end-points</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="sattabsc_combined_grid-block_and_temperature-dependent_table_end-points"><a name="sattabsc_combined_grid-block_and_temperature-dependent_table_end-points"><!-- --></a>
+<h1 class="topictitle1">Combined grid-block and temperature-dependent table end-points</h1>
+
+
+ <div>
+<p>ECLIPSE 300  </p>
+
+<p>For thermal models, it is possible to combine
+the grid-block end-points, which are temperature independent, with
+the temperature-dependent table end-points. In general, for the end-point
+scaling option, the grid-block end-points are obtained from the end-point
+arrays, for saturation, relative permeability and capillary pressure
+end-points respectively. The end-point arrays are specified using
+keywords such as <a href="../ecl_rm/swl_SWL_ISWL.html#swl_swl_iswl">SWL</a>, <a href="../ecl_rm/SWCR.html#SWCR">SWCR</a>, <a href="../ecl_rm/swu_SWU_ISWU.html#swu_swu_iswu">SWU</a>, <a href="../ecl_rm/krwx.html#krwx">KRW</a> and <a href="../ecl_rm/pcw_PCW_IPCW.html#pcw_pcw_ipcw"> PCW</a>, possibly in combination with the depth-dependent end-point
+tables <a href="../ecl_rm/ENPTVD.html#ENPTVD">ENPTVD</a>, <a href="../ecl_rm/ENKRVD.html#ENKRVD">ENKRVD</a> and <a href="../ecl_rm/ENPCVD.html#ENPCVD">ENPCVD</a>. The defaulted values are furnished from the end-points obtained
+from the saturation tables.</p>
+
+<p>If the <a href="../ecl_rm/ENDSCALE.html#ENDSCALE"> ENDSCALE</a> keyword is specified with item 5 set to a value of 1 or 2,
+it is possible either to supersede or combine respectively these values
+with those specified in the temperature-dependent end-point tables <a href="../ecl_rm/ENPTVT.html#ENPTVT">ENPTVT</a>, <a href="../ecl_rm/ENKRVT.html#ENKRVT">ENKRVT</a> and <a href="../ecl_rm/ENPCVT.html#ENPCVT">ENPCVT</a> for saturation, relative
+permeability and capillary pressure end-points respectively.</p>
+
+<p>If item 5 is set to 0 or defaulted, the use of grid block end-points
+and temperature-dependent table end-points is mutually exclusive.
+This is the only option available for versions of ECLIPSE 300 prior
+to the 2011.1 version and is the default option for the 2011.1 version.</p>
+
+<p>If item 5 is set to 1, a temperature dependent end-point, where
+specified, will supersede the grid block value.</p>
+
+<p>If item 5 is set to 2, a temperature dependent table end-point,
+where specified, will be combined with the grid block value such that
+the resultant temperature dependent grid block end-point  <math><mrow><msub><mrow>
+<mi>E</mi><mi>p</mi></mrow><mrow><mi>g</mi><mi>b</mi>
+</mrow></msub><mrow><mo>(</mo><mi>T</mi><mo>)</mo>
+</mrow></mrow></math> is given by:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sattabsc.equ.01f4"/>
+ <math><mrow><mrow><msub>
+<mrow><mi>E</mi><mi>p</mi></mrow><mrow><mi>g</mi>
+<mi>b</mi></mrow></msub><mrow><mo>(</mo><mi>T</mi>
+<mo>)</mo></mrow></mrow><mo>=</mo><mrow><msub><mrow>
+<mi>E</mi><mi>p</mi></mrow><mrow><mi>t</mi></mrow>
+</msub><mrow><mo>(</mo><mi>T</mi><mo>)</mo></mrow>
+</mrow><mo>×</mo><mfrac><mrow><msub><mrow><mi>E</mi><mi>p</mi></mrow><mrow><mi>g</mi><mi>b</mi>
+</mrow></msub></mrow><mrow><msub><mrow><mi>E</mi><mi>p</mi></mrow><mrow><mi>t</mi></mrow></msub><mo>(</mo>
+<msub><mrow><mi>T</mi></mrow><mrow><mn>1</mn></mrow>
+</msub><mo>)</mo></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 163.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><mi>E</mi>
+<mi>p</mi></mrow></math> </td>
+
+<td valign="top">is used to signify any of the saturation, relative permeability
+or capillary pressure end-points</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>E</mi><mi>p</mi></mrow><mrow><mi>t</mi></mrow></msub><mrow><mo>(</mo><mi>T</mi><mo>)</mo></mrow></mrow></math> </td>
+
+<td valign="top"> is the end-point value obtained from the temperature-dependent
+table for the grid-block temperature  <math><mi>T</mi></math>          </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mrow><mi>E</mi><mi>p</mi></mrow><mrow><mi>g</mi><mi>b</mi>
+</mrow></msub></math> </td>
+
+<td valign="top"> is the temperature-independent grid-block end-point value</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>E</mi><mi>p</mi></mrow><mrow><mi>t</mi></mrow></msub><mrow><mo>(</mo><msub><mrow><mi>T</mi></mrow><mrow><mn>1</mn></mrow></msub><mo>)</mo>
+</mrow></mrow></math> </td>
+
+<td valign="top"> is the end-point value from the temperature-dependent table
+at temperature  <math><msub><mi>T</mi>
+<mn>1</mn></msub></math>  which corresponds to the first temperature
+entry in the table.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This form of scaling ensures that the original grid-block end-point
+is honored at the lowest temperature in the table.</p>
+
+<p>Any end-point in any of the temperature-dependent end-point tables
+may be defined to be temperature independent by specifying the values
+in all rows of the appropriate column to be default values (1*). The
+consequence of this defaulting will depend upon the value of item
+5 of the <span class="keyword">ENDSCALE</span> keyword. If this value is 0,
+the combination of grid-block and temperature-dependent table end-points
+is not permitted; if only the temperature-dependent tables are specified,
+the defaults will be supplied from the saturation table end-points.
+However, if item 5 of the <span class="keyword">ENDSCALE</span> keyword is 1
+or 2, the defaults will be supplied from the grid-block end-points,
+except for the relative permeabilities at critical and residual saturations.
+If these are defaulted, these will be scaled according to the current
+values of the maximum relative permeabilities. The value of item 5
+is ignored for non-thermal models.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

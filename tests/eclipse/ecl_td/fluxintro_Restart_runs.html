@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Restart runs"/>
+<meta name="DC.subject" content="Running the simulator, Flux boundary conditions, Restarts"/>
+<meta name="keywords" content="Running the simulator, Flux boundary conditions, Restarts"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="fluxintro_restart_runs"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Restart runs</title>
+</head>
+<body>
+
+
+<div class="nested0" id="fluxintro_restart_runs"><a name="fluxintro_restart_runs"><!-- --></a>
+<h1 class="topictitle1">Restart runs</h1>
+
+
+ <div>
+<p>The reduced run can use flux information from a full field run
+that consists of a sequence of restarts. The <a href="../ecl_rm/USEFLUX.html#USEFLUX">USEFLUX</a> keyword in the reduced
+run should specify the root name of the last ECLIPSE run in the full
+field restart sequence. The <samp class="codeph">FLUX</samp> files from all the
+restarts must exist and either be all formatted or all unformatted.
+Keyword <a href="../ecl_rm/FMTIN.html#FMTIN">FMTIN</a> should be specified in the <span class="keyword">RUNSPEC</span> section
+if the files are formatted.</p>
+
+<div class="fignone" id="fluxintro_restartruns_fullfield"><a name="fluxintro_restartruns_fullfield"><!-- --></a>
+
+ <br/><img src="../img/flux_field_run.png" width="421px"/><br/> 
+<br/><span class="figcap">
+           Figure 746.1  A sequence of restarts that together make a full field run</span></div>
+
+<p>The reduced run <samp class="codeph">SMALL.DATA</samp> includes the <span class="keyword">USEFLUX</span> keyword as follows:</p>
+
+<pre><code>USEFLUX
+ 'RUN3'
+/</code></pre>
+<p>This run uses files <samp class="codeph">RUN1.FLUX</samp>, <samp class="codeph">RUN2.FLUX</samp> and <samp class="codeph">RUN3.FLUX</samp> to read flux information for the
+time sequence represented by all the rectangles. The number of restarts
+in the sequence is limited to 20.</p>
+
+<p>It is possible to restart a reduced run from the corresponding
+full field run by specifying the full field root name in the <a href="../ecl_rm/RESTART.html#RESTART">RESTART</a> keyword in the usual
+manner.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The periods covered by the restarts in the sequence should not
+overlap.                      </span></div>
+
+<p>ECLIPSE 300</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">When doing a reduced run from a restart,
+the <samp class="codeph">GRID</samp> file from the restart run must also be present
+in order for the simulation to initialize correctly.          </span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

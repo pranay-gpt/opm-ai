@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Thermal option"/>
+<meta name="DC.subject" content="Running the simulator, Flux boundary conditions, Thermal option"/>
+<meta name="keywords" content="Running the simulator, Flux boundary conditions, Thermal option"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="fluxintro_thermal_option"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Thermal option</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="fluxintro_thermal_option"><a name="fluxintro_thermal_option"><!-- --></a>
+<h1 class="topictitle1">Thermal option</h1>
+
+
+ <div>
+<p>ECLIPSE 300 </p>
+<p>The flux boundary option can be used for 2
+different scenarios:</p>
+<ol><li>Full field model is a Thermal model, and the reduced model is
+also a Thermal model             </li>
+<li>Full field model is either an ECLIPSE 300 Black-oil model or a
+Compositional model, and the reduced run is a Thermal model.</li>
+</ol>
+<p>For option 1, a thermal reduced run can be carried out from a thermal
+base run. In this case, the energy flows across the boundary are written
+out to the <samp class="codeph">FLUX</samp> file in the full field run.</p>
+<p>For option 2, a thermal reduced run can be carried out from a compositional
+or an ECLIPSE 300 black-oil base case. In this case the energy flows
+across the boundary are calculated in the reduced run.</p>
+<p>The conductive term is defined as  <math><mrow><msub><mrow><mi>C</mi></mrow><mrow><mi>e</mi><mi>i</mi></mrow></msub><mo>=</mo><mrow><mo>-</mo><mstyle><mrow><munder><mrow><mo>∑</mo></mrow><mrow><mi>n</mi></mrow></munder><mrow><msub><mrow><mi>Ψ</mi></mrow><mrow><mi>n</mi><mi>i</mi></mrow></msub><mi>Λ</mi><mo>(</mo><msub><mrow><mi>T</mi></mrow><mrow><mi>i</mi></mrow></msub><mrow><mo>-</mo><msub><mrow><mi>T</mi></mrow><mrow><mi>n</mi></mrow></msub></mrow><mo>)</mo></mrow></mrow></mstyle></mrow></mrow></math>,</p>
+<p>where</p>
+<p> <math><msub><mi>Ψ</mi><mrow><mi>n</mi><mi>i</mi></mrow></msub></math>  is
+the heat transmissibility between cells  <math><mi>n</mi></math>  and  <math><mi>i</mi></math>. This term is calculated as follows:</p>
+<p> <math><msub><mi>Ψ</mi><mrow><mi>n</mi><mi>i</mi></mrow></msub><mo>=</mo><mi>α</mi><mo>×</mo><msub><mi>ϒ</mi><mrow><mi>n</mi><mi>i</mi></mrow></msub></math> </p>
+<p>where  <math><msub><mi>ϒ</mi><mrow><mi>n</mi><mi>i</mi></mrow></msub></math>  is
+the transmissibility between cells  <math><mi>n</mi></math>  and  <math><mi>i</mi></math>  taken from the base run, and</p>
+<p> <math><mi>α</mi></math>  is the heat transmissibility factor, defined using the <a href="../ecl_rm/THFLXTF.html#THFLXTF">THFLXTF</a> keyword.</p>
+<p>The  <math><mi>Λ</mi></math>  term is the saturation dependent transmissibility multiplier of
+the cell inside the active flux region.</p>
+<p>The convective term is defined as  <math><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>e</mi><mi>i</mi></mrow></msub><mo>=</mo><mstyle><mrow><munder><mo>∑</mo><mrow><mi>n</mi></mrow></munder><msub><mrow><mi>ϒ</mi></mrow><mrow><mi>n</mi></mrow></msub></mrow></mstyle><mrow><mrow><mo>(</mo><mstyle><mrow><munder><mrow><mo>∑</mo></mrow><mrow><mi>p</mi></mrow></munder></mrow></mstyle><mrow><mrow><msubsup><mrow><mi>M</mi></mrow><mrow><mi>p</mi></mrow><mrow><mi>e</mi></mrow></msubsup></mrow><mrow><mi>d</mi><msub><mrow><mi>P</mi></mrow><mrow><mi>p</mi><mi>n</mi><mi>i</mi></mrow></msub></mrow></mrow><mo>)</mo></mrow></mrow></mrow></math>,</p>
+<p>where</p>
+<p> <math><mrow><msubsup><mrow><mi>M</mi></mrow><mrow><mi>p</mi></mrow><mrow><mi>e</mi></mrow></msubsup></mrow></math> is the energy generalized
+mobility, and is calculated as follows:</p>
+<p> <math><mrow><msubsup><mrow><mi>M</mi></mrow><mrow><mi>p</mi></mrow><mrow><mi>e</mi></mrow></msubsup><mo>=</mo><msub><mrow><mi>H</mi></mrow><mrow><mi>p</mi></mrow></msub><mo>⋅</mo><mrow><msub><mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>p</mi></mrow></msub><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>p</mi></mrow></msub><mo>)</mo></mrow><mo>⋅</mo><mfrac><mrow><msub><mrow><mi>b</mi></mrow><mrow><mi>p</mi></mrow></msub></mrow><mrow><msub><mrow><mi>μ</mi></mrow><mrow><mi>p</mi></mrow></msub></mrow></mfrac></mrow></math>.</p>
+<p>Referring to the above form, the  <math><mrow><mrow><msub><mrow><mi>k</mi></mrow><mrow><mi>r</mi><mi>p</mi></mrow></msub><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>p</mi></mrow></msub><mo>)</mo></mrow><mo>⋅</mo><mfrac><mrow><msub><mrow><mi>b</mi></mrow><mrow><mi>p</mi></mrow></msub></mrow><mrow><msub><mrow><mi>μ</mi></mrow><mrow><mi>p</mi></mrow></msub></mrow></mfrac></mrow></math> part is taken from the base
+run, and the phase enthalpy  <math><msub><mi>H</mi><mi>p</mi></msub></math>  is calculated in the cell inside
+the active flux region during the reduced run.</p>
+<p>To enable a thermal reduced
+run from a non-thermal base run, item 1 of the <a href="../ecl_rm/FLUXOPTS.html#FLUXOPTS">FLUXOPTS</a> keyword should be
+used in the base run and set to YES. This allows ECLIPSE 300 to provide
+all the essential information to perform the reduced thermal simulation.</p>
+</div>
+</div>
+
+</body>
+</html>

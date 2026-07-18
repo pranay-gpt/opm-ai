@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Formulation"/>
+<meta name="DC.subject" content="Optimization, Adjoint gradient screening formulation"/>
+<meta name="keywords" content="Optimization, Adjoint gradient screening formulation"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="adjscr_formulation"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Formulation</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="adjscr_formulation"><a name="adjscr_formulation"><!-- --></a>
+<h1 class="topictitle1">Formulation</h1>
+
+
+ <div>
+<p>ECLIPSE forces the fully implicit residual in each simulator grid
+block,                  <math><mi>R</mi></math>, to be zero (see <a href="formulate_Formulation_of_the_Equations.html#formulate_formulation_of_the_equations">  "Formulation of the equations"</a>) by solving for solution variables
+ <math><mrow><mi>X</mi>
+<mo>(</mo><mi>t</mi><mo>)</mo></mrow></math>  at discrete
+points in time,  <math><mrow><msub><mi>t</mi><mn>1</mn></msub><mo>,</mo><mrow><msub><mi>t</mi><mn>2</mn></msub><mo>,</mo><mrow><mi>…</mi>
+<mo>,</mo><msub><mi>t</mi><mi>N</mi></msub></mrow>
+</mrow></mrow></math>, so that for a dynamic well parameter,
+the following vector notation can be used.          </p>
+
+<p>                              <math><mrow>
+<mrow><mi>W</mi><mo>[</mo><mrow><mi>X</mi><mo>(</mo>
+<mi>t</mi><mo>)</mo></mrow><mo>]</mo></mrow><mo>→</mo><mrow><munder><mrow><mi>W</mi>
+</mrow><mrow><mo>̲</mo></mrow></munder></mrow><mo>=</mo><mrow><mo>[</mo><mtable><mtr><mtd><mrow><mi>W</mi><mo>[</mo><mrow><mi>X</mi><mo>(</mo><msub>
+<mrow><mi>t</mi></mrow><mrow><mn>1</mn></mrow></msub>
+<mo>)</mo></mrow><mo>]</mo></mrow></mtd></mtr><mtr>
+<mtd><mrow><mi>W</mi><mo>[</mo><mrow><mi>X</mi><mo>(</mo><msub><mrow><mi>t</mi></mrow><mrow><mn>2</mn>
+</mrow></msub><mo>)</mo></mrow><mo>]</mo></mrow></mtd>
+</mtr><mtr><mtd><mi>…</mi></mtd></mtr><mtr><mtd>
+<mrow><mi>W</mi><mo>[</mo><mrow><mi>X</mi><mo>(</mo>
+<msub><mrow><mi>t</mi></mrow><mrow><mi>N</mi></mrow>
+</msub><mo>)</mo></mrow><mo>]</mo></mrow></mtd></mtr>
+</mtable><mo>]</mo></mrow><mo>≡</mo><mrow><mo>[</mo>
+<mtable><mtr><mtd><msub><mrow><mi>W</mi></mrow><mrow>
+<mn>1</mn></mrow></msub></mtd></mtr><mtr><mtd><msub>
+<mrow><mi>W</mi></mrow><mrow><mn>2</mn></mrow></msub>
+</mtd></mtr><mtr><mtd><mi>…</mi></mtd></mtr><mtr>
+<mtd><msub><mrow><mi>W</mi></mrow><mrow><mi>N</mi>
+</mrow></msub></mtd></mtr></mtable><mo>]</mo></mrow>
+</mrow></math>                      </p>
+
+<p>Assuming that a parameter                  <math><mi>p</mi></math>, which is normally a constant in the flow equations,
+can be varied, then  <math><mi>W</mi><mo>=</mo>
+<mrow><mi>W</mi><mo>(</mo><mi>p</mi><mo>,</mo><mrow>
+<mi>X</mi><mo>(</mo><mi>t</mi><mo>,</mo><mi>p</mi>
+<mo>)</mo></mrow><mo>)</mo></mrow></math> which has the
+following differential:          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="adjscr.XID-00000130"/>
+ <math><mrow><mrow><mi>d</mi><mi>W</mi></mrow><mo>=</mo><mo>(</mo><mfrac>
+<mrow><mi>∂</mi><mi>W</mi></mrow><mrow><mi>∂</mi>
+<mi>p</mi></mrow></mfrac><mo>)</mo><mo>⋅</mo><mrow>
+<mi>d</mi><mi>p</mi></mrow><mo>+</mo><mo>(</mo>
+<mfrac><mrow><mi>∂</mi><mi>W</mi></mrow><mrow><mi>∂</mi><mi>X</mi></mrow></mfrac><mo>)</mo><mo>⋅</mo>
+<mrow><mi>d</mi><mi>X</mi></mrow></mrow></math> 
+</td><td align="right">[Eq. 838.1]
+              </td></tr></tbody></table>
+<p>and that the flow equations still have to be honored:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="adjscr.XID-00000134"/>
+ <math><mrow><mtable><mtr>
+<mtd><mrow><mi>d</mi><msub><mrow><mi>R</mi></mrow>
+<mrow><mn>1</mn></mrow></msub><mo>(</mo><msub><mrow>
+<mi>X</mi></mrow><mrow><mn>1</mn></mrow></msub><mo>,</mo><msub><mrow><mi>X</mi></mrow><mrow><mn>0</mn>
+</mrow></msub><mo>,</mo><mi>p</mi><mo>)</mo></mrow>
+</mtd><mtd><mo>=</mo></mtd><mtd><mn>0</mn></mtd>
+</mtr><mtr><mtd><mrow><mi>d</mi><msub><mrow><mi>R</mi></mrow><mrow><mn>2</mn></mrow></msub><mo>(</mo>
+<msub><mrow><mi>X</mi></mrow><mrow><mn>2</mn></mrow>
+</msub><mo>,</mo><msub><mrow><mi>X</mi></mrow><mrow>
+<mn>1</mn></mrow></msub><mo>,</mo><mi>p</mi><mo>)</mo></mrow></mtd><mtd><mo>=</mo></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mrow><mi>d</mi><msub>
+<mrow><mi>R</mi></mrow><mrow><mn>3</mn></mrow></msub>
+<mo>(</mo><msub><mrow><mi>X</mi></mrow><mrow><mn>3</mn></mrow></msub><mo>,</mo><msub><mrow><mi>X</mi>
+</mrow><mrow><mn>2</mn></mrow></msub><mo>,</mo><mi>p</mi><mo>)</mo></mrow></mtd><mtd><mo>=</mo></mtd>
+<mtd><mn>0</mn></mtd></mtr><mtr><mtd><mi>…</mi>
+</mtd><mtd><mi>…</mi></mtd></mtr><mtr><mtd><mrow>
+<mi>d</mi><msub><mrow><mi>R</mi></mrow><mrow><mi>N</mi></mrow></msub><mo>(</mo><msub><mrow><mi>X</mi>
+</mrow><mrow><mi>N</mi></mrow></msub><mo>,</mo><msub>
+<mrow><mi>X</mi></mrow><mrow><mi>N</mi><mrow><mo>-</mo><mn>1</mn></mrow></mrow></msub><mo>,</mo><mi>p</mi><mo>)</mo></mrow></mtd><mtd><mo>=</mo></mtd>
+<mtd><mn>0</mn></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 838.2]
+              </td></tr></tbody></table>
+<p>then the term containing solution variables in equation <a href="adjscr_Formulation.html#adjscr.XID-00000130">838.1</a>  can be eliminated. To do this,
+apply Lagrange multipliers,                  <math><mi>Ψ</mi></math>, for each equation in equation <a href="adjscr_Formulation.html#adjscr.XID-00000134">838.2</a>, and insert them into equation <a href="adjscr_Formulation.html#adjscr.XID-00000130">838.1</a>  to give the following:       
+  </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="adjscr.XID-0000013c"/>
+ <math><mrow><mfrac><mrow>
+<mi>d</mi><mi>W</mi></mrow><mrow><mi>d</mi><mi>p</mi>
+</mrow></mfrac><mo>=</mo><mo>{</mo><mo>(</mo><mfrac>
+<mrow><mi>∂</mi><mi>W</mi></mrow><mrow><mi>∂</mi>
+<mi>p</mi></mrow></mfrac><mo>)</mo><mo>+</mo><mi>Ψ</mi><mo>⋅</mo><mo>(</mo><mfrac><mrow><mi>∂</mi>
+<mi>R</mi></mrow><mrow><mi>∂</mi><mi>p</mi></mrow>
+</mfrac><mo>)</mo><mo>}</mo><mo>+</mo><mo>{</mo><mo>(</mo><mfrac><mrow><mi>∂</mi><mi>W</mi></mrow><mrow>
+<mi>∂</mi><mi>X</mi></mrow></mfrac><mo>)</mo><mo>+</mo><mi>Ψ</mi><mo>⋅</mo><mo>(</mo><mfrac><mrow>
+<mi>∂</mi><mi>R</mi></mrow><mrow><mi>∂</mi><mi>X</mi>
+</mrow></mfrac><mo>)</mo><mo>}</mo><mo>⋅</mo><mfrac>
+<mrow><mi>d</mi><mi>X</mi></mrow><mrow><mi>d</mi>
+<mi>p</mi></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 838.3]
+              </td></tr></tbody></table>
+<p>Then choose the Lagrange multipliers so that the right hand term
+in equation <a href="adjscr_Formulation.html#adjscr.XID-0000013c">838.3</a>  is equal to
+zero - this choice has the benefit that there is no need to calculate
+the (expensive)                  <math><mrow>
+<mi>d</mi><mi>X</mi></mrow><mo>/</mo><mrow><mi>d</mi>
+<mi>p</mi></mrow></math>  term.          </p>
+
+<p>These Lagrange multipliers can be represented as a lower triangular
+matrix:</p>
+
+<p>                              <math><mi>Ψ</mi><mo>=</mo><matrix><matrixrow><msub><mi>Ψ</mi>
+<mrow><mn>1</mn><mo>,</mo><mn>1</mn></mrow></msub>
+<mn>0</mn><mn>0</mn><mn>0</mn><mi>…</mi></matrixrow>
+<matrixrow><msub><mi>Ψ</mi><mrow><mn>2</mn><mo>,</mo>
+<mn>1</mn></mrow></msub><msub><mi>Ψ</mi><mrow><mn>2</mn><mo>,</mo><mn>2</mn></mrow></msub><mn>0</mn>
+<mn>0</mn><mi>…</mi></matrixrow><matrixrow><msub><mi>Ψ</mi><mrow><mn>3</mn><mo>,</mo><mn>1</mn></mrow>
+</msub><msub><mi>Ψ</mi><mrow><mn>3</mn><mo>,</mo>
+<mn>2</mn></mrow></msub><msub><mi>Ψ</mi><mrow><mn>3</mn><mo>,</mo><mn>3</mn></mrow></msub><mn>0</mn>
+<mi>…</mi></matrixrow><matrixrow><mi>…</mi><mi>…</mi>
+<mi>…</mi><mi>…</mi><mi>…</mi></matrixrow><matrixrow>
+<msub><mi>Ψ</mi><mrow><mi>N</mi><mo>,</mo><mn>1</mn>
+</mrow></msub><mi>…</mi><msub><mi>Ψ</mi><mrow><mi>N</mi><mo>,</mo><mi>N</mi><mrow><mo>-</mo><mn>2</mn>
+</mrow></mrow></msub><msub><mi>Ψ</mi><mrow><mi>N</mi>
+<mo>,</mo><mi>N</mi><mrow><mo>-</mo><mn>1</mn>
+</mrow></mrow></msub><msub><mi>Ψ</mi><mrow><mi>N</mi>
+<mo>,</mo><mrow><mn>1</mn><mi>N</mi></mrow></mrow>
+</msub></matrixrow></matrix></math>                       </p>
+
+<p>where both row and column indices indicate the report step number.</p>
+
+<p>So, at each time level,                  <math><mi>k</mi></math>, the Lagrange multipliers can be calculated by
+solving the “adjoint” equations, equations <a href="adjscr_Formulation.html#adjscr.XID-0000014a">838.4</a>  and <a href="adjscr_Formulation.html#adjscr.XID-0000014d">838.5</a>:          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="adjscr.XID-0000014a"/>
+ <math><mrow><mfrac><mrow>
+<mi>∂</mi><msub><mrow><mi>W</mi></mrow><mrow><mi>k</mi></mrow></msub></mrow><mrow><mi>∂</mi><msub>
+<mrow><mi>X</mi></mrow><mrow><mi>k</mi></mrow></msub>
+</mrow></mfrac><mo>+</mo><msub><mrow><mi>Ψ</mi></mrow>
+<mrow><mi>k</mi><mo>,</mo><mi>k</mi></mrow></msub>
+<mo>⋅</mo><mfrac><mrow><mi>∂</mi><msub><mrow><mi>R</mi></mrow><mrow><mi>k</mi></mrow></msub></mrow>
+<mrow><mi>∂</mi><msub><mrow><mi>X</mi></mrow><mrow>
+<mi>k</mi></mrow></msub></mrow></mfrac><mo>=</mo><mn>0</mn></mrow></math> 
+</td><td align="right">[Eq. 838.4]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="adjscr.XID-0000014d"/>
+ <math><mrow><msub><mrow>
+<mi>Ψ</mi></mrow><mrow><mi>k</mi><mo>,</mo><mi>m</mi>
+</mrow></msub><mo>⋅</mo><mfrac><mrow><mi>∂</mi><msub>
+<mrow><mi>R</mi></mrow><mrow><mi>m</mi></mrow></msub>
+</mrow><mrow><mi>∂</mi><msub><mrow><mi>X</mi></mrow>
+<mrow><mi>m</mi></mrow></msub></mrow></mfrac><mo>+</mo>
+<msub><mrow><mi>Ψ</mi></mrow><mrow><mi>k</mi><mo>,</mo><mi>m</mi><mo>+</mo><mn>1</mn></mrow></msub>
+<mo>⋅</mo><mfrac><mrow><mi>∂</mi><msub><mrow><mi>R</mi></mrow><mrow><mi>m</mi><mo>+</mo><mn>1</mn>
+</mrow></msub></mrow><mrow><mi>∂</mi><msub><mrow><mi>X</mi></mrow><mrow><mi>m</mi></mrow></msub></mrow>
+</mfrac><mo>=</mo><mn>0</mn></mrow></math> 
+</td><td align="right">[Eq. 838.5]
+              </td></tr></tbody></table>
+<p>where                  <math><mi>m</mi><mo>=</mo>
+<mrow><mn>1</mn><mo>,</mo><mi>…</mi></mrow><mo>,</mo>
+<mi>k</mi><mrow><mo>-</mo><mn>1</mn></mrow></math>.          </p>
+
+<p>The residual derivatives required in this system are the same as
+the ones already used in the non-linear iterations inside the simulator,
+so they are already calculated and available for this method to use.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">With this adjoint method, the number of equations that must
+be solved grows quadratically with the number of report steps. However,
+for a given report step, the number of parameters are not limiting
+as the residual derivatives required in equation <a href="adjscr_Formulation.html#adjscr.XID-0000013c">838.3</a>  are relatively cheap to obtain.
+ </span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

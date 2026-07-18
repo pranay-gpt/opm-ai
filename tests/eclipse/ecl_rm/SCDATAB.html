@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SCDATAB"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SCDATAB"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SCDATAB</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SCDATAB"><a name="SCDATAB"><!-- --></a>
+<h1 class="keyword">SCDATAB</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="scdatab.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="scdatab.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2208e45"> x </th>
+
+<th valign="top" id="d2208e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2208e54"> x </th>
+
+<th valign="top" id="d2208e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2208e45 d2208e54 ">  </td>
+
+<td valign="top" headers="d2208e48 d2208e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2208e45 d2208e54 ">  </td>
+
+<td valign="top" headers="d2208e48 d2208e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2208e45 d2208e54 ">  </td>
+
+<td valign="top" headers="d2208e48 d2208e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2208e45 d2208e54 ">  </td>
+
+<td valign="top" headers="d2208e48 d2208e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2208e45 d2208e54 ">  </td>
+
+<td valign="top" headers="d2208e48 d2208e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2208e45 d2208e54 ">  </td>
+
+<td valign="top" headers="d2208e48 d2208e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2208e45 d2208e54 ">  </td>
+
+<td valign="top" headers="d2208e48 d2208e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2208e45 d2208e54 "> x </td>
+
+<td valign="top" headers="d2208e48 d2208e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword may be used to input tables which give the reduction
+factor for the PI of each connection in a well as a function of the
+current amount of scale deposited per unit length of perforated interval.
+The tables defined here are allocated to individual wells with the <a href="WSCTAB.html#WSCTAB"> WSCTAB</a> keyword. The rate
+of scale deposition around the well connections per unit water flow
+rate should be defined as a function of the sea water fraction in
+scale deposition tables supplied by the <a href="SCDPTAB.html#SCDPTAB"> SCDPTAB</a> keyword.</p>
+
+<p>The keyword is followed by  <samp class="codeph">NTSCDA</samp> tables <strong>exactly</strong>, each containing two columns and no more than <samp class="codeph">NPSCDA</samp> rows of data. The dimensions <samp class="codeph">NTSCDA</samp> and <samp class="codeph">NPSCDA</samp> are entered in the <span class="keyword">RUNSPEC</span> section
+keyword <a href="SCDPDIMS.html#SCDPDIMS"> SCDPDIMS</a>. Each table should be terminated with a slash (/).</p>
+
+<ol>
+<li>The current amount of scale deposited per unit length of perforated
+interval in a well connection. <p>The values should increase monotonically
+down the column.</p>
+ <p>UNITS: gm/m (<samp class="codeph">METRIC</samp>), lb/ft
+(<samp class="codeph">FIELD</samp>), gm/cm (<samp class="codeph">LAB</samp>), gm/m (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li>The corresponding reduction factor for the PI of the connection. </li>
+
+</ol>
+
+<p>The effect of the scale damage is to multiply the original connection
+transmissibility factor by this amount.</p>
+
+<p>Empty tables (containing just their terminating slash) default
+to a copy of the previous table. Extrapolation outside the range of
+a table will return the value of the nearest point in the table.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The scale damage tables are <strong>not</strong> written to the Restart
+files. Accordingly they must be present in any restarted data set.
+Thus it is also possible to change the tables at a restart. </span></div>
+
+<p>The calculation for the effect of scale damage on a well is performed
+explicitly. Thus, at the end of each timestep the mass of scale deposited
+around each connection will be incremented according to the flow of
+water during the timestep and the current sea water concentration.
+This is translated into a PI reduction factor for each connection,
+which will be used during the following timestep.</p>
+
+<p>The current amount of scale deposited around a connection (calculated
+using the scale deposition tables) is converted to the current amount
+of scale deposited per unit length of perforation (for use in these
+tables) by dividing by the connection length. For multisegment and
+friction wells, this length is taken directly from associated keyword
+data. For all other wells, this length is obtained by dividing the
+effective Kh value by the permeability perpendicular to the direction
+of penetration (see <a href="COMPDAT.html#COMPDAT"> COMPDAT</a> keyword).</p>
+
+<div class="section" id="scdatab_example"><a name="scdatab_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTSCDA=1</samp>. <samp class="codeph">NPSCDA</samp> must have been set ≥5:</p>
+ <pre><code>SCDATAB
+-- scale    PI
+-- deposit mult
+    0.0    1.0
+    10.0   0.95
+    20.0   0.85
+    40.0   0.55
+    90.0   0.43  /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

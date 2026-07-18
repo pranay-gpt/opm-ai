@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GASFCOMP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GASFCOMP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GASFCOMP</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="GASFCOMP"><a name="GASFCOMP"><!-- --></a>
+<h1 class="keyword">GASFCOMP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gasfcomp.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gasfcomp.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d778e45"> x </th>
+
+<th valign="top" id="d778e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d778e54">  </th>
+
+<th valign="top" id="d778e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d778e45 d778e54 ">  </td>
+
+<td valign="top" headers="d778e48 d778e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d778e45 d778e54 ">  </td>
+
+<td valign="top" headers="d778e48 d778e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d778e45 d778e54 ">  </td>
+
+<td valign="top" headers="d778e48 d778e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d778e45 d778e54 ">  </td>
+
+<td valign="top" headers="d778e48 d778e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d778e45 d778e54 ">  </td>
+
+<td valign="top" headers="d778e48 d778e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d778e45 d778e54 ">  </td>
+
+<td valign="top" headers="d778e48 d778e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d778e45 d778e54 ">  </td>
+
+<td valign="top" headers="d778e48 d778e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d778e45 d778e54 "> x </td>
+
+<td valign="top" headers="d778e48 d778e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>When the gas field operations model is run in conjunction with
+the standard network option, automatic compressors can be declared
+with this keyword. One compressor is allowed in each branch of the
+network. ECLIPSE switches on compression whenever necessary to enable
+the field to meet its gas production target. The compressors are turned
+off whenever the target rate decreases to see if the field can meet
+it without them. The automatic compressors are also turned on while
+calculating the field’s delivery capacity.</p>
+
+<p>The Simple option for automatic compressors has just two states:
+all compressors on and all compressors off. Each compressor is defined
+by a single record of data.</p>
+
+<p>The Extended option allows each compressor to have up to five levels
+of compression. The compressors will be turned on or switched to a
+higher compression level individually in a predefined order until
+the field can make its production target. The order in which these
+events occur is determined by an action sequence number. Compression
+levels with sequence number 1 are switched on first, followed by levels
+with sequence number 2, and so on in ascending order until either
+the rate target is met or all compressors are operating at their highest
+defined levels. The current operating level of each compressor can
+be written to the Summary file with the <a href="SUMMARY.html#SUMMARY">  SUMMARY</a> section keyword <span class="keyword">GMCPL</span>. All compressors are switched to their highest defined level while
+calculating the field’s delivery capacity. The Extended option
+requires a small amount of extra storage, which must be reserved by
+entering <samp class="codeph">‘YES’</samp> in item 1 of keyword <a href="GASFIELD.html#GASFIELD">  GASFIELD</a> in the <span class="keyword">RUNSPEC</span> section. Each compression level in each compressor
+is defined by a single record of data.</p>
+
+<p>See <a href="../ecl_td/gasfieldintro_Gas_Field_Operations_Model.html#gasfieldintro_gas_field_operations_model">"Gas field operations
+model"</a> and <a href="../ecl_td/networkintro_Network_Option.html#networkintro_network_option">"Network option"</a> in the <cite>ECLIPSE Technical Description</cite> for further details.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> If you are using the Extended Network option (keyword <a href="NETWORK.html#NETWORK">  NETWORK</a> in the <span class="keyword">RUNSPEC</span> section) then automatic compressors must be defined
+with the <a href="NETCOMPA.html#NETCOMPA">  NETCOMPA</a> keyword instead of <span class="keyword">GASFCOMP</span>. The Extended Network
+compressors defined with keyword <span class="keyword">NETCOMPA</span> have
+most of the functionality of the extended compressors defined with <span class="keyword">GASFCOMP</span>. </span></div>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).
+The set of records must end with a blank record, containing only a
+slash (/).</p>
+
+<ol>
+<li> Group name or group name root whose network pipeline contains
+the compressor <p>The compressor associated with this group influences
+the pressure drop in the pipeline between this group and its parent
+group.</p>
+ <p>A group name root, enclosed in quotes and ending with
+an asterisk (*), can be used to refer to several groups in one record.</p>
+ </li>
+
+<li> VFP table number to use when the compressor is operating at the
+level specified in item 5 <p>When the compressor is off, the table
+number specified in keyword <a href="GRUPNET.html#GRUPNET">  GRUPNET</a> is used.</p>
+ <p>A zero or negative number means that the
+same VFP table number specified in <span class="keyword">GRUPNET</span> is used.</p>
+<p>DEFAULT: 0</p>
+ </li>
+
+<li> Artificial Lift Quantity to use when the compressor is operating
+at the level specified in Item 5 <p>When the compressor is off, the
+ALQ value specified in keyword <span class="keyword">GRUPNET</span> will be
+used.</p>
+ <p>UNITS: These depend on what the ALQ was meant to represent
+when the table was created. Refer to section <a href="vfpprod_Record_6_ALQ_values.html#vfpprod_record_6_alq_values">  "Record 6:ALQ values"</a> in the description of keyword <a href="VFPPROD.html#VFPPROD"> VFPPROD</a>.</p>
+<p>DEFAULT:
+0.0</p>
+ </li>
+
+<li> Compressor’s gas consumption rate (used to fuel the compressor)
+when operating at the level specified in item 5 <p>When the compressor
+is on, the extra gas consumption rate is added to the fixed value
+specified in <a href="GCONSUMP.html#GCONSUMP">  GCONSUMP</a>, if any.</p>
+ <p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), Mscf/day (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.0</p>
+ </li>
+
+<li> The compression level that items 2 - 4 represent <p>An integer
+between 1 and 5. A number greater than 1 may be entered only if you
+are using the extended compressor option (see keyword <a href="GASFIELD.html#GASFIELD">  GASFIELD</a> in the <span class="keyword">RUNSPEC</span> section).</p>
+ <p>DEFAULT: 1</p>
+ </li>
+
+<li> The action sequence number at which the compressor switches to
+this compression level <p>An integer <math><mrow><mo>≥</mo>
+</mrow></math> 0. A number greater than 1 may be entered only if
+you are using the extended compressor option (see keyword <span class="keyword">GASFIELD</span> in the <span class="keyword">RUNSPEC</span> section). A
+zero value makes this level inactive.</p>
+ <p>Two levels in the same
+compressor cannot share the same action sequence number.</p>
+<p>DEFAULT:
+1</p>
+ </li>
+
+</ol>
+
+<p>End data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<p>See also the <a href="COMPOFF.html#COMPOFF">  COMPOFF</a> keyword.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SMULTX-Z"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="smult_smultx_-z"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SMULTX-Z</title>
+</head>
+<body>
+
+
+<div class="nested0" id="smult_smultx_-z"><a name="smult_smultx_-z"><!-- --></a>
+<h1 class="keyword">SMULTX-Z</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="smult.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="smult.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d3826e45"> x </th>
+
+<th valign="top" id="d3826e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d3826e54">  </th>
+
+<th valign="top" id="d3826e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d3826e45 d3826e54 ">  </td>
+
+<td valign="top" headers="d3826e48 d3826e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3826e45 d3826e54 "> x </td>
+
+<td valign="top" headers="d3826e48 d3826e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3826e45 d3826e54 ">  </td>
+
+<td valign="top" headers="d3826e48 d3826e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3826e45 d3826e54 ">  </td>
+
+<td valign="top" headers="d3826e48 d3826e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3826e45 d3826e54 ">  </td>
+
+<td valign="top" headers="d3826e48 d3826e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3826e45 d3826e54 ">  </td>
+
+<td valign="top" headers="d3826e48 d3826e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3826e45 d3826e54 ">  </td>
+
+<td valign="top" headers="d3826e48 d3826e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3826e45 d3826e54 ">  </td>
+
+<td valign="top" headers="d3826e48 d3826e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">SMULTX</span>, <span class="keyword">SMULTY</span> and <span class="keyword">SMULTZ</span> keywords specify transmissibility multipliers for
+auto-refined grids which apply only between cells in the auto-refined
+grid that lie on an interface between cells in the base grid.</p>
+
+<p>Thus a value of <span class="keyword">SMULTX</span> for block (IB,JB,KB)
+in the base grid multiplies the transmissibility between all cells
+(IA,JA,KA) and (IA+1,JA,KA) in the auto-refined grid which lie on
+the X+ direction interface between cells (IB,JB,KB) and (IB+1,JB,KB)
+in the base grid. (That is, auto-refined cell (IA,JA,KA) is contained
+within the base grid cell (IB,JB,KB), and auto-refined cell (IA+1,JA,KA)
+is contained within the base grid cell (IB+1,JB,KB).) The behavior
+of <span class="keyword">SMULTY</span> and <span class="keyword">SMULTZ</span> is analogous.</p>
+
+<p>By default, any data for <a href="MULTX.html#MULTX"> MULTX</a> for example, is inherited from the host cells in the base
+grid, so that <span class="keyword">MULTX</span> for cell (IB,JB,KB) applies
+to all auto-refined cells (IA,JA,KA) contained within the base grid
+cell (IB,JB,KB).</p>
+
+<p>The <span class="keyword">SMULT</span> keywords can only be used if item
+4 of the <a href="AUTOREF.html#AUTOREF"> AUTOREF</a> keyword in the <span class="keyword">RUNSPEC</span> section is set to 2. In
+this case, both <span class="keyword">MULTX</span> and <span class="keyword">SMULTX</span> for example can be used together and <span class="keyword">MULTX</span> will
+assume the default behavior.</p>
+
+<p>If item 4 of <span class="keyword">AUTOREF</span> is set to 1, then any <span class="keyword">MULTX</span> multipliers in the base data set are treated the same
+as <span class="keyword">SMULTX</span> multipliers. The same is true for <span class="keyword">MULTY</span> and <span class="keyword">MULTZ</span> multipliers.</p>
+
+<p>The keyword should be followed by one non-negative real number
+for every grid block in the current input box, and the data must be
+terminated by a slash (/).</p>
+
+<div class="section" id="smult_example"><a name="smult_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <pre><code>------- IX1-IX2 JY1-JY2 KZ1-KZ2
+BOX
+        5   5    3   8   4   6   /
+SMULTX
+ 18*0.5 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

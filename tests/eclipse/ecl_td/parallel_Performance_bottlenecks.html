@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Performance bottlenecks"/>
+<meta name="DC.subject" content="Parallel option performance bottlenecks, Parallel option, Performance"/>
+<meta name="keywords" content="Parallel option performance bottlenecks, Parallel option, Performance"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="parallel_performance_bottlenecks"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Performance bottlenecks</title>
+</head>
+<body>
+
+
+<div class="nested0" id="parallel_performance_bottlenecks"><a name="parallel_performance_bottlenecks"><!-- --></a>
+<h1 class="topictitle1">Performance bottlenecks</h1>
+
+
+ <div>
+<p>There are several possible reasons for performance bottlenecks.</p>
+
+<ul>
+<li> A poor active cell load balance. This can only be addressed by
+re-partitioning the grid. Some user intervention is required to improve
+the partitioning of any grid. You can exampine the partition graphically
+using   the <span class="keyword">RESTART</span> file by putting the <span class="keyword">PART</span> mnemonic in the <a href="../ecl_rm/RPTRST.html#RPTRST"> RPTRST</a> keyword, and suggestions for better partitions can be acquired
+by putting the <span class="keyword">PART</span> mnemonic in <a href="../ecl_rm/RPTSOL.html#RPTSOL"> RPTSOL</a>. </li>
+
+<li> If completions of a well are on a different processor to the
+well head (specified, for example, by the <a href="../ecl_rm/COMPDAT.html#COMPDAT"> COMPDAT</a> and <a href="../ecl_rm/WELSPECS.html#WELSPECS"> WELSPECS</a> keywords) then off-processor
+completions will result, and the 10th argument of <a href="../ecl_rm/WELLDIMS.html#WELLDIMS"> WELLDIMS</a> needs to be set
+to the maximum allowed. Do not set this argument to too high a number.
+Off-processor completions will result in a significant communication
+overhead, and will consequently degrade parallel performance. If possible,
+these should be avoided, either by moving the location of the well
+head or re-partitioning. If all the horizontally-completed wells lie
+in the I or J direction, then re-partitioning may be a straightforward
+operation: just partition in the I or J direction to avoid the off-processor
+completions. However, off-processor completions are very often unavoidable
+if horizontally completed wells are present. </li>
+
+<li> The parallel linear solver is a variant of nested factorization.
+The significant feature is that the serial and parallel algorithms
+are different. This results in some slight differences in results
+between the serial and parallel runs. More importantly, the parallel
+algorithm often requires more iterations to converge, and so more
+work is required by the parallel run which inevitably may result in
+some degradation of parallel performance. This can be monitored using
+the <span class="keyword">NLINEARS</span> mnemonic in the <span class="keyword">SUMMARY</span> section. </li>
+
+<li> Disk output is a solely sequential activity, and so all processes
+within a parallel job will wait while one process writes to disk.
+Excessive output will significantly degrade overall parallel performance. </li>
+
+<li> Numerical aquifers connect a group of cells, representing the
+aquifer, to the reservoir. If the group of cells (defined using <a href="../ecl_rm/AQUNUM.html#AQUNUM"> AQUNUM</a> keyword) or the connections
+from the aquifer to the reservoir (defined using <a href="../ecl_rm/AQUCON.html#AQUCON"> AQUCON</a> keyword) cross partition
+boundaries, then extra communication will result. This will degrade
+parallel performance. If such connections can be easily avoided it
+is advisable to do so. </li>
+
+<li> LGRs are allowed with the parallel option. In ECLIPSE 300 the
+partition of the LGRs is 'inherited' from the global grid.
+Any LGRs that lie across partition boundaries are automatically split.
+If many nested LGRs are present, then achieving a good active load
+balance can be problematic, given the constraints of the global partition.
+In addition, LGRs that are split across domain boundaries can have
+an adverse effect on the linear solver performance. <p>In ECLIPSE
+100 LGRs are processed as on one processor and the data swapped between
+processors. The default distribution of LGRs tries to place approximately
+equal numbers of refined cells on each processor. However, mixing
+LGRs in place and locally timestepped LGRs can destroy this load balancing
+as these are processed in completely different ways. Also, locally
+timestepped LGRs do not all take the same number of linear or non-linear
+iterations, or local timesteps. Hence it is possible that the smallest
+LGR in terms of the number of refined active cells may be the slowest
+to perform a given global timestep. In addition, the most difficult
+local grid to solve may change during the run. All this can destroy
+any attempt to load-balance the LGR calculations.</p>
+ </li>
+
+<li> It is possible to connect any two cells of the grid through the <a href="../ecl_rm/NNC.html#NNC"> NNC</a> keyword. If the cells lie on different
+partitions, a noticeable communication overhead in conjunction with
+degraded linear solver performance may result. </li>
+
+</ul>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

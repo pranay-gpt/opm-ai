@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The PVT properties of brine"/>
+<meta name="DC.subject" content="Fluid model, Brine model, Brine model PVT properties"/>
+<meta name="keywords" content="Fluid model, Brine model, Brine model PVT properties"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="brinetra_the_pvt_properties_of_brine"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The PVT properties of brine</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="brinetra_the_pvt_properties_of_brine"><a name="brinetra_the_pvt_properties_of_brine"><!-- --></a>
+<h1 class="topictitle1">The PVT properties of brine</h1>
+
+
+ <div>
+<p>The PVT properties of salt water solution are specified using the <a href="../ecl_rm/PVTWSALT.html#PVTWSALT">PVTWSALT</a> and <a href="../ecl_rm/BDENSITY.html#BDENSITY">BDENSITY</a> keywords in the <span class="keyword">PROPS</span> section.</p>
+
+<p>The <span class="keyword">PVTWSALT</span> keyword replaces <a href="../ecl_rm/PVTW.html#PVTW">PVTW</a> in brine models, and is
+used to specify the water properties at different values of the salt
+concentration <math><msub><mi>C</mi>
+<mi>s</mi></msub></math>. The first record of each table contains
+two items of data: the reference pressure  <math><msub>
+<mi>P</mi><mrow><mi>r</mi><mi>e</mi><mi>f</mi>
+</mrow></msub></math>  and the reference salt concentration
+ <math><msub><mi>C</mi>
+<mrow><mi>s</mi><mi>r</mi><mi>e</mi><mi>f</mi>
+</mrow></msub></math>. The reference salt concentration defines
+the formation volume factor  <math><mrow><msub><mi>B</mi><mi>w</mi></msub><mo>(</mo><msub><mi>P</mi>
+<mrow><mi>r</mi><mi>e</mi><mi>f</mi></mrow></msub>
+<mo>,</mo><msub><mi>C</mi><mrow><mi>s</mi><mi>r</mi>
+<mi>e</mi><mi>f</mi></mrow></msub><mo>)</mo></mrow>
+</math>  for stock tank water. The reference salt concentration
+defaults to the minimum salt concentration in the table.          </p>
+
+<p>The <span class="keyword">BDENSITY</span> keyword tabulates the brine surface
+density against the salt concentration (as specified in the <span class="keyword">PVTWSALT</span> data). The <span class="keyword">BDENSITY</span> keyword
+is optional. If the keyword is not used the brine surface density
+is taken as the water surface density (input using the <a href="../ecl_rm/DENSITY.html#DENSITY">DENSITY</a> or <a href="../ecl_rm/GRAVITY.html#GRAVITY">GRAVITY</a> keywords) for all salt
+concentrations.</p>
+
+<p>The fluid properties of the salt water phase are computed from
+the information entered in the <span class="keyword">PVTWSALT</span> keyword
+in different ways depending on whether ECLIPSE 100 or ECLIPSE 300
+is used.</p>
+
+<div class="section" id="brinetra_eclipse_100"><a name="brinetra_eclipse_100"><!-- --></a><h4 class="sectiontitle">ECLIPSE 100</h4> <p>ECLIPSE
+100 first calculates the values of formation volume factor     <math><msub><mi>B</mi>
+<mi>w</mi></msub></math>, compressibility  <math><mi>C</mi></math>, viscosity  <math><msub><mi>μ</mi>
+<mi>w</mi></msub></math>  and viscosibility  <math><msub><mi>C</mi>
+<mi>v</mi></msub></math>  for the water phase as functions
+of the salt concentration at the previous timestep by linear interpolation
+of  <math><mi>C</mi></math>  and  <math><msub><mi>C</mi>
+<mi>v</mi></msub></math>  and the <strong>reciprocals</strong> of  <math><msub><mi>B</mi>
+<mi>w</mi></msub></math>  and  <math><mrow>
+<msub><mi>B</mi><mi>w</mi></msub><msub><mi>μ</mi>
+<mi>w</mi></msub></mrow></math>. Then it calculates  <math><msub><mi>B</mi>
+<mi>w</mi></msub></math>  and  <math><mrow>
+<msub><mi>B</mi><mi>w</mi></msub><msub><mi>μ</mi>
+<mi>w</mi></msub></mrow></math>  at the current pressure
+ <math><mi>P</mi></math>  as follows:          </p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.Xbrinetra.equ.013b"/>
+ <math><mrow><mrow><msub>
+<mrow><mi>B</mi></mrow><mrow><mi>w</mi></mrow></msub>
+<mo>⁡</mo><mrow><mrow><mo>(</mo><mi>P</mi><mo>,</mo>
+<mtext> </mtext><msub><mrow><mi>C</mi></mrow><mrow>
+<mi>s</mi></mrow></msub><mo>)</mo></mrow></mrow>
+</mrow><mo>=</mo><mfrac><mrow><msub><mrow><mi>B</mi>
+</mrow><mrow><mi>w</mi></mrow></msub><mo>⁡</mo><mrow>
+<mo>(</mo><mrow><msub><mrow><msub><mrow><mi>P</mi>
+</mrow><mrow><mi>r</mi><mi>e</mi><mi>f</mi></mrow>
+</msub></mrow><mrow><mtext> </mtext></mrow></msub>
+<mo>,</mo><msub><mrow><mi>C</mi></mrow><mrow><mi>s</mi></mrow></msub></mrow><mo>)</mo></mrow></mrow>
+<mrow><mn>1</mn><mo>+</mo><mi>X</mi><mo>+</mo><mo>(</mo><msup><mrow><mi>X</mi></mrow><mrow><mn>2</mn>
+</mrow></msup><mo>/</mo><mn>2</mn><mo>)</mo></mrow>
+</mfrac></mrow></math> 
+</td><td align="right">[Eq. 206.1]
+              </td></tr></tbody></table><p>where <math><mi>X</mi><mo>=</mo>
+<mrow><mi>C</mi><mo>(</mo><mi>P</mi><mrow><mo>-</mo>
+<msub><mi>P</mi><mrow><mi>r</mi><mi>e</mi><mi>f</mi>
+</mrow></msub></mrow><mo>)</mo></mrow></math> </p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.equ.013f"/>
+ <math><mrow><mrow><mrow>
+<mo>(</mo><msub><mrow><mi>B</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>(</mo><mi>P</mi><mo>,</mo>
+<msub><mrow><mi>C</mi></mrow><mrow><mi>s</mi></mrow>
+</msub><mo>)</mo><msub><mrow><mi>μ</mi></mrow>
+<mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow><mo>⁡</mo><mrow><mo>(</mo><mi>P</mi><mo>,</mo><msub>
+<mrow><mi>C</mi></mrow><mrow><mi>s</mi></mrow></msub>
+<mo>)</mo></mrow></mrow><mo>=</mo><mfrac><mrow><mrow>
+<msub><mrow><mi>B</mi></mrow><mrow><mi>w</mi></mrow>
+</msub><mo>⁡</mo><mrow><mo>(</mo><msub><mrow><msub>
+<mrow><mi>P</mi></mrow><mrow><mi>r</mi><mi>e</mi>
+<mi>f</mi></mrow></msub></mrow><mrow><mtext> </mtext>
+</mrow></msub><mo>,</mo><msub><mrow><mi>C</mi></mrow>
+<mrow><mi>s</mi></mrow></msub><mo>)</mo></mrow></mrow>
+<mrow><msub><mrow><mi>μ</mi></mrow><mrow><mi>w</mi>
+</mrow></msub><mo>⁡</mo><mrow><mo>(</mo><msub><mrow>
+<msub><mrow><mi>P</mi></mrow><mrow><mi>r</mi><mi>e</mi><mi>f</mi></mrow></msub></mrow><mrow><mtext> </mtext></mrow></msub><mo>,</mo><msub><mrow><mi>C</mi></mrow><mrow><mi>s</mi></mrow></msub><mo>)</mo>
+</mrow></mrow></mrow><mrow><mn>1</mn><mo>+</mo><mi>Y</mi><mo>+</mo><mo>(</mo><msup><mrow><mi>Y</mi>
+</mrow><mrow><mn>2</mn></mrow></msup><mo>/</mo><mn>2</mn><mo>)</mo></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 206.2]
+              </td></tr></tbody></table><p>where  <math><mi>Y</mi><mo>=</mo>
+<mrow><mo>(</mo><mi>C</mi><mrow><mo>-</mo><msub><mi>C</mi><mi>v</mi></msub></mrow><mo>)</mo><mo>(</mo>
+<mi>P</mi><mrow><mo>-</mo><msub><mi>P</mi><mrow><mi>r</mi><mi>e</mi><mi>f</mi></mrow></msub></mrow><mo>)</mo></mrow></math> </p>
+</div>
+
+<div class="section" id="brinetra_eclipse_300"><a name="brinetra_eclipse_300"><!-- --></a><h4 class="sectiontitle">ECLIPSE 300</h4>  <p>ECLIPSE 300 also calculates <math><msub><mi>B</mi>
+<mi>w</mi></msub></math>  using equation <a href="brinetra_The_PVT_properties_of_brine.html#brinetra.Xbrinetra.equ.013b">206.1</a>. The water viscosity  <math><msub><mi>μ</mi>
+<mi>w</mi></msub></math>  is then calculated similarly, using
+the expression:          </p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.equ.0149"/>
+ <math><mrow><mrow><msub>
+<mrow><mi>μ</mi></mrow><mrow><mi>w</mi></mrow>
+</msub><mo>(</mo><mi>P</mi><mo>,</mo><msub><mrow>
+<mi>C</mi></mrow><mrow><mi>s</mi></mrow></msub><mo>)</mo></mrow><mo>=</mo><mfrac><mrow><msub><mrow><mi>μ</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>⁢</mo><mtext> </mtext><mo>⁡</mo><mrow><mo>(</mo>
+<msub><mrow><msub><mrow><mi>P</mi></mrow><mrow><mi>r</mi><mi>e</mi><mi>f</mi></mrow></msub></mrow><mrow>
+<mtext> </mtext></mrow></msub><mo>,</mo><msub>
+<mrow><mi>C</mi></mrow><mrow><mi>s</mi></mrow></msub>
+<mo>)</mo></mrow></mrow><mrow><mn>1</mn><mo>+</mo>
+<mi>Y</mi><mo>+</mo><mo>(</mo><msup><mrow><mi>Y</mi>
+</mrow><mrow><mn>2</mn></mrow></msup><mo>/</mo><mn>2</mn><mo>)</mo></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 206.3]
+              </td></tr></tbody></table><p>where  <math><mi>Y</mi><mo>=</mo>
+<mrow><mo>-</mo><mrow><msub><mi>C</mi><mi>v</mi>
+</msub><mo>(</mo><mi>P</mi><mrow><mo>-</mo><msub>
+<mi>P</mi><mrow><mi>r</mi><mi>e</mi><mi>f</mi>
+</mrow></msub></mrow><mo>)</mo></mrow></mrow></math> </p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

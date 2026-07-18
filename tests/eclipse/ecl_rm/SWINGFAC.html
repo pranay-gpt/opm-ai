@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SWINGFAC"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SWINGFAC"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SWINGFAC</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SWINGFAC"><a name="SWINGFAC"><!-- --></a>
+<h1 class="keyword">SWINGFAC</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="swingfac.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="swingfac.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2520e45"> x </th>
+
+<th valign="top" id="d2520e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2520e54"> x </th>
+
+<th valign="top" id="d2520e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2520e45 d2520e54 ">  </td>
+
+<td valign="top" headers="d2520e48 d2520e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2520e45 d2520e54 ">  </td>
+
+<td valign="top" headers="d2520e48 d2520e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2520e45 d2520e54 ">  </td>
+
+<td valign="top" headers="d2520e48 d2520e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2520e45 d2520e54 ">  </td>
+
+<td valign="top" headers="d2520e48 d2520e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2520e45 d2520e54 ">  </td>
+
+<td valign="top" headers="d2520e48 d2520e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2520e45 d2520e54 ">  </td>
+
+<td valign="top" headers="d2520e48 d2520e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2520e45 d2520e54 ">  </td>
+
+<td valign="top" headers="d2520e48 d2520e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2520e45 d2520e54 "> x </td>
+
+<td valign="top" headers="d2520e48 d2520e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">SWINGFAC</span> keyword turns on the gas field
+operations model and defines the swing factors and profile factors
+for the FIELD. (If you want to apply separate gas supply contracts
+to two or more groups, use keyword <a href="GSWINGF.html#GSWINGF"> GSWINGF</a> instead.) The following features of the
+model are activated when the keyword is first entered:</p>
+
+<ul>
+<li> Group and field gas rate targets are applied to <strong>sales</strong> gas
+rates instead of <strong>gross</strong> gas production rates. </li>
+
+<li> The delivery capacity is calculated at the beginning of each
+timestep. </li>
+
+<li>In ECLIPSE 100, any automatic compressors
+(specified with keyword <a href="GASFCOMP.html#GASFCOMP"> GASFCOMP</a> or <a href="NETCOMPA.html#NETCOMPA"> NETCOMPA</a>) will be turned on and off as required to meet the field gas target. </li>
+
+</ul>
+
+<p>The swing factors and profile factors themselves are used to set
+the field gas production target and to adjust the DCQ when the simulation
+is advanced using the keyword <a href="GASYEAR.html#GASYEAR"> GASYEAR</a> or <a href="GASPERIO.html#GASPERIO"> GASPERIO</a> instead of <a href="DATES.html#DATES"> DATES</a>, <a href="TIME.html#TIME"> TIME</a> or <a href="TSTEP.html#TSTEP"> TSTEP</a>. The FIELD is automatically
+placed under Guide Rate Control to meet any gas rate targets imposed,
+unless Prioritization is requested with the keyword <a href="GCONPRI.html#GCONPRI"> GCONPRI</a>.</p>
+
+<p>See <a href="../ecl_td/gasfieldintro_Gas_Field_Operations_Model.html#gasfieldintro_gas_field_operations_model">"Gas field operations
+model"</a> in the <cite>ECLIPSE Technical Description</cite> for
+further details.</p>
+
+<p>The <span class="keyword">SWINGFAC</span> keyword is followed by 24 numbers,
+terminating with a slash (/).</p>
+
+<ul>
+<li>The first 12 numbers are the <strong>swing factors</strong> for each month
+in sequence from January to December.</li>
+
+<li>The second 12 numbers are the <strong>profile factors</strong> for each
+month in sequence from January to December.</li>
+
+</ul>
+
+<p>A warning is printed if the profile factor for any month is greater
+than that month’s swing factor. If this is so, obeying the swing requirement
+may not guarantee the field could produce its target rate profile.</p>
+
+<div class="section" id="swingfac_normalized_profile_factors"><a name="swingfac_normalized_profile_factors"><!-- --></a><h4 class="sectiontitle">Normalized
+profile factors</h4><p>In order to produce the required ACQ for
+a given DCQ, the profile factors should be normalized such that</p>
+<p>the sum over all months of {profile factor × number of days in
+month}</p>
+<p>= 365.25, with February allocated 28.25 days.</p>
+<p>If
+this “normalization requirement” is obeyed, then when leap years are
+taken into account every fourth year, the average annual production
+at a constant DCQ is DCQ × 365.25, which is the ACQ. A warning is
+printed if the profile factors are not normalized.</p>
+</div>
+
+<div class="section" id="swingfac_example"><a name="swingfac_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>SWINGFAC
+-- JAN  FEB  MAR  APR  MAY  JUN  JUL  AUG  SEP  OCT  NOV  DEC
+   12*1.67
+   2*1.5036  3*1.0024       3*0.5012       3*1.0024       1.5036  /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

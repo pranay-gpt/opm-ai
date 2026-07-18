@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Calculating the initial conditions"/>
+<meta name="DC.subject" content="Initial conditions, Equilibration"/>
+<meta name="keywords" content="Initial conditions, Equilibration"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="initial_calculating_the_initial_conditions"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Calculating the initial conditions</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="initial_calculating_the_initial_conditions"><a name="initial_calculating_the_initial_conditions"><!-- --></a>
+<h1 class="topictitle1">Calculating the initial conditions</h1>
+
+
+ <div>
+<p>Within each equilibration region, the calculation is performed
+in two stages. The first stage sets up an internal table of phase
+pressures                  <math><mo>(</mo><msub>
+<mi>P</mi><mi>w</mi></msub><mo>,</mo><msub><mi>P</mi>
+<mi>o</mi></msub><mo>,</mo><msub><mi>P</mi><mi>g</mi>
+</msub><mo>)</mo></math>, and composition (or R<sub>s</sub>  and   R<sub>v</sub>   for black oil) against depth. The second
+stage interpolates this table and uses the saturation functions to
+obtain the fluid conditions in each grid block in the region.    
+     </p>
+
+<p>In the first stage, depth points for the internal tables are spaced
+equally throughout the region. The number of depth points is set using
+the keyword <a href="../ecl_rm/EQLDIMS.html#EQLDIMS">EQLDIMS</a> in the <span class="keyword">RUNSPEC</span> section. The value should
+be increased when finer definition is required, for example in problems
+where the oil zone occupies only a small fraction of the overall reservoir
+thickness.</p>
+
+<p>Between each pair of depth points in the table, the pressure gradient
+of each phase is calculated iteratively using a density consistent
+with the average pressure within the depth step. If the datum depth
+lies in the oil zone, the oil pressure values are calculated first,
+stepping from the datum depth up to the top and down to the bottom
+of the equilibration region. The water pressure on the oil-water contact
+can now be obtained, and the water pressure values are calculated.
+Similarly the gas pressure values are calculated starting from the
+gas-oil contact.</p>
+
+<p>ECLIPSE 300  </p>
+
+<p>Depth table data can be reported using the <samp class="codeph">SOLVD</samp> mnemonic in the <a href="../ecl_rm/RPTSOL.html#RPTSOL">RPTSOL</a> keyword.</p>
+
+<p>In the second stage of the equilibration calculation, the local
+fluid conditions are determined in each grid block in the equilibration
+region. The internal table is interpolated to obtain the values of
+phase pressures                  <math><mo>(</mo><msub><mi>P</mi><mi>w</mi></msub><mo>,</mo>
+<msub><mi>P</mi><mi>o</mi></msub><mo>,</mo><msub>
+<mi>P</mi><mi>g</mi></msub><mo>)</mo></math>  and
+composition (or   R<sub>s</sub>  and   R<sub>v</sub>) in each grid
+block. Different interpolation methods can be used to improve the
+accuracy, see <a href="initial_accurate_fluids_in_place_calculation.html#initial_accurate_fluids_in_place_calculation"> "Accurate
+fluids in place calculation"</a>.          </p>
+
+<p>The water saturation is determined by inverse look-up of the water
+capillary pressure table (entered with keyword <a href="../ecl_rm/SWFN.html#SWFN">SWFN</a> or <a href="../ecl_rm/SWOF.html#SWOF">SWOF</a>) for the grid block, such
+that</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="initial.equ.00a7"/>
+ <math><mrow><mrow><msub>
+<mrow><mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi>
+<mi>w</mi></mrow></msub><mo>⁡</mo><mrow><mo>(</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>w</mi></mrow>
+</msub><mo>)</mo></mrow></mrow><mo>=</mo><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>o</mi></mrow></msub><mrow>
+<mo>-</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>w</mi></mrow></msub></mrow></mrow></math> 
+</td><td align="right">[Eq. 385.1]
+              </td></tr></tbody></table>
+<p>If                  <math><msub><mi>P</mi>
+<mi>o</mi></msub><mrow><mo>-</mo><msub><mi>P</mi>
+<mi>w</mi></msub></mrow></math>  exceeds the highest capillary
+pressure value in the <span class="keyword">SWFN</span>/<span class="keyword">SWOF</span> table (corresponding to the lowest saturation value  S<sub>wmin</sub>), the water saturation is set equal to  S<sub>wmin</sub>.      
+   </p>
+
+<p>If                  <math><msub><mi>P</mi>
+<mi>o</mi></msub><mrow><mo>-</mo><msub><mi>P</mi>
+<mi>w</mi></msub></mrow></math>  is less than the lowest
+capillary pressure in the table (corresponding to the highest saturation
+value  S<sub>wmax</sub>), the water saturation is set equal to  S<sub>wmax</sub>  and the oil pressure is adjusted to follow the water
+pressure gradient.          </p>
+
+<p>The gas saturation is similarly determined by inverse look-up of
+the gas capillary pressure table (keyword <a href="../ecl_rm/SGFN.html#SGFN">SGFN</a>, <a href="../ecl_rm/SGOF.html#SGOF">SGOF</a> or <a href="../ecl_rm/SLGOF.html#SLGOF">SLGOF</a>) for the grid block,
+such that</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="initial.equ.00b8"/>
+ <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi><mi>g</mi>
+</mrow></msub><mrow><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow>
+<mo>=</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>g</mi></mrow></msub><mrow><mo>-</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>o</mi></mrow></msub></mrow>
+</mrow></math> 
+</td><td align="right">[Eq. 385.2]
+              </td></tr></tbody></table>
+<p>If                  <math><msub><mi>P</mi>
+<mi>g</mi></msub><mrow><mo>-</mo><msub><mi>P</mi>
+<mi>o</mi></msub></mrow></math>  is less than the lowest
+capillary pressure value in the table (corresponding to the lowest
+gas saturation value  S<sub>gmin</sub>), the gas saturation is set
+equal to  S<sub>gmin</sub>.          </p>
+
+<p>If                  <math><msub><mi>P</mi>
+<mi>g</mi></msub><mrow><mo>-</mo><msub><mi>P</mi>
+<mi>o</mi></msub></mrow></math>  exceeds the highest capillary
+pressure in the table (corresponding to the highest gas saturation
+value  S<sub>gmax</sub>), the gas saturation is set equal to  S<sub>gmax</sub>  and the oil pressure is adjusted to follow the gas pressure
+gradient.          </p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

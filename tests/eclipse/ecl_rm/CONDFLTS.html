@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="CONDFLTS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="CONDFLTS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>CONDFLTS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="CONDFLTS"><a name="CONDFLTS"><!-- --></a>
+<h1 class="keyword">CONDFLTS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="condflts.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="condflts.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d324e45"> </th>
+
+<th valign="top" id="d324e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d324e54"> x </th>
+
+<th valign="top" id="d324e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d324e45 d324e54 "> </td>
+
+<td valign="top" headers="d324e48 d324e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d324e45 d324e54 "> x </td>
+
+<td valign="top" headers="d324e48 d324e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d324e45 d324e54 "> </td>
+
+<td valign="top" headers="d324e48 d324e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d324e45 d324e54 "> </td>
+
+<td valign="top" headers="d324e48 d324e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d324e45 d324e54 "> </td>
+
+<td valign="top" headers="d324e48 d324e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d324e45 d324e54 "> </td>
+
+<td valign="top" headers="d324e48 d324e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d324e45 d324e54 "> </td>
+
+<td valign="top" headers="d324e48 d324e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d324e45 d324e54 "> </td>
+
+<td valign="top" headers="d324e48 d324e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">CONDFLTS</span> keyword defines the geometry of
+the conductive faults. This facility is designed to help with the
+modeling of parts of the reservoir which can be regarded as being
+in vertical equilibrium (VE); for example, regions where the throughput
+is of one or more orders of magnitude faster than in other parts of
+the reservoir. </p>
+
+<p>Whilst the order in which the grid blocks are entered is arbitrary,
+the code does internally nominate the first one to be the representative
+cell of the fault. If a well connects to the fault then this representative
+cell must also be a connection of the well. (It need not be open,
+of course.) </p>
+
+<p>One conductive fault is specified in each <span class="keyword">CONDFLTS</span> keyword. </p>
+
+<p>The following restrictions apply: </p>
+
+<ul>
+<li> Only ECLIPSE 300 black oil models </li>
+
+<li> No <a href="AIM.html#AIM">  AIM</a> runs </li>
+
+<li> No <a href="GASWAT.html#GASWAT">  GASWAT</a> option </li>
+
+<li> No parallel runs </li>
+
+<li> No thermal runs. </li>
+
+</ul>
+
+<p>The <span class="keyword">CONDFLTS</span> keyword contains the following
+data, terminated by a slash (/): </p>
+
+<ol>
+<li> Name of the conductive fault (up to 8 characters) </li>
+
+<li> Type of solution method to be employed within the conductive
+fault  <p>VE: the VE approximation will be applied within the fault </p>
+ <div class="note"><span class="notetitle">Note:</span> <span class="notebody"> The following solution method options are also available,
+but are only recommended for the use of developers. </span></div>
+<p>OFF:
+calculates the geometry but performs no calculations </p>
+<p>COARSEN:
+assumes the solution is identical in all cells of the fault (VE is
+not applied). </p>
+ </li>
+
+</ol>
+
+<p>End the line by a slash (/) </p>
+
+<p>The following lines define the grid cells in the conductive fault.
+There can be as many lines as needed to define the region. </p>
+
+<ol>
+<li> <samp class="codeph">I1</samp> Lower I-coordinate of the box in the parent
+grid. </li>
+
+<li> <samp class="codeph">I2</samp> Upper I-coordinate of the box in the parent
+grid. </li>
+
+<li> <samp class="codeph">J1</samp> Lower J-coordinate of the box in the parent
+grid. </li>
+
+<li> <samp class="codeph">J2</samp> Upper J-coordinate of the box in the parent
+grid. </li>
+
+<li> <samp class="codeph">K1</samp> Lower K-coordinate of the box in the parent
+grid. </li>
+
+<li> <samp class="codeph">K2</samp> Upper K-coordinate of the box in the parent
+grid. </li>
+
+<li> <samp class="codeph">ZGRID</samp> Name of the parent grid. <p>DEFAULT parent
+grid name: GLOBAL </p>
+ </li>
+
+</ol>
+
+<p>Each line must be terminated by a slash (/). </p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">When using this keyword the conservation equations for <strong>all</strong> the cells are replaced with a conservation equation for <strong>the</strong> conductive fault. This is then solved for <strong>one</strong> pressure, water
+saturation and gas saturation. If using the VE option then the fluids
+will be redistributed among all the cells (water in the bottommost
+and gas in the topmost). However, there remains just the single pressure
+which can be a poor approximation in certain situations. </span></div>
+
+<div class="section" id="condflts_example"><a name="condflts_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>CONDFLTS
+  CFAULT1  VE /
+1 5 3 3 1 1 /
+3 3 3 3 2 10 /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

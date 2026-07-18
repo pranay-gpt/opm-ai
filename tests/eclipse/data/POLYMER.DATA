@@ -1,0 +1,254 @@
+RUNSPEC
+TITLE
+10 by 10 oil/water/polymer
+
+DIMENS
+   10   10    1  /
+
+OIL
+
+WATER
+
+POLYMER
+
+FIELD
+
+TABDIMS
+    1    1   50    2    2   20 /
+
+REGDIMS
+    2    1    0    0 /
+
+WELLDIMS
+    2    1    1    2 /
+
+START
+   1 'JAN' 1983  /
+
+NSTACK
+    8 /
+
+UNIFOUT
+
+UNIFIN
+
+GRID      ==============================================================
+
+INIT
+
+EQUALS
+'DX'     75 /
+'DY'     75 /
+'DZ'     30 /
+'PERMX'  50 /
+'PERMY'  50 /
+'TOPS'   4000.0 /
+'PORO'   0.2 /
+/
+
+RPTGRID
+-- Report Levels for Grid Section Data
+-- 
+'PORO' 
+'PORV' 
+ / 
+
+PROPS     ==============================================================
+
+SWFN
+    .25    .0    4.0
+    .7    1.0     .0
+/
+
+SOF2
+    .3000  .0000
+    .7500 1.0000
+/
+
+PVTW
+  .0  1.0  3.03E-06  .5  0.0 /
+
+PVDO
+  .0     1.0     2.0
+ 8000.0   .92    2.0
+/
+
+ROCK
+ 4000.0    .30E-05 /
+
+DENSITY
+ 52.0000  64.0000   .04400 /
+
+PLYVISC
+  0.0   1.0
+  1.0  10.0 /
+
+PLYROCK
+   0.16  1.5  1000.0  1  0.005 /
+
+PLYADS
+  0.0  0.005
+  0.5  0.010
+  1.0  0.010 /
+
+PLMIXPAR
+ 1.0 /
+
+PLYMAX
+ 1.0  0.0 /
+
+RPTPROPS
+ -- PROPS Reporting Options
+ -- 
+ 'PLYVISC' 
+/
+
+REGIONS    ========================================================
+
+FIPNUM
+1 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2 /
+
+SOLUTION   =============================================================
+
+EQUIL
+4000  4000  6000  0   0   0   0   0   0  /
+
+RPTSOL
+-- Initialisation Print Output
+-- 
+'RESTART=2' 'FIP=2' 'PBLK' 'SALT' 'PLYADS' 'RK' 'FIPPLY=2' /
+
+SUMMARY    =============================================================
+
+RUNSUM
+
+FWCT
+FCPR
+FCPT
+FCIR
+FCIT
+FCIP
+FCAD
+GCPR
+ 'G' /
+GCPT
+ 'G' /
+GCIR
+ 'G' /
+GCIT
+ 'G' /
+WCPR
+ 'P' /
+WCPT
+ 'P' /
+WCIR
+ 'I' /
+WCIT
+ 'I' /
+CCFR
+ 'P' 10 10  1 /
+ /
+CCPT
+ 'P' 10 10  1 /
+ /
+CCIT
+ 'I'  1  1  1 /
+ /
+RCIP
+ 1 2 /
+RCFT
+ 1 2 /
+ /
+RCAD
+ 1 2 /
+BCCN
+ 1 1 1 /
+ /
+BCIP
+ 1 1 1 /
+ /
+BCAD
+ 1 1 1 /
+ /
+FSPR
+FSPT
+FSIR
+FSIT
+FSIP
+BSCN
+ 1 1 1 /
+ /
+BSIP
+ 1 1 1 /
+ /
+BEMVIS
+ 1 1 1 /
+ /
+BEPVIS
+ 1 1 1 /
+ /
+ 
+ RPTSMRY
+ 1 /
+ALL
+
+PERFORMA
+
+WMCTL
+/
+
+WSTAT
+/
+SCHEDULE   =============================================================
+
+RPTSCHED
+'PRES' 'SWAT' 'RESTART=2' 'FIP=2' 'WELLS=2' 'SUMMARY=2' 'CPU=2' 'WELSPECS' 
+'NEWTON=2' 'PBLK' 'SALT' 'PLYADS' 'RK' 'FIPSALT=2' /
+
+WELSPECS
+'I'  'G'   1  1  4000  'WAT'  0.0  'STD'  'SHUT'  'NO'  /
+'P'  'G'  10 10  4000  'OIL'  0.0  'STD'  'SHUT'  'NO'  /
+/
+
+COMPDAT
+'I       '   1   1   1   1 'OPEN'   0  .0   1.0 /
+'P       '  10  10   1   1 'OPEN'   0  .0   1.0 /
+/
+
+WCONPROD
+'P' 'OPEN' 'BHP' 5* 3999.0 /
+/
+
+WCONINJE
+'I' 'WAT' 'OPEN' 'RATE' 500.0 /
+/
+
+WPOLYMER
+ 'I' 1.0  0.0 /
+/
+
+TSTEP
+1.0 9.0 2*20.0 3*50.0 /
+
+RPTSCHED
+'PRES' 'SWAT' 'RESTART=2' 'FIP=2' 'WELLS=2' 'SUMMARY=2' 'CPU=2' 'NEWTON=2' 
+'PBLK' 'SALT' 'PLYADS' 'RK' 'FIPSALT=2' /
+
+WPOLYMER
+ 'I' 0.5 0.0 /
+ /
+
+TSTEP
+8*200.0  /
+
+END
+

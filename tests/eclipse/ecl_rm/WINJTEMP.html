@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WINJTEMP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WINJTEMP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WINJTEMP</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WINJTEMP"><a name="WINJTEMP"><!-- --></a>
+<h1 class="keyword">WINJTEMP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="winjtemp.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="winjtemp.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2976e45">  </th>
+
+<th valign="top" id="d2976e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2976e54"> x </th>
+
+<th valign="top" id="d2976e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2976e45 d2976e54 ">  </td>
+
+<td valign="top" headers="d2976e48 d2976e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2976e45 d2976e54 ">  </td>
+
+<td valign="top" headers="d2976e48 d2976e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2976e45 d2976e54 ">  </td>
+
+<td valign="top" headers="d2976e48 d2976e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2976e45 d2976e54 ">  </td>
+
+<td valign="top" headers="d2976e48 d2976e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2976e45 d2976e54 ">  </td>
+
+<td valign="top" headers="d2976e48 d2976e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2976e45 d2976e54 ">  </td>
+
+<td valign="top" headers="d2976e48 d2976e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2976e45 d2976e54 ">  </td>
+
+<td valign="top" headers="d2976e48 d2976e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2976e45 d2976e54 "> x </td>
+
+<td valign="top" headers="d2976e48 d2976e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword can only be used with the <a href="THERMAL.html#THERMAL"> THERMAL</a> option or the <a href="TEMP.html#TEMP"> TEMP</a> option.</p>
+
+<p><span class="keyword">WINJTEMP</span> specifies the nature of the water,
+gas or steam gas to be injected by a well. The well control must have
+already been defined using an injection well control keyword such
+as <a href="WCONINJE.html#WCONINJE"> WCONINJE</a>. The
+pair of keywords <span class="keyword">WCONINJE</span> and <span class="keyword">WINJTEMP</span> are an alternative to using the <a href="WELLINJE.html#WELLINJE"> WELLINJE</a> keyword.</p>
+
+<p>In thermal simulations, where an energy equation is solved, the
+specific enthalpy of the injected fluid must be specified. This can
+be done directly, by specifying the enthalpy at a given pressure (using
+items 4 and 5). This is not straightforward since the fluid enthalpy
+is not easy for to calculate. Alternative data can therefore be specified,
+allowing the simulator to calculate the enthalpy. This can be done
+by specifying the temperature at a given pressure (using items 3 and
+4). However, if a mixture of water and steam is being injected (that
+is the pressure is the water saturation pressure) then the pressure
+and temperature do not specify the enthalpy uniquely. This is because
+different proportions of steam and water can exist at the saturation
+pressure and temperature. In this case the steam quality should be
+specified, as well as either the temperature (items 2 and 3) or the
+pressure (items 2 and 4). For further information regarding the calculation
+of the enthalpy of the injected fluid see <a href="../ecl_td/features_Water__steam_and_gas_injection.html#features_water__steam_and_gas_injection">"Water, steam and
+gas injection"</a> and <a href="../ecl_td/props_Energies_and_enthalpies.html#props_energies_and_enthalpies">"Energies and enthalpies"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the items of data described below, and each terminated by a slash(/).</p>
+
+<p>The records can be terminated early using the slash (/) character,
+the remaining items taking default values. Defaults can also be specified
+by a null repeat count of the form n*, where n is the number of consecutive
+items to be defaulted.</p>
+
+<p>The set of records is ended by a blank record, containing only
+a slash.</p>
+
+<ol>
+<li> Well name, well name template, well list or well list template. <p>A template enclosed in quotes can be used to refer to multiple wells
+or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+<p>This item is always required and the wells referenced must have
+already been defined by this point in the <span class="keyword">SCHEDULE</span> section.</p>
+<p>Thermal only</p>
+ </li>
+
+<li> The steam quality of the injected fluid. This quantity can be
+a user-defined argument (UDA), and can be set with keywords <a href="UDQ.html#UDQ"> UDQ</a> and <a href="UDADIMS.html#UDADIMS"> UDADIMS</a>.<p>If specified, the steam quality
+must be between 0 and 1. Also, either the temperature or the pressure
+must be specified, but not the specific enthalpy rate.</p>
+<p>For water
+injectors or 100% gas injectors, the steam quality should not be used.
+For these injectors, specify the pressure and temperature (or pressure
+and enthalpy) instead.</p>
+ </li>
+
+<li> The temperature of the injected fluid. This quantity can be a
+user-defined argument (UDA), and can be set with keywords <span class="keyword">UDQ</span> and <span class="keyword">UDADIMS</span>. <p>Thermal only</p>
+ <p>This quantity is used to define the specific
+enthalpy of the injected fluid. The actual temperature of the fluid
+at a particular point along the wellbore will depend on the pressure
+at that point. If the pressure in the wellbore changes over time,
+the temperature will therefore also change over time. See <a href="../ecl_td/features_Water__steam_and_gas_injection.html#features_water__steam_and_gas_injection.tempatbottomhole">Temperature at the bottom hole pressure</a> in the <cite>ECLIPSE Technical
+Description</cite> for further information.</p>
+<p>If specified, either
+the steam quality or the pressure must also be specified, but not
+the specific enthalpy rate.</p>
+<p>UNITS: °C (<samp class="codeph">METRIC</samp>), °F (<samp class="codeph">FIELD</samp>), °C (<samp class="codeph">LAB</samp>), °C (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+<li> The pressure of the injected fluid. This quantity can be a user-
+defined argument (UDA), and can be set with keywords <span class="keyword">UDQ</span> and <span class="keyword">UDADIMS</span>. <p>If specified, then one of steam
+quality, temperature, or specific enthalpy rate must also be specified.</p>
+ <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+ <p>Thermal only</p>
+</li>
+
+<li> The specific enthalpy of the injected fluid. This quantity can
+be a user-defined argument (UDA), and can be set with keywords <span class="keyword">UDQ</span> and <span class="keyword">UDADIMS</span>.<p>If specified, the
+pressure must also be specified. If specified, neither the steam quality
+nor the temperature may be specified.</p>
+<p>UNITS: kJ/kg-M (<samp class="codeph">METRIC</samp>), Btu/lb-M (<samp class="codeph">FIELD</samp>), J/gm-M (<samp class="codeph">LAB</samp>), kJ/kg-M (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+</ol>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">For 2012.1, the enthalpy calculation was improved. To revert
+this new calculation to pre-2012.1 behavior, set <a href="OPTIONS3.html#options3.276">item 276</a> in <span class="keyword">OPTIONS3</span> to 1.</span></div>
+
+<div class="section" id="winjtemp_example"><a name="winjtemp_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WINJTEMP
+--    SQ   T(C) P(BAR)
+WELL1 0.7  200   1* / STEAM-WATER
+WELL2 0.7  1*    15 / STEAM-WATER
+WELL3 1*   20    15 / WATER
+WELL4 1*   250   15 / STEAM
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

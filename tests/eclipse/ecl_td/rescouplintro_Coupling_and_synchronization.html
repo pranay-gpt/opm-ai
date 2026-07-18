@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Coupling and synchronization"/>
+<meta name="DC.subject" content="Reservoir coupling and synchronization, Reservoir coupling, Synchronization"/>
+<meta name="keywords" content="Reservoir coupling and synchronization, Reservoir coupling, Synchronization"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="rescouplintro_coupling_and_synchronization"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Coupling and synchronization</title>
+</head>
+<body>
+
+
+<div class="nested0" id="rescouplintro_coupling_and_synchronization"><a name="rescouplintro_coupling_and_synchronization"><!-- --></a>
+<h1 class="topictitle1">Coupling and synchronization</h1>
+
+
+ <div>
+<p>At the start of the master run, the master enquires the start date
+of each slave run. A slave may, if necessary, be set to start later
+than the master. In this case the slave will be “dormant”,
+not contributing any production or injection, until its start date
+is reached in the master run.</p>
+
+<p>The events that couple the master and the slave runs are synchronized
+with the timesteps of the master run. Note that these are the <strong>actual</strong> timesteps, rather than the user-defined <strong>reporting</strong> steps.
+Thus the coupling events can be made to occur more frequently (for
+greater accuracy) by reducing the maximum timestep size in the master
+reservoir (keyword <a href="../ecl_rm/TUNING.html#TUNING"> TUNING</a>).</p>
+
+<p>For each timestep in the master run:</p>
+
+<ol>
+<li> The master must first decide the length of the timestep. This
+is done in the usual way, but subject to two additional constraints: <ol type="a">
+<li> The timestep is limited so as not to overshoot a reporting time
+in any of the slave runs. (Changes to wells may be scheduled to occur
+at these times.) The master asks each of the slaves when its next
+report time is. Timesteps limited in this way are identified by the
+timestep control mnemonic <samp class="codeph">SLVR</samp> in the timestep summary
+written to the Print file. </li>
+
+<li> The timestep is limited to keep the expected change in flow rate
+from the slave groups occurring over its length to within certain
+bounds. This limit is estimated from the changes that occurred over
+the previous timestep. (See keywords <a href="../ecl_rm/GRUPMAST.html#GRUPMAST"> GRUPMAST</a> and <a href="../ecl_rm/RCMASTS.html#RCMASTS"> RCMASTS</a>.) Timesteps limited
+in this way are identified by the timestep control mnemonic <samp class="codeph">SLVC</samp> in the timestep summary written to the Print file. </li>
+
+</ol>
+ </li>
+
+<li> At the beginning of the timestep, the master enquires from the
+slaves what their slave groups’ production and injection potentials
+are. These are determined from the reservoir conditions at the beginning
+of the timestep. They may be used to calculate the guide rates of
+the master groups, for apportioning the group flow targets. </li>
+
+<li> The master allocates rate targets to all its master groups, based
+on their guide rates. This is done according to the usual procedure
+for guide rate group control. When a master group is given a rate
+target, it sends it to its equivalent slave group in the slave reservoir.
+The slave run calculates the flows of the group under this constraint,
+at the conditions prevailing at the beginning of the timestep, and
+tells the master. </li>
+
+<li> The master completes its own timestep, assuming that the production
+and injection rates of the slave groups remain constant over the timestep. </li>
+
+<li> When the master has completed its timestep, all the slave reservoirs
+are advanced to the end of the master’s timestep, using the
+rate targets allocated to the slave groups as constraints. The slaves
+may take one or more of their own timesteps to reach this time. The
+timestep that is limited to reach this time is identified by the timestep
+control mnemonic <samp class="codeph">MAST</samp> in the timestep summary written
+to the Print file. <samp class="codeph">RESTART</samp> and <samp class="codeph">SUMMARY</samp> files are written at the appropriate times by each slave process,
+as they would be if the slaves were being run independently. The slave
+simulation processes can be run in parallel with each other, if they
+are located on different workstations. Note that events occurring
+in a slave reservoir cannot influence the master or the other slaves
+until the next master timestep. </li>
+
+<li> When the slave reservoirs have advanced to the new time, they
+send the new cumulative production and injection totals of the slave
+groups to the master. From these the master computes the average flow
+rates of each master group over its timestep. The master sums these
+flows up to its FIELD level, and updates its cumulative totals. The
+master writes its own <samp class="codeph">SUMMARY</samp> and <samp class="codeph">RESTART</samp> files as required, at the end of its timestep. </li>
+
+</ol>
+
+<p>This procedure continues until the master run finishes. Its final
+task is to send a signal to the slave runs to terminate. If a slave
+run finishes before the master run, the master run will continue without
+any production or injection from the slave. However, the master run
+can be made to stop in these circumstances by setting the “end
+run” flag of its master groups in item 8 of keyword <a href="../ecl_rm/GECON.html#GECON"> GECON</a>. Of course, if a slave
+run stops due to an error condition, the master and all the other
+slave runs will also stop.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

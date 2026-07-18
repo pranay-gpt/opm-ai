@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Structure of unformatted files"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="outputfl_structure_of_unformatted_files"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Structure of unformatted files</title>
+</head>
+<body>
+
+
+<div class="nested0" id="outputfl_structure_of_unformatted_files"><a name="outputfl_structure_of_unformatted_files"><!-- --></a>
+<h1 class="topictitle1">Structure of unformatted files</h1>
+
+
+ <div>
+<p>Fortran "unformatted" files are composed of successive records
+(referred to as "physical records" in a later section). The format
+implemented by the compilers used to build ECLIPSE is as follows.</p>
+
+<p>Each record is composed of a payload prefixed and suffixed by a
+signed 4-byte integer encoding the payload size in bytes. If the payload
+size in bytes exceeds 2<sup>31</sup> (that is 2 Gigabytes), the record
+is split into sub-records. The sign bit of the prefix indicates whether
+the sub-record is continued or not. The sign bit of the suffix indicates
+the presence of a preceding sub-record.</p>
+
+<p>ECLIPSE unformatted files are written in big-endian mode. The encoding
+of "LOGICAL" data is such that "false" has all bits set to zero and
+"true" has at least one non-zero bit. It is recommended that the "LOGICAL"
+values read from file are converted to the native "LOGICAL" encoding.</p>
+
+<p>Programmers using Intel Fortran or GNU Fortran need to use <samp class="codeph">CONVERT='BIG_ENDIAN'</samp> when they open an unformatted file,
+for example:</p>
+
+<pre><code>OPEN(UNIT=IUNIT,FILE=ZFILE,FORM='UNFORMATTED',CONVERT='BIG_ENDIAN')</code></pre>
+<p>Additionally, when using a program built by Intel Fortran, use
+of big-endian conversion can be selected at run time by setting the
+environment variable <samp class="codeph">F_UFMTENDIAN</samp> to <samp class="codeph">"big"</samp>.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

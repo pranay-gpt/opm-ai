@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="AJGWELLS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="AJGWELLS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>AJGWELLS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="AJGWELLS"><a name="AJGWELLS"><!-- --></a>
+<h1 class="keyword">AJGWELLS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="ajgwells.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="ajgwells.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d54e45">  </th>
+
+<th valign="top" id="d54e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d54e54"> x </th>
+
+<th valign="top" id="d54e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d54e45 d54e54 ">  </td>
+
+<td valign="top" headers="d54e48 d54e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d54e45 d54e54 ">  </td>
+
+<td valign="top" headers="d54e48 d54e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d54e45 d54e54 ">  </td>
+
+<td valign="top" headers="d54e48 d54e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d54e45 d54e54 ">  </td>
+
+<td valign="top" headers="d54e48 d54e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d54e45 d54e54 ">  </td>
+
+<td valign="top" headers="d54e48 d54e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d54e45 d54e54 ">  </td>
+
+<td valign="top" headers="d54e48 d54e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d54e45 d54e54 ">  </td>
+
+<td valign="top" headers="d54e48 d54e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d54e45 d54e54 "> x </td>
+
+<td valign="top" headers="d54e48 d54e57 "> SCHEDULE </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d54e45 d54e54 ">  </td>
+
+<td valign="top" headers="d54e48 d54e57 "> OPTIMIZE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">This keyword can only be used if the adjoint gradient option
+for sensitivities has been requested in the <span class="keyword">RUNSPEC</span> section using the <a href="AJGRADNT.html#AJGRADNT">  AJGRADNT</a> keyword.</span></div>
+
+<p>This keyword is used to specify the objective functions for which
+sensitivities will be calculated at the end of the simulation run
+using the adjoint method (see <a href="../ecl_td/adjscr_Adjoint_Gradient_Screening.html#adjscr_adjoint_gradient_screening">"Adjoint gradient
+screening"</a> in the <cite>ECLIPSE Technical Description</cite>). These sensitivities are calculated with respect to static properties
+(specified using the <a href="AJGPARAM.html#AJGPARAM">  AJGPARAM</a> keyword) on every simulation grid cell at every report time,
+and they are output to the restart files. (Note that the sensitivities
+output to the restart file will be encoded unless the <a href="UNCODHMD.html#UNCODHMD">  UNCODHMD</a> keyword is
+present in the <span class="keyword">RUNSPEC</span> section.)</p>
+
+<p>The keyword must be followed by a set of records, each specifying
+a parameter to be used in the optimization. Each record should be
+terminated with a slash (/) and the set of records must end with a
+slash. At least one record is required for the calculation of sensitivities;
+an empty record is not allowed. (The total number of records should
+not exceed 200.)</p>
+
+<ol>
+<li> Well name. <p>This should be the name of a well that has already
+been, or will be, defined in the <span class="keyword">SCHEDULE</span> section.
+It is not possible to use wildcard characters to specify more than
+one well.</p>
+ </li>
+
+<li> Objective function mnemonic. <p>The list of available keywords
+is:</p>
+ 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"><span class="keyword">WBHP</span></td>
+
+<td valign="top"> Flowing bottom hole pressure</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">WOPR</span></td>
+
+<td valign="top"> Oil production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">WGPR</span></td>
+
+<td valign="top"> Gas production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">WGIR</span></td>
+
+<td valign="top"> Gas injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">WWPR</span></td>
+
+<td valign="top"> Water production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">WWIR</span></td>
+
+<td valign="top"> Water injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"><span class="keyword">WLPR</span></td>
+
+<td valign="top"> Liquid production rate</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ </li>
+
+</ol>
+
+<div class="section" id="ajgwells_example"><a name="ajgwells_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>This example
+shows how to request sensitivities for a selection of objective functions
+on a selection of wells.</p>
+<pre><code> AJGWELLS
+'P1'  ‘WWPR’  /
+'P1'  ‘WBHP’  /
+'P2'  ‘WLPR’  /
+'I1'  ‘WWIR’  /
+'I1'  ‘WBHP’  /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

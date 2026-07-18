@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WSEGITER"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WSEGITER"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WSEGITER</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="WSEGITER"><a name="WSEGITER"><!-- --></a>
+<h1 class="keyword">WSEGITER</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wsegiter.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wsegiter.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d3064e45">                         x                   
+  </th>
+
+<th valign="top" id="d3064e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d3064e54">                         x                   
+  </th>
+
+<th valign="top" id="d3064e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d3064e45 d3064e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3064e48 d3064e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3064e45 d3064e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3064e48 d3064e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3064e45 d3064e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3064e48 d3064e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3064e45 d3064e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3064e48 d3064e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3064e45 d3064e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3064e48 d3064e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3064e45 d3064e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3064e48 d3064e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3064e45 d3064e54 ">                                             
+ </td>
+
+<td valign="top" headers="d3064e48 d3064e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3064e45 d3064e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d3064e48 d3064e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword controls the iteration sequence for the solution of
+multisegment wells (see <a href="../ecl_td/multisegintro_Multi-segment_Wells.html#multisegintro_multi-segment_wells">"Multisegment wells"</a> in the <cite>ECLIPSE Technical Description</cite>). These wells
+are often harder to converge than ‘standard’ wells, and would benefit
+from a more robust iteration sequence. By default, if the <span class="keyword">WSEGITER</span> keyword is not entered, each well is allowed up
+to <samp class="codeph">MXWSIT</samp> iterations (set in item 5 of the 3<sup>rd</sup> record of keyword <a href="TUNING.html#TUNING"> TUNING</a>) to converge its solution. If it cannot converge in this
+number of iterations a ‘problem’ message is issued and the latest
+(unconverged) well solution is used. This may hamper the convergence
+of the non-linear iterations of the timestep. However, if the <span class="keyword">WSEGITER</span> keyword is entered ECLIPSE invokes a sequence
+of iteration cycles that gives the well a greater chance of converging
+its solution. The method, which applies only to multisegment wells,
+is described below.</p>
+
+<p>In ECLIPSE 300, the <span class="keyword">WSEGITER</span> convergence sequence is only called after a predictor is called.</p>
+
+<p>If a well does not converge in a cycle of <samp class="codeph">MXWSIT</samp> iterations, the pressure equation in each of its segments is altered
+by averaging its pressure drop with the value at the beginning of
+the iteration cycle, using an adjustable weighting factor <em>W</em> <sub>p</sub></p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wsegiter.equ.0050"/>
+ <math><msub><mi>P</mi>
+<mrow><mi>s</mi><mi>e</mi><mi>g</mi></mrow></msub>
+<mo>=</mo><msub><mi>P</mi><mrow><mi>o</mi><mi>u</mi>
+<mi>t</mi></mrow></msub><mo>+</mo><mrow><msub><mi>W</mi><mi>p</mi></msub><mi>Δ</mi><mi>P</mi></mrow>
+<mo>+</mo><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mi>W</mi><mi>p</mi></msub></mrow><mo>)</mo>
+<mi>Δ</mi><msub><mi>P</mi><mrow><mi>p</mi><mi>r</mi>
+<mi>e</mi><mi>v</mi></mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>P</mi>
+<mrow><mi>s</mi><mi>e</mi><mi>g</mi></mrow></msub>
+</math> </td>
+
+<td valign="top">is the pressure in a segment   </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>P</mi>
+<mrow><mi>o</mi><mi>u</mi><mi>t</mi></mrow></msub>
+</math> </td>
+
+<td valign="top">is the pressure in its outlet segment (towards the wellhead)
+    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><mi>Δ</mi>
+<mi>P</mi></mrow></math> </td>
+
+<td valign="top">is the calculated pressure drop across the segment  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><mi>Δ</mi>
+<msub><mi>P</mi><mrow><mi>p</mi><mi>r</mi><mi>e</mi>
+<mi>v</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the pressure drop at the previous converged iteration cycle.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The effect of the weighting factor is to reduce the amount by which
+the segment pressure drop changes from its previous converged value.
+If the well does not converge in a cycle of <samp class="codeph">MXWSIT</samp> iterations, the weighting factor <em>W</em> <sub>p</sub> is reduced
+by a factor <em>F</em> <sub>R</sub> (<math><msub>
+<mi>W</mi><mi>p</mi></msub><mo>←</mo><msub><mi>F</mi>
+<mi>R</mi></msub><mo>×</mo><msub><mi>W</mi><mi>p</mi>
+</msub></math>) and a new iteration cycle is begun. If the iterations
+still do not converge, <em>W</em> <sub>p</sub> is reduced again by the
+same factor and another iteration cycle is begun. <em>W</em> <sub>p</sub> can be reduced a specified maximum number of times <em>N</em> <sub>R</sub> before ECLIPSE gives up and finally declares the well solution
+unconverged. When an iteration cycle converges with a reduced value
+of <em>W</em> <sub>p</sub> its value is increased by a factor <em>F</em>                <sub>I</sub> (<math><msub>
+<mi>W</mi><mi>p</mi></msub><mo>←</mo><msub><mi>F</mi>
+<mi>I</mi></msub><mo>×</mo><msub><mi>W</mi><mi>p</mi>
+</msub></math>) and a new iteration cycle is begun. <em>W</em> <sub>p</sub> is successively increased in this manner until it reaches
+the value 1.0, and when this iteration cycle converges the well solution
+is finally declared converged. Overall, this process traverses ‘difficult’
+regions of the residual function by taking small steps in the pressure
+variable.          </p>
+
+<p>You must take care when selecting the iteration parameters. If
+the factors <em>F</em> <sub>R</sub> and <em>F</em> <sub>I</sub> are too
+small it can take many iteration cycles for <em>W</em> <sub>p</sub> to
+reach unity again. It can take up to <em>N<sub>cycles</sub></em> of
+iterations to converge a well after its maximum allowed number of
+reductions in <em>W</em> <sub>p </sub>, where</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wsegiter.equ.007a"/>
+ <math><mrow><msub><mrow>
+<mi>N</mi></mrow><mrow><mi>c</mi><mi>y</mi><mi>c</mi>
+<mi>l</mi><mi>e</mi><mi>s</mi></mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext><msub><mrow><mi>N</mi>
+</mrow><mrow><mi>R</mi></mrow></msub><mo>⁢</mo><mtext> </mtext><mo>+</mo><mtext> </mtext><mn>1</mn><mo>⁢</mo><mtext> </mtext><mo>+</mo><mtext> </mtext><msub>
+<mrow><mi>N</mi></mrow><mrow><mi>R</mi></mrow></msub>
+<mfrac><mrow><mi>log</mi><mo>⁡</mo><mrow><mo>(</mo>
+<mn>1</mn><mo>/</mo><msub><mrow><mi>F</mi></mrow>
+<mrow><mi>R</mi></mrow></msub><mo>)</mo></mrow></mrow>
+<mrow><mi>log</mi><mo>⁡</mo><mrow><mo>(</mo><msub>
+<mrow><mi>F</mi></mrow><mrow><mi>I</mi></mrow></msub>
+<mo>)</mo></mrow></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 247.2]
+              </td></tr></tbody></table>
+<p>The <span class="keyword">WSEGITER</span> keyword is followed by a data record
+consisting of the following items, terminated with a slash (/).</p>
+
+<ol>
+<li>Maximum number of well iterations per cycle, <samp class="codeph">MXWSIT</samp> <p>This item overwrites any value previously entered in item 5 of
+the 3<sup>rd</sup> record  of keyword <span class="keyword">TUNING</span> (or <a href="TUNINGL.html#TUNINGL"> TUNINGL</a> or <a href="TUNINGS.html#TUNINGS">  TUNINGS</a>).</p>
+ <p>DEFAULT:
+40</p>
+</li>
+
+<li>Maximum number of times, <em>N</em> <sub>R</sub>, that a new iteration
+cycle with a reduced <em>W</em> <sub>p</sub> will be started following
+an unconverged iteration cycle. <p>The well will finally be declared
+unconverged if there are more than <em>N</em>  <sub>R</sub> unconverged
+iteration cycles.</p>
+                <p>DEFAULT: 5</p>
+</li>
+
+<li>Reduction factor <em>F</em> <sub>R</sub><p> <em>W</em> <sub>p</sub> will
+be reduced by this factor following an unconverged iteration cycle.</p>
+                <p>A value between 0.01 and 0.9 is allowed.</p>
+<p>DEFAULT: 0.3</p>
+</li>
+
+<li>Increase factor <em>F</em> <sub>I</sub> <p> <em>W</em> <sub>p</sub> will be increased by this factor following each converged iteration
+cycle, until it reaches the value 1.0.</p>
+                <p>The value
+must not be less than 1.2</p>
+<p>DEFAULT: 2.0</p>
+ </li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> If the <a href="TUNING.html#TUNING"> TUNING</a>  keyword is entered after <span class="keyword">WSEGITER</span>, the
+value of <samp class="codeph">MXWSIT</samp>  in the third record of <span class="keyword">TUNING</span> overwrites the value entered in item 1 of this keyword.</div>
+
+<div class="section" id="wsegiter_example"><a name="wsegiter_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WSEGITER
+ 25  5  0.1  3.0 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

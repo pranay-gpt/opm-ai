@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Optimizing gas lift to individual wells"/>
+<meta name="DC.subject" content="Artificial lift quantity, Gas injection, Gas lift optimization, Individual well, Weighted incremental gradient"/>
+<meta name="keywords" content="Artificial lift quantity, Gas injection, Gas lift optimization, Individual well, Weighted incremental gradient"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gasliftintro_optimizing_gas_lift_to_individual_wells"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Optimizing gas lift to individual wells</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="gasliftintro_optimizing_gas_lift_to_individual_wells"><a name="gasliftintro_optimizing_gas_lift_to_individual_wells"><!-- --></a>
+<h1 class="topictitle1">Optimizing gas lift to individual wells</h1>
+
+
+ <div>
+<p>For a well under THP control, as the supply of lift gas to it is
+gradually increased, the production rate at first increases due to
+the reduced density of the mixture in the tubing. However, as the
+lift gas supply is increased further, friction pressure losses in
+the tubing become more important, and the production rate peaks and
+then starts to decrease (see figure <a href="gasliftintro_Optimizing_gas_lift_to_individual_wells.html#gasliftintro.XID-00000036">596.1</a>). For an individual well
+with no constraints other than a THP limit, with an unlimited free
+supply of lift gas, the optimum lift gas injection rate is the value
+at the peak (point A).</p>
+
+<p>In reality, of course, lift gas injection is never free. Compression
+costs can be expressed as a cost per unit rate of lift gas injection
+(for example, dollars/day per Mscf/day). This must be balanced against
+the value of the extra amount of oil produced. Thus there is a “minimum
+economic gradient” of oil production rate versus lift gas injection
+rate, at which the value of the extra amount of oil produced by a
+small increase in the lift gas injection rate is equal to the cost
+of supplying the extra amount of lift gas. The optimum lift gas injection
+rate is then somewhat lower than the peak value, at the point on the
+curve where its gradient equals the minimum economic gradient (point
+B).</p>
+
+<div class="fignone" id="gasliftintro.XID-00000036"><a name="gasliftintro.XID-00000036"><!-- --></a>
+
+ <br/><img src="../img/optilgir.png" width="560px"/><br/> 
+<br/><span class="figcap">
+           Figure 596.1  Optimum Lift Gas Injection Rate</span></div>
+
+<p>For flexibility, each well can be assigned a “weighting factor”
+(which defaults to 1.0 if not specified). The local gradient of the
+oil production rate versus lift gas injection rate curve is multiplied
+by this weighting factor before being compared with the minimum economic
+gradient.</p>
+
+<p>If the well is subject to additional constraints, the optimum lift
+gas injection rate may be lower than that indicated by the minimum
+economic gradient. For example, if the well is subject to an oil rate
+target that is achievable with gas lift, it is pointless increasing
+the lift gas supply beyond the value that maintains the rate target.</p>
+
+<p>To calculate the optimum lift gas injection rate, it is first necessary
+to divide the lift gas supply into discrete increments of uniform
+size. This is accomplished using the keyword <a href="../ecl_rm/LIFTOPT.html#LIFTOPT">LIFTOPT</a>. A typical increment
+size could be a twentieth of the maximum allowed lift gas injection
+rate for each well. A smaller increment size would determine the optimum
+lift gas injection rate to a finer resolution, but at the expense
+of a longer computing time. (In general, however, the computing time
+for gas lift optimization is only an important consideration when
+the Network option is being used.)</p>
+
+<p>Each time ECLIPSE performs a gas lift optimization, it must decide
+whether lift gas increments must be added to, or subtracted from,
+each well. Taking the current lift gas injection rate of a well, ECLIPSE
+calculates what the well would produce if the lift gas injection rate
+were increased by one increment, and also what it would produce if
+the rate were reduced by one increment. The production rates are adjusted
+if necessary to obey any rate or BHP limits that the well may be subject
+to. From this information, ECLIPSE calculates the well’s “weighted
+incremental gradient” and its “weighted decremental gradient”
+according to the formula:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gasliftintro.equ.003f"/>
+ <math><mrow><mrow><mi>G</mi><mi>r</mi><mi>a</mi><mi>d</mi><mi>i</mi><mi>e</mi><mi>n</mi><mi>t</mi></mrow><mo>=</mo><mo>{</mo><mfrac><mrow><msub><mrow><msub><mrow><mi>α</mi>
+</mrow><mrow><mi>w</mi></mrow></msub><mo>⋅</mo><mrow>
+<mi>Δ</mi><mi>Q</mi></mrow></mrow><mrow><mi>o</mi></mrow></msub></mrow><mrow><mo>(</mo><msub>
+<mrow><mi>Δ</mi><mi>Q</mi></mrow><mrow><mi>g</mi>
+<mi>l</mi><mi>i</mi></mrow></msub><mo>+</mo><msub>
+<mrow><msub><mrow><mi>α</mi></mrow><mrow><mi>g</mi></mrow></msub><mo>⋅</mo><mrow><mi>Δ</mi>
+<mi>Q</mi></mrow></mrow><mrow><mi>g</mi></mrow></msub>
+<mo>)</mo></mrow></mfrac><mo>}</mo></mrow></math> 
+</td><td align="right">[Eq. 596.1]
+              </td></tr></tbody></table>
+<p>where:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>α</mi>
+<mi>w</mi></msub></math> </td>
+
+<td valign="top">is the weighting factor for the preferential allocation of
+lift gas.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>α</mi>
+<mi>g</mi></msub></math> </td>
+
+<td valign="top"> is the gas production rate weighting factor.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mrow><mi>Δ</mi><mi>Q</mi></mrow><mi>o</mi></msub></math> </td>
+
+<td valign="top">is the increment or decrement in oil production rate.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mrow><mi>Δ</mi><mi>Q</mi></mrow><mi>g</mi></msub></math> </td>
+
+<td valign="top">is the increment or decrement in gas production rate.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mrow><mi>Δ</mi><mi>Q</mi></mrow><mrow><mi>g</mi><mi>l</mi><mi>i</mi></mrow></msub></math> </td>
+
+<td valign="top"> is the gas lift increment or decrement.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>By default, the gas production rate weighting factor  <math><msub><mi>α</mi>
+<mi>g</mi></msub></math>  is defined to be 0.0 such that,
+in general, the gradients are calculated according to the reduced
+formula:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gasliftintro.equ.004f"/>
+ <math><mrow><mrow><mi>G</mi><mi>r</mi><mi>a</mi><mi>d</mi><mi>i</mi><mi>e</mi><mi>n</mi><mi>t</mi></mrow><mo>=</mo><mo>{</mo><mfrac><mrow><msub><mrow><msub><mrow><mi>α</mi>
+</mrow><mrow><mi>w</mi></mrow></msub><mo>⋅</mo><mrow>
+<mi>Δ</mi><mi>Q</mi></mrow></mrow><mrow><mi>o</mi></mrow></msub></mrow><mrow><msub><mrow><mi>Δ</mi><mi>Q</mi></mrow><mrow><mi>g</mi><mi>l</mi><mi>i</mi></mrow></msub></mrow></mfrac><mo>}</mo></mrow></math> 
+</td><td align="right">[Eq. 596.2]
+              </td></tr></tbody></table>
+<p>However, a positive value of  <math><msub>
+<mi>α</mi><mi>g</mi></msub></math>  may be employed
+to discourage the allocation of lift gas to wells which are producing
+more gas. The gas rate term in the denominator is subject to the constraint
+ <math><mrow><msub>
+<mrow><msub><mrow><mi>α</mi></mrow><mrow><mi>g</mi></mrow></msub><mo>⋅</mo><mrow><mi>Δ</mi>
+<mi>Q</mi></mrow></mrow><mrow><mi>g</mi></mrow></msub>
+<mo>≥</mo><mn>0.0</mn></mrow></math>. If  <math><mrow><msub><mrow>
+<msub><mrow><mi>α</mi></mrow><mrow><mi>g</mi>
+</mrow></msub><mo>⋅</mo><mrow><mi>Δ</mi><mi>Q</mi></mrow></mrow><mrow><mi>g</mi></mrow></msub>
+<mo>»</mo><msub><mrow><mi>Δ</mi><mi>Q</mi>
+</mrow><mrow><mi>g</mi><mi>l</mi><mi>i</mi></mrow>
+</msub></mrow></math> the gradient becomes essentially an inverse
+GOR term. The weighting factors  <math><msub>
+<mi>α</mi><mi>w</mi></msub></math>  and  <math><msub><mi>α</mi>
+<mi>g</mi></msub></math>  are specified via items 4 and 6
+respectively of the <a href="../ecl_rm/WLIFTOPT.html#WLIFTOPT">WLIFTOPT</a> keyword.</p>
+
+<p>These gradients are updated each time an increment is added or
+removed. ECLIPSE adds lift gas increments to the well as long as its
+weighted incremental gradient exceeds the minimum economic gradient,
+subject to any limits on the lift gas supply.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

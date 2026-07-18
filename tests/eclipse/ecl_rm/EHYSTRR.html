@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="EHYSTRR"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="EHYSTRR"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>EHYSTRR</title>
+</head>
+<body>
+
+
+<div class="nested0" id="EHYSTRR"><a name="EHYSTRR"><!-- --></a>
+<h1 class="keyword">EHYSTRR</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="ehystrr.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="ehystrr.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d576e45"> x </th>
+
+<th valign="top" id="d576e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d576e54">  </th>
+
+<th valign="top" id="d576e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d576e45 d576e54 ">  </td>
+
+<td valign="top" headers="d576e48 d576e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d576e45 d576e54 ">  </td>
+
+<td valign="top" headers="d576e48 d576e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d576e45 d576e54 ">  </td>
+
+<td valign="top" headers="d576e48 d576e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d576e45 d576e54 "> x </td>
+
+<td valign="top" headers="d576e48 d576e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d576e45 d576e54 ">  </td>
+
+<td valign="top" headers="d576e48 d576e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d576e45 d576e54 ">  </td>
+
+<td valign="top" headers="d576e48 d576e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d576e45 d576e54 ">  </td>
+
+<td valign="top" headers="d576e48 d576e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d576e45 d576e54 ">  </td>
+
+<td valign="top" headers="d576e48 d576e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is entirely optional and allows the hysteresis curvature
+parameters to be entered on a saturation region basis. The keyword
+should be followed by <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a> (set in the <span class="keyword">TABDIMS</span> keyword) records, each terminated by a
+slash (/).</p>
+
+<p>Each record consists of the following items of data:</p>
+
+<ol>
+<li>Curvature parameter for capillary pressure hysteresis.<p>It must
+be greater than zero, and should normally lie in the range 0.05 to
+0.1.</p>
+<p>DEFAULT: 0.1.</p>
+</li>
+
+<li>Curvature parameter for Killough’s wetting phase relative permeability
+hysteresis.<p>It must be a positive number. This item will be ignored
+if item 2 of the <a href="EHYSTR.html#EHYSTR">  EHYSTR</a> keyword is set to anything other than 4.</p>
+<p>DEFAULT:
+1.0.</p>
+</li>
+
+<li>Modification parameter for the trapped non-wetting phase saturation
+in the Killough Model.<p>If this parameter is zero (the standard Killough
+model) or set to a small value, the trapped saturation will be close
+to the maximum attained saturation when the maximum itself is small.
+This can lead to convergence problems.</p>
+<p>DEFAULT: 0.1.</p>
+</li>
+
+</ol>
+
+<p>The three data items for each region are the same as data items
+1, 3 and 4 of the <span class="keyword">EHYSTR</span>  keyword. If the  <span class="keyword">EHYSTRR</span>  keyword is present this overrides the data supplied
+in the <span class="keyword">EHYSTR</span> keyword even if the <span class="keyword">EHYSTRR</span> data is defaulted.</p>
+
+<p>The <span class="keyword">EHYSTRR</span> data for a cell is taken from the
+record corresponding to the drainage region number (<a href="SATNUM.html#SATNUM">  SATNUM</a>). The data associated
+with the imbibition region numbers (<a href="IMBNUM.html#IMBNUM">  IMBNUM</a>) will be ignored.</p>
+
+<div class="section" id="ehystrr_example"><a name="ehystrr_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>--
+-- NTSFUN = 4
+--
+EHYSTRR
+0.05 1.0 0.1 /
+0.07 1.0 0.1 /
+0.1  1.0 0.1 /
+0.1  1.0 0.1 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

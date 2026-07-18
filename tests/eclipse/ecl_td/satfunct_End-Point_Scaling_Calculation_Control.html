@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="End-point scaling calculation control"/>
+<meta name="DC.subject" content="Saturation functions three-phase relative permeability models, Saturation functions three-phase relative permeability models ODD3P end-point scaling, Saturation functions, Three-phase relative permeability models, ODD3P method"/>
+<meta name="keywords" content="Saturation functions three-phase relative permeability models, Saturation functions three-phase relative permeability models ODD3P end-point scaling, Saturation functions, Three-phase relative permeability models, ODD3P method"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="satfunct_end-point_scaling_calculation_control"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>End-point scaling calculation control</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="satfunct_end-point_scaling_calculation_control"><a name="satfunct_end-point_scaling_calculation_control"><!-- --></a>
+<h1 class="topictitle1">End-point scaling calculation control</h1>
+
+
+ <div>
+<p>The end-point scaling calculation is controlled by the <span class="keyword">PROPS</span> section table keyword <span class="keyword">EPSODD3P</span>. This keyword provides control over the application of a sweep efficiency
+component to the process-dependent end-point saturations. The following
+Land formulation (<cite><span> <a href="biblio_Bibliography.html#biblio_90665">Hustad, 2002</a> </span></cite>) is used for this purpose and calculates a modified grid-block
+end-point saturation S i r j according to the expression:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="satfunct.equ.06b1"/>
+ <math><msub><mi>S</mi>
+<mrow><mi>i</mi><mi>r</mi><mi>j</mi></mrow></msub>
+<mo>=</mo><mfrac><mrow><msubsup><mi>S</mi><mi>i</mi>
+<mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msubsup>
+</mrow><mrow><mn>1</mn><mo>+</mo><mfrac><mrow>
+<msubsup><mi>S</mi><mi>i</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msubsup></mrow><mrow><mn>1</mn><mo>+</mo><msubsup><mi>S</mi><mrow><mi>i</mi>
+<mi>r</mi><mi>j</mi></mrow><mi>p</mi></msubsup></mrow>
+</mfrac><mrow><mo>-</mo><mfrac><mrow><msubsup><mi>S</mi><mi>i</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow></msubsup></mrow><mrow><mn>1</mn><mrow><mo>-</mo><msubsup><mi>S</mi><mrow><mi>j</mi><mi>r</mi>
+<mi>i</mi></mrow><mi>p</mi></msubsup></mrow></mrow>
+</mfrac></mrow></mrow></mfrac></math> 
+</td><td align="right">[Eq. 152.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msubsup><mi>S</mi>
+<mi>i</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow></msubsup></math> </td>
+
+<td valign="top">  is the maximum grid block saturation and</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msubsup><mi>S</mi>
+<mrow><mi>i</mi><mi>r</mi><mi>j</mi></mrow><mi>p</mi>
+</msubsup></math> and             <math>
+<msubsup><mi>S</mi><mrow><mi>i</mi><mi>r</mi><mi>i</mi></mrow><mi>p</mi></msubsup></math> </td>
+
+<td valign="top"> are the process-dependent grid-block end-point saturations
+and</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>i</mi><mo>≠</mo><mi>j</mi></mrow></math>, and
+            <math><msubsup><mi>S</mi>
+<mi>i</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi>
+</mrow></msubsup></math> </td>
+
+<td valign="top">are subject to the constraint             <math><mrow><msubsup><mrow>
+<mi>S</mi></mrow><mrow><mi>i</mi></mrow><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msubsup><mo>≤</mo>
+<mn>1</mn><mrow><mo>-</mo><msubsup><mrow><mi>S</mi>
+</mrow><mrow><mi>j</mi><mi>r</mi><mi>i</mi></mrow>
+<mrow><mi>p</mi></mrow></msubsup></mrow></mrow></math> </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The Land formulation may be applied individually to any or all
+of the oil, gas and water saturations.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The network model in ECLIPSE 300"/>
+<meta name="DC.subject" content="Network, ECLIPSE 300"/>
+<meta name="keywords" content="Network, ECLIPSE 300"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="e300net_the_network_model_in_eclipse_300"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The network model in ECLIPSE 300</title>
+</head>
+<body>
+
+
+<div class="nested0" id="e300net_the_network_model_in_eclipse_300"><a name="e300net_the_network_model_in_eclipse_300"><!-- --></a>
+<h1 class="topictitle1">The network model in ECLIPSE 300</h1>
+
+
+ <div>
+<p>There are some important differences between the implementations
+of the network model in ECLIPSE 100 and ECLIPSE 300. However,
+the ECLIPSE 300 model can emulate much of the ECLIPSE 100
+model’s capability and shares a common set of keywords.</p>
+
+<div class="section" id="e300net_standard_and_extended_network_models"><a name="e300net_standard_and_extended_network_models"><!-- --></a><h4 class="sectiontitle">Standard and extended network models</h4><p>ECLIPSE 300 can
+run either the standard model or the extended model. When constructing
+a network model from scratch, you are recommended to use the extended
+network model as this is more versatile than the standard model. The
+standard model keywords, however, are available to assist the porting
+of ECLIPSE 100 data sets.</p>
+<p>Unlike ECLIPSE 100, ECLIPSE 300
+allows you to use the Extended model for injection networks as well
+as production networks. The two types of model cannot be mixed, so
+if you use the extended model for the production network then you
+must also use it for any injection networks. This requirement differs
+from ECLIPSE 100, where the injection networks have to use the
+standard model even if the extended model is used for the production
+network. Thus the data file for runs containing both production and
+injection networks cannot be ported directly between the simulators
+if the production network uses the extended model.</p>
+<p>When using
+the extended network model for both production and injection networks,
+node names must be unique across all networks; an injection network
+node cannot have the same name as a node in the production network.
+However, a source node in the production network may represent the
+same group as a sink node in the injection network, if the group contains
+both producers and injectors. The corresponding nodes in the two networks
+must have different names; they cannot both have the same name as
+the well group (although one node may have the same name). Accordingly,
+ECLIPSE 300 allows source nodes (corresponding to well groups)
+to have a different name from their corresponding group.</p>
+<p>Currently
+there are no automatic pump/compressor facilities in ECLIPSE 300.</p>
+</div>
+
+<div class="section" id="e300net_balancing_the_network"><a name="e300net_balancing_the_network"><!-- --></a><h4 class="sectiontitle">Balancing the network</h4><p>The network balancing calculation solves the branch flows and
+pressure losses across the network, and balances the flows into the
+network from the wells with the pressures at the source nodes, which
+are translated into THP limits for the wells. ECLIPSE 300 balances
+the combined network and reservoir system in each of the first <span class="keyword">NUPCOL</span> Newton iterations at every timestep. (The value
+of <span class="keyword">NUPCOL</span> may be set using keyword <a href="../ecl_rm/NUPCOL.html#NUPCOL">NUPCOL</a> or keyword <a href="../ecl_rm/GCONTOL.html#GCONTOL">GCONTOL</a>.) During any subsequent
+iterations that are required to converge the timestep, the nodal pressures
+and well THP limits remain unchanged. Thus the balancing error at
+the end of the timestep reflects only the changes in reservoir conditions
+that have taken place after the <span class="keyword">NUPCOL</span><sup>th</sup> Newton iteration. ECLIPSE 100 allows you to reduce the frequency
+of the balancing iterations or to balance the network only during
+the first iteration of the timestep; either of these options would
+increase the balancing error and so they are not implemented in ECLIPSE 300.</p>
+<p>The default convergence criterion (item 2 of keyword <a href="../ecl_rm/NETBALAN.html#NETBALAN"> NETBALAN</a>) is substantially
+tighter in ECLIPSE 300 because the balancing calculation is more
+advanced. The branch flows and pressure losses are solved in an inner
+iteration loop nested inside the iterations that balance the network
+with the reservoir. The inner loop is converged to a tolerance that
+is a factor of 10 tighter than the tolerance for the network/reservoir
+coupling iterations.</p>
+<p>The total number of network/reservoir coupling
+iterations performed over each timestep is reported in the timestep
+summary table in the column headed <samp class="codeph"> NIT </samp>.</p>
+<p>Another
+difference from ECLIPSE 100 is that ECLIPSE 300 automatically
+activates the <a href="../ecl_rm/WAITBAL.html#WAITBAL"> WAITBAL</a> instruction, so that a new well from the drilling queue
+is drilled only after the network/reservoir iterations have converged.
+In ECLIPSE 100 it is necessary to activate the instruction with
+the <span class="keyword">WAITBAL</span> keyword, otherwise wells may be drilled
+prematurely before the network is properly balanced.</p>
+</div>
+
+<div class="section" id="e300net_rate_constraints_and_automatic_chokes"><a name="e300net_rate_constraints_and_automatic_chokes"><!-- --></a><h4 class="sectiontitle">Rate constraints and automatic chokes</h4><p>ECLIPSE 300
+has the option of meeting group rate targets by applying a pressure
+differential across an automatic choke, similarly to the Extended
+Network model in ECLIPSE 100 (see <a href="extended_Automatic_chokes.html#extended_automatic_chokes"> "Automatic
+chokes"</a>). However, there are some differences between the two
+simulators:</p>
+<ul>
+<li>ECLIPSE 100 uses a ‘subsea manifold’ model to
+handle rate constraints for well groups via the network (it iterates
+to find a common well THP that produces the required total rate).
+ECLIPSE 300, on the other hand, does not use this approach; it
+uses automatic chokes to handle rate constraints at all levels of
+the node or group hierarchy, including well groups. While this unifies
+the handling of rate constraints for all levels of the hierarchy,
+it may require some data changes to be made when porting an ECLIPSE 100
+data set to ECLIPSE 300. If a well group acts as a subsea manifold
+in ECLIPSE 100, the pressure losses in its outlet pipeline can
+still be represented by a VFP table. When this becomes an automatic
+choke in ECLIPSE 300, its outlet branch must be given a VFP table
+number of 9999 so the only pressure differential along it is that
+of the choke. In order to include the pressure losses in the rest
+of the pipeline it will be necessary to create an intermediate network
+node to split the pipeline into two sections: one section to represent
+the choke with a VFP table number of 9999, and the other section to
+represent the rest of the pipeline with the well group’s original
+VFP table number.             </li>
+
+<li>ECLIPSE 300 can apply automatic chokes to handle rate constraints
+in injection networks using the Extended Network model. Extended injection
+networks are not available in ECLIPSE 100.             </li>
+
+<li>When using the Standard Network model, ECLIPSE 100 can only
+handle production rate constraints via the network at well groups,
+by declaring them as subsea manifolds. In the Standard Network model
+of ECLIPSE 300, production rate constraints may be handled through
+the network at any level of the group hierarchy by automatic chokes.
+            </li>
+
+<li>Automatic chokes in ECLIPSE 300 can apply constraints on
+the flow of oil, water, liquid (oil + water) and gas directly. Other
+constraints (reservoir fluid volume rate, wet gas rate) are converted
+into constraints on these quantities using the latest available ratios,
+and so may not be met exactly.             </li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

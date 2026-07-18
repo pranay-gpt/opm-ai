@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Activating compressors"/>
+<meta name="DC.subject" content="Group production rules"/>
+<meta name="keywords" content="Group production rules"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="groupprd_activating_compressors"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Activating compressors</title>
+</head>
+<body>
+
+
+<div class="nested0" id="groupprd_activating_compressors"><a name="groupprd_activating_compressors"><!-- --></a>
+<h1 class="topictitle1">Activating compressors</h1>
+
+
+ <div>
+<p>This option is only available if the extended network model is
+in use (see <a href="extended_The_extended_network_model.html#extended_the_extended_network_model"> "The extended network model"</a>). The extended network model
+includes a special type of compressor that is turned on automatically
+when a nominated group fails to meet its production rate target. These
+compressors are defined with the keyword <a href="../ecl_rm/NETCOMPA.html#NETCOMPA"> NETCOMPA</a>. Each compressor
+is located in a specified branch of the network, and its operation
+is modeled by changing the ALQ value used to look up the VFP table
+associated with the branch. Compressors may be single-level or multilevel.
+Single-level compressors switch directly to the new ALQ value when
+they are turned on. Multilevel compressors change their ALQ value
+in a user-defined number of increments until they are fully on at
+their maximum ALQ value.</p>
+
+<p>It is possible for a group to have more than one compressor responding
+to it. The compressors can be located anywhere in the network, but
+of course they should be positioned to boost the production of their
+nominated group. If two or more compressors respond to the same group,
+the order in which they are activated is controlled by their 'switching
+sequence number' (item 12 in keyword <span class="keyword">NETCOMPA</span>). Compressors responding to the same group are activated in increasing
+order of their sequence number. If more compression is still required
+when the first compressor is fully on, the next compressor that responds
+to the group will be turned on (incrementally, if it is a multistage
+compressor).</p>
+
+<p>When a group cannot achieve its target rate, ECLIPSE scans the
+network for a compressor that responds to the group. Compressors that
+are already fully on are ignored. If more than one compressor responds
+to the group, the compressor with the lowest switching sequence number
+is selected first. If it is a single-level compressor, it is turned
+fully on. If it is a multilevel compressor, its ALQ value is increased
+one increment at a time until either the group's rate target
+is met or the compressor is fully on.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

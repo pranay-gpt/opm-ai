@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GCONSUMP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GCONSUMP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GCONSUMP</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GCONSUMP"><a name="GCONSUMP"><!-- --></a>
+<h1 class="keyword">GCONSUMP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gconsump.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gconsump.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d818e45"> x </th>
+
+<th valign="top" id="d818e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d818e54">  </th>
+
+<th valign="top" id="d818e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d818e45 d818e54 ">  </td>
+
+<td valign="top" headers="d818e48 d818e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d818e45 d818e54 ">  </td>
+
+<td valign="top" headers="d818e48 d818e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d818e45 d818e54 ">  </td>
+
+<td valign="top" headers="d818e48 d818e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d818e45 d818e54 ">  </td>
+
+<td valign="top" headers="d818e48 d818e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d818e45 d818e54 ">  </td>
+
+<td valign="top" headers="d818e48 d818e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d818e45 d818e54 ">  </td>
+
+<td valign="top" headers="d818e48 d818e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d818e45 d818e54 ">  </td>
+
+<td valign="top" headers="d818e48 d818e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d818e45 d818e54 "> x </td>
+
+<td valign="top" headers="d818e48 d818e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is used to specify the rate of gas consumption and
+the gas import rate for individual groups. The gas consumption rate
+may represent, for example, gas used for power generation at a platform.
+The gas import rate can be used to take account of gas imported from
+outside the group.</p>
+
+<p>Gas consumption and import rates are taken into account for group
+reinjection control (see keyword <a href="GCONINJE.html#GCONINJE">  GCONINJE</a>) and sales gas control (see keyword <a href="GCONSALE.html#GCONSALE">  GCONSALE</a>).</p>
+
+<p>Under gas reinjection control, the gas injection rate is (gas injection
+rate of group) = (the group’s reinjection fraction) * [(the
+group’s gas production rate) + (the gas import rate to the group
+and any subordinate groups) - (the gas consumption rate of the group
+and any subordinate groups)]</p>
+
+<p>The sales gas production rate is calculated as (sales gas production
+rate) = (gas production rate) - (gas injection rate) + (gas import
+rate) - (gas consumption rate)</p>
+
+<p>Gas consumption and import rates are also taken into account by
+the network model (gas consumed is subtracted from the pipeline flows,
+gas imported is added - but see also item 4 below), and the gas field
+operations model (group/field target gas rates apply to sales gas
+rather than gross production from the formation).</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li> Group name or group name root <p>or <samp class="codeph">FIELD</samp> (if
+gas is consumed or imported at the field level)</p>
+ <p>A group name
+root, enclosed in quotes and ending with an asterisk (*), can be used
+to refer to several groups in one record.</p>
+ </li>
+
+<li> Gas consumption rate for the group <p>If a negative value between
+0.0 and -1.0 is specified, it is interpreted as minus the fraction
+of the group’s gas production. Thus for example a value of -0.1
+sets the gas consumption rate for the group to one tenth of its total
+gas production rate. A negative value is not allowed when running
+the gas field operations model. A user-defined argument can be set
+with keywords <a href="UDQ.html#UDQ">  UDQ</a> and <a href="UDADIMS.html#UDADIMS">  UDADIMS</a>.</p>
+ <p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), Mscf/day
+(<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: Zero</p>
+ </li>
+
+<li> Gas import rate for the group. The value must be greater than
+or equal to zero. A user-defined argument can be set with keywords <a href="UDQ.html#UDQ">  UDQ</a> and <a href="UDADIMS.html#UDADIMS">  UDADIMS</a>. <p>UNITS:
+sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), Mscf/day (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: Zero</p>
+ </li>
+
+<li> Name of the network node from which the group’s consumption
+should also be removed or import added <p>This item is only relevant
+if you are using the extended network model. It is ignored otherwise.
+The item defines the point in the network where the gas consumption
+should be subtracted from (or import added to) the network flow. This
+is necessary because the extended network structure is distinct from
+the group hierarchy, and in general there is no correspondence between
+groups and network nodes (except at the source-groups that supply
+production into the network, for example well-groups).</p>
+ <p>If this
+item is defaulted when the extended network model is active, the result
+is as follows. If the group in item 1 is a source-group, then the
+default node is the node with the same name as the source-group. If
+the group in item 1 is <strong>not</strong> a source-group, then the default
+is that the consumption or import will <strong>not</strong> be taken into account
+in the network flows. If the group is a source-group but it is desired
+that the consumption or import rates are not accounted for anywhere
+in the network, then the character string '<samp class="codeph">NO-NODES</samp>' must be entered here.</p>
+ </li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<p>Groups not specified in this keyword will have their gas consumption
+and import rates defaulted to zero.</p>
+
+<div class="section" id="gconsump_example"><a name="gconsump_example"><!-- --></a><h4 class="sectiontitle">Example</h4> <pre><code>GCONSUMP
+ PLAT-A  20 50  /
+ PLAT-B  15     /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PIMULTAB"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PIMULTAB"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PIMULTAB</title>
+</head>
+<body>
+
+
+<div class="nested0" id="PIMULTAB"><a name="PIMULTAB"><!-- --></a>
+<h1 class="keyword">PIMULTAB</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="pimultab.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="pimultab.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1798e45"> x </th>
+
+<th valign="top" id="d1798e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1798e54">  </th>
+
+<th valign="top" id="d1798e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1798e45 d1798e54 ">  </td>
+
+<td valign="top" headers="d1798e48 d1798e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1798e45 d1798e54 ">  </td>
+
+<td valign="top" headers="d1798e48 d1798e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1798e45 d1798e54 ">  </td>
+
+<td valign="top" headers="d1798e48 d1798e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1798e45 d1798e54 ">  </td>
+
+<td valign="top" headers="d1798e48 d1798e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1798e45 d1798e54 ">  </td>
+
+<td valign="top" headers="d1798e48 d1798e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1798e45 d1798e54 ">  </td>
+
+<td valign="top" headers="d1798e48 d1798e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1798e45 d1798e54 ">  </td>
+
+<td valign="top" headers="d1798e48 d1798e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1798e45 d1798e54 "> x </td>
+
+<td valign="top" headers="d1798e48 d1798e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword may be used to input PI multiplier tables, which scale
+a well’s connection factors according to the maximum water cut it
+has so far achieved. The tables defined here are allocated to individual
+wells with the <a href="WPITAB.html#WPITAB"> WPITAB</a> keyword. The facility may be useful in approximating performance
+decline due to backflow of water.</p>
+
+<p>The keyword is followed <strong>exactly</strong> by <samp class="codeph">NTPIMT</samp> tables, each containing two columns and no more than <samp class="codeph">NPPIMT</samp> rows of data. The dimensions <samp class="codeph">NTPIMT</samp> and <samp class="codeph">NPPIMT</samp> are entered in the <span class="keyword">RUNSPEC</span> section
+keyword <a href="PIMTDIMS.html#PIMTDIMS">  PIMTDIMS</a>. Each table should be terminated with a slash (/).</p>
+
+<ol>
+<li>Maximum water cut values.<p>The values should increase monotonically
+down the column.</p>
+<p>UNITS: sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), stb/stb (<samp class="codeph">FIELD</samp>), scc/scc (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li>The corresponding values of the PI scaling factor.</li>
+
+</ol>
+
+<p>Empty tables (containing just their terminating slash) default
+to a copy of the previous table. Extrapolation outside the range of
+a table returns the value of the nearest point in the table.</p>
+
+<p>See also keywords <span class="keyword">WPITAB</span> and <a href="WPIMULT.html#WPIMULT"> WPIMULT</a> (the latter may
+be used to scale well PIs by a constant factor).</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The PI scaling tables are <strong>not</strong> written to the Restart
+files. Accordingly they must be present in any restarted data set.
+Thus it is also possible to change the tables at a restart.</span></div>
+
+<div class="section" id="pimultab_example"><a name="pimultab_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTPIMT=2</samp>. <samp class="codeph">NPPIMT</samp> must have been set ≥5:</p>
+ <pre><code>PIMULTAB
+-- max    PI
+-- WCT   mult
+   0.0   1.0
+   0.1   0.95
+   0.15  0.85
+   0.4   0.55
+   0.8   0.43  /
+
+   0.0   1.0
+   0.01  0.92
+   0.04  0.85
+   0.12  0.44
+   0.4   0.32  /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WARP solution procedure for sub-grids"/>
+<meta name="DC.subject" content="Solution of the linear equations, Solution of the linear equations ECLIPSE 300 WARP sub-grids, Solution procedure for LGRs"/>
+<meta name="keywords" content="Solution of the linear equations, Solution of the linear equations ECLIPSE 300 WARP sub-grids, Solution procedure for LGRs"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sollineq_warp_solution_procedure_for_sub-grids"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WARP solution procedure for sub-grids</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="sollineq_warp_solution_procedure_for_sub-grids"><a name="sollineq_warp_solution_procedure_for_sub-grids"><!-- --></a>
+<h1 class="topictitle1">WARP solution procedure for sub-grids</h1>
+
+
+ <div>
+<p>Firstly consider the two color case, where  <math><msub><mi>S</mi>
+<mi>α</mi></msub></math>  and  <math><msub><mi>S</mi>
+<mi>β</mi></msub></math>  represents all the sub-grids
+in colors  <math><mi>α</mi></math>  and  <math><mi>β</mi>
+</math>  respectively,  <math><msub><mi>L</mi>
+<mrow><mi>α</mi><mi>β</mi></mrow></msub>
+</math> and  <math>
+<msub><mi>U</mi><mrow><mi>α</mi><mi>β</mi>
+</mrow></msub></math>  are the lower and upper color-to-color
+connective terms (these are implemented using NNC connections). Let
+us assume that nested factorization can be performed on each sub-grid,
+and hence each color, as outlined in the previous sections. The matrix
+system  <math><mi>A</mi></math> can be decomposed into a 2 x 2 block color matrix
+thus</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.0279"/>
+ <math><mrow><mi>A</mi><mo>=</mo><mrow><mo>[</mo><mtable>
+<mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd>
+</mtr><mtr><mtd><msub><mrow><mi>L</mi></mrow><mrow>
+<mi>α</mi><mi>β</mi></mrow></msub></mtd><mtd>
+<mn>0</mn></mtd></mtr></mtable><mo>]</mo></mrow><mo>+</mo><mrow><mo>[</mo><mtable><mtr>
+<mtd><msub><mrow><mi>S</mi></mrow><mrow><mi>α</mi>
+</mrow></msub></mtd><mtd><mn>0</mn></mtd></mtr><mtr>
+<mtd><mn>0</mn></mtd><mtd><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>β</mi></mrow></msub></mtd></mtr>
+</mtable><mo>]</mo></mrow><mo>+</mo><mrow><mo>[</mo>
+<mtable><mtr><mtd><mn>0</mn></mtd><mtd><msub><mrow>
+<mi>U</mi></mrow><mrow><mi>α</mi><mi>β</mi>
+</mrow></msub></mtd></mtr><mtr><mtd><mn>0</mn></mtd>
+<mtd><mn>0</mn></mtd></mtr></mtable><mo>]</mo></mrow>
+</mrow></math> 
+</td><td align="right">[Eq. 683.1]
+              </td></tr></tbody></table>
+<p>The procedure is to perform nested factorization on this block
+system, that is the pre-conditioner is</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.027d"/>
+ <math><mrow><mover>
+<mrow><mi>M</mi></mrow><mrow><mo> ˜</mo></mrow>
+</mover><mo>=</mo><mrow><mrow><mo>[</mo><mtable><mtr><mtd><msub><mrow><mi>Q</mi></mrow>
+<mrow><mi>α</mi></mrow></msub></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><msub><mrow><mi>L</mi>
+</mrow><mrow><mi>α</mi><mi>β</mi></mrow>
+</msub></mtd><mtd><msub><mrow><mi>Q</mi></mrow><mrow>
+<mi>β</mi></mrow></msub></mtd></mtr></mtable><mo>]</mo></mrow><msup><mrow><mrow><mo>[</mo><mtable>
+<mtr><mtd><msub><mrow><mi>Q</mi></mrow><mrow><mi>α</mi></mrow></msub></mtd><mtd><mn>0</mn></mtd>
+</mtr><mtr><mtd><mn>0</mn></mtd><mtd><msub><mrow>
+<mi>Q</mi></mrow><mrow><mi>β</mi></mrow></msub>
+</mtd></mtr></mtable><mo>]</mo></mrow></mrow><mrow>
+<mo>-</mo><mn>1</mn></mrow></msup></mrow><mrow><mo>[</mo><mtable><mtr><mtd><msub><mrow><mi>Q</mi></mrow>
+<mrow><mi>α</mi></mrow></msub></mtd><mtd><msub>
+<mrow><mi>U</mi></mrow><mrow><mi>α</mi><mi>β</mi>
+</mrow></msub></mtd></mtr><mtr><mtd><mn>0</mn></mtd>
+<mtd><msub><mrow><mi>Q</mi></mrow><mrow><mi>β</mi>
+</mrow></msub></mtd></mtr></mtable><mo>]</mo></mrow>
+</mrow></math> 
+</td><td align="right">[Eq. 683.2]
+              </td></tr></tbody></table>
+<p>thus</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.0281"/>
+ <math><mrow><mover><mrow>
+<mi>M</mi></mrow><mrow><mo> ˜</mo></mrow></mover>
+<mo>=</mo><mrow><mo>[</mo><mtable><mtr><mtd><msub>
+<mrow><mi>Q</mi></mrow><mrow><mi>α</mi></mrow>
+</msub></mtd><mtd><msub><mrow><mi>U</mi></mrow><mrow>
+<mi>α</mi><mi>β</mi></mrow></msub></mtd>
+</mtr><mtr><mtd><msub><mrow><mi>L</mi></mrow><mrow>
+<mi>α</mi><mi>β</mi></mrow></msub></mtd><mtd>
+<mrow><mo>(</mo><mtable><mtr><mtd><mrow><msubsup>
+<mrow><msub><mrow><mi>L</mi></mrow><mrow><mi>α</mi>
+<mi>β</mi></mrow></msub><mo>⁢</mo><mtext> </mtext>
+<mi>Q</mi></mrow><mrow><mi>β</mi></mrow><mrow>
+<mo>-</mo><mn>1</mn></mrow></msubsup><mo>+</mo><msub>
+<mrow><mi>Q</mi></mrow><mrow><mi>β</mi></mrow>
+</msub></mrow></mtd></mtr></mtable><mo>)</mo></mrow>
+</mtd></mtr></mtable><mo>]</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 683.3]
+              </td></tr></tbody></table>
+<p>The matrix  <math>
+<mi>Q</mi></math> is chosen to preserve rowsum (of pressure
+only) so</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.0286"/>
+ <math><msub><mi>Q</mi><mi>α</mi></msub><mo>=</mo><msub><mi>G</mi><mi>α</mi></msub></math> 
+</td><td align="right">[Eq. 683.4]
+              </td></tr></tbody></table>
+<p>and</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.028a"/>
+ <math><mrow><msub>
+<mrow><mi>Q</mi></mrow><mrow><mi>β</mi></mrow>
+</msub><mo>=</mo><msub><mrow><mi>G</mi></mrow><mrow>
+<mi>β</mi></mrow></msub><mo>⁢</mo><mrow><mo>-</mo>
+<mtext> </mtext><mrow><mi>r</mi><mi>o</mi><mi>w</mi>
+<mi>s</mi><mi>u</mi><mi>m</mi><mo>⁢</mo><mtext> </mtext>
+<mo>(</mo><mrow><msub><mrow><mi>L</mi></mrow><mrow>
+<mi>α</mi><mi>β</mi></mrow></msub><msup>
+<mrow><msub><mrow><mi>Q</mi></mrow><mrow><mi>β</mi>
+</mrow></msub></mrow><mrow><mo>-</mo><mn>1</mn></mrow>
+</msup><msub><mrow><mi>U</mi></mrow><mrow><mi>α</mi>
+<mi>β</mi></mrow></msub></mrow><mo>)</mo></mrow>
+</mrow></mrow></math> 
+</td><td align="right">[Eq. 683.5]
+              </td></tr></tbody></table>
+<p>where  <math><msub>
+<mi>G</mi><mi>α</mi></msub></math>  and  <math><msub><mi>G</mi>
+<mi>β</mi></msub></math> are the diagonal nested factorization
+matrices constructed from all the sub-grids associated with colors
+ <math><mi>α</mi>
+</math> and  <math>
+<mi>β</mi></math>  respectively.</p>
+
+<p>During this procedure  <math><msup><mi>Q</mi>
+<mrow><mo>-</mo><mn>1</mn></mrow></msup></math>  needs
+to be evaluated. If individual tolerances are imposed on sub-grids
+(through the <a href="../ecl_rm/LSCRITS.html#LSCRITS">LSCRITS</a> keyword), then this inversion is approximated by multiple
+iterations of GMRES, rather than just one nested factorization inversion.</p>
+
+<p>For multiple colors the above procedure is applied recursively.
+For example if four colors  <math><mi>α</mi><mo>,</mo><mi>β</mi><mo>,</mo><mi>γ</mi><mo>,</mo><mi>δ</mi></math>  are present, the matrix  <math><mi>A</mi></math> could be written</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.0298"/>
+ <math><mi>A</mi>
+<mo>=</mo><matrix><matrixrow><matrix><matrixrow><msub>
+<mi>S</mi><mi>α</mi></msub><msub><mi>U</mi>
+<mrow><mi>α</mi><mi>β</mi></mrow></msub>
+</matrixrow><matrixrow><msub><mi>L</mi><mrow><mi>α</mi>
+<mi>β</mi></mrow></msub><msub><mi>S</mi><mi>β</mi>
+</msub></matrixrow></matrix><msub><mi>U</mi><mrow><mo>{</mo><mrow><mi>α</mi><mi>β</mi></mrow><mo>,</mo><mrow><mi>γ</mi><mi>δ</mi></mrow><mo>}</mo></mrow></msub></matrixrow><matrixrow><msub><mi>L</mi><mrow><mo>{</mo><mrow><mi>α</mi><mi>β</mi>
+</mrow><mo>,</mo><mrow><mi>γ</mi><mi>δ</mi>
+</mrow><mo>}</mo></mrow></msub><matrix><matrixrow><msub>
+<mi>S</mi><mi>γ</mi></msub><msub><mi>U</mi>
+<mrow><mi>γ</mi><mi>δ</mi></mrow></msub>
+</matrixrow><matrixrow><msub><mi>L</mi><mrow><mi>γ</mi>
+<mi>δ</mi></mrow></msub><msub><mi>S</mi><mi>δ</mi></msub></matrixrow></matrix></matrixrow>
+</matrix></math> 
+</td><td align="right">[Eq. 683.6]
+              </td></tr></tbody></table>
+<p>and then nested factorization can be performed on the 2 x 2 system,
+where the blocks are groups of colors. Up to four levels of nesting
+are currently available, which corresponds to a maximum of 16 colors.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

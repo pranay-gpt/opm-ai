@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Example 1"/>
+<meta name="DC.subject" content="Polymer flood, ECLIPSE 100 example"/>
+<meta name="keywords" content="Polymer flood, ECLIPSE 100 example"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="polymer_problem_1"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Example 1</title>
+</head>
+<body>
+
+
+<div class="nested0" id="polymer_problem_1"><a name="polymer_problem_1"><!-- --></a>
+<h1 class="topictitle1">Example 1</h1>
+
+
+ <div>
+<p>This is a 1-D example modeling water injection into oil at adverse
+mobility ratios. To aid recovery, a polymer slug is injected into
+the reservoir some time after the primary water drive. Water injection
+is resumed after the polymer injection period. The performance of
+the polymer drive is assumed not be salt sensitive in this study.</p>
+
+<div class="section" id="polymer_runspec"><a name="polymer_runspec"><!-- --></a><h4 class="sectiontitle">RUNSPEC</h4><pre><code>RUNSPEC  ===========================================================
+TITLE
+Polymer flood model test problem - oil/water/polymer 
+
+DIMENS
+ 15    1    1  /
+
+OIL
+WATER
+POLYMER
+FIELD
+
+TABDIMS
+ 1    1   50    2    2   20    1   20 /
+
+REGDIMS
+ 2    1    0    0    0    1 /
+
+WELLDIMS
+ 2    1    1    2 /
+
+START
+ 1 'JAN' 1983  /
+
+FMTOUT
+FMTIN</code></pre></div>
+
+<div class="section" id="polymer_grid"><a name="polymer_grid"><!-- --></a><h4 class="sectiontitle">GRID</h4><pre><code>GRID    ============================================================
+EQUALS 
+'DX'     100    /
+'DY'     100    /
+'DZ'     20     /
+'PERMX'  100    /
+'PERMY'  100    /
+'TOPS'   3990.0 /
+'PORO'   0.5    /
+/ 
+
+RPTGRID
+ 'PORO'  'PORV'  /</code></pre></div>
+
+<div class="section" id="polymer_props"><a name="polymer_props"><!-- --></a><h4 class="sectiontitle">PROPS</h4><pre><code>PROPS   ============================================================
+SWFN
+    .20    .0    4.0
+    .7    0.7    2.0
+   1.0    1.0    0.0 
+ /
+
+SOF2                                                                
+    .3000  .0000
+    .8000 1.0000
+/
+
+PVTW
+  .0  1.0  3.03E-06  .5  0.0 /
+
+PVDO
+  .0     1.0     5.0
+ 8000.0   .92    5.0
+/
+
+ROCK
+ 4000.0    .30E-05 /
+
+DENSITY
+ 52.0000  64.0000   .04400 /</code></pre><p>Define the viscosity of the polymer solution as a function of
+the polymer concentration. Note that the function values refer to
+the multiplication factor for the pure water viscosity to obtain the
+true polymer solution viscosity.</p>
+<pre><code>PLYVISC
+  0.0   1.0 
+  7.0  20.0 /</code></pre><p>Define the polymer-rock
+properties. A series of entries is required for each rock region.
+These values represent the inaccessible pore volume, the residual
+resistance factor, the rock mass density, the adsorption index and
+the maximum polymer concentration, to be used in the calculation of
+the actual resistance factor.</p>
+<pre><code>PLYROCK
+ 0.15  2.67  1000.0  2  0.0035 /</code></pre><p>Define the polymer adsorption properties. A table of values is
+required for each rock region. Each table represents the equilibrium
+concentration of polymer adsorbed on the rock and the concentration
+of polymer in the surrounding aqueous phase.</p>
+<pre><code>PLYADS
+  0.0  0.000
+  2.0  0.0015
+  8.0  0.0025 /</code></pre><p>Mixing parameter
+to indicate the degree of segregation between the polymer solution
+and the water at the trailing edge of the slug. In this case the polymer
+and water in each grid cell are fully mixed. A value of the mixing
+parameter should be entered for each mixing region.</p>
+<pre><code>PLMIXPAR
+  1.0 /</code></pre><p>Maximum value for the polymer
+and salt concentration values to be used in the mixing calculation
+of fluid viscosities. Since the salt option has been disabled in this
+run, the second value is ignored. A pair of entries is required for
+each mixing region.</p>
+<pre><code>PLYMAX
+ 5.0  0.0  /</code></pre><p>The polymer properties
+can be echoed using keyword <a href="../ecl_rm/RPTPROPS.html#RPTPROPS">RPTPROPS</a>.</p>
+<pre><code>RPTPROPS
+ 'PLYVISC'  /</code></pre></div>
+
+<div class="section" id="polymer_regions"><a name="polymer_regions"><!-- --></a><h4 class="sectiontitle">REGIONS</h4><pre><code>REGIONS    ========================================================
+FIPNUM
+1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 /</code></pre></div>
+
+<div class="section" id="polymer_solution"><a name="polymer_solution"><!-- --></a><h4 class="sectiontitle">SOLUTION</h4><pre><code>SOLUTION  ==========================================================
+PRESSURE
+ 15*4000.0 / 
+
+SWAT 
+ 15*0.2 </code></pre><p>Note that the mixing regions have
+not been specified in this run since the region numbers are all unity
+in this problem.</p>
+<pre><code>RPTSOL
+ 'PRES'  'SOIL'  'SWAT'  'RESTART=2'  'PBLK'
+ 'SALT'  'PLYADS'  'FIPPLY=2'  /</code></pre></div>
+
+<div class="section" id="polymer_summary"><a name="polymer_summary"><!-- --></a><h4 class="sectiontitle">SUMMARY</h4><pre><code>SUMMARY    ===========================================================
+RUNSUM
+
+</code></pre><p> <span class="keyword">SUMMARY</span>    file keywords are used
+to indicate which data are to be written to the ECLIPSE <samp class="codeph">SUMMARY</samp> files at each timestep. In this case, we are writing field water-cuts,
+polymer production rates, the cumulative polymer total and the cumulative
+oil production total at each timestep.</p>
+<pre><code>FWCT
+FCPR
+FCPT
+FOPT
+RPTSMRY
+ 1 /</code></pre></div>
+
+<div class="section" id="polymer_schedule"><a name="polymer_schedule"><!-- --></a><h4 class="sectiontitle">SCHEDULE</h4><pre><code>SCHEDULE ==========================================================
+RPTSCHED  
+'PRES'  'SOIL'  'SWAT'  'RESTART=2'  'NEWTON=2'
+'PBLK'  'SALT'  'PLYADS'  'RK'  /
+
+WELSPECS
+'I'  'G'   1  1  4000  'WAT'  0.0  'STD'  'SHUT'  'NO'  /
+'P'  'G'  15  1  4000  'WAT'  0.0  'STD'  'SHUT'  'NO'  /
+/
+
+COMPDAT
+'I       '   1   1   1   1 'OPEN'   0  .0   1.0 /
+'P       '   15  1   1   1 'OPEN'   0  .0   1.0 /
+/
+
+WCONPROD
+'P' 'OPEN' 'LRAT' 3* 1000.0 /
+/
+
+WCONINJE
+'I' 'WAT' 'OPEN' 'RATE' 1000.0 /
+/</code></pre><dl>
+
+<dt class="dlterm">Initial water flood  </dt>
+
+<dd>Specify polymer concentration in the injection stream of well
+‘I’. The second figure refers to the injection salt concentration
+and is ignored in this run.<pre><code>WPOLYMER
+ 'I'  0.0  0.0 / 
+ /
+TSTEP
+1.0 99.0 2*100.0  /</code></pre></dd>
+
+
+<dt class="dlterm">Polymer slug in fresh water</dt>
+
+<dd>Specify the polymer concentration in the injection stream of well
+‘I’.<pre><code>WPOLYMER
+ 'I'  5.0  0.0   /
+ / 
+TSTEP
+ 5*100.0 /</code></pre></dd>
+
+
+<dt class="dlterm">Chase water period</dt>
+
+<dd>Specify the polymer concentration in the injection stream of well
+‘I’.<pre><code>WPOLYMER
+ 'I'  0.0  0.0   /
+ /
+TSTEP
+10*100.0  /
+END</code></pre></dd>
+
+</dl>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

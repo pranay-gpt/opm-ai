@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="TRACITVD"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="TRACITVD"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>TRACITVD</title>
+</head>
+<body>
+
+
+<div class="nested0" id="TRACITVD"><a name="TRACITVD"><!-- --></a>
+<h1 class="keyword">TRACITVD</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="tracitvd.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="tracitvd.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2628e45"> x </th>
+
+<th valign="top" id="d2628e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2628e54">  </th>
+
+<th valign="top" id="d2628e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2628e45 d2628e54 ">  </td>
+
+<td valign="top" headers="d2628e48 d2628e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2628e45 d2628e54 ">  </td>
+
+<td valign="top" headers="d2628e48 d2628e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2628e45 d2628e54 ">  </td>
+
+<td valign="top" headers="d2628e48 d2628e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2628e45 d2628e54 "> x </td>
+
+<td valign="top" headers="d2628e48 d2628e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2628e45 d2628e54 ">  </td>
+
+<td valign="top" headers="d2628e48 d2628e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2628e45 d2628e54 ">  </td>
+
+<td valign="top" headers="d2628e48 d2628e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2628e45 d2628e54 ">  </td>
+
+<td valign="top" headers="d2628e48 d2628e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2628e45 d2628e54 ">  </td>
+
+<td valign="top" headers="d2628e48 d2628e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword requests the use of the implicit flux limited transport
+scheme for the tracer calculation. Flux limited transport is a higher-order
+TVD (total variance diminishing) scheme that reduces numerical dispersion
+of the tracer. (The implicit TVD is implemented with three alternative
+limiters.)</p>
+
+<p>The <span class="keyword">TRACITVD</span> keyword is available for single
+phase tracers, that is water tracers and hydrocarbon tracers in phases
+that do not dissolve in the complementary phase. The <span class="keyword">TRACITVD</span> keyword does not work in combination with parallel.</p>
+
+<p>See <a href="../ecl_td/tracertr_Control_of_numerical_diffusion.html#tracertr_control_of_numerical_diffusion">"Control of numerical
+diffusion"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.</p>
+
+<ol>
+<li> TVD flux limiter <p>This must be one of the following:</p>
+ 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">1</td>
+
+<td valign="top">Van Leer limiter</td>
+
+</tr>
+
+<tr>
+<td valign="top">2</td>
+
+<td valign="top">Minmod limiter</td>
+
+</tr>
+
+<tr>
+<td valign="top">3</td>
+
+<td valign="top"> Super Bee limiter</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: 1</p>
+ <div class="note"><span class="notetitle">Note:</span> <span class="notebody">The use of implicit TVD with large
+timestep can result in non-physical effects for tracers for a subset
+of problems. The default Van Leer limiter should handle most situations.
+The minmod limiter is relatively diffusive; it can be used to reduce
+possible tracer effects. SuperBee is the limiter that can produce
+the sharpest tracer fronts; however, it may potentially have larger
+effects. Effects can be reduced by various tuning methods (see note
+below).</span></div>
+ </li>
+
+<li> A flag to select whether tracer solutions at both the previous
+and the current time should be used to compute TVD flux limiter. Tracer
+solution at the previous time should only be used when tracer moves
+a small distance relative to grid size within a timestep. The default
+is strongly recommended. 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top">uses tracer solutions at both the previous and the current
+time</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top">uses tracer solutions only at the previous time</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">YES</samp> </p>
+ </li>
+
+</ol>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The default settings should be applied for most cases requesting
+implicit flux limiting scheme.</span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The implicit flux limiting TVD scheme is a useful option to
+problems using non-uniform grid or requiring tracer dispersion and
+diffusion. For such cases, the implicit TVD scheme can provide significant
+speed-up compared to the explicit TVD scheme. Implicit TVD can significantly
+improve solution accuracy over the standard fully implicit solver
+by reducing numerical diffusion in the tracer equation.</span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Timestep tuning is useful for reducing artificial effects, typified
+by the over/under shooting of tracer concentrations beyond physical
+ranges. A large timestep can cause the implicit tracer equation to
+fail to converge, due to the error caused by the flow equation not
+being adequately converged. In addition, it can be helpful to tune
+with the <a href="TIGHTEN.html#TIGHTEN">  TIGHTEN</a> keyword which can help the flow equation to converge. When flow
+and tracer equations are converged, non-physical effects in general
+are greatly diminished or disappear.</span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">A viable alternative is to use the Minmod mode, which can be
+helpful to somewhat reduce such effects without using timestep tuning
+or tightening. Proper tuning will improve the quality of tracer solution
+by computing sharp fronts with little or no non-physical effects.</span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

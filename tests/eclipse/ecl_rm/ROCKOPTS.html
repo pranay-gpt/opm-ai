@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ROCKOPTS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ROCKOPTS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ROCKOPTS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ROCKOPTS"><a name="ROCKOPTS"><!-- --></a>
+<h1 class="keyword">ROCKOPTS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="rockopts.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="rockopts.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2044e45">                         x                   
+  </th>
+
+<th valign="top" id="d2044e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2044e54">                         x                   
+  </th>
+
+<th valign="top" id="d2044e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2044e45 d2044e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2044e48 d2044e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2044e45 d2044e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2044e48 d2044e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2044e45 d2044e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2044e48 d2044e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2044e45 d2044e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d2044e48 d2044e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2044e45 d2044e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2044e48 d2044e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2044e45 d2044e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2044e48 d2044e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2044e45 d2044e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2044e48 d2044e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2044e45 d2044e54 ">                                             
+ </td>
+
+<td valign="top" headers="d2044e48 d2044e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">ROCKOPTS</span> keyword is used to control options
+associated with the rock compaction and compressibility facilities.
+It should be followed by some or all of the following data items,
+terminated by a slash (/).</p>
+
+<ol>
+<li id="rockopts_23234"><a name="rockopts_23234"><!-- --></a>The method of application of <a href="OVERBURD.html#OVERBURD"> OVERBURD</a> to the tabulated
+pressures in the <a href="ROCKTAB.html#ROCKTAB"> ROCKTAB</a>,  <a href="ROCKTABH.html#ROCKTABH"> ROCKTABH</a> keywords: <p>OPTIONS: <samp class="codeph">PRESSURE</samp> or  <samp class="codeph">STRESS</samp> </p>
+ <p>If the overburden pressure supplied in the <span class="keyword">OVERBURD</span> keyword is greater than the fluid pressure (which it often will
+be), the effective fluid pressure (P<sub>eff fl</sub> = P<sub>fluid</sub> - Overburden) will be negative.  In this case the rock compaction
+tables will have to be entered with negative pressure values. The
+tables can be input in a more intuitive manner by selecting the <samp class="codeph">STRESS</samp> option before the tables are entered. In this case
+the pore volume and transmissibility multipliers will be tabulated
+against the effective overburden pressure, P<sub>effov </sub>= Overburden
+- P<sub>fluid</sub>,  which will then be positive.</p>
+<p>This item
+should be left defaulted if the <span class="keyword">OVERBURD</span> keyword
+is not used.</p>
+<p>DEFAULT: <samp class="codeph">PRESSURE</samp> </p>
+</li>
+
+<li>The reference pressure option:<p>OPTIONS: <samp class="codeph">STORE</samp> or <samp class="codeph">NOSTORE</samp> </p>
+ <p>The <samp class="codeph">STORE</samp> option
+copies the initial equilibrated pressure at the start of the run into
+the overburden array. This has the effect of referencing the pore
+volume (as a function of pressure) to the initial pressure rather
+than the reference pressure, that is, the pressure with a pore volume
+multiplier of 1.0 in the <span class="keyword">ROCKTAB</span> or <span class="keyword">ROCKTABH </span>tables.  Thus the input pore volume for a cell is defined as the
+pore volume at initial conditions rather than the pore volume at the
+reference pressure.</p>
+<p>Note that the <span class="keyword">OVERBURD</span> keyword should <strong>not</strong> be used with the <samp class="codeph">STORE</samp>  option as the input <samp class="codeph">OVERBURD</samp> data will be overwritten
+and ignored.</p>
+<p>ECLIPSE 300</p>
+<p>If the <samp class="codeph">STORE</samp> option is used
+with the  <a href="ROCK.html#ROCK"> ROCK</a> keyword
+for the elastic rock compressibility model, the input pore volume
+for a cell is similarly defined as the reservoir pore volume at initial
+conditions rather than the pore volume at the reference pressure.</p>
+<p>DEFAULT: <samp class="codeph">NOSTORE</samp> </p>
+</li>
+
+<li id="rockopts_61638"><a name="rockopts_61638"><!-- --></a>Table region to be used:<p>Possible values
+are: <samp class="codeph">ROCKNUM</samp>, <samp class="codeph">SATNUM</samp> or <samp class="codeph">PVTNUM</samp> </p>
+ <p>DEFAULT: <samp class="codeph">PVTNUM</samp> </p>
+<p>If <a href="SATNUM.html#SATNUM"> SATNUM</a> or <a href="ROCKNUM.html#ROCKNUM"> ROCKNUM</a> are not found
+in the  <span class="keyword">REGIONS</span> section, default  <a href="PVTNUM.html#PVTNUM"> PVTNUM</a> values will be
+used. Note that the number of <span class="keyword">ROCK</span> tables must
+be specified using <a href="TABDIMS.html#TABDIMS.NTROCC"> NTROCC</a> in the <span class="keyword">TABDIMS</span> keyword.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The table region specified applies to the <span class="keyword">ROCK</span> keyword only. Other rock-based keywords with an associated table
+region always use <span class="keyword">ROCKNUM</span>.</span></div>
+</li>
+
+<li>Flag determining the initial conditions for the <samp class="codeph">HYSTER</samp> and  <samp class="codeph">BOBERG</samp> options. <p>OPTIONS:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">DEFLATION</samp> </td>
+
+<td valign="top">The reservoir rock is assumed to be fully compacted and initial
+pore volume and transmissibility multipliers are calculated from the
+deflation curve.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">ELASTIC</samp> </td>
+
+<td valign="top"> The reservoir rock is assumed to lie on an elastic curve with
+pore volume multiplier equal to 1 at the cell pressure.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The elastic curve will not be calculated if the initial
+pressure is below the minimum pressure in the table. If the initial
+pressure is below the minimum pressure in the table the deflation
+curve will be used and this could lead to unphysical values. It is
+recommend to ensure that the initial pressure is within the specified
+range of pressure in the table(s).</span></div>
+ <p>DEFAULT: <samp class="codeph">DEFLATION</samp> </p>
+ </li>
+
+</ol>
+
+<p>See also keywords <a href="ROCKTAB.html#ROCKTAB"> ROCKTAB</a>,  <a href="ROCKTABH.html#ROCKTABH"> ROCKTABH</a>,  <a href="ROCK2D.html#ROCK2D"> ROCK2D</a>,  <a href="ROCK2DTR.html#ROCK2DTR"> ROCK2DTR</a> and  <a href="OVERBURD.html#OVERBURD"> OVERBURD</a>, and  <a href="../ecl_td/rockcomp_Rock_Compaction.html#rockcomp_rock_compaction">"Rock compaction"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<div class="section" id="rockopts_example"><a name="rockopts_example"><!-- --></a><h4 class="sectiontitle">Example</h4>            
+    <pre><code>ROCKOPTS
+  STRESS  NOSTORE/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

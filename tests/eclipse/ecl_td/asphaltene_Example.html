@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Example"/>
+<meta name="DC.subject" content="Fluid model, Asphaltene example"/>
+<meta name="keywords" content="Fluid model, Asphaltene example"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="asphaltene_example"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Example</title>
+</head>
+<body>
+
+
+<div class="nested0" id="asphaltene_example"><a name="asphaltene_example"><!-- --></a>
+<h1 class="topictitle1">Example</h1>
+
+
+ <div>
+<p>In the <span class="keyword">RUNSPEC</span> section, switch on asphaltene
+deposition model and the solid model (if required):</p>
+
+<pre><code>ASPHALTE
+ WEIGHT  /
+
+SOLID</code></pre>
+<p>In the <span class="keyword">PROPS</span> section, specify the hydrocarbon
+and asphaltene components. For example if components 6, 7 and 8 are
+the precipitation, floc and deposition components:</p>
+
+<pre><code>CNAMES
+    C1    C3    C6    C10    C15    C20    ASPH    DEPO /
+
+-- Asphaltene component type
+CATYPE
+    5*    PREC    FLOC    DEP /
+-- Make deposition component a solid
+CVTYPE
+    7*    SOLID /
+-- ... define asphaltene concentration limits
+ASPREWG
+--  pres   %_wt
+  1000.0    30.0
+ 10000.0    100.0  /
+-- ... asphaltene floc rates
+ASPFLRT
+-- C20 &lt;-&gt;ASPH
+    0.001
+    0.0001 /
+-- ... asphaltene deposition
+ASPDEPO
+-- adsorp plug entrain Vcr
+   5.0E-6 0.0  0.00    1.0E6 /
+-- ... asphaltene damage ratio
+SOLIDMMS
+-- deposit mult
+     0.0     1.0
+     1.0     0.5 /
+-- ... asphaltene viscosity change
+ASPVISO
+-- vfrac  mult
+    0.00  1.00
+    1.00  1.00  /</code></pre>
+</div>
+
+</div>
+
+
+</body>
+</html>

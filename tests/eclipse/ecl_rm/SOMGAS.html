@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SOMGAS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SOMGAS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SOMGAS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SOMGAS"><a name="SOMGAS"><!-- --></a>
+<h1 class="keyword">SOMGAS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="somgas.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="somgas.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2374e45"> x </th>
+
+<th valign="top" id="d2374e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2374e54"> x </th>
+
+<th valign="top" id="d2374e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2374e45 d2374e54 ">  </td>
+
+<td valign="top" headers="d2374e48 d2374e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2374e45 d2374e54 ">  </td>
+
+<td valign="top" headers="d2374e48 d2374e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2374e45 d2374e54 ">  </td>
+
+<td valign="top" headers="d2374e48 d2374e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2374e45 d2374e54 "> x </td>
+
+<td valign="top" headers="d2374e48 d2374e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2374e45 d2374e54 ">  </td>
+
+<td valign="top" headers="d2374e48 d2374e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2374e45 d2374e54 ">  </td>
+
+<td valign="top" headers="d2374e48 d2374e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2374e45 d2374e54 ">  </td>
+
+<td valign="top" headers="d2374e48 d2374e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2374e45 d2374e54 ">  </td>
+
+<td valign="top" headers="d2374e48 d2374e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is optional, and specifies the minimum oil saturation
+used in the STONE I three-phase relative permeability model, as a
+function of the gas saturation. The data will be ignored if the <a href="STONE1.html#STONE1"> STONE1</a> keyword has not
+been used.</p>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a> 
+(set in the <span class="keyword">TABDIMS</span> keyword) tables of minimum oil saturation. Each
+table consists of the following columns of data, terminated by a slash (/):</p>
+
+<ol>
+<li>The gas saturation. <p>Values should increase down the column.</p>
+ <p>The first gas saturation should equal the connate gas saturation
+in the corresponding <a href="SGFN.html#SGFN"> SGFN</a> table (which is usually zero).</p>
+ <p>The last gas saturation
+in the table should equal 1 – S<sub>wco</sub> - S<sub>ogcr</sub>,
+where S<sub>wco</sub> is the connate water saturation and is the residual
+oil-to-gas saturation, in the corresponding saturation tables. (S<sub>wco</sub> is the lowest saturation in the <a href="SWFN.html#SWFN"> SWFN</a> table and S<sub>ogcr</sub> is the largest oil
+saturation with k<sub>rog</sub> of zero, in column 3 of the <a href="SOF3.html#SOF3">  SOF3</a> keyword.)</p>
+</li>
+
+<li>The corresponding minimum oil saturation. <p>The minimum oil saturation
+at connate gas (first point) should not exceed S<sub>owcr</sub>, the
+residual oil-to-water saturation in the corresponding <span class="keyword">SOF3</span> table. (S<sub>owcr</sub> is the largest oil saturation with k<sub>row</sub> of zero, in column 2 of the <span class="keyword">SOF3</span> keyword.)</p>
+ <p>The minimum oil saturation at 1 – S<sub>wco</sub> - S<sub>ogcr</sub> (last point) should not exceed S<sub>ogcr</sub>, the residual oil-to-gas
+saturation in the corresponding <span class="keyword">SOF3</span> table. </p>
+</li>
+
+</ol>
+
+<p>Each table must contain at least two, and no more than <a href="TABDIMS.html#TABDIMS.NSSFUN"> NSSFUN</a> (set in the <span class="keyword">TABDIMS</span> keyword) rows. Each row must be complete, containing an entry in every column of the table.</p>
+
+<p>The entire table may be defaulted, provided the table is not the
+first. Defaulted tables are replaced with a copy of the previous table.</p>
+
+<p>An alternative keyword <a href="SOMWAT.html#SOMWAT"> SOMWAT</a> can be used to input the minimum oil saturation; <span class="keyword">SOMWAT</span> tabulates the minimum oil saturation against the
+water saturation rather than the gas saturation. Either keyword can
+be used to describe the same minimum oil isoperm. However, the actions
+of the two keywords are slightly different at oil saturations above
+the minimum. Using the <span class="keyword">SOMGAS</span> keyword implies that
+the <span class="keyword">SOM</span> is looked up at the prevailing gas saturation.
+Both keywords cannot be used in the same run.</p>
+
+<div class="p">The alternative family of saturation keywords (<a href="SWOF.html#SWOF"> SWOF</a>, <a href="SGOF.html#SGOF"> SGOF</a>, <a href="SLGOF.html#SLGOF"> SLGOF</a>)
+can be used to input the relative permeability data. In this case
+the connate water saturation S<sub>wco</sub> and the residual oil-to-water
+saturation S<sub>owcr</sub> are determined from the <span class="keyword">SWOF</span> table and the residual oil-to-gas saturation S<sub>ogcr</sub> is
+determined from the <span class="keyword">SGOF</span> or <span class="keyword">SLGOF</span> table.<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The consistency requirements described above refer to
+the table end-points irrespective of whether or not end-point scaling
+has been specified.</span></div>
+</div>
+
+<p>Refer to <a href="../ecl_td/satfunct_Saturation_Functions.html#satfunct_saturation_functions">"Saturation functions"</a> in the <cite>ECLIPSE Technical Description</cite> for more information.</p>
+
+<div class="section" id="somgas_example"><a name="somgas_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTSFUN</samp> = 1 and <samp class="codeph">NSSFUN</samp> = 6:</p>
+ <pre><code>SWFN
+-- Sw    Kr    Pc
+   0.25  0.0   0.0
+   0.7   1.0   0.0   /
+SOF3
+-- So    Krow  Krog
+   0.1   0.0   0.0
+   0.31  0.0   0.5
+   0.75  1.0   1.0   /
+SOMGAS
+ 0.0   0.31
+ 0.1   0.2
+ 0.2   0.1
+ 0.3   0.05
+ 0.4   0.01
+ 0.5   0.05
+ 0.65  0.1  /              1-SWCO-SOGCR (1 - 0.25 - 0.1)</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Examples"/>
+<meta name="DC.subject" content="WFRICTN"/>
+<meta name="keywords" content="WFRICTN"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wfrictn_examples"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Examples</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wfrictn_examples"><a name="wfrictn_examples"><!-- --></a>
+<h1 class="topictitle1">Examples</h1>
+
+
+ <div>
+<p>A well called HORIZ with 6 connections.</p>
+
+<div class="section" id="wfrictn_example_1"><a name="wfrictn_example_1"><!-- --></a><h4 class="sectiontitle">Example 1</h4><p>This example
+sets the tubing lengths manually for each connection of the well 'HORIZ’'</p>
+<pre><code>WFRICTN
+-- Name     Diam  Roughness  Scalefac
+   HORIZ    0.25  1.0E-3     1.0 /
+-- I J K  Tlen1  Tlen2   Dirn   RangeEnd  Diam
+  3 5 6    0.0  100.0 /
+   4 5 6  100.0  200.0 /
+  5 5 6  200.0  400.0 /
+  6 5 6  400.0  600.0 /
+  7 5 6  600.0  700.0 /
+  8 5 6  700.0  800.0 /
+/</code></pre></div>
+
+<div class="section" id="wfrictn_example_2"><a name="wfrictn_example_2"><!-- --></a><h4 class="sectiontitle">Example 2</h4><p>This example
+sets the tubing lengths for the same set of well connections grouped
+into a single range. The well is assumed to penetrate fully the grid
+blocks I=3-8, J=5, K=6, with the connection at I=3 nearest the wellhead</p>
+<pre><code>WFRICTN
+-- Name    Diam Roughness Scalefac
+   HORIZ  0.25 1.0E-3    1.0 /
+-- I J K  Tlen1  Tlen2   Dirn   RangeEnd  Diam
+  3 5 6   0.0    1*      I       8 /
+/</code></pre></div>
+
+<div class="section" id="wfrictn_example_3"><a name="wfrictn_example_3"><!-- --></a><h4 class="sectiontitle">Example 3</h4><p>This example
+defines a simple multilateral well, having a horizontal main stem
+(3-8, 5, 6) based on the previous example and a single perpendicular
+side-branch (5, 5-1, 6) of smaller diameter, joining the main stem
+at (5, 5, 6). Note that the branch point connection (5, 5, 6) is referenced
+twice: firstly as part of the main stem range, and secondly as the
+start of the side-branch range. The properties of the connection are
+taken from the first reference (that is, I-direction penetration and
+a diameter of 0.25).</p>
+<pre><code>WFRICTN
+-- Name    Diam   Roughness   Scalefac
+   MULTI   0.25   1.0E-3      1.0    /
+-- I J K  Tlen1  Tlen2    Dirn  RangeEnd  Diam
+   3 5 6  0.0    1*       I     8        / main stem (3-8, 5, 6)
+   5 5 6  2*              J     1        0.19 / side branch (5, 5-1, 6)
+/
+
+</code></pre><p>Or, equivalently,</p>
+<pre><code>WFRICTN
+-- Name    Diam   Roughness   Scalefac
+   MULTI   0.25   1.0E-3      1.0    /
+-- I J K   Tlen1  Tlen2   Dirn   RangeEnd  Diameter
+   3 5 6  0.0     1*       I     8            / main stem (3-8, 5, 6)
+   5 5 6                                      / branch-point (5, 5, 6)
+   5 4 6   2*             J     1      0.19   / side branch (5, 4-1, 6)
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ENPCVD"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ENPCVD"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ENPCVD</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ENPCVD"><a name="ENPCVD"><!-- --></a>
+<h1 class="keyword">ENPCVD</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="enpcvd.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="enpcvd.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d604e45"> x </th>
+
+<th valign="top" id="d604e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d604e54"> x </th>
+
+<th valign="top" id="d604e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d604e45 d604e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d604e48 d604e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d604e45 d604e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d604e48 d604e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d604e45 d604e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d604e48 d604e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d604e45 d604e54 "> x </td>
+
+<td valign="top" headers="d604e48 d604e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d604e45 d604e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d604e48 d604e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d604e45 d604e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d604e48 d604e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d604e45 d604e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d604e48 d604e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d604e45 d604e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d604e48 d604e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword specifies the depth variation of the maximum capillary
+pressure for different end-point scaling regions within the reservoir.
+The keyword can only be used when the end-point scaling option is
+active (keyword <a href="ENDSCALE.html#ENDSCALE"> ENDSCALE</a> in the <span class="keyword">RUNSPEC</span> section).</p>
+
+<p>The data comprises <samp class="codeph">NTENDP</samp> (item 3 of keyword <span class="keyword">ENDSCALE</span>) tables of maximum capillary pressure end points
+versus depth, one for each end point scaling region. Each table consists
+of 3 columns of data, and must be terminated by a slash (/). </p>
+
+<p>Column:</p>
+
+<ol>
+<li>Depth values.<p>The values should increase monotonically down
+the column.</p>
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li>The corresponding values of the maximum gas-oil capillary pressure. <p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li>The corresponding values of the maximum water-oil capillary pressure.<p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+</ol>
+
+<p>There must be the same number of entries in each column of a given
+table. This number should not be less than 2 or greater than <samp class="codeph">NSENDP</samp> (item 4 of keyword <a href="ENDSCALE.html#ENDSCALE"> ENDSCALE</a>). If a maximum capillary pressure
+is defaulted for all depth values, in a problem where a value could
+correctly be defined, then the end point for each cell in the same
+scaling region will be the value in the appropriate saturation function
+table. However, if a maximum capillary pressure is defaulted and the
+end-point  has been defined at other depths, the end-point  versus
+depth table will be filled in by linear interpolation within the table
+and constant extrapolation at the ends of the table. End-point values
+entered for absent phases are ignored.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>If the hysteresis model (switch '<samp class="codeph">HYSTER</samp>' in keyword <a href="SATOPTS.html#SATOPTS"> SATOPTS</a>) is active, the <span class="keyword">ENPCVD</span> data applies to the drainage
+curve and the <a href="IMPCVD.html#IMPCVD"> IMPCVD</a> keyword is available to specify the imbibition end points as a function
+of depth. The <span class="keyword">IMPCVD</span> keyword is used in exactly
+the same way as <span class="keyword">ENPCVD</span>.</p>
+
+<p>See also keyword <a href="ENDNUM.html#ENDNUM"> ENDNUM</a> in the <span class="keyword">REGIONS</span> section, and the keywords <a href="ENPTVD.html#ENPTVD"> ENPTVD</a>, <a href="ENSPCVD.html#ENSPCVD"> ENSPCVD</a>, <a href="ENKRVD.html#ENKRVD"> ENKRVD</a> and <span class="keyword">IMPCVD</span> in the <span class="keyword">PROPS</span> section.</p>
+
+<div class="section" id="enpcvd_example"><a name="enpcvd_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>---- RUNSPEC section
+OIL
+WATER
+GAS
+ENDSCALE
+-- NTENDP  NSENDP
+ 2*   1       2   /
+---- PROPS section
+ENPCVD
+ 3000.0  1.4  23.0 
+ 9000.0   1.2   35.0  /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

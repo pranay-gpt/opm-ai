@@ -1,0 +1,232 @@
+-- ====================================================================
+-- THIS SMALL X-Z CROSS SECTION ILLUSTRATES THE USE OF A FOUR-CELL
+-- NUMERICAL AQUIFER.
+--
+-- THE AQUIFER IS CONNECTED TO THE ENTIRE RIGHT SIDE OF THE FIELD,
+-- AND PROVIDES PRESSURE SUPPORT WHILE THE FIELD IS DEPLETED BY A
+-- PRODUCTION WELL IN THE LEFT-MOST COLUMN.
+-- ===================================================================
+-- IN THE RUNSPEC SECTION THE AQUIFERS ARE DIMENSIONED
+-- BY MXNAQN ( THE MAXIMUM NUMBER OF LINES OF AQUNUM DATA )
+-- AND BY MXNAQC ( THE MAXIMUM NUMBER OF LINES OF AQUCON DATA )
+--
+RUNSPEC
+TITLE
+   NUMERICAL AQUIFER TEST
+
+DIMENS
+   10    1    3  /
+
+OIL
+
+WATER
+
+GAS
+
+DISGAS
+
+FIELD
+
+EQLDIMS
+    1  100   10    1   20 /
+
+TABDIMS
+    1    1   16   12    1   12 /
+
+WELLDIMS
+    2    3    1    2 /
+
+NUPCOL
+    4 /
+
+AQUDIMS
+    4    1    0    0    0    0 /
+
+START
+  19 'OCT' 1982  /
+
+NSTACK
+    4 /
+
+GRID      ===========================================================
+
+--THE BASIC GRID IS 10 BY 3, THE MAIN FIELD LYING IN COLUMNS
+-- 1 TO 5, AND THE AQUIFER IN THE TOP CELLS OF COLUMNS 7 TO 10
+DX
+
+   30*1000 /
+
+DY
+
+   30*1000 /
+
+DZ
+
+   30*50 /
+
+PERMX
+
+  30*200 /
+
+PERMY
+
+  30*200 /
+
+PERMZ
+
+  30*200 /
+
+PORO
+
+ 5*0.3   0.0 4*0.5
+ 5*0.3 5*0.0
+ 5*0.3 5*0.0 /
+
+TOPS
+
+ 10*5000 10*5050 10*5100  /
+
+-------------------------------------------------------------------
+--THE AQUIFER CELLS ARE SET UP USING THE AQUNUM KEYWORD
+--ALL BELONG TO AQUIFER 1, AND CONNECTIONS ARE MADE TO THE FIRST
+--CELL SPECIFIED WITH A GIVEN AQUIFER NUMBER - IN THIS CASE (7,1,1)
+--
+--THE AQUIFER CELL CROSS SECTION AND PORE VOLUME ARE 100000 AND 20000,
+--THE PERMEABILITY IS SPECIFIED AS 200 MD, BUT THE POROSITY (0.5), DEPTH
+--AN INITIAL PRESSURE ARE TAKEN FROM THE GRID CELL VALUES
+------------------------------------------------------------------
+AQUNUM
+ 1  7 1 1 1.0E+5 20000 1* 200.0 2*        1 1 /
+ 1  8 1 1 1.0E+5 20000 1* 200.0 2*        1 1 /
+ 1  9 1 1 1.0E+5 20000 1* 200.0 2*        1 1 /
+ 1 10 1 1 1.0E+5 20000 1* 200.0 2*        1 1 /
+/
+
+-------------------------------------------------------------------
+--THE AQUIFER CELL IN (7,1,1) IS NOW CONNECTED TO THE POSITIVE X-FACE
+--OF ALL THE CELLS IN THE FIFTH COLUMN OF CELLS. ALL HAVE CONNECTIONS,
+--AS THERE ARE NO ACTIVE NEIGHBOURING CELLS ON THIS SIDE
+--
+--THE FIFTH COLUMN IS SPECIFIED AS A BOX OF CELLS WITH I VALUES 5 TO 5,
+--J VALUES 1 TO 1 AND K VALUES 1 TO 3. THE TRANSMSSIBILITY MULTIPLIER
+--IS SET TO UNITY.
+------------------------------------------------------------------
+AQUCON
+ 1 5 5 1 1 1 3 'I+' 1.0 /
+/
+
+RPTGRID
+24*1 /
+
+PROPS    ===============================================================
+
+SWFN
+
+    0.12  0.0 0
+    1.0   0.9 0  /
+
+SGFN
+
+    0     0       0
+    0.02  0       0
+    0.05  0.005   0
+    0.85  0.98    0
+    0.88  1.0     0
+/
+
+SOF3
+
+    0        0        0
+    0.18     0        0
+    0.28     0.0001   0.0001
+    0.38     0.001    0.001
+    0.83     0.98     0.98
+    0.86     0.997    0.997
+    0.879    1        1
+    0.88     1        1    /
+
+PVTW
+       4014.7     1.029        3.13D-6           0.31            0 /
+
+ROCK
+        14.7          3.0D-6          /
+
+
+DENSITY
+         49.1   64.79  0.06054  /
+
+PVDG
+     14.7 166.666   0.008
+    264.7  12.093   0.0096
+    514.7   6.274   0.0112
+   1014.7   3.197   0.014
+   2014.7   1.614   0.0189
+   2514.7   1.294   0.0208
+   3014.7   1.080   0.0228
+   4014.7   0.811   0.0268
+   5014.7   0.649   0.0309
+   9014.7   0.386   0.047   /
+
+PVTO
+    0.001    14.7 1.062  1.04    /
+    0.0905  264.7 1.15   0.975   /
+    0.18    514.7 1.207  0.91    /
+    0.371  1014.7 1.295  0.83    /
+    0.636  2014.7 1.435  0.695   /
+    0.775  2514.7 1.5    0.641   /
+    0.93   3014.7 1.565  0.594   /
+    1.270  4014.7 1.695  0.51
+           5014.7 1.671  0.549
+           9014.7 1.579  0.74    /
+    1.618  5014.7 1.827  0.449
+           9014.7 1.726  0.605   /
+/
+
+SOLUTION   =============================================================
+
+EQUIL
+
+5000  4800  6000  0  4200  0  1  0  0  /
+
+RSVD
+
+8200 1.270
+8500 1.270  /
+
+RPTSOL
+-- 
+-- Initialisation Print Output
+-- 
+'PRES' 'SOIL' 'SWAT' /
+
+SUMMARY   =============================================================
+
+ALL
+TCPU
+
+SCHEDULE  ==============================================================
+
+RPTSCHED                                         FIELD   21:07 12 JUN 85
+ 'PRES' 'SOIL' 'SWAT' 'SGAS' 'WELLS=1' 'SUMMARY=2' 'CPU=2' /
+
+DRSDT
+0  /
+
+
+WELSPECS
+  'PRODUCER'  'G'  1  1  5000  'OIL'  /
+  /
+
+COMPDAT
+  'PRODUCER'  1  1  1  3  'O' 0 -1   0.5  -1  0  0 /
+  /
+
+WCONPROD
+  'PRODUCER' 'O' 'ORAT' 5000  4*  1000  0  0  0 /
+  /
+
+TSTEP
+  10*60
+  /
+
+END

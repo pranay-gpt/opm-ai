@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Timestepping criteria"/>
+<meta name="DC.subject" content="Thermal timestepping criteria"/>
+<meta name="keywords" content="Thermal timestepping criteria"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="features_timestepping_criteria"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Timestepping criteria</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="features_timestepping_criteria"><a name="features_timestepping_criteria"><!-- --></a>
+<h1 class="topictitle1">Timestepping criteria</h1>
+
+
+ <div>
+<p>By default the timestepping strategy employed in thermal simulations
+is based upon controlling the number of non-linear iterations that
+a timestep is expected to take. This is a heuristic timestep selection
+method in which the overall run time of a simulation can be minimized.
+In general this is a compromise between taking many cheap short timesteps
+and taking fewer longer, but computationally more expensive steps.
+The algorithm is based primarily on selecting a new timestep length
+depending on the previous timestep length and the number of non-linear
+iterations required to converge it.</p>
+
+<p>The default timestep selection strategy is generally found to be
+robust across a wide range of models. However, in some instances,
+it may be possible to improve upon the default timestep selection
+by using the <a href="../ecl_rm/TSCRIT.html#TSCRIT">TSCRIT</a> keyword to specify solution change targets and solution change
+limits.</p>
+
+<div class="section" id="features_timestepping.rejecting"><a name="features_timestepping.rejecting"><!-- --></a><h4 class="sectiontitle">Rejecting a timestep</h4><p>A timestep can be rejected even though the non-linear iterations
+have converged, if the solution change during the timestep is too
+big. In these cases a smaller timestep will be used. A timestep will
+only be accepted if the change in specific volume, the throughput,
+                 <math><mrow><mi>T</mi>
+<mi>P</mi><mi>T</mi></mrow></math>  and  <math><mrow><mi>T</mi>
+<mi>T</mi><mi>E</mi></mrow></math>  are less than limits
+ <math><msub><mi>S</mi>
+<mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub>
+</math>,  <math><mrow><mi>T</mi>
+<mi>P</mi><msub><mi>T</mi><mrow><mi>m</mi><mi>a</mi>
+<mi>x</mi></mrow></msub></mrow></math>  and  <math><mrow><mi>T</mi>
+<mi>T</mi><msub><mi>E</mi><mrow><mi>m</mi><mi>a</mi>
+<mi>x</mi></mrow></msub></mrow></math>:  </p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="features.equ.0191"/>
+ <math><mrow><munder>
+<mrow><mi>Σ</mi></mrow><mrow><mi>X</mi><mo>′</mo></mrow></munder><mrow><mo>|</mo>
+<msub><mrow><mi>X</mi><mo>′</mo></mrow><mrow><mi>t</mi></mrow></msub><mo>⁢</mo><mo>−</mo><mtext> </mtext>
+<msub><mrow><mi>X</mi><mo>′</mo></mrow><mrow><mi>t</mi><mo>⁢</mo><mo>−</mo><mtext> </mtext><mi>Δ</mi><mi>t</mi></mrow></msub><mo>|</mo></mrow><mo>⋅</mo><mrow><mo>|</mo><mover><mrow>
+<mfrac><mrow><mo>∂</mo><mi>T</mi></mrow><mrow><mo>∂</mo><mi>X</mi><mo>′</mo></mrow></mfrac></mrow>
+<mrow><mo> ¯</mo></mrow></mover><mo>|</mo></mrow>
+<mo>≤</mo><msub><mrow><mi>S</mi></mrow><mrow><mstyle><mi>max</mi></mstyle><mo>⁡</mo></mrow>
+</msub></mrow></math> 
+</td><td align="right">[Eq. 365.1]
+              </td></tr></tbody></table><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="features.equ.0194"/>
+ <math><mrow><mi>T</mi>
+<mi>P</mi><mi>T</mi></mrow><mo>≤</mo><mrow><mi>T</mi>
+<mi>P</mi><msub><mi>T</mi><mrow><mi>m</mi><mi>a</mi>
+<mi>x</mi></mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 365.2]
+              </td></tr></tbody></table><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="features.equ.0197"/>
+ <math><mrow><mi>T</mi>
+<mi>T</mi><mi>E</mi></mrow><mo>≤</mo><mrow><mi>T</mi>
+<mi>T</mi><msub><mi>E</mi><mrow><mi>m</mi><mi>a</mi>
+<mi>x</mi></mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 365.3]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><mi>X</mi>
+<mi>′</mi></mrow></math> </td>
+
+<td valign="top"> is any solution variable except the pressure  <math><mrow><mi>X</mi>
+<mi>′</mi></mrow><mo>=</mo><mo>(</mo><msub><mi>m</mi>
+<mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo>
+<msub><mi>m</mi><mi>N</mi></msub><mo>,</mo><msub>
+<mi>m</mi><mi>w</mi></msub><mo>,</mo><mi>e</mi><mo>)</mo></math>,  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mover><mrow><mrow><mo>|</mo><mfrac><mrow><mo>∂</mo>
+<mi>V</mi></mrow><mrow><mo>∂</mo><mi>X</mi><mo>′</mo>
+</mrow></mfrac><mo>|</mo></mrow></mrow><mrow><mo>¯</mo>
+</mrow></mover></mrow></math> </td>
+
+<td valign="top"> is the average value of  <math><mrow><mo>|</mo>
+<mrow><mrow><mfrac><mrow><mo>∂</mo><mi>V</mi></mrow>
+<mrow><mo>∂</mo><mi>X</mi><mo>′</mo></mrow></mfrac>
+</mrow></mrow><mo>|</mo></mrow></math> over all cells
+   </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>The throughput is the volume flow divided by the cell
+volume and is discussed further in <a href="converge_Throughput_target__TPT_.html#converge_throughput_target__tpt_"> "Throughput target (TPT)"</a>. The throughput limit is only applied
+to <span class="keyword">IMPES</span> cells.</p>
+<p>The time truncation error
+is a measure of the “acceleration” of the specific volume and is discussed
+further in <a href="converge_Time_truncation_error__TTE_.html#converge_time_truncation_error__tte_"> "Time truncation error (TTE)"</a>.</p>
+<p>In thermal simulations
+three additional convergence criteria can be applied. The changes
+in saturation                  <math><msub>
+<mrow><mi>S</mi><mi>A</mi><mi>T</mi></mrow><mi>p</mi>
+</msub></math>  of each phase  <math><mi>p</mi></math>, temperature and energy in every cell must be less
+than limits  <math><mrow><mi>S</mi>
+<mi>A</mi><msub><mi>T</mi><mrow><mi>m</mi><mi>a</mi>
+<mi>x</mi></mrow></msub></mrow></math>,  <math><msub><mi>T</mi>
+<mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub>
+</math>  and  <math><msub><mi>e</mi>
+<mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub>
+</math>:          </p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="features.equ.01ac"/>
+ <math><mrow><mrow>
+<mo>|</mo><msub><mrow><mi>S</mi><mi>A</mi><mi>T</mi>
+</mrow><mrow><mi>p</mi><mo>,</mo><mi>t</mi></mrow>
+</msub><mo>⁢</mo><mo>−</mo><mtext> </mtext><msub>
+<mrow><mi>S</mi><mi>A</mi><mi>T</mi></mrow><mrow>
+<mi>p</mi><mo>,</mo><mtext> </mtext><mi>t</mi><mo>−</mo><mi>Δ</mi><mi>t</mi></mrow>
+</msub><mo>|</mo></mrow><mo>≤</mo><msub><mrow><mi>S</mi><mi>A</mi><mi>T</mi></mrow><mrow><mstyle><mi>max</mi></mstyle><mo>⁡</mo></mrow>
+</msub></mrow></math> 
+</td><td align="right">[Eq. 365.4]
+              </td></tr></tbody></table><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="features.equ.01af"/>
+ <math><mrow><mrow>
+<mo>|</mo><msub><mrow><mi>T</mi></mrow><mrow><mi>t</mi></mrow></msub><mo>⁢</mo><mo>−</mo><mtext> </mtext>
+<msub><mrow><mi>T</mi></mrow><mrow><mtext> </mtext>
+<mi>t</mi><mo>−</mo><mi>Δ</mi><mi>t</mi></mrow></msub><mo>|</mo></mrow><mo>≤</mo><msub>
+<mrow><mi>T</mi></mrow><mrow><mstyle>
+<mi>max</mi></mstyle><mo>⁡</mo></mrow></msub></mrow>
+</math> 
+</td><td align="right">[Eq. 365.5]
+              </td></tr></tbody></table><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="features.equ.01b2"/>
+ <math><mrow><mrow>
+<mo>|</mo><msub><mrow><mi>e</mi></mrow><mrow><mi>t</mi></mrow></msub><mo>⁢</mo><mo>−</mo><mtext> </mtext>
+<msub><mrow><mi>e</mi></mrow><mrow><mtext> </mtext>
+<mi>t</mi><mo>−</mo><mi>Δ</mi><mi>t</mi></mrow></msub><mo>|</mo></mrow><mo>≤</mo><msub>
+<mrow><mi>e</mi></mrow><mrow><mstyle>
+<mi>max</mi></mstyle><mo>⁡</mo></mrow></msub><mo>⁢</mo>
+<mo>=</mo><mtext> </mtext><msub><mrow><mi>c</mi>
+</mrow><mrow><mi>p</mi></mrow></msub><mo>⋅</mo><msub>
+<mrow><mi>T</mi></mrow><mrow><mstyle>
+<mi>max</mi></mstyle><mo>⁡</mo></mrow></msub></mrow>
+</math> 
+</td><td align="right">[Eq. 365.6]
+              </td></tr></tbody></table><p>The maximum energy change is defined by the maximum
+temperature change, using a typical value of specific heat       
+          <math><msub><mi>c</mi>
+<mi>p</mi></msub></math>  = 2347 kJ/m<sup>3</sup>/K = 35 Btu/ft<sup>3</sup>/R. The saturation limit can be used instead of the solution
+change limit.          </p>
+<p>Limits                  <math><mrow><mi>T</mi>
+<mi>T</mi><msub><mi>E</mi><mrow><mi>m</mi><mi>a</mi>
+<mi>x</mi></mrow></msub></mrow></math>,  <math><mrow><mi>T</mi>
+<mi>P</mi><msub><mi>T</mi><mrow><mi>m</mi><mi>a</mi>
+<mi>x</mi></mrow></msub></mrow></math>,  <math><msub><mi>S</mi>
+<mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub>
+</math>,  <math><mrow><mi>S</mi>
+<mi>A</mi><msub><mi>T</mi><mrow><mi>m</mi><mi>a</mi>
+<mi>x</mi></mrow></msub></mrow></math>  and  <math><msub><mi>T</mi>
+<mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub>
+</math>  are set using items 7, 9, 13, 16 and 18 of the <a href="../ecl_rm/TSCRIT.html#TSCRIT">TSCRIT</a> keyword.     </p>
+ </div>
+
+<div class="section" id="features_timestepping.determining"><a name="features_timestepping.determining"><!-- --></a><h4 class="sectiontitle">Determining
+a new timestep</h4><p>New timesteps                  <math><mrow><mi>Δ</mi>
+<mi>t</mi></mrow></math>  are chosen so that the predicted
+solution change is less than a specified target. Targets  <math><mrow><mi>T</mi>
+<mi>T</mi><msub><mi>E</mi><mrow><mi>t</mi><mi>a</mi>
+<mi>r</mi></mrow></msub></mrow></math>,  <math><mrow><mi>T</mi>
+<mi>P</mi><msub><mi>T</mi><mrow><mi>t</mi><mi>a</mi>
+<mi>r</mi></mrow></msub></mrow></math>,  <math><msub><mi>S</mi>
+<mrow><mi>t</mi><mi>a</mi><mi>r</mi></mrow></msub>
+</math>,  <math><msub><mi>P</mi>
+<mrow><mi>t</mi><mi>a</mi><mi>r</mi></mrow></msub>
+</math>,  <math><mrow><mi>S</mi>
+<mi>A</mi><msub><mi>T</mi><mrow><mi>t</mi><mi>a</mi>
+<mi>r</mi></mrow></msub></mrow></math>,  <math><msub><mi>T</mi>
+<mrow><mi>t</mi><mi>a</mi><mi>r</mi></mrow></msub>
+</math>  are set for the time truncation error, throughput and changes
+in specific volume, pressure, saturation and temperature. An energy
+target  <math><msub><mi>e</mi>
+<mrow><mi>t</mi><mi>a</mi><mi>r</mi></mrow></msub>
+</math>  is calculated from the temperature target.          </p>
+<p>                              <math><mrow>
+<msub><mrow><mi>e</mi></mrow><mrow><mi>t</mi><mi>a</mi><mi>r</mi></mrow></msub><mo>=</mo><msub><mrow>
+<mi>T</mi></mrow><mrow><mi>t</mi><mi>a</mi><mi>r</mi>
+</mrow></msub><mo>⋅</mo><msub><mrow><mi>c</mi></mrow>
+<mrow><mi>p</mi></mrow></msub></mrow></math>       
+              </p>
+<p>Changes in parameters for the new timestep are
+estimated by multiplying the rate of change in the previous timestep
+by the new timestep length.</p>
+<p>Values for targets             
+    <math><mrow><mi>T</mi>
+<mi>T</mi><msub><mi>E</mi><mrow><mi>t</mi><mi>a</mi>
+<mi>r</mi></mrow></msub></mrow></math>,  <math><mrow><mi>T</mi>
+<mi>P</mi><msub><mi>T</mi><mrow><mi>t</mi><mi>a</mi>
+<mi>r</mi></mrow></msub></mrow></math>,  <math><msub><mi>S</mi>
+<mrow><mi>t</mi><mi>a</mi><mi>r</mi></mrow></msub>
+</math>,  <math><msub><mi>P</mi>
+<mrow><mi>t</mi><mi>a</mi><mi>r</mi></mrow></msub>
+</math>,  <math><mrow><mi>S</mi>
+<mi>A</mi><msub><mi>T</mi><mrow><mi>t</mi><mi>a</mi>
+<mi>r</mi></mrow></msub></mrow></math>  and  <math><msub><mi>T</mi>
+<mrow><mi>t</mi><mi>a</mi><mi>r</mi></mrow></msub>
+</math>  are set using items 6, 8, 10, 12, 15 and 17 of the <span class="keyword">TSCRIT</span> keyword.          </p>
+ </div>
+
+<div class="section" id="features_timestepping.detemining.implicit"><a name="features_timestepping.detemining.implicit"><!-- --></a><h4 class="sectiontitle">Determining
+implicit cells in AIM runs</h4><p>The throughput and changes in
+specific volume and temperature for a timestep are compared with targets:</p>
+<p>                              <math><msub>
+<mi>R</mi><mi>P</mi></msub><mo>=</mo><mo>(</mo>
+<mrow><mi>T</mi><mi>P</mi><msub><mi>T</mi><mi>t</mi>
+</msub></mrow><mo>)</mo><mo>/</mo><mo>(</mo><mrow>
+<mi>T</mi><mi>P</mi><msub><mi>T</mi><mrow><mi>t</mi>
+<mi>a</mi><mi>r</mi></mrow></msub></mrow><mo>)</mo>
+</math>                       </p>
+<p>                          
+   <math><msub><mi>R</mi>
+<mi>S</mi></msub><mo>=</mo><mo>(</mo><msub><mrow>
+<mi>Δ</mi><mi>S</mi></mrow><mi>t</mi></msub><mo>)</mo><mo>/</mo><mo>(</mo><msub><mi>S</mi><mrow>
+<mi>t</mi><mi>a</mi><mi>r</mi></mrow></msub><mo>)</mo></math>                       </p>
+<p>                 
+            <math><msub><mi>R</mi>
+<mi>T</mi></msub><mo>=</mo><mo>(</mo><msub><mrow>
+<mi>Δ</mi><mi>T</mi></mrow><mi>t</mi></msub><mo>)</mo><mo>/</mo><mo>(</mo><msub><mi>T</mi><mrow>
+<mi>t</mi><mi>a</mi><mi>r</mi></mrow></msub><mo>)</mo></math>                       </p>
+<p>These ratios can be
+output to the restart file by using arguments <samp class="codeph">RATP</samp>, <samp class="codeph">RATS</samp> or <samp class="codeph">RATT</samp> with the <a href="../ecl_rm/RPTRST.html#RPTRST">RPTRST</a> keyword. The ratios
+are extrapolated to the new timestep                  <math><mi>t</mi><mo>+</mo>
+<mrow><mi>Δ</mi><mi>t</mi></mrow></math> and cells are
+made implicit if these extrapolated ratios exceed values set in <a href="../ecl_rm/AIMCON.html#AIMCON">AIMCON</a>.      </p>
+ </div>
+
+<div class="section" id="features_Timestepping_46684"><a name="features_Timestepping_46684"><!-- --></a><h4 class="sectiontitle">Instability in AIM
+runs due to thermal conduction</h4><p>In <a href="../ecl_rm/AIM.html#AIM"> AIM</a> runs the implicit cells are determined
+using throughput criteria. However in thermal runs, conduction can
+cause instability in explicitly solved cells. To prevent this instability:</p>
+<ul>
+<li>Rock filled cells (or near rock filled cells) should be solved
+fully implicitly. Therefore, in <span class="keyword">AIM</span> runs item 3
+of the <a href="../ecl_rm/AIMCON.html#AIMCON">AIMCON</a> keyword should be set to a positive value.             </li>
+
+<li>Problems where conduction is significant should not be solved
+using <span class="keyword">AIM</span>.</li>
+
+</ul>
+
+<div class="tablenoborder"><a name="features.tab.01ee"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="features.tab.01ee" frame="border" border="1" rules="all"><caption>
+           Table 365.2  Summary of convergence criteria and timestepping criteria</caption>       
+<thead align="left">
+<tr>
+<th valign="top" id="d458e1328"> Restriction   </th>
+
+<th valign="top" id="d458e1331">Parameter</th>
+
+<th valign="top" id="d458e1334">  Non linear iteration ΔX lim                
+      </th>
+
+<th valign="top" id="d458e1337">  Non linear iteration ΔX con  </th>
+
+<th valign="top" id="d458e1340">Timestep change  max        </th>
+
+<th valign="top" id="d458e1343">Timestep change   tar                        
+    </th>
+
+<th valign="top" id="d458e1346">Timestep change argument</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d458e1328 ">&nbsp;</td>
+ 
+<td valign="top" headers="d458e1331 ">Pressure</td>
+
+<td valign="top" headers="d458e1334 "> <span class="keyword">CVCRIT</span> item 15 </td>
+
+<td valign="top" headers="d458e1337 "><span class="keyword">CVCRIT</span> item  </td>
+
+<td valign="top" headers="d458e1340 ">                     </td>
+
+<td valign="top" headers="d458e1343 "> <span class="keyword">TSCRIT</span> item 12  </td>
+
+<td valign="top" headers="d458e1346 ">PCT</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d458e1328 ">&nbsp;</td>
+ 
+<td valign="top" headers="d458e1331 ">Specific volume</td>
+
+<td valign="top" headers="d458e1334 "><span class="keyword">CVCRIT</span> item 13</td>
+
+<td valign="top" headers="d458e1337 "><span class="keyword">CVCRIT</span> item 7</td>
+
+<td valign="top" headers="d458e1340 "><span class="keyword">TSCRIT</span> item 13</td>
+
+<td valign="top" headers="d458e1343 "><span class="keyword">TSCRIT</span> item 10</td>
+
+<td valign="top" headers="d458e1346 ">SCT</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d458e1328 ">                                             
+            </td>
+
+<td valign="top" headers="d458e1331 ">Time truncation error</td>
+
+<td valign="top" headers="d458e1334 ">&nbsp;</td>
+ 
+<td valign="top" headers="d458e1337 ">&nbsp;</td>
+ 
+<td valign="top" headers="d458e1340 "> <span class="keyword">TSCRIT</span> item 7 </td>
+
+<td valign="top" headers="d458e1343 "><span class="keyword">TSCRIT</span> item 6</td>
+
+<td valign="top" headers="d458e1346 "> TTE                  </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d458e1328 ">IMPES cells       </td>
+
+<td valign="top" headers="d458e1331 ">Throughput      </td>
+
+<td valign="top" headers="d458e1334 ">&nbsp;</td>
+ 
+<td valign="top" headers="d458e1337 ">&nbsp;</td>
+ 
+<td valign="top" headers="d458e1340 "><span class="keyword">TSCRIT</span>   item 9  </td>
+
+<td valign="top" headers="d458e1343 "><span class="keyword">TSCRIT</span> item 8   </td>
+
+<td valign="top" headers="d458e1346 "> TPT                  </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d458e1328 "> Thermal only       </td>
+
+<td valign="top" headers="d458e1331 "> Temperature     </td>
+
+<td valign="top" headers="d458e1334 "><span class="keyword">CVCRIT</span> item 14</td>
+
+<td valign="top" headers="d458e1337 "><span class="keyword">CVCRIT</span> item 8 </td>
+
+<td valign="top" headers="d458e1340 "><span class="keyword">TSCRIT</span> item 18  </td>
+
+<td valign="top" headers="d458e1343 "> <span class="keyword">TSCRIT</span> item 17</td>
+
+<td valign="top" headers="d458e1346 ">  TEC                  </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d458e1328 "> Thermal only      </td>
+
+<td valign="top" headers="d458e1331 ">e/cp                </td>
+
+<td valign="top" headers="d458e1334 ">&nbsp;</td>
+ 
+<td valign="top" headers="d458e1337 ">&nbsp;</td>
+ 
+<td valign="top" headers="d458e1340 "><span class="keyword">TSCRIT</span> item 18 </td>
+
+<td valign="top" headers="d458e1343 "> <span class="keyword">TSCRIT</span> item 17 </td>
+
+<td valign="top" headers="d458e1346 ">EnC                 </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d458e1328 "> Thermal only      </td>
+
+<td valign="top" headers="d458e1331 ">Saturation         </td>
+
+<td valign="top" headers="d458e1334 ">&nbsp;</td>
+ 
+<td valign="top" headers="d458e1337 ">&nbsp;</td>
+ 
+<td valign="top" headers="d458e1340 "><span class="keyword">TSCRIT</span>   item 16 </td>
+
+<td valign="top" headers="d458e1343 "><span class="keyword">TSCRIT</span>   item 15 </td>
+
+<td valign="top" headers="d458e1346 ">SAC                  </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<div class="note" id="features_Timestepping_81510"><a name="features_Timestepping_81510"><!-- --></a><span class="notetitle">Note:</span> <span class="notebody">If items 13 and 14
+of keyword <a href="../ecl_rm/CVCRIT.html#CVCRIT">CVCRIT</a> are not set, the default values for the non-linear step limits
+                          <math><msub><mi>S</mi>
+<mrow><mi>l</mi><mi>i</mi><mi>m</mi></mrow></msub>
+</math>  and  <math><msub><mi>T</mi>
+<mrow><mi>l</mi><mi>i</mi><mi>m</mi></mrow></msub>
+</math>  are calculated from items 10 and 17 of keyword <a href="../ecl_rm/TSCRIT.html#TSCRIT">TSCRIT</a>.  This means that if
+the target specific volume is relaxed (item 10 of <span class="keyword">TSCRIT</span>) - which may be the case if the target saturation is used (item
+15 of <span class="keyword">TSCRIT</span>) - then item 13 of keyword <span class="keyword">CVCRIT</span> should be used to override the default value for
+the non-linear step limit  <math><msub><mi>S</mi>
+<mrow><mi>l</mi><mi>i</mi><mi>m</mi></mrow></msub>
+</math>.  </span></div>
+ </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

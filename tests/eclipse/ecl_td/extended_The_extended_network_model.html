@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The extended network model"/>
+<meta name="DC.subject" content="Extended network, Network, Extended, Structure"/>
+<meta name="keywords" content="Extended network, Network, Extended, Structure"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="extended_the_extended_network_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The extended network model</title>
+</head>
+<body>
+
+
+<div class="nested0" id="extended_the_extended_network_model"><a name="extended_the_extended_network_model"><!-- --></a>
+<h1 class="topictitle1">The extended network model</h1>
+
+
+ <div>
+<p>The extended network model contains several enhancements over the
+standard model for production networks:</p>
+
+<ul>
+<li>The surface network can be structured independently of the group
+control hierarchy defined with keyword <a href="../ecl_rm/GRUPTREE.html#GRUPTREE">GRUPTREE</a>. However, it must
+still have a “gathering tree” topology.  <p>ECLIPSE 100 </p>
+</li>
+
+<li>The automatic compressor/pump facilities
+are more versatile.<p>Compressors are turned on whenever a nominated
+group fails to meet its production rate target. Multiple compression
+levels can be defined.</p>
+</li>
+
+<li>An automatic choke facility can adjust the pressure loss across
+a choke in a designated network branch to meet a group’s production
+rate target. This provides an alternative method to guide rate control
+or prioritization for meeting group production rate targets.     
+       </li>
+
+<li>It provides more flexibility in handling well and group downtime.
+            </li>
+
+<li>It is possible to remove a specified rate or fraction of the water
+flowing through a node.                                          
+                              </li>
+
+</ul>
+
+<p>ECLIPSE 100               </p>
+
+<p>In ECLIPSE 100 the extended network model
+applies to the production network only. However, it is possible to
+use it in conjunction with the Standard model for an injection network.</p>
+
+<p>ECLIPSE 300                        </p>
+
+<p>In ECLIPSE 300 the extended network model
+applies to both production and injection networks. The two types of
+model cannot be mixed, so either all networks must use the Extended
+model or all must use the standard model.</p>
+
+<div class="section" id="extended_the_network_structure"><a name="extended_the_network_structure"><!-- --></a><h4 class="sectiontitle">The network structure</h4><p>Sometimes you need to impose a group control hierarchy that is
+different from the physical structure of the surface network. For
+example, figure <a href="extended_The_extended_network_model.html#extended.XID-00000019">634.1</a>  shows a
+case where production from several groups feeds into a main trunk
+line at different points. GA1, GB1, GA2 and GB2 are all well-groups
+feeding into the trunk line at nodes N1, N2, N3 and N4 respectively.
+FIELD is the fixed pressure node.</p>
+<div class="fignone" id="extended.XID-00000019"><a name="extended.XID-00000019"><!-- --></a>
+
+ <br/><img src="../img/network4.png" width="403px"/><br/> 
+<br/><span class="figcap">
+           Figure 634.1  The network structure</span></div>
+<p>In this example, groups GA1 and GA2 belong to Company A whilst
+groups GB1 and GB2 belong to Company B. Clearly both companies may
+need to apply targets or limits to their own total production rate.
+They can define a group hierarchy with <a href="../ecl_rm/GRUPTREE.html#GRUPTREE">GRUPTREE</a> as shown in figure <a href="extended_The_extended_network_model.html#extended.XID-00000021">634.2</a>, which is different from the
+network structure.</p>
+<div class="fignone" id="extended.XID-00000021"><a name="extended.XID-00000021"><!-- --></a>
+
+ <br/><img src="../img/network5.png" width="290px"/><br/> <br/><span class="figcap">
+           Figure 634.2  The group control hierarchy</span></div>
+<p>The group control hierarchy is constructed in the standard model
+with keyword <a href="../ecl_rm/GRUPTREE.html#GRUPTREE">GRUPTREE</a>  and the relevant production targets set with <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a> or <a href="../ecl_rm/GCONPRI.html#GCONPRI">GCONPRI</a>. But by using the
+Extended Network Model, a separate network structure can be constructed
+with keywords <a href="../ecl_rm/BRANPROP.html#BRANPROP">BRANPROP</a> and <a href="../ecl_rm/NODEPROP.html#NODEPROP">NODEPROP</a>. The network consists of a gathering tree structure of nodes
+and branches. The nodes at the bottom level of the tree are “source
+nodes”, which inject flow into the network. The source nodes must
+be well-groups or satellite groups (or master groups in Reservoir
+Coupling master runs), and all source nodes should correspond to groups
+in the <span class="keyword">GRUPTREE</span> hierarchy; in ECLIPSE 100 the corresponding
+nodes and groups must have the same name in both structures but this
+is not necessary in ECLIPSE 300. The remaining network nodes and <span class="keyword">GRUPTREE</span> groups need not coincide. The top node of the
+network tree (the terminal node) must be a fixed pressure node.</p>
+<p>In the example above, GA1, GA2, GB1 and GB2 are common to both
+the network structure and the <span class="keyword">GRUPTREE</span> hierarchy.
+Also the fixed pressure node corresponds to the FIELD group (although
+this is not compulsory). But nodes N1, N2, N3 and N4 only appear in
+the network structure, and groups COMP-A and COMP-B only appear in
+the group control hierarchy.</p>
+<p>The network may consist of two
+or more separate gathering trees, in which case each tree must have
+its own fixed pressure terminal node at the top. It is possible for
+subordinate groups also to be fixed-pressure nodes; these form ‘sub-networks’
+whose pressures are independent of the main network but whose flows
+will be added into it. For example, in the network shown in figure <a href="extended_The_extended_network_model.html#extended.XID-00000019">634.1</a>  the nodes FIELD and N3 could
+both be fixed-pressure nodes. Node N3 then acts as a source into node
+N2 of the main network, while keeping its own pressure independent
+of the pressures in the main network.</p>
+<p>A consequence of separating
+the group control hierarchy from the network structure is that the
+location of any gas consumption or import must be identified in both
+structures. ECLIPSE must know where consumed gas is extracted from
+the network (to compute downstream pressure losses correctly), and
+also where it is extracted from the <span class="keyword">GRUPTREE</span> hierarchy
+(to perform the group production accounting). Accordingly the <a href="../ecl_rm/GCONSUMP.html#GCONSUMP"> GCONSUMP</a> keyword in ECLIPSE 100
+has an additional item (Item 4) to identify the node at which the
+gas is extracted from or added to the extended network structure.
+Alternatively the keyword <a href="../ecl_rm/NCONSUMP.html#NCONSUMP">NCONSUMP</a> can be used to define the consumption at a network node,
+and optionally to assign the consumption to a particular group. The
+corresponding keyword in ECLIPSE 300 for removing gas from the network
+is <a href="../ecl_rm/NGASREM.html#NGASREM">NGASREM</a>.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

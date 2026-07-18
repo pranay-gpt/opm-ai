@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Two-phase model"/>
+<meta name="DC.subject" content="WAG hysteresis non-wetting phase, Hysteresis in WAG floods, Non-wetting phase"/>
+<meta name="keywords" content="WAG hysteresis non-wetting phase, Hysteresis in WAG floods, Non-wetting phase"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wag_two-phase_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Two-phase model</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="wag_two-phase_model"><a name="wag_two-phase_model"><!-- --></a>
+<h1 class="topictitle1">Two-phase model</h1>
+
+
+ <div>
+<p>The gas phase model is based on the theory developed by Land and
+Carlson. The two-phase model differs from the standard ECLIPSE implementation
+as it uses an analytic version of the Carlson model based on the input
+Land’s parameter, and ignores the imbibition curve input using the <a href="../ecl_rm/IMBNUM.html#IMBNUM">IMBNUM</a> keyword.</p>
+
+<p>Consider a typical drainage process followed by an imbibition process
+(as shown in the following figure).</p>
+
+<div class="fignone" id="wag.XID-0000016f"><a name="wag.XID-0000016f"><!-- --></a>
+
+ <br/><img src="../img/wag1.png" width="560px"/><br/> 
+<br/><span class="figcap">
+           Figure 194.1  A typical drainage process followed by an imbibition process</span></div>
+
+<p>Consider a drainage process reaching a maximum gas saturation  <math><msub><mrow><mi>S</mi><mi>g</mi></mrow><mi>m</mi></msub></math> 
+followed by a imbibition process leading to a trapped gas saturation
+ <math><mrow><mi>S</mi><msub><mrow><mi>g</mi></mrow><mrow><mi>t</mi>
+<mi>r</mi><mi>a</mi><mi>p</mi></mrow></msub></mrow>
+</math>. The trapped gas saturation  <math><mrow>
+<mi>S</mi><msub><mi>g</mi><mrow><mi>t</mi><mi>r</mi>
+<mi>a</mi><mi>p</mi></mrow></msub></mrow></math> 
+is given by</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wag.XID-00000177"/>
+ <math><mrow><mrow><mi>S</mi><msub><mrow><mi>g</mi></mrow><mrow><mi>t</mi>
+<mi>r</mi><mi>a</mi><mi>p</mi></mrow></msub></mrow>
+<mo>=</mo><msub><mrow><mi>S</mi><mi>g</mi></mrow>
+<mrow><mi>c</mi><mi>r</mi></mrow></msub><mo>+</mo>
+<mfrac><mrow><mo>(</mo><mrow><mi>S</mi><msub><mrow>
+<mi>g</mi></mrow><mrow><mi>m</mi></mrow></msub><mo>⁢</mo><mo>−</mo><mtext> </mtext><msub><mrow><mi>S</mi>
+<mi>g</mi></mrow><mrow><mi>c</mi><mi>r</mi></mrow>
+</msub></mrow><mo>)</mo></mrow><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mi>C</mi><mo>⋅</mo><mo>(</mo>
+<mrow><mi>S</mi><msub><mrow><mi>g</mi></mrow><mrow>
+<mi>m</mi></mrow></msub><mo>⁢</mo><mo>−</mo><mtext> </mtext><msub><mrow><mi>S</mi><mi>g</mi></mrow>
+<mrow><mi>c</mi><mi>r</mi></mrow></msub></mrow><mo>)</mo><mo>)</mo></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 194.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mi>C</mi></math> </td>
+
+<td valign="top">  is Land’s parameter, input with the <a href="../ecl_rm/WAGHYSTR.html#WAGHYSTR">WAGHYSTR</a> keyword, or specified
+by the transition parameter as discussed later.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">As for the generic hysteresis calculation, the Killough method
+has been modified slightly to overcome non-physical behavior when
+ <math><msub><mrow><mi>S</mi><mi>g</mi></mrow><mi>m</mi></msub></math> 
+is small. As  <math><msub><mrow><mi>S</mi><mi>g</mi></mrow><mi>m</mi></msub></math> 
+tends to  <math><msub><mrow><mi>S</mi><mi>g</mi></mrow><mrow><mi>c</mi><mi>r</mi>
+</mrow></msub></math>  in Equation <a href="wag_Two-phase_model.html#wag.XID-00000177">194.1</a>,  <math><msub><mrow><mi>S</mi><mi>g</mi></mrow><mrow><mi>t</mi><mi>r</mi>
+<mi>a</mi><mi>p</mi></mrow></msub></math>  tends to
+ <math><msub><mrow><mi>S</mi><mi>g</mi></mrow><mrow><mi>c</mi><mi>r</mi>
+</mrow></msub></math>, which leads to an infinite imbibition
+relative permeability gradient. This in turn can cause convergence
+problems, while having little material effect on the simulation results.
+Equation <a href="wag_Two-phase_model.html#wag.XID-00000177">194.1</a>  has been modified as
+follows:  <math><mrow>
+<msub><mrow><mi>S</mi><mi>g</mi></mrow><mrow><mi>t</mi><mi>r</mi><mi>a</mi><mi>p</mi></mrow></msub>
+<mo>⁢</mo><mo>=</mo><mtext> </mtext><msub><mrow><mi>S</mi><mi>g</mi></mrow><mrow><mi>c</mi><mi>r</mi>
+</mrow></msub><mo>⁢</mo><mo>+</mo><mtext> </mtext>
+<mfrac><mrow><msub><mrow><mi>S</mi><mi>g</mi></mrow>
+<mrow><mi>m</mi></mrow></msub><mo>⁢</mo><mo>−</mo>
+<mtext> </mtext><msub><mrow><mi>S</mi><mi>g</mi>
+</mrow><mrow><mi>c</mi><mi>r</mi></mrow></msub></mrow>
+<mrow><mi>A</mi><mo>⁢</mo><mo>+</mo><mtext> </mtext>
+<mi>C</mi><mrow><mo>(</mo><msub><mrow><mi>S</mi><mi>g</mi></mrow><mrow><mi>m</mi></mrow></msub><mo>⁢</mo>
+<mo>−</mo><mtext> </mtext><msub><mrow><mi>S</mi><mi>g</mi></mrow><mrow><mi>c</mi><mi>r</mi></mrow></msub>
+<mo>)</mo></mrow></mrow></mfrac></mrow></math>   where <math><mrow><mi>A</mi>
+<mo>⁢</mo><mo>=</mo><mtext> </mtext><mn>1</mn><mo>⁢</mo><mo>+</mo><mtext> </mtext><mi>a</mi><mo>⋅</mo>
+<mrow><mo>(</mo><msub><mrow><mi>S</mi><mi>g</mi>
+</mrow><mrow><mi>max</mi><mo>⁡</mo></mrow></msub><mo>⁢</mo><mo>−</mo><mtext> </mtext><msub><mrow><mi>S</mi>
+<mi>g</mi></mrow><mrow><mi>m</mi></mrow></msub><mo>)</mo></mrow></mrow></math>, where  <math><msub>
+<mrow><mi>S</mi><mi>g</mi></mrow><mrow><mi>m</mi>
+<mi>a</mi><mi>x</mi></mrow></msub></math>  is the maximum
+attainable gas saturation. The parameter  <math><mi>a</mi></math>  is input through the fourth data item in the <a href="../ecl_rm/EHYSTR.html#EHYSTR">EHYSTR</a> keyword and defaults
+to 0.1.          </span></div>
+
+<p>The gas relative permeability on the scanning curve is given by:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wag.equ.018d"/>
+ <math><mrow><mrow><msub>
+<mrow><mi>K</mi></mrow><mrow><mi>r</mi><mi>g</mi>
+</mrow></msub><mo>(</mo><mrow><mi>S</mi><mi>g</mi>
+</mrow><mo>)</mo></mrow><mo>=</mo><mrow><msubsup>
+<mrow><mi>K</mi></mrow><mrow><mi>r</mi><mi>g</mi>
+</mrow><mrow><mi>d</mi><mi>r</mi><mi>a</mi><mi>i</mi>
+<mi>n</mi></mrow></msubsup><mo>(</mo><msub><mrow><mi>S</mi><mi>g</mi></mrow><mrow><mi>f</mi></mrow></msub>
+<mo>)</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 194.2]
+              </td></tr></tbody></table>
+<p>where:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wag.Xwag.Xwag.XID-00000191"/>
+ <math><mrow><msub><mrow>
+<mi>S</mi><mi>g</mi></mrow><mrow><mi>f</mi></mrow>
+</msub><mo>=</mo><msub><mrow><mi>S</mi><mi>g</mi>
+</mrow><mrow><mi>c</mi><mi>r</mi></mrow></msub><mo>+</mo><mrow><mfrac><mrow><mn>1</mn></mrow><mrow><mn>2</mn></mrow></mfrac><mo>{</mo><mo>(</mo><mrow><mi>S</mi><mi>g</mi><mo>-</mo><mrow><mi>S</mi><msub>
+<mrow><mi>g</mi></mrow><mrow><mi>t</mi><mi>r</mi>
+<mi>a</mi><mi>p</mi></mrow></msub></mrow></mrow><mo>)</mo><mo>+</mo><msqrt><mrow><msup><mrow><mo>(</mo>
+<mrow><mi>S</mi><mi>g</mi><mo>-</mo><mrow><mi>S</mi>
+<msub><mrow><mi>g</mi></mrow><mrow><mi>t</mi><mi>r</mi><mi>a</mi><mi>p</mi></mrow></msub></mrow>
+</mrow><mo>)</mo></mrow><mrow><mn>2</mn></mrow></msup>
+<mo>+</mo><mrow><mfrac><mrow><mn>4</mn></mrow><mrow>
+<mi>C</mi></mrow></mfrac><mo>(</mo><mrow><mi>S</mi>
+<mi>g</mi><mo>-</mo><mrow><mi>S</mi><msub><mrow><mi>g</mi></mrow><mrow><mi>t</mi><mi>r</mi><mi>a</mi>
+<mi>p</mi></mrow></msub></mrow></mrow><mo>)</mo>
+</mrow></mrow></msqrt><mo>}</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 194.3]
+              </td></tr></tbody></table>
+<p>This transformation typically has an infinite gradient  <math><mrow><mi>d</mi>
+<mi>S</mi><msub><mi>g</mi><mi>f</mi></msub></mrow>
+<mo>/</mo><mrow><mi>d</mi><mi>S</mi><mi>g</mi>
+</mrow></math>  when  <math><mrow><mi>S</mi>
+<mi>g</mi></mrow></math>  is close to  <math><mrow>
+<mi>S</mi><msub><mi>g</mi><mrow><mi>t</mi><mi>r</mi>
+<mi>a</mi><mi>p</mi></mrow></msub></mrow></math>.
+As the input drainage relative permeability functions are represented
+as piece-wise linear functions, the final relative permeability function
+also has an infinite gradient. As this causes convergence problems
+the transformation  <math><mrow><mi>S</mi>
+<mi>g</mi></mrow></math>  to  <math><msub>
+<mrow><mi>S</mi><mi>g</mi></mrow><mi>f</mi></msub>
+</math>  is modified to a linear function near to the trapped gas
+saturation. The proportion of the transformation that departs for
+the pure Carlson equation can be controlled using the sixth data item
+in the <a href="../ecl_rm/WAGHYSTR.html#WAGHYSTR">WAGHYSTR</a> keyword.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">In order to make a section of the imbibition curve linear to
+prevent an infinite gradient in the final relative permeability curve,
+the Carlson mapping algorithm is applied and the Land’s parameter
+ <math><mi>C</mi></math>  in equations <a href="wag_Two-phase_model.html#wag.XID-00000177">194.1</a>  and <a href="wag_Two-phase_model.html#wag.Xwag.Xwag.XID-00000191">194.3</a>  can be replaced by the
+transition parameter <math>
+<mrow><msup><mrow><mi>C</mi></mrow><mrow><mi>t</mi>
+<mi>r</mi><mi>a</mi><mi>n</mi><mover><mrow><mi>s</mi>
+</mrow><mrow><mn>..</mn></mrow></mover></mrow></msup>
+</mrow></math>  defined as   <math><mrow><msup><mrow>
+<mi>C</mi></mrow><mrow><mi>t</mi><mi>r</mi><mi>a</mi>
+<mi>n</mi><mover><mrow><mi>s</mi></mrow><mrow><mn>..</mn></mrow></mover></mrow></msup><mo>⁢</mo><mo>=</mo><mtext> </mtext><mfrac><mrow><mn>1</mn></mrow>
+<mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>n</mi>
+<mi>c</mi><mi>r</mi><mi>i</mi><mo>⁢</mo></mrow>
+</msub><mo>⁢</mo><mo>−</mo><mtext> </mtext><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>n</mi><mi>c</mi>
+<mi>r</mi><mi>d</mi></mrow></msub></mrow></mfrac><mo>⁢</mo><mo>−</mo><mtext> </mtext><mfrac><mrow><mn>1</mn></mrow><mrow><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>n</mi><mo>⁢</mo><mtext> </mtext><mtext> </mtext>
+<mi>max</mi><mo>⁡</mo></mrow></msub><mo>⁢</mo><mo>−</mo><mtext> </mtext><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>n</mi><mi>c</mi><mi>r</mi><mi>d</mi>
+</mrow></msub></mrow></mfrac></mrow></math>  </span></div>
+
+<p>If the gas saturation increases following an imbibition process,
+the gas relative permeability follows the imbibition curve provided
+that the model remains in two-phase mode, that is if the displacing
+phase is oil. The criterion for the model to remain in two-phase mode
+is that the water saturation at the start of the secondary drainage
+process must be less than the connate water saturation plus a threshold
+value. The threshold value is input via the seventh data item in the <span class="keyword">WAGHYSTR</span> keyword, which defaults to 0.001.</p>
+
+<p>Note that if the imbibition curve is retraced and the saturation
+reaches  <math><msub><mrow><mi>S</mi><mi>g</mi></mrow><mi>m</mi></msub></math> 
+then the primary drainage curve is followed for increasing gas saturation.</p>
+
+<p>If the water saturation exceeds the connate saturation plus the
+threshold value, the three-phase model described below is used.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

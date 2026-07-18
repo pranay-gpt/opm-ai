@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Opening new connections (re-perforating)"/>
+<meta name="DC.subject" content="Group production rules"/>
+<meta name="keywords" content="Group production rules"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="groupprd_opening_new_connections__re-perforating_"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Opening new connections (re-perforating)</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="groupprd_opening_new_connections__re-perforating_"><a name="groupprd_opening_new_connections__re-perforating_"><!-- --></a>
+<h1 class="topictitle1">Opening new connections (re-perforating)</h1>
+
+
+ <div>
+<p>Well connections may be placed on “automatic opening”,
+by specifying <samp class="codeph">AUTO</samp> in item 6 of keyword <a href="../ecl_rm/COMPDAT.html#COMPDAT">COMPDAT</a> (or in keyword <a href="../ecl_rm/WELOPEN.html#WELOPEN">WELOPEN</a> or <a href="../ecl_rm/COMPDATL.html#COMPDATL">COMPDATL</a> as appropriate).
+Wells will be worked over in turn to open these connections. Restrictions
+on the rate at which wells can be worked over may be imposed by declaring
+the time taken to perform a workover (keyword <a href="../ecl_rm/WORKLIM.html#WORKLIM">WORKLIM</a>) and defining workover
+rigs (keyword <a href="../ecl_rm/GRUPRIG.html#GRUPRIG">GRUPRIG</a>). When a group cannot achieve its target rate of the required
+phase, ECLIPSE examines each open production well in turn, rejecting
+the well if:</p>
+
+<ul>
+<li>it has no connections in its AUTO opening queue</li>
+
+<li>it is already operating at its own target or limiting rate for
+the required phase, and so cannot increase its flow further</li>
+
+<li>it is not subordinate to the group that is unable to achieve its
+production target</li>
+
+<li>it is subordinate to an intermediate level group that is already
+operating at its target or limiting rate for the required phase, and
+so cannot increase its flow further</li>
+
+<li>workovers take a non-zero time (keyword <span class="keyword">WORKLIM</span>) and all workover rigs available to its group (keyword <span class="keyword">GRUPRIG</span>) are already occupied for the whole of the current
+timestep.</li>
+
+</ul>
+
+<p>For each well that survives all these tests, ECLIPSE determines
+ <math><mrow><mi>Σ</mi><msub><mrow><mi>T</mi>
+</mrow><mrow><mi>w</mi><mi>j</mi></mrow></msub><msub>
+<mrow><mi>M</mi></mrow><mrow><mi>p</mi><mi>j</mi>
+</mrow></msub></mrow></math>, the sum of the connection factors
+multiplied by the mobility of the required phase over all the connections
+in its AUTO queue. ECLIPSE then selects the well having the largest
+value of this sum, and opens its next connection in its AUTO queue.
+Within each well, connections on AUTO are opened in the order in which
+they are first declared with the keyword <a href="../ecl_rm/COMPDAT.html#COMPDAT">COMPDAT</a>.  </p>
+
+<p>This scheme allows you to dictate the order in which the new connections
+are opened in any given well (for example from the bottom up). However,
+ECLIPSE decides for itself which well to re-perforate, on the basis
+of the combined productivity of the connections remaining on AUTO.
+Note that the procedure does not necessarily work over the 'best'
+connection each time. Consider a well whose first connection on AUTO
+is in a layer with poor mobility but which has additional connections
+on AUTO in highly productive layers. The procedure may choose this
+well on the strength of its productive AUTO connections, but opens
+the unproductive connection first. Thus the unproductive connection
+does not 'block' the opening of the productive ones further
+down the queue. In fact, opening the unproductive connection may not
+be sufficient to achieve the group's rate target, and another
+connection may have to be opened also. The time taken to perform a
+workover is assumed to be independent of the number of connections
+opened. Thus, if a rig has been allocated to the well to open a connection,
+opening a second connection in the well during the same timestep will
+not take up any additional rig time.</p>
+
+<p>There are two additional options that relate to the opening of
+connections on AUTO. Firstly, connections can be lumped together into
+'completions' (see keyword <a href="../ecl_rm/COMPLUMP.html#COMPLUMP">COMPLUMP</a>). During automatic
+workovers, all connections belonging to the same completion are opened
+or closed together. When a well has been selected for re-perforating,
+its completions are examined in increasing order of their completion
+number, and the first one found having connections on AUTO will have
+all its connections opened together. Secondly, a minimum oil saturation
+can be specified with keyword <a href="../ecl_rm/WELSOMIN.html#WELSOMIN">WELSOMIN</a>. Any connection or
+completion on AUTO with a grid block oil saturation below this minimum
+value is not opened. In completions, the connection factor weighted
+average of the grid block saturations is used.</p>
+
+<p>Note that a connection on AUTO is also opened automatically when
+another connection in the same well is closed in a workover at the
+end of the timestep, which could be triggered for example by the violation
+of an economic limit (keywords <a href="../ecl_rm/WECON.html#WECON">WECON</a>, <a href="../ecl_rm/GECON.html#GECON">GECON</a>). Also, if the production rate of a well falls below its
+minimum economic limit (keyword <span class="keyword">WECON</span> items 2 and
+3), its next connection on AUTO is opened. If it has no connections
+remaining on AUTO, the well is shut or stopped. These actions result
+in AUTO connections being opened according to the behavior of the
+wells individually rather than as a group, and takes place irrespective
+of whether or not group targets are being met.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

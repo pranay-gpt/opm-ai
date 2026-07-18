@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ODD3P method"/>
+<meta name="DC.subject" content="Saturation functions three-phase relative permeability models, Saturation functions, Three-phase relative permeability models, ODD3P method"/>
+<meta name="keywords" content="Saturation functions three-phase relative permeability models, Saturation functions, Three-phase relative permeability models, ODD3P method"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="satfunct_odd3p_method"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ODD3P method</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="satfunct_odd3p_method"><a name="satfunct_odd3p_method"><!-- --></a>
+<h1 class="topictitle1">ODD3P method</h1>
+
+
+ <div>
+<p>ECLIPSE 300</p>
+
+<p>The ODD3P method provides a coupled hysteretic
+model for three-phase relative permeabilities and capillary pressures.
+This method is due to <cite><span> <a href="biblio_Bibliography.html#biblio_90665">Hustad (2002)</a> </span></cite> and extends the IKU method (<cite><span> <a href="biblio_Bibliography.html#biblio_26095">Hustad et al, 2002</a> </span></cite>) described above. A summary of the ODD3P method is presented
+below. A full description of this method may be found in <cite><span> <a href="biblio_Bibliography.html#biblio_90665">Hustad (2002)</a> </span></cite>. It is recommended that this reference is read as a
+precursor to using this model.</p>
+
+<p>Whereas the Stone-type models are based upon water-wet systems,
+the ODD3P method is more general with respect to wettability in that
+it uses pairs of two-phase relative permeability data for each of
+the three phases, with the wettability property being implied via
+the supplied input data.</p>
+
+<p>The primary motivation for the development of the ODD3P method
+has been the difficulty in reproducing measured core flooding behavior
+using reservoir simulators with the traditional models of three-phase
+relative permeability (<cite><span> <a href="biblio_Bibliography.html#biblio_90665">Hustad, 2002</a> </span></cite>). The ODD3P method also ensures consistency (continuous functions)
+of the three-phase properties at the two-phase and single- phase boundaries
+with the respective two-phase properties. The saturation profiles
+observed in core flooding simulations have been found to be strongly
+dependent upon the capillary forces and the boundary conditions at
+the core inlet and outlet. In addition, the relative permeability
+has been found to depend not only upon fluid saturation but also upon
+saturation history. The requirements for the ODD3P method, therefore,
+include relative permeability and capillary pressure values which
+are saturation history dependent. Hence the properties assigned to
+the relative permeability and capillary pressure for a particular
+set of three-phase saturations should not be unique but instead depend
+upon the saturation history leading up to the current saturation condition.</p>
+
+<p>Problems have also been found to occur when modeling three-phase
+systems if a first-contact miscible injection process causes an oil-water
+system to become a gas-water system due to the labelling of the hydrocarbon
+phase. This can result in discontinuities in relative permeabilities
+and capillary pressures. A further motivation for the ODD3P method,
+therefore, has been to ensure that relative permeability and capillary
+pressure are consistent and continuous for the flow processes which
+transition from any two-phase state to another two-phase state via
+a three-phase state.</p>
+
+<p>In this model an important distinction is made between the end-point
+saturations and residual saturations (<cite><span> <a href="biblio_Bibliography.html#biblio_90665">Hustad, 2002</a> </span></cite>). The end-point saturation is defined as the lowest value
+of saturation for which the phase is continuous and also corresponds
+to the saturation where the relative permeability is zero. In contrast,
+the residual saturation is defined as the saturation at which the
+phase becomes immobile. This condition may arise for different values
+of capillary pressure according to the pressure gradient of the phase
+or how high or low a capillary pressure is achieved by the flow conditions.
+The relative permeability need not be zero at the residual saturation,
+but for a phase not to flow, the phase pressure gradients must be
+zero. On the basis of these definitions, therefore, the residual saturation
+is greater than or equal to the end-point saturation.</p>
+
+<p>End-point and residual saturation data will typically incorporate
+information about the processes which have been subjected to upscaling.
+For this model, the end-point saturation applied to a simulation model
+grid block may be related to the upscaled processes by including a
+representation of the sweep efficiency of the grid block using a Land-type
+formulation (<cite><span> <a href="biblio_Bibliography.html#biblio_40166">Land, 1968</a> </span></cite>).</p>
+
+<div class="section"><h4 class="sectiontitle">Overview</h4><p>The ODD3P method provides a three-phase
+relative permeability model which is based upon the saturation functions
+of the contributing three pairs of two-phase relative permeability
+saturation functions. This method extends the normalized saturation
+approach employed by the IKU method (<cite><span> <a href="biblio_Bibliography.html#biblio_26095">Hustad et al, 2002</a> </span></cite>), which is described above. In the ODD3P method, relative
+permeability and capillary pressure hysteresis effects are incorporated
+together with grid-block end-point scaling which can optionally include
+miscible effects.</p>
+<p>Instead of the traditional specification of
+drainage and imbibition saturation functions and the explicit selection
+of the wetting phase, three sets of saturation functions are employed
+which are based upon the following ideas:</p>
+<ul>
+<li>Originally, in terms of geological time, formations which currently
+contain hydrocarbon fluids contained only water. Over a period of
+millions of years, hydrocarbon fluids gradually penetrated these formations
+until a point of equilibrium was reached between water, oil and gas.
+A set of primary saturation functions is used to represent this initial
+state of the reservoir and the initial production of hydrocarbon fluids.
+These also define the initial departure of the reservoir from its
+equilibrium conditions.</li>
+
+<li> When the formation is exploited commercially, an initial process
+of sometimes unassisted oil and gas production is usually followed
+by injection to maintain recovery. Typically the injection process
+will consist of alternating water and gas (WAG) injection which is
+one mechanism for improving oil recovery. At some point the saturation
+behavior will cease to follow the primary saturation functions and
+enter a hysteresis loop. Two sets of hysteresis saturation functions
+are used to model the hysteresis behavior experienced by the reservoir
+when fluid saturations increase and decrease as a function of the
+cyclical injection processes.   </li>
+
+</ul>
+<p>The hysteresis curves are specified in terms of increasing
+and decreasing saturation directions instead of the more usual notation
+of drainage and imbibition. For example, the relative permeability
+to water for the water-oil system is expressed both in terms of the
+increasing and decreasing water saturation. This corresponds to processes
+which result in the water saturation increasing and decreasing respectively
+with respect to the oil saturation. Conversely, the relative permeability
+to oil for the oil-water system is expressed in terms of increasing
+and decreasing oil saturation with respect to the water saturation.</p>
+<p>The use of primary saturation functions which are distinct from
+the secondary and tertiary hysteresis saturation functions permits
+the modeling of the relative permeability behavior where, for example,
+the decreasing saturation characteristics of relative permeability
+are different for primary and tertiary processes. One complexity of
+this model is establishing the appropriate criteria for the relative
+permeabilities and capillary pressures to transition from the primary
+to the hysteresis saturation functions.</p>
+</div>
+
+<div class="section"><h4 class="sectiontitle">Three-phase formulation</h4><p>The three-phase
+relative permeabilities and capillary pressures are based upon pairs
+of representative two-phase properties which are combined through
+a saturation weighting scheme. Each phase property is made dependent
+upon its own normalized saturation in order to ensure consistency
+(<cite><span> <a href="biblio_Bibliography.html#biblio_26095">Hustad
+et al, 2002</a> </span></cite>). Zero relative permeabilities are
+ensured at and below the end-point saturations. The gas-water data
+is represented by the oil-water data in order to avoid the difficulties
+associated with representing the hydrocarbon-water system when gas
+and oil are miscible. This is especially important for first-contact
+miscible floods in which phase labeling changes between gas and oil
+require that the functions of relative permeability and capillary
+pressure remain continuous. This approach also avoids the potential
+interpolation complexities associated with the use of separate saturation
+functions tabulated against different sets of saturation values.</p>
+<p>Unlike the choice of the different Stone methods for the selection
+of three-phase relative permeability models and the separate selection
+of the different methods for modeling hysteresis effects, for example,
+Jargon or Killough, the ODD3P method incorporates implicitly both
+three-phase relative permeability and capillary pressure hysteresis.
+In addition, no explicit specification of the wetting phase is required.
+Instead, the wetting phase is implicit in the characteristics of the
+tables of relative permeability and capillary pressure expressed as
+functions of gas, oil and water saturation for the primary, secondary
+hysteresis and tertiary hysteresis processes.</p>
+</div>
+
+<div class="section"><h4 class="sectiontitle">Saturation process modes (directions)</h4><p>The
+primary, secondary hysteresis and tertiary hysteresis processes refer
+to the direction of the phases’ saturations. The directions of the
+gas, oil and water saturations are defined with respect to the change
+in their respective grid-block saturations. The relative permeability
+and capillary pressure data are based upon three pairs of two phase
+data such that, for each two-phase pair,  <math><msub>
+<mrow><msub><mi>S</mi><mi>i</mi></msub><mo>=</mo>
+<mn>1</mn><mrow><mo>-</mo><mi>S</mi></mrow></mrow>
+<mi>j</mi></msub></math>  and  <math><msub>
+<mi>S</mi><mi>k</mi></msub><mo>=</mo><mn>0</mn>
+</math>  where the subscripts i, j and k denote the three phases
+subject to the constraint that  <math><mi>i</mi><mo>≠</mo><mi>j</mi><mo>≠</mo><mi>k</mi>
+</math>. The saturation directions for each phase may be summarized
+as follows:</p>
+<dl>
+
+<dt class="dlterm">Primary</dt>
+
+<dd> <math><msub><mi>S</mi>
+<mi>w</mi></msub></math>  decreasing<p> <math><msub>
+<mi>S</mi><mi>g</mi></msub></math>  increasing</p>
+<p> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext><mn>1</mn><mo>⁢</mo>
+<mo>−</mo><mtext> </mtext><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>g</mi></mrow></msub></mrow></math> or  <math><mrow>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow>
+</msub><mo>⁢</mo><mo>=</mo><mtext> </mtext><mn>1</mn>
+<mo>⁢</mo><mo>−</mo><mtext> </mtext><msub><mrow><mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub></mrow>
+</math> </p>
+</dd>
+
+
+<dt class="dlterm">Secondary hysteresis</dt>
+
+<dd> <math><msub><mi>S</mi>
+<mi>w</mi></msub></math>  increasing<p> <math><msub>
+<mi>S</mi><mi>g</mi></msub></math>  decreasing</p>
+<p> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext><mn>1</mn><mo>⁢</mo>
+<mo>−</mo><mtext> </mtext><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>g</mi></mrow></msub></mrow></math> increasing</p>
+<p> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext><mn>1</mn><mo>⁢</mo>
+<mo>−</mo><mtext> </mtext><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>w</mi></mrow></msub></mrow></math> decreasing</p>
+</dd>
+
+
+<dt class="dlterm">Tertiary hysteresis</dt>
+
+<dd> <math><msub><mi>S</mi>
+<mi>w</mi></msub></math>  decreasing<p> <math><msub>
+<mi>S</mi><mi>g</mi></msub></math>  increasing</p>
+<p> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext><mn>1</mn><mo>⁢</mo>
+<mo>−</mo><mtext> </mtext><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>g</mi></mrow></msub></mrow></math> decreasing</p>
+<p> <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext><mn>1</mn><mo>⁢</mo>
+<mo>−</mo><mtext> </mtext><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>w</mi></mrow></msub></mrow></math> increasing</p>
+</dd>
+
+</dl>
+<p>For a given saturation process mode, the gas saturation direction
+will be in the opposing direction to that of the water saturation.
+For the increasing and decreasing hysteresis saturation directions,
+the oil saturation direction will be in the opposing direction to
+the water or gas saturation against which it has been measured. For
+example, for the secondary hysteresis process, gas saturation is decreasing;
+therefore, if the oil saturation is measured or modeled against gas
+saturation, the measurements for increasing oil saturation will be
+used for the secondary hysteresis process.</p>
+</div>
+
+<div class="section"><h4 class="sectiontitle">Availability and limitations</h4><p>The ODD3P model
+is currently only available for ECLIPSE 300 compositional models using
+an equation of state solution method.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

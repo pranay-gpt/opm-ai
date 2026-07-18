@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using the ECLIPSE 300 surfactant model"/>
+<meta name="DC.subject" content="Surfactant model ECLIPSE 300 surfactant properties, Surfactant model ECLIPSE 300 adsorption, Surfactant model ECLIPSE 300 decay, Surfactant model ECLIPSE 300 wettability, Surfactant model ECLIPSE 300 injection, Surfactant model ECLIPSE 300 output, Surfactant, Using ECLIPSE 300"/>
+<meta name="keywords" content="Surfactant model ECLIPSE 300 surfactant properties, Surfactant model ECLIPSE 300 adsorption, Surfactant model ECLIPSE 300 decay, Surfactant model ECLIPSE 300 wettability, Surfactant model ECLIPSE 300 injection, Surfactant model ECLIPSE 300 output, Surfactant, Using ECLIPSE 300"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="surfactant_using_the_eclipse_300_surfactant_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using the ECLIPSE 300 surfactant model</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="surfactant_using_the_eclipse_300_surfactant_model"><a name="surfactant_using_the_eclipse_300_surfactant_model"><!-- --></a>
+<h1 class="topictitle1">Using the ECLIPSE 300 surfactant model</h1>
+
+
+ <div>
+<div class="section" id="surfactant_surfactant_properties"><a name="surfactant_surfactant_properties"><!-- --></a><h4 class="sectiontitle">Surfactant properties</h4><p>The <a href="../ecl_rm/COMPW.html#COMPW">COMPW</a> keyword should be used to set at least two water components
+- one for water itself and one to represent surfactant. The <a href="../ecl_rm/CWTYPE.html#CWTYPE">CWTYPE</a> keyword should be used
+to identify which water components behave as surfactants. The water
+properties are defined using the water component keywords, as described
+in <a href="watercompintro_Water_component_keywords.html#watercompintro_props_section_keywords"> "Water PROPS keywords"</a>. For example, the water viscosity can
+be set using the <a href="../ecl_rm/VREFW.html#VREFW">VREFW</a> keyword.</p>
+</div>
+
+<div class="section" id="surfactant_adsorption"><a name="surfactant_adsorption"><!-- --></a><h4 class="sectiontitle">Adsorption</h4><p>Adsorbed
+surfactant can be modeled using the <a href="../ecl_rm/SOLID.html#SOLID">SOLID</a> model. The <a href="../ecl_rm/COMPS.html#COMPS"> COMPS</a> or <a href="../ecl_rm/COMPSOL.html#COMPSOL">COMPSOL</a> keyword should be
+used to set the number of non-water components (including solids).
+The <a href="../ecl_rm/CVTYPE.html#CVTYPE">CVTYPE</a> keyword should be used to identify the solid component. The
+properties of adsorbed surfactant are defined using the solid keywords,
+see <a href="solidintro_Solid_keywords.html#solidintro.tab.0050">276.1</a>.</p>
+<p>The adsorption and desorption
+processes can be modeled using the <a href="../ecl_rm/REACTION.html#REACTION">REACTION</a> model where the properties
+of the reaction are defined using the reaction keywords, as described
+in <a href="reactionskeywords_Chemical_reaction_keywords.html#reactionskeywords_props_section_keywords"> "Chemical reaction PROPS keywords"</a>. The reaction keywords
+are flexible and you can define the reaction in various ways. One
+simple method is described in <a href="solidintro_Adsorption_of_dissolved_water_components.html#solidintro_adsorption_of_dissolved_water_components"> "Adsorption of dissolved water components"</a>. In this method
+the <a href="../ecl_rm/STOREAC.html#STOREAC">STOREAC</a> and <a href="../ecl_rm/STOPROD.html#STOPROD">STOPROD</a> keywords are used to define dissolved surfactant as the reactant
+and adsorbed surfactant as the product of the reaction. The <a href="../ecl_rm/EQLDREAC.html#EQLDREAC">EQLDREAC</a> keyword (model 4)
+is used to define a reaction rate that depends on the dissolved-adsorbed
+equilibrium. The half-life for  <math><mo>(</mo><msub><mi>C</mi><mrow><mi>a</mi><mi>e</mi>
+<mi>q</mi></mrow></msub><mrow><mo>-</mo><msub><mi>C</mi><mi>a</mi></msub></mrow><mo>)</mo></math> 
+is:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="surfactant.XID-00000198"/>
+ <math><mrow><msub>
+<mrow><mi>T</mi></mrow><mrow><mn>1</mn><mo>/</mo>
+<mn>2</mn></mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext><mi>ln</mi><mo>⁡</mo><mn>2</mn><mo>/</mo>
+<msub><mrow><mi>A</mi></mrow><mrow><mi>r</mi></mrow>
+</msub></mrow></math> 
+</td><td align="right">[Eq. 473.1]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>A</mi>
+<mi>r</mi></msub></math> </td>
+
+<td valign="top"> is a constant defined by the <a href="../ecl_rm/REACRATE.html#REACRATE">REACRATE</a> keyword,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>C</mi>
+<mrow><mi>a</mi><mi>e</mi><mi>q</mi></mrow></msub>
+</math> </td>
+
+<td valign="top"> is the equilibrium adsorbed solid concentration defined by <a href="../ecl_rm/EQLDTAB.html#EQLDTAB">EQLDTAB</a>,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>C</mi>
+<mi>a</mi></msub></math> </td>
+
+<td valign="top"> is the actual adsorbed solid concentration.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>This reaction can be one way (forwards for adsorption or
+backwards for desorption) or two way.</p>
+<p>If an ECLIPSE 100 model
+is converted to ECLIPSE 300, <a href="../ecl_rm/EQLDTAB.html#EQLDTAB">EQLDTAB</a> data can be derived from the <a href="../ecl_rm/SURFADS.html#SURFADS">SURFADS</a> data, which defines
+equilibrium concentrations  <math><msub><mi>C</mi>
+<mrow><mi>a</mi><mi>e</mi><mi>q</mi></mrow></msub>
+</math>  as functions of dissolved concentrations  <math><msub><mi>C</mi>
+<mi>d</mi></msub></math>. To convert the data it is necessary
+to replace the dissolved concentrations  <math><msub>
+<mi>C</mi><mi>d</mi></msub></math>  with the surfactant
+mole fractions  <math><msub><mi>a</mi>
+<mi>i</mi></msub></math>  defined by</p>
+<p>              <math><mrow><msub><mrow>
+<mi>a</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>=</mo><mfrac><mrow><mi>M</mi><msub><mrow><mi>W</mi>
+</mrow><mrow><mi>w</mi></mrow></msub></mrow><mrow>
+<msub><mrow><mi>ρ</mi></mrow><mrow><mi>w</mi><mi>s</mi></mrow></msub></mrow></mfrac><mo>⋅</mo><mfrac>
+<mrow><msub><mrow><mi>C</mi></mrow><mrow><mi>d</mi>
+</mrow></msub></mrow><mrow><mi>M</mi><msub><mrow><mi>W</mi></mrow><mrow><mi>i</mi></mrow></msub></mrow>
+</mfrac></mrow></math>         </p>
+<p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow><mi>M</mi>
+<msub><mi>W</mi><mi>w</mi></msub></mrow></math>  and
+ <math><mrow><mi>M</mi>
+<msub><mi>W</mi><mi>i</mi></msub></mrow></math> </td>
+
+<td valign="top"> are the molecular weights of the water mixture and the surfactant
+component, and   </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>ρ</mi>
+<mrow><mi>w</mi><mi>s</mi></mrow></msub></math> </td>
+
+<td valign="top">is the surface density of water.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>In ECLIPSE 100 the adsorption process is instantaneous,
+which could be modeled using a large reaction rate constant  <math><msub><mi>A</mi>
+<mi>r</mi></msub></math>. However this may make it hard to
+converge. A reasonable value for  <math><msub>
+<mi>A</mi><mi>r</mi></msub></math>  can be determined
+by estimating a half-life and using equation <a href="surfactant_Using_the_ECLIPSE_300_surfactant_model.html#surfactant.XID-00000198">473.1</a>. For example, the residence
+time of the surfactant in a cell can be determined from the pore volume
+and the flow rate  <math>
+<mrow><msub><mrow><mi>T</mi></mrow><mrow><mi>r</mi>
+<mi>e</mi><mi>s</mi></mrow></msub><mo>≈</mo>
+<msub><mrow><mi>V</mi></mrow><mrow><mi>P</mi></mrow>
+</msub><mo>/</mo><mi>Q</mi></mrow></math>, and the maximum
+rate of adsorption occurs when there are no adsorbed solids and when
+the surfactant concentration is at a maximum. If we set <math><mrow><msub><mrow>
+<mi>A</mi></mrow><mrow><mi>r</mi></mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext><mi>ln</mi><mo>⁡</mo>
+<mn>2</mn><mo>/</mo><msub><mrow><mi>T</mi></mrow>
+<mrow><mi>r</mi><mi>e</mi><mi>s</mi></mrow></msub>
+</mrow></math>  then we would expect about half the surfactant
+to be adsorbed in the first cell.</p>
+</div>
+
+<div class="section" id="surfactant_decay"><a name="surfactant_decay"><!-- --></a><h4 class="sectiontitle">Decay</h4><p>Surfactant decay
+can be modeled by using the <a href="../ecl_rm/REACTION.html#REACTION">REACTION</a> model where the properties of the reaction are defined using
+the reaction keywords, as described in <a href="reactionskeywords_Chemical_reaction_keywords.html#reactionskeywords_props_section_keywords"> "Chemical reaction PROPS keywords"</a>. Surfactant could decay
+to water, or perhaps to another water component. The <a href="../ecl_rm/STOREAC.html#STOREAC">STOREAC</a> and <a href="../ecl_rm/STOPROD.html#STOPROD">STOPROD</a> keywords should be
+used to define surfactant as the reactant and water (or another component)
+as the product of the reaction. The reaction rate should be made proportional
+to the amount of surfactant using <a href="../ecl_rm/REACCORD.html#REACCORD">REACCORD</a>. The <a href="../ecl_rm/REACRATE.html#REACRATE">REACRATE</a> keyword should be
+used to define a constant  <math><msub><mi>A</mi>
+<mi>r</mi></msub></math>  for the decay rate. This can be
+determined from the decay half-life <math><mrow><msub><mrow>
+<mi>A</mi></mrow><mrow><mi>r</mi><mo>⁢</mo></mrow>
+</msub><mo>=</mo><mtext> </mtext><mi>ln</mi><mo>⁡</mo>
+<mn>2</mn><mo>/</mo><msub><mrow><mi>T</mi></mrow>
+<mrow><mn>1</mn><mo>/</mo><mn>2</mn></mrow></msub>
+</mrow></math>.</p>
+</div>
+
+<div class="section" id="surfactant_surfactant_effects1"><a name="surfactant_surfactant_effects1"><!-- --></a><h4 class="sectiontitle">Surfactant effects</h4><p>The surfactant concentration is calculated in each cell by summing
+up the weight of the surfactant components and dividing by the volume
+of water at surface conditions. The surface tension  <math><mrow><msub><mrow>
+<mi>σ</mi></mrow><mrow><mi>o</mi><mi>w</mi>
+</mrow></msub></mrow></math> must be set using the <a href="../ecl_rm/SURFST.html#SURFST">SURFST</a> keyword, as a function
+of the surfactant concentration, or <a href="../ecl_rm/SURFSTES.html#SURFSTES"> SURFSTES</a> keyword, as a function
+of the surfactant and salt concentrations. Note that the amount of
+adsorbed surfactant does not affect the surface tension. The surface
+tension allows the capillary number  <math><msub>
+<mi>N</mi><mi>c</mi></msub></math>  to be calculated and
+determines the capillary pressure multiplier  <math><mrow><msub><mrow>
+<mi>F</mi></mrow><mrow><mi>c</mi><mi>p</mi></mrow>
+</msub></mrow></math>. The <a href="../ecl_rm/SURFCAPD.html#SURFCAPD">SURFCAPD</a> keyword must be used
+to determine the effect of surface tension on the relative permeability
+ <math><msub><mi>F</mi>
+<mrow><mi>k</mi><mi>r</mi></mrow></msub></math>.</p>
+<p>The <a href="../ecl_rm/SURFNUM.html#SURFNUM">SURFNUM</a> keyword must be used to identify the miscible relative permeability
+tables. Capillary pressures defined by these tables are not used -
+it is assumed that the miscible capillary pressure is zero.</p>
+<p>For cells with low water saturation, a small amount of surfactant
+will have a high concentration in the water phase, and could therefore
+have a large effect on the capillary pressure. To prevent numerical
+errors having an effect, the surfactant concentration in the water
+phase is set to zero for cells with very small water saturations.
+Therefore there will be no surfactant effect in cells with water saturations
+below a threshold. The molar concentrations are unchanged, so the
+component balance equations are not affected by this threshold. The
+threshold value can be set using the <a href="../ecl_rm/SURFOPTS.html#SURFOPTS">SURFOPTS</a> keyword.</p>
+</div>
+
+<div class="section" id="surfactant_wettability"><a name="surfactant_wettability"><!-- --></a><h4 class="sectiontitle">Wettability</h4><p>The effects on wettability of adsorbed surfactant can be modeled
+by creating two sets of saturation functions, for low and high concentrations
+of adsorbed solids. The <a href="../ecl_rm/SATNUM.html#SATNUM">SATNUM</a> and <a href="../ecl_rm/SOLWNUM.html#SOLWNUM">SOLWNUM</a> keywords are used to identify the saturation functions corresponding
+to these two extremes and the <a href="../ecl_rm/SOLWTAB.html#SOLWTAB">SOLWTAB</a> keyword is used to determine an interpolation parameter dependent
+on the adsorbed solid concentration.</p>
+</div>
+
+<div class="section" id="surfactant_injection"><a name="surfactant_injection"><!-- --></a><h4 class="sectiontitle">Injection</h4><p>The
+water composition of an injection stream can be defined using the <a href="../ecl_rm/WELLSTRW.html#WELLSTRW">WELLSTRW</a> keyword, and associated
+with an injection well using the <a href="../ecl_rm/WINJW.html#WINJW">WINJW</a> keyword.</p>
+</div>
+
+<div class="section" id="surfactant_output"><a name="surfactant_output"><!-- --></a><h4 class="sectiontitle">Output</h4><p>Properties
+of the water, adsorbed surfactant and the adsorption / desorption
+processes can be output using the <span class="keyword">SUMMARY</span> vectors
+and other output keywords described in <a href="watercompintro_Water_component_keywords.html#watercompintro_water_component_keywords"> "Water component keywords"</a>, <a href="solidintro_Solid_keywords.html#solidintro_solid_keywords"> "Solid
+keywords"</a> and <a href="reactionskeywords_Chemical_reaction_keywords.html#reactionskeywords_chemical_reaction_keywords"> "Chemical reaction keywords"</a>. In addition surfactant specific
+keywords can be used to output the surfactant concentration  <math><mrow><msub><mrow>
+<mi>C</mi></mrow><mrow><mi>s</mi><mi>u</mi><mi>r</mi>
+<mi>f</mi></mrow></msub></mrow></math>, surface tension
+ <math><msub><mi>σ</mi>
+<mrow><mi>o</mi><mi>w</mi></mrow></msub></math>, capillary
+number  <math><msub><mi>N</mi>
+<mi>c</mi></msub></math>, capillary pressure multiplier  <math><msub><mi>F</mi>
+<mrow><mi>c</mi><mi>p</mi></mrow></msub></math>. and
+the miscible / immiscible relative permeability interpolation parameter
+ <math><msub><mi>F</mi>
+<mrow><mi>k</mi><mi>r</mi></mrow></msub></math>. See <a href="surfactant_Summary_of_ECLIPSE_300_keywords.html#surfactant_summary_section1"> "ECLIPSE 300 Surfactant SUMMARY output controls"</a> and <a href="surfactant_Summary_of_ECLIPSE_300_keywords.html#surfactant_other_reporting"> "ECLIPSE 300 Surfactant output controls"</a>.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

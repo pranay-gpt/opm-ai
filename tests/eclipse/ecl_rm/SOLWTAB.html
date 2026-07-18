@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SOLWTAB"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SOLWTAB"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SOLWTAB</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SOLWTAB"><a name="SOLWTAB"><!-- --></a>
+<h1 class="keyword">SOLWTAB</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="solwtab.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="solwtab.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2370e45">  </th>
+
+<th valign="top" id="d2370e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2370e54"> x </th>
+
+<th valign="top" id="d2370e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2370e45 d2370e54 ">  </td>
+
+<td valign="top" headers="d2370e48 d2370e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2370e45 d2370e54 ">  </td>
+
+<td valign="top" headers="d2370e48 d2370e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2370e45 d2370e54 ">  </td>
+
+<td valign="top" headers="d2370e48 d2370e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2370e45 d2370e54 "> x </td>
+
+<td valign="top" headers="d2370e48 d2370e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2370e45 d2370e54 ">  </td>
+
+<td valign="top" headers="d2370e48 d2370e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2370e45 d2370e54 ">  </td>
+
+<td valign="top" headers="d2370e48 d2370e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2370e45 d2370e54 ">  </td>
+
+<td valign="top" headers="d2370e48 d2370e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2370e45 d2370e54 ">  </td>
+
+<td valign="top" headers="d2370e48 d2370e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a>  (set in the <span class="keyword">TABDIMS</span> keyword)
+tables that define an interpolation parameter as a function of the
+adsorbed solid concentration. The parameter is used to interpolate
+between two sets of saturation functions, representing two different
+wettability conditions, defined by <a href="SATNUM.html#SATNUM"> SATNUM</a> and <a href="SOLWNUM.html#SOLWNUM"> SOLWNUM</a>. Oil and water relative permeability and capillary pressure
+saturation functions are interpolated. The gas saturation functions
+are not affected by solid wettability and only the <span class="keyword">SATNUM</span> tables are used for gas permeability and capillary pressure.</p>
+
+<p>Each table consists of the following columns of data and should
+be terminated by a slash (/):</p>
+
+<ol>
+<li> Concentration of adsorbed solid <p>The values should increase
+monotonically down the column.</p>
+ <p>UNITS: kg/kg (<samp class="codeph">METRIC</samp>), lb/lb (<samp class="codeph">FIELD</samp>), gm/gm (<samp class="codeph">LAB</samp>),
+kg/kg (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+<li> Interpolation parameter <p>The value should not be greater than
+1.0 or less than 0.0 A value of 0 means the <span class="keyword">SATNUM</span> saturation functions and a value of 1 means the <span class="keyword">SOLWNUM</span> saturation functions will be used.</p>
+</li>
+
+</ol>
+
+<p>There must be the same number of entries in each column of a given
+table.Each column must contain at least two entries, and no more than <a href="TABDIMS.html#TABDIMS.NSSFUN"> NSSFUN</a> (set
+in the <span class="keyword">TABDIMS</span> keyword) entries.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> <samp class="codeph">NTSFUN</samp> tables must be supplied. However only <span class="keyword">SOLWTAB</span> tables referenced by <span class="keyword">SATNUM</span> are
+used. If any table after the first is defaulted, then that table is
+copied from the previous table.</span></div>
+
+<p>The keyword can only be used with the <a href="SOLID.html#SOLID"> SOLID</a> model. The <a href="ROCKDEN.html#ROCKDEN"> ROCKDEN</a> keyword must be supplied, to allow the adsorbed
+solid concentration to be determined. The keyword can be used with
+standard saturation functions and can also be used with the oil-water
+miscibility model which is described in the <a href="../ecl_td/surfactant_Surfactant_Model.html#surfactant_surfactant_model">"Surfactant model"</a> in the <cite>ECLIPSE Technical Description</cite>. However, it cannot
+be used with other saturation function options, such as hysteresis, <a href="ODD3P.html#ODD3P">  ODD3P</a> and <a href="IKU3P.html#IKU3P"> IKU3P</a>.</p>
+
+<div class="section" id="solwtab_example"><a name="solwtab_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTSFUN</samp> = 4 and <samp class="codeph">NSSFUN</samp> = 4</p>
+ <pre><code>SOLWTAB
+0        0.0
+0.0001  0.2
+0.0005  0.3
+0.0010 0.6/
+/ default second table to the first table
+0   0.0
+1  0.0  / dummy table corresponding to a SATNUM table value
+/ default the fourth table to the third table</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Corner point grids"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="egrid_corner_point_grids"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Corner point grids</title>
+</head>
+<body>
+
+
+<div class="nested0" id="egrid_corner_point_grids"><a name="egrid_corner_point_grids"><!-- --></a>
+<h1 class="topictitle1">Corner point grids</h1>
+
+
+ <div>
+<p>Keywords for corner point grids are valid following a <span class="keyword">GRIDHEAD</span> keyword of type 1.</p>
+
+<p>The keywords are arranged as follows:</p>
+
+<ol>
+<li><span class="keyword">BOXORIG</span> (optional)</li>
+
+<li><span class="keyword">COORD</span></li>
+
+<li><span class="keyword">COORDSYS</span> (optional)</li>
+
+<li><span class="keyword">ZCORN</span></li>
+
+<li><span class="keyword">ACTNUM</span> (optional)</li>
+
+<li><span class="keyword">CORSNUM</span> (optional)</li>
+
+<li><span class="keyword">HOSTNUM</span> (for LGRs only)</li>
+
+</ol>
+
+
+<div class="tablenoborder"><a name="egrid.tab.0153"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="egrid.tab.0153" frame="border" border="1" rules="all"><caption>
+           Table 22.1  Corner point grid keywords </caption>    
+<thead align="left">
+<tr>
+<th valign="top" id="d10e91"> Keyword </th>
+
+<th valign="top" id="d10e94"> No. of Items </th>
+
+<th valign="top" id="d10e97"> Data Type </th>
+
+<th valign="top" id="d10e100"> Contents </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d10e91 "> <span class="keyword">GRIDHEAD</span> </td>
+
+<td valign="top" headers="d10e94 "> 100 </td>
+
+<td valign="top" headers="d10e97 "> INTE </td>
+
+<td valign="top" headers="d10e100 "> In addition to items described in Table <a href="egrid_EGRID_file_structure.html#egrid.grid.keywords">21.2</a>: <p>25) NUMRES (number of reservoirs)</p>
+<p>26) NSEG (number of
+coordinate line segments) = 1</p>
+<p>27) NTHETA</p>
+<ul>
+<li> = 0 for non-radial</li>
+
+<li>&gt; 0 for radial global</li>
+
+<li> = 1, 4 or 8 for radial LGR</li>
+
+</ul>
+<p>28) Lower I-index in host</p>
+<p>29) Lower J-index in host</p>
+<p>30) Lower K-index in host</p>
+<p>31) Upper I-index in host</p>
+<p>32) Upper J-index in host</p>
+<p>33) Upper K-index in host</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d10e91 "> <span class="keyword">BOXORIG</span> </td>
+
+<td valign="top" headers="d10e94 "> 3 </td>
+
+<td valign="top" headers="d10e97 "> INTE </td>
+
+<td valign="top" headers="d10e100 "> For a subset of a full grid or LGR, output by
+the Extract program, the box origin IX,IY,IZ relative to the original
+grid. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d10e91 "> <span class="keyword">COORD</span> </td>
+
+<td valign="top" headers="d10e94 "> 6*(NY+1)*(NX+1)*NUMRES </td>
+
+<td valign="top" headers="d10e97 "> REAL </td>
+
+<td valign="top" headers="d10e100 "> Coordinate lines, for each reservoir, each defined
+by top and bottom X,Y,Z values. Syntax is as in the ECLIPSE input
+keyword of the same name. <p>Where INTERSECT has imported a grid with
+missing pillars, it will export dummy values as required to be compatible
+with this format.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d10e91 "> <span class="keyword">COORDSYS</span> </td>
+
+<td valign="top" headers="d10e94 "> 6*NUMRES </td>
+
+<td valign="top" headers="d10e97 ">INTE</td>
+
+<td valign="top" headers="d10e100 "> Coordinate system layer definitions for each
+reservoir. <p>1) lower bound for block index in k</p>
+<p>2) upper bound
+for block index in k</p>
+<p>3) 0 — circle complete, 1 — circle incomplete</p>
+<p>4) 0 — join reservoir, 1 — isolate reservoir</p>
+<p>5) lower bound
+for lateral reservoir connection</p>
+<p>6) upper bound for lateral
+reservoir connection</p>
+<p>Syntax as in the ECLIPSE input keyword
+of the same name.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d10e91 "> <span class="keyword">ZCORN</span> </td>
+
+<td valign="top" headers="d10e94 "> (2*NX)*(2*NY)*(2*NZ) </td>
+
+<td valign="top" headers="d10e97 "> REAL </td>
+
+<td valign="top" headers="d10e100 "> Z-values for each node in the grid. Syntax as
+in the ECLIPSE input keyword of the same name. <p>The size of <span class="keyword">ZCORN</span> must meet the maximum size allowed for a data array
+as stated in <a href="outputfl_ECLIPSE_output_formats.html#outputfl_eclipse_output_formats"> "ECLIPSE output formats"</a>. For simulators that do not implement
+the extended size format described in <a href="outputfl_Output_of_Large_Arrays.html#outputfl_output_of_large_arrays"> "Output of Large Arrays"</a>, <span class="keyword">ZCORN</span> imposes
+the limit that <samp class="codeph">NX</samp> * <samp class="codeph">NY</samp> * <samp class="codeph">NZ</samp> must be less than 2<sup>28</sup>.</p>
+<p>Where INTERSECT has imported
+a grid with missing pillars, it will export dummy values as required
+to be compatible with this format.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d10e91 "> <span class="keyword">ACTNUM</span> </td>
+
+<td valign="top" headers="d10e94 "> NX*NY*NZ </td>
+
+<td valign="top" headers="d10e97 "> INTE</td>
+
+<td valign="top" headers="d10e100 "> Active cell index: <p>0 — inactive</p>
+<p>1 —
+active (or active matrix for dual porosity runs)</p>
+<p>2 — active
+fracture (for dual porosity runs)</p>
+<p>3 — active matrix and fracture
+(for dual porosity runs)</p>
+<p>ECLIPSE LGR host cells are considered
+to be active.</p>
+<p>INTERSECT currently treats all cells as active
+within an EGRID file (value 1), and all dual porosity cells as active
+both matrix and fracture (value 3).</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d10e91 "> <span class="keyword">CORSNUM</span> </td>
+
+<td valign="top" headers="d10e94 "> NX*NY*NZ </td>
+
+<td valign="top" headers="d10e97 ">INTE</td>
+
+<td valign="top" headers="d10e100 "> Coarsening group numbers for each cell (if any) </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d10e91 "> <span class="keyword">HOSTNUM</span> </td>
+
+<td valign="top" headers="d10e94 "> NX*NY*NZ </td>
+
+<td valign="top" headers="d10e97 ">INTE</td>
+
+<td valign="top" headers="d10e100 "> Host cell number in the parent grid (LGR's only). </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

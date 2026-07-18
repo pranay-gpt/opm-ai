@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="TOPT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="TOPT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>TOPT</title>
+</head>
+<body>
+
+
+<div class="nested0" id="TOPT"><a name="TOPT"><!-- --></a>
+<h1 class="keyword">TOPT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="topt.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="topt.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2614e45">  </th>
+
+<th valign="top" id="d2614e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2614e54"> x </th>
+
+<th valign="top" id="d2614e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2614e45 d2614e54 ">  </td>
+
+<td valign="top" headers="d2614e48 d2614e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2614e45 d2614e54 ">  </td>
+
+<td valign="top" headers="d2614e48 d2614e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2614e45 d2614e54 ">  </td>
+
+<td valign="top" headers="d2614e48 d2614e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2614e45 d2614e54 ">  </td>
+
+<td valign="top" headers="d2614e48 d2614e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2614e45 d2614e54 ">  </td>
+
+<td valign="top" headers="d2614e48 d2614e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2614e45 d2614e54 ">  </td>
+
+<td valign="top" headers="d2614e48 d2614e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2614e45 d2614e54 ">  </td>
+
+<td valign="top" headers="d2614e48 d2614e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2614e45 d2614e54 "> x </td>
+
+<td valign="top" headers="d2614e48 d2614e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword has a number of preset tuning options. All the options
+set can be defined by combinations of other keywords.</p>
+
+<p>The keyword contains an item of data, terminated with a slash (/).
+The item should be one of the following:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">DEFAULT</samp> </td>
+
+<td valign="top"> This is the default item; no changes are made, the current
+tuning setting for the simulator are used. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">AIM1</samp> </td>
+
+<td valign="top"> This is equivalent to the <samp class="codeph">DEFAULT</samp> settings,
+this option is only maintained for backward compatibility reasons.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">2001A</samp> </td>
+
+<td valign="top"> This setting reestablishes the 2001A tuning setting, and is
+additionally activated by <a href="OPTIONS3.html#options3.69"> item
+69</a> in <span class="keyword">OPTIONS3</span> <ul>
+<li> The limit on the timestep after a well alteration is set to 5
+days for an <a href="IMPES.html#IMPES">  IMPES</a> run and 20 days for an <a href="AIM.html#AIM">  AIM</a> or <a href="FULLIMP.html#FULLIMP">  FULLIMP</a> run. See item 11 in the <a href="TSCRIT.html#TSCRIT">  TSCRIT</a> keyword. During history matching, quite often the report
+steps will be close together (for example every month), with well
+modifications after every report. The limit of 20 days after a well
+modification prevents a month timestep, and was consequently changed
+for the 2002A release. </li>
+
+<li> The implicit cells are controlled using the <a href="AIMCON.html#AIMCON">  AIMCON</a> keyword. The settings used here
+reproduce the 2001A settings: <p>Set open well cells, and all cells
+with the same inner solver direction as implicit (item 1 in <span class="keyword">AIMCON</span>).</p>
+ <p>Reevaluate the set of implicit cells every
+5<sup>th</sup> timestep (item 4 in <span class="keyword">AIMCON</span>).</p>
+<p>Use 2001A default for implicit cell selection (item 5 in <span class="keyword">AIMCON</span>).</p>
+<p>Do not select any implicit cells based on
+solution change (item 7 in <span class="keyword">AIMCON</span>).</p>
+<p>The <span class="keyword">TOPT</span> keyword with this item for an <span class="keyword">AIM</span> run is equivalent to the following combination of keywords:</p>
+<pre><code>TSCRIT
+-- 1-- 2-- 3-- 4-- 5-- 6-- 7-- 8-- 9--10--11--12--13--  .......
+  1*  1*  1*  1*  1*  1*  1*  1*  1*  1*  20  1*  1*   /
+AIMCON
+-- 1-- 2-- 3-- 4-- 5-- 6-- 7-- 8-- 9--10--
+   1  1*   1*  5  -1.0 1  -1.0  /</code></pre> </li>
+
+</ul>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">AIMCHOP</samp> </td>
+
+<td valign="top">This setting is suitable for <span class="keyword">AIM</span> runs for
+which <samp class="codeph">AIM1</samp> gives high numbers of implicit cells and/or
+severe timestep chops. It is a similar to the <samp class="codeph">AIM1</samp> setting, but with the following modifications:<ul>
+<li> The maximum increase factor after a timestep is 1.5 (item 4 in <span class="keyword">TSCRIT</span>). </li>
+
+<li> The maximum decrease factor after a timestep is 0.125 (item 5
+in <span class="keyword">TSCRIT</span>). </li>
+
+<li> Cells with a normalized solution change of over a quarter (item
+7 in <span class="keyword">AIMCON</span>) of 0.1 the solution change target
+(item 10 in <span class="keyword">TSCRIT</span>) is implicit, up to a maximum
+of 5% (item 6 in <span class="keyword">AIMCON</span>) of the reservoir cells. <p>The <span class="keyword">TOPT</span> keyword with this item is equivalent
+to the following combination of keywords:</p>
+ <pre><code>TSCRIT
+-- 1-- 2-- 3-- 4-- 5-- 6-- 7-- 8-- 9--10--11--12--13-- .......
+  1*  1*  1*  1.5 .125 1*  1*  1*  1*  .1 1*  1*  1*   /
+AIMCON
+-- 1-- 2-- 3-- 4-- 5-- 6-- 7-- 8-- 9--10--
+   2  1*   1*  1  .5   5  .25  5   5  1  /</code></pre> </li>
+
+</ul>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">AIMLOOSE</samp> </td>
+
+<td valign="top"> This setting is suitable for <a href="AIM.html#AIM"> AIM</a> runs where large areas of the reservoir may
+need to be implicit (for example for a sector model with many small
+cells near a gas injector). It is a similar to the <samp class="codeph">AIM1</samp> setting, but with the following modifications:<ul>
+<li>No limits are placed on the number of implicit cells (items 6
+and 8 of the <a href="AIMCON.html#AIMCON">  AIMCON</a> keyword). If large numbers of cells are made implicit this increases
+the memory requirements.</li>
+
+<li>The <span class="keyword">TOPT</span> keyword with this item is equivalent
+to the following combination of keywords<pre><code>AIMCON
+-- 1-- 2-- 3-- 4-- 5-- 6-- 7-- 8-- 9--10--
+   2  1*   1*  1  .5  100 .25 100  5  1  /</code></pre></li>
+
+</ul>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">This option only changes the values specified, and does not
+reset all the default tuning values. Consequently, tuning keywords
+that appear before <span class="keyword">TOPT</span> in the <span class="keyword">SCHEDULE</span> section take effect if their values are not altered by the <span class="keyword">TOPT</span> keyword. </span></div>
+
+<div class="section" id="topt_example"><a name="topt_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>TOPT
+ AIMCHOP/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Instability in IMPES"/>
+<meta name="DC.subject" content="Formulation and solution of the equations"/>
+<meta name="keywords" content="Formulation and solution of the equations"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="formulate_instability_in_impes"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Instability in IMPES</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="formulate_instability_in_impes"><a name="formulate_instability_in_impes"><!-- --></a>
+<h1 class="topictitle1">Instability in IMPES</h1>
+
+
+ <div>
+<p>The most common instability using IMPES arises when a phase crosses
+the critical saturation and becomes mobile. In figure <a href="formulate_Instability_in_IMPES.html#formulate.XID-00000128">661.1</a>  water is flowing from cell
+A to cell B. Water levels at time t are shown by the dark shading.
+Because the saturation in cell B is below S<sub>wcr</sub> at time
+t, water cannot flow out of cell B. During the timestep,  <math><mrow><mi>d</mi>
+<mi>t</mi></mrow></math>, the water saturation in cell B
+can rise significantly above S<sub>wcr</sub> to a value greater than
+that in cell A. At the next timestep, water is allowed to flow out
+of cell B at a high rate especially if k<sub>rw</sub> increases sharply
+above S<sub>wcr</sub>, and the saturation may fall below S<sub>wcr</sub> making water in cell B immobile again at the following timestep.
+Saturations may therefore oscillate about their critical values using
+IMPES. These difficulties do not arise with the fully-implicit method
+because as soon as S<sub>w</sub> is greater than S<sub>wcr</sub> it
+is permitted to flow out of cell B.</p>
+
+<div class="fignone" id="formulate.XID-00000128"><a name="formulate.XID-00000128"><!-- --></a>
+
+ <br/><img src="../img/formulate1.png" width="385px"/><br/> 
+<br/><span class="figcap">
+           Figure 661.1  The most common instability using IMPES</span></div>
+
+<p>This type of instability may limit the efficiency of the IMPES
+method. The problem is reduced in some simulators (but not in ECLIPSE)
+by automatically rescaling the input relative permeability curves
+to equally spaced saturation intervals. This is not done in ECLIPSE
+because:</p>
+
+<ul>
+<li>you may wish the data to be honored precisely</li>
+
+<li>sharp relative permeability contrasts are handled efficiently
+by the fully implicit method</li>
+
+<li>table look-up is equally efficient either way (contrary to popular
+belief)  </li>
+
+<li>you have the option of inputting ‘smooth’ k<sub>r</sub> curves</li>
+
+</ul>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

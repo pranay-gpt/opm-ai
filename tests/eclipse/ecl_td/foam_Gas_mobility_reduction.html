@@ -1,0 +1,669 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Gas mobility reduction"/>
+<meta name="DC.subject" content="Gas, Mobility reduction"/>
+<meta name="keywords" content="Gas, Mobility reduction"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="foam_gas_mobility_reduction"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Gas mobility reduction</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="foam_gas_mobility_reduction"><a name="foam_gas_mobility_reduction"><!-- --></a>
+<h1 class="topictitle1">Gas mobility reduction</h1>
+
+
+ <div>
+<p>The foam modifies the gas mobility by way of a simple multiplier
+supplied as a function of foam concentration (that is the effective
+surfactant concentration). The mobility modification is applied explicitly;
+that is, the modification associated with the conditions at the end
+of each iteration or timestep is applied at the subsequent iteration
+or timestep.</p>
+
+<div class="section" id="foam_gas_mobility_reduction_models"><a name="foam_gas_mobility_reduction_models"><!-- --></a><h4 class="sectiontitle">Gas mobility
+reduction models</h4><p>Two methods of modeling the gas mobility
+reduction <math><mrow>
+<msub><mrow><mi>M</mi></mrow><mrow><mi>r</mi><mi>f</mi></mrow></msub></mrow></math> due to foam are available:</p>
+<dl>
+
+<dt class="dlterm">Tabular model:</dt>
+
+<dd>For this model the gas mobility reduction factor is modeled using
+a set of tables which specify the mobility reduction as tabulated
+functions of foam concentration (<a href="../ecl_rm/FOAMMOB.html#FOAMMOB">FOAMMOB</a> keyword), pressure
+(<a href="../ecl_rm/FOAMMOBP.html#FOAMMOBP">FOAMMOBP</a> keyword) and shear (<a href="../ecl_rm/FOAMMOBS.html#FOAMMOBS">FOAMMOBS</a> keyword) from which the net mobility reduction factor is
+calculated.</dd>
+
+</dl>
+<dl>
+
+<dt class="dlterm">Functional form:</dt>
+
+<dd>For this model, the gas mobility reduction factor is modeled in
+terms of a set of functions which represent the individual reduction
+factors due to surfactant concentration (<a href="../ecl_rm/FOAMFSC.html#FOAMFSC">FOAMFSC</a> keyword), oil saturation
+(<a href="../ecl_rm/FOAMFSO.html#FOAMFSO">FOAMFSO</a> keyword), water saturation (<a href="../ecl_rm/FOAMFSW.html#FOAMFSW">FOAMFSW</a> keyword) and capillary
+number (<a href="../ecl_rm/FOAMFCN.html#FOAMFCN">FOAMFCN</a> keyword). These are combined multiplicatively with a reference
+mobility reduction factor (<a href="../ecl_rm/FOAMFRM.html#FOAMFRM">FOAMFRM</a> keyword) to determine the net mobility reduction factor.</dd>
+
+
+</dl>
+<p>These two methods are selected using the  <a href="../ecl_rm/FOAMOPTS.html#FOAMOPTS">FOAMOPTS</a> keyword. This tabular
+gas mobility reduction model is available with either gas or water
+specified as the transport phase. However, the functional gas mobility
+reduction model is only available if water is specified as the transport
+phase. The formulation of these two models is described below.</p>
+<dl>
+
+<dt class="dlterm">Gas mobility reduction – tabular model</dt>
+
+<dd>For the tabular model, the gas mobility reduction factor <math><mrow><msub><mrow>
+<mi>M</mi></mrow><mrow><mi>r</mi><mi>f</mi></mrow>
+</msub></mrow></math> is expressed in the form:<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="foam.equ-a"/>
+ <math><mrow><msub>
+<mrow><mi>M</mi></mrow><mrow><mi>r</mi><mi>f</mi>
+</mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext>
+<mrow><mo>(</mo><mn>1</mn><mo>⁢</mo><mo>−</mo>
+<mtext> </mtext><msubsup><mrow><mi>M</mi></mrow><mrow>
+<mi>r</mi><mi>f</mi></mrow><mrow><mi>c</mi><mi>p</mi>
+</mrow></msubsup><mo>)</mo><msub><mrow><mi>M</mi>
+</mrow><mrow><mi>v</mi></mrow></msub><mrow><mo>(</mo>
+<msub><mrow><mi>V</mi></mrow><mrow><mi>g</mi></mrow>
+</msub><mo>)</mo><mtext> </mtext><mo>+</mo><mtext> </mtext><msubsup><mrow><mi>M</mi></mrow><mrow><mi>r</mi><mi>f</mi></mrow><mrow><mi>c</mi><mi>p</mi>
+</mrow></msubsup></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 480.1]
+              </td></tr></tbody></table><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="foam.equ-b"/>
+ <math><mrow><msubsup>
+<mrow><mi>M</mi></mrow><mrow><mi>r</mi><mi>f</mi>
+</mrow><mrow><mi>c</mi><mi>p</mi></mrow></msubsup><mo>⁢</mo><mo>=</mo><mtext> </mtext><mrow><mo>(</mo><mn>1</mn><mo>⁢</mo><mo>−</mo><mtext> </mtext><msub>
+<mrow><mi>M</mi></mrow><mrow><mi>c</mi></mrow></msub>
+<mrow><mo>(</mo><msub><mrow><mi>C</mi></mrow><mrow>
+<mi>f</mi></mrow></msub><mo>)</mo></mrow><mo>)</mo>
+<msub><mrow><mi>M</mi></mrow><mrow><mi>p</mi></mrow>
+</msub><mrow><mo>(</mo><mi>P</mi><mo>)</mo><mtext> </mtext><mo>+</mo><mtext> </mtext><msub><mrow><mi>M</mi></mrow><mrow><mi>c</mi></mrow></msub><mrow><mo>(</mo><msub><mrow><mi>C</mi></mrow><mrow><mi>f</mi>
+</mrow></msub><mo>)</mo></mrow></mrow></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 480.2]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>M</mi></mrow><mrow><mi>v</mi></mrow>
+</msub><mrow><mo>(</mo><msub><mrow><mi>V</mi></mrow>
+<mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow></mrow>
+</math> </td>
+
+<td valign="top"> is the mobility reduction modifier due to gas velocity (<a href="../ecl_rm/FOAMMOBS.html#FOAMMOBS">FOAMMOBS</a> keyword).</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>M</mi></mrow><mrow><mi>c</mi></mrow>
+</msub><mrow><mo>(</mo><msub><mrow><mi>C</mi></mrow>
+<mrow><mi>f</mi></mrow></msub><mo>)</mo></mrow></mrow>
+</math> </td>
+
+<td valign="top"> is the gas mobility reduction modifier due to foam concentration
+(<a href="../ecl_rm/FOAMMOB.html#FOAMMOB">FOAMMOB</a> keyword).</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>M</mi></mrow><mrow><mi>p</mi></mrow>
+</msub><mrow><mo>(</mo><mi>P</mi><mo>)</mo></mrow>
+</mrow></math> </td>
+
+<td valign="top"> is the mobility reduction modifier due to pressure (<a href="../ecl_rm/FOAMMOBP.html#FOAMMOBP">FOAMMOBP</a> keyword).</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>P</mi></mrow></math> </td>
+
+<td valign="top"> is the oil phase pressure.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>V</mi></mrow><mrow><mi>g</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is the gas velocity (see below).</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>The gas velocity is calculated according to the expression:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="foam.equ-c"/>
+ <math><mrow><msub>
+<mrow><mi>V</mi></mrow><mrow><mi>g</mi></mrow></msub>
+<mo>⁢</mo><mo>=</mo><mtext> </mtext><msub><mrow><mi>B</mi></mrow><mrow><mi>g</mi></mrow></msub><mrow><mo>(</mo><mfrac><mrow><msub><mrow><mi>F</mi></mrow>
+<mrow><mi>g</mi></mrow></msub></mrow><mrow><mi>φ</mi>
+<mo>⋅</mo><mi>A</mi></mrow></mfrac><mo>)</mo></mrow>
+</mrow></math> 
+</td><td align="right">[Eq. 480.3]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>F</mi></mrow><mrow><mi>g</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the gas flow rate in surface units.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>B</mi></mrow><mrow><mi>g</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is the gas formation volume factor.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>φ</mi></mrow></math> </td>
+
+<td valign="top"> is the average porosity of the two cells.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>A</mi></mrow></math> </td>
+
+<td valign="top"> is the flow area between the two cells.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>The gas mobility reduction modifiers due to pressure and
+gas velocity are optional and will tend to increase the gas mobility
+as compared to the mobility reduction due to foam concentration alone.</p>
+</dd>
+
+
+<dt class="dlterm">Gas mobility reduction - functional model</dt>
+
+<dd>For the functional model, the mobility reduction factor <math><mrow><msub><mrow>
+<mi>M</mi></mrow><mrow><mi>r</mi><mi>f</mi></mrow>
+</msub></mrow></math> is expressed in the form in <cite><span> <a href="biblio_Bibliography.html#biblio_65813">Kovscek (1998)</a> </span></cite> and <cite><span> <a href="biblio_Bibliography.html#biblio_37337">Cheng et al (2000)</a> </span></cite>:<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="foam.equ-d"/>
+ <math><mrow><msub>
+<mrow><mi>M</mi></mrow><mrow><mi>r</mi><mi>f</mi>
+</mrow></msub><mo>=</mo><mtext> </mtext><mfrac><mrow>
+<mn>1</mn></mrow><mrow><mn>1</mn><mo>⁢</mo><mo>+</mo>
+<mtext> </mtext><mrow><mo>(</mo><msub><mrow><mi>M</mi>
+</mrow><mrow><mi>r</mi></mrow></msub><mo>⋅</mo><msub>
+<mrow><mi>F</mi></mrow><mrow><mi>s</mi></mrow></msub>
+<mo>⋅</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi>F</mi>
+</mrow><mrow><mi>o</mi></mrow></msub><mo>⋅</mo><msub>
+<mrow><mi>F</mi></mrow><mrow><mi>c</mi></mrow></msub>
+<mo>)</mo></mrow></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 480.4]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>M</mi></mrow><mrow><mi>r</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"><p> is the reference mobility reduction factor.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>F</mi></mrow><mrow><mi>s</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the mobility reduction factor component due to surfactant
+concentration.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>F</mi></mrow><mrow><mi>w</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the mobility reduction factor component due to water saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>F</mi></mrow><mrow><mi>o</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top">is the mobility reduction factor component due to oil saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>F</mi></mrow><mrow><mi>c</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is the mobility reduction factor component due to gas velocity
+(capillary number).</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>The reference mobility reduction factor <math><mrow><msub><mrow>
+<mi>M</mi></mrow><mrow><mi>r</mi></mrow></msub></mrow>
+</math> is typically in the range of 1 to 100 and corresponds to
+the normalized resistance to flow for a minimum bubble size in the
+absence of factors that increase bubble size. It is specified using
+the <a href="../ecl_rm/FOAMFRM.html#FOAMFRM">FOAMFRM</a>.</p>
+<p>Each mobility reduction factor may optionally be specified
+or omitted according to whether or not the associated keyword is present.
+However, at least one of these components must be specified for the
+mobility reduction factor to be operational.</p>
+<p>The mobility reduction
+factor <math><mrow>
+<msub><mrow><mi>F</mi></mrow><mrow><mi>s</mi></mrow>
+</msub></mrow></math> represents the dependence upon foam (effective
+surfactant) concentration and is expressed as:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="foam.equ-e"/>
+ <math><mrow><msub>
+<mrow><mi>F</mi></mrow><mrow><mi>s</mi></mrow></msub>
+<mo>⁢</mo><mo>=</mo><mtext> </mtext><msup><mrow><mo>(</mo><mfrac><mrow><msub><mrow><mi>C</mi></mrow>
+<mrow><mi>s</mi></mrow></msub></mrow><mrow><msubsup>
+<mrow><mi>C</mi></mrow><mrow><mi>s</mi></mrow><mrow>
+<mi>r</mi></mrow></msubsup></mrow></mfrac><mo>)</mo>
+</mrow><mrow><msub><mrow><mi>e</mi></mrow><mrow><mi>s</mi></mrow></msub></mrow></msup></mrow></math> 
+</td><td align="right">[Eq. 480.5]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>C</mi></mrow><mrow><mi>s</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is the effective surfactant concentration.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msubsup><mrow><mi>C</mi></mrow><mrow><mi>s</mi>
+</mrow><mrow><mi>r</mi></mrow></msubsup></mrow></math> </td>
+
+<td valign="top"> is the reference surfactant concentration.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>e</mi></mrow><mrow><mi>s</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is an exponent which controls the steepness of the transition
+about the point <math>
+<mrow><msub><mrow><mi>C</mi></mrow><mrow><mi>s</mi>
+</mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext>
+<msubsup><mrow><mi>C</mi></mrow><mrow><mi>s</mi>
+</mrow><mrow><mi>r</mi></mrow></msubsup></mrow></math>.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>The significance of <math><mrow><msub><mrow>
+<mi>F</mi></mrow><mrow><mi>s</mi></mrow></msub></mrow>
+</math> is determined by the reference surfactant concentration
+above which the presence of surfactant becomes significant in the
+creation of foam. For low surfactant concentrations <math><mrow><msub><mrow>
+<mi>C</mi></mrow><mrow><mi>s</mi></mrow></msub><mo>&lt;</mo><msubsup><mrow><mi>C</mi></mrow><mrow><mi>s</mi></mrow><mrow><mi>r</mi></mrow></msubsup></mrow>
+</math> (weak foam), the value of <math><mrow><msub><mrow>
+<mi>F</mi></mrow><mrow><mi>s</mi></mrow></msub></mrow>
+</math> will be less than 1 and will tend to 0 as the surfactant
+concentration decreases to 0. Conversely, for high surfactant concentrations <math><mrow><msub><mrow>
+<mi>C</mi></mrow><mrow><mi>s</mi></mrow></msub><mo>&gt;</mo><msubsup><mrow><mi>C</mi></mrow><mrow><mi>s</mi>
+</mrow><mrow><mi>r</mi></mrow></msubsup></mrow></math> (strong foam), the value of <math><mrow><msub><mrow>
+<mi>F</mi></mrow><mrow><mi>s</mi></mrow></msub></mrow>
+</math> will be greater than 1 and will increase with increasing
+surfactant concentration. The steepness and curvature of <math><mrow><msub><mrow>
+<mi>F</mi></mrow><mrow><mi>s</mi></mrow></msub></mrow>
+</math> versus <math>
+<mrow><msub><mrow><mi>C</mi></mrow><mrow><mi>s</mi>
+</mrow></msub></mrow></math> is determined by the value of <math><mrow><msub><mrow>
+<mi>e</mi></mrow><mrow><mi>s</mi></mrow></msub></mrow>
+</math>. The rate of change about the point where <math><mrow><msub><mrow>
+<mi>C</mi></mrow><mrow><mi>s</mi></mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext><msubsup><mrow><mi>C</mi></mrow><mrow><mi>s</mi></mrow><mrow><mi>r</mi>
+</mrow></msubsup></mrow></math> will increase with increasing <math><mrow><msub><mrow>
+<mi>e</mi></mrow><mrow><mi>s</mi></mrow></msub></mrow>
+</math>. The reference surfactant concentration and the exponent
+term are specified using the <a href="../ecl_rm/FOAMFSC.html#FOAMFSC">FOAMFSC</a> keyword.</p>
+<p>The mobility reduction factor <math><mrow><msub><mrow>
+<mi>F</mi></mrow><mrow><mi>w</mi></mrow></msub></mrow>
+</math> represents the dependence upon water saturation and is expressed
+as:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="foam.equ-f"/>
+ <math><mrow><msub>
+<mrow><mi>F</mi></mrow><mrow><mi>w</mi></mrow></msub>
+<mo>⁢</mo><mo>=</mo><mtext> </mtext><mn>0.5</mn><mo>+</mo><mo>⁢</mo><mfrac><mrow><mstyle>
+<mrow><mi>a</mi><mo>⁢</mo><mi>tan</mi></mrow></mstyle>
+<mo>⁡</mo><mrow><mo>[</mo><msub><mrow><mi>f</mi>
+</mrow><mrow><mi>w</mi></mrow></msub><mo>⋅</mo><mrow>
+<mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>⁢</mo><mo>−</mo><mtext> </mtext>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>w</mi>
+</mrow><mrow><mn>1</mn></mrow></msubsup><mo>)</mo>
+</mrow><mo>]</mo></mrow></mrow><mrow><mi>π</mi></mrow>
+</mfrac></mrow></math> 
+</td><td align="right">[Eq. 480.6]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>w</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is the water saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>w</mi>
+</mrow><mrow><mn>1</mn></mrow></msubsup></mrow></math> </td>
+
+<td valign="top"> is the limiting water saturation below which the foam ceases
+to be effective.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>f</mi></mrow><mrow><mi>w</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is the weighting factor which controls the sharpness in the
+change in mobility.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>The gas mobility increases sharply as water saturation
+decreases towards this limiting value. The limiting water saturation
+and the weighting factor are specified using the <a href="../ecl_rm/FOAMFSW.html#FOAMFSW">FOAMFSW</a> keyword.</p>
+<p>The
+mobility reduction factor <math><mrow><msub><mrow>
+<mi>F</mi></mrow><mrow><mi>o</mi></mrow></msub></mrow>
+</math> represents the dependence upon oil saturation and is expressed
+as:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="foam.equ-g"/>
+ <math><mrow><msub>
+<mrow><mi>F</mi></mrow><mrow><mi>o</mi></mrow></msub>
+<mo>⁢</mo><mo>=</mo><mtext> </mtext><msup><mrow><mo>(</mo><mfrac><mrow><msubsup><mrow><mi>S</mi></mrow>
+<mrow><mi>o</mi></mrow><mrow><mi>m</mi></mrow>
+</msubsup><mo>⁢</mo><mo>−</mo><mtext> </mtext><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub>
+</mrow><mrow><msubsup><mrow><mi>S</mi></mrow><mrow>
+<mi>o</mi></mrow><mrow><mi>m</mi></mrow></msubsup>
+</mrow></mfrac><mo>)</mo></mrow><mrow><msub><mrow><mi>e</mi></mrow><mrow><mi>o</mi></mrow></msub></mrow>
+</msup><mo>⁢</mo><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext>
+<mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext>
+<mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext>
+<mtext> </mtext><mtext> </mtext><mrow><mo>{</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub>
+<mo>≤</mo><msubsup><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow><mrow><mi>m</mi></mrow></msubsup><mo>}</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 480.7]
+              </td></tr></tbody></table><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="foam.equ-h"/>
+ <math><mrow><msub>
+<mrow><mi>F</mi></mrow><mrow><mi>o</mi></mrow></msub>
+<mo>⁢</mo><mo>=</mo><mtext> </mtext><mn>0.0</mn><mo>⁢</mo><mtext> </mtext><mtext> </mtext><mtext> </mtext>
+<mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext>
+<mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext>
+<mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext>
+<mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext>
+<mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext>
+<mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext>
+<mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mrow><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext>
+<mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mo>{</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow>
+</msub><mo>&gt;</mo><msubsup><mrow><mi>S</mi></mrow>
+<mrow><mi>o</mi></mrow><mrow><mi>m</mi></mrow>
+</msubsup><mo>}</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 480.8]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is the oil saturation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>o</mi>
+</mrow><mrow><mi>m</mi></mrow></msubsup></mrow></math> </td>
+
+<td valign="top"> is the maximum oil saturation above which the foam ceases
+to be effective.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>e</mi></mrow><mrow><mi>o</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is an exponent which controls the steepness of the transition
+about the point <math>
+<mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi>
+</mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext>
+<msubsup><mrow><mi>S</mi></mrow><mrow><mi>o</mi>
+</mrow><mrow><mi>m</mi></mrow></msubsup></mrow></math> </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>The maximum value of <math><mrow><msub><mrow>
+<mi>F</mi></mrow><mrow><mi>o</mi></mrow></msub></mrow>
+</math> is 1 and occurs when <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext><mn>0.0</mn></mrow>
+</math>. For values of <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>&lt;</mo><msubsup><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow><mrow><mi>m</mi></mrow></msubsup></mrow>
+</math>, the value of <math><mrow><msub><mrow>
+<mi>F</mi></mrow><mrow><mi>o</mi></mrow></msub></mrow>
+</math> will decrease with increasing <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub></mrow>
+</math>. The rate of decrease is controlled by the value of the
+exponent <math><mrow>
+<msub><mrow><mi>e</mi></mrow><mrow><mi>o</mi></mrow>
+</msub></mrow></math>. For values of <math><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>≥</mo><msubsup><mrow><mi>S</mi></mrow><mrow><mi>o</mi>
+</mrow><mrow><mi>m</mi></mrow></msubsup></mrow></math>, the value of <math>
+<mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>o</mi>
+</mrow></msub></mrow></math> will be 0 and will completely
+eliminate any gas mobility reduction irrespective of the values of
+the other multiplicative factors. The maximum oil saturation and the
+exponent term are specified using the <a href="../ecl_rm/FOAMFSO.html#FOAMFSO">FOAMFSO</a> keyword.</p>
+<p>The
+mobility reduction factor <math><mrow><msub><mrow>
+<mi>F</mi></mrow><mrow><mi>c</mi></mrow></msub></mrow>
+</math> represents the dependence upon capillary number and is expressed
+as:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="foam.equ-i"/>
+ <math><mrow><msub>
+<mrow><mi>F</mi></mrow><mrow><mi>c</mi></mrow></msub>
+<mo>⁢</mo><mo>=</mo><mtext> </mtext><msup><mrow><mo>(</mo><mfrac><mrow><msubsup><mrow><mi>N</mi></mrow>
+<mrow><mi>c</mi></mrow><mrow><mi>r</mi></mrow>
+</msubsup></mrow><mrow><msub><mrow><mi>N</mi></mrow>
+<mrow><mi>c</mi></mrow></msub></mrow></mfrac><mo>)</mo>
+</mrow><mrow><msub><mrow><mi>e</mi></mrow><mrow><mi>c</mi></mrow></msub></mrow></msup></mrow></math> 
+</td><td align="right">[Eq. 480.9]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>N</mi></mrow><mrow><mi>c</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is the capillary number.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msubsup><mrow><mi>N</mi></mrow><mrow><mi>c</mi>
+</mrow><mrow><mi>r</mi></mrow></msubsup></mrow></math> </td>
+
+<td valign="top"> is the reference capillary number.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>e</mi></mrow><mrow><mi>c</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is an exponent which controls the steepness of the transition
+about the point <math>
+<mrow><msub><mrow><mi>N</mi></mrow><mrow><mi>c</mi>
+</mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext>
+<msubsup><mrow><mi>N</mi></mrow><mrow><mi>c</mi>
+</mrow><mrow><mi>r</mi></mrow></msubsup></mrow></math>.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>This component controls the gas mobility for shear-thinning
+in the low foam quality region. The reference capillary number and
+the exponent term are specified using the <a href="../ecl_rm/FOAMFCN.html#FOAMFCN">FOAMFCN</a> keyword. The capillary
+number is a dimensionless parameter which provides a measure of the
+ratio of viscous to capillary forces and is calculated according to
+the expression:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="foam.equ-j"/>
+ <math><mrow><msub>
+<mrow><mi>N</mi></mrow><mrow><mi>c</mi><mo>⁢</mo>
+<mo>=</mo><mtext> </mtext><msub><mrow><mi>C</mi>
+</mrow><mrow><mi>N</mi></mrow></msub></mrow></msub>
+<mfrac><mrow><mrow><mo>‖</mo><mi>K</mi><mo>⋅</mo>
+<mo>∇</mo><mi>P</mi><mo>‖</mo></mrow></mrow><mrow>
+<msub><mrow><mi>σ</mi></mrow><mrow><mi>w</mi><mi>g</mi></mrow></msub></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 480.10]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mrow>
+<mi>K</mi></mrow></math> </td>
+
+<td valign="top"> is the rock permeability.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>P</mi></mrow></math> </td>
+
+<td valign="top"> is the pressure.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>σ</mi></mrow><mrow><mi>w</mi><mi>g</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the gas-water interfacial tension defined by the <a href="../ecl_rm/FOAMFST.html#FOAMFST">FOAMFST</a> keyword.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>C</mi></mrow><mrow><mi>N</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is the conversion factor which depends upon the units used.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>The calculation of the capillary number is described in <a href="velocity_Capillary_Number.html#velocity_capillary_number"> "Capillary
+number"</a>.</p>
+<p>The mobility reduction factor is only calculated
+for grid blocks that contain foam with a concentration greater than
+or equal to the minimum concentration specified by item 3 of the <a href="../ecl_rm/FOAMFSC.html#FOAMFSC">FOAMFSC</a> keyword.</p>
+</dd>
+
+
+</dl>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

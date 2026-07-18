@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GNETPUMP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GNETPUMP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GNETPUMP</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GNETPUMP"><a name="GNETPUMP"><!-- --></a>
+<h1 class="keyword">GNETPUMP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gnetpump.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gnetpump.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d870e45"> x </th>
+
+<th valign="top" id="d870e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d870e54">  </th>
+
+<th valign="top" id="d870e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d870e45 d870e54 ">  </td>
+
+<td valign="top" headers="d870e48 d870e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d870e45 d870e54 ">  </td>
+
+<td valign="top" headers="d870e48 d870e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d870e45 d870e54 ">  </td>
+
+<td valign="top" headers="d870e48 d870e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d870e45 d870e54 ">  </td>
+
+<td valign="top" headers="d870e48 d870e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d870e45 d870e54 ">  </td>
+
+<td valign="top" headers="d870e48 d870e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d870e45 d870e54 ">  </td>
+
+<td valign="top" headers="d870e48 d870e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d870e45 d870e54 ">  </td>
+
+<td valign="top" headers="d870e48 d870e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d870e45 d870e54 "> x </td>
+
+<td valign="top" headers="d870e48 d870e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword defines automatic compressors or pumps in a standard
+production network in the network option (see <a href="../ecl_td/networkintro_Network_Option.html#networkintro_network_option">"Network option"</a> in the <cite>ECLIPSE Technical Description</cite>). If you are using
+the extended network model (keyword <a href="NETWORK.html#NETWORK">  NETWORK</a> in the <span class="keyword">RUNSPEC</span> section),
+you should define automatic compressors or pumps with keyword <a href="NETCOMPA.html#NETCOMPA">  NETCOMPA</a> instead.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The records may be terminated at any item after item 1. The remaining
+items assume their default values. Default values can be specified
+before the slash by a null repeat count of the form n*, where n is
+the number of consecutive items to be defaulted.</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li> Group name or group name root <p>A group name root, enclosed
+in quotes and ending with an asterisk (*), can be used to refer to
+several groups in one record.</p>
+ </li>
+
+<li> Production rate below which the pump/compressor is to be switched
+on <p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), stb/day
+for oil (<samp class="codeph">FIELD</samp>), Mscf/day for gas (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 0.0</p>
+<p>A zero or negative value will disable
+this option.</p>
+ </li>
+
+<li> Phase to which the production rate in item 2 refers <p> <samp class="codeph">OIL</samp> or <samp class="codeph">GAS</samp> </p>
+ <p>DEFAULT: <samp class="codeph">OIL</samp> </p>
+ </li>
+
+<li> New VFP table number <p>(When the pump/compressor is switched
+on this replaces the table number previously specified in keyword <a href="GRUPNET.html#GRUPNET">  GRUPNET</a>.)</p>
+ <p>A
+zero or negative number will leave the original VFP table number unchanged.</p>
+<p>DEFAULT: 0</p>
+ </li>
+
+<li> New artificial lift quantity (ALQ) <p>(When the pump/compressor
+is switched on this replaces the artificial lift quantity previously
+specified in keyword <span class="keyword">GRUPNET</span>.)</p>
+ <p>The artificial
+lift quantity may be regarded as the pump or compressor power, according
+to the definition used in the VFP table.</p>
+<p>UNITS: These depend
+on what the ALQ was meant to represent when the table was created.
+Refer to section <a href="vfpprod_Record_6_ALQ_values.html#vfpprod_record_6_alq_values"> "Record 6:ALQ values"</a> in the description of keyword <span class="keyword">VFPPROD</span>.</p>
+<p>DEFAULT: 0.0</p>
+ </li>
+
+<li> New gas consumption rate for the group <p>(When the pump/compressor
+is switched on this replaces any consumption rate previously specified
+with keyword <a href="GCONSUMP.html#GCONSUMP">  GCONSUMP</a>, to account for the increase in gas demand for power generation.)</p>
+ <p>A zero or negative value leaves the original gas consumption
+rate unchanged (that is, zero if <span class="keyword">GCONSUMP</span> is not
+specified).</p>
+<p>The gas consumption is subtracted from the flow
+rate through the pipeline when interpolating the VFP table to calculate
+the pressure loss. Gas consumption is also taken into account for
+group reinjection control (see keyword <a href="GCONINJE.html#GCONINJE">  GCONINJE</a>) and sales gas control (see keyword <a href="GCONSALE.html#GCONSALE">  GCONSALE</a>). But the
+total gas production rates reported for the groups and the field will
+not be reduced.</p>
+<p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), Mscf/day (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.0</p>
+ </li>
+
+</ol>
+
+<p>End data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<p>The pump/compressor is switched on at the end of the timestep in
+which the group’s production rate falls below the set limit. A network
+balancing calculation is performed at the beginning of the next timestep,
+regardless of the interval set in keyword <a href="NETBALAN.html#NETBALAN">  NETBALAN</a>. However, if a limit tolerance
+fraction has been set with keyword <a href="WLIMTOL.html#WLIMTOL">  WLIMTOL</a>, the timestep in which the rate fell below
+the limit is recalculated with the pump/compressor switched on if
+the limit is violated by more than this fraction.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> An automatic compressor cannot be present if the pipeline’s
+ALQ is equated to the oil or gas surface density in item 7 of keyword <a href="GRUPNET.html#GRUPNET">  GRUPNET</a>. </span></div>
+
+<div class="section" id="gnetpump_example"><a name="gnetpump_example"><!-- --></a><h4 class="sectiontitle">Example</h4> <p>Pumps to
+boost the flow through the network pipelines from platforms PLAT-A
+and PLAT-B are started if their oil production rates fall below 1000
+stb/day. An artificial lift quantity of 100 is used to interpolate
+the VFP table that calculates the pressure loss in the pipeline from
+PLAT-A, keeping the same VFP table number. The pipeline from PLAT-B
+changes to a new table number 3, interpolated with a zero artificial
+lift quantity. There is no change to any gas consumption rate, if
+specified.</p>
+ <pre><code>GNETPUMP
+ PLAT-A  1000  OIL  0 100 /
+ PLAT-B  1000  OIL  3 /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

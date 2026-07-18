@@ -1,0 +1,777 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Generalized pseudo-pressure in ECLIPSE 300"/>
+<meta name="DC.subject" content="Well inflow performance generalized pseudo-pressure in ECLIPSE 300"/>
+<meta name="keywords" content="Well inflow performance generalized pseudo-pressure in ECLIPSE 300"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wellinfl_generalized_pseudo-pressure_in_eclipse_300"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Generalized pseudo-pressure in ECLIPSE 300</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="wellinfl_generalized_pseudo-pressure_in_eclipse_300"><a name="wellinfl_generalized_pseudo-pressure_in_eclipse_300"><!-- --></a>
+<h1 class="topictitle1">Generalized pseudo-pressure in ECLIPSE 300</h1>
+
+
+ <div>
+<p>The generalized pseudo-pressure method of <cite><span> <a href="biblio_Bibliography.html#biblio_41530">Whitson and Fevang (1997)</a> </span></cite> is also available in ECLIPSE 300. </p>
+
+<p>For the current version of the generalized pseudo-pressure
+(GPP) model, which is a revised and extended version of the previous
+model, the entire specification and control of the calculation can
+be handled by the <a href="../ecl_rm/WPICOND.html#WPICOND">WPICOND</a> keyword. This provides an alternative to the use of the <a href="../ecl_rm/WELSPECS.html#WELSPECS">WELSPECS</a>, <a href="../ecl_rm/PSEUPRES.html#PSEUPRES">PSEUPRES</a> and <a href="../ecl_rm/PICOND.html#PICOND">PICOND</a> keywords whilst additionally
+providing individual control over the calculation parameters for each
+well together with the facility to turn both on and off the generalized
+pseudo-pressure calculation arbitrarily during the course of the simulation.
+The <span class="keyword">WELSPECS</span>, <span class="keyword">PSEUPRES</span> and <span class="keyword">PICOND</span> keywords can be still be used without any changes
+to their previous usage interpretations (except that items 7 and 8
+of the <span class="keyword">PICOND</span> keyword are interpreted as absolute
+rather than fractional changes unless <a href="../ecl_rm/OPTIONS3.html#options3.330">item 330</a> of the <span class="keyword">OPTIONS3</span> keyword is set to 2) and can be interspersed with
+the <span class="keyword">WPICOND</span> keyword. The <span class="keyword">PSEUPRES</span> keyword is no longer required to be specified early in the simulation
+and will simply have the effect of turning the generalized pseudo-pressure
+option on for all wells in the simulation. The <span class="keyword">PICOND</span> keyword will have the effect of specifying the calculation control
+parameters for all wells currently in the simulation and updating
+the default calculation control parameters for all wells defined subsequently.
+The <span class="keyword">PICOND</span> keyword does not select or deselect
+the generalized pseudo-pressure calculation.</p>
+
+<p>For the generalized pseudo-pressure model prior to the 2015.1 version,
+the generalized pseudo-pressure option can be requested for all wells
+with the <a href="../ecl_rm/PSEUPRES.html#PSEUPRES">PSEUPRES</a> keyword, which should be entered early in the <span class="keyword">SCHEDULE</span> section before any well operations or time stepping keywords are
+specified. Alternatively this option can be activated for individual
+wells by entering GPP in item 8 of keyword <a href="../ecl_rm/WELSPECS.html#WELSPECS">WELSPECS</a>. Calculation controls
+are specified for all wells via the keyword <a href="../ecl_rm/PICOND.html#PICOND">PICOND</a>. The pre-2015.1 version
+may be selected by setting <a href="../ecl_rm/OPTIONS3.html#options3.330">item 330</a> of the <span class="keyword">OPTIONS3</span> keyword to 1. This version does not support the <a href="../ecl_rm/WPICOND.html#WPICOND">WPICOND</a> keyword.</p>
+
+<p>The calculation and implementation of the generalized pseudo-pressure
+method is described below.</p>
+
+<p>Consider the flow of phase <math><mi>j</mi></math> = (oil, gas), in a radial homogenous media of height
+ <math><mi>h</mi></math>  and permeability  <math><mi>K</mi></math>. Darcy’s Law describes the velocity of the fluid at radius  <math><mi>r</mi></math>  in the equation:          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.XID-000001a0"/>
+ <math><msub><mi>v</mi>
+<mi>j</mi></msub><mo>=</mo><mfrac><mrow><msub><mi>Q</mi><mi>j</mi></msub></mrow><mrow><mrow><mn>2</mn>
+<mi>π</mi><mi>r</mi><mi>h</mi></mrow></mrow></mfrac>
+<mo>=</mo><mrow><mfrac><mrow><mrow><mi>K</mi><msub>
+<mi>K</mi><mrow><mi>r</mi><mi>j</mi></mrow></msub>
+</mrow></mrow><mrow><msub><mi>μ</mi><mi>j</mi></msub>
+</mrow></mfrac><mfrac><mrow><mrow><mi>d</mi><mi>P</mi>
+</mrow></mrow><mrow><mrow><mi>d</mi><mi>r</mi></mrow>
+</mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 522.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>Q</mi>
+<mi>j</mi></msub></math> </td>
+
+<td valign="top">is the in-situ volumetric flow rate,     </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>K</mi>
+<mrow><mi>r</mi><mi>j</mi></mrow></msub></math>  and
+ <math><msub><mi>μ</mi>
+<mi>j</mi></msub></math> </td>
+
+<td valign="top"> are the phase relative permeability and viscosity and    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><mi>d</mi>
+<mi>P</mi></mrow><mo>/</mo><mrow><mi>d</mi><mi>r</mi>
+</mrow></math> </td>
+
+<td valign="top"> is the pressure gradient.    </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The phase volumetric flow rate                  <math><msub><mi>Q</mi>
+<mi>j</mi></msub></math>  is related to phase molar flow rate
+ <math><msub><mi>n</mi>
+<mi>j</mi></msub></math>  by:          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.XID-000001ae"/>
+ <math><msub><mi>Q</mi>
+<mi>j</mi></msub><mo>=</mo><mrow><msub><mi>n</mi>
+<mi>j</mi></msub><msub><mi>V</mi><mrow><mi>m</mi>
+<mi>j</mi></mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 522.2]
+              </td></tr></tbody></table>
+<p>where                  <math><msub><mi>V</mi>
+<mrow><mi>m</mi><mi>j</mi></mrow></msub></math>  is
+phase molar volume.          </p>
+
+<p>Combining equations <a href="wellinfl_Generalized_pseudo-pressure_in_ECLIPSE_300.html#wellinfl.XID-000001a0">522.1</a>  and <a href="wellinfl_Generalized_pseudo-pressure_in_ECLIPSE_300.html#wellinfl.XID-000001ae">522.2</a>  and rearranging gives:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.equ.01b6"/>
+ <math><mrow><mrow><msub>
+<mrow><mi>n</mi></mrow><mrow><mi>j</mi></mrow></msub>
+<mfrac><mrow><mi>d</mi><mi>r</mi></mrow><mrow><mi>r</mi></mrow></mfrac></mrow><mo>=</mo><mrow><mn>2</mn>
+<mi>π</mi><mi>K</mi><mi>h</mi><mfrac><mrow><msub>
+<mrow><mi>K</mi></mrow><mrow><mi>r</mi><mi>j</mi>
+</mrow></msub><msub><mrow><mi>b</mi></mrow><mrow><mi>j</mi></mrow></msub></mrow><mrow><msub><mrow><mi>μ</mi></mrow><mrow><mi>j</mi></mrow></msub></mrow>
+</mfrac><mi>d</mi><mi>p</mi></mrow></mrow></math> 
+</td><td align="right">[Eq. 522.3]
+              </td></tr></tbody></table>
+<p>where                  <math><msub><mi>b</mi>
+<mi>j</mi></msub><mo>=</mo><mn>1</mn><mo>/</mo>
+<msub><mi>V</mi><mrow><mi>m</mi><mi>j</mi></mrow>
+</msub></math>, the phase molar density.          </p>
+
+<p>For component,                  <math><mi>i</mi></math>, the component phase molar rate will be:     </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.XID-000001bd"/>
+ <math><mrow><msub><mi>n</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mfrac>
+<mrow><mrow><mi>d</mi><mi>r</mi></mrow></mrow><mrow>
+<mi>r</mi></mrow></mfrac></mrow><mo>=</mo><mrow><mn>2</mn><mi>π</mi><mi>K</mi><mi>h</mi><msub><mi>x</mi>
+<mrow><mi>i</mi><mi>j</mi></mrow></msub><mfrac><mrow>
+<mrow><msub><mi>K</mi><mrow><mi>r</mi><mi>j</mi>
+</mrow></msub><msub><mi>b</mi><mi>j</mi></msub></mrow>
+</mrow><mrow><msub><mi>μ</mi><mi>j</mi></msub></mrow>
+</mfrac><mi>d</mi><mi>p</mi></mrow></math> 
+</td><td align="right">[Eq. 522.4]
+              </td></tr></tbody></table>
+<p>where                  <math><msub><mi>x</mi>
+<mrow><mi>i</mi><mi>j</mi></mrow></msub></math>  is
+the mole fraction of the i<sup>th</sup> component in the j<sup>th</sup> phase.          </p>
+
+<p>Integrating equation <a href="wellinfl_Generalized_pseudo-pressure_in_ECLIPSE_300.html#wellinfl.XID-000001bd">522.4</a>  between the Peaceman pressure equivalent radius  <math><msub><mi>r</mi>
+<mi>B</mi></msub></math>  and the well radius  <math><msub><mi>r</mi>
+<mi>W</mi></msub></math>  gives:          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.equ.01c8"/>
+ <math><mrow><mrow><msub>
+<mrow><mi>n</mi></mrow><mrow><mi>i</mi><mi>j</mi>
+</mrow></msub><mrow><msubsup><mrow><mo>∫</mo></mrow><mrow><msub><mrow><mi>r</mi>
+</mrow><mrow><mi>W</mi></mrow></msub></mrow><mrow>
+<msub><mrow><mi>r</mi></mrow><mrow><mi>B</mi></mrow>
+</msub></mrow></msubsup><mfrac><mrow><mi>d</mi><mi>r</mi></mrow><mrow><mi>r</mi></mrow></mfrac></mrow>
+</mrow><mo>=</mo><mrow><mn>2</mn><mi>π</mi><mi>K</mi>
+<mi>h</mi><mrow><msubsup><mrow><mo>∫</mo></mrow><mrow><msub><mrow><mi>p</mi>
+</mrow><mrow><mi>W</mi></mrow></msub></mrow><mrow>
+<msub><mrow><mi>p</mi></mrow><mrow><mi>B</mi></mrow>
+</msub></mrow></msubsup><msub><mrow><mi>x</mi></mrow>
+<mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><mfrac>
+<mrow><msub><mrow><mi>K</mi></mrow><mrow><mi>r</mi>
+<mi>j</mi></mrow></msub><msub><mrow><mi>b</mi></mrow>
+<mrow><mi>j</mi></mrow></msub></mrow><mrow><msub>
+<mrow><mi>μ</mi></mrow><mrow><mi>j</mi></mrow></msub>
+</mrow></mfrac><mi>d</mi><mi>p</mi></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 522.5]
+              </td></tr></tbody></table>
+<p>Summing component phase molar rates in the oil and gas phases for
+component                  <math><mi>i</mi></math>:          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.XID-000001cd"/>
+ <math><mrow><mo>(</mo><msub><mrow><mi>n</mi></mrow><mrow>
+<mi>i</mi><mi>o</mi></mrow></msub><mo>+</mo><msub>
+<mrow><mi>n</mi></mrow><mrow><mi>i</mi><mi>g</mi>
+</mrow></msub><mo>)</mo><mrow><mo>[</mo>
+<mi>ln</mi><mo>⁡</mo><mo>(</mo><mrow>
+<mfrac><mrow><msub><mrow><mi>r</mi></mrow><mrow><mi>B</mi></mrow></msub></mrow><mrow><msub><mrow><mi>r</mi></mrow><mrow><mi>W</mi></mrow></msub></mrow>
+</mfrac></mrow><mo>)</mo><mo>+</mo><mi>S</mi><mo>]</mo><mo>=</mo><mn>2</mn><mi>π</mi><mi>K</mi><mi>h</mi><mrow><msubsup><mrow><mo>∫</mo>
+</mrow><mrow><msub><mrow><mi>p</mi></mrow><mrow><mi>w</mi></mrow></msub></mrow><mrow><msub><mrow><mi>P</mi></mrow><mrow><mi>B</mi></mrow></msub></mrow>
+</msubsup><mrow><mo>[</mo><msub><mrow><mi>x</mi>
+</mrow><mrow><mi>i</mi></mrow></msub><mfrac><mrow>
+<msub><mrow><mi>K</mi></mrow><mrow><mi>r</mi><mi>o</mi></mrow></msub><msub><mrow><mi>b</mi></mrow>
+<mrow><mi>o</mi></mrow></msub></mrow><mrow><msub>
+<mrow><mi>μ</mi></mrow><mrow><mi>o</mi></mrow></msub>
+</mrow></mfrac><mo>+</mo><msub><mrow><mi>y</mi></mrow>
+<mrow><mi>i</mi></mrow></msub><mfrac><mrow><msub>
+<mrow><mi>K</mi></mrow><mrow><mi>r</mi><mi>g</mi>
+</mrow></msub><msub><mrow><mi>b</mi></mrow><mrow><mi>g</mi></mrow></msub></mrow><mrow><msub><mrow><mi>μ</mi></mrow><mrow><mi>g</mi></mrow></msub></mrow>
+</mfrac><mo>]</mo></mrow><mi>d</mi><mi>p</mi></mrow>
+</mrow></mrow></math> 
+</td><td align="right">[Eq. 522.6]
+              </td></tr></tbody></table>
+<p>or:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.XID-000001d1"/>
+ <math><mrow><msub><mrow>
+<mi>n</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>=</mo><mrow><mi>T</mi><mrow><msubsup><mrow><mo>∫</mo></mrow><mrow><msub><mrow>
+<mi>p</mi></mrow><mrow><mi>W</mi></mrow></msub></mrow>
+<mrow><msub><mrow><mi>p</mi></mrow><mrow><mi>B</mi>
+</mrow></msub></mrow></msubsup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>(</mo><mi>p</mi><mo>)</mo>
+<mi>d</mi><mi>p</mi></mrow></mrow></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 522.7]
+              </td></tr></tbody></table>
+<p>where the well connection factor,                  <math><mi>T</mi></math>, including the skin factor,  <math><mi>S</mi></math>, is given by:          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.equ.01d7"/>
+ <math><mrow><mi>T</mi><mo>=</mo><mfrac><mrow><mn>2</mn><mi>π</mi>
+<mi>K</mi><mi>h</mi></mrow><mrow><mi>ln</mi><mo>⁡</mo><mrow><mo>(</mo><mfrac><mrow><msub><mrow><mi>r</mi></mrow><mrow><mi>B</mi></mrow></msub></mrow>
+<mrow><msub><mrow><mi>r</mi></mrow><mrow><mi>W</mi>
+</mrow></msub></mrow></mfrac><mo>)</mo><mo>+</mo><mi>S</mi></mrow></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 522.8]
+              </td></tr></tbody></table>
+<p>and the Component Generalized Molar Mobility (CGMM) is given by:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.equ.01db"/>
+ <math><mrow><msub><mrow>
+<mi>M</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>=</mo><mrow><msub><mrow><mi>x</mi></mrow><mrow><mi>i</mi></mrow></msub><mfrac><mrow><msub><mrow><mi>K</mi></mrow><mrow><mi>r</mi><mi>o</mi></mrow></msub>
+<msub><mrow><mi>b</mi></mrow><mrow><mi>o</mi></mrow>
+</msub></mrow><mrow><msub><mrow><mi>μ</mi></mrow>
+<mrow><mi>o</mi></mrow></msub></mrow></mfrac></mrow>
+<mo>+</mo><mrow><msub><mrow><mi>y</mi></mrow><mrow>
+<mi>i</mi></mrow></msub><mfrac><mrow><msub><mrow><mi>K</mi></mrow><mrow><mi>r</mi><mi>g</mi></mrow></msub>
+<msub><mrow><mi>b</mi></mrow><mrow><mi>g</mi></mrow>
+</msub></mrow><mrow><msub><mrow><mi>μ</mi></mrow>
+<mrow><mi>g</mi></mrow></msub></mrow></mfrac></mrow>
+</mrow></math> 
+</td><td align="right">[Eq. 522.9]
+              </td></tr></tbody></table>
+<p>Normally, we do not consider the pressure dependency in equation <a href="wellinfl_Generalized_pseudo-pressure_in_ECLIPSE_300.html#wellinfl.XID-000001d1">522.7</a>. Instead, we compute the CGMM
+at the block pressure:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.equ.01e0"/>
+ <math><mrow><msubsup><mrow>
+<mo>∫</mo></mrow><mrow><msub>
+<mrow><mi>p</mi></mrow><mrow><mi>W</mi></mrow></msub>
+</mrow><mrow><msub><mrow><mi>p</mi></mrow><mrow><mi>B</mi></mrow></msub></mrow></msubsup><mrow><msub><mrow>
+<mi>M</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>(</mo><mi>p</mi><mo>)</mo>
+<mi>d</mi><mi>p</mi><mo>→</mo><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>(</mo><msub><mrow><mi>p</mi></mrow><mrow>
+<mi>B</mi></mrow></msub><mo>)</mo><mo>[</mo><msub><mrow><mi>p</mi></mrow><mrow><mi>B</mi>
+</mrow></msub><mrow><mo>-</mo><msub><mrow><mi>p</mi>
+</mrow><mrow><mi>W</mi></mrow></msub></mrow><mo>]</mo>
+</mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 522.10]
+              </td></tr></tbody></table>
+<p>that we know can be a poor approximation for a gas condensate where,
+although the block pressure may be well above the dew point and hence
+the gas relative permeability is high, the well pressure may be well
+below the dew point in which case the gas relative permeability can
+be substantially reduced. In this case, we want perform the integral
+in equation <a href="wellinfl_Generalized_pseudo-pressure_in_ECLIPSE_300.html#wellinfl.XID-000001cd">522.6</a>.</p>
+
+<p>To prevent accumulation of moles in the completion cell, the ratio
+of CGMM for component <math><mi>i</mi></math> to the Total Generalized Molar Mobility (TGMM) must be a constant:
+         </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.XID-000001e7"/>
+ <math><msub><mi>z</mi>
+<mrow><mi>p</mi><mi>i</mi></mrow></msub><mo>=</mo>
+<mfrac><mrow><msub><mi>M</mi><mi>i</mi></msub></mrow>
+<mrow><msub><mi>M</mi><mi>T</mi></msub></mrow></mfrac>
+</math> 
+</td><td align="right">[Eq. 522.11]
+              </td></tr></tbody></table>
+<p>where:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.equ.01eb"/>
+ <math><mrow><msub><mrow>
+<mi>M</mi></mrow><mrow><mi>T</mi></mrow></msub><mo>=</mo><mrow><munder><mrow><mi>Σ</mi>
+</mrow><mrow><mi>i</mi></mrow></munder><msub><mrow>
+<mi>M</mi></mrow><mrow><mi>i</mi></mrow></msub></mrow>
+</mrow></math> 
+</td><td align="right">[Eq. 522.12]
+              </td></tr></tbody></table>
+<p>Therefore, equation <a href="wellinfl_Generalized_pseudo-pressure_in_ECLIPSE_300.html#wellinfl.XID-000001d1">522.7</a>  can
+be written:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.equ.01f0"/>
+ <math><mrow><msub><mrow>
+<mi>n</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>=</mo><mrow><mi>T</mi><msub><mrow><mi>z</mi></mrow>
+<mrow><mi>p</mi><mi>i</mi></mrow></msub><mrow>
+<msubsup><mrow><mo>∫</mo>
+</mrow><mrow><msub><mrow><mi>p</mi></mrow><mrow><mi>W</mi></mrow></msub></mrow><mrow><msub><mrow><mi>p</mi></mrow><mrow><mi>B</mi></mrow></msub></mrow>
+</msubsup><mrow><msub><mrow><mi>M</mi></mrow><mrow>
+<mi>T</mi></mrow></msub><mo>(</mo><mi>p</mi><mo>)</mo><mi>d</mi><mi>p</mi>
+</mrow></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 522.13]
+              </td></tr></tbody></table>
+<p>where:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.equ.01f4"/>
+ <math><msub><mi>M</mi>
+<mi>T</mi></msub><mo>=</mo><mfrac><mrow><mrow><msub>
+<mi>K</mi><mrow><mi>r</mi><mi>o</mi></mrow></msub>
+<msub><mi>b</mi><mi>o</mi></msub></mrow></mrow><mrow>
+<msub><mi>μ</mi><mi>o</mi></msub></mrow></mfrac><mo>+</mo><mfrac><mrow><mrow><msub><mi>K</mi><mrow><mi>r</mi><mi>g</mi></mrow></msub><msub><mi>b</mi><mi>g</mi></msub></mrow></mrow><mrow><msub><mi>μ</mi><mi>g</mi></msub></mrow></mfrac></math> 
+</td><td align="right">[Eq. 522.14]
+              </td></tr></tbody></table>
+<p>If the block pressure <math><msub><mi>p</mi>
+<mi>B</mi></msub></math>  exceeds the dew point pressure,
+the production composition <math><msub><mi>z</mi>
+<mrow><mi>p</mi><mi>i</mi></mrow></msub></math> is
+simply the total hydrocarbon composition in the block. If the block
+pressure is less than the dew point pressure, the production composition
+is computed from CGMM for oil and gas.          </p>
+
+<p>When the Generalized Pseudo-Pressure (GPP) model is applied in
+ECLIPSE 300, rather than rewriting the appropriate parts of the well
+model, we simply modify the conventional well inflow equation through
+the addition of the component dimensionless <em>flow blocking</em> factor, <math><msub><mi>F</mi>
+<mrow><mi>B</mi><mi>i</mi></mrow></msub></math>, to
+give:          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.equ.01fe"/>
+ <math><mrow><msub><mrow>
+<mi>n</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>=</mo><mrow><mi>T</mi><msub><mrow><mi>F</mi></mrow>
+<mrow><mi>B</mi><mi>i</mi></mrow></msub><msub><mrow>
+<mi>M</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>(</mo><mi>p</mi><mo>)</mo>
+<mo>[</mo><msub><mrow><mi>p</mi></mrow>
+<mrow><mi>B</mi></mrow></msub><mrow><mo>-</mo><msub>
+<mrow><mi>p</mi></mrow><mrow><mi>W</mi></mrow></msub>
+</mrow><mo>]</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 522.15]
+              </td></tr></tbody></table>
+<p>where:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.equ.0202"/>
+ <math><mrow><msub><mrow>
+<mi>F</mi></mrow><mrow><mi>B</mi><mi>i</mi></mrow>
+</msub><mo>=</mo><mrow><mfrac><mrow><mn>1</mn></mrow>
+<mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>i</mi>
+</mrow></msub><mo>(</mo><msub><mrow><mi>p</mi></mrow><mrow><mi>B</mi></mrow></msub><mo>)</mo></mrow></mfrac><mfrac><mrow><mn>1</mn></mrow><mrow><mo>(</mo><msub>
+<mrow><mi>p</mi></mrow><mrow><mi>B</mi></mrow></msub>
+<mrow><mo>-</mo><msub><mrow><mi>p</mi></mrow><mrow>
+<mi>W</mi></mrow></msub></mrow><mo>)</mo>
+</mrow></mfrac><msub><mrow><mi>z</mi></mrow><mrow><mi>p</mi><mi>i</mi></mrow></msub><mrow><msubsup><mrow>
+<mo>∫</mo></mrow><mrow><msub>
+<mrow><mi>p</mi></mrow><mrow><mi>W</mi></mrow></msub>
+</mrow><mrow><msub><mrow><mi>p</mi></mrow><mrow><mi>B</mi></mrow></msub></mrow></msubsup><mrow><msub><mrow>
+<mi>M</mi></mrow><mrow><mi>T</mi></mrow></msub><mo>(</mo><mi>p</mi><mo>)</mo>
+<mi>d</mi><mi>p</mi></mrow></mrow></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 522.16]
+              </td></tr></tbody></table>
+<p>Because of equation <a href="wellinfl_Generalized_pseudo-pressure_in_ECLIPSE_300.html#wellinfl.XID-000001e7">522.11</a>,
+we can write:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.equ.0207"/>
+ <math><mrow><mrow><msub>
+<mrow><mi>M</mi></mrow><mrow><mi>i</mi></mrow></msub>
+<mrow><mo>(</mo><msub><mrow><mi>p</mi></mrow><mrow>
+<mi>B</mi></mrow></msub><mo>)</mo></mrow></mrow><mo>=</mo><mrow><msub><mrow><mi>z</mi></mrow><mrow><mi>p</mi><mi>i</mi></mrow></msub><msub><mrow><mi>M</mi>
+</mrow><mrow><mi>T</mi></mrow></msub><mrow><mo>(</mo>
+<msub><mrow><mi>p</mi></mrow><mrow><mi>B</mi></mrow>
+</msub><mo>)</mo></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 522.17]
+              </td></tr></tbody></table>
+<p>therefore, we define the total dimensionless flow blocking factor,
+                 <math><msub><mi>F</mi>
+<mi>B</mi></msub></math>, (DFBF)          </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.Xwellinfl.XID-0000020c"/>
+ <math><mrow><msub><mrow>
+<mi>F</mi></mrow><mrow><mi>B</mi></mrow></msub><mo>=</mo><mrow><mfrac><mrow><mn>1</mn></mrow><mrow>
+<msub><mrow><mi>M</mi></mrow><mrow><mi>T</mi></mrow>
+</msub><mo>(</mo><msub><mrow><mi>p</mi>
+</mrow><mrow><mi>B</mi></mrow></msub><mo>)</mo></mrow></mfrac><mfrac><mrow><mn>1</mn></mrow>
+<mrow><mo>(</mo><msub><mrow><mi>p</mi>
+</mrow><mrow><mi>B</mi></mrow></msub><mrow><mo>-</mo>
+<msub><mrow><mi>p</mi></mrow><mrow><mi>W</mi></mrow>
+</msub></mrow><mo>)</mo></mrow></mfrac>
+<mrow><msubsup><mrow><mo>∫</mo>
+</mrow><mrow><msub><mrow><mi>p</mi></mrow><mrow><mi>W</mi></mrow></msub></mrow><mrow><msub><mrow><mi>p</mi></mrow><mrow><mi>B</mi></mrow></msub></mrow>
+</msubsup><mrow><msub><mrow><mi>M</mi></mrow><mrow>
+<mi>T</mi></mrow></msub><mo>(</mo><mi>p</mi><mo>)</mo><mi>d</mi><mi>p</mi>
+</mrow></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 522.18]
+              </td></tr></tbody></table>
+<p>and hence the modified inflow equation becomes:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.XID-00000210"/>
+ <math><mrow><msub><mrow>
+<mi>n</mi></mrow><mrow><mi>i</mi></mrow></msub><mo>=</mo><mrow><mi>T</mi><msub><mrow><mi>F</mi></mrow>
+<mrow><mi>B</mi></mrow></msub><msub><mrow><mi>M</mi>
+</mrow><mrow><mi>i</mi></mrow></msub><mo>(</mo><mi>p</mi><mo>)</mo><mo>[</mo><msub><mrow><mi>p</mi></mrow><mrow>
+<mi>B</mi></mrow></msub><mrow><mo>-</mo><msub><mrow>
+<mi>p</mi></mrow><mrow><mi>W</mi></mrow></msub></mrow>
+<mo>]</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 522.19]
+              </td></tr></tbody></table>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> <a href="../ecl_rm/OPTIONS3.html#options3.121">Item 121</a> of the <span class="keyword">OPTIONS3</span> keyword can be used to impose an upper limit (greater
+than or equal to unity) on the value of the dimensionless blocking
+factor in order to prevent convergence issues in the simulation. 
+                     </span></div>
+
+<p>The final form of the GPP inflow equation, <a href="wellinfl_Generalized_pseudo-pressure_in_ECLIPSE_300.html#wellinfl.XID-00000210">522.19</a>, differs only from the normal
+inflow equation by the additional multiplication factor, <math><msub><mi>F</mi>
+<mi>B</mi></msub></math>, which we calculate from equation <a href="wellinfl_Generalized_pseudo-pressure_in_ECLIPSE_300.html#wellinfl.Xwellinfl.XID-0000020c">522.18</a>. The block pressure,
+ <math><msub><mi>p</mi>
+<mi>B</mi></msub></math>  and the TGMM at block conditions,
+ <math><mrow><msub><mi>M</mi><mi>T</mi></msub><mo>(</mo><msub><mi>p</mi>
+<mi>B</mi></msub><mo>)</mo></mrow></math>  is already
+known prior to entering the well routines. The integral in equation <a href="wellinfl_Generalized_pseudo-pressure_in_ECLIPSE_300.html#wellinfl.Xwellinfl.XID-0000020c">522.18</a>  appears to be a function
+of two variables:             </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.equ.021e"/>
+ <math><mrow><mrow><mi>Q</mi><mrow><mo>(</mo><msub><mrow><mi>p</mi></mrow>
+<mrow><mi>B</mi></mrow></msub><mo>,</mo><msub><mrow>
+<mi>p</mi></mrow><mrow><mi>W</mi></mrow></msub><mo>)</mo></mrow></mrow><mo>=</mo><mrow><msubsup><mrow>
+<mo>∫</mo></mrow><mrow><msub>
+<mrow><mi>p</mi></mrow><mrow><mi>W</mi></mrow></msub>
+</mrow><mrow><msub><mrow><mi>p</mi></mrow><mrow><mi>B</mi></mrow></msub></mrow></msubsup><mrow><msub><mrow>
+<mi>M</mi></mrow><mrow><mi>T</mi></mrow></msub><mrow>
+<mo>(</mo><mi>p</mi><mo>)</mo></mrow><mi>d</mi><mi>p</mi></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 522.20]
+              </td></tr></tbody></table>
+<p>but in fact it can be constructed as the difference of two integrals,
+namely:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.XID-00000222"/>
+ <math><mrow><mrow><mi>Q</mi><mo>(</mo><msub><mrow><mi>p</mi>
+</mrow><mrow><mi>B</mi></mrow></msub><mo>,</mo><msub>
+<mrow><mi>p</mi></mrow><mrow><mi>W</mi></mrow></msub>
+<mo>)</mo></mrow><mo>=</mo><mrow><mi>R</mi><mo>(</mo><msub><mrow><mi>p</mi>
+</mrow><mrow><mi>B</mi></mrow></msub><mo>)</mo><mo>-</mo><mrow><mi>R</mi><mo>(</mo><msub><mrow><mi>p</mi></mrow><mrow><mi>W</mi>
+</mrow></msub><mo>)</mo></mrow></mrow>
+<mo>=</mo><mrow><msubsup><mrow><mo>∫</mo></mrow><mrow><msub><mrow><mi>p</mi>
+</mrow><mrow><mi>L</mi></mrow></msub></mrow><mrow>
+<msub><mrow><mi>p</mi></mrow><mrow><mi>B</mi></mrow>
+</msub></mrow></msubsup><mrow><msub><mrow><mi>M</mi>
+</mrow><mrow><mi>T</mi></mrow></msub><mo>(</mo><mi>p</mi><mo>)</mo><mi>d</mi>
+<mi>p</mi><mrow><mo>-</mo><mrow><msubsup><mrow><mo>∫</mo></mrow><mrow><msub><mrow>
+<mi>p</mi></mrow><mrow><mi>L</mi></mrow></msub></mrow>
+<mrow><msub><mrow><mi>p</mi></mrow><mrow><mi>W</mi>
+</mrow></msub></mrow></msubsup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>T</mi></mrow></msub><mo>(</mo><mi>p</mi><mo>)</mo>
+<mi>d</mi><mi>p</mi></mrow></mrow></mrow></mrow>
+</mrow></mrow></math> 
+</td><td align="right">[Eq. 522.21]
+              </td></tr></tbody></table>
+<p>where  <math><msub><mi>p</mi>
+<mi>L</mi></msub></math>  is some suitable <em>lower</em> or
+base pressure, such as zero or other user-specified minimum pressure.
+            </p>
+
+<p>The contributions of the oil and gas phases to the TGMM are clearly
+saturation dependent through the respective relative permeability
+functions, <math><mo>(</mo><msub>
+<mi>K</mi><mrow><mi>r</mi><mi>o</mi></mrow></msub>
+<mo>,</mo><msub><mi>K</mi><mrow><mi>r</mi><mi>g</mi>
+</mrow></msub><mo>)</mo></math>. The requirement that the
+produced composition be constant is equivalent to saying that the
+produced Gas-Oil-Ratio (GOR) or the produced gas-oil molar ratio be
+constant. Therefore:             </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.XID-0000022a"/>
+ <math><mfrac><mrow><mrow>
+<msub><mi>M</mi><mi>o</mi></msub><mo>(</mo><msub>
+<mi>S</mi><mi>o</mi></msub><mo>)</mo></mrow></mrow>
+<mrow><mrow><msub><mi>M</mi><mi>g</mi></msub><mo>(</mo><msub><mi>S</mi><mi>g</mi></msub><mo>)</mo>
+</mrow></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>L</mi>
+</mrow><mrow><mi>V</mi></mrow></mfrac></math> 
+</td><td align="right">[Eq. 522.22]
+              </td></tr></tbody></table>
+<p>where</p>
+
+<p> <math><mi>L</mi></math>  and  <math><mi>V</mi></math>  are the total liquid and vapor moles at the pressure  <math><mrow><msub><mrow>
+<mi>p</mi></mrow><mrow><mi>L</mi></mrow></msub><mo>≤</mo><mi>p</mi><mo>≤</mo><msub><mrow><mi>p</mi>
+</mrow><mrow><mi>B</mi></mrow></msub></mrow></math> such that  <math><mi>L</mi><mo>+</mo>
+<mi>V</mi><mo>=</mo><mn>1</mn></math>  and the gas saturation
+ <math><msub><mi>S</mi>
+<mi>g</mi></msub><mo>=</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mi>S</mi><mi>w</mi></msub><mo>-</mo><msub>
+<mi>S</mi><mi>o</mi></msub></mrow></math>          
+                  </p>
+
+<p>where <math><mo>(</mo><msub>
+<mi>S</mi><mi>w</mi></msub><mo>,</mo><msub><mi>S</mi>
+<mi>o</mi></msub><mo>)</mo></math>  are the water and
+oil saturations, respectively.             </p>
+
+<p>The phase molar mobility, <math><msub><mi>M</mi>
+<mi>j</mi></msub></math>  is simply:             </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.Xwellinfl.equ.0238"/>
+ <math><msub><mi>M</mi>
+<mi>j</mi></msub><mo>=</mo><mfrac><mrow><mrow><msub>
+<mi>K</mi><mrow><mi>r</mi><mi>j</mi></mrow></msub>
+<msub><mi>b</mi><mi>j</mi></msub></mrow></mrow><mrow>
+<msub><mi>μ</mi><mi>j</mi></msub></mrow></mfrac>
+</math> 
+</td><td align="right">[Eq. 522.23]
+              </td></tr></tbody></table>
+<p>Equation  <a href="wellinfl_Generalized_pseudo-pressure_in_ECLIPSE_300.html#wellinfl.XID-0000022a">522.22</a>  is a simple non-linear equation in one variable, the oil saturation.
+The single integral in equation <a href="wellinfl_Generalized_pseudo-pressure_in_ECLIPSE_300.html#wellinfl.XID-00000222">522.21</a>  is constructed using the trapezium rule, following the suggestions
+made by <cite><span> <a href="biblio_Bibliography.html#biblio_41530">Whitson and Fevang (1997)</a> </span></cite>. In practice, the integral
+is constructed at the beginning of each time step in the form of a
+table of pressure versus total generalized molar mobilities but only
+when the grid block conditions have changed significantly. Control
+over the number of pressure nodes in this table together with the
+pressure spacing and extent can be specified via either the <a href="../ecl_rm/WPICOND.html#WPICOND">WPICOND</a> or <a href="../ecl_rm/PICOND.html#PICOND">PICOND</a> keywords.</p>
+
+<p>The table of pressure versus total generalized molar
+mobilities is constructed for each well connection over a pressure
+range which is defined by the lower and upper pressure bounds specified
+by <a href="../ecl_rm/WPICOND.html#wpicond.7">item 7</a> and <a href="../ecl_rm/WPICOND.html#wpicond.8">item 8</a> respectively of the <span class="keyword">WPICOND</span> keyword (<a href="../ecl_rm/PICOND.html#picond.5">item 5</a> and <a href="../ecl_rm/PICOND.html#picond.6">item 6</a> of the <span class="keyword">PICOND</span> keyword).
+These bounds are defined in terms of multiplicative factors of the
+current pressure of the grid block containing the connection. The
+table pressures should typically span the range from zero to the highest
+point above the current grid block pressure for which an instantaneous
+pressure may be required when finding a future well solution at the
+prevailing reservoir conditions such that the table may be potentially
+reused at a future time without recalculation. The lower pressure
+limit can be increased up to a maximum value of 0.95 <math><msub><mi>p</mi>
+<mi>B</mi></msub></math>, but is constrained to the minimum
+of the specified limit and the dew-point pressure. If the lower limit
+is too high, this may impair the accuracy of the integrals which can
+be constructed and hence limit the accuracy of the calculated blocking
+factor, in particular, if the total generalized molar mobility is
+of significant value at pressures below this lower limit. Similarly,
+the upper pressure limit can be specified to be as low as 1.05 <math><msub><mi>p</mi>
+<mi>B</mi></msub></math>; however, this may not be sufficient
+to encompass the range of grid block pressures involved at a future
+time. If, when using the table to calculate the blocking factor, the
+completion or grid block pressures are outside the pressure range
+of the table a warning message is issued. However, this will potentially
+result in inaccuracies in the calculated blocking factor.</p>
+
+<p>The table is constructed with two sets of pressure steps; the sizes
+of the steps below and above the dew point are specified by <a href="../ecl_rm/WPICOND.html#wpicond.3">item 3</a> and <a href="../ecl_rm/WPICOND.html#wpicond.4">item 4</a> of the <span class="keyword">WPICOND</span> keyword
+(<a href="../ecl_rm/PICOND.html#picond.1">item 1</a> and <a href="../ecl_rm/PICOND.html#picond.2">item 2</a> of the <span class="keyword">PICOND</span> keyword).
+The rate of change of total generalized molar mobility with pressure
+is typically greatest in the region close to the dew-point pressure.
+Ideally, therefore, smaller pressure steps should be selected in the
+vicinity of the dew-point pressure. This may be accomplished via the
+adaptive ordinate control using <a href="../ecl_rm/WPICOND.html#wpicond.13">item 13</a> and <a href="../ecl_rm/WPICOND.html#wpicond.14">item 14</a> of the <span class="keyword">WPICOND</span> keyword
+(<a href="../ecl_rm/PICOND.html#picond.11">item 11</a> and <a href="../ecl_rm/PICOND.html#picond.12">item 12</a> of the <span class="keyword">PICOND</span> keyword).
+This simply involves the automatic addition of extra pressure steps
+in the regions between the last pressure step before the dew-point
+pressure and the first pressure step after the dew-point pressure,
+such that these pressure step sizes become smaller as they approach
+the dew point (The intervals are successively halved until the minimum
+value specified by <a href="../ecl_rm/WPICOND.html#wpicond.14">item 14</a> of the <span class="keyword">WPICOND</span> keyword (<a href="../ecl_rm/PICOND.html#picond.12">item 12</a> of the <span class="keyword">PICOND</span> keyword) is attained.)</p>
+
+<p>The table of pressure versus total generalized molar mobilities
+for each connection for each well (for which the generalized pseudo-pressure
+option has been specified) is recalculated at the start of each time
+step when one or more of the conditions for recalculation are triggered.
+These conditions are specified in terms of four control parameters: </p>
+
+<ul>
+<li>Change in water saturation — <a href="../ecl_rm/WPICOND.html#wpicond.9">Item 9</a> of <span class="keyword">WPICOND</span> or <a href="../ecl_rm/PICOND.html#picond.7">item 7</a> of <span class="keyword">PICOND</span>. </li>
+
+<li>Change in saturation pressure (dew-point pressure)
+or grid block pressure — <a href="../ecl_rm/WPICOND.html#wpicond.10">Item 10</a> of <span class="keyword">WPICOND</span> or <a href="../ecl_rm/PICOND.html#picond.8">item 8</a> of <span class="keyword">PICOND</span>.</li>
+
+<li>Fractional change in composition of any component
+— <a href="../ecl_rm/WPICOND.html#wpicond.11">Item 11</a> of <span class="keyword">WPICOND</span> or <a href="../ecl_rm/PICOND.html#picond.9">item 9</a> of <span class="keyword">PICOND</span>.</li>
+
+<li>Change in simulation time — <a href="../ecl_rm/WPICOND.html#wpicond.12">Item 12</a> of <span class="keyword">WPICOND</span> or <a href="../ecl_rm/PICOND.html#picond.10">item 10</a> of <span class="keyword">PICOND</span>.</li>
+
+</ul>
+
+<p>The checks for the conditions which can trigger a recalculation
+are performed in the order list above; that is, if the change in water
+saturation is sufficient to trigger a recalculation, the three subsequent
+checks are not performed.</p>
+
+<p>Each of these of these controls can be disabled, that
+is, not used to trigger a recalculation, by specifying a negative
+value. Conversely, if one or more of these controls are set to zero,
+this will have the effect of requiring a recalculation at each time
+step. </p>
+
+<p>By default, the changes in water saturation and saturation
+or grid block pressure are interpreted as the magnitudes of the differences
+between the values in force at the simulation time when the table
+was previously calculated and the values at the current simulation
+time. For example, if the water saturation has changed from 0.10 to
+0.12, this corresponds to a change of 0.02 which would trigger a recalculation
+for the default change in water saturation of 0.01. If required, changes
+in water saturation and saturation or grid block pressure can be treated
+as fractional changes by setting <a href="../ecl_rm/OPTIONS3.html#options3.330">item 330</a> of the <span class="keyword">OPTIONS3</span> keyword to 2. This corresponds to the magnitude
+of the difference between the current and previous values normalized
+by the previous value. Changes in composition are always treated as
+fractional. </p>
+
+<p>In addition to changes specified by the control parameters
+described above, a recalculation will also be triggered each time
+a <a href="../ecl_rm/WPICOND.html#WPICOND">WPICOND</a> keyword is encountered in the <span class="keyword">SCHEDULE</span> section for all the connections for those wells matching the well
+specification defined in item 1, if one or more of the items specified
+by the keyword have changed compared to those currently in force.
+Similarly, when a  <a href="../ecl_rm/PICOND.html#PICOND">PICOND</a> keyword is encountered, a recalculation will be triggered
+for all connections in all wells for which one or more of the items
+specified by the keyword have changed compared to those currently
+in force. If the generalized pseudo-pressure option is deselected
+for a well by setting <a href="../ecl_rm/WPICOND.html#wpicond.2">item 2</a> of the <span class="keyword">WPICOND</span> keyword to NO, the complete set of tables for this
+well will be deleted. These will be recalculated at a later time if
+item 2 of the <span class="keyword">WPICOND</span> keyword is subsequently set
+to YES.</p>
+
+<p>The number of pressure entries in the table of pressure versus
+total generalized molar mobilities for a given well connection will
+depend upon the following: </p>
+
+<ul>
+<li>The current grid block pressure. </li>
+
+<li>The lower and upper pressure table bounds. </li>
+
+<li>The step sizes in pressure below and above the dew point.</li>
+
+<li>The location of the dew-point pressure relative to the lower and
+upper table bounds. </li>
+
+<li>The optional inclusion of additional pressure steps in the vicinity
+of the dew-point pressure. </li>
+
+</ul>
+
+<p>The maximum number of rows per table is specified
+via item 14 of the <a href="../ecl_rm/WELLDIMS.html#WELLDIMS">WELLDIMS</a> keyword. This has a default value of 201 and this may be
+increased or decreased as required but is expected to be sufficient
+for most modeling purposes. The minimum number of rows which may be
+specified is 21. The maximum number of rows actually used (over all
+tables of all connections in all wells) is reported at the end of
+the simulation. If the maximum available number of rows is less than
+the number required for a given well connection, the sizes of the
+pressure steps are widened to reduce the number of rows to the available
+maximum and an appropriate warning message is used. In this case,
+the actual number of rows allocated may vary slightly from the specified
+maximum because of integer rounding.</p>
+
+<p>The calculation time required to construct these tables increases
+with the number of rows (pressure entries) required and the total
+number of well connections for which tables are required. The status
+of the tables can be reported to the PRT file by setting item 19 of
+the <a href="../ecl_rm/RPTPRINT.html#RPTPRINT">RPTPRINT</a> keyword to 1 or 3. This provides information such as the
+time when the table was last updated, the reason for the update and
+the values of the control parameters at the time of the update. If
+item 19 of the <span class="keyword">RPTPRINT</span> keyword is set to 2 or
+4, the actual table of pressure versus total generalized molar mobilities
+is also reported. Values of 1 and 2 will only provide a report at
+the report step for a table which has been updated since the previous
+report step, whereas values of 3 and 4 will provide full reports at
+each report step irrespective of when the table was last updated.</p>
+
+<p>The number of pressure table update calculations performed
+for a specified well connection may be inspected via the connection
+summary vector <span class="keyword">CGPPTN</span>. This is essentially a counter
+which is incremented by one each time the pressure table is recalculated.
+If the GPP option is deselected for a well, the counters associated
+with all the well connections will be reset to zero. The status of
+the pressure table update calculation for a specified well connection,
+that is, the reason for the update, may be inspected via the companion
+connection summary vector <span class="keyword">CGPPTS</span>. This has one
+of the following values:</p>
+
+<ul>
+<li>-3 Recalculation triggered by <span class="keyword">WPICOND</span> keyword.</li>
+
+<li>-2 Recalculation triggered by <span class="keyword">PICOND</span> keyword.</li>
+
+<li>-1 Recalculation triggered by empty table.</li>
+
+<li>0 No table calculation yet performed or GPP inflow
+model not applied to well.</li>
+
+<li>1 Recalculation triggered by change in water saturation.</li>
+
+<li>2 Recalculation triggered by change in saturation
+pressure.</li>
+
+<li>3 Recalculation triggered by change in composition.</li>
+
+<li>4 Recalculation triggered by change in simulation
+time.</li>
+
+<li>5 Recalculation triggered by change in grid block
+pressure.</li>
+
+</ul>
+
+<p>Typically this summary vector will commence with a
+value of zero for any initial period of simulation for which the GPP
+inflow model is not applied to the well connection. Upon initial specification
+of the GPP inflow model for the well via one or more of the keywords
+described above, the value will initially change to -1 indicating
+that a calculation has been triggered by the absence of an existing
+table and will subsequently fluctuate between values of 1 and 5 according
+to which condition has triggered a recalculation of the pressure table.
+If subsequently a <a href="../ecl_rm/PICOND.html#PICOND">PICOND</a> or <a href="../ecl_rm/WPICOND.html#WPICOND">WPICOND</a> keyword is specified which alters one or more of the keyword
+items, this will also trigger a recalculation resulting in an instantaneous
+status value of -2 or -3 respectively. If at any point during the
+simulation the GPP inflow model is subsequently deselected, the status
+value will be reset to zero. For periods during which the table is
+not updated, the status value will remain fixed at the value corresponding
+to the reason for the most recent update.</p>
+
+<div class="section" id="wellinfl_generalized_pseudo-pressure_in_eclipse_300_Notes"><a name="wellinfl_generalized_pseudo-pressure_in_eclipse_300_Notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li>As described on page 107 of <cite><span> <a href="biblio_Bibliography.html#biblio_38613">Whitson and Fevang (1996)</a> </span></cite>, and also illustrated in <cite><span> <a href="biblio_Bibliography.html#biblio_13723">Singh and Whitson (2008)</a> </span></cite>, an over-coarse grid will lead potentially to an underestimate
+of well deliverability. It is important that the grid size containing
+the well should be small enough to model the region 1 steady-state
+flow using GPP. This will be of the order of 50-100 m for lean gas
+condensate and 100-200 m for rich gas condensate reservoirs, although
+sensitivity studies should be carried out to determine the required
+well grid. </li>
+
+<li>If the rock compaction option has been specified via the <a href="../ecl_rm/ROCKCOMP.html#ROCKCOMP">ROCKCOMP</a> keyword, the values
+of oil and gas relative permeability used in the above equations will
+be modified by the transmissibility multipliers specified via the <a href="../ecl_rm/ROCKTAB.html#ROCKTAB">ROCKTAB</a> keyword. This can be
+disabled by setting <a href="../ecl_rm/OPTIONS3.html#options3.299">item 299</a> of the <span class="keyword">OPTIONS3</span> keyword to 1. </li>
+
+<li>The calculated blocking factor will depend upon the
+calculation control criteria specified via either the <a href="../ecl_rm/WPICOND.html#WPICOND">WPICOND</a> or the <a href="../ecl_rm/PICOND.html#PICOND">PICOND</a> keywords. It is recommended,
+therefore, that a sensitivity analysis is performed in order to establish
+the dependence of the calculated blocking factor upon the spacing
+and extent of the pressure nodes in the total generalized molar mobility
+table and upon the frequency at which the table is updated. </li>
+
+<li>An example table is shown below in figure <a href="wellinfl_Generalized_pseudo-pressure_in_ECLIPSE_300.html#generalizedpseudopressure.XID-000177">522.1</a>  for which a fixed
+spacing of 20 and 40 bars below and above the dew point respectively
+without the adaptive spacing option selected (red curve) is compared
+with a fixed spacing of 40 and 80 bars with the adaptive spacing option
+selected with a minimum spacing of 0.1 bar (blue curve). The adaptive
+option adds additional points by applying successive halving of the
+final step below and above the dew point thereby constructing progressively
+smaller pressure steps on the approach to the dew point until the
+minimum specified step size is reached. This provides considerably
+improved resolution in the vicinity of the dew point for a comparatively
+small increase in table points and will improve the accuracy of the
+integration applied via the trapezium rule, in particular, when the
+connection pressure is close to the dew-point pressure. </li>
+
+</ul>
+<div class="fignone" id="generalizedpseudopressure.XID-000177"><a name="generalizedpseudopressure.XID-000177"><!-- --></a>
+
+ <br/><img src="../img/generalized_pseudo_pressure.png" width="560px"/><br/> 
+<br/><span class="figcap">
+           Figure 522.1  Example Table for Pressure versus Total Generalized Molar Mobility</span></div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

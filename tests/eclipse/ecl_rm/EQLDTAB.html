@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="EQLDTAB"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="EQLDTAB"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>EQLDTAB</title>
+</head>
+<body>
+
+
+<div class="nested0" id="EQLDTAB"><a name="EQLDTAB"><!-- --></a>
+<h1 class="keyword">EQLDTAB</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="eqldtab.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="eqldtab.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d638e45">  </th>
+
+<th valign="top" id="d638e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d638e54"> x </th>
+
+<th valign="top" id="d638e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d638e45 d638e54 ">  </td>
+
+<td valign="top" headers="d638e48 d638e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d638e45 d638e54 ">  </td>
+
+<td valign="top" headers="d638e48 d638e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d638e45 d638e54 ">  </td>
+
+<td valign="top" headers="d638e48 d638e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d638e45 d638e54 "> x </td>
+
+<td valign="top" headers="d638e48 d638e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d638e45 d638e54 ">  </td>
+
+<td valign="top" headers="d638e48 d638e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d638e45 d638e54 ">  </td>
+
+<td valign="top" headers="d638e48 d638e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d638e45 d638e54 ">  </td>
+
+<td valign="top" headers="d638e48 d638e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d638e45 d638e54 ">  </td>
+
+<td valign="top" headers="d638e48 d638e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword is used to specify tables of equilibrium values for
+modeling reactions that deviate from an equilibrium state. The equilibrium
+states are defined by the amount of adsorbed solid as a function of
+a water component mole fraction. The number of tables, N<sub>T</sub>, is specified by the item 5 in the <a href="REACTION.html#REACTION">  REACTION</a> keyword. Each table consists of two columns
+of data and is terminated by a slash (/). </p>
+
+<ol>
+<li> A water component mole fraction. <p>The values should be between
+0 and 1 and increase monotonically down the column.</p>
+ </li>
+
+<li> The corresponding adsorbed solid concentration, defined as mass
+of solid per mass of rock. <p>UNITS: kg/kg (<samp class="codeph">METRIC</samp>), lb/lb (<samp class="codeph">FIELD</samp>), gm/gm (<samp class="codeph">LAB</samp>),
+kg/kg (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+</ol>
+
+<p>Each table must contain no more than <a href="TABDIMS.html#TABDIMS.NPPVT">NPPVT</a> (set
+in the <span class="keyword">TABDIMS</span> keyword) rows. Each row must be
+complete, containing an entry in every column of the table.</p>
+
+<p>The <a href="EQLDREAC.html#EQLDREAC">  EQLDREAC</a> keyword is required to specify the equilibrium deviation terms and
+the <a href="ROCKDEN.html#ROCKDEN">  ROCKDEN</a> keyword
+is required to specify the rock density.</p>
+
+<p>See <a href="../ecl_td/reactionsintro_Chemical_Reactions.html#reactionsintro_chemical_reactions">"Chemical reactions"</a>, <a href="../ecl_td/watercompintro_Water_components.html#watercompintro_water_components">"Water components"</a> and <a href="../ecl_td/solidintro_Solid_Phase.html#solidintro_solid_phase">"Solid phase"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<div class="section" id="eqldtab_example"><a name="eqldtab_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>In this example
+there is one table as item 5 in the <span class="keyword">REACTION</span> keyword
+is set to 1. <span class="keyword">NPPVT</span> is set to 3 and the table contains
+three entries, the maximum permitted with this setting.</p>
+<pre><code>EQLDTAB
+-- AMF  EQ
+0.000   0.00000
+0.001   0.0005
+1.000   0.0005
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

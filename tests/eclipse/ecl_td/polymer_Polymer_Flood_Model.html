@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Polymer flood model"/>
+<meta name="DC.subject" content="Salinity, Polymer flood, Processes, Polymer flood model"/>
+<meta name="keywords" content="Salinity, Polymer flood, Processes, Polymer flood model"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="polymer_polymer_flood_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Polymer flood model</title>
+</head>
+<body>
+
+
+<div class="nested0" id="polymer_polymer_flood_model"><a name="polymer_polymer_flood_model"><!-- --></a>
+<h1 class="keyword">Polymer flood model</h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="polymer.tab.0009"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="polymer.tab.0009" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">                         x                   
+  </td>
+
+<td valign="top">                         ECLIPSE 100         
+            </td>
+
+</tr>
+
+<tr>
+<td valign="top">                         x     
+                    </td>
+
+<td valign="top">                         ECLIPSE 300         
+            </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The main objective of polymer injection during water flooding of
+oil reservoirs is to decrease the mobility of the injected water.
+This decrease results in a more favorable fractional flow curve for
+the injected water, leading to a more efficient sweep pattern and
+reduced viscous fingering. Some plugging effects within highly permeable
+layers may also occur and result in the diversion of the injected
+water into less permeable zones of the reservoir.</p>
+
+<p>The mobility decrease of the injected water resulting from the
+addition of polymer is due to two effects. Firstly, the viscosity
+of the polymer solution is higher than that of pure water (the viscosity
+of the polymer solution increases with the polymer concentration).
+Secondly, the rock permeability to water is reduced after the passage
+of a polymer solution through the rock material (the permeability
+to oil is, however, largely unaffected). Both effects combine to reduce
+the water mobility while that for the oil is unaltered.</p>
+
+<p>To achieve maximum efficiency, the polymer solution is often applied
+in the form of a tapered slug. At the front edge of the slug, the
+displacement is stable but the interface between the water and the
+polymer solution smears due to physical dispersion of the polymer.
+At the rear edge, the mobility ratio is unfavorable and is dominated
+by viscous fingering. Both effects cause deterioration of the slug.
+In ECLIPSE 100 these effects are modeled by means of a mixing parameter
+applied to the viscosity terms in the fluid flow equations. In ECLIPSE
+300 these effects are currently not modeled; it is assumed that the
+polymer is fully mixed in the water phase.</p>
+
+<p>Certain polymer solutions, such as those of the PA type (Polyamides),
+exhibit a strong sensitivity to the presence of certain salts. In
+particular, sodium chloride can influence the viscosity characteristics
+of PA solutions to such an extent that in highly saline reservoirs
+it is often necessary to pre-flush with fresh water to reduce the
+exposure of the polymer solution to the reservoir brine. Both ECLIPSE
+100 and ECLIPSE 300 models allow you to investigate the effect of
+varying brine concentrations on the efficiency of the polymer flood.
+The brine effect is, however, optional.</p>
+
+<p>When a polymer solution is injected into the reservoir some of
+the long chain molecules constituting the polymer are adsorbed onto
+the rock surfaces. Mechanical entrapment of some of the large molecules
+at the entrance to small pore throats may also occur and account for
+an apparent loss of polymer from the invading solution. Experimentally,
+the reservoir rock material is believed to retain a specific capacity
+of polymer. The main effects of polymer loss occur at the leading
+edges of the polymer slug where a stripped water bank is created and
+the slug width is gradually reduced in time. Some desorption effects
+can occur as the trailing edge of the slug passes but these effects
+are usually small compared with the adsorption losses. ECLIPSE 100
+allows you to either neglect the desorption effect or to allow the
+adsorption isotherm to be retraced after passage of the polymer slug.
+ECLIPSE 300 allows you to model the effects of adsorption and desorption
+by combining the Polymer Flood Model with the Solid Model.</p>
+
+<dl>
+
+<dt class="dlterm">ECLIPSE 100 considerations</dt>
+
+<dd>A further effect caused by the adsorption and entrapment processes
+is a reduction in the relative permeability of the polymer solution.
+The reduction results from an interaction between the aqueous solution
+and the polymer retained by the rock material. For modeling purposes
+it will be assumed that the reduction in permeability to the polymer
+solution is proportional to the quantity of polymer lost to the rock
+material. The permeability of the rock to water is thus permanently
+reduced after the passage of a polymer slug compared to its value
+before the passage. Experimentally, it is found that only a very small
+change occurs to the hydrocarbon relative permeability and the ECLIPSE
+100 model assumes that the change is negligible.<p>The effect of temperature
+variations on the behavior of the polymer solution can be optionally
+modeled.</p>
+<p>In core flooding experiments, it is often observed
+that injected polymer slugs break through to producers earlier than
+tracer slugs (for example, NaCl). The polymer fluid velocity is higher
+than that of the tracer fluid within the porous medium and this is
+due to the fact that only a fraction of the total pore space is available
+to the polymer fluid. As the inaccessible pore space to the polymer
+fluid increases, the effective polymer velocity through the rock increases
+and leads to a faster breakthrough of polymer. This chromatographic
+effect is modeled by assuming that the dead pore space is constant
+for each rock type:</p>
+<ul>
+<li>and either does not exceed the corresponding irreducible water
+saturation (pre 2008.2).</li>
+
+<li>or independent of the water saturation (post 2008.2 included)</li>
+
+</ul>
+<p>The rheology of polymer solutions is not simple. At low flow
+rates the viscosity of the solution is approximately constant and
+depends only on the concentration of polymer in the solution. At higher
+flow rates the solution viscosity reduces in a reversible (elastic)
+manner. At even higher velocities the large polymer molecules begin
+to break up, and the viscosity reduction becomes irreversible (plastic).
+The effects tend to be greatest in the vicinity of injection wells
+where the fluid velocity is greatest, and so is the shear rate.</p>
+</dd>
+
+</dl>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

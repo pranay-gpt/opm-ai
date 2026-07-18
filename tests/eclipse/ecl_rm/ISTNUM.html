@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ISTNUM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ISTNUM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ISTNUM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ISTNUM"><a name="ISTNUM"><!-- --></a>
+<h1 class="keyword">ISTNUM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="istnum.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="istnum.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1162e45">  </th>
+
+<th valign="top" id="d1162e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1162e54"> x </th>
+
+<th valign="top" id="d1162e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1162e45 d1162e54 ">  </td>
+
+<td valign="top" headers="d1162e48 d1162e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1162e45 d1162e54 ">  </td>
+
+<td valign="top" headers="d1162e48 d1162e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1162e45 d1162e54 ">  </td>
+
+<td valign="top" headers="d1162e48 d1162e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1162e45 d1162e54 ">  </td>
+
+<td valign="top" headers="d1162e48 d1162e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1162e45 d1162e54 "> x </td>
+
+<td valign="top" headers="d1162e48 d1162e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1162e45 d1162e54 ">  </td>
+
+<td valign="top" headers="d1162e48 d1162e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1162e45 d1162e54 ">  </td>
+
+<td valign="top" headers="d1162e48 d1162e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1162e45 d1162e54 ">  </td>
+
+<td valign="top" headers="d1162e48 d1162e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword should be followed by one integer for every grid block
+in the current input box specifying the secondary hysteresis saturation
+function region to which it belongs. This keyword is used together
+with <span class="keyword">PSTNUM</span> and <span class="keyword">DSTNUM</span> if the <a href="ODD3P.html#ODD3P"> ODD3P</a> relative permeability
+and capillary pressure hysteresis model has been selected in the <span class="keyword">PROPS</span> section. The region number should not be less than
+1 or greater than <a href="TABDIMS.html#TABDIMS.NTSFUN"> NTSFUN</a> 
+(set in the <span class="keyword">TABDIMS</span> keyword). The data must
+be terminated by a slash (/).</p>
+
+<p>The secondary hysteresis saturation function region number specifies
+which set of saturation functions (input using <span class="keyword">SOF3</span>, <span class="keyword">SGF3</span>, and <span class="keyword">SWF3</span> in the <span class="keyword">PROPS</span> section) should be used to calculate the secondary
+hysteresis relative permeabilities and capillary pressures in each
+grid block.</p>
+
+<p>Grid blocks are ordered with the X axis index cycling fastest,
+followed by the Y and Z axis indices. Repeat counts may be used for
+repeated values (for example 115*2). Note that spaces must not be
+inserted on either side of the asterisk.</p>
+
+<p>For grid blocks for which the secondary hysteresis saturation function
+region numbers are not specified, the values will be assigned from
+those defined for the primary saturation function region numbers using
+the <span class="keyword">PSTNUM</span> keyword. The <span class="keyword">ODD3P</span> model is implicitly hysteretic. However, hysteresis may be deselected
+on a per grid block basis by setting the secondary and tertiary hysteresis
+saturation region numbers equal to the primary saturation region numbers.</p>
+
+<p>See also the saturation function keywords <a href="SOF3.html#SOF3"> SOF3</a>, <a href="SGF3.html#SGF3"> SGF3</a> and <a href="SWF3.html#SWF3"> SWF3</a> in
+the <span class="keyword">PROPS</span> section and the primary and tertiary
+hysteresis saturation region numbers <a href="PSTNUM.html#PSTNUM"> PSTNUM</a> and <a href="DSTNUM.html#DSTNUM"> DSTNUM</a> in the <span class="keyword">REGIONS</span> section.</p>
+
+<div class="section" id="istnum_example"><a name="istnum_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTSFUN</samp> = 2 specified in the <span class="keyword">TABDIMS</span> keyword, and <samp class="codeph">NDIVIZ</samp> = 6 specified in the 
+<span class="keyword">DIMENS</span>; no input <span class="keyword">BOX</span> is set:</p>
+ 
+<pre><code>ISTNUM
+ 144*1 96*2 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

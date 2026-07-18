@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="NMATRIX"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="NMATRIX"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>NMATRIX</title>
+</head>
+<body>
+
+
+<div class="nested0" id="NMATRIX"><a name="NMATRIX"><!-- --></a>
+<h1 class="keyword">NMATRIX</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="nmatrix.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="nmatrix.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1540e45">                         x </th>
+
+<th valign="top" id="d1540e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1540e54">                         x </th>
+
+<th valign="top" id="d1540e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1540e45 d1540e54 ">                         x </td>
+
+<td valign="top" headers="d1540e48 d1540e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1540e45 d1540e54 "> </td>
+
+<td valign="top" headers="d1540e48 d1540e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1540e45 d1540e54 "> </td>
+
+<td valign="top" headers="d1540e48 d1540e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1540e45 d1540e54 "> </td>
+
+<td valign="top" headers="d1540e48 d1540e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1540e45 d1540e54 "> </td>
+
+<td valign="top" headers="d1540e48 d1540e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1540e45 d1540e54 "> </td>
+
+<td valign="top" headers="d1540e48 d1540e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1540e45 d1540e54 "> </td>
+
+<td valign="top" headers="d1540e48 d1540e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1540e45 d1540e54 "> </td>
+
+<td valign="top" headers="d1540e48 d1540e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Defines the number of matrix pore systems.</p>
+
+<p>In ECLIPSE 100 this keyword activates the
+discretized matrix dual porosity model, in which the matrix is subdivided
+into smaller cells to allow the modeling of transient effects within
+the matrix cells (without <samp class="codeph">NMATOPTS</samp>, or with the first
+3 (ECLIPSE 100) or 4 (ECLIPSE 300) <samp class="codeph">NMATOPTS</samp> options),
+or to create a more detailed representation of gravity drainage (<span class="keyword">NMATOPTS</span> keyword, <samp class="codeph">VERTICAL</samp> option). See
+the <a href="NMATOPTS.html#NMATOPTS"> NMATOPTS</a> keyword in the <a href="GRID.html#GRID"> GRID</a> section and <a href="../ecl_td/dualporo_Dual_Porosity.html#dualporo_dual_porosity">"Dual porosity"</a> in the <cite>ECLIPSE Technical Description</cite> for more details.</p>
+
+<p>In ECLIPSE 300 this keyword activates the
+multi-porosity option. See <a href="../ecl_td/multiporo_Multi_porosity.html#multiporo_multi_porosity">"Multi porosity"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">In ECLIPSE 100, explicit initialization
+of the internal sub-matrix cells is not possible, and the <a href="EQUIL.html#EQUIL"> EQUIL</a> keyword
+must be used with <samp class="codeph">NMATRIX</samp> so that the sub-matrix
+cells are properly initialized.</span></div>
+
+<p>With this keyword in ECLIPSE 100, the minimum
+number of global cells in the X direction (keyword <a href="DIMENS.html#DIMENS"> DIMENS</a>)
+is 2.</p>
+
+<p>With this keyword in ECLIPSE 100, the additional
+Z-planes for the matrix sub-cells are stored internally and are not
+part of the deck as described in the <samp class="codeph">DIMENS</samp> or <a href="CARFIN.html#CARFIN"> CARFIN</a> keywords.
+For this simulator, these keywords should only describe the dual porosity
+model size.</p>
+
+<p>By contrast, with this keyword in ECLIPSE
+300, the additional Z-planes for the matrix sub-cells are explicitly
+represented in the <span class="keyword">DIMENS</span> or <span class="keyword">CARFIN</span> keywords. For this simulator, the NZ values in these keywords should
+be multiples of the number of porosities, that is (NMATRIX+1).</p>
+
+<p>This model is not compatible with the use of block to block connections
+(<a href="BTOBALFA.html#BTOBALFA"> BTOBALFA</a> or <a href="BTOBALFV.html#BTOBALFV"> BTOBALFV</a>) or with the use of <a href="DPNUM.html#DPNUM"> DPNUM</a> to create a single porosity region
+in a dual porosity run.</p>
+
+<p>This keyword should not be used for triple-porosity modeling. The <a href="TRPLPORO.html#TRPLPORO"> TRPLPORO</a> keyword should be used instead.</p>
+
+<p>The keyword should be followed by one data item, defining the number
+of sub-cells required within each original matrix cell. The data item
+should be followed by a slash (/).</p>
+
+<div class="section" id="nmatrix_example"><a name="nmatrix_example"><!-- --></a><h4 class="sectiontitle">Example</h4>             
+   <pre><code>NMATRIX
+ 6 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

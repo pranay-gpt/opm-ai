@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="USENOFLO"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="USENOFLO"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>USENOFLO</title>
+</head>
+<body>
+
+
+<div class="nested0" id="USENOFLO"><a name="USENOFLO"><!-- --></a>
+<h1 class="keyword">USENOFLO</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="usenoflo.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="usenoflo.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2720e45"> x </th>
+
+<th valign="top" id="d2720e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2720e54">  </th>
+
+<th valign="top" id="d2720e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2720e45 d2720e54 ">  </td>
+
+<td valign="top" headers="d2720e48 d2720e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2720e45 d2720e54 "> x </td>
+
+<td valign="top" headers="d2720e48 d2720e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2720e45 d2720e54 ">  </td>
+
+<td valign="top" headers="d2720e48 d2720e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2720e45 d2720e54 ">  </td>
+
+<td valign="top" headers="d2720e48 d2720e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2720e45 d2720e54 ">  </td>
+
+<td valign="top" headers="d2720e48 d2720e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2720e45 d2720e54 ">  </td>
+
+<td valign="top" headers="d2720e48 d2720e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2720e45 d2720e54 ">  </td>
+
+<td valign="top" headers="d2720e48 d2720e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2720e45 d2720e54 ">  </td>
+
+<td valign="top" headers="d2720e48 d2720e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword enables a <span class="keyword">USEFLUX</span> run to be performed
+without a Flux file. The flux region has no-flow boundary conditions,
+instead of reading the boundary flows or pressures from the Flux file.</p>
+
+<p>The <a href="USEFLUX.html#USEFLUX"> USEFLUX</a> keyword
+should still be supplied, but the <samp class="codeph">FLUX</samp> file name
+is ignored (and can be defaulted) if the <span class="keyword">USENOFLO</span> keyword is present.</p>
+
+<p>The <span class="keyword">USENOFLO</span> option could be useful as a means
+of simulating just a section of the reservoir (for example, the drainage
+region of a well, for which no-flow boundary conditions may be a reasonable
+approximation) in isolation, without having to perform a <a href="DUMPFLUX.html#DUMPFLUX"> DUMPFLUX</a> run.</p>
+
+<p>As well as imposing no-flow boundary conditions, there are two
+other consequences of applying the <span class="keyword">USENOFLO</span> keyword:</p>
+
+<ul>
+<li> In addition to the boundary flows or pressures, the Flux file
+would normally supply the average pressure, R<sub>s</sub> and R<sub>v</sub> in the field. These are used, for example, to transform well
+flows between surface rate and reservoir volume rate. In a <span class="keyword">USENOFLO</span> run, the average pressure, R<sub>s </sub>and R<sub>v</sub> in the flux region is used instead. Thus the correspondence
+between surface rate and reservoir volume rate differs from a standard <span class="keyword">USEFLUX</span> run. </li>
+
+<li> The Flux file also contains information on the well flows outside
+the flux region, which is used for group control calculations when
+the group contains wells both within and outside the region. In a <span class="keyword">USENOFLO</span> run this information is not present; thus group
+controls should not be applied in these circumstances. </li>
+
+</ul>
+
+<p>See <a href="../ecl_td/fluxintro_Flux_Boundary_Conditions.html#fluxintro_flux_boundary_conditions">"Flux boundary conditions"</a> in the <cite>ECLIPSE Technical Description</cite> for information
+on the Flux Boundary option.</p>
+
+<div class="section" id="usenoflo_example"><a name="usenoflo_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <pre><code>USENOFLO</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

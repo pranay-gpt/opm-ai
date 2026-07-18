@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SCHEDULE section"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SCHEDULE"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SCHEDULE section</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SCHEDULE"><a name="SCHEDULE"><!-- --></a>
+<h1 class="topictitle1">SCHEDULE section</h1>
+
+
+ <div>
+<p>The <span class="keyword">SCHEDULE</span> section specifies the operations
+to be simulated (production and injection controls and constraints)
+and the times at which output reports are required. Vertical flow
+performance curves and simulator tuning parameters may also be specified
+in the <span class="keyword">SCHEDULE</span> section.</p>
+
+<p>All keywords in this section are optional, except for those necessary
+to define the status of the wells, and the <span class="keyword">END</span> keyword,
+which should mark the end of the scheduling data.</p>
+
+<p>To define a well and its connection properties and controls, the
+following keywords should be used:</p>
+
+<ol>
+<li> <a href="WELSPECS.html#WELSPECS">  WELSPECS</a> or <a href="WELSPECL.html#WELSPECL">  WELSPECL</a> (to introduce the well). <p>Having created a well specification
+you can now set its completion and control data.</p>
+ </li>
+
+<li> <a href="COMPDAT.html#COMPDAT">  COMPDAT</a> or <a href="COMPDATL.html#COMPDATL">  COMPDATL</a> (to specify
+its completion data) </li>
+
+<li> You can specify well controls using the following keywords: <p> <a href="WCONPROD.html#WCONPROD">  WCONPROD</a> (production
+controls, if the well is a producer) or</p>
+ <p> <a href="WCONINJE.html#WCONINJE">  WCONINJE</a> (injection controls, if the
+well is an injector) or</p>
+<p> <a href="WCONHIST.html#WCONHIST">  WCONHIST</a> (measured flows and pressures, if it is
+a history matching producer) or</p>
+<p> <a href="WCONINJH.html#WCONINJH">  WCONINJH</a> (measured flow and pressures, if it is
+a history matching injector) or</p>
+<p> <a href="WCONINJP.html#WCONINJP">  WCONINJP</a> (control of a pattern flood injector)</p>
+ </li>
+
+<li> <p>In ECLIPSE 300, separators should be defined with <a href="SEPCOND.html#SEPCOND"> SEPCOND</a> and allocated
+to wells with <a href="WSEPCOND.html#WSEPCOND"> WSEPCOND</a>. Injection gas composition should also be defined with <a href="WINJGAS.html#WINJGAS"> WINJGAS</a> or <a href="GINJGAS.html#GINJGAS">  GINJGAS</a>. Injection oil
+composition should be defined with the <a href="WINJOIL.html#WINJOIL"> WINJOIL</a> keyword.</p>
+ </li>
+
+</ol>
+
+<p>The keywords <span class="keyword">WELSPECL</span> and <span class="keyword">COMPDATL</span> should be used in local grid refinement runs when the well is situated
+in a local grid. There are also some alternatives to the above keywords
+that are available only in ECLIPSE 300: <a href="WELLSPEC.html#WELLSPEC"> WELLSPEC</a>, <a href="WELLCOMP.html#WELLCOMP"> WELLCOMP</a>, <a href="WELLPROD.html#WELLPROD">  WELLPROD</a> and <a href="WELLINJE.html#WELLINJE"> WELLINJE</a>. These original keywords are retained for back compatibility,
+but you are encouraged to use the keywords that are compatible with
+both simulators.</p>
+
+<p>Any other keywords that refer to a particular well must be positioned
+after the well and its connections have been defined.</p>
+
+<p>Wells can be introduced at any time in the simulation, but once
+a well has been introduced using the keyword <span class="keyword">WELSPECS</span> or <span class="keyword">WELSPECL</span> its connection properties and operating
+status must be defined as shown above. Data concerning the well can
+be changed later in the simulation by repeating the appropriate keyword(s).</p>
+
+<p>Certain keywords (for example <a href="GCONPROD.html#GCONPROD"> GCONPROD</a>, <a href="GCONINJE.html#GCONINJE"> GCONINJE</a>, <a href="GECON.html#GECON"> GECON</a>)
+refer to groups. A new group is automatically introduced immediately
+its name appears in either keyword <span class="keyword">WELSPECS</span> or <a href="GRUPTREE.html#GRUPTREE"> GRUPTREE</a>. Any other
+keywords that refer to a particular group must be positioned after
+the group has been introduced.</p>
+
+<p>Well and group names, and other character strings in the scheduling
+data, may be enclosed in quotes (' '), but generally this is not essential.
+Such quotes are only usually required if a name contains embedded
+blanks, starts with a number or contains non-alphanumeric characters.
+Quotes are also required for name roots and well list names (see below),
+which contain an asterisk (*).</p>
+
+<p>In most of the well scheduling keywords a well name root, ending
+with an asterisk (<samp class="codeph">*</samp>), can be used to refer to several
+wells in one record. The data is applied to all currently defined
+wells whose names begin with the sequence of characters preceding
+the asterisk in the name root. For example the root ‘<span class="keyword">PR*</span> ’ applies to all wells currently entered with names beginning with
+PR, including the name ‘<span class="keyword">PR</span> ’ itself. The root ‘ <samp class="codeph">*</samp> ’ will refer to all wells currently entered. It is important
+to note that the data does <strong>not</strong> apply to any wells introduced
+later in the run. Therefore if you are going to use well name roots,
+it may be advisable to define all the wells at the beginning of the
+run with the keywords <a href="WELSPECS.html#WELSPECS"> WELSPECS</a>, <a href="COMPDAT.html#COMPDAT"> COMPDAT</a> and <a href="WCONPROD.html#WCONPROD"> WCONPROD</a> or <a href="WCONINJE.html#WCONINJE"> WCONINJE</a> or <a href="WCONHIST.html#WCONHIST"> WCONHIST</a> or <a href="WCONINJH.html#WCONINJH"> WCONINJH</a> or <a href="WCONINJP.html#WCONINJP"> WCONINJP</a> and shut the
+wells that are not needed until later. Group name roots can similarly
+be used to refer to multiple groups. As with well name roots, group
+name roots only refer to groups that are currently defined. Well and
+group name roots must not have any characters following the asterisk.</p>
+
+<p>An alternative method of referring to several wells in one record
+is to use a well list name. These begin with an asterisk, followed
+by at least one letter. A well list comprises a set of well names;
+there is no limit to the number or length of the well lists, and they
+may be changed at any time in the simulation. The keywords <a href="WLIST.html#WLIST"> WLIST</a> and <a href="WLISTDYN.html#WLISTDYN"> WLISTDYN</a> provide a
+set of facilities for constructing and managing well lists.</p>
+
+<p>All keywords must start in column 1 of the data file. The keywords
+may be up to 8 characters long, and all 8 characters (including blanks)
+are significant. Most of the keywords have a similar syntax: the keyword
+is followed by any number of records, each containing a number of
+data items, and each terminated by a slash character (/). The records
+can be terminated early using the slash character (/); the remaining
+items take their default values. Defaults can also be specified by
+a null repeat count of the form <samp class="codeph">n*</samp>, where n is the
+number of consecutive items to be defaulted. The set of records is
+ended by a blank record, containing only a slash. Some of the data
+items are character strings which select a particular option from
+a set of available options. In general, these may be truncated to
+the first one or two characters as necessary to avoid ambiguity. However,
+you should enter the complete character string as some sets of options
+may be extended in future releases and the number of characters necessary
+to avoid ambiguity may increase.</p>
+
+<p>The order in which keywords are specified in the <span class="keyword">SCHEDULE</span> section dictates the order in which the specified operations are
+simulated. A <a href="TIME.html#TIME"> TIME</a>, <a href="TSTEP.html#TSTEP"> TSTEP</a> or <a href="DATES.html#DATES"> DATES</a> keyword advances
+the simulation to a specified time. A subsequent well control keyword
+alters the well status from the current time. A further <span class="keyword">TIME</span>, <span class="keyword">TSTEP</span> or <span class="keyword">DATES</span> keyword advances
+the simulation through another time period using the new well status.
+For example, if a <a href="WELTARG.html#WELTARG"> WELTARG</a> keyword is used to redefine a well production rate at a certain
+time, a subsequent <span class="keyword">TIME</span>, <span class="keyword">TSTEP</span> or <span class="keyword">DATES</span> keyword advances the simulation to the
+next report time with the well operating at its new rate.</p>
+
+<p>A list of keywords available in the <span class="keyword">SCHEDULE</span> section is given below, together with a brief description of their
+function. The list is grouped into functional categories. The list
+does not include old-style ECLIPSE 300 keywords which have been superseded
+by ECLIPSE 100 compatible keywords, although these keywords are generally
+retained for back compatibility. The list also does not include keywords
+specific to the special extensions (for example, local grid refinement);
+these are listed in the appropriate chapter of the <cite>ECLIPSE Technical
+Description</cite>. A more detailed description of all the keyword
+data may be found by looking up the keyword in this manual.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

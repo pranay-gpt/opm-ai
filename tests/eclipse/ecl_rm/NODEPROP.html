@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="NODEPROP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="NODEPROP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>NODEPROP</title>
+</head>
+<body>
+
+
+<div class="nested0" id="NODEPROP"><a name="NODEPROP"><!-- --></a>
+<h1 class="keyword">NODEPROP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="nodeprop.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="nodeprop.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1554e45"> x </th>
+
+<th valign="top" id="d1554e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1554e54"> x </th>
+
+<th valign="top" id="d1554e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1554e45 d1554e54 ">  </td>
+
+<td valign="top" headers="d1554e48 d1554e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1554e45 d1554e54 ">  </td>
+
+<td valign="top" headers="d1554e48 d1554e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1554e45 d1554e54 ">  </td>
+
+<td valign="top" headers="d1554e48 d1554e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1554e45 d1554e54 ">  </td>
+
+<td valign="top" headers="d1554e48 d1554e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1554e45 d1554e54 ">  </td>
+
+<td valign="top" headers="d1554e48 d1554e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1554e45 d1554e54 ">  </td>
+
+<td valign="top" headers="d1554e48 d1554e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1554e45 d1554e54 ">  </td>
+
+<td valign="top" headers="d1554e48 d1554e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1554e45 d1554e54 "> x </td>
+
+<td valign="top" headers="d1554e48 d1554e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword must be used to define the properties of the network
+nodes when the extended network model is employed (keyword <a href="NETWORK.html#NETWORK"> NETWORK</a> in the <span class="keyword">RUNSPEC</span> section). Keyword <a href="BRANPROP.html#BRANPROP"> BRANPROP</a> must have previously been entered. The
+top node of each network gathering tree (the terminal node) must be
+a fixed pressure node. Only the fixed pressure node, and other nodes
+with non-default properties need to be specified here. Nodes with
+default properties may be omitted from the <span class="keyword">NODEPROP</span> keyword data.</p>
+
+<p>The <span class="keyword">NODEPROP</span> keyword is followed by any number
+of records, each containing the following items of data and terminated
+with a slash (/). The set of records must end with a blank record,
+containing only a slash.</p>
+
+<ol>
+<li>In ECLIPSE 300, the node name <p>Node names
+should be unique both within a network and across multiple production
+and injection networks.</p>
+</li>
+
+<li>Fixed pressure for the terminal node <p>Default this item, or
+set it negative, if the node is not a terminal node in the network.</p>
+ <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li id="nodeprop_81338"><a name="nodeprop_81338"><!-- --></a>Flag indicating whether the uptree branch
+from this node should act as an automatic choke to impose a flow rate
+limit. <p>(The uptree branch is the one towards the terminal node;
+the outlet branch for a production network or the inlet branch for
+an injection network.)</p>
+ <p>An automatic choke acts to control the
+flow of a target group nominated in item 5 by adjusting the pressure
+drop across the choke (see <a href="../ecl_td/extended_Automatic_chokes.html#extended_automatic_chokes">"Automatic chokes"</a> in the <cite>ECLIPSE Technical Description</cite>). The branch must
+be given a VFP table number of 9999 in keyword <span class="keyword">BRANPROP</span> so that its only pressure drop is that of the choke. Note that a
+terminal node cannot be selected for this purpose, as it has no uptree
+branch and its pressure is fixed.</p>
+<p>ECLIPSE
+100</p>
+<p>If the node in item 1 corresponds to
+a <strong>well group</strong>, this flag indicates whether the corresponding
+group is a sub-sea completion manifold, so that a group production
+target will be met by adjusting its wells’ THP limits instead of by
+the standard method of flowing the wells in proportion to their guide
+rates (see <a href="../ecl_td/networkintro_Network_Option.html#networkintro_group_production_control_in_the_network_option">"Group production
+control in the network option"</a> in the <cite>ECLIPSE Technical
+Description</cite>). The uptree branch <strong>can</strong> be given a VFP table
+number other than 9999 in this case. Effectively, the choke’s pressure
+drop is added to the pressure drop along the branch.</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top"> The node’s uptree branch acts as an automatic choke. A production
+rate target applied to the group named in item 5 will be met by adjusting
+the pressure loss across the choke.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top">A production target applied to the corresponding group is met
+by the standard methods of group control.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>Manifold groups, and target groups for automatic chokes
+(item 5), may either have their rate targets set directly with <a href="GCONPROD.html#GCONPROD"> GCONPROD</a> or indirectly
+as a share of a higher level group’s rate target. In the latter case,
+that is, if they are subordinate to a higher level group having a
+production rate target (or a limit that becomes a rate target if violated),
+they should be given guide rates in keyword <span class="keyword">GCONPROD</span>. Groups subordinate to an automatic choke’s target group should <strong>not</strong> have guide rates. Production wells subordinate to an automatic
+choke’s target group are not subject to guide rate group control.</p>
+<p>The convergence tolerance and iteration limit for the calculation
+of the manifold group’s THP, or the choke’s pressure loss, are set
+in keyword <a href="NETBALAN.html#NETBALAN"> NETBALAN</a>. It may be necessary to increase the network balancing iteration
+limit (item 3) substantially if there are any automatic chokes.</p>
+<p>ECLIPSE 100</p>
+<p>The
+THP value input in item 10 of keyword <a href="WCONPROD.html#WCONPROD"> WCONPROD</a> for the first well in the group will be
+used as the initial guess for a manifold group’s THP in the first
+timestep. A suitable value entered for this quantity speeds the convergence
+of the first calculation.</p>
+<p>DEFAULT: <samp class="codeph">NO</samp> </p>
+</li>
+
+<li id="nodeprop_34116"><a name="nodeprop_34116"><!-- --></a>Flag indicating whether gas-lift gas from
+the corresponding group’s subordinate wells should be added to the
+produced gas entering the network at this source node. 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top"> Do not include any lift gas flow; only produced gas enters
+the network at this node.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top">Add the lift gas flows of the subordinate producers to the
+gas flow entering the network at this node. The lift gas flow is assumed
+to be equal to the sum of the ALQ values of the subordinate producers,
+multiplied by their efficiency factors unless instructed otherwise
+in <span class="keyword">WEFAC</span> item 3. The ALQ variable for the wells
+must therefore be defined as the rate of lift gas injection. This
+definition must be selected in the VFP <em>i</em> program if it is used
+to construct the VFP tables.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>This item is only relevant to source nodes in a production
+network, which pass fluid into the network (well groups, satellite
+groups or Reservoir Coupling master groups). In ECLIPSE 100 they must
+have the same name as their corresponding groups; in ECLIPSE 300 the
+correspondence is defined in item 6.</p>
+<p>Default this item if the
+node is not a source node in a production network.</p>
+<p>DEFAULT: <samp class="codeph">NO</samp> </p>
+</li>
+
+<li> Name of the group whose rate target the automatic choke attempts
+to match by adjusting the pressure drop across it. <p>For a production
+network node, the choke attempts to match this group’s production
+rate target (<span class="keyword">GCONPROD</span> l). For a water/gas injection
+network node in ECLIPSE 300, the choke will attempt to match the group’s
+water/gas injection target (<a href="GCONINJE.html#GCONINJE">  GCONINJE</a>).</p>
+ <p>This item is relevant only if item 3 is set to <samp class="codeph">YES</samp>.</p>
+<p>ECLIPSE 100</p>
+<p>If the node in item 1 corresponds to a <strong>well
+group</strong>, default this item in ECLIPSE 100 since manifold groups
+must always respond to their <strong>own</strong> rate targets.</p>
+<p>DEFAULT:
+  The group of the same name as item 1, if one exists.</p>
+ <p>ECLIPSE 300</p>
+</li>
+
+<li> For a source/sink node, the name of the
+corresponding group.<p>This item is relevant only to source nodes
+in a production network (where fluid produced from the formation enters
+the network) and sink nodes in an injection network (where fluid leaves
+the network to be injected into the formation). The node should correspond
+to a well group or a satellite group. The item names the group that
+corresponds to the node named in item 1. The source/sink node’s inflow/outflow
+will be equated with the production/injection of the nominated group.
+(The setting of item 3 of keyword <a href="WEFAC.html#WEFAC">  WEFAC</a> dictates whether or not the well flows are
+multiplied by their efficiency factors for this purpose.)</p>
+<p>This
+item is ignored if the node is not a source/sink node. It is also
+ignored in ECLIPSE 100 because here the source/sink nodes must have
+the same names as their corresponding groups.</p>
+<p>DEFAULT: The group
+of the same name as item 1, if one exists.</p>
+ <p>ECLIPSE 300</p>
+</li>
+
+<li> The type of network to which the node belongs
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">PROD</samp> </td>
+
+<td valign="top">Production network</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WINJ</samp> </td>
+
+<td valign="top">Water injection network</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">GINJ</samp> </td>
+
+<td valign="top">Gas injection network</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>All the nodes within a given network (subordinate to the
+same terminal node) must have the network same type.</p>
+<p>This item
+is ignored in ECLIPSE 100 because the extended network structure supports
+only production networks.</p>
+<p>DEFAULT: <samp class="codeph">PROD</samp> </p>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record containing just a slash.</p>
+
+<p>See also keyword <a href="WNETDP.html#WNETDP"> WNETDP</a>.</p>
+
+<div class="section" id="nodeprop_example"><a name="nodeprop_example"><!-- --></a><h4 class="sectiontitle">Example</h4>            
+    <pre><code>NODEPROP
+-- Node      Fixed    Automatic choke     Add      Choke control
+-- name     pressure  un uptree branch  lift gas?       group
+   FIELD      200   /
+   GR-A1       1*           1*            YES  /
+   GR-A2       1*           1*            YES  /
+   GR-B1       1*          YES            YES  /
+   GR-B2       1*          YES            YES  /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

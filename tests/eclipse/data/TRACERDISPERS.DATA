@@ -1,0 +1,186 @@
+-- =====================================================================
+--
+--  THIS PROBLEM IS A TEST PROBLEM FOR THE TRACER TRACKING DISPERSION
+--  CONTROL ALGORITHM IN A WATER-ONLY RESERVOIR.
+--  A QUARTER-FIVE SPOT CONFIGURATION WITH REGULAR GRID BLOCKS CONTAINS
+--  A WATER INJECTION WELL IN CELL (15,15,1). THE PRODUCER IS LOCATED
+--  IN THE DIAGONALLY OPPOSITE CORNER GRID CELL (1,1,1).
+--  THE INITIAL IN-PLACE WATER HAS A TRACER CONCENTRATION VALUE OF ZERO.
+--  THE WATER INJECTED INTO THE FIELD HAS A CONCENTRATION VALUE OF
+--  UNITY AT TIME ZERO.
+--  THE PURPOSE OF THE RUN IS TO STUDY THE EFFECTS OF NUMERICAL
+--  ERRORS ON THE SMEARING OF THE INTERFACE BETWEEN THE INJECTED WATER
+--  AND THE INITIAL IN-PLACE WATER.
+--
+RUNSPEC
+TITLE
+    WATER ONLY QUARTER-FIVE SPOT - WITH DISPERSION CONTROL
+
+DIMENS
+   15   15    1  /
+
+WATER
+
+METRIC
+
+EQLDIMS
+    1  100   20    2    2 /
+
+TRACERS
+    0    1    0    0 'DIFF  ' /
+
+TABDIMS
+    1    1   20   20    2   20 /
+
+REGDIMS
+    2    1    0    0  /
+
+WELLDIMS
+   10   10    1   10 /
+
+START
+   1 'JAN' 1983  /
+
+NSTACK
+    8 /
+
+GRID      ==============================================================
+
+NOGGF
+
+DX
+  225*10.0 /
+
+DY
+  225*10.0 /
+
+DZ
+  225*10.0 /
+
+TOPS
+  225*4000.0 /
+
+PORO
+  225*1.0 /
+
+PERMX
+  225*100.0 /
+
+PERMY
+  225*100.0 /
+
+PROPS     ==============================================================
+
+PVTW
+  .0  1.0  3.03E-06  .5  0.0 /
+
+ROCK
+ 4000.0         .30E-05 /
+
+DENSITY
+ 52.0000  64.0000   .04400 /
+
+-- TRACER NAMES AND THEIR ASSOCIATED STOCK TANK PHASES ARE DEFINED USING
+-- THE TRACER KEYWORD
+
+TRACER
+ 'INJ' 'WAT' /
+ /
+
+-- ECHO TRACER NAMES AND PHASES USING ITEM 10 IN THE RPTPROPS KEYWORD
+
+RPTPROPS
+-- Passive Tracer Names
+-- 
+   'INJ'   'WAT'    /
+
+REGIONS    =============================================================
+
+FIPNUM
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
+1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
+1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
+1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
+1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
+1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
+1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
+1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
+/
+
+SOLUTION   =============================================================
+
+PRESSURE
+ 225*4000.0 /
+
+TBLKFINJ
+225*0.0 /
+
+RPTSOL
+-- Initialisation Print Output
+-- 
+'PRES' 'SOIL' 'SWAT' 'FIP=2' 'AQUCT=1' 'TVDP' 'FIPTR=1' 'TBLK'  /
+
+SUMMARY    ===========================================================
+
+FTPRINJ
+FTPTINJ
+
+RUNSUM
+
+ALL
+
+SEPARATE
+
+MSUMLINS
+
+MSUMNEWT
+
+SCHEDULE   ===========================================================
+
+-- ACTIVATE OUTPUT OF THE CURRENT FIELD VOLUMES OF TRACER-IN-PLACE
+-- AND THE CURRENT TRACER CONCENTRATION GRID ARRAYS USING ITEMS 32
+-- AND 33 RESPECTIVELY
+
+RPTSCHED
+'RESTART=2' 'FIP=2' 'WELLS=2' 'VFPPROD=2' 'SUMMARY=2' 'CPU=2' 'WELSPECS' 
+'NEWTON=2' 'FIPTR=2' 'TBLK'  /
+
+
+WELSPECS
+'I'  'G'  15  15  4000  'WAT'  /
+'P'  'G'  1   1   4000  'WAT'  /
+/
+
+COMPDAT
+'I       '   15  15  1   1 'OPEN'   0  .0   1.0 /
+'P       '   1   1   1   1 'OPEN'   0  .0   1.0 /
+/
+
+WCONPROD
+'P' 'OPEN' 'WRAT' 1* 1000.0 /
+/
+
+WCONINJE
+'I ' 'WAT' 'OPEN' 'RATE' 1000.0     /
+/
+
+-- DEFINE THE CONCENTRATION OF EACH TRACER IN THE INJECTION STREAMS.
+-- INJECTION TRACER CONCENTRATIONS NOT DEFINED USING THE WTRACER
+-- KEYWORD ARE ASSUMED TO BE ZERO.
+
+
+WTRACER
+'I' 'INJ' 1.0  /
+/
+
+TSTEP
+ 15*10.00  6*25.0 /
+
+END

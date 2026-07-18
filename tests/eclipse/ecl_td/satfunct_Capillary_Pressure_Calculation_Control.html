@@ -1,0 +1,737 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Capillary pressure calculation control"/>
+<meta name="DC.subject" content="Saturation functions three-phase relative permeability models, Saturation functions three-phase relative permeability models ODD3P capillary pressure calculation control, Saturation functions, Three-phase relative permeability models, ODD3P method"/>
+<meta name="keywords" content="Saturation functions three-phase relative permeability models, Saturation functions three-phase relative permeability models ODD3P capillary pressure calculation control, Saturation functions, Three-phase relative permeability models, ODD3P method"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="satfunct_capillary_pressure_calculation_control"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Capillary pressure calculation control</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="satfunct_capillary_pressure_calculation_control"><a name="satfunct_capillary_pressure_calculation_control"><!-- --></a>
+<h1 class="topictitle1">Capillary pressure calculation control</h1>
+
+
+ <div>
+<p>The calculation of the capillary pressure is controlled by the <span class="keyword">PROPS</span> section table keywords <a href="../ecl_rm/PCODD3P.html#PCODD3P">PCODD3P</a>, <a href="../ecl_rm/PCODD3PG.html#PCODD3PG">PCODD3PG</a> and <a href="../ecl_rm/PCODD3PW.html#PCODD3PW">PCODD3PW</a> which should be specified
+for each saturation region. In practice, only those tables which are
+associated with the primary saturation region numbers are used; those
+associated with the secondary and tertiary hysteresis region numbers
+may be defaulted. The <span class="keyword">PCODD3P</span> keyword consists
+of a single row of seven columns of data per saturation region. These
+are defined as follows:</p>
+
+<ol>
+<li>Capillary pressure calculation type. This provides thirteen functional
+relationships for the calculation of capillary pressure which are
+numbered 0 to 12.</li>
+
+<li>The constant  <math>
+<msub><mi>δ</mi><mi>g</mi></msub></math>  in the gas
+saturation dependent capillary pressure weighting function.</li>
+
+<li>The first exponent  <math><msub><mi>α</mi>
+<mi>g</mi></msub></math>  in the gas saturation dependent
+capillary pressure weighting function.</li>
+
+<li>The second exponent <math><msub><mi>β</mi>
+<mi>g</mi></msub></math>  in the gas saturation dependent
+capillary pressure weighting function.</li>
+
+<li>The constant  <math>
+<msub><mi>δ</mi><mi>w</mi></msub></math>  in the water
+saturation dependent capillary pressure weighting function.</li>
+
+<li>The first exponent  <math><msub><mi>α</mi>
+<mi>w</mi></msub></math>  in the water saturation dependent
+capillary pressure weighting function.</li>
+
+<li>The second exponent  <math><msub><mi>β</mi>
+<mi>w</mi></msub></math>  in the water saturation dependent
+capillary pressure weighting function.</li>
+
+</ol>
+
+<p>The data specified in columns 2 to 7 are only required if the functional
+relationship type is between 1 and 8. For these types, the capillary
+pressure weighting functions <math><mrow><mi>H</mi>
+<mo>(</mo><msub><mi>S</mi><mi>g</mi></msub><mo>)</mo>
+</mrow></math>  and  <math><mrow><mi>F</mi>
+<mo>(</mo><msub><mi>S</mi><mi>w</mi></msub><mo>)</mo>
+</mrow></math>  are calculated as shown below:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="satfunct.equ.05c9"/>
+ <math><mrow><mrow>
+<mi>H</mi><mo>(</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow><mo>=</mo><mfrac><mrow><msub><mrow><mi>δ</mi></mrow>
+<mrow><mi>g</mi></mrow></msub><msubsup><mrow><mi>S</mi>
+</mrow><mrow><mi>g</mi></mrow><mrow><msub><mrow><mi>α</mi></mrow><mrow><mi>g</mi></mrow></msub></mrow>
+</msubsup></mrow><mrow><msubsup><mrow><mi>S</mi></mrow>
+<mrow><mi>g</mi></mrow><mrow><msub><mrow><mi>α</mi>
+</mrow><mrow><mi>g</mi></mrow></msub></mrow></msubsup>
+<mo>+</mo><msup><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi>
+</mrow></msub></mrow><mo>)</mo></mrow><mrow><msub>
+<mrow><mi>β</mi></mrow><mrow><mi>g</mi></mrow></msub>
+</mrow></msup></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 151.1]
+              </td></tr></tbody></table>
+<p>and</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="satfunct.equ.05cd"/>
+ <math><mrow><mi>F</mi><mo>(</mo><msub><mi>S</mi><mi>w</mi></msub>
+<mo>)</mo></mrow><mo>=</mo><mfrac><mrow><mrow><msub>
+<mi>δ</mi><mi>w</mi></msub><msubsup><mi>S</mi><mi>w</mi><msub><mi>α</mi><mi>w</mi></msub></msubsup>
+</mrow></mrow><mrow><msubsup><mi>S</mi><mi>w</mi>
+<msub><mi>α</mi><mi>w</mi></msub></msubsup><mo>+</mo>
+<msup><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<msub><mi>S</mi><mi>w</mi></msub></mrow><mo>)</mo>
+</mrow><msub><mi>β</mi><mi>w</mi></msub></msup></mrow>
+</mfrac></math> 
+</td><td align="right">[Eq. 151.2]
+              </td></tr></tbody></table>
+<p>The <em>representative</em> capillary pressures, that is, the values
+obtained from table look-up using the normalized saturations are corrected
+according to the following equations:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="satfunct.equ.05d2"/>
+ <math><mrow><msub>
+<mrow><mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi>
+<mi>w</mi></mrow></msub><mo>⁢</mo><mo>=</mo><mtext> </mtext><msub><mrow><mover><mrow><mi>P</mi></mrow>
+<mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi>
+<mi>o</mi><mi>w</mi></mrow></msub><mo>⁢</mo><mo>+</mo><mtext> </mtext><mi>H</mi><mo>⋅</mo><mi>R</mi>
+</mrow></math> 
+</td><td align="right">[Eq. 151.3]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="satfunct.equ.05d5"/>
+ <math><mrow><msub>
+<mrow><mi>P</mi></mrow><mrow><mi>c</mi><mi>g</mi>
+<mi>o</mi></mrow></msub><mo>=</mo><msub><mrow><mover>
+<mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover>
+</mrow><mrow><mi>c</mi><mi>g</mi><mi>o</mi></mrow>
+</msub><mo>+</mo><mi>F</mi><mo>⋅</mo><mi>R</mi>
+</mrow></math> 
+</td><td align="right">[Eq. 151.4]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="satfunct.equ.05d8"/>
+ <math><mrow><mi>R</mi><mo>=</mo><msub><mrow><mover><mrow><mi>P</mi>
+</mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow>
+<mi>c</mi><mi>g</mi><mi>w</mi></mrow></msub><mrow>
+<mo>-</mo><msub><mrow><mover><mrow><mi>P</mi></mrow>
+<mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi>
+<mi>g</mi><mi>o</mi></mrow></msub><mo>-</mo><msub>
+<mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo>
+</mrow></mover></mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi></mrow></msub></mrow></mrow></math> 
+</td><td align="right">[Eq. 151.5]
+              </td></tr></tbody></table>
+<p>where the circumflex denotes the <strong>representative</strong> (IFT scaled)
+capillary pressures. The corrected capillary pressures may be made
+functions of one of two pairs of saturations as shown below:</p>
+
+
+<div class="tablenoborder"><a name="satfunct.tab.05dd"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="satfunct.tab.05dd" frame="border" border="1" rules="all"><caption>
+           Table 151.1  Saturation functions</caption>    
+<thead align="left">
+<tr>
+<th valign="top" id="d1332e558">Saturation Dependence                        
+   </th>
+
+<th valign="top" id="d1332e561"> Oil-Water System                            </th>
+
+<th valign="top" id="d1332e564">Gas-Oil System                            </th>
+
+<th valign="top" id="d1332e567">  Gas-Water System                          </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1332e558 ">1                          </td>
+
+<td valign="top" headers="d1332e561 "> <math>
+<mrow><msub><mrow><mover><mrow><mi>P</mi></mrow><mrow>
+<mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi></mrow></msub><mrow><mo>(</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub>
+<mo>)</mo></mrow></mrow></math> </td>
+
+<td valign="top" headers="d1332e564 "> <math>
+<mrow><msub><mrow><mover><mrow><mi>P</mi></mrow><mrow>
+<mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>g</mi><mi>o</mi></mrow></msub><mrow><mo>(</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub>
+<mo>)</mo></mrow></mrow></math> </td>
+
+<td valign="top" headers="d1332e567 "> <math>
+<mrow><msub><mrow><mover><mrow><mi>P</mi></mrow><mrow>
+<mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow></msub><mrow><mo>(</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub>
+<mo>)</mo></mrow></mrow></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1332e558 ">2                            </td>
+
+<td valign="top" headers="d1332e561 "> <math>
+<mrow><msub><mrow><mover><mrow><mi>P</mi></mrow><mrow>
+<mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi></mrow></msub><mrow><mo>(</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub>
+<mo>)</mo></mrow></mrow></math> </td>
+
+<td valign="top" headers="d1332e564 "> <math>
+<mrow><msub><mrow><mover><mrow><mi>P</mi></mrow><mrow>
+<mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>g</mi><mi>o</mi></mrow></msub><mrow><mo>(</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub>
+<mo>)</mo></mrow></mrow></math> </td>
+
+<td valign="top" headers="d1332e567 "> <math>
+<mrow><msub><mrow><mover><mrow><mi>P</mi></mrow><mrow>
+<mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow></msub><mrow><mo>(</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub>
+<mo>)</mo></mrow></mrow></math> </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The calculation control parameter defined above in column 1 of
+the <a href="../ecl_rm/PCODD3P.html#PCODD3P">PCODD3P</a> keyword selects the functional relationship type to calculate
+the capillary pressures as shown below:</p>
+
+
+<div class="tablenoborder"><a name="satfunct.tab.060b"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="satfunct.tab.060b" frame="border" border="1" rules="all"><caption>
+           Table 151.2  Functional relationship types for the calculation of capillary
+pressures</caption>  
+<thead align="left">
+<tr>
+<th valign="top" width="31.07344632768362%" id="d1332e838">Type </th>
+
+<th valign="top" width="68.92655367231639%" id="d1332e841">Calculation of oil-water and gas-oil capillary pressures</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" width="31.07344632768362%" headers="d1332e838 ">0</td>
+
+<td valign="top" width="68.92655367231639%" headers="d1332e841 "> <math>
+<msub><mi>P</mi><mrow><mi>c</mi><mi>o</mi><mi>w</mi>
+</mrow></msub><mo>=</mo><mn>0.0</mn></math>, <math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>g</mi><mi>o</mi></mrow></msub>
+<mo>=</mo><mn>0.0</mn></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="31.07344632768362%" headers="d1332e838 ">1&amp;2</td>
+
+<td valign="top" width="68.92655367231639%" headers="d1332e841 "> <math>
+<mrow><msub><mrow><mi>P</mi></mrow><mrow><mi>c</mi>
+<mi>o</mi><mi>w</mi></mrow></msub><mo>=</mo><mrow>
+<msub><mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>o</mi>
+<mi>w</mi></mrow></msub><mrow><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>)</mo></mrow></mrow><mo>+</mo><mi>H</mi><mo>⋅</mo>
+<mi>R</mi></mrow></math>, <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>g</mi><mi>o</mi>
+</mrow></msub><mo>=</mo><mrow><msub><mrow><mover>
+<mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover>
+</mrow><mrow><mi>c</mi><mi>g</mi><mi>o</mi></mrow>
+</msub><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow></mrow>
+<mo>+</mo><mi>F</mi><mo>⋅</mo><mi>R</mi></mrow>
+</math> </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="31.07344632768362%" headers="d1332e838 ">3&amp;4</td>
+
+<td valign="top" width="68.92655367231639%" headers="d1332e841 "> <math>
+<mrow><msub><mrow><mi>P</mi></mrow><mrow><mi>c</mi>
+<mi>o</mi><mi>w</mi></mrow></msub><mo>=</mo><mrow>
+<msub><mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>o</mi>
+<mi>w</mi></mrow></msub><mrow><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>)</mo></mrow></mrow><mo>+</mo><mi>H</mi><mo>⋅</mo>
+<mi>R</mi></mrow></math>, <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>g</mi><mi>o</mi>
+</mrow></msub><mo>=</mo><mrow><msub><mrow><mover>
+<mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover>
+</mrow><mrow><mi>c</mi><mi>g</mi><mi>o</mi></mrow>
+</msub><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>o</mi></mrow></msub><mo>)</mo></mrow></mrow>
+<mo>+</mo><mi>F</mi><mo>⋅</mo><mi>R</mi></mrow>
+</math> </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="31.07344632768362%" headers="d1332e838 ">5&amp;6</td>
+
+<td valign="top" width="68.92655367231639%" headers="d1332e841 "> <math>
+<mrow><msub><mrow><mi>P</mi></mrow><mrow><mi>c</mi>
+<mi>o</mi><mi>w</mi></mrow></msub><mo>=</mo><mrow>
+<msub><mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>o</mi>
+<mi>w</mi></mrow></msub><mrow><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow></mrow><mo>+</mo><mi>H</mi><mo>⋅</mo>
+<mi>R</mi></mrow></math>, <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>g</mi><mi>o</mi>
+</mrow></msub><mo>=</mo><mrow><msub><mrow><mover>
+<mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover>
+</mrow><mrow><mi>c</mi><mi>g</mi><mi>o</mi></mrow>
+</msub><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow></mrow>
+<mo>+</mo><mi>F</mi><mo>⋅</mo><mi>R</mi></mrow>
+</math> </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="31.07344632768362%" headers="d1332e838 ">7&amp;8</td>
+
+<td valign="top" width="68.92655367231639%" headers="d1332e841 "> <math>
+<mrow><msub><mrow><mi>P</mi></mrow><mrow><mi>c</mi>
+<mi>o</mi><mi>w</mi></mrow></msub><mo>=</mo><mrow>
+<msub><mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>o</mi>
+<mi>w</mi></mrow></msub><mrow><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow></mrow><mo>+</mo><mi>H</mi><mo>⋅</mo>
+<mi>R</mi></mrow></math>, <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>g</mi><mi>o</mi>
+</mrow></msub><mo>=</mo><mrow><msub><mrow><mover>
+<mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover>
+</mrow><mrow><mi>c</mi><mi>g</mi><mi>o</mi></mrow>
+</msub><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>o</mi></mrow></msub><mo>)</mo></mrow></mrow>
+<mo>+</mo><mi>F</mi><mo>⋅</mo><mi>R</mi></mrow>
+</math> </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="31.07344632768362%" headers="d1332e838 ">9</td>
+
+<td valign="top" width="68.92655367231639%" headers="d1332e841 "> <math>
+<mrow><msub><mrow><mi>P</mi></mrow><mrow><mi>c</mi>
+<mi>o</mi><mi>w</mi></mrow></msub><mo>=</mo><mrow>
+<msub><mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>o</mi>
+<mi>w</mi></mrow></msub><mrow><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>)</mo></mrow></mrow></mrow></math>, <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>g</mi><mi>o</mi>
+</mrow></msub><mo>=</mo><mrow><msub><mrow><mover>
+<mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover>
+</mrow><mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow>
+</msub><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow><msub><mrow><mover><mrow><mi>P</mi>
+</mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow>
+<mi>c</mi><mi>o</mi><mi>w</mi></mrow></msub><mrow>
+<mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>)</mo></mrow></mrow></mrow>
+</mrow></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="31.07344632768362%" headers="d1332e838 ">10</td>
+
+<td valign="top" width="68.92655367231639%" headers="d1332e841 "> <math>
+<mrow><msub><mrow><mi>P</mi></mrow><mrow><mi>c</mi>
+<mi>o</mi><mi>w</mi></mrow></msub><mo>=</mo><mrow>
+<mfrac><mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub></mrow><mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub><mo>+</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow>
+</msub></mrow></mfrac><msub><mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow>
+<mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow></msub>
+<mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>w</mi></mrow></msub><mo>)</mo></mrow></mrow><mo>+</mo><mrow><mfrac><mrow><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>o</mi></mrow></msub></mrow><mrow>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow>
+</msub><mo>+</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>o</mi></mrow></msub></mrow></mfrac><msub><mrow>
+<mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow>
+</mover></mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi>
+</mrow></msub><mrow><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow>
+</mrow></mrow></math>, <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>g</mi><mi>o</mi>
+</mrow></msub><mo>=</mo><mrow><mfrac><mrow><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub>
+</mrow><mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>+</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>w</mi></mrow></msub></mrow></mfrac>
+<msub><mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>g</mi>
+<mi>w</mi></mrow></msub><mrow><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow></mrow><mo>+</mo><mrow><mfrac><mrow>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow>
+</msub></mrow><mrow><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>o</mi></mrow></msub><mo>+</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub></mrow>
+</mfrac><msub><mrow><mover><mrow><mi>P</mi></mrow>
+<mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi>
+<mi>g</mi><mi>o</mi></mrow></msub><mrow><mo>(</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow>
+</msub><mo>)</mo></mrow></mrow></mrow></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="31.07344632768362%" headers="d1332e838 ">11</td>
+
+<td valign="top" width="68.92655367231639%" headers="d1332e841 "> <math>
+<mrow><msub><mrow><mi>P</mi></mrow><mrow><mi>c</mi>
+<mi>o</mi><mi>w</mi></mrow></msub><mo>=</mo><mrow>
+<mfrac><mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub></mrow><mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub><mo>+</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow>
+</msub></mrow></mfrac><msub><mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow>
+<mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow></msub>
+<mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>w</mi></mrow></msub><mo>)</mo></mrow></mrow><mo>+</mo><mrow><mfrac><mrow><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>o</mi></mrow></msub></mrow><mrow>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow>
+</msub><mo>+</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>o</mi></mrow></msub></mrow></mfrac><msub><mrow>
+<mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow>
+</mover></mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi>
+</mrow></msub><mrow><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow>
+</mrow></mrow></math>, <math><mrow><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>c</mi><mi>g</mi><mi>o</mi>
+</mrow></msub><mo>=</mo><mrow><msub><mrow><mover>
+<mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover>
+</mrow><mrow><mi>c</mi><mi>g</mi><mi>o</mi></mrow>
+</msub><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>g</mi></mrow></msub><mo>)</mo></mrow></mrow>
+</math> </td>
+
+</tr>
+
+<tr>
+<td valign="top" width="31.07344632768362%" headers="d1332e838 ">12</td>
+
+<td valign="top" width="68.92655367231639%" headers="d1332e841 "> <math>
+<mrow><msub><mrow><mi>P</mi></mrow><mrow>
+<mi>c</mi><mi>o</mi><mi>w</mi></mrow></msub><mo>=</mo>
+<mfrac><mrow><mrow><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>g</mi></mrow></msub><mrow>
+<mo>(</mo><mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow>
+</msub><mrow><mo>[</mo><msub><mrow><mover>
+<mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow></msub><mrow><mo>(</mo><msub>
+<mrow><mover><mrow><mi>S</mi></mrow><mrow>
+<mo> ˜</mo></mrow></mover></mrow><mrow>
+<mi>w</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow><msub><mrow>
+<mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>g</mi><mi>o</mi></mrow></msub><mrow><mo>(</mo><msub>
+<mrow><msub><mrow><mover><mrow><mi>S</mi>
+</mrow><mrow><mo> ˜</mo></mrow></mover>
+</mrow><mrow><mi>w</mi></mrow></msub>
+</mrow><mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow></mrow><mo>]</mo>
+</mrow></mrow><mo>+</mo><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub><mrow><mo>[</mo><msub>
+<mrow><mover><mrow><mi>P</mi></mrow><mrow>
+<mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow></msub><mrow><mo>(</mo><msub>
+<mrow><msub><mrow><mover><mrow><mi>S</mi>
+</mrow><mrow><mo> ˜</mo></mrow></mover>
+</mrow><mrow><mi>w</mi></mrow></msub>
+</mrow><mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow>
+<msub><mrow><mover><mrow><mi>P</mi></mrow>
+<mrow><mo>^</mo></mrow></mover></mrow>
+<mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow></msub><mrow><mo>(</mo><msub><mrow><msub><mrow><mover><mrow><mi>S</mi></mrow><mrow><mo> ˜</mo>
+</mrow></mover></mrow><mrow><mi>w</mi>
+</mrow></msub></mrow><mrow><mi>g</mi>
+</mrow></msub><mo>)</mo></mrow></mrow><mo>]</mo></mrow></mrow><mo>)</mo>
+</mrow></mrow><mo>+</mo><mrow><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mrow><mo>(</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>+</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>)</mo>
+</mrow><msub><mrow><mover><mrow><mi>P</mi>
+</mrow><mrow><mo>^</mo></mrow></mover>
+</mrow><mrow><mi>c</mi><mi>o</mi><mi>w</mi></mrow></msub><mrow><mo>(</mo><msub><mrow><msub><mrow><mover><mrow>
+<mi>S</mi></mrow><mrow><mo> ˜</mo></mrow></mover></mrow><mrow><mi>w</mi></mrow></msub></mrow><mrow><mi>w</mi>
+</mrow></msub><mo>)</mo></mrow></mrow>
+</mrow><mrow><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>o</mi></mrow></msub><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>g</mi></mrow></msub><mo>+</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>o</mi></mrow></msub><mo>+</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow></mfrac></mrow></math> <p> <math><mrow><mtable><mtr><mtd><msub><mrow><mi>P</mi></mrow>
+<mrow><mi>c</mi><mi>g</mi><mi>o</mi></mrow></msub>
+<mo>=</mo><mo>[</mo><mfrac><mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub></mrow>
+<mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>o</mi></mrow></msub><mo>+</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>)</mo>
+</mrow></mfrac><mo>+</mo><mfrac><mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub>
+</mrow><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>o</mi></mrow></msub><mo>+</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>)</mo><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>g</mi></mrow></msub><mo>+</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>+</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>w</mi></mrow>
+</msub><mo>)</mo></mrow></mfrac><mo>]</mo><mo>⋅</mo>
+<mrow><msub><mrow><mover><mrow><mi>P</mi></mrow><mrow>
+<mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>g</mi><mi>o</mi></mrow></msub><mrow><mo>(</mo><msub>
+<mrow><mover><mrow><mi>S</mi></mrow><mrow><mo> ˜</mo>
+</mrow></mover></mrow><mrow><mi>g</mi></mrow></msub>
+<mo>)</mo></mrow></mrow><mo>+</mo></mtd></mtr><mtr>
+<mtd><mo>[</mo><mfrac><mrow><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>w</mi></mrow></msub></mrow><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi>
+</mrow></msub><mo>+</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow>
+</mfrac><mo>+</mo><mfrac><mrow><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>g</mi></mrow></msub><msubsup><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi></mrow><mrow><mn>2</mn></mrow></msubsup></mrow><mrow><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>(</mo>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow>
+</msub><mo>+</mo><msub><mrow><mi>S</mi></mrow><mrow>
+<mi>w</mi></mrow></msub><mo>)</mo><mo>(</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub>
+<mo>+</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>+</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow>
+</mfrac><mo>]</mo><mo>⋅</mo><mrow><msub><mrow><mover>
+<mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover>
+</mrow><mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow>
+</msub><mrow><mo>(</mo><msub><mrow><mover><mrow><mi>S</mi></mrow><mrow><mo> ˜</mo></mrow></mover>
+</mrow><mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow>
+<mo>-</mo></mrow></mtd></mtr><mtr><mtd><mrow><mo>[</mo><mfrac><mrow><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>g</mi></mrow></msub><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>w</mi></mrow></msub></mrow><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi>
+</mrow></msub><mo>+</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>o</mi></mrow></msub><mo>+</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow></mfrac><mo>]</mo><mo>⋅</mo><mrow><msub>
+<mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo>
+</mrow></mover></mrow><mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow></msub><mrow><mo>(</mo><msub><mrow>
+<mover><mrow><mi>S</mi></mrow><mrow><mo> ˜</mo>
+</mrow></mover></mrow><mrow><mi>w</mi></mrow></msub>
+<mo>)</mo></mrow><mo>-</mo><mo>[</mo><mfrac><mrow>
+<msub><mrow><mi>S</mi></mrow><mrow><mi>w</mi></mrow>
+</msub></mrow><mrow><mo>(</mo><msub><mrow><mi>S</mi>
+</mrow><mrow><mi>g</mi></mrow></msub><mo>+</mo><msub>
+<mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub>
+<mo>+</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow></mfrac><mo>]</mo><mo>⋅</mo><mrow><msub><mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow>
+<mrow><mi>c</mi><mi>o</mi><mi>w</mi></mrow></msub>
+<mrow><mo>(</mo><msub><mrow><mover><mrow><mi>S</mi>
+</mrow><mrow><mo> ˜</mo></mrow></mover></mrow>
+<mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow></mrow>
+</mrow></mrow></mtd></mtr></mtable></mrow></math> </p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>For functional relationship types 1 to 8,  <math><mi>R</mi></math>  is calculated as shown below:</p>
+
+
+<div class="tablenoborder"><a name="satfunct.tab.065b"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="satfunct.tab.065b" frame="border" border="1" rules="all"><caption>
+           Table 151.3  Functional relationship types and the calculation of R</caption>  
+<thead align="left">
+<tr>
+<th valign="top" id="d1332e2991">Type</th>
+
+<th valign="top" id="d1332e2994">Calculation of value R</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1332e2991 ">1</td>
+
+<td valign="top" headers="d1332e2994 "> <math>
+<mrow><mi>R</mi><mo>=</mo><mrow><msub><mrow><mover>
+<mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover>
+</mrow><mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow>
+</msub><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow><msub><mrow><mover><mrow><mi>P</mi>
+</mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow>
+<mi>c</mi><mi>g</mi><mi>o</mi></mrow></msub><mrow>
+<mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow>
+<msub><mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>o</mi>
+<mi>w</mi></mrow></msub><mrow><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>)</mo></mrow></mrow></mrow></mrow></mrow></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1332e2991 "> 2</td>
+
+<td valign="top" headers="d1332e2994 "> <math>
+<mrow><mi>R</mi><mo>=</mo><mrow><msub><mrow><mover>
+<mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover>
+</mrow><mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow>
+</msub><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow><msub><mrow><mover><mrow><mi>P</mi>
+</mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow>
+<mi>c</mi><mi>g</mi><mi>o</mi></mrow></msub><mrow>
+<mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow>
+<msub><mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>o</mi>
+<mi>w</mi></mrow></msub><mrow><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>)</mo></mrow></mrow></mrow></mrow></mrow></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1332e2991 ">3                         </td>
+
+<td valign="top" headers="d1332e2994 "> <math>
+<mrow><mi>R</mi><mo>=</mo><mrow><msub><mrow><mover>
+<mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover>
+</mrow><mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow>
+</msub><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow><msub><mrow><mover><mrow><mi>P</mi>
+</mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow>
+<mi>c</mi><mi>g</mi><mi>o</mi></mrow></msub><mrow>
+<mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow>
+<msub><mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>o</mi>
+<mi>w</mi></mrow></msub><mrow><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>)</mo></mrow></mrow></mrow></mrow></mrow></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1332e2991 ">4</td>
+
+<td valign="top" headers="d1332e2994 "> <math>
+<mrow><mi>R</mi><mo>=</mo><mrow><msub><mrow><mover>
+<mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover>
+</mrow><mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow>
+</msub><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow><msub><mrow><mover><mrow><mi>P</mi>
+</mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow>
+<mi>c</mi><mi>g</mi><mi>o</mi></mrow></msub><mrow>
+<mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow>
+<msub><mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>o</mi>
+<mi>w</mi></mrow></msub><mrow><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>)</mo></mrow></mrow></mrow></mrow></mrow></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1332e2991 "> 5</td>
+
+<td valign="top" headers="d1332e2994 "> <math>
+<mrow><mi>R</mi><mo>=</mo><mrow><msub><mrow><mover>
+<mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover>
+</mrow><mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow>
+</msub><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow><msub><mrow><mover><mrow><mi>P</mi>
+</mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow>
+<mi>c</mi><mi>g</mi><mi>o</mi></mrow></msub><mrow>
+<mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow>
+<msub><mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>o</mi>
+<mi>w</mi></mrow></msub><mrow><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow></mrow></mrow></mrow></mrow></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1332e2991 ">6</td>
+
+<td valign="top" headers="d1332e2994 "> <math>
+<mrow><mi>R</mi><mo>=</mo><mrow><msub><mrow><mover>
+<mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover>
+</mrow><mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow>
+</msub><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow><msub><mrow><mover><mrow><mi>P</mi>
+</mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow>
+<mi>c</mi><mi>g</mi><mi>o</mi></mrow></msub><mrow>
+<mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow>
+<msub><mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>o</mi>
+<mi>w</mi></mrow></msub><mrow><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow></mrow></mrow></mrow></mrow></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1332e2991 ">7</td>
+
+<td valign="top" headers="d1332e2994 "> <math>
+<mrow><mi>R</mi><mo>=</mo><mrow><msub><mrow><mover>
+<mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover>
+</mrow><mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow>
+</msub><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>g</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow><msub><mrow><mover><mrow><mi>P</mi>
+</mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow>
+<mi>c</mi><mi>g</mi><mi>o</mi></mrow></msub><mrow>
+<mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow>
+<msub><mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>o</mi>
+<mi>w</mi></mrow></msub><mrow><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow></mrow></mrow></mrow></mrow></math> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1332e2991 ">8</td>
+
+<td valign="top" headers="d1332e2994 "> <math>
+<mrow><mi>R</mi><mo>=</mo><mrow><msub><mrow><mover>
+<mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover>
+</mrow><mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow>
+</msub><mrow><mo>(</mo><msub><mrow><mi>S</mi></mrow>
+<mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow><msub><mrow><mover><mrow><mi>P</mi>
+</mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow>
+<mi>c</mi><mi>g</mi><mi>o</mi></mrow></msub><mrow>
+<mo>(</mo><msub><mrow><mi>S</mi></mrow><mrow><mi>o</mi></mrow></msub><mo>)</mo></mrow><mo>-</mo><mrow>
+<msub><mrow><mover><mrow><mi>P</mi></mrow><mrow><mo>^</mo></mrow></mover></mrow><mrow><mi>c</mi><mi>o</mi>
+<mi>w</mi></mrow></msub><mrow><mo>(</mo><msub><mrow>
+<mi>S</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow></mrow></mrow></mrow></mrow></math> </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The functional relationship types 9, 10 and 11 correspond to cases
+where  <math><mi>R</mi></math>  is equal to 0.0.</p>
+
+<p>Capillary pressure functional dependence calculation control parameter
+options 9, 10 and 11 correspond to cases where R is equal to 0.0.
+For options 10, 11 and 12 the saturation weightings are obtained from
+the grid block saturations  <math><msub><mi>S</mi>
+<mi>i</mi></msub></math>. Option 12 incorporates saturation
+weighting based upon all three grid block saturations (S-Weighted
+Model). This model has been developed by StatoilHydro ASA (<cite><span> <a href="biblio_Bibliography.html#biblio_28264">StatoilHydro ASA,
+2010</a> </span></cite>) and results obtained from this model are
+described in <cite><span> <a href="biblio_Bibliography.html#biblio_90492">Hustad and Browning (2009)</a> </span></cite> and compared with alternative
+models above.</p>
+
+<p>For ultimate flexibility the capillary pressure weighting functions
+ <math><mrow><mi>H</mi><mo>(</mo><msub><mi>S</mi><mi>g</mi></msub>
+<mo>)</mo></mrow></math>  and  <math><mrow><mi>F</mi>
+<mo>(</mo><msub><mi>S</mi><mi>w</mi></msub><mo>)</mo>
+</mrow></math>  may be defined explicitly using the keywords <a href="../ecl_rm/PCODD3PG.html#PCODD3PG">PCODD3PG</a> and <a href="../ecl_rm/PCODD3PW.html#PCODD3PW">PCODD3PW</a> which tabulate these
+functions against gas and water saturation respectively. Either of
+these keywords may optionally be specified. If the <span class="keyword">PCODD3PG</span> keyword is specified, the values defined in columns 2, 3 and 4 of
+the <a href="../ecl_rm/PCODD3P.html#PCODD3P">PCODD3P</a> keyword will be ignored. Similarly, if the <span class="keyword">PCODD3PW</span> keyword is specified, the values defined in columns 5, 6 and 7 of
+the <span class="keyword">PCODD3P</span> keyword will be ignored.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

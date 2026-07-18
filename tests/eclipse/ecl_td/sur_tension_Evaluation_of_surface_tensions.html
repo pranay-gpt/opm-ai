@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Evaluation of surface tensions"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sur_tension_evaluation_of_surface_tensions"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Evaluation of surface tensions</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="sur_tension_evaluation_of_surface_tensions"><a name="sur_tension_evaluation_of_surface_tensions"><!-- --></a>
+<h1 class="topictitle1">Evaluation of surface tensions</h1>
+
+
+ <div>
+<p>Surface tensions can either be entered as a function of pressure
+using the <a href="../ecl_rm/STVP.html#STVP">STVP</a> keyword, or can be obtained as functions of the oil and gas
+compositions using the Macleod-Sugden correlation:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sur_tension.XID-0000008e"/>
+ <math><mrow><msup>
+<mrow><mi>σ</mi><mo>⁢</mo><mo>=</mo><mtext> </mtext>
+<mrow><mo>[</mo><mstyle><mrow>
+<munderover><mrow><mo>∑</mo></mrow><mrow><mtext>i=1</mtext></mrow><mrow>
+<msub><mrow><mtext>N</mtext>
+</mrow><mrow><mtext>comps</mtext>
+</mrow></msub></mrow></munderover></mrow></mstyle><msub>
+<mrow><mo>[</mo><mi>P</mi><mo>]</mo></mrow><mrow>
+<mi>i</mi></mrow></msub><mrow><mo>(</mo><msubsup>
+<mrow><mi>b</mi></mrow><mrow><mi>L</mi></mrow><mrow>
+<mi>m</mi></mrow></msubsup><msub><mrow><mi>x</mi>
+</mrow><mrow><mi>i</mi></mrow></msub><mo>⁢</mo><mo>−</mo><mtext> </mtext><msubsup><mrow><mi>b</mi></mrow>
+<mrow><mi>V</mi></mrow><mrow><mi>m</mi></mrow>
+</msubsup><msub><mrow><mi>y</mi></mrow><mrow><mi>i</mi>
+</mrow></msub><mo>)</mo></mrow><mo>]</mo></mrow>
+</mrow><mrow><mn>4</mn></mrow></msup></mrow></math> 
+</td><td align="right">[Eq. 175.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mi>σ</mi></math> </td>
+
+<td valign="top">is the surface tension (always in dynes/cm) and   </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mo>(</mo><msub>
+<mi>x</mi><mi>i</mi></msub><mo>,</mo><msub><mi>y</mi>
+<mi>i</mi></msub><mo>)</mo></math> </td>
+
+<td valign="top">  are the liquid and vapor mole fractions.      </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>                                     </p>
+
+<p>the liquid and vapor phase molar densities                  <math><mo>(</mo><msubsup>
+<mi>b</mi><mi>L</mi><mi>m</mi></msubsup><mo>,</mo>
+<msubsup><mi>b</mi><mi>V</mi><mi>m</mi></msubsup><mo>)</mo></math>  are converted into gm-M/cc for this evaluation.
+         </p>
+
+<p>the parachors                  <math><msub>
+<mrow><mo>[</mo><mi>P</mi><mo>]</mo></mrow><mi>i</mi>
+</msub></math>  should be provided by the <a href="../ecl_rm/PARACHOR.html#PARACHOR">PARACHOR</a> keyword.       
+  </p>
+
+<p>For one-phase states the surface tension is not used (and the reference
+surface tension will be reported). The value of                  <math><mi>σ</mi></math>  will go sharply to zero as the phase compositions and phase molar
+densities become equal, such as occurs near the critical point.  
+       </p>
+
+<p>Warnings of un-physically large values of surface tension can be
+requested using the second data item in the <a href="../ecl_rm/MISCSTR.html#MISCSTR">   MISCSTR</a> or <a href="../ecl_rm/MISCSTRR.html#MISCSTRR">MISCSTRR</a> keyword.</p>
+
+<p>Values of surface tension can be output to the print file or restart
+file using the argument <samp class="codeph">STEN</samp> with the <a href="../ecl_rm/RPTSOL.html#RPTSOL">RPTSOL</a>, <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a>, or <a href="../ecl_rm/RPTRST.html#RPTRST">RPTRST</a> keywords. Block values
+can be output to the summary file using the <span class="keyword">BSTEN</span> keyword.</p>
+
+<div class="section" id="sur_tension_reference_surface_tension"><a name="sur_tension_reference_surface_tension"><!-- --></a><h4 class="sectiontitle">Reference
+surface tension</h4><p>The reference surface tension          
+       <math><msub><mi>σ</mi>
+<mn>0</mn></msub></math>  can be defined or calculated in
+various ways:          </p>
+<ul>
+<li> By evaluating the Macleod-Sugden correlation, equation <a href="sur_tension_Evaluation_of_surface_tensions.html#sur_tension.XID-0000008e">175.1</a>  at a reference pressure,
+specified either by the <a href="../ecl_rm/MISCSTRR.html#MISCSTRR">MISCSTRR</a> or <a href="../ecl_rm/MISCSTRP.html#MISCSTRP">MISCSTRP</a> keyword.             </li>
+
+<li>By specifying a value directly, using either the <span class="keyword">MISCSTRR</span> or <span class="keyword">MISCSTR</span> keyword.             </li>
+
+<li>By taking the maximum value from the <a href="../ecl_rm/STVP.html#STVP">STVP</a> table.             </li>
+
+<li>By evaluating the Macleod-Sugden correlation equation <a href="sur_tension_Evaluation_of_surface_tensions.html#sur_tension.XID-0000008e">175.1</a>  at the saturation pressure
+in each grid block.             </li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

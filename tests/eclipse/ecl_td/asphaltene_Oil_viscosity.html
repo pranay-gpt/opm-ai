@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Oil viscosity"/>
+<meta name="DC.subject" content="Fluid model, Asphaltene damage oil viscosity (both deposition models)"/>
+<meta name="keywords" content="Fluid model, Asphaltene damage oil viscosity (both deposition models)"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="asphaltene_oil_viscosity"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Oil viscosity</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="asphaltene_oil_viscosity"><a name="asphaltene_oil_viscosity"><!-- --></a>
+<h1 class="topictitle1">Oil viscosity</h1>
+
+
+ <div>
+<p>When precipitation occurs, asphaltene fines can be considered as
+colloids in the oil phase, which can alter the viscosity of the transporting
+phase, that is the oil phase.</p>
+
+<p>Using the <a href="../ecl_rm/ASPVISO.html#ASPVISO">ASPVISO</a> keyword in conjunction with item 3 of the <a href="../ecl_rm/ASPHALTE.html#ASPHALTE">ASPHALTE</a> keyword, you can model
+the viscosity alteration as a function of the mass fraction of precipitate
+in the oil  <math><mrow><msub><mrow>
+<mi>C</mi></mrow><mrow><mi>p</mi></mrow></msub></mrow>
+</math>. This includes both the fines and the floc component:</p>
+
+<p>              <math><mrow><msub><mrow>
+<mi>C</mi></mrow><mrow><mi>p</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mrow><mi>m</mi></mrow>
+<mrow><mi>w</mi><mi>p</mi></mrow></msub><mo>⋅</mo>
+<msub><mrow><mi>x</mi></mrow><mrow><mi>p</mi><mi>f</mi></mrow></msub><mo>+</mo><msub><mrow><mi>m</mi>
+</mrow><mrow><mi>w</mi><mi>f</mi></mrow></msub><mo>⋅</mo><msub><mrow><mi>x</mi></mrow><mrow><mi>f</mi>
+</mrow></msub></mrow><mrow><msub><mrow><mi>m</mi>
+</mrow><mrow><mi>w</mi><mi>o</mi><mi>i</mi><mi>l</mi>
+</mrow></msub></mrow></mfrac></mrow></math>         </p>
+
+<p>Three different models are available:</p>
+
+<ul>
+<li>Generalized Einstein model (one parameter)  <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="asphaltene.equ.01d9"/>
+ <math><mfrac><mrow><mi>μ</mi></mrow><mrow><msub><mi>μ</mi><mn>0</mn></msub>
+</mrow></mfrac><mo>=</mo><mn>1</mn><mo>+</mo><msub>
+<mrow><mi>a</mi><mi>C</mi></mrow><mi>p</mi></msub>
+</math> 
+</td><td align="right">[Eq. 244.1]
+              </td></tr></tbody></table>                               <p>where the default for
+a is <math><mi>a</mi><mo>=</mo>
+<mn>2.5</mn></math>, and μ<sub>0</sub> is the oil viscosity
+at <math><mrow><mi>C</mi><mi>p</mi><mo>⁢</mo><mo>=</mo><mtext> </mtext>
+<mn>0</mn></mrow></math>. You can specify the coefficient
+ <math><mi>a</mi></math>  using <span class="keyword">ASPVISO</span>.</p>
+             </li>
+
+<li>Krieger and Dougherty model (two parameter)  <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="asphaltene.equ.01e7"/>
+ <math><mrow><mfrac><mrow>
+<mi>μ</mi></mrow><mrow><msub><mrow><mi>μ</mi></mrow>
+<mrow><mn>0</mn></mrow></msub></mrow></mfrac><mo>=</mo>
+<msup><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo>
+<mfrac><mrow><msub><mrow><mi>C</mi></mrow><mrow><mi>p</mi></mrow></msub></mrow><mrow><msub><mrow><mi>C</mi></mrow><mrow><mi>p</mi><mo>⁢</mo><mn>0</mn>
+</mrow></msub></mrow></mfrac></mrow><mo>)</mo></mrow>
+<mrow><mrow><mo>-</mo><mi>η</mi></mrow><msub><mrow>
+<mi>C</mi></mrow><mrow><mi>p</mi><mn>0</mn></mrow>
+</msub></mrow></msup></mrow></math> 
+</td><td align="right">[Eq. 244.2]
+              </td></tr></tbody></table> <p>where:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mi>η</mi></math> </td>
+
+<td valign="top">  is the intrinsic viscosity,  <math><mi>η</mi><mo>=</mo><mn>2.5</mn></math>  for spherical colloids</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>C</mi>
+<mrow><mi>p</mi><mn>0</mn></mrow></msub></math> </td>
+
+<td valign="top">is the concentration for maximum packing.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>You can specify the coefficient  <math><mi>η</mi></math>  and the maximum concentration  <math><msub><mi>C</mi>
+<mrow><mi>p</mi><mn>0</mn></mrow></msub></math>  using <a href="../ecl_rm/ASPVISO.html#ASPVISO">ASPVISO</a>.</p>
+             </li>
+
+<li>  Lookup table that gives the oil viscosity multiplier as a function
+of the mass fraction of the asphaltene precipitate. The first column
+is the volume fraction and the second column is the viscosity multiplier.
+You can set the maximum number of rows with <a href="../ecl_rm/TABDIMS.html#TABDIMS.MXRASO">MXRASO</a> in the <span class="keyword">TABDIMS</span> keyword.</li>
+
+</ul>
+
+<p>Depending on the model chosen, the <span class="keyword">ASPVISO</span> keyword
+takes the appropriate number of entries.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

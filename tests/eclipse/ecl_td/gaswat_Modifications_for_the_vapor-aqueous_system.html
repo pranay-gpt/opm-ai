@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Modifications for the vapor-aqueous system"/>
+<meta name="DC.subject" content="GASWAT option"/>
+<meta name="keywords" content="GASWAT option"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gaswat_modifications_for_the_vapor-aqueous_system"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Modifications for the vapor-aqueous system</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="gaswat_modifications_for_the_vapor-aqueous_system"><a name="gaswat_modifications_for_the_vapor-aqueous_system"><!-- --></a>
+<h1 class="topictitle1">Modifications for the vapor-aqueous system</h1>
+
+
+ <div>
+<p>If the Peng-Robinson equation is used in the above form for a gas-aqueous
+system the predicted saturated mole fractions of gases dissolved in
+water are hopelessly wrong - predicted solubilities are typically
+10<sup>-7</sup> mole/mole, whilst experimental values are nearer 10<sup>-3</sup> mole/mole.</p>
+
+<p>Soreide and Whitson propose two changes:</p>
+
+<ul>
+<li>The expression for <math><msup><mrow><mi>α</mi></mrow><mrow><mfrac><mrow><mn>1</mn></mrow>
+<mrow><mn>2</mn></mrow></mfrac></mrow></msup></math>  above is modified for the water component. It is replaced by an
+expression with a more complex temperature dependence:           
+                   <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gaswat.equ.0087"/>
+ <math><msup><mrow>
+<mi>α</mi></mrow><mrow><mfrac><mrow><mn>1</mn>
+</mrow><mrow><mn>2</mn></mrow></mfrac></mrow></msup>
+<mo>=</mo><mn>1</mn><mo>+</mo><mrow><mi>a</mi><msub>
+<mi>q</mi><mn>1</mn></msub><mo>(</mo><mn>1</mn>
+<mrow><mo>-</mo><mrow><mi>a</mi><msub><mi>q</mi><mn>2</mn></msub><msub><mi>T</mi><mi>r</mi></msub></mrow>
+</mrow><mo>)</mo></mrow><mo>+</mo><mrow><mi>a</mi>
+<msub><mi>q</mi><mn>3</mn></msub><mo>(</mo><msup>
+<mrow><msub><mi>T</mi><mi>r</mi></msub></mrow><mrow>
+<mrow><mi>-</mi><mn>3</mn></mrow></mrow></msup><mrow>
+<mo>-</mo><mn>1</mn></mrow><mo>)</mo></mrow></math> 
+</td><td align="right">[Eq. 214.1]
+              </td></tr></tbody></table><p>with default values:</p>
+<p> <math><mrow><mi>a</mi>
+<msub><mi>q</mi><mn>1</mn></msub></mrow><mo>=</mo>
+<mn>0.4530</mn></math> </p>
+<p> <math><mrow><mrow><mi>a</mi><msub><mrow><mi>q</mi></mrow><mrow><mn>2</mn>
+</mrow></msub></mrow><mo>=</mo><mn>1</mn><mrow><mtext> </mtext><mo>-</mo><mtext> </mtext><mrow><mn>0.0103</mn>
+</mrow></mrow><msubsup><mrow><mi>c</mi></mrow><mrow>
+<mi>s</mi></mrow><mrow><mn>1.1</mn></mrow></msubsup>
+</mrow></math> </p>
+<p> <math><mrow><mi>a</mi>
+<msub><mi>q</mi><mn>3</mn></msub></mrow><mo>=</mo>
+<mn>0.0034</mn></math> </p>
+<p> <math><msub><mi>c</mi>
+<mi>s</mi></msub></math>  is the brine concentration expressed
+as a molality. (Molality is given by  <math><mo>[</mo><mn>1000</mn>
+<mo>×</mo><mo>(</mo><mtext>moles of salt</mtext>
+<mo>)</mo><mo>/</mo><mo>(</mo><mtext>mass of water</mtext>
+<mo>)</mo><mo>]</mo></math>, where moles and mass are expressed
+in consistent units such as kg-M and kg respectively. This is discussed
+further below). </p>
+<p>In ECLIPSE 300 you may overwrite the defaults
+for <math><mrow><mi>a</mi><msub><mi>q</mi><mn>1</mn></msub></mrow></math>,  <math><mrow><mi>a</mi><msub><mi>q</mi><mn>2</mn></msub></mrow></math>  and  <math><mrow>
+<mi>a</mi><msub><mi>q</mi><mn>3</mn></msub></mrow>
+</math>  by entering the <a href="../ecl_rm/AQCOEF.html#AQCOEF">AQCOEF</a> keyword.</p>
+<p>This modification is only done for the water
+component, and the remainder take the usual form. A general form for
+all the components is thus:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gaswat.equ.009a"/>
+ <math><mrow><msup>
+<mrow><mi>α</mi></mrow><mrow><mfrac><mrow><mn>1</mn></mrow><mrow><mn>2</mn></mrow></mfrac></mrow>
+</msup><mo>=</mo><mi>p</mi><mo>+</mo><mrow><mi>q</mi>
+<msup><mrow><mi>T</mi><mi>r</mi></mrow><mrow><mfrac>
+<mrow><mn>1</mn></mrow><mrow><mn>2</mn></mrow></mfrac>
+</mrow></msup></mrow><mo>+</mo><mrow><mi>r</mi><mi>T</mi><mi>r</mi></mrow><mo>+</mo><mrow><mi>s</mi>
+<msup><mrow><mi>T</mi><mi>r</mi></mrow><mrow><mrow>
+<mo>(</mo><mi>-</mi><mn>3</mn><mo>)</mo></mrow>
+</mrow></msup></mrow></mrow></math> 
+</td><td align="right">[Eq. 214.2]
+              </td></tr></tbody></table> </li>
+
+<li>Different binary interaction coefficients are used for the gas
+and aqueous phases. This would cause problems near the critical point,
+but for a water-dominated system the critical temperature is in the
+region of <math><msub>
+<mi>T</mi><mrow><mi>c</mi><mi>w</mi></mrow></msub>
+<mo>=</mo><mrow><mn>647</mn><mtext>K</mtext></mrow>
+</math>, which should be well above the area of interest. <p>Soreide
+and Whitson propose adding a temperature dependence to the aqueous
+phase binary interaction coefficients:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gaswat.equ.00a1"/>
+ <math><mrow><msubsup>
+<mrow><mi>k</mi></mrow><mrow><mi>j</mi><mi>w</mi>
+</mrow><mrow><mi>a</mi></mrow></msubsup><mo>=</mo>
+<mrow><mi>b</mi><msub><mrow><mi>q</mi></mrow><mrow>
+<mn>1</mn></mrow></msub></mrow><mo>+</mo><mrow><mi>b</mi><msub><mrow><mi>q</mi></mrow><mrow><mn>2</mn>
+</mrow></msub><msub><mrow><mi>T</mi></mrow><mrow><mi>r</mi><mi>j</mi></mrow></msub></mrow><mo>+</mo><mrow>
+<mi>b</mi><msub><mrow><mi>q</mi></mrow><mrow><mn>3</mn></mrow></msub><msubsup><mrow><mi>T</mi></mrow>
+<mrow><mi>r</mi><mi>j</mi></mrow><mrow><mn>2</mn>
+</mrow></msubsup></mrow></mrow></math> 
+</td><td align="right">[Eq. 214.3]
+              </td></tr></tbody></table><p>with default values:</p>
+<p> <math><mrow><mi>b</mi>
+<msub><mi>q</mi><mn>1</mn></msub></mrow><mo>=</mo>
+<mrow><msub><mi>A</mi><mn>0</mn></msub><mo>(</mo>
+<mn>1</mn><mo>+</mo><mrow><msub><mi>S</mi><mn>0</mn>
+</msub><msub><mi>c</mi><mi>s</mi></msub></mrow><mo>)</mo></mrow></math> </p>
+<p> <math><mrow><mi>b</mi>
+<msub><mi>q</mi><mn>2</mn></msub></mrow><mo>=</mo>
+<mrow><msub><mi>A</mi><mn>1</mn></msub><mo>(</mo>
+<mn>1</mn><mo>+</mo><mrow><msub><mi>S</mi><mn>1</mn>
+</msub><msub><mi>c</mi><mi>s</mi></msub></mrow><mo>)</mo></mrow></math> </p>
+<p> <math><mrow><mi>b</mi>
+<msub><mi>q</mi><mn>3</mn></msub></mrow><mo>=</mo>
+<mrow><msub><mi>A</mi><mn>2</mn></msub><mo>(</mo>
+<mn>1</mn><mo>+</mo><mrow><msub><mi>S</mi><mn>2</mn>
+</msub><msub><mi>c</mi><mi>s</mi></msub></mrow><mo>)</mo></mrow></math>  </p>
+<p>where:</p>
+<p> <math><mrow><msub><mrow>
+<mi>A</mi></mrow><mrow><mn>0</mn></mrow></msub><mo>=</mo><mn>1.112</mn><mrow><mo>-</mo><mrow><mn>1.7369</mn>
+<msubsup><mrow><mi>w</mi></mrow><mrow><mi>j</mi>
+</mrow><mrow><mo>−</mo><mn>0.1</mn></mrow>
+</msubsup></mrow></mrow></mrow></math> </p>
+<p> <math><msub><mi>A</mi>
+<mn>1</mn></msub><mo>=</mo><mn>1.1001</mn><mo>+</mo>
+<mrow><mn>0.836</mn><msub><mi>w</mi><mi>j</mi></msub>
+</mrow></math> </p>
+<p> <math><mrow><msub><mrow>
+<mi>A</mi><mo>⁢</mo></mrow><mrow><mtext> </mtext><mn>2</mn></mrow></msub><mo>=</mo><mrow><mo>-</mo><mn>0.15742</mn><mo>-</mo><mrow><mn>1.0988</mn><msub><mrow>
+<mi>w</mi></mrow><mrow><mi>j</mi></mrow></msub></mrow>
+</mrow></mrow></math> </p>
+<p>and:</p>
+<p> <math><msub><mi>S</mi>
+<mn>0</mn></msub><mo>=</mo><mn>0.017407</mn></math> </p>
+<p> <math><msub>
+<mi>S</mi><mn>1</mn></msub><mo>=</mo><mn>0.033516</mn>
+</math> </p>
+<p> <math>
+<msub><mi>S</mi><mn>2</mn></msub><mo>=</mo><mn>0.011478</mn>
+</math>                                   </p>
+</li>
+
+</ul>
+
+<p>Special values are used for binary interaction coefficients between
+the aqueous phase and N<sub>2</sub>, CO<sub>2</sub> and H<sub>2</sub>S:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gaswat.equ.00bd"/>
+ <math><mrow><msubsup>
+<mrow><mi>k</mi></mrow><mrow><msub><mrow><mi>N</mi>
+</mrow><mrow><mn>2</mn></mrow></msub><mi>w</mi></mrow>
+<mrow><mi>a</mi></mrow></msubsup><mo>=</mo><mrow><mo>-</mo><mrow><mn>1.70235</mn><mo>(</mo><mn>1</mn><mo>+</mo><mrow><mn>0.025587</mn><msubsup><mrow><mi>c</mi>
+</mrow><mrow><mi>s</mi></mrow><mrow><mfrac><mrow><mn>3</mn></mrow><mrow><mn>4</mn></mrow></mfrac></mrow>
+</msubsup></mrow><mo>)</mo></mrow></mrow><mo>+</mo>
+<mrow><mn>0.44338</mn><mo>(</mo><mn>1</mn><mo>+</mo>
+<mrow><mn>0.08126</mn><msubsup><mrow><mi>c</mi></mrow>
+<mrow><mi>s</mi></mrow><mrow><mfrac><mrow><mn>3</mn>
+</mrow><mrow><mn>4</mn></mrow></mfrac></mrow></msubsup>
+</mrow><mo>)</mo><msub><mrow><mi>T</mi></mrow><mrow>
+<mi>r</mi><msub><mrow><mi>N</mi></mrow><mrow><mn>2</mn></mrow></msub></mrow></msub></mrow></mrow></math> 
+</td><td align="right">[Eq. 214.4]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gaswat.equ.00c0"/>
+ <math><mrow><mtable><mtr><mtd><msubsup><mrow><mi>k</mi>
+</mrow><mrow><msub><mrow><mi>c</mi><mi>o</mi></mrow>
+<mrow><mn>2</mn></mrow></msub><mi>w</mi></mrow><mrow>
+<mi>a</mi></mrow></msubsup><mo>=</mo><mrow><mo>-</mo>
+<mrow><mn>0.31092</mn><mo>(</mo><mn>1</mn><mo>+</mo>
+<mrow><mn>0.15587</mn><msubsup><mrow><mi>c</mi></mrow>
+<mrow><mi>s</mi></mrow><mrow><mn>0.7505</mn></mrow>
+</msubsup></mrow><mo>)</mo></mrow></mrow></mtd></mtr>
+<mtr><mtd><mo>+</mo><mrow><mrow><mo>(</mo><mn>0.23580</mn>
+<mo>)</mo></mrow><mo>(</mo><mn>1</mn><mo>+</mo>
+<mrow><mn>0.17837</mn><msubsup><mrow><mi>c</mi></mrow>
+<mrow><mi>s</mi></mrow><mrow><mn>0.979</mn></mrow>
+</msubsup></mrow><mo>)</mo><msub><mrow><mi>T</mi>
+</mrow><mrow><mi>r</mi><mi>C</mi><msub><mrow><mi>O</mi></mrow><mrow><mn>2</mn></mrow></msub></mrow>
+</msub><mo>-</mo><mn>21.2566</mn><msup><mrow><mi>e</mi>
+</mrow><mrow><mo>(</mo><mrow><mo>-</mo><mrow><mn>6.7222</mn><msub><mrow><mi>T</mi></mrow><mrow><mi>r</mi><mi>C</mi><msub><mrow><mi>O</mi></mrow><mrow>
+<mn>2</mn></mrow></msub></mrow></msub></mrow><mo>-</mo>
+<msub><mrow><mi>c</mi></mrow><mrow><mi>s</mi></mrow>
+</msub></mrow><mo>)</mo></mrow></msup></mrow></mtd>
+</mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 214.5]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="gaswat.equ.00c3"/>
+ <math><mrow><msubsup>
+<mrow><mi>K</mi></mrow><mrow><msub><mrow><mi>H</mi>
+</mrow><mrow><mn>2</mn></mrow></msub><mi>S</mi><mi>w</mi></mrow><mrow><mi>a</mi></mrow></msubsup><mo>=</mo><mrow><mo>-</mo><mn>0.20441</mn></mrow><mo>+</mo><mrow><mn>0.23426</mn><msub><mrow><mi>T</mi>
+</mrow><mrow><mi>r</mi><msub><mrow><mi>H</mi></mrow>
+<mrow><mn>2</mn></mrow></msub><mi>S</mi></mrow></msub>
+</mrow></mrow></math> 
+</td><td align="right">[Eq. 214.6]
+              </td></tr></tbody></table>
+<p>These fit into the general quadratic form, apart from the exponential
+term in the CO<sub>2</sub> case: this is evaluated at the reservoir
+temperature or surface standard conditions and added to the <math><mrow><mi>b</mi>
+<msub><mi>q</mi><mn>1</mn></msub></mrow></math>  term.</p>
+
+<p>In ECLIPSE 300 you may overwrite these defaults for <math><mrow><mi>b</mi>
+<msub><mi>q</mi><mn>1</mn></msub></mrow></math>,  <math><mrow><mi>b</mi>
+<msub><mi>q</mi><mn>2</mn></msub></mrow></math>  and
+ <math><mrow><mi>b</mi><msub><mi>q</mi><mn>3</mn></msub></mrow></math>  using the <a href="../ecl_rm/BICAQ1.html#BICAQ1">BICAQ1</a>, <a href="../ecl_rm/BICAQ2.html#BICAQ2">BICAQ2</a> and <a href="../ecl_rm/BICAQ3.html#BICAQ3">BICAQ3</a> keywords.</p>
+
+<p>The above forms for <math><mi>α</mi>
+</math>  and  <math>
+<msub><mi>k</mi><mrow><mi>a</mi><mi>j</mi><mi>k</mi>
+</mrow></msub></math>  may then be simply assembled with the
+cell temperature to build up the equation of state A-coefficient.</p>
+
+<p>The program automatically uses both these modifications in <span class="keyword">GASWAT</span> mode. The water component is identified as that
+with name ‘H2O’ - this must be present. Nitrogen, carbon
+dioxide and hydrogen sulfide, if present, should be identified with
+the names ‘ <samp class="codeph">N2</samp> ’, ‘ <samp class="codeph">CO2</samp> ’ and ‘ <samp class="codeph">H2S</samp> ’ respectively. Keywords
+such as <a href="../ecl_rm/SALINITY.html#SALINITY">SALINITY</a>, <a href="../ecl_rm/SALINITR.html#SALINITR">SALINITR</a>, <a href="../ecl_rm/AQCOEF.html#AQCOEF">AQCOEF</a>, <span class="keyword">BICAQ1</span>, <span class="keyword">BICAQ2</span> and <span class="keyword">BICAQ3</span> are entered once, and need not be specified for
+each equation of state region or separately for reservoir and surface
+conditions. The gas binary interaction coefficients are obtained from
+the usual user-input data.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

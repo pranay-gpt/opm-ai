@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WCOL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WCOL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WCOL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WCOL"><a name="WCOL"><!-- --></a>
+<h1 class="keyword">WCOL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wcol.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wcol.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2828e45">  </th>
+
+<th valign="top" id="d2828e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2828e54"> x </th>
+
+<th valign="top" id="d2828e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2828e45 d2828e54 ">  </td>
+
+<td valign="top" headers="d2828e48 d2828e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2828e45 d2828e54 "> x </td>
+
+<td valign="top" headers="d2828e48 d2828e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2828e45 d2828e54 ">  </td>
+
+<td valign="top" headers="d2828e48 d2828e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2828e45 d2828e54 ">  </td>
+
+<td valign="top" headers="d2828e48 d2828e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2828e45 d2828e54 ">  </td>
+
+<td valign="top" headers="d2828e48 d2828e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2828e45 d2828e54 ">  </td>
+
+<td valign="top" headers="d2828e48 d2828e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2828e45 d2828e54 ">  </td>
+
+<td valign="top" headers="d2828e48 d2828e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2828e45 d2828e54 ">  </td>
+
+<td valign="top" headers="d2828e48 d2828e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword controls the coloring method used within the WARP
+linear solver. This is initiated using the <a href="WARP.html#WARP"> WARP</a> keyword. Coloring is required when using the <a href="PARALLEL.html#PARALLEL"> PARALLEL</a> option. The
+presence of this keyword initiates the WARP linear solver. The keyword
+contains three items of data terminated with a slash (/).</p>
+
+<ol>
+<li>The type of coloring. <p>Valid inputs are:</p>
+ 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">'<samp class="codeph">XY</samp>'</td>
+
+<td valign="top"> The partition is subdivided in the X and Y directions</td>
+
+</tr>
+
+<tr>
+<td valign="top">'<samp class="codeph">X</samp>'</td>
+
+<td valign="top"> The partition is subdivided in the X direction</td>
+
+</tr>
+
+<tr>
+<td valign="top">'<samp class="codeph">Y</samp>' </td>
+
+<td valign="top">The partition is subdivided in the Y direction</td>
+
+</tr>
+
+<tr>
+<td valign="top">' ' </td>
+
+<td valign="top">If left blank the coloring is chosen based on the partition
+splits, so if <a href="NPROCX.html#NPROCX"> NPROCX</a>, <a href="NPROCY.html#NPROCY"> NPROCY</a> then
+‘Y’ coloring is used, otherwise ‘X’ coloring is used. This is the
+DEFAULT.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</li>
+
+<li>Number of colors. <p>This item is only relevant if the number
+of processors is set greater than 1 in item 1 of the <span class="keyword">PARALLEL</span> keyword. Otherwise, a value of 1 is assumed.</p>
+ <p>DEFAULT: 2 (if there is more than one processor)</p>
+ </li>
+
+<li>LGR sub-grid treatment.
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">1 -</td>
+
+<td valign="top">The color of any LGR grid is inherited from the base grid.
+Portions of LGR grid of the same level of refinement and color are
+amalgamated into a sub-grid. <p>If the number of colors set in item
+2 of this keyword is set to 1, then each level of LGR refinement represents
+a sub-grid.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top">2 -</td>
+
+<td valign="top">The color of any LGR grid is inherited from the base grid,
+and the portions of the base grid and LGR grid that have the same
+color are then amalgamated into the same sub-grid. This is the DEFAULT.<p>In this case the number of sub-grids is independent of the number,
+or levels, of LGRs. If the number of colors in item 2 of this keyword
+is set to 1, then only one sub-grid will result.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top">3 -</td>
+
+<td valign="top">Each LGR is colored using the type and number specified in
+items 1 and 2. No amalgamation of LGRs within or between levels is
+performed. <p>Many sub-grids can easily be generated with this method.</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ </li>
+
+</ol>
+
+<p>For further information see <a href="../ecl_td/sollineq_The_ECLIPSE_300_WARP_linear_solver.html#sollineq_the_eclipse_300_warp_linear_solver">"The ECLIPSE 300
+WARP linear solver"</a> in the <cite>ECLIPSE Technical Description</cite></p>
+
+<div class="section" id="wcol_example"><a name="wcol_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WCOL
+ 'Y' 3 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

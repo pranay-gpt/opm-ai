@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Current restrictions"/>
+<meta name="DC.subject" content="Reservoir coupling current restrictions, Reservoir coupling, Restrictions"/>
+<meta name="keywords" content="Reservoir coupling current restrictions, Reservoir coupling, Restrictions"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="rescouplintro_current_restrictions"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Current restrictions</title>
+</head>
+<body>
+
+
+<div class="nested0" id="rescouplintro_current_restrictions"><a name="rescouplintro_current_restrictions"><!-- --></a>
+<h1 class="topictitle1">Current restrictions</h1>
+
+
+ <div>
+<ul>
+<li>The global constraints that couple the reservoirs are limited
+to group rate control (using group guide rates) and network pressures.
+Other features (for example prioritization, economic limits, automatic
+drilling and workover facilities, group production rules) can be used
+within individual reservoirs, but cannot be employed globally. The
+master run does not have information about the individual wells in
+the slave reservoirs, and cannot directly command drilling, workover,
+shut-in or production rule actions (<a href="../ecl_rm/PRORDER.html#PRORDER">PRORDER</a>) on these wells. In
+particular, <a href="../ecl_rm/GECON.html#GECON">GECON</a> should not be used to apply economic limits to master groups
+or their superiors, and no procedure other than RATE should be specified
+for these groups in <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a>. Prioritization (keyword <a href="../ecl_rm/GCONPRI.html#GCONPRI">GCONPRI</a>) cannot be applied
+to these groups.</li>
+
+<li>Global rate targets and limits will not be met exactly, due to
+the flows of the slave groups changing over the length of the master
+timestep.</li>
+
+<li>It is not possible to guarantee that all current and future ECLIPSE
+facilities may be used in coupled reservoirs. In particular, Gas Lift
+Optimization cannot be used at present (see <a href="gasliftintro_Introduction.html#gasliftintro_gas_lift_optimization"> "Gas lift optimization"</a>). However, individual reservoirs may
+use Local Grid Refinement, Vertical Equilibrium, the Flux option,
+tracers, and polymer or surfactant floods. The Gas Field Operations
+Model may be used to a limited extent with Reservoir Coupling (see <a href="rescouplusing_Using_the_reservoir_coupling_facility.html#rescouplusing_using_the_reservoir_coupling_facility"> "Using the reservoir coupling facility"</a>).</li>
+
+<li>The master timestep cannot be influenced by events happening in
+the slave reservoirs, other than observing their report times. For
+example, automatic drilling or workovers happening in a slave reservoir
+will not cause the master to chop or repeat its timestep.</li>
+
+<li>The master run and all the slave runs must have the same unit
+convention. The slave runs need not all have the same set of active
+phases, but all phases active in any slave must be active in the master.</li>
+
+<li>The order of solving the different types of wells (for example
+producers, water injectors, gas injectors) must be the same in all
+the coupled reservoirs. Thus, all reservoirs must have the same top-up
+phase for voidage replacement or reservoir volume rate injection targets,
+as these injectors are solved last. For example, one reservoir cannot
+have water voidage replacement targets if another has gas voidage
+replacement targets. Similarly, either none or all of them must use
+production balancing, which requires the producers to be solved after
+the injectors.</li>
+
+<li>Automatic compressors in an extended network (see keyword <a href="../ecl_rm/NETCOMPA.html#NETCOMPA">NETCOMPA</a>) cannot respond to
+falling production from a group in a different reservoir. For example,
+compressors in a slave reservoir cannot be activated by a group in
+the master reservoir failing to meet its <span class="keyword">GCONPROD</span> target.             </li>
+
+</ul>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

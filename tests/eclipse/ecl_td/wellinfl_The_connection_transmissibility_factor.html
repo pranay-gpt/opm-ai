@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The connection transmissibility factor"/>
+<meta name="DC.subject" content="Well inflow performance connection transmissibility factor, Well inflow performance connection transmissibility factor cartesian, Well inflow performance connection transmissibility factor radial, Well inflow performance connection transmissibility factor fractured completions, Well inflow performance connection transmissibility factor rock crushing modifications, Well inflow performance, Connection transmissibility factor, Connection, Factor, Horizontal well, Well, Horizontal"/>
+<meta name="keywords" content="Well inflow performance connection transmissibility factor, Well inflow performance connection transmissibility factor cartesian, Well inflow performance connection transmissibility factor radial, Well inflow performance connection transmissibility factor fractured completions, Well inflow performance connection transmissibility factor rock crushing modifications, Well inflow performance, Connection transmissibility factor, Connection, Factor, Horizontal well, Well, Horizontal"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wellinfl_the_connection_transmissibility_factor"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The connection transmissibility factor</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="wellinfl_the_connection_transmissibility_factor"><a name="wellinfl_the_connection_transmissibility_factor"><!-- --></a>
+<h1 class="topictitle1">The connection transmissibility factor</h1>
+
+
+ <div>
+<p>For brevity, we refer to this quantity as the “connection
+factor”. It depends on the geometry of the connecting grid block,
+the well bore radius, and the rock permeability. Its value may be
+specified directly by the engineer, or it can be calculated by the
+program using one of the formulae below.</p>
+
+<div class="section" id="wellinfl_cartesian_grids"><a name="wellinfl_cartesian_grids"><!-- --></a><h4 class="sectiontitle">Cartesian grids</h4><p>In a Cartesian grid, ECLIPSE uses the relationship</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.XID-00000061"/>
+ <math><mrow><msub><mrow>
+<mi>T</mi></mrow><mrow><mi>w</mi><mi>j</mi></mrow>
+</msub><mo>⁢</mo><mo>=</mo><mtext> </mtext><mfrac>
+<mrow><mi>c</mi><mi>θ</mi><mi>K</mi><mi>h</mi>
+</mrow><mrow><mi>ln</mi><mo>⁡</mo><mo>(</mo><msub><mrow><mi>r</mi></mrow><mrow><mi>o</mi>
+</mrow></msub><mo>/</mo><msub><mrow><mi>r</mi></mrow>
+<mrow><mi>w</mi></mrow></msub><mo>)</mo>
+<mtext> </mtext><mo>+</mo><mtext> </mtext><mi>S</mi>
+</mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 515.1]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mi>c</mi></math> </td>
+
+<td valign="top">  is a unit conversion factor (0.001127 in field units, 0.008527
+in metric units, 3.6 in lab units).     </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>θ</mi>
+</math> </td>
+
+<td valign="top"> is the angle of the segment connecting with the well, in radians.
+In a Cartesian grid its value is 6.2832 (<math><mo>=</mo><mrow><mn>2</mn><mi>π</mi></mrow></math>), as the connection is assumed to be in the center of the grid block.
+For wells located on an edge (or a corner) of a Cartesian grid, for
+example in a sector model or symmetry element, use keyword <a href="../ecl_rm/WPIMULT.html#WPIMULT">WPIMULT</a> after <a href="../ecl_rm/COMPDAT.html#COMPDAT">COMPDAT</a> to scale the resulting
+connection factors by 0.5 (or 0.25).       </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><mi>K</mi>
+<mi>h</mi></mrow></math> </td>
+
+<td valign="top">is the effective permeability times net thickness of the connection.
+For a vertical well the permeability used here is the geometric mean
+of the x- and y-direction permeabilities,  <math><mi>K</mi><mo>=</mo><msup><mrow><mo>(</mo><mrow><msub>
+<mi>K</mi><mi>x</mi></msub><msub><mi>K</mi><mi>y</mi>
+</msub></mrow><mo>)</mo></mrow><mrow><mn>1</mn><mo>/</mo><mn>2</mn></mrow></msup></math>.   </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>r</mi>
+<mi>o</mi></msub></math> </td>
+
+<td valign="top">   is the “pressure equivalent radius” of the grid
+block, defined below.     </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>r</mi>
+<mi>w</mi></msub></math> </td>
+
+<td valign="top"> is the well bore radius.   </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>S</mi></math> </td>
+
+<td valign="top">is the skin factor.     </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>The pressure equivalent radius of the grid block is defined
+as the distance from the well at which the local pressure is equal
+to the nodal average pressure of the block. In a Cartesian grid we
+use Peaceman’s formula, which is applicable to rectangular grid
+blocks in which the permeability may be anisotropic. The well is assumed
+to penetrate the full thickness of the block, through its center,
+perpendicularly to two of its faces.</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.XID-00000076"/>
+ <math><msub><mi>r</mi>
+<mi>o</mi></msub><mo>=</mo><mrow><mn>0.28</mn><mfrac>
+<mrow><mrow><msup><mrow><mo>[</mo><mrow><msubsup><mi>D</mi><mi>x</mi><mn>2</mn></msubsup><msup><mrow><mo>(</mo><mfrac><mrow><msub><mi>K</mi><mi>y</mi></msub>
+</mrow><mrow><msub><mi>K</mi><mi>x</mi></msub></mrow>
+</mfrac><mo>)</mo></mrow><mrow><mn>1</mn><mo>/</mo>
+<mn>2</mn></mrow></msup></mrow><mo>+</mo><mrow>
+<msubsup><mi>D</mi><mi>y</mi><mn>2</mn></msubsup>
+<msup><mrow><mo>(</mo><mfrac><mrow><msub><mi>K</mi>
+<mi>x</mi></msub></mrow><mrow><msub><mi>K</mi><mi>y</mi></msub></mrow></mfrac><mo>)</mo></mrow><mrow>
+<mn>1</mn><mo>/</mo><mn>2</mn></mrow></msup></mrow>
+<mo>]</mo></mrow><mrow><mn>1</mn><mo>/</mo><mn>2</mn>
+</mrow></msup></mrow></mrow><mrow><msup><mrow><mo>(</mo><mfrac><mrow><msub><mi>K</mi><mi>y</mi></msub>
+</mrow><mrow><msub><mi>K</mi><mi>x</mi></msub></mrow>
+</mfrac><mo>)</mo></mrow><mrow><mn>1</mn><mo>/</mo>
+<mn>4</mn></mrow></msup><mo>+</mo><msup><mrow><mo>(</mo><mfrac><mrow><msub><mi>K</mi><mi>x</mi></msub>
+</mrow><mrow><msub><mi>K</mi><mi>y</mi></msub></mrow>
+</mfrac><mo>)</mo></mrow><mrow><mn>1</mn><mo>/</mo>
+<mn>4</mn></mrow></msup></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 515.2]
+              </td></tr></tbody></table><p>where </p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>D</mi>
+<mi>x</mi></msub></math>  and  <math><msub>
+<mi>D</mi><mi>y</mi></msub></math>  </td>
+
+<td valign="top">are the x- and y- dimensions of the grid block</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>K</mi>
+<mi>x</mi></msub></math>  and  <math><msub>
+<mi>K</mi><mi>y</mi></msub></math> </td>
+
+<td valign="top"> are the x- and y- direction permeabilities.    </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>Equations <a href="wellinfl_The_connection_transmissibility_factor.html#wellinfl.XID-00000061">515.1</a>  and <a href="wellinfl_The_connection_transmissibility_factor.html#wellinfl.XID-00000076">515.2</a>  are intended for vertical wells.
+Horizontal wells may penetrate the block in either the x- or y- direction,
+and the appropriate components of permeability and block dimensions
+are substituted in these equations. For a well penetrating in the
+x-direction, for example, the quantities K<sub>y</sub>, K<sub>z</sub>, D<sub>y</sub>, D<sub>z</sub> will be used in equation <a href="wellinfl_The_connection_transmissibility_factor.html#wellinfl.XID-00000076">515.2</a>, and in equation <a href="wellinfl_The_connection_transmissibility_factor.html#wellinfl.XID-00000061">515.1</a>  the expression             
+                  <math><mrow><mi>K</mi>
+<mi>h</mi></mrow><mo>=</mo><mrow><msub><mi>D</mi>
+<mi>x</mi></msub><msup><mrow><mo>(</mo><mrow><msub>
+<mi>K</mi><mi>y</mi></msub><msub><mi>K</mi><mi>z</mi>
+</msub></mrow><mo>)</mo></mrow><mrow><mn>1</mn><mo>/</mo><mn>2</mn></mrow></msup></mrow></math> will be
+used.          </p>
+<p>ECLIPSE 300 requires the <a href="../ecl_rm/HWELLS.html#HWELLS">HWELLS</a> keyword to be entered
+in the <span class="keyword">RUNSPEC</span> section if there are well connections
+penetrating in a direction other than z; this is not necessary in
+ECLIPSE 100.</p>
+<p>A net-to-gross ratio applied to a grid block containing
+a horizontal well will not affect                  <math><mrow><mi>K</mi>
+<mi>h</mi></mrow></math>, but will still affect  <math><msub><mi>r</mi>
+<mi>o</mi></msub></math>  through the reduction in the value
+of  <math><msub><mi>D</mi>
+<mi>z</mi></msub></math>.          </p>
+</div>
+
+<div class="section" id="wellinfl_radial_grids"><a name="wellinfl_radial_grids"><!-- --></a><h4 class="sectiontitle">Radial grids</h4><p>In radial geometry, the formula used to calculate               
+  <math><msub><mi>T</mi>
+<mrow><mi>w</mi><mi>j</mi></mrow></msub></math>  depends
+on the location of the connecting grid block.          </p>
+<p>When
+the connection is situated in one of the innermost grid blocks (i
+= 1), it is assumed to lie on the inner boundary of the block. The
+connection factor is</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.equ.0098"/>
+ <math><mrow><msub>
+<mrow><mi>T</mi></mrow><mrow><mi>w</mi><mi>j</mi>
+</mrow></msub><mo>=</mo><mfrac><mrow><mi>c</mi><mi>θ</mi><mi>K</mi><mi>h</mi></mrow><mrow><mfrac>
+<mrow><msubsup><mrow><mi>r</mi></mrow><mrow><mn>2</mn>
+</mrow><mrow><mn>2</mn></mrow></msubsup></mrow><mrow>
+<msubsup><mrow><mi>r</mi></mrow><mrow><mn>2</mn>
+</mrow><mrow><mn>2</mn></mrow></msubsup><mo>−</mo>
+<msubsup><mrow><mi>r</mi></mrow><mrow><mi>w</mi>
+</mrow><mrow><mn>2</mn></mrow></msubsup></mrow></mfrac>
+<mi>ln</mi><mo>(</mo><mrow><msub><mrow>
+<mi>r</mi></mrow><mrow><mn>2</mn></mrow></msub><mo>/</mo><msub><mrow><mi>r</mi></mrow><mrow><mi>w</mi>
+</mrow></msub></mrow><mo>)</mo><mo>−</mo>
+<mn>0.5</mn><mo>+</mo><mi>S</mi><mo>⁡</mo></mrow>
+</mfrac></mrow></math> 
+</td><td align="right">[Eq. 515.3]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mi>θ</mi>
+</math> </td>
+
+<td valign="top">  is the segment angle of the grid block in radians,   </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>r</mi>
+<mn>2</mn></msub></math> </td>
+
+<td valign="top"> is the block’s outer radius.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>If a connection is situated in one of the outermost blocks
+(i = <samp class="codeph">NDIVIX</samp>), it is assumed to occupy the outer boundary
+of the block for the purpose of applying boundary conditions. The
+corresponding connection factor is</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.equ.00a2"/>
+ <math><mrow><msub>
+<mrow><mi>T</mi></mrow><mrow><mi>w</mi><mi>j</mi>
+</mrow></msub><mo>=</mo><mfrac><mrow><mi>c</mi><mi>θ</mi><mi>K</mi><mi>h</mi></mrow><mrow><mfrac>
+<mrow><msubsup><mrow><mi>r</mi></mrow><mrow><mn>1</mn>
+</mrow><mrow><mn>2</mn></mrow></msubsup></mrow><mrow>
+<msubsup><mrow><mi>r</mi></mrow><mrow><mn>2</mn>
+</mrow><mrow><mn>2</mn></mrow></msubsup><mo>−</mo>
+<msubsup><mrow><mi>r</mi></mrow><mrow><mn>1</mn>
+</mrow><mrow><mn>2</mn></mrow></msubsup></mrow></mfrac>
+<mi>ln</mi><mo>(</mo><mrow><msub><mrow>
+<mi>r</mi></mrow><mrow><mn>1</mn></mrow></msub><mo>/</mo><msub><mrow><mi>r</mi></mrow><mrow><mn>2</mn>
+</mrow></msub></mrow><mo>)</mo><mo>+</mo>
+<mn>0.5</mn><mo>+</mo><mi>S</mi><mo>⁡</mo></mrow>
+</mfrac></mrow></math> 
+</td><td align="right">[Eq. 515.4]
+              </td></tr></tbody></table><p>where r<sub>1</sub> and r<sub>2</sub> are the inner
+and outer radii of the block.</p>
+<p>This enables you to use a BHP-controlled
+well to apply constant pressure outer boundary conditions. If on the
+other hand you wish to model a real well in an outer block, the calculated
+connection factor will be much too large. In this case, you should
+either supply an appropriate connection factor value in item 8 of
+the <a href="../ecl_rm/COMPDAT.html#COMPDAT">COMPDAT</a> keyword, or add an extra ring of inactive cells so that the
+well is no longer in an outer block.</p>
+<p>If a well is completed
+in any other block (1 &lt; i &lt; <span class="keyword">NDIVIX</span>), its
+connection factor is calculated as if it were in a Cartesian grid
+block with                  <math><msub><mi>D</mi>
+<mi>x</mi></msub><mo>=</mo><msub><mi>r</mi><mn>2</mn>
+</msub><mrow><mo>-</mo><msub><mi>r</mi><mn>1</mn>
+</msub></mrow></math>  and  <math><msub>
+<mi>D</mi><mi>y</mi></msub><mo>=</mo><mrow><mi>θ</mi>
+<mo>(</mo><msub><mi>r</mi><mn>1</mn></msub><mo>+</mo>
+<msub><mi>r</mi><mn>2</mn></msub><mo>)</mo></mrow>
+<mo>/</mo><mn>2</mn></math>                       </p>
+</div>
+
+<div class="section" id="wellinfl_fractured_completions"><a name="wellinfl_fractured_completions"><!-- --></a><h4 class="sectiontitle">Fractured completions</h4><p>ECLIPSE 300   </p>
+<p>When using one of the
+built-in formulae above to calculate the connection factor, the engineer
+can supply a constant value for the skin factor <em>S</em>, to represent
+the effects of, for example, formation damage or stimulation, partial
+penetration and well bore deviation. However, ECLIPSE 300 provides
+an additional formula to calculate the connection factor for cases
+where a vertical fracture penetrates the full width of the cell in
+the x- or y- direction.</p>
+<p>The fractured completion formula is
+selected by entering <samp class="codeph">FX</samp> or <samp class="codeph">FY</samp> in
+item 13 of <a href="../ecl_rm/COMPDAT.html#COMPDAT">COMPDAT</a>. The <a href="../ecl_rm/FWELLS.html#FWELLS">FWELLS</a> keyword must be entered in the <span class="keyword">RUNSPEC</span> section if any wells use this option.</p>
+<p>In the case of FX, the
+completion connection factor is</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.equ.00b9"/>
+ <math><msub><mi>T</mi>
+<mrow><mi>w</mi><mi>j</mi></mrow></msub><mo>=</mo>
+<mfrac><mrow><mrow><mn>8</mn><mi>c</mi><msub><mi>K</mi><mi>y</mi></msub><msub><mi>D</mi><mi>x</mi>
+</msub><msub><mi>D</mi><mi>z</mi></msub></mrow></mrow>
+<mrow><msub><mi>D</mi><mi>y</mi></msub><mo>+</mo>
+<mrow><mi>S</mi><msub><mi>D</mi><mi>x</mi></msub>
+<mo>/</mo><mi>π</mi></mrow></mrow></mfrac></math> 
+</td><td align="right">[Eq. 515.5]
+              </td></tr></tbody></table><p>In the case of FY, the completion connection factor
+is</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.equ.00bd"/>
+ <math><msub><mi>T</mi>
+<mrow><mi>w</mi><mi>j</mi></mrow></msub><mo>=</mo>
+<mfrac><mrow><mrow><mn>8</mn><mi>c</mi><msub><mi>K</mi><mi>x</mi></msub><msub><mi>D</mi><mi>y</mi>
+</msub><msub><mi>D</mi><mi>z</mi></msub></mrow></mrow>
+<mrow><msub><mi>D</mi><mi>x</mi></msub><mo>+</mo>
+<mrow><mi>S</mi><msub><mi>D</mi><mi>y</mi></msub>
+</mrow><mo>/</mo><mi>π</mi></mrow></mfrac></math> 
+</td><td align="right">[Eq. 515.6]
+              </td></tr></tbody></table><p>In both cases we assume uniform flow into the fracture
+at the center of the cell. The mean distance of flow is          
+       <math><msub><mi>D</mi>
+<mi>y</mi></msub><mo>/</mo><mn>4</mn></math>  or  <math><msub><mi>D</mi>
+<mi>x</mi></msub><mo>/</mo><mn>4</mn></math>, over
+an area of   <math><mrow><mn>2</mn>
+<msub><mi>D</mi><mi>x</mi></msub><msub><mi>D</mi>
+<mi>z</mi></msub></mrow></math>  or  <math><mrow>
+<mn>2</mn><msub><mi>D</mi><mi>y</mi></msub><msub>
+<mi>D</mi><mi>z</mi></msub></mrow></math>.          </p>
+</div>
+
+<div class="section" id="wellinfl_rock_crushing_modifications"><a name="wellinfl_rock_crushing_modifications"><!-- --></a><h4 class="sectiontitle">Rock crushing
+modifications</h4><p>If a transmissibility multiplier is specified
+with the <a href="../ecl_rm/ROCKTAB.html#ROCKTAB">ROCKTAB</a> or <a href="../ecl_rm/ROCKTABH.html#ROCKTABH">ROCKTABH</a> keywords, the well connection transmissibility factor, grid
+block transmissibilities and NNCs are modified accordingly.</p>
+<p>ECLIPSE 300</p>
+<p>ECLIPSE
+300 also updates the generalized mobility terms for grid cells and
+well connections. Similar functionality, but based on the corresponding
+changes in porosity, is also available by specifying the keywords <a href="../ecl_rm/ROCKTRMX.html#ROCKTRMX">ROCKTRMX</a>, <a href="../ecl_rm/ROCKTRMY.html#ROCKTRMY">ROCKTRMY</a> and <a href="../ecl_rm/ROCKTRMZ.html#ROCKTRMZ">ROCKTRMZ</a>.</p>
+<p>If the <span class="keyword">ROCKTAB</span> or <span class="keyword">ROCKTABH</span> table contains directional
+transmissibility multipliers, as specified in keyword <a href="../ecl_rm/RKTRMDIR.html#RKTRMDIR">RKTRMDIR</a>, the well connection
+transmissibility factor is modified according to the formula</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellinfl.equ.00d2"/>
+ <math><mrow><msub><mrow>
+<mover><mrow><mi>T</mi></mrow><mrow><mo> ˜</mo>
+</mrow></mover></mrow><mrow><mi>w</mi><mi>j</mi>
+</mrow></msub><mo>=</mo><mrow><msub><mrow><mi>T</mi>
+</mrow><mrow><mi>w</mi><mi>j</mi></mrow></msub><msup>
+<mrow><mo>(</mo><mrow><msub><mrow><mi>m</mi></mrow>
+<mrow><mi>x</mi></mrow></msub><msub><mrow><mi>m</mi>
+</mrow><mrow><mi>y</mi></mrow></msub></mrow><mo>)</mo>
+</mrow><mrow><mn>1</mn><mo>/</mo><mn>2</mn></mrow>
+</msup></mrow></mrow></math> 
+</td><td align="right">[Eq. 515.7]
+              </td></tr></tbody></table><p>where</p>
+<p> <math><mrow><msub><mrow>
+<mover><mrow><mi>T</mi></mrow><mrow><mo> ˜</mo>
+</mrow></mover></mrow><mrow><mi>w</mi><mi>j</mi>
+</mrow></msub></mrow></math>  is the pressure-adjusted connection
+factor,          </p>
+<p> <math><msub><mrow><msub>
+<mi>m</mi><mi>x</mi></msub><mo>,</mo><mi>m</mi>
+</mrow><mi>y</mi></msub></math>  are the transmissibility
+multipliers interpolated from the rock table at the grid block pressure
+ <math><msub><mi>P</mi>
+<mi>j</mi></msub></math>. The formula assumes a vertically
+completed well within the grid block  <math><mi>j</mi></math>. For other well orientations, permute the directions
+accordingly.          </p>
+<p>In Cartesian grids, this transmissibility
+update is in accordance with modifying the effective             
+    <math><mrow><mi>K</mi>
+<mi>h</mi></mrow></math>  and with keeping the Peaceman’s
+formula term <math>
+<mrow><mi>ln</mi><mo>⁡</mo><mrow><mo>(</mo><msub>
+<mrow><mi>r</mi></mrow><mrow><mi>o</mi></mrow></msub>
+<mo>/</mo><msub><mrow><mi>r</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>)</mo></mrow></mrow></math> unaffected.          </p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

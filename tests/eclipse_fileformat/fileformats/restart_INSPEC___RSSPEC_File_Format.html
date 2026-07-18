@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="INSPEC / RSSPEC File Format"/>
+<meta name="DC.subject" content="Restart files"/>
+<meta name="keywords" content="Restart files"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="restart_inspec___rsspec_file_format"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>INSPEC / RSSPEC File Format</title>
+</head>
+<body>
+
+
+<div class="H1" id="restart_inspec___rsspec_file_format"><a name="restart_inspec___rsspec_file_format"><!-- --></a>
+<h1 class="topictitle1">INSPEC / RSSPEC File Format</h1>
+
+
+ <div>
+<p>This section describes the format of the <samp class="codeph">INSPEC</samp> and <samp class="codeph">RSSPEC</samp> files written by ECLIPSE, and the fields
+currently used by consumers of these files. Note that this file format
+assumes the creating product is written in FORTRAN. The addresses
+given by the POINTER and POINTERB records therefore point to the first
+character in a FORTRAN file record which will probably be a control
+character. If you are reading the file from an application written
+in anything other than FORTRAN you may need to account for this.</p>
+
+<p>The file follows standard ECLIPSE formatting rules.</p>
+
+<ol>
+<li>'INTEHEAD' <p>Standard output from the simulator with various
+internal and external details. For instance, for the <samp class="codeph">INSPEC</samp> file, the starting date can be accessed using items 65, 66, 67,
+207, 208 and 411.</p>
+ </li>
+
+</ol>
+
+<p>The following two records describe the date and report step and
+they are present at the start of each new step. The records that follow
+them relate to them. None of these items are mandatory for the <samp class="codeph">INSPEC</samp> file where the starting date can be obtained using
+INTEHEAD.</p>
+
+<ol>
+<li>'TIME' - 1 DOUB <p>(1) number of days (or hours in LAB units)
+since the start of simulation.</p>
+ </li>
+
+<li>'ITIME' -  13 INTE <p>(1) Report number</p>
+ <p>(2) Report
+day (1-31)</p>
+<p>(3) Report month (1-12)</p>
+<p>(4) Report year (as
+four digits, for example 1952)</p>
+<p>(5) Number of the current mini-step.
+Use -2345 if undefined.</p>
+<p>(6) 1 if the file is a unified restart,
+otherwise 0</p>
+<p>(7) 1 if the file is formatted, otherwise 0</p>
+<p>(8) 1 if the restart file is written to the save file, otherwise
+0. Use -2345 if undefined.</p>
+<p>(9) 1 if the grid file is written
+and closed, otherwise 0. Use -2345 if undefined.</p>
+<p>(10) 1 if the
+init file is written and closed, otherwise 0. Use -2345 if undefined.</p>
+<p>(11) Report hour (0-23)</p>
+<p>(12) Report minute (0-59)</p>
+<p>(13) Report second (expressed in microseconds) (0-59,999,999)</p>
+</li>
+
+</ol>
+
+<p>The following group of vector records may be repeated several times:</p>
+
+<ol>
+<li>'NAME' -  &lt;n vectors&gt; CHAR  <p>The names of all the vectors
+found in the INIT file</p>
+ </li>
+
+<li>'TYPE' -  &lt;n vectors&gt; CHAR <p>The type of the vectors
+(for example, INTE, LOGI, DOUB, REAL)</p>
+ </li>
+
+<li>'NUMBER' -  &lt;n vectors&gt; INTE <p>Size of the vectors above</p>
+ </li>
+
+<li>'POINTER' -  &lt;n vectors&gt; INTE <p>The lower part of the
+address of the record header in the INIT/RESTART file. This is calculated
+as modulo(address,2<sup>31</sup>).</p>
+ </li>
+
+<li>'POINTERB' -  &lt;n vectors&gt; INTE <p>The upper part of the
+address of the record header. This is calculated as address/2<sup>31</sup>. This is 0 for an address smaller than 2Gb. The address
+can be calculated as:</p>
+ <p> <samp class="codeph">POINTERB*2<sup>31</sup>+POINTER</samp> </p>
+ </li>
+
+<li>'ARRAYMAX' -  &lt;n vectors&gt; REAL <p>The maximum size of
+the values of each vector above. Avoids the post-application having
+to calculate it.</p>
+ </li>
+
+<li>'ARRAYMIN' -   &lt;n vectors&gt; REAL <p>The minimum size of
+the values of each vector above. Avoids the post-application having
+to calculate it.</p>
+ </li>
+
+<li>'MEASRMNT' -   &lt;nblock*n vectors&gt; CHAR <p>The measurement
+associated with each vector above. It makes it possible to obtain
+the unit of the vectors using the measurement system as given by item
+3 of INTEHEAD. "nblock" is an integer that can be obtained by dividing
+the provided number of elements of this record by "n".</p>
+ </li>
+
+<li>'UNITS' -   &lt;n vectors&gt; CHAR <p>The unit associated with
+each vector above.</p>
+ </li>
+
+</ol>
+
+<p>Domain specifiers:</p>
+
+<p>Groups of vector records may be followed by the LGRNAME or LGRSGONE
+keyword to change the domain to which the records that follow relate.</p>
+
+<ol>
+<li>'LGRNAME'  - 1 CHAR <p>The name of the LGR to which all following
+records relate</p>
+ </li>
+
+<li>'LGRSGONE' -  0 MESS <p>Indicates the end of the LGR records</p>
+ </li>
+
+</ol>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Files larger than 2Gb can be produced by any supported versions
+of the simulators even on a 32bit operating system. The format of
+POINTER and POINTERB described above does not depend on the operating
+system.</span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

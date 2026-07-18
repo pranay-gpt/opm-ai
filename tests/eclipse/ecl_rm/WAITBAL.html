@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WAITBAL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WAITBAL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WAITBAL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WAITBAL"><a name="WAITBAL"><!-- --></a>
+<h1 class="keyword">WAITBAL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="waitbal.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="waitbal.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2800e45"> x </th>
+
+<th valign="top" id="d2800e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2800e54">  </th>
+
+<th valign="top" id="d2800e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2800e45 d2800e54 ">  </td>
+
+<td valign="top" headers="d2800e48 d2800e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2800e45 d2800e54 ">  </td>
+
+<td valign="top" headers="d2800e48 d2800e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2800e45 d2800e54 ">  </td>
+
+<td valign="top" headers="d2800e48 d2800e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2800e45 d2800e54 ">  </td>
+
+<td valign="top" headers="d2800e48 d2800e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2800e45 d2800e54 ">  </td>
+
+<td valign="top" headers="d2800e48 d2800e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2800e45 d2800e54 ">  </td>
+
+<td valign="top" headers="d2800e48 d2800e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2800e45 d2800e54 ">  </td>
+
+<td valign="top" headers="d2800e48 d2800e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2800e45 d2800e54 "> x </td>
+
+<td valign="top" headers="d2800e48 d2800e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword can be used in conjunction with the network option
+(see <a href="../ecl_td/networkintro_Network_Option.html#networkintro_network_option">"Network option"</a> in the <cite>ECLIPSE Technical Description</cite>) to request that
+the drilling of new wells and other production rule actions to enhance
+production should not occur until the network has been balanced.</p>
+
+<p>At each network balancing iteration, the well and group production
+rates are determined at the latest iterate of the nodal pressures.
+If a group production target cannot be met, actions may be taken to
+increase production, such as drilling a new well (see keyword <a href="PRORDER.html#PRORDER"> PRORDER</a>). New wells may
+also be drilled to maintain a group’s production potential above a
+specified value (see keyword <a href="GDRILPOT.html#GDRILPOT"> GDRILPOT</a>). By default, all such actions except for automatic compressor
+switching (keyword <a href="NETCOMPA.html#NETCOMPA"> NETCOMPA</a>) are performed whenever required to increase the production
+rate in <strong>any</strong> network balancing iteration. However, it is possible
+that an intermediate balancing iteration with high nodal pressures
+and consequentially low well productivities may cause such an action
+to be taken prematurely. This can be prevented by using the <span class="keyword">WAITBAL</span> keyword to request that these actions should not
+be performed until the network is properly balanced. Then if more
+flow is required once the network has converged, an appropriate action
+is performed and the network must be balanced again. Using this option
+therefore requires more network balancing iterations in total.</p>
+
+<p>The keyword is followed by one item of data, terminated with a
+slash (/).</p>
+
+<ol>
+<li> Flag indicating whether <span class="keyword">PRORDER</span> and <span class="keyword">GDRILPOT</span> actions should wait until the network is balanced. 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top"> The actions are performed at any iteration of the network
+balancing calculation.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top">The actions are only performed if required after the network
+balancing iterations have converged.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>(The word may be abbreviated; only the first character
+is significant)</p>
+ <p>DEFAULT: <samp class="codeph">NO</samp> </p>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>ECLIPSE 300</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">ECLIPSE 300 always waits until the network
+is balanced before deciding whether to open a new well from the drilling
+queue; this is equivalent to having item 1 permanently set to <samp class="codeph">YES</samp>.</span></div>
+
+<div class="section" id="waitbal_example"><a name="waitbal_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WAITBAL
+ YES /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

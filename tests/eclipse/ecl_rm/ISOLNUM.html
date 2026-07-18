@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ISOLNUM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ISOLNUM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ISOLNUM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ISOLNUM"><a name="ISOLNUM"><!-- --></a>
+<h1 class="keyword">ISOLNUM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="isolnum.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="isolnum.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1160e45"> x </th>
+
+<th valign="top" id="d1160e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1160e54">  </th>
+
+<th valign="top" id="d1160e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1160e45 d1160e54 ">  </td>
+
+<td valign="top" headers="d1160e48 d1160e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1160e45 d1160e54 "> x </td>
+
+<td valign="top" headers="d1160e48 d1160e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1160e45 d1160e54 ">  </td>
+
+<td valign="top" headers="d1160e48 d1160e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1160e45 d1160e54 ">  </td>
+
+<td valign="top" headers="d1160e48 d1160e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1160e45 d1160e54 ">  </td>
+
+<td valign="top" headers="d1160e48 d1160e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1160e45 d1160e54 ">  </td>
+
+<td valign="top" headers="d1160e48 d1160e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1160e45 d1160e54 ">  </td>
+
+<td valign="top" headers="d1160e48 d1160e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1160e45 d1160e54 ">  </td>
+
+<td valign="top" headers="d1160e48 d1160e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">ISOLNUM</span> keyword defines the regions of the
+reservoir that are not connected by a flow path within the reservoir
+and should not be used in any other circumstances. The only coupling
+is by the well facilities (through group control). Once the isolated
+regions of the reservoir have been identified, ECLIPSE will solve
+them more efficiently as separate units, whose linear equations in
+general require different numbers of iterations to converge. (See <a href="../ecl_td/independ_Independent_Reservoir_Regions.html#independ_independent_reservoir_regions">"Independent reservoir
+regions"</a> in the <cite>ECLIPSE Technical Description</cite>.)</p>
+
+<p>The keyword should only be used if <samp class="codeph">NRFREG</samp> has
+been set to a value greater than 1 in the <span class="keyword">RUNSPEC</span> section keyword <a href="REGDIMS.html#REGDIMS"> REGDIMS</a>.</p>
+
+<p>The keyword should be followed by one integer for each grid cell
+in the full field, specifying the independent reservoir region number
+to which it belongs. The data must be terminated by a slash (/).</p>
+
+<p>There must be at least one active cell allocated to each reservoir
+region between 1 and <samp class="codeph">NRFREG</samp>. Only inactive cells
+should be given a reservoir region number of 0 (active cells in region
+0 will be assumed to be in region 1), and it is not possible to give
+a cell a value  greater than  <samp class="codeph">NRFREG</samp>.</p>
+
+<p>ECLIPSE can be made to output the <span class="keyword">ISOLNUM</span> array
+for an existing model by specifying the <a href="RPTISOL.html#RPTISOL"> RPTISOL</a> keyword. The <span class="keyword">ISOLNUM</span> array
+is output to the Debug file if there is more than one independent
+reservoir within the model.</p>
+
+<div class="section" id="isolnum_example"><a name="isolnum_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>Two layers
+separated by an inactive layer:</p>
+ <pre><code>ISOLNUM
+ 1200*1
+ 1200*0
+ 1200*2 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

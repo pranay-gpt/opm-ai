@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="FLUXNUM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="FLUXNUM"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>FLUXNUM</title>
+</head>
+<body>
+
+
+<div class="nested0" id="FLUXNUM"><a name="FLUXNUM"><!-- --></a>
+<h1 class="keyword">FLUXNUM</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="fluxnum.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="fluxnum.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d700e45"> x </th>
+
+<th valign="top" id="d700e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d700e54"> x </th>
+
+<th valign="top" id="d700e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d700e45 d700e54 ">  </td>
+
+<td valign="top" headers="d700e48 d700e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d700e45 d700e54 "> x </td>
+
+<td valign="top" headers="d700e48 d700e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d700e45 d700e54 ">  </td>
+
+<td valign="top" headers="d700e48 d700e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d700e45 d700e54 ">  </td>
+
+<td valign="top" headers="d700e48 d700e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d700e45 d700e54 ">  </td>
+
+<td valign="top" headers="d700e48 d700e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d700e45 d700e54 ">  </td>
+
+<td valign="top" headers="d700e48 d700e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d700e45 d700e54 ">  </td>
+
+<td valign="top" headers="d700e48 d700e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d700e45 d700e54 ">  </td>
+
+<td valign="top" headers="d700e48 d700e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">FLUXNUM</span> keyword has two uses. Firstly, it
+provides a convenient way of defining a region in the <span class="keyword">GRID</span> section for subsequent modification of its data using the <a href="EQUALREG.html#EQUALREG"> EQUALREG</a>, <a href="ADDREG.html#ADDREG"> ADDREG</a>, <a href="COPYREG.html#COPYREG"> COPYREG</a>, <a href="MULTIREG.html#MULTIREG"> MULTIREG</a>, <a href="MULTREGP.html#MULTREGP"> MULTREGP</a> and <a href="MULTREGT.html#MULTREGT"> MULTREGT</a> keywords. Secondly,
+the keyword is used with the flux boundary option to define regions
+that can be run as separate models with boundary fluxes defined in
+a previous full field run.</p>
+
+<p>The keyword should be followed by one integer for each grid cell
+in the full field model, specifying the flux region number to which
+it belongs. The region numbers should not exceed the value of <samp class="codeph">NTFREG</samp> entered using keyword <a href="REGDIMS.html#REGDIMS"> REGDIMS</a> in the <span class="keyword">RUNSPEC</span> section
+(item 4). The data must be terminated by a slash (/).</p>
+
+<p>The <span class="keyword">FLUXNUM</span> array can be copied into the <span class="keyword">REGIONS</span> section arrays (for example <a href="FIPNUM.html#FIPNUM"> FIPNUM</a> and <a href="SATNUM.html#SATNUM"> SATNUM</a>) using the <a href="COPY.html#COPY"> COPY</a> keyword. It is recommended that <samp class="codeph">NTFREG</samp> should be set greater than 1 if this facility is to be used. If
+a zero <span class="keyword">FLUXNUM</span> region is copied in to a <span class="keyword">REGIONS</span> array then the destination array will be set to
+1.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>Any cells not explicitly assigned a <span class="keyword">FLUXNUM</span> value will be defaulted to a value of 1.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>Any cells not explicitly assigned a <span class="keyword">FLUXNUM</span> value will be defaulted to a value of -1.</p>
+
+<p>Set <span class="keyword">FLUXNUM</span> to zero explicitly for any cells
+not required in flux regions.</p>
+
+<p>The <span class="keyword">FLUXNUM</span> keyword should be used before the <span class="keyword">EQUALREG</span>, <span class="keyword">ADDREG</span>, <span class="keyword">COPYREG</span>, <span class="keyword">MULTIREG</span> and <span class="keyword">MULTREGT</span> keywords
+are used to modify grid properties within a flux region.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>The <span class="keyword">FLUXNUM</span> keyword cannot
+be used inside a <span class="keyword">CARFIN</span>/<span class="keyword">RADFIN</span> ... <span class="keyword">ENDFIN</span> bracket.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>For use with the dual porosity option, only
+the matrix cells or the fracture cells need to be input. The cell
+values in the other porosity will be copied automatically. If you
+want to specify matrix cells and fracture cells separately, then <a href="OPTIONS.html#options.117">item 117</a> in <span class="keyword">OPTIONS</span> should be set greater than 1. This will also affect use of the <a href="MULTNUM.html#MULTNUM"> MULTNUM</a>, <a href="PINCHNUM.html#PINCHNUM"> PINCHNUM</a> or <a href="OPERNUM.html#OPERNUM"> OPERNUM</a> keywords.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>For use with dual porosity option, both matrix
+and fracture cells should be provided. <span class="keyword">FLUXNUM</span> use
+with <span class="keyword">MULTREGT</span> or <span class="keyword">MULTREGP</span>, will
+automatically copy all matrix cells to the corresponding fracture
+cells, so dummy fracture values could be input. For other <span class="keyword">FLUXNUM</span> uses, there is no copying of data from the matrix
+to fracture cells.</p>
+
+<div class="section" id="fluxnum_flux_option_cases"><a name="fluxnum_flux_option_cases"><!-- --></a><h4 class="sectiontitle">Flux option cases</h4><p>See <a href="../ecl_td/fluxintro_Flux_Boundary_Conditions.html#fluxintro_flux_boundary_conditions">"Flux Boundary Conditions"</a> in the <cite>ECLIPSE Technical Description</cite> for more information
+on this option.</p>
+<p>The <span class="keyword">FLUXNUM</span> keyword must
+be used in both the full-field (<a href="DUMPFLUX.html#DUMPFLUX"> DUMPFLUX</a>) run and the reduced (<a href="USEFLUX.html#USEFLUX"> USEFLUX</a>) run to identify the cells belonging
+to each flux region. The <span class="keyword">DUMPFLUX</span> or <span class="keyword">USEFLUX</span> keyword must have been entered previously.</p>
+<p>For runs in which
+the full field has just a single flux region (<samp class="codeph">NTFREG=1</samp>), the cells inside the flux region should have a region number of
+1, and 0 for the cells outside. For runs involving multiple flux regions
+(<samp class="codeph">NTFREG&gt;1</samp>), the region numbers should lie between
+1 and <samp class="codeph">NTFREG</samp>, and the <a href="FLUXREG.html#FLUXREG"> FLUXREG</a> keyword is used in the reduced run to indicate
+which flux regions are active.</p>
+<p>ECLIPSE
+100</p>
+<p>(A negative region number will automatically
+be converted to positive.)</p>
+<p>The contents of the <span class="keyword">FLUXNUM</span> keyword in a reduced run must be identical with the original full-field
+run.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="COLLAPSE"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="COLLAPSE"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>COLLAPSE</title>
+</head>
+<body>
+
+
+<div class="nested0" id="COLLAPSE"><a name="COLLAPSE"><!-- --></a>
+<h1 class="keyword">COLLAPSE</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="collapse.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="collapse.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d266e45"> x </th>
+
+<th valign="top" id="d266e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d266e54">&nbsp;</th>
+ 
+<th valign="top" id="d266e56"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d266e45 d266e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d266e48 d266e56 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d266e45 d266e54 "> x </td>
+
+<td valign="top" headers="d266e48 d266e56 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d266e45 d266e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d266e48 d266e56 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d266e45 d266e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d266e48 d266e56 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d266e45 d266e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d266e48 d266e56 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d266e45 d266e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d266e48 d266e56 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d266e45 d266e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d266e48 d266e56 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d266e45 d266e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d266e48 d266e56 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">COLLAPSE</span> keyword may optionally be used
+in compressed VE runs (keyword <a href="VE.html#VE"> VE</a> in the <span class="keyword">RUNSPEC</span> section). It specifies
+which cells can be collapsed, or merged with other cells in the same
+column, to form the larger compressed VE cells.</p>
+
+<p>The keyword should be followed by one integer for each grid cell
+in the model. The integers should be equal to either 0 or 1:</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">0</td>
+
+<td valign="top"> Implies that a cell will not be merged with its lower neighbor.</td>
+
+</tr>
+
+<tr>
+<td valign="top">1</td>
+
+<td valign="top">Implies that a cell is available to be merged with its lower
+neighbor.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>DEFAULT: 1 (throughout the grid.)</p>
+
+<p>Grid blocks are ordered with the X axis index cycling fastest,
+followed by the Y and Z axis indices. Repeat counts may be used for
+repeated values (for example 115*1). Note that spaces must not be
+inserted on either side of the asterisk.</p>
+
+<p>A cell merges with the next active cell below, provided that <strong>none</strong> of the following situations occur:</p>
+
+<ul>
+<li><span class="keyword">COLLAPSE</span> = 0 for that cell</li>
+
+<li><span class="keyword">TRANZ</span> = 0.0</li>
+
+<li><span class="keyword">PERMZ</span> ≤ critical value entered in <a href="CRITPERM.html#CRITPERM"> CRITPERM</a>, if this keyword
+is present</li>
+
+<li>There is an inactive cell with DZ &gt; 0.0 between the two active
+cells</li>
+
+<li>Either cell has been refined using <a href="RADFIN.html#RADFIN"> RADFIN</a> or <a href="CARFIN.html#CARFIN"> CARFIN</a> (see <a href="../ecl_td/lgrc_Local_Grid_Refinement_and_Coarsening.html#lgrc_local_grid_refinement_and_coarsening">"Local grid refinement
+and coarsening"</a> in the <cite>ECLIPSE Technical Description</cite>).</li>
+
+</ul>
+
+<p>See also keyword <span class="keyword">CRITPERM</span> and <a href="../ecl_td/ve_Compressed_vertical_equilibrium_option.html#ve_compressed_vertical_equilibrium_option">"Compressed vertical
+equilibrium option"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

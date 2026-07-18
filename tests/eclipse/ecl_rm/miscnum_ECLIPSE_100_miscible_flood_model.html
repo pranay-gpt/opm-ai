@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ECLIPSE 100 miscible flood model"/>
+<meta name="DC.subject" content="MISCNUM"/>
+<meta name="keywords" content="MISCNUM"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="miscnum_eclipse_100_miscible_flood_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ECLIPSE 100 miscible flood model</title>
+</head>
+<body>
+
+
+<div class="nested0" id="miscnum_eclipse_100_miscible_flood_model"><a name="miscnum_eclipse_100_miscible_flood_model"><!-- --></a>
+<h1 class="topictitle1">ECLIPSE 100 miscible flood model</h1>
+
+
+ <div>
+<p>The region number should not be less than 0 or greater than <samp class="codeph">NTMISC</samp> (see keyword <a href="MISCIBLE.html#MISCIBLE"> MISCIBLE</a>). The data must be terminated by a slash (/).</p>
+
+<p>A positive value of the miscibility region number specifies which
+value of the mixing parameter (input using the keyword <a href="TLMIXPAR.html#TLMIXPAR"> TLMIXPAR</a>) should be
+used to calculate the effective PVT properties of the gas and oil
+components in each cell of the grid. A positive miscibility region
+number also specifies which table of miscible residual oil saturation
+versus water saturation should be used in the calculation of the relative
+permeabilities and effective oil and gas PVT properties.</p>
+
+<p>Grid blocks which are allocated a miscibility region number of
+0 are assumed to contain immiscible oil and gas. The mixing parameter
+is set automatically to 0 in these regions and the gas/oil relative
+permeabilities are computed from immiscible data. Any cells for which <span class="keyword">MISCNUM</span> is not explicitly defined are given a <span class="keyword">MISCNUM</span> value of 1.</p>
+
+<p>The miscibility region numbers can be modified during the simulation
+by re-specifying the <span class="keyword">MISCNUM</span> keyword in the <span class="keyword">SCHEDULE</span> section. This procedure should only be carried
+out with care and is <strong>not</strong> recommended in general.</p>
+
+<p>Grid blocks are ordered with the X axis index cycling fastest,
+followed by the Y and Z axis indices. Repeat counts may be used for
+repeated values (for example 115*2). Note that spaces must not be
+inserted on either side of the asterisk.</p>
+
+<p>The <span class="keyword">MISCNUM</span> keyword may only be used in miscible
+flood simulations (keyword <span class="keyword">MISCIBLE</span> in <span class="keyword">RUNSPEC</span>). However, the <span class="keyword">MISCNUM</span> keyword
+is not obligatory in these cases - a default region number of 1 is
+assumed for each grid cell. When using the polymer flood model (keyword <a href="POLYMER.html#POLYMER"> POLYMER</a> in <span class="keyword">RUNSPEC</span>) the <a href="PLMIXNUM.html#PLMIXNUM"> PLMIXNUM</a> keyword should be used instead.</p>
+
+<p>See also the keywords <a href="SORWMIS.html#SORWMIS"> SORWMIS</a> and <span class="keyword">TLMIXPAR</span> in the <span class="keyword">PROPS</span> section.</p>
+
+<p>The ECLIPSE 100 treatment of miscibility is described in <a href="../ecl_td/miscfloo_Miscible_Flood_Modeling.html#miscfloo_miscible_flood_modeling">"Miscible flood
+modeling"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<div class="section" id="miscnum_example"><a name="miscnum_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>-- In the RUNSPEC section:
+MISCIBLE
+ 2 /
+DIMENS
+ 8 6 5 /
+-- In the REGIONS section (with no input box set):
+MISCNUM
+ 72*0 72*1 96*2 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

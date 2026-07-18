@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Live oil"/>
+<meta name="DC.subject" content="Thermal properties for live oil"/>
+<meta name="keywords" content="Thermal properties for live oil"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="props_live_oil"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Live oil</title>
+</head>
+<body>
+
+
+<div class="nested0" id="props_live_oil"><a name="props_live_oil"><!-- --></a>
+<h1 class="topictitle1">Live oil</h1>
+
+
+ <div>
+<p>For a live oil run you must specify temperature dependent properties
+for each component. The properties required for live components are,
+K-values to determine equilibrium between the oil and gas phase, and
+the phase enthalpies, densities and viscosities. These properties
+are output to the print file in tabular form. The program PVT <em>i</em> can be used to output K-values, enthalpy and density data.</p>
+
+<div class="section" id="props_volatility_type"><a name="props_volatility_type"><!-- --></a><h4 class="sectiontitle">Volatility type</h4><p>In a live oil run, not all the components need be live. The <a href="../ecl_rm/CVTYPE.html#CVTYPE">CVTYPE</a> keyword can be used
+to define a component as non-volatile, non-condensable or solid.</p>
+<dl>
+
+<dt class="dlterm">Non-volatile and non-condensable components</dt>
+
+<dd>A component can be made non-volatile or non-condensable using
+the  <span class="keyword">CVTYPE</span> keyword. <p>For versions of E300 prior
+to 2023.1, this keyword also reset the component critical temperature,
+to 10<sup>4</sup> for non-volatile components and to 10<sup>-6</sup> for non-condensable components. From 2023.1, this is no longer the
+case and the user-supplied critical temperature will be used in any
+calculations where it is needed, for instance Lorentz-Bray-Clark viscosity.</p>
+<p>For back-compatibility with earlier versions of ECLIPSE, components
+with critical temperatures of 10<sup>4</sup> and above are also assumed
+to be non-volatile, while those with temperatures of 10<sup>-6</sup> are assumed to be non-condensable.</p>
+<p>For surface calculations,
+the volatility types are set by default to the reservoir values. If
+different volatility types are required at the surface, the <a href="../ecl_rm/CVTYPES.html#CVTYPES"> CVTYPES</a> keyword can be used.
+In this case the <a href="../ecl_rm/TCRITS.html#TCRITS">TCRITS</a> keyword should also be used to ensure the correct critical
+temperatures are used in the surface calculations.</p>
+</dd>
+
+
+<dt class="dlterm">Solid phase components</dt>
+
+<dd>A component can be made a solid using the <span class="keyword">CVTYPE</span> keyword. Solid components have density and enthalpy. A solid component
+cannot appear in the oil phase or the liquid phase, so its K-values
+can be defaulted.</dd>
+
+</dl>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

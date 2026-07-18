@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Gas calorific value control"/>
+<meta name="DC.subject" content="Energy control, Controlling the mean calorific value, Controlling the energy production rate, Gas calorific value control, Calorific value, Group, Gas, Control, Energy"/>
+<meta name="keywords" content="Energy control, Controlling the mean calorific value, Controlling the energy production rate, Gas calorific value control, Calorific value, Group, Gas, Control, Energy"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gcalvalintro_gas_calorific_value_control"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Gas calorific value control </title>
+</head>
+<body>
+
+
+<div class="nested0" id="gcalvalintro_gas_calorific_value_control"><a name="gcalvalintro_gas_calorific_value_control"><!-- --></a>
+<h1 class="keyword">Gas calorific value control </h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gcalvalintro.tab.0009"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gcalvalintro.tab.0009" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> x </td>
+
+<td valign="top"> ECLIPSE 100 </td>
+
+</tr>
+
+<tr>
+<td valign="top">  </td>
+
+<td valign="top"> ECLIPSE 300 </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The gas calorific value control option is only available in ECLIPSE
+100; it is not available in ECLIPSE 300, but the <span class="keyword">GASWAT</span> option in that simulator (see <a href="gaswat_GASWAT_Option.html#gaswat_gaswat_option"> "GASWAT option"</a>) offers some of the same functionality. The purpose of this option
+is to enable you to control the mean calorific value of gas produced
+from the field, while also controlling the gas production rate. Production
+rate targets are handled by guide rate group control (keyword <a href="../ecl_rm/GCONPROD.html#GCONPROD"> GCONPROD</a>), and ECLIPSE automatically
+adjusts the guide rates so that the produced mixture has, whenever
+possible, the required mean calorific value. As an alternative to
+controlling the gas production rate, you may elect instead to control
+the overall energy produced (that is the calorific value times volumetric
+production rate).</p>
+
+<div class="section" id="gcalvalintro_calorific_value"><a name="gcalvalintro_calorific_value"><!-- --></a><h4 class="sectiontitle">Calorific value</h4><p>The calorific value is a measure of the energy content of gas,
+that is the energy released when a given volume of the gas is burned.
+ECLIPSE measures the calorific value in units of kJ/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), Btu/Mscf (<samp class="codeph">FIELD</samp>), J/scc
+(<samp class="codeph">LAB</samp>).</p>
+<p>The term 'quality' is also used to denote
+the energy content of gas, with a distinction between the volumetric
+quality and the molar quality. Volumetric quality is the energy content
+per unit volume, while molar quality is the energy content per mole
+of gas. Molar quality has units of kJ/kg-M (<samp class="codeph">METRIC</samp>), Btu/lb-M (<samp class="codeph">FIELD</samp>), J/gm-M (<samp class="codeph">LAB</samp>). Conversion between the two definitions of quality can be performed
+assuming ideal gas behavior:</p>
+<ul>
+<li>23.6903 sm<sup>3</sup>/kg-M (METRIC)</li>
+
+<li>0.379506 Mscf/lb-M (FIELD)</li>
+
+<li>23690.3 scc/gm-M (LAB).</li>
+
+</ul>
+<p>As ECLIPSE 100 is not a compositional simulator, the calorific
+value of reservoir gas cannot be computed from its composition; you
+must enter it. The calorific value of the produced gas may either
+be specified independently for each well, or equated to the concentration
+of a gas phase tracer.</p>
+</div>
+
+<div class="section" id="gcalvalintro_controlling_the_mean_calorific_value"><a name="gcalvalintro_controlling_the_mean_calorific_value"><!-- --></a><h4 class="sectiontitle">Controlling the mean calorific value</h4><p>When the production
+rate of a group (or the field) is under guide rate control (keyword <a href="../ecl_rm/GCONPROD.html#GCONPROD"> GCONPROD</a>), its rate target
+is shared between the subordinate wells in proportion to their guide
+rates. It is also possible to control simultaneously the mean calorific
+value of the gas produced by the group, by automatically adjusting
+the well guide rates to give an appropriate mixture of high and low
+calorific value gas. The set of subordinate wells currently under
+group control are divided into two categories: those producing gas
+with higher calorific value than the target, and those with a calorific
+value lower than the target. All the wells in the second category
+have their guide rates multiplied by the same adjustment factor, calculated
+during each of the first <a href="../ecl_rm/NUPCOL.html#NUPCOL"> NUPCOL</a> iterations of the timestep to give the required overall
+calorific value. This method works provided that there is at least
+one subordinate well under group control in each of the two categories.</p>
+<p>There could ultimately come a point when the required calorific
+value cannot be met, when there are no group controlled wells left
+in one or other of the two categories. It may be possible to restore
+the required mean calorific value by drilling a new well or by performing
+one of the other actions associated with the group production rules
+(keyword <a href="../ecl_rm/PRORDER.html#PRORDER"> PRORDER</a>). Otherwise there is an option to reduce the group's flow
+target in stages until wells straddling the required calorific value
+are brought back under group control. This option would therefore
+attempt to honor the calorific value target at the expense of the
+flow rate target.</p>
+</div>
+
+<div class="section" id="gcalvalintro_controlling_the_energy_production_rate"><a name="gcalvalintro_controlling_the_energy_production_rate"><!-- --></a><h4 class="sectiontitle">Controlling the energy production rate</h4><p>Instead of
+supplying a target for the group's flow rate, you may supply a target
+for its energy production rate (that is the gas production rate multiplied
+by its calorific value). ECLIPSE shares a group's energy target among
+its subordinate wells in proportion to their energy guide rates (that
+is the gas guide rates multiplied by their latest calorific values).</p>
+<p>This facility may be used with or without a control target for
+the mean calorific value. If there is no such control target, the
+mean calorific value depends on the guide rates of the wells.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

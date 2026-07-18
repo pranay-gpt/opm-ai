@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Regression in SimOpt using ECLIPSE gradients"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="tech_desc_regression_in_simopt_using_eclipse_gradients"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Regression in SimOpt using ECLIPSE gradients</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="tech_desc_regression_in_simopt_using_eclipse_gradients"><a name="tech_desc_regression_in_simopt_using_eclipse_gradients"><!-- --></a>
+<h1 class="topictitle1">Regression in SimOpt using ECLIPSE gradients</h1>
+
+
+ <div>
+<p>The solution                  <math><mrow>
+<mi>∂</mi><mi>X</mi></mrow><mo>/</mo><mrow><mi>∂</mi>
+<mi>λ</mi></mrow></math> of equation <a href="tech_desc_Obtaining_gradients_in_ECLIPSE.html#tech_desc.Xtech_desc.XID-00000032">824.4</a>  consists of derivatives of solution variables in each grid
+block. These are converted to derivatives of meaningful observable
+well quantities  <math><mrow><mi>∂</mi>
+<msub><mi>W</mi><mrow><mi>c</mi><mi>a</mi><mi>l</mi>
+<mi>c</mi></mrow></msub></mrow><mo>/</mo><mrow><mi>∂</mi><mi>λ</mi></mrow></math>  such as well block pressure
+and well flow rates. SimOpt uses these quantities to calculate derivatives
+and the Hessian of the objective function with respect to the gradient
+parameters for use in the regression algorithm.          </p>
+
+<p>It is important to note that ECLIPSE returns gradients        
+         <math><mrow><mi>∂</mi>
+<mi>X</mi></mrow><mo>/</mo><mrow><mi>∂</mi><mi>λ</mi>
+</mrow></math>  around  <math><mi>λ</mi><mo>=</mo>
+<mn>1</mn></math>  for multiplier-based parameters (such as <span class="keyword">HMPORVM</span>, <span class="keyword">HMPERMX</span> and <span class="keyword">HMKRW</span>, in <a href="../ecl_rm/HMxxxxxx.html#HMxxxxxx">HMxxxxxx</a>). During a gradient-based minimization loop, a sequence of
+multiplicative modifiers  <math><msub><mi>λ</mi>
+<mi>i</mi></msub><mo>,</mo><mi>i</mi><mo>=</mo><mi>i</mi><mo>,</mo><mi>…</mi><mo>,</mo><mi>υ</mi>
+</math>  may be applied to the base data set whose effect is cumulative,
+so that after  <math><mi>υ</mi></math>  iterations, the cumulative modifier is          </p>
+
+<p>                              <math><mrow>
+<msub><mrow><mi>Λ</mi></mrow><mrow><mi>n</mi></mrow>
+</msub><mo>=</mo><mrow><munderover><mrow><mi>Π</mi></mrow><mrow><mi>i</mi><mo>⁢</mo><mo>=</mo><mtext> </mtext><mn>1</mn></mrow>
+<mrow><mi>n</mi></mrow></munderover><msub><mrow><mi>λ</mi></mrow><mrow><mi>i</mi></mrow></msub></mrow>
+</mrow></math>                      </p>
+
+<p>If the regression requires gradients with respect to the total
+modifier                  <math><msub><mi>Λ</mi>
+<mi>n</mi></msub></math>, then          </p>
+
+<p>                              <math><mrow>
+<mfrac><mrow><mo>∂</mo><mi>X</mi></mrow><mrow><mo>∂</mo><msub><mrow><mi>Λ</mi></mrow><mrow><mi>n</mi>
+</mrow></msub></mrow></mfrac><mo>=</mo><mfrac><mrow>
+<mo>∂</mo><mi>X</mi></mrow><mrow><mo>∂</mo><mo>(</mo>
+<mrow><msub><mrow><mi>Λ</mi></mrow><mrow><mi>n</mi>
+<mrow><mo>-</mo><mn>1</mn></mrow></mrow></msub><msub>
+<mrow><mi>λ</mi></mrow><mrow><mi>n</mi></mrow></msub>
+</mrow><mo>)</mo></mrow></mfrac><mo>=</mo><mfrac>
+<mrow><mn>1</mn></mrow><mrow><msub><mrow><mi>Λ</mi>
+</mrow><mrow><mi>n</mi><mrow><mo>-</mo><mn>1</mn>
+</mrow></mrow></msub></mrow></mfrac><mo>⋅</mo><mfrac>
+<mrow><mo>∂</mo><mi>X</mi></mrow><mrow><mo>∂</mo>
+<msub><mrow><mi>λ</mi></mrow><mrow><mi>n</mi></mrow>
+</msub></mrow></mfrac></mrow></math>                   
+  </p>
+
+<p>In SimOpt, the regression operates on the parameter           
+      <math><msub><mi>Λ</mi>
+<mi>n</mi></msub></math>  and the sensitivities provided by
+ECLIPSE are divided by  <math><msub><mi>Λ</mi>
+<mi>n</mi></msub></math>  at each regression iteration. For
+regression loops such as SimOpt relying on the cumulative parameters
+ <math><msub><mi>Λ</mi>
+<mi>n</mi></msub></math>  in this way, it is suggested that
+the log transform <math>
+<mrow><mrow><mi>λ</mi></mrow><mo>=</mo><mi>ln</mi>
+<mo>⁡</mo><mrow><mo>(</mo><mi>λ</mi><mo>)</mo>
+</mrow></mrow></math>  is applied.          </p>
+
+<p>ECLIPSE 100 </p>
+
+<p>For parameters whose cumulative modifiers are additive (such as <span class="keyword">HMSWCR</span> and <span class="keyword">HMSOWCR</span>, in <a href="../ecl_rm/HMxxxxxx.html#HMxxxxxx"> HMxxxxxx</a>), the cumulative
+modifier would be</p>
+
+<p>                              <math><mrow>
+<msub><mrow><mi>Λ</mi></mrow><mrow><mi>n</mi></mrow>
+</msub><mo>=</mo><mrow><munderover><mrow><mi>Σ</mi></mrow><mrow><mi>i</mi><mo>⁢</mo><mo>=</mo><mtext> </mtext><mn>1</mn></mrow>
+<mrow><mi>n</mi></mrow></munderover><msub><mrow><mi>λ</mi></mrow><mrow><mi>i</mi></mrow></msub></mrow>
+</mrow></math>                      </p>
+
+<p>in which case no modification is required because</p>
+
+<p>                              <math><mfrac>
+<mrow><mrow><mo>∂</mo><mi>X</mi></mrow></mrow><mrow>
+<mrow><mo>∂</mo><msub><mi>Λ</mi><mi>n</mi></msub>
+</mrow></mrow></mfrac><mo>=</mo><mfrac><mrow><mrow>
+<mo>∂</mo><mi>X</mi></mrow></mrow><mrow><mrow><mo>∂</mo><mo>(</mo><msub><mi>Λ</mi><mrow><mi>n</mi>
+<mrow><mo>-</mo><mn>1</mn></mrow></mrow></msub><mo>+</mo><msub><mi>λ</mi><mi>n</mi></msub><mo>)</mo>
+</mrow></mrow></mfrac><mo>=</mo><mfrac><mrow><mrow>
+<mo>∂</mo><mi>X</mi></mrow></mrow><mrow><msub><mrow>
+<mo>∂</mo><mi>λ</mi></mrow><mi>n</mi></msub></mrow>
+</mfrac></math>                       </p>
+
+<p>For any objective function                  <math><mi>G</mi><mo>=</mo><mrow><mi>G</mi><mo>(</mo><mi>X</mi>
+<mo>,</mo><mi>λ</mi><mo>)</mo></mrow></math>, used
+during regression, then          </p>
+
+<p>                              <math><mrow>
+<mfrac><mrow><mi>d</mi><mi>G</mi></mrow><mrow><mi>d</mi><mi>λ</mi></mrow></mfrac><mo>=</mo><mrow><mrow>
+<mstyle><mrow><munder><mrow><mo>∑</mo></mrow><mrow><mi>t</mi>
+</mrow></munder></mrow></mstyle><mo>(</mo><mfrac><mrow>
+<mo>∂</mo><mrow><mi>G</mi><mo>(</mo><msub><mrow><mi>X</mi></mrow><mrow><mi>t</mi></mrow></msub><mo>,</mo>
+<mi>λ</mi><mo>)</mo></mrow></mrow><mrow><mo>∂</mo>
+<msub><mrow><mi>X</mi></mrow><mrow><mi>t</mi></mrow>
+</msub></mrow></mfrac><mfrac><mrow><mo>∂</mo><msub>
+<mrow><mi>X</mi></mrow><mrow><mi>t</mi></mrow></msub>
+</mrow><mrow><mo>∂</mo><mi>λ</mi></mrow></mfrac><mo>)</mo></mrow><mo>+</mo><mfrac><mrow><mo>∂</mo><mi>G</mi></mrow><mrow><mo>∂</mo><mi>λ</mi></mrow>
+</mfrac></mrow></mrow></math>                 </p>
+
+<p>so once                  <math><mrow><mo>∂</mo>
+<msub><mi>X</mi><mi>t</mi></msub></mrow><mo>/</mo>
+<mrow><mo>∂</mo><mi>λ</mi></mrow></math>  is known then
+regression can be performed for any objective function  <math><mi>G</mi></math>.          </p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

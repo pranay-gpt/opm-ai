@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Vertical flow performance"/>
+<meta name="DC.subject" content="Well modeling vertical flow performance, Vertical flow performance, Well modeling facilities, VFP tables, Artificial lift"/>
+<meta name="keywords" content="Well modeling vertical flow performance, Vertical flow performance, Well modeling facilities, VFP tables, Artificial lift"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wellmode_vertical_flow_performance"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Vertical flow performance</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wellmode_vertical_flow_performance"><a name="wellmode_vertical_flow_performance"><!-- --></a>
+<h1 class="topictitle1">Vertical flow performance</h1>
+
+
+ <div>
+<p>Calculations involving tubing head pressure are handled using Vertical
+Flow Performance (VFP) tables, which are supplied as input data. These
+tables relate the bottom hole pressure of a well to the tubing head
+pressure at various sets of flowing conditions.</p>
+
+<p>There are two types of VFP table:</p>
+
+<ul>
+<li>Injector tables, which describe the vertical flow performance
+of injection wells, entered with keyword <a href="../ecl_rm/VFPINJ.html#VFPINJ">VFPINJ</a>. These are tables of:
+               <ul>
+<li>bottom hole pressure versus injection rate</li>
+
+<li>bottom hole pressure versus tubing head pressure</li>
+
+</ul>
+</li>
+
+<li>Producer tables, which describe the vertical flow performance
+of production wells, entered with keyword <a href="../ecl_rm/VFPPROD.html#VFPPROD">VFPPROD</a>. Producer tables may
+also be used describe how the temperature of the fluid at the tubing
+head varies with flowing conditions in the well (see also <a href="../ecl_rm/WHTEMP.html#WHTEMP">WHTEMP</a> keyword). These are
+tables of bottom hole pressure (or) tubing head temperature versus:
+               <ul>
+<li>production rate of oil, liquid or gas</li>
+
+<li>tubing head pressure</li>
+
+<li>water-oil ratio, water cut, or water-gas ratio</li>
+
+<li>gas-oil ratio, gas-liquid ratio, or oil-gas ratio</li>
+
+<li>artificial lift quantity</li>
+
+</ul>
+</li>
+
+</ul>
+
+<p>Note that there are three different ways of defining the flow rate,
+water fraction and gas fraction in producer VFP tables. The engineer
+should select the most appropriate definitions for the type of well
+being modeled. For example, if it is an oil well which eventually
+waters out, a VFP table defined in terms of the liquid rate, water
+cut and gas-liquid ratio would be suitable. For gas wells, the VFP
+table should be defined in terms of the gas rate, water-gas ratio
+and oil-gas ratio.</p>
+
+<p>The artificial lift quantity (ALQ) is a fifth variable that can
+be used to incorporate an additional lookup parameter, such as the
+level of artificial lift. For example, if gas lift is being applied,
+the artificial lift quantity could refer to the injection rate of
+lift gas into the well bore. Or if the lift mechanism is a downhole
+pump, the artificial lift quantity could refer to the pump rating.
+In ECLIPSE  100 artificial lift can be switched on automatically
+when a well’s production rate falls below a specified limit
+(see keyword <a href="../ecl_rm/WLIFT.html#WLIFT">WLIFT</a>), subject to optional constraints on the total group or field
+lift capacity (see keyword <a href="../ecl_rm/GLIFTLIM.html#GLIFTLIM">GLIFTLIM</a>).</p>
+
+<p>ECLIPSE 100                             
+                </p>
+
+<p>By default, VFP tables are interpolated linearly in all variables.
+However, there is an option to apply cubic spline interpolation to
+the ALQ (Artificial Lift Quantity) variable. This option is primarily
+intended to be useful for the Gas Lift Optimization facility, in which
+the gradient of the wells’ performance with respect to the lift
+gas injection rate is important for deciding which wells could gain
+the most benefit from an increased lift gas supply. The option is
+enabled with the <a href="../ecl_rm/VFPTABL.html#VFPTABL">VFPTABL</a> keyword.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If the actual simulation conditions fall outside the range given
+in a VFP table, then linear extrapolation is used. This can produce
+unrealistic results and should be avoided (by ensuring that each VFP
+table covers all conditions that will arise during the simulation).
+ </span></div>
+
+<p>Two or more different wells may use the same VFP table, provided
+they have similar depths, deviations and internal diameters. Any difference
+between the bottom hole datum depths of the wells and that of the
+VFP table will be taken into account using a simple hydrostatic correction
+to the BHP obtained from the VFP table. In ECLIPSE 100 individual
+wells may also have a further user-defined adjustment made to their
+BHPs obtained from the table, specified with keyword <a href="../ecl_rm/WVFPDP.html#WVFPDP">WVFPDP</a>. This could be applied,
+for example, to help match a well’s flow rate at a given THP.</p>
+
+<p>When a well is under THP control, its flow rate is determined by
+the intersection of its inflow performance relationship (IPR) and
+the VFP curve interpolated at the current value of its water and gas
+flowing fractions, on a plane of BHP versus flow rate. Often the VFP
+curve for a producer is U-shaped, and when there are two intersections
+the one with the higher flow rate is chosen (the other being unstable).
+If the IPR does not intersect the VFP curve, the well is deemed to
+have died. Occasionally, wells dying suddenly in this fashion may
+cause problems in the simulation. The ECLIPSE 100 keyword <a href="../ecl_rm/WVFPEXP.html#WVFPEXP">WVFPEXP</a> controls some possible
+remedies, either by using explicit values of the water and gas fractions
+for the interpolation of the tables or by the use of ‘stabilized’
+VFP curves.</p>
+
+<p>Producer tables are input with the keyword <a href="../ecl_rm/VFPPROD.html#VFPPROD">VFPPROD</a>, and injector tables
+are input with the keyword <a href="../ecl_rm/VFPINJ.html#VFPINJ">VFPINJ</a>. A separate interactive program VFP <em>i</em> is available
+to calculate VFP tables, using a choice of multiphase flow correlations
+to calculate the pressure losses within the tubing string. The program
+has been specifically tailored for ECLIPSE, in that it can produce
+any type of VFP table required by the simulator in a form which can
+be included directly in the input data. It contains extensive graphical
+facilities for examining and visually editing VFP tables in cross-section
+and displaying them in 3D.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

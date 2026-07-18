@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="TOPS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="TOPS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>TOPS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="TOPS"><a name="TOPS"><!-- --></a>
+<h1 class="keyword">TOPS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="tops.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="tops.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2612e45"> x </th>
+
+<th valign="top" id="d2612e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2612e54"> x </th>
+
+<th valign="top" id="d2612e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2612e45 d2612e54 ">  </td>
+
+<td valign="top" headers="d2612e48 d2612e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2612e45 d2612e54 "> x </td>
+
+<td valign="top" headers="d2612e48 d2612e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2612e45 d2612e54 ">  </td>
+
+<td valign="top" headers="d2612e48 d2612e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2612e45 d2612e54 ">  </td>
+
+<td valign="top" headers="d2612e48 d2612e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2612e45 d2612e54 ">  </td>
+
+<td valign="top" headers="d2612e48 d2612e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2612e45 d2612e54 ">  </td>
+
+<td valign="top" headers="d2612e48 d2612e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2612e45 d2612e54 ">  </td>
+
+<td valign="top" headers="d2612e48 d2612e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2612e45 d2612e54 ">  </td>
+
+<td valign="top" headers="d2612e48 d2612e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword should be followed by one number for every grid block
+in the current input box, specifying the depth at the top of each
+grid block.</p>
+
+<p>The data must be terminated by a slash (/).</p>
+
+<p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>),
+cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+
+<p>Every <span class="keyword">TOPS</span> value in the top plane (K = 1) must
+be specified in one way or another by the end of the <span class="keyword">GRID</span> section. Values in lower planes (K &gt; 1) that are not specified are
+computed by adding the gross grid block thickness (<samp class="codeph">DZ</samp>) to the <span class="keyword">TOPS</span> value for the corresponding grid
+block in the plane above.</p>
+
+<p>Grid blocks are ordered with the X axis index cycling fastest,
+followed by the Y and Z axis indices. Repeat counts may be used for
+repeated values (for example 115*0.127). Note that spaces must not
+be inserted on either side of the asterisk.</p>
+
+<div class="p"><div class="note"><span class="notetitle">Note:</span> <span class="notebody">For dual porosity models (and multiporosity models in ECLIPSE
+300), supplying values for only the top plane (K = 1) will lead to
+fracture cells having different <span class="keyword">TOPS</span> values from
+their corresponding matrix cells. If this is not the desired behavior,
+values should also be specified for the top plane in each porosity.</span></div>
+</div>
+
+<div class="section" id="tops_example"><a name="tops_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>-------- IX1-IX2 JY1-JY2 KZ1-KZ2
+BOX
+           1   8   1  13   1   1   /
+TOPS
+6222 6232 6242 6250 6256 6260 6262 6259
+6202 6212 6222 6230 6236 6241 6242 6239
+6182 6192 6202 6210 6216 6221 6222 6219
+6162 6172 6182 6190 6196 6201 6202 6199
+6142 6152 6162 6170 6176 6181 6182 6179
+6122 6132 6142 6150 6156 6161 6162 6159
+6102 6112 6122 6130 6136 6141 6142 6139
+6092 6102 6112 6120 6126 6130 6132 6129
+6082 6092 6102 6110 6116 6120 6122 6119
+6072 6082 6092 6100 6106 6110 6112 6109
+6062 6072 6082 6090 6096 6100 6102 6099
+6042 6052 6062 6070 6076 6080 6082 6079
+6022 6032 6042 6050 6056 6060 6062 6059  /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

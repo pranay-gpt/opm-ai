@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="DRSDTR"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="DRSDTR"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>DRSDTR</title>
+</head>
+<body>
+
+
+<div class="nested0" id="DRSDTR"><a name="DRSDTR"><!-- --></a>
+<h1 class="keyword">DRSDTR</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="drsdtr.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="drsdtr.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d516e45">                         x                   
+  </th>
+
+<th valign="top" id="d516e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d516e54">                                             
+ </th>
+
+<th valign="top" id="d516e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d516e45 d516e54 ">                                             
+ </td>
+
+<td valign="top" headers="d516e48 d516e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d516e45 d516e54 ">                                             
+ </td>
+
+<td valign="top" headers="d516e48 d516e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d516e45 d516e54 ">                                             
+ </td>
+
+<td valign="top" headers="d516e48 d516e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d516e45 d516e54 ">                                             
+ </td>
+
+<td valign="top" headers="d516e48 d516e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d516e45 d516e54 ">                                             
+ </td>
+
+<td valign="top" headers="d516e48 d516e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d516e45 d516e54 ">                                             
+ </td>
+
+<td valign="top" headers="d516e48 d516e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d516e45 d516e54 ">                                             
+ </td>
+
+<td valign="top" headers="d516e48 d516e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d516e45 d516e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d516e48 d516e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword controls the rate at which the solution gas-oil ratio
+is allowed to rise, with a separate value for each PVT region.
+The data comprises <span class="keyword">NTPVT</span> (set in the <span class="keyword">TABDIMS</span>) 
+entries, each terminated by a slash (/). Each line of data corresponds to a single 
+PVT region and has the same structure as the <span class="keyword">DRSDT</span> keyword:</p>
+
+<ol>
+<li>The maximum rate at which the solution gas-oil ratio (R<sub>s</sub>)
+in any grid block in the corresponding PVT region is allowed to increase.
+<p>UNITS: sm<sup>3</sup>/sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), Mscf/stb/day (<samp class="codeph">FIELD</samp>), scc/scc/hr (<samp class="codeph">LAB</samp>)</p>
+
+<p>DEFAULT: 10<sup>20</sup></p>
+</li>
+
+<li>Option flag
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">ALL</samp> </td>
+
+<td valign="top">Apply the limit to all cells in the corresponding PVT region</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">FREE</samp> </td>
+
+<td valign="top">Apply the limit only to the region's cells which contain free gas</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: '<samp class="codeph">ALL</samp>'</p>
+</li>
+
+</ol>
+
+<p>In the same way as the <span class="keyword">DRSDT</span> keyword operates, this 
+keyword controls the way in which free gas and undersaturated
+oil coexist within a grid block. For example, if the first entry
+is set to 0, R<sub>s</sub> cannot rise and free gas does not dissolve
+in undersaturated oil (no re-solution) in this PVT region. At the other 
+extreme, if the first number of a particular region entry is very large, 
+R<sub>s</sub> rises very quickly until
+either the oil is saturated or no free gas remains (total re-solution).</p>
+
+<p>If the keyword is not used, the resolution rate is unrestricted
+(equivalent to a resolution rate limit of infinity).</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Similar to <span class="keyword">DRSDT</span>, this keyword has no effect 
+on reductions in R<sub>s</sub> (for
+example during pressure decline). Moreover increases in R<sub>s</sub> are constrained by the availability of free gas and the oil saturation
+limit (R<sub>ssat</sub>).</span></div>
+
+<p>If this keyword is used in a system containing both dissolved gas
+and vaporized oil, the application of the <span class="keyword">DRSDTR</span> limit will be disabled by the subsequent use of the <a href="VAPPARS.html#VAPPARS"> VAPPARS</a> keyword. Similarly,
+the constraints imposed by the <span class="keyword">VAPPARS</span> keyword
+will be disabled by the subsequent specification of the <span class="keyword">DRSDTR</span> keyword.</p>
+
+<p>If the first number of a PVT region entry is zero and the model 
+contains undersaturated oil with a variation of R<sub>s</sub> values
+in this region, then non-physical behavior
+can occur when high R<sub>s</sub> oil moves in to a cell containing
+a lower R<sub>s</sub>. The <span class="keyword">DRSDTR</span> limit prevents
+the R<sub>s</sub> increasing, and free gas develops, even though the
+oil is undersaturated. This behavior can be prevented by setting the
+option flag in item 2 to '<samp class="codeph">FREE</samp>' for this region. 
+The limit then only applies to the two-phase regions. (Note that in
+this case gas flowing from a two-phase cell into an undersaturated
+cell will dissolve in the destination cell, as the R<sub>s</sub> is
+allowed to rise.)</p>
+
+<div class="section" id="drsdtr_example"><a name="drsdtr_example"><!-- --></a><h4 class="sectiontitle">Example</h4>
+<p>With <samp class="codeph">NTPVT=2</samp> </p>
+
+<pre><code>DRSDTR
+ 0.0003 /   (in Mscf/stb/day)
+ 0.5  FREE /
+</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

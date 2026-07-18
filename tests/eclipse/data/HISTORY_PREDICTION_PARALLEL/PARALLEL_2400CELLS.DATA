@@ -1,0 +1,246 @@
+-------------------------------------------------------------------------------
+-- DATAFILE FOR ECLIPSE PARALLEL TESTING
+-------------------------------------------------------------------------------
+
+
+---------------------------- Runspec Section -----------------------------------
+NOECHO
+
+RUNSPEC
+
+TITLE
+ 20X20X6 = 2,400 blocks parallel Eclipse test example
+
+DIMENS
+-- NX   NY   NZ
+   20   20    6  /
+
+-- Phases present
+
+OIL
+
+WATER
+
+GAS
+
+DISGAS
+
+-- Units
+
+METRIC
+
+---------------------------------------------
+-- Switching on parallel mode, example is for
+-- 4 processor machine
+
+PARALLEL
+4  'DISTRIBUTED' /
+---------------------------------------------
+
+--LGR
+--MaxLGRs MaxCellsLGR  MaxAmalCoarseCells MaxAmal MaxAmalLGR
+--   20     1300                 10           10       10    /
+
+-- Table dimension
+
+TABDIMS
+
+-- NoSatTabl     MaxNodesSatTab  MaxFIPReg      MaxSatEndpointsDepthTab
+--       NoPVTTab       MaxPressNodes    MaxRsRvNodes
+     1       1      20      200       1      200       1    /
+
+-- Well dimension
+
+WELLDIMS
+-- MaxNo  MaxPerf  MaxGroup MaxWell/Group
+    20     200        10        15  /
+
+-- Injection wells VFP table dimensions
+--MXSFLO (Maximum No. of flow values per table
+--                MXSTHP (Max No. of tubing head pressure values per table)
+--                                    NMSVFT (Max. No. of injection well VFP tables)
+VFPIDIMS
+   20            10                 3  /
+
+-- Production wells VFP table dimensions
+--MXMFLO (Max No. of flow values per table)
+--         MXMTHP (Max No. of tubing head pressure values per table)
+--                      MXMWFR (Max. No. of water fraction values per table)
+--                                        MXMGFR (Max. No. gas fraction values per table)
+--                                                 MXMALQ (Max. No. of artificial lift quantities per table)
+--                                                            NMMVFT (Max. No. of production well VFP tables)
+VFPPDIMS
+   20     10        10             10        5          2  /
+
+START
+  1 'JAN' 1970 /
+
+-- Defining aquifer dimensions for all aquifers
+
+AQUDIMS
+-- MaxNoLines MaxNoConntect MaxNoInflu   MaxNoRows  NoAnalyt  NoBlocksConnect
+-- NumAquifer LinesNumAquif TablesCarter InflTable  Acquifers Aquifer
+-- MXNAQN     NXNAQC        NIFTBL       NRIFTB     NANAQU    NCAMAX
+     1            1            1         1           1       5000 /
+
+--FMTOUT
+
+UNIFOUT
+
+--NOSIM
+
+NSTACK
+ 10 /
+
+------------------------------- Grid Section -----------------------------------
+
+GRID
+
+-- Including the indiviual grid file
+
+INCLUDE
+ '20X20X6.GRDECL' /
+
+--GRIDFILE
+-- 2 /
+
+NOGGF
+
+--INIT
+
+NEWTRAN
+
+
+------------------------------- Edit Section -----------------------------------
+
+
+------------------------------ Properties Section ------------------------------
+
+
+PROPS
+
+INCLUDE
+ 'ALL.PVO   ' /
+
+ROCK
+-- RefPressure          Compressibility
+-- for PoreVol Calc
+--BARSA                 1/BARSA
+  200                        1.450E-05 /
+
+INCLUDE
+'ALL.RCP   ' /
+
+
+------------------------------- Regions Section --------------------------------
+
+
+------------------------------ Solution Section --------------------------------
+
+SOLUTION
+
+-- Equilibrium data
+
+EQUIL
+
+-- DATUM   DATUM    OWC    OWC      GOC     GOC     RSVD   RVVD   ACCURACY OPT
+-- DEPTH   PRESS   DEPTH   PCOW    DEPTH    PCOG    TABLE  TABLE  No of LAYERS
+2000.000 200.00 2280.00  .000  2000.000  .000     0      0       0 /
+
+RPTSOL
+-- SOIL
+-- SWAT
+-- SGAS
+-- PRESSURE
+ RESTART /
+
+-- Defining an analytical aquifer
+
+AQUFETP
+
+-- No. DatumDepth Pinit  WaterVolume  Ctotal        PI      PVTTableNo  SaltConc
+--     METRES     BAR    M3           1/BAR      M3/D/BAR              LB/STB
+   1  2300.00     1*    1.0E+16    2.41829E-05  1000.000        1        .00000 /
+
+-- Pinit defaulted -> in equilibrium with the reservoir
+
+-- Connection of the aquifer with the reservoir
+
+AQUANCON
+-- Aqu.No I1-I2  J1-J2  K1-K2 ResFace  AquInfluxCoeff. CoeffMultiplier
+    1     1 20   1 20   6 6   'K+'        1000            1.0   /
+/
+
+
+------------------------------- Summary Section --------------------------------
+
+SUMMARY
+
+------------------------------------------------
+--Output of production data/pressure  for FIELD:
+------------------------------------------------
+FOPR
+
+FPR
+
+-----------------------------------------
+--Output of production data for all wells:
+-----------------------------------------
+WOPR
+ /
+WWPR
+ /
+WGPR
+ /
+WWCT
+ /
+WGOR
+ /
+WBHP
+  /
+WTHP
+ /
+WWIR
+/
+
+RUNSUM
+
+SEPARATE
+
+RPTSMRY
+ 1  /
+
+DATE
+
+LOTUS
+
+TCPU
+------------------------------ Schedule Section --------------------------------
+
+SCHEDULE
+
+INCLUDE
+'VERTWELLS.VFP  ' /
+
+INCLUDE
+'HORWELLS.VFP  ' /
+
+INCLUDE
+'INJWELLS.VFP  ' /
+
+----------------------------------------------
+-- To run the simulation in prediction mode
+-- uncomment these two lines
+
+INCLUDE
+ '20X20X6_PRED.SCH ' /
+
+-- To run the simulation in history match mode
+-- uncomment these two lines
+
+--INCLUDE
+--  '20X20X6_HIST.SCH ' /
+-----------------------------------------------
+
+END
+

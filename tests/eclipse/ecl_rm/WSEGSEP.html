@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WSEGSEP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WSEGSEP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WSEGSEP</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="WSEGSEP"><a name="WSEGSEP"><!-- --></a>
+<h1 class="keyword">WSEGSEP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wsegsep.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wsegsep.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d3076e45">                         x </th>
+
+<th valign="top" id="d3076e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d3076e54"> </th>
+
+<th valign="top" id="d3076e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d3076e45 d3076e54 "> </td>
+
+<td valign="top" headers="d3076e48 d3076e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3076e45 d3076e54 "> </td>
+
+<td valign="top" headers="d3076e48 d3076e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3076e45 d3076e54 "> </td>
+
+<td valign="top" headers="d3076e48 d3076e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3076e45 d3076e54 "> </td>
+
+<td valign="top" headers="d3076e48 d3076e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3076e45 d3076e54 "> </td>
+
+<td valign="top" headers="d3076e48 d3076e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3076e45 d3076e54 "> </td>
+
+<td valign="top" headers="d3076e48 d3076e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3076e45 d3076e54 "> </td>
+
+<td valign="top" headers="d3076e48 d3076e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3076e45 d3076e54 ">                         x </td>
+
+<td valign="top" headers="d3076e48 d3076e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>A down-hole separator can separate water or free gas from the flowing
+mixture within a multisegment well (see <a href="../ecl_td/multisegintro_Multi-segment_Wells.html#multisegintro_multi-segment_wells">"Multisegment wells"</a> in the <cite>ECLIPSE Technical Description</cite>), and send it
+along a lateral branch to reinject into the formation. This keyword
+designates a well segment as a downhole separator. The segment must
+have three segments connecting with it:</p>
+
+<ul>
+<li>An inlet segment, from which the well stream enters the separator.</li>
+
+<li>A water or gas offtake segment, which should be the beginning
+of the lateral branch that injects the separated fluid back into the
+formation.</li>
+
+<li>An outlet segment, through which the remaining fluid flows to
+continue its journey towards the wellhead; this should normally be
+the separator segment’s outlet segment on the same branch.</li>
+
+</ul>
+
+<p>The offtake segment, or any other segment on the offtake branch,
+may contain a pump to control the flow rate of fluid through the offtake.
+This pump should be modeled either by a VFP table with negative flow
+values (since the flow is in the direction away from the wellhead)
+or, for water separation, by a pull-through pump device model (keyword <a href="WSEGPULL.html#WSEGPULL">   WSEGPULL</a>). A pump
+may also be placed elsewhere in the well, but not in the separator
+segment itself.</p>
+
+<p>For a more detailed description of the downhole separator model,
+please refer to <a href="../ecl_td/dhsep_Down-hole_separators__ECLIPSE_100_.html#dhsep_down-hole_separators__eclipse_100_">"Down-hole separators
+(ECLIPSE 100)"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<p>The <span class="keyword">WSEGSEP</span> keyword is followed by a number
+of data records, each containing the following items of data. Each
+record is terminated with a slash (/), and the set of records must
+end with an additional blank record containing just a slash.</p>
+
+<ol>
+<li>Well name, well name template, well list or well list template
+ <p>A template enclosed in quotes can be used to refer to multiple
+wells or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+                <p>The well must previously have had its segments
+defined with keyword <a href="WELSEGS.html#WELSEGS"> WELSEGS</a>.</p>
+</li>
+
+<li>Segment number of the down-hole separator segment  <p>An integer
+between 2 and the <samp class="codeph">NSEGMX</samp> mnemonic in the <a href="WSEGDIMS.html#WSEGDIMS">  WSEGDIMS</a> keyword.</p>
+             </li>
+
+<li>Segment number of the offtake segment <p>An integer between 2
+and <samp class="codeph">NSEGMX</samp>.</p>
+ <p>The offtake segment should be
+situated on a lateral branch and must connect with the separator segment.
+The separator segment must have been designated as the <strong>outlet</strong> segment of the offtake segment in <span class="keyword">WELSEGS</span>, since
+the separator should be the offtake’s neighbor in the direction of
+the wellhead. Note that the actual flow is normally in the opposite
+direction.</p>
+</li>
+
+<li>The separated phase that the offtake preferentially removes   
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">WAT</samp> </td>
+
+<td valign="top">The offtake preferentially removes water from the fluid in
+the separator</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">GAS</samp> </td>
+
+<td valign="top">The offtake preferentially removes free gas (at the separator
+segment’s pressure) from the fluid in the separator</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NONE</samp> </td>
+
+<td valign="top">The offtake acts as a standard outlet/inlet to the segment
+in item 2, which ceases to act as a downhole separator.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">NONE</samp>  </p>
+ </li>
+
+<li>The maximum separation efficiency for the offtake, <math><msub><mi>E</mi>
+<mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub>
+</math>                                                  <p>A number
+between 0.0 and 1.0</p>
+                <p>The holdup fraction, <math><msup><mi>α</mi>
+<mrow><mi>o</mi><mi>f</mi></mrow></msup></math>, of
+the offtake’s preferential phase is equal to this value, as long as
+the phase’s holdup fraction within the remaining mixture in the separator
+segment keeps above the value specified in item 6.  </p>
+<p>DEFAULT:
+1.0</p>
+ </li>
+
+<li>The limiting holdup fraction, <math><msub>
+<mi>α</mi><mrow><mi>l</mi><mi>i</mi><mi>m</mi>
+</mrow></msub></math>, below which the separation efficiency
+begins to decrease  <p>When the phase’s holdup fraction remaining
+in the separator segment, <math><msup><mi>α</mi>
+<mrow><mi>s</mi><mi>e</mi><mi>p</mi></mrow></msup>
+</math>, lies below the value  <math><msub>
+<mi>α</mi><mrow><mi>l</mi><mi>i</mi><mi>m</mi>
+</mrow></msub></math>, the separation efficiency decreases proportionally
+towards zero,  <math><mi>E</mi><mo>=</mo>
+<mrow><msub><mi>E</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>(</mo><msup><mi>α</mi><mrow>
+<mi>s</mi><mi>e</mi><mi>p</mi></mrow></msup><mo>/</mo><msub><mi>α</mi><mrow><mi>l</mi><mi>i</mi>
+<mi>m</mi></mrow></msub><mo>)</mo></mrow></math>.
+               </p>
+ <p>The value of                        <math><msub><mi>α</mi>
+<mrow><mi>l</mi><mi>i</mi><mi>m</mi></mrow></msub>
+</math>  must be greater than zero and must not exceed 1.0. The
+smaller the value is, the smaller the fraction of the separated phase
+remaining is within the separator to flow towards the wellhead. However,
+very small values (&lt; .001) may result in convergence difficulties. </p>
+<p>DEFAULT: 0.01</p>
+ </li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of data records with a slash.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The separator segment should use the homogeneous flow model.
+If it has previously been set up to use the drift flux model, ECLIPSE
+automatically changes it to homogeneous flow.  The operation of a
+down-hole separator may increase the number of well model iterations
+required to converge the well solution. In cases of convergence difficulty,
+use keyword <a href="WSEGITER.html#WSEGITER"> WSEGITER</a> to increase the number of iterations and/or iteration cycles.  
+                               </span></div>
+
+<div class="section" id="wsegsep_example"><a name="wsegsep_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WSEGSEP
+-- Well    Separator  Offtake  Offtake  Maximum     Limiting
+-- Name    Segment    Segment  Phase    Efficiency  Holdup Fr
+   PROD1     3         14      'WAT'     1.0          0.001 /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

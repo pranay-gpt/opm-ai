@@ -1,0 +1,390 @@
+-- This data file comes with a standard Eclipse installation
+-- This data tests ECLFR12148: Alkaline Model 1 in ASP floods - simplified model to take into account some effects of the
+-- alkaline on an ASP flooding performance.
+-- Some facilities are available to analyze the effect of the alkaline on the water-oil surface tension and
+-- adsorption reduction of surfactant and polymer.
+-- New keywords: ALKALINE (Runspec), ALSURFST, ALSURFAD, ALPOLADS, ALKADS, ALKROCK (PROPS), WALKALIN (Schedule) and some summary mnemonics
+
+RUNSPEC      ==============================================================
+TITLE
+  10 by 2 oil/water/polymer
+
+DIMENS
+   10   2    2  /
+
+OIL
+
+WATER
+
+POLYMER
+SURFACT
+ALKALINE
+
+FIELD
+
+TABDIMS
+    2    1   50    20    2   20 /
+
+REGDIMS
+    2    1    0    0 /
+
+WELLDIMS
+    2    2    1    2 /
+
+START
+   1 'JAN' 1983  /
+
+NSTACK
+    8 /
+UNIFOUT
+UNIFIN
+-- PARALLEL
+-- 2  /
+
+GRID      ==============================================================
+
+EQUALS
+'DX'     75 /
+'DY'     75 /
+'DZ'     15 /
+'PERMX'  50 /
+'PERMY'  50 /
+'PERMZ'  5 /
+'TOPS'   4000.0 /
+'PORO'   0.2 /
+/
+
+PROPS     ==============================================================
+
+SWFN
+    0.25   0.0    4.0
+    0.7     1.0    0.0  /
+    0.0    0.0   0.0
+    1.0    1.0   0.0 /
+
+SOF2
+    0.3000   0.0000
+    0.7500  1.0000 /
+    0.0    0.0
+    1.0    1.0 /
+
+PVTW
+    0.0  1.0  3.03E-06  0.5  0.0 /
+
+PVDO
+       0.0   1.0      2.0
+       8000.0   0.92    2.0 /
+
+ROCK
+    4000.0    .30E-05 /
+
+DENSITY
+    52.0000  64.0000   .04400 /
+
+--Alkaline settings
+
+ALSURFST
+-- Alkaline        Water/Oil Surface Tension
+-- concentration        multiplier
+--   LB/STB
+      0.0                1.0
+      0.1                0.9
+      0.2                0.8
+      0.5                0.7 /
+
+ALPOLADS
+-- Alkaline        polymer adsorption
+-- concentration        multiplier
+--   LB/STB
+      0.0                1.0
+      0.1                0.9
+      0.2                0.8
+      0.5                0.7  /
+      0.0                1.0
+      0.1                0.9
+      0.2                0.8
+      0.5                0.7  /
+
+-- Alkaline multupliers for Surfactant Adsorption
+ALSURFAD
+-- alkaline             adsorption
+-- concentration        multiplier
+--   LB/STB
+     0.0                  1.00000
+     0.1                  0.99995
+     0.2                  0.99500
+     0.5                  0.50000 /
+     0.0                  1.00000
+     0.1                  0.99995
+     0.2                  0.99500
+     0.5                  0.50000 /
+
+-- POLYMER KEYWORDS
+PLYVISC
+-- Polymer Viscosity
+     0.0   1.0
+   70.0  10.0 /
+
+PLYROCK
+-- Polymer-Rock Properties
+   0.16  1.5  1000.0  1  0.005 /
+   0.16  1.5  1000.0  1  0.005 /
+
+PLYADS
+-- Polymer Adsorption
+   0.0  0.00
+   20.0  0.010
+   70.0  0.010  /
+   0.0  0.000
+   20.0  0.010
+   70.0  0.010  /
+
+PLMIXPAR
+ 1.0 /
+
+PLYMAX
+-- Polymer-Salt Concentrations for mixing
+  50.0  0.0 /
+
+-- SURFACTANT KEYWORDS
+SURFVISC
+ 0.0     0.5
+ 30.     5.0  /
+
+SURFADS
+ 0.0      0.0000
+ 1.0      0.0005
+ 30.0     0.0005  /
+ 0.0      0.0000
+ 1.0      0.0005
+ 30.0     0.0005  /
+
+SURFST
+ 0.0    1.0E-4
+ 1.0    1.0E-8
+ 30.0   1.0E-8  /
+
+SURFCAPD
+  -9    0.0
+  -4.5  0.0
+  -2    1.0
+  10    1.0 /
+  -9    0.0
+  -4.5  0.0
+  -2    1.0
+  10    1.0 /
+
+SURFROCK
+ 1  2650 /
+ 2  2650 /
+
+REGIONS    ========================================================
+
+FIPNUM
+  40*1 /
+
+SURFNUM
+ 40*2 /
+
+RPTREGS
+  20*0 1 /
+
+SOLUTION   =============================================================
+
+EQUIL
+  4000  4000  6000  0   0   0   0   0   0  /
+
+SUMMARY    =============================================================
+FWCT
+FCPR
+FCPT
+FCIR
+FCIT
+FCIP
+FCAD
+GCPR
+ 'G' /
+GCPT
+ 'G' /
+GCIR
+ 'G' /
+GCIT
+ 'G' /
+WCPR
+ 'P' /
+WCPT
+ 'P' /
+WCIR
+ 'I' /
+WCIT
+ 'I' /
+CCFR
+ 'P' 10 1  1 /
+ /
+CCPT
+ 'P' 10 1  1 /
+ /
+CCIT
+ 'I'  1  1  1 /
+ /
+RCIP
+ 1 2 /
+RCFT
+ 1 2 /
+ /
+RCAD
+ 1 2 /
+BCCN
+ 1 1 1 /
+ /
+BCIP
+ 1 1 1 /
+ /
+BCAD
+ 1 1 1 /
+ /
+FOPR
+FSPR
+FSPT
+FSIR
+FSIT
+FSIP
+WBHP
+/
+WOPR
+/
+BSCN
+ 1 1 1 /
+ /
+BSIP
+ 1 1 1 /
+ /
+BOSAT
+ 1 1 1 /
+ 5 1 1 /
+ 9 1 1 /
+/
+BWPC
+1 1 1 /
+ 5 1 1 /
+ 9 1 1 /
+ /
+WTPRSUR
+'OP' /
+
+BTADSUR
+  1 1 1 /
+  5 1 1 /
+  10 1 1 /
+/
+FTPRSUR
+FTPTSUR
+FTIRSUR
+FTITSUR
+BTCNFSUR
+  1 1 1 /
+  5 1 1 /
+  10 1 1 /
+ /
+BTSTMALK
+ -- surface tension multiplier
+  1 1 1 /
+  5 1 1 /
+  10 1 1 /
+/
+BTCNFALK
+ -- block alkali concentration
+  1 1 1 /
+  5 1 1 /
+  10 1 1 /
+/
+RPTSMRY
+ 1 /
+
+ALL
+SEPARATE
+RUNSUM
+
+SCHEDULE   =============================================================
+
+WELSPECS
+ 'I'  'G'   1  1  4000  'WAT'  0.0  'STD'  'SHUT'  'NO'  /
+ 'P'  'G'  10 1  4000  'OIL'  0.0  'STD'  'SHUT'  'NO'  /
+/
+
+COMPDAT
+   'I'    1   1   1  1  'OPEN'   0  .0   1.0 /
+  'P'  10  1  1  1  'OPEN'   0  .0   1.0 /
+/
+
+WCONPROD
+  'P' 'OPEN' 'BHP' 5* 3999.0 /
+/
+
+WCONINJE
+   'I' 'WAT' 'OPEN' 'RATE' 200.0 1* 100000 /
+/
+
+-- CYCLE 1 WATER
+WALKALIN
+ 'I' 0.0 /
+/
+
+WPOLYMER
+-- Polymer-Salt concentrations for injection wells
+   'I' 0.0  0.0 /
+ /
+
+TSTEP
+ 50 /
+
+-- CYCLE 2 SURFACTANT
+WALKALIN
+ 'I' 50.0 /
+/
+
+WPOLYMER
+-- Polymer-Salt concentrations for injection wells
+   'I' 50.0  0.0 /
+ /
+WSURFACT
+ 'I'  30.0 /
+/
+
+TSTEP
+ 50 /
+
+-- CYCLE 3 SURFACTANT
+WALKALIN
+ 'I' 50.0 /
+/
+
+WPOLYMER
+-- Polymer-Salt concentrations for injection wells
+   'I' 50.0  0.0 /
+ /
+
+WSURFACT
+ 'I'  30.0 /
+/
+
+TSTEP
+ 50 /
+
+-- CYCLE 4 WATER
+WALKALIN
+ 'I' 0.0 /
+ /
+WPOLYMER
+-- Polymer-Salt concentrations for injection wells
+ 'I' 0.0  0.0 /
+ /
+WSURFACT
+ 'I'  0.0 /
+ /
+
+TSTEP
+  50 /
+
+END
+

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GLIFTOPT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GLIFTOPT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GLIFTOPT</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GLIFTOPT"><a name="GLIFTOPT"><!-- --></a>
+<h1 class="keyword">GLIFTOPT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gliftopt.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gliftopt.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d864e45"> x </th>
+
+<th valign="top" id="d864e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d864e54"> x </th>
+
+<th valign="top" id="d864e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d864e45 d864e54 ">  </td>
+
+<td valign="top" headers="d864e48 d864e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d864e45 d864e54 ">  </td>
+
+<td valign="top" headers="d864e48 d864e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d864e45 d864e54 ">  </td>
+
+<td valign="top" headers="d864e48 d864e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d864e45 d864e54 ">  </td>
+
+<td valign="top" headers="d864e48 d864e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d864e45 d864e54 ">  </td>
+
+<td valign="top" headers="d864e48 d864e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d864e45 d864e54 ">  </td>
+
+<td valign="top" headers="d864e48 d864e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d864e45 d864e54 ">  </td>
+
+<td valign="top" headers="d864e48 d864e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d864e45 d864e54 "> x </td>
+
+<td valign="top" headers="d864e48 d864e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">GLIFTOPT</span> keyword may be used to set group
+lift gas supply limits for the Gas lift optimization facility (see <a href="../ecl_td/gasliftintro_Introduction.html#gasliftintro_gas_lift_optimization">"Gas lift optimization"</a> in the <cite>ECLIPSE Technical Description</cite>). Keyword <a href="LIFTOPT.html#LIFTOPT">  LIFTOPT</a> must be entered
+before <span class="keyword">GLIFTOPT</span>, to activate the facility.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data and terminated with a slash (/). The set
+of records must end with a blank record, containing only a slash.</p>
+
+<ol>
+<li> Group name or group name root, or <samp class="codeph">FIELD</samp> to set
+a lift gas supply limit for the field <p>A group name root, enclosed
+in quotes and ending with an asterisk (*), can be used to refer to
+several groups in one record.</p>
+ </li>
+
+<li> Maximum lift gas supply limit for the group <p>The group’s lift
+gas supply is the sum of the lift gas injection rates of its subordinate
+wells or groups, multiplied by the wells’ or groups’ efficiency factors.</p>
+ <p>A default or negative value implies there is no limit for the
+group.</p>
+<p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>),
+Mscf/day (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>),
+sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+<li> Maximum <strong>total</strong> gas rate for the group <p>The group’s total
+gas rate is the sum of the lift gas plus the gas produced from the
+formation for each subordinate well or group, multiplied by the well’s
+or group’s efficiency factor. Lift gas increments are not allocated
+to wells below this group if they would cause this limit to be exceeded.</p>
+<p>A default or negative value implies there is no limit for the
+group.</p>
+<p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>),
+Mscf/day (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>),
+sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+ </li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record containing just a slash
+(/).</p>
+
+<div class="section" id="gliftopt_example"><a name="gliftopt_example"><!-- --></a><h4 class="sectiontitle">Example</h4> <pre><code>GLIFTOPT
+-- group    max lift   max total
+-- name     gas rate   gas rate
+--          SM3/DAY
+   'PL-*'     1E6 /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

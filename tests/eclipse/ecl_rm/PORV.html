@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PORV"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PORV"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PORV</title>
+</head>
+<body>
+
+
+<div class="nested0" id="PORV"><a name="PORV"><!-- --></a>
+<h1 class="keyword">PORV</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="porv.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="porv.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1864e45"> x </th>
+
+<th valign="top" id="d1864e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1864e54"> x </th>
+
+<th valign="top" id="d1864e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1864e45 d1864e54 ">  </td>
+
+<td valign="top" headers="d1864e48 d1864e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1864e45 d1864e54 ">  </td>
+
+<td valign="top" headers="d1864e48 d1864e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1864e45 d1864e54 "> x </td>
+
+<td valign="top" headers="d1864e48 d1864e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1864e45 d1864e54 ">  </td>
+
+<td valign="top" headers="d1864e48 d1864e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1864e45 d1864e54 ">  </td>
+
+<td valign="top" headers="d1864e48 d1864e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1864e45 d1864e54 ">  </td>
+
+<td valign="top" headers="d1864e48 d1864e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1864e45 d1864e54 ">  </td>
+
+<td valign="top" headers="d1864e48 d1864e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1864e45 d1864e54 ">  </td>
+
+<td valign="top" headers="d1864e48 d1864e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword should be followed by one non-negative real number
+for every grid block in the current input box, specifying the grid
+block pore volumes.</p>
+
+<p>This keyword is entirely optional. Any pore volumes that are not
+altered remain at the values calculated by the program from the <span class="keyword">GRID</span> data.</p>
+
+<p>Grid blocks whose pore volume is zero are treated by the program
+as inactive. Since the computing time and storage space requirements
+of a run depend primarily on the number of active grid blocks, it
+is important that inactive blocks should be unambiguously identified.
+This can be done either by using the <span class="keyword">PORV</span> keyword
+(described here) to overwrite pore volumes directly in the <span class="keyword">EDIT</span> section, or by setting <a href="PORO.html#PORO"> PORO</a> or <a href="NTG.html#NTG"> NTG</a> to zero in the <span class="keyword">GRID</span> section. The <a href="ACTNUM.html#ACTNUM"> ACTNUM</a> keyword (in the <span class="keyword">GRID</span> section) can also be used to identify inactive grid
+blocks.</p>
+
+<p>In ECLIPSE 100, grid cells defined as inactive
+in the <span class="keyword">GRID</span> section could be activated in the <span class="keyword">EDIT</span> section using the <span class="keyword">PORV</span> keyword.
+A warning message is issued in this case.</p>
+
+<p>In ECLIPSE 300, grid cells defined as inactive
+in the <span class="keyword">GRID</span> section using the <span class="keyword">ACTNUM</span> keyword cannot be activated in the <span class="keyword">EDIT</span> section.
+The use of the <span class="keyword">PORV</span> keyword is ignored in this
+case.</p>
+
+<p>Grid blocks are ordered with the X axis index cycling fastest,
+followed by the Y and Z axis indices. Repeat counts may be used for
+repeated values (for example 115*195.8). Note that spaces must not
+be inserted on either side of the asterisk.</p>
+
+<p>UNITS: rm<sup>3</sup> (<samp class="codeph">METRIC</samp>), rb (<samp class="codeph">FIELD</samp>), rcc (<samp class="codeph">LAB</samp>), rm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+
+<p>The data must be terminated by a slash (/).</p>
+
+<p>ECLIPSE 100</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If a cell is defined with zero pore volume
+in the <span class="keyword">GRID</span> section, then making it active by changing
+the pore volume in the <span class="keyword">EDIT</span> section is not allowed
+with the polymer, surfactant, foam, temperature or environmental tracer
+options.</span></div>
+
+<p>ECLIPSE 300</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">For thermal runs both the rock volume and
+the pore volume should be zero for a cell to become inactive.</span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">It is not possible to give a non-zero pore volume to a cell
+which has a thickness of zero. An error message will be issued in
+this case (this can be reduced to a warning in ECLIPSE 300 by setting <a href="OPTIONS3.html#options3.233">item 233</a> in <span class="keyword">OPTIONS3</span> to a non-zero value). Individual cell thicknesses can be adjusted
+with <a href="ADDZCORN.html#ADDZCORN"> ADDZCORN</a> if
+needed.</span></div>
+
+<div class="section" id="porv_example"><a name="porv_example"><!-- --></a><h4 class="sectiontitle">Example</h4>                 <pre><code>-------- IX1-IX2 JY1-JY2 KZ1-KZ2
+BOX
+          11  14   3   8   6   6   /
+PORV
+ 24*0 /
+ENDBOX</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

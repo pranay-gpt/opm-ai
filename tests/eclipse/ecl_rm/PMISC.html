@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PMISC"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PMISC"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PMISC</title>
+</head>
+<body>
+
+
+<div class="nested0" id="PMISC"><a name="PMISC"><!-- --></a>
+<h1 class="keyword">PMISC</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="pmisc.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="pmisc.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1858e45"> x </th>
+
+<th valign="top" id="d1858e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1858e54">  </th>
+
+<th valign="top" id="d1858e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1858e45 d1858e54 ">  </td>
+
+<td valign="top" headers="d1858e48 d1858e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1858e45 d1858e54 ">  </td>
+
+<td valign="top" headers="d1858e48 d1858e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1858e45 d1858e54 ">  </td>
+
+<td valign="top" headers="d1858e48 d1858e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1858e45 d1858e54 "> x </td>
+
+<td valign="top" headers="d1858e48 d1858e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1858e45 d1858e54 ">  </td>
+
+<td valign="top" headers="d1858e48 d1858e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1858e45 d1858e54 ">  </td>
+
+<td valign="top" headers="d1858e48 d1858e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1858e45 d1858e54 ">  </td>
+
+<td valign="top" headers="d1858e48 d1858e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1858e45 d1858e54 ">  </td>
+
+<td valign="top" headers="d1858e48 d1858e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">PMISC</span> keyword is optional, and may only
+be used in miscible runs (see keyword <a href="MISCIBLE.html#MISCIBLE"> MISCIBLE</a>). It supplies tables that control the transition
+between immiscible and miscible displacement as a function of oil
+pressure. If this keyword is not present in miscible runs, miscible
+displacement is assumed to occur at all pressures; pressure having
+no effect on the miscibility. See <a href="../ecl_td/miscfloo_Miscible_Flood_Modeling.html#miscfloo_miscible_flood_modeling">"Miscible flood
+modeling"</a> in the <cite>ECLIPSE Technical Description</cite>. Saturation functions for the immiscible fluid must be specified
+when <span class="keyword">PMISC</span> is used in a miscible run.</p>
+
+<p>If used in runs which use the Solvent Model in miscible mode (keywords <a href="SOLVENT.html#SOLVENT"> SOLVENT</a> and <span class="keyword">MISCIBLE</span> in the <span class="keyword">RUNSPEC</span> section) then
+see also the section entitled <a href="../ecl_td/solvent_Using_the_Solvent_Model.html#solvent_using_the_solvent_model">"Using the Solvent
+Model"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<p>The data comprises <samp class="codeph">NTMISC</samp> (see keyword <span class="keyword">MISCIBLE</span>) tables of the pressure dependent miscibility
+function, each terminated by a slash.</p>
+
+<p>Each table consists of 2 columns of data:</p>
+
+<ol>
+<li>The local oil phase pressure.<p>Values should increase monotonically
+down the column.</p>
+<p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia
+(<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li>The corresponding miscibility, on a scale from 0.0 to 1.0.<p>Zero
+corresponds to immiscible displacement and 1.0 to miscible displacement.</p>
+<p>The values should be level or increasing down the column.</p>
+</li>
+
+</ol>
+
+<p>There must be the same number of entries in each column of a given
+table. This number should not be less than 2 or greater than <samp class="codeph">NSMISC</samp> (defined by keyword <span class="keyword">MISCIBLE</span>).</p>
+
+<div class="section" id="pmisc_notes"><a name="pmisc_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4>  <ul>
+<li>Setting the miscibility to 0.0 at all pressures will produce the same 
+results as the immiscible case with DRSDT equal to zero. This is because 
+the standard miscible model does not permit re-solution of free gas into 
+undersaturated oil in miscible zones. If this behavior is required, it may 
+be necessary to use the Solvent Model.</li>
+
+</ul>
+ </div>
+
+<div class="section" id="pmisc_example"><a name="pmisc_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTMISC=1</samp> and <samp class="codeph">NSMISC≥4</samp>:</p>
+ <pre><code>PMISC
+ 1000.0 0.0
+ 4000.0 0.0
+ 4100.0 1.0
+ 8000.0 1.0 /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

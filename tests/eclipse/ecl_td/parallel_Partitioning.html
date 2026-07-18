@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Partitioning"/>
+<meta name="DC.subject" content="Parallel partitioning, Parallel option, Partitioning"/>
+<meta name="keywords" content="Parallel partitioning, Parallel option, Partitioning"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="parallel_partitioning"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Partitioning</title>
+</head>
+<body>
+
+
+<div class="nested0" id="parallel_partitioning"><a name="parallel_partitioning"><!-- --></a>
+<h1 class="topictitle1">Partitioning</h1>
+
+
+ <div>
+<p>Parallel versions ECLIPSE 100 and ECLIPSE 300 are fundamentally
+different in two respects. Firstly, the well model calculations of
+ECLIPSE 100 are not done in parallel. This has a minor impact on the
+scalability of ECLIPSE 100. The second and more important difference
+is in the approach used in the making the linear solver run in parallel.
+ECLIPSE 100 uses a modified nested factorization approach, which
+maintains full coupling across the grid at each linear iteration.
+ECLIPSE 300 uses a domain decomposition approach.</p>
+
+<p>ECLIPSE 100 restricts you to a one-dimensional domain decomposition,
+but maintains full coupling of the solution across the reservoir at
+each linear iteration, at the expense of increasing the work required
+per linear iteration by 1.3. We would however not expect the number
+of linear iterations to increase significantly as we increase the
+number of domains. ECLIPSE 100 parallel runs are restricted to three
+dimensional data sets.</p>
+
+<p>ECLIPSE 300 allows a two-dimensional decomposition and requires
+no extra work per linear iteration, at the cost of breaking the coupling
+across the reservoir at each linear iteration. We would therefore
+expect the number of linear iterations to increase with the number
+of domains. (Note that each domain is coupled to its neighbor only
+at each linear iteration, but the reservoir is fully coupled at the
+level of each Newton iteration.)</p>
+
+<p>In both ECLIPSE simulators a balance has to be struck between increasing
+the amount of work per linear iteration and increasing the number
+of linear iterations.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

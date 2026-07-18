@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="NEFAC"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="NEFAC"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>NEFAC</title>
+</head>
+<body>
+
+
+<div class="nested0" id="NEFAC"><a name="NEFAC"><!-- --></a>
+<h1 class="keyword">NEFAC</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="nefac.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="nefac.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1508e45">x</th>
+
+<th valign="top" id="d1508e48">ECLIPSE 100</th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1508e54">&nbsp;</th>
+ 
+<th valign="top" id="d1508e56">ECLIPSE 300</th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1508e45 d1508e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1508e48 d1508e56 ">RUNSPEC</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1508e45 d1508e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1508e48 d1508e56 ">GRID</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1508e45 d1508e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1508e48 d1508e56 ">EDIT</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1508e45 d1508e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1508e48 d1508e56 ">PROPS</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1508e45 d1508e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1508e48 d1508e56 ">REGIONS</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1508e45 d1508e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1508e48 d1508e56 ">SOLUTION</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1508e45 d1508e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1508e48 d1508e56 ">SUMMARY</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1508e45 d1508e54 ">x</td>
+
+<td valign="top" headers="d1508e48 d1508e56 ">SCHEDULE</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword may be used to specify an efficiency factor at a node
+in the extended network (see <a href="../ecl_td/extended_The_extended_network_model.html#extended_the_extended_network_model">"The extended network
+model"</a> in the <cite>ECLIPSE Technical Description</cite>).
+This may be useful if a group efficiency factor has been applied with
+keyword <a href="GEFAC.html#GEFAC">  GEFAC</a> to a group which does not correspond to a network node; <span class="keyword">NEFAC</span> may then be used to apply the efficiency factor to
+an appropriate node in the network, if desired. Alternatively it may
+be used to set a node's efficiency factor (which governs its contribution
+to downstream nodes in the network) to a value different from the
+efficiency factor that has been set for its corresponding group with
+keyword <span class="keyword">GEFAC</span>. See <a href="../ecl_td/extended_Well_and_group_efficiency_factors.html#extended_well_and_group_efficiency_factors">"Well and group
+efficiency factors"</a> in the <cite>ECLIPSE Technical Description</cite> for further discussion on the handling of efficiency factors.</p>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> Care should be taken if you are also using the <span class="keyword">GEFAC</span> keyword with item 3 set to <samp class="codeph">YES</samp>,
+if the node name and the group name are the same. If <span class="keyword">GEFAC</span> is entered after <span class="keyword">NEFAC</span> then the nodal efficiency
+factors gets reset by <span class="keyword">GEFAC</span>. On the other hand,
+using <span class="keyword">NEFAC</span> does <strong>not</strong> change a group's efficiency
+factor, even if it has the same name as the node. The efficiency values
+assigned to the groups/nodes can be checked by using the <samp class="codeph">WELSPECS</samp> mnemonic in the <a href="RPTSCHED.html#RPTSCHED">  RPTSCHED</a> keyword.</div>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li> Node name </li>
+
+<li> Efficiency factor for the node <p>This is the fractional time
+for which the node is operational. For example, if the node is 'down'
+for 10 percent of the time, its efficiency factor will be 0.9.</p>
+ <p>The efficiency factor must be greater than zero.</p>
+ <p>DEFAULT:
+1.0</p>
+ </li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<p>The efficiency factors for nodes not specified with this keyword
+are defaulted to 1.0.</p>
+
+<div class="section" id="nefac_example"><a name="nefac_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <pre><code>NEFAC
+ NODE4  0.9 /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

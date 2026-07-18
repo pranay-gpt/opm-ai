@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Rock volume and cell activation in dual porosity thermal calculations"/>
+<meta name="DC.subject" content="Grid and reservoir modeling"/>
+<meta name="keywords" content="Grid and reservoir modeling"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="dualporo_rock_volume_and_cell_activation_in_dual_porosity_thermal_calculations"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Rock volume and cell activation in dual porosity thermal calculations</title>
+</head>
+<body>
+
+
+<div class="nested0" id="dualporo_rock_volume_and_cell_activation_in_dual_porosity_thermal_calculations"><a name="dualporo_rock_volume_and_cell_activation_in_dual_porosity_thermal_calculations"><!-- --></a>
+<h1 class="topictitle1">Rock volume and cell activation in dual porosity thermal calculations</h1>
+
+
+ <div>
+<div class="section" id="dualporo_rock_volume"><a name="dualporo_rock_volume"><!-- --></a><h4 class="sectiontitle">Rock volume</h4><p>In
+single porosity calculations, the rock volume is simply the cell volume
+less the pore volume. In dual porosity calculations, this leads to
+a double counting of rock volume, as the cell volume is in reality
+common to all the cells of different porosity sharing the same location.
+To prevent this, the rock volume, defined as the average cell volume
+for all porosities less the total pore volume in all cells in that
+location, is shared between the porosities. Each cell receives the
+same rock volume as its pore volume. Any remaining rock volume is
+given to the matrix. If there is not enough rock volume to achieve
+this, the rock volume is shared in proportion to the cell pore volume.</p>
+<p>As a special case, if a cell in one porosity has <samp class="codeph">ACTNUM=2</samp> (see below), meaning that the cell is rock only, then the remaining
+rock is shared equally among all the porosities for that cell location.</p>
+<p>As a special case, if a cell in one porosity has <samp class="codeph">ACTNUM=3</samp> (see below), meaning that the cell is pore-volume only, then the
+pore volume assumed is the physical volume divided by the number of
+porosities. If an asymmetric pore volume distribution is required,
+the net-to-gross value can be adjusted as a weighting factor.</p>
+<p>If this option does not achieve the desired rock distribution, 
+you can override it with the <a href="../ecl_rm/ROCKSPLV.html#ROCKSPLV"> ROCKSPLV</a> keyword.</p>
+</div>
+
+<div class="section" id="dualporo_actnum"><a name="dualporo_actnum"><!-- --></a><h4 class="sectiontitle">ACTNUM</h4><p>The <a href="../ecl_rm/ACTNUM.html#ACTNUM"> ACTNUM</a> keyword allows you
+ to deactivate cells. In thermal calculations, you can also
+deactivate either the fluids or the rock to give an energy-only or
+flow-only calculation in that cell.</p>
+<p>In dual porosity, total
+deactivation of the matrix causes deactivation of the fracture, and
+the other way round. But rock-only or flow-only deactivation only
+affects the porosity specified. The specification of rock-only or
+flow-only cells does not affect the distribution of rock among the
+porosities, as described above; however, the rock or pore volume calculated
+may be set to zero by the <samp class="codeph">ACTNUM</samp> flag.</p>
+<p>There
+is no automatic default for synchronizing <samp class="codeph">ACTNUM</samp> rock-only
+or flow-only deactivations with the rock distribution. It is suggested
+that you take advantage of the possibility to deactivate using
+porosity (keyword <a href="../ecl_rm/PORO.html#PORO"> PORO</a>) or pore volume (keyword <a href="../ecl_rm/PORV.html#PORV"> PORV</a>) and <a href="../ecl_rm/ROCKSPLV.html#ROCKSPLV"> ROCKSPLV</a> to control deactivation through the volume sizes on a per
+cell, per porosity basis.</p>
+<p>If a cell is rock-only (<samp class="codeph">ACTNUM=2</samp>) then the rules for apportioning rock volume are modified; see above.
+If a cell is pore-volume only (<samp class="codeph">ACTNUM=3</samp>) then the
+rules for apportioning pore volume are modified; see above.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

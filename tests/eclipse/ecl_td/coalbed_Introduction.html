@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Coal bed methane model"/>
+<meta name="DC.subject" content="Unconventionals, Single porosity, Dual porosity, Triple porosity, Multi porosity, Instant sorption, Coal bed methane, Triple porosity"/>
+<meta name="keywords" content="Unconventionals, Single porosity, Dual porosity, Triple porosity, Multi porosity, Instant sorption, Coal bed methane, Triple porosity"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="coalbed_introduction"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Coal bed methane model</title>
+</head>
+<body>
+
+
+<div class="nested0" id="coalbed_introduction"><a name="coalbed_introduction"><!-- --></a>
+<h1 class="keyword">Coal bed methane model</h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="coalbed.tab.0009"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="coalbed.tab.0009" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">                         x                   
+  </td>
+
+<td valign="top">                         ECLIPSE 100         
+            </td>
+
+</tr>
+
+<tr>
+<td valign="top">                         x     
+                </td>
+
+<td valign="top">                         ECLIPSE 300         
+            </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The naturally occurring methane within coal seams can in some cases
+be economically produced using oil field technology. In these “Coal
+Bed Methane” projects, wells are drilled into the coal seam
+to produce gas. Considerable reserves of this “unconventional”
+natural gas are present in many parts of the world.</p>
+
+<p>The coal beds are naturally fractured systems with the gas adsorbed
+into the coal matrix. Primary production occurs by initially de-watering
+the natural fractures and hence reducing the pressure in the fracture
+system. The reduced pressure in the fractures allows gas desorption
+from the surface of the coal to the fracture. Gas diffuses from the
+bulk of the coal towards the fracture surface.</p>
+
+<p>For dual porosity the coal bed methane model uses a modified Warren
+and Root model to describe the physical processes involved in a typical
+coal bed methane project.</p>
+
+<p>In ECLIPSE 100 it is possible to introduce a second gas, known
+as a solvent, for enhanced Coal Bed Methane projects, while in ECLIPSE
+300 a full compositional treatment is possible.</p>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> You should be aware that certain entities, corporations,
+individuals or organizations may or do hold applicable patents with
+regard to enhanced recovery of coal bed gases through injection of
+both inert and non-inert gases. You are strongly encouraged to investigate
+if any proposed field applications are subject to these patents.</div>
+
+<dl>
+
+<dt class="dlterm">Single porosity model</dt>
+
+<dd>In ECLIPSE 300 it is possible to activate an instant sorption
+model that can be used in single porosity mode. With this model the
+amount of adsorbed gas is immediately in equilibrium with the free
+gas phase.</dd>
+
+
+<dt class="dlterm">Dual porosity model</dt>
+
+<dd>The dual porosity model consists of two interconnected systems
+representing the coal matrix and the permeable rock fractures. To
+model such systems, two simulation cells are associated with each
+block in the geometric grid, representing the coal matrix and fracture
+volumes of the cell. In ECLIPSE, the properties of these blocks may
+be independently defined. In an ECLIPSE dual porosity run, the number
+of layers in the Z-direction should be doubled. ECLIPSE associates
+the first half of the grid (the first <samp class="codeph">NDIVIZ</samp> /2 layers)
+with the matrix blocks, and the second half with the fractures. In
+such runs <samp class="codeph">NDIVIZ</samp> must therefore be even; ECLIPSE
+checks that this is the case.<p>Unlike a dual porosity oil reservoir
+model, in which the matrix has both an associated pressure and an
+oil saturation, only the gas concentration in the coal is tracked.
+In the fracture system, however, the standard flow equations are solved.</p>
+<p>The <a href="../ecl_rm/DUALPERM.html#DUALPERM">DUALPERM</a> option should only be used if the instant adsorption model
+in ECLIPSE 300 is activated (<a href="../ecl_rm/CBMOPTS.html#CBMOPTS">CBMOPTS</a>) or if the time-dependent adsorption model is used with multi-porosity.
+With the time-dependent sorption model, one of the submatrix porosities
+will then represent the pore volume of the matrix having conductivity
+to neighbor matrix grid blocks, while grid cells assigned to be coal
+will get a zero transmissibility.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">In a coal bed methane model
+the pore volume of the matrix cells has a different interpretation
+than for an ordinary dual porosity run; it gives the coal volume of
+the cell, using the time-dependent sorption model. By default the
+porosity is set to unity minus the porosity of the fracture. The cell
+bulk volume multiplied by the porosity then equals the coal volume.
+It is possible to use the keyword <a href="../ecl_rm/ROCKFRAC.html#ROCKFRAC">ROCKFRAC</a> instead of the porosity
+to set the coal volume in ECLIPSE 300.</span></div>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">By default the
+input permeabilities in the fracture are scaled by the porosities.
+To turn this off use the keyword <a href="../ecl_rm/NODPPM.html#NODPPM">NODPPM</a>.   </span></div>
+</dd>
+
+
+<dt class="dlterm">Triple porosity model</dt>
+
+<dd>In ECLIPSE 300, the triple porosity model, <a href="../ecl_rm/TRPLPORO.html#TRPLPORO">TRPLPORO</a>, can be activated
+together with the Coal Bed Methane option. The triple porosity model
+offers an extra connection between the second submatrix (M2) and the
+fracture (F) and, if using four porosities, from the “isolated”
+third submatrix (M3) to the first submatrix (M1) as shown in the diagram
+below.<p> <br/><div class="imagebreak"><img src="../img/cbm-matrix-fracture.png" width="347px"/></div><br/> </p>
+<p>This enables the modeling of conventional flow in micro pores
+or mini fractures within the coal matrix together with diffusion of
+coal gas as formulated by the time-dependent sorption model. Different
+setups are possible depending on the setting of adsorbed gas in the
+submatrix. For the transmissibility and/or diffusivity between the
+M2-F connection, <a href="../ecl_rm/SIGMAV.html#SIGMAV">SIGMAV</a> values are allowed to be assigned to the fracture grid cells.
+Note that to model dual permeability, the connection transmissibilities
+could be set by <a href="../ecl_rm/PERMMF.html#PERMMF">PERMMF</a> instead of using the matrix <span class="keyword">PERMX</span> values,
+but K-layer indices in the <span class="keyword">PERMMF</span> case only run
+over matrix porosities while for the triple porosity model the <span class="keyword">SIGMAV</span> values include the fracture porosity. For more information
+see <a href="multiporo_Triple_Porosity.html#multiporo_triple_porosity"> "Triple Porosity"</a> and also consider the example data set <samp class="codeph">CBMTRPL.DATA</samp>.</p>
+</dd>
+
+
+<dt class="dlterm">Multi porosity model</dt>
+
+<dd><p>In ECLIPSE 300 a multi porosity model can be activated, enabling
+a detailed study of the transient behavior in the matrix. See <a href="multiporo_Multi_porosity.html#multiporo_multi_porosity"> "Multi
+porosity"</a>.</p>
+</dd>
+
+</dl>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

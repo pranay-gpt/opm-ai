@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="EGRID file structure"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="egrid_egrid_file_structure"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>EGRID file structure</title>
+</head>
+<body>
+
+
+<div class="nested0" id="egrid_egrid_file_structure"><a name="egrid_egrid_file_structure"><!-- --></a>
+<h1 class="topictitle1">EGRID file structure</h1>
+
+
+ <div>
+<p>The EGRID file can contain a hierarchy of grids - a top level global
+grid and local grid refinements (LGRs). Each grid is a 3D array of
+simulation cells. Depending on the grid type the geometry of the cells
+can be structured (for example corner point) or unstructured (arbitrary
+polyhedral cells). With unstructured grids, the global grid or LGR
+may be a composite grid made up of unstructured sub-grids.</p>
+
+<p>The grid file contents are arranged as follows.</p>
+
+<ol>
+<li>File header data: <ol type="a">
+<li><span class="keyword">FILEHEAD</span></li>
+
+<li><span class="keyword">MAPUNITS</span> (optional)</li>
+
+<li><span class="keyword">MAPAXES</span> (optional)</li>
+
+<li><span class="keyword">GRIDUNIT</span></li>
+
+<li><span class="keyword">GDORIENT</span> (optional)</li>
+
+</ol>
+ </li>
+
+<li>Global grid data: <ol type="a">
+<li><span class="keyword">GRIDHEAD</span></li>
+
+<li>Keywords for global grid</li>
+
+<li><span class="keyword">ENDGRID</span></li>
+
+</ol>
+ </li>
+
+<li>For each LGR: <ol type="a">
+<li><span class="keyword">LGR</span></li>
+
+<li><span class="keyword">LGRPARNT</span> (For nested LGRs only)</li>
+
+<li><span class="keyword">LGRSGRID</span> (For LGRs parented from a sub-grid
+only)</li>
+
+<li><span class="keyword">GRIDHEAD</span></li>
+
+</ol>
+ </li>
+
+<li>Keywords for LGR grid <ol type="a">
+<li><span class="keyword">ENDGRID</span></li>
+
+<li><span class="keyword">ENDLGR</span></li>
+
+</ol>
+ </li>
+
+<li>Non-neighbor connection data for corner point grids</li>
+
+</ol>
+
+
+<div class="tablenoborder"><a name="egrid.tab.0062"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="egrid.tab.0062" frame="border" border="1" rules="all"><caption>
+           Table 21.1  EGRID file header keywords </caption>    
+<thead align="left">
+<tr>
+<th valign="top" id="d14e142"> Keyword </th>
+
+<th valign="top" id="d14e145"> No. of Items </th>
+
+<th valign="top" id="d14e148"> Data Type </th>
+
+<th valign="top" id="d14e151"> Contents </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d14e142 "> <span class="keyword">FILEHEAD</span> </td>
+
+<td valign="top" headers="d14e145 "> 100 </td>
+
+<td valign="top" headers="d14e148 "> INTE </td>
+
+<td valign="top" headers="d14e151 "> Grid file header information: <p>Version number
+(&gt;= 1) <a href="egrid_EGRID_file_structure.html#egrid.XID-000000d4">(1)</a>  </p>
+<p>Release
+year</p>
+<p>Reserved</p>
+<p>Backwards compatibility version (the earliest
+version this file will read into)</p>
+<p>Grid type:</p>
+<ul>
+<li>0 - Corner point</li>
+
+<li>1 - Unstructured</li>
+
+<li>2 - Hybrid (Corner point / Unstructured)</li>
+
+</ul>
+<p>Whether model is dual porosity: (&gt;=1) <a href="egrid_EGRID_file_structure.html#egrid.XID-000000d6">(2)</a> </p>
+<ul>
+<li>0 - single porosity</li>
+
+<li>1 - dual porosity</li>
+
+<li> 2 - dual permeability</li>
+
+</ul>
+<p>Format of the original grid data</p>
+<ul>
+<li> 0 - Unknown</li>
+
+<li>1 - Corner point</li>
+
+<li>2 - Block centered.</li>
+
+<li>8-100) not used.</li>
+
+</ul>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d14e142 "> <span class="keyword">MAPUNITS</span> </td>
+
+<td valign="top" headers="d14e145 "> 1 </td>
+
+<td valign="top" headers="d14e148 "> CHAR </td>
+
+<td valign="top" headers="d14e151 "> Units used for the <span class="keyword">MAPAXES</span> data (for example METRES). </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d14e142 "> <span class="keyword">MAPAXES</span> </td>
+
+<td valign="top" headers="d14e145 "> 6 </td>
+
+<td valign="top" headers="d14e148 "> REAL </td>
+
+<td valign="top" headers="d14e151 "> Axes defining grid position relative to map coordinates: <p>X-coordinate of end of Y-axis</p>
+<p>Y-coordinate of end of Y-axis</p>
+<p>X-coordinate of origin</p>
+<p>Y-coordinate of origin</p>
+<p>X-coordinate
+of end of X-axis</p>
+<p>Y-coordinate of end of X-axis</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d14e142 "> <span class="keyword">GRIDUNIT</span> </td>
+
+<td valign="top" headers="d14e145 "> 2 </td>
+
+<td valign="top" headers="d14e148 "> CHAR </td>
+
+<td valign="top" headers="d14e151 "> Units used for grid x,y,z data, with flag indicating
+whether these were output in map or grid coordinates. <p>Units (for
+example METRES)</p>
+<p>MAP or MAPFT if map coordinates used, blank
+otherwise.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d14e142 "> <span class="keyword">GDORIENT</span> </td>
+
+<td valign="top" headers="d14e145 "> 5 </td>
+
+<td valign="top" headers="d14e148 "> CHAR </td>
+
+<td valign="top" headers="d14e151 "> Grid orientation: <p>Property ordering in I direction</p>
+<p>Property ordering in J direction</p>
+<p>Property ordering in K
+direction</p>
+<p>Z-direction</p>
+<p>Grid handedness</p>
+<p>See the <span class="keyword">GDORIENT</span> keyword in the <cite>ECLIPSE Reference Manual</cite> for more details.</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p id="egrid.XID-000000d4"><a name="egrid.XID-000000d4"><!-- --></a>(1) The version numbers are a positive
+integer (refer to revision history). The integer will be incremented
+each time a change in the format is released. This will not necessarily
+be every release cycle. The release year is included for information
+only.</p>
+
+<p id="egrid.XID-000000d6"><a name="egrid.XID-000000d6"><!-- --></a>(2) Dual porosity grids only have geometry
+for the matrix cells. LGR locations and coarsening groups are entered
+using matrix cell identifiers and are copied into the fracture system.The <span class="keyword">ACTNUM</span> keyword has been expanded to store both matrix and
+fracture activity. This data is only output by ECLIPSE. Grids output
+by FloGrid and Grid are always nominally single porosity.</p>
+
+<p>Each <span class="keyword">GRIDHEAD</span> keyword indicates the geometry
+type for the following grid and the set of keywords used to describe
+it. Keywords for a grid should be processed until the next <span class="keyword">ENDGRID</span> is encountered. Similarly LGR keywords should be
+processed until an <span class="keyword">ENDLGR</span> keyword is read. For
+forwards compatibility, readers should skip any unrecognized keywords
+encountered.</p>
+
+<p>Cell numbers in a local grid are counted independently starting
+from 1.</p>
+
+
+<div class="tablenoborder"><a name="egrid.grid.keywords"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="egrid.grid.keywords" frame="border" border="1" rules="all"><caption>
+           Table 21.2  Grid keywords</caption>    
+<thead align="left">
+<tr>
+<th valign="top" id="d14e386"> Keyword </th>
+
+<th valign="top" id="d14e389"> No. of Items </th>
+
+<th valign="top" id="d14e392"> Data Type </th>
+
+<th valign="top" id="d14e395"> Contents </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d14e386 "> <span class="keyword">GRIDHEAD</span> </td>
+
+<td valign="top" headers="d14e389 "> 100 </td>
+
+<td valign="top" headers="d14e392 "> INTE </td>
+
+<td valign="top" headers="d14e395 "> Start of grid and header information. One of: <p>Type of grid:</p>
+<ul>
+<li>0 - composite</li>
+
+<li>1 - corner point</li>
+
+<li> 2 - unstructured</li>
+
+</ul>
+<p>NX</p>
+<p>NY</p>
+<p>NZ</p>
+<p>LGR index. 0 - global, &gt;0 - LGR</p>
+<p>6-24) not used.</p>
+<p>25 - 100) reserved for grid type.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d14e386 "> <span class="keyword">ENDGRID</span> </td>
+
+<td valign="top" headers="d14e389 "> 0 </td>
+
+<td valign="top" headers="d14e392 "> INTE </td>
+
+<td valign="top" headers="d14e395 "> Terminates keywords for a grid. </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d14e386 "> <span class="keyword">LGR</span> </td>
+
+<td valign="top" headers="d14e389 "> N </td>
+
+<td valign="top" headers="d14e392 "> CHAR </td>
+
+<td valign="top" headers="d14e395 "> LGR identification: LGR name </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d14e386 "> <span class="keyword">LGRPARNT</span> </td>
+
+<td valign="top" headers="d14e389 "> N </td>
+
+<td valign="top" headers="d14e392 "> CHAR </td>
+
+<td valign="top" headers="d14e395 "> Parent LGR (for nested LGRs) </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d14e386 "> <span class="keyword">LGRSGRID</span> </td>
+
+<td valign="top" headers="d14e389 "> N </td>
+
+<td valign="top" headers="d14e392 "> CHAR </td>
+
+<td valign="top" headers="d14e395 "> Parent sub-grid for LGR's parented from a composite
+grid </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d14e386 "> <span class="keyword">ENDLGR</span> </td>
+
+<td valign="top" headers="d14e389 "> 0 </td>
+
+<td valign="top" headers="d14e392 "> INTE </td>
+
+<td valign="top" headers="d14e395 "> Terminates LGR keywords. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

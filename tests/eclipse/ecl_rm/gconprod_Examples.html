@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Examples"/>
+<meta name="DC.subject" content="GCONPROD"/>
+<meta name="keywords" content="GCONPROD"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gconprod_examples"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Examples</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gconprod_examples"><a name="gconprod_examples"><!-- --></a>
+<h1 class="topictitle1">Examples</h1>
+
+
+ <div>
+<div class="fignone" id="gconprod.example.fig"><a name="gconprod.example.fig"><!-- --></a>
+
+ <br/><img src="../img/5_level_hierarch.png" width="428px"/><br/> <br/><span class="figcap">
+           Figure 247.1  A five level hierarchy</span></div>
+
+<div class="section" id="gconprod_example_1"><a name="gconprod_example_1"><!-- --></a><h4 class="sectiontitle">Example 1</h4><p>The field
+has a target oil rate of 10,000 stb/day of oil, to be shared between
+the wells in proportion to their guide rates or potentials, subject
+to their individual rate and pressure limits.</p>
+<pre><code>GCONPROD
+ FIELD  ORAT  10000 /
+/</code></pre></div>
+
+<div class="section" id="gconprod_example_2"><a name="gconprod_example_2"><!-- --></a><h4 class="sectiontitle">Example 2</h4><p>As Example
+1, but PLAT-A, PLAT-B and SAT-B have water and gas production limits.
+If these limits are exceeded, the worst-offending wells are to be
+worked over.</p>
+<pre><code>GCONPROD
+  FIELD  ORAT  10000 /
+ 'PLAT*' NONE  1*      6000 20000 1*  CON /
+  SAT-B  NONE  1*      4000 10000 1*  CON /
+/</code></pre></div>
+
+<div class="section" id="gconprod_example_3"><a name="gconprod_example_3"><!-- --></a><h4 class="sectiontitle">Example 3</h4><p>As Example
+2, but PLAT-A and PLAT-B are required to produce equal amounts of
+liquid, if possible. They are given equal guide rates for the liquid
+phase, set to an arbitrary value of 1000, say. Since they have been
+given guide rates, they are placed under rate control from the higher
+(field) level.</p>
+<pre><code>GCONPROD
+  FIELD  ORAT  10000 /
+ 'PLAT*' FLD   1*     6000 20000 1*  CON  1* 1000  LIQ /
+  SAT-B  NONE  1*     4000 10000 1*  CON  /
+/</code></pre></div>
+
+<div class="section" id="gconprod_example_4"><a name="gconprod_example_4"><!-- --></a><h4 class="sectiontitle">Example 4</h4><p>As Example
+3, but GR-A1 is required to produce as much as it can. The group is
+declared unable to respond to a higher level rate target. Its wells
+then produce as much as they can according to their own rate and pressure
+limits.</p>
+<pre><code>GCONPROD
+  FIELD  'ORAT' 10000 /
+ 'PLAT*' FLD   1*     6000 20000 1*  CON  1*   1000    LIQ  /
+  SAT-B  NONE  1*     4000 10000 1*  CON                    /
+  GR-A1  NONE  5*                          NO               /
+/</code></pre></div>
+
+<div class="section" id="gconprod_example_5"><a name="gconprod_example_5"><!-- --></a><h4 class="sectiontitle">Example 5</h4><p>As Example
+4, but in addition GR-B1 is required to produce 2000 stb/day of oil,
+irrespective of any higher level rate target. It is declared unable
+to respond to a higher level rate target, and placed under oil rate
+control with a target rate of 2000.</p>
+<pre><code>GCONPROD
+  FIELD  ORAT  10000 /
+ 'PLAT*' FLD   1*      6000 20000 1*  CON  1*   1000  LIQ  /
+  SAT-B  NONE  1*      4000 10000 1*  CON                  /
+  GR-A1  NONE  5*                           NO             /
+  GR-B1  ORAT  2000    4*                   NO             /
+/</code></pre></div>
+
+<div class="section" id="gconprod_example_6"><a name="gconprod_example_6"><!-- --></a><h4 class="sectiontitle">Example
+6</h4><p>ECLIPSE 100</p>
+<p>The field is set
+to produce at a reservoir volume rate equal to the total reservoir
+volume injection rate of the field. The reservoir volume production
+rate target is to be shared between PLAT-A and PLAT-B in proportion
+to their individual reservoir volume injection rates.</p>
+<pre><code>GCONPROD
+  FIELD  PRBL  12*          1.0     /
+ 'PLAT*' FLD   7*            INJV   /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GRUPRIG"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GRUPRIG"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GRUPRIG</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GRUPRIG"><a name="GRUPRIG"><!-- --></a>
+<h1 class="keyword">GRUPRIG</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gruprig.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gruprig.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d932e45"> x </th>
+
+<th valign="top" id="d932e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d932e54"> x </th>
+
+<th valign="top" id="d932e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d932e45 d932e54 ">  </td>
+
+<td valign="top" headers="d932e48 d932e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d932e45 d932e54 ">  </td>
+
+<td valign="top" headers="d932e48 d932e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d932e45 d932e54 ">  </td>
+
+<td valign="top" headers="d932e48 d932e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d932e45 d932e54 ">  </td>
+
+<td valign="top" headers="d932e48 d932e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d932e45 d932e54 ">  </td>
+
+<td valign="top" headers="d932e48 d932e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d932e45 d932e54 ">  </td>
+
+<td valign="top" headers="d932e48 d932e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d932e45 d932e54 ">  </td>
+
+<td valign="top" headers="d932e48 d932e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d932e45 d932e54 "> x </td>
+
+<td valign="top" headers="d932e48 d932e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is used to assign workover rigs and drilling rigs
+to individual groups. Each group may have up to five workover rigs
+and five drilling rigs allocated to it. Several groups may share the
+same rig, if required. A rig allocated to a high-level group (or the
+Field) will be available for use by all the wells in its subordinate
+groups.</p>
+
+<p>A workover rig is necessary to perform automatic workovers if the
+time taken to perform workovers has been set to a value greater than
+zero in keyword <a href="WORKLIM.html#WORKLIM">  WORKLIM</a>. The availability of workover rigs will then determine the
+rate at which automatic workovers can be performed. For each automatic
+workover on a well, a workover rig is assigned and is made unavailable
+for other workovers for the duration entered in keyword <span class="keyword">WORKLIM</span>. A workover on a particular well is postponed if all the workover
+rigs that can be assigned to it are already occupied until the end
+of the timestep.</p>
+
+<ul>
+<li> In ECLIPSE 100, a workover refers to the
+automatic closure, plug-back or opening of a well connection resulting
+from instructions specified in keywords <a href="WECON.html#WECON">  WECON</a>, <a href="CECON.html#CECON">  CECON</a>, <a href="GECON.html#GECON">  GECON</a>, <a href="GCONPROD.html#GCONPROD">  GCONPROD</a>, <a href="GCONPRI.html#GCONPRI">  GCONPRI</a>, <a href="GCONSALE.html#GCONSALE">  GCONSALE</a>, <a href="PRORDER.html#PRORDER">  PRORDER</a> and <a href="WORKTHP.html#WORKTHP">  WORKTHP</a>. </li>
+
+<li> In ECLIPSE 300, a workover refers only to
+the automatic closure of a well connection as a result of an economic
+or rate limit being broken. </li>
+
+</ul>
+
+<p>Connection changes specified manually (for example with <a href="COMPDAT.html#COMPDAT">  COMPDAT</a>) are not affected
+by rig availability, and do not occupy any rigs. If item 3 of keyword <a href="WDRILTIM.html#WDRILTIM">  WDRILTIM</a> is set to <samp class="codeph">YES</samp> for a given well, the well is treated as closed for
+the duration of the workover. This is done by temporarily reducing
+the well's efficiency factor, so that its flows are not included in
+the group totals and cumulative totals while it is being worked over.
+If the <span class="keyword">WORKLIM</span> keyword is absent, workovers take
+up no rig time, and workover rig availability is not a restriction.</p>
+
+<p>A drilling rig is necessary to open a new well automatically if
+the time taken to drill the well has been set to a value greater than
+zero in item 2 of keyword <span class="keyword">WDRILTIM</span>. The availability
+of drilling rigs will then determine the rate at which new wells can
+be opened automatically. When a new well is to be drilled, a drilling
+rig is assigned and is made unavailable for drilling other wells for
+the duration entered in keyword <span class="keyword">WDRILTIM</span>. The drilling
+of a well is postponed if all the drilling rigs that can be assigned
+to it are already occupied until the end of the timestep. The drilling
+processes controlled by rig availability are:</p>
+
+<ul>
+<li> Wells opened from the Drilling Queue (see keywords <a href="QDRILL.html#QDRILL">  QDRILL</a> and <a href="WDRILPRI.html#WDRILPRI">  WDRILPRI</a>) <p>ECLIPSE 100</p>
+</li>
+
+<li> Wells on Automatic Opening (for example
+with item 2 in keyword <a href="WCONPROD.html#WCONPROD">  WCONPROD</a> set to <samp class="codeph">AUTO</samp>) </li>
+
+<li>Wells that are opened on the closure of another well (see item
+9 of keyword <span class="keyword">WECON</span>).</li>
+
+</ul>
+
+<p>Wells opened manually are not affected by rig availability, and
+do not occupy any rigs. If item 3 of keyword <span class="keyword">WDRILTIM</span> is set to <samp class="codeph">YES</samp> for a given well, the well is treated
+as closed for the duration of the drilling process. This is done by
+temporarily reducing the well's efficiency factor, so that its flows
+are not included in the group totals and cumulative totals while it
+is being drilled. If the <span class="keyword">WDRILTIM</span> keyword is absent,
+drilling takes up no rig time, and drilling rig availability is not
+a restriction.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li> Group name or group name root <p>or <samp class="codeph">FIELD</samp> (if
+the rig is being assigned to the whole field)</p>
+ <p>A group name
+root, ending with an asterisk (*), can be used to refer to several
+groups in one record.</p>
+ </li>
+
+<li> Workover rig number (between -2 and 99) 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">1-99</td>
+
+<td valign="top">A workover rig with this number is added to (or removed from)
+the group</td>
+
+</tr>
+
+<tr>
+<td valign="top">0</td>
+
+<td valign="top">No change to existing workover rigs</td>
+
+</tr>
+
+<tr>
+<td valign="top">-1 </td>
+
+<td valign="top">A workover rig with this number prevents workovers on any well
+subordinate to the group, regardless of the availability of other
+rigs</td>
+
+</tr>
+
+<tr>
+<td valign="top">-2 </td>
+
+<td valign="top">This number causes the removal of all workover rigs currently
+belonging to the group (but not any belonging to subordinate or superior
+groups).</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: 0</p>
+ </li>
+
+<li> Drilling rig number (between -2 and 99) 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">1-99 </td>
+
+<td valign="top">A drilling rig with this number is added to (or removed from)
+the group</td>
+
+</tr>
+
+<tr>
+<td valign="top">0</td>
+
+<td valign="top">No change to existing drilling rigs</td>
+
+</tr>
+
+<tr>
+<td valign="top">-1</td>
+
+<td valign="top">A drilling rig with this number prevents any well subordinate
+to the group from being drilled, regardless of the availability of
+other rigs</td>
+
+</tr>
+
+<tr>
+<td valign="top">-2</td>
+
+<td valign="top">This number causes the removal of all drilling rigs currently
+belonging to the group (but not any belonging to subordinate or superior
+groups).</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: 0</p>
+ </li>
+
+<li> Add or remove these rigs 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">ADD</samp> </td>
+
+<td valign="top"> Add the rig(s) to the group</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">REM</samp> </td>
+
+<td valign="top"> Remove the rig(s) from the group</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">ADD</samp> </p>
+ </li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<p>If no workover rigs have been specified, a single workover rig
+(number 100) is automatically be created for the FIELD group. Similarly,
+if no drilling rigs have been specified, a single drilling rig (number
+100) will automatically be created for the FIELD group. These default
+rigs are created for back-compatibility with pre-95A ECLIPSE 100 and
+pre-2002A ECLIPSE 300 releases that do not use the <span class="keyword">GRUPRIG</span> keyword for both types of rig. They are removed automatically the
+first time <span class="keyword">GRUPRIG</span> is used to add a rig to any
+group.</p>
+
+<p>Rigs may be allocated to groups on different levels. A rig allocated
+to a group on any level will be available to all its subordinate wells.
+For example, let the FIELD contain two groups, PLAT-A and PLAT-B.
+If rigs 1 and 2 are allocated to the FIELD group, and rig 3 is allocated
+to group PLAT-A, then all three rigs are available to the wells subordinate
+to PLAT-A while only rigs 1 and 2 are available to the wells subordinate
+to PLAT-B. Thus, if more than five rigs of a given type are to be
+available to the whole field, the first five can be allocated to the
+FIELD group and the remainder (up to another five) can be allocated
+to all the groups on the next level down. ECLIPSE makes no attempt
+to optimize the use of multiple rigs; to find a rig for a well it
+searches up the group hierarchy from the well’s group up to the FIELD
+and selects the first free rig that it finds.</p>
+
+<p>The two types of rig operate independently of each other. For example,
+drilling rig number 1 and workover rig number 1 are separate rigs,
+and do not affect each other.</p>
+
+<p>ECLIPSE 100</p>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> Pre-96A data sets experience
+a change in behavior if two or more rigs of either type are allocated
+to the same group (for example if a group changes its rig during the
+run). Before the 96A release, the second rig would replace the first
+one. Now, however, the second rig is added to the group and the first
+rig still remains available. If you wish to replace one rig with another,
+you must now remove the old rig then add the new one.</div>
+
+<p>See also keywords <a href="WORKLIM.html#WORKLIM">  WORKLIM</a>, <a href="WDRILTIM.html#WDRILTIM">  WDRILTIM</a>, <a href="QDRILL.html#QDRILL">  QDRILL</a>, <a href="WDRILPRI.html#WDRILPRI">  WDRILPRI</a> and <a href="PRORDER.html#PRORDER">  PRORDER</a>.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Examples"/>
+<meta name="DC.subject" content="WFRICTNL"/>
+<meta name="keywords" content="WFRICTNL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wfrictnl_examples"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Examples</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wfrictnl_examples"><a name="wfrictnl_examples"><!-- --></a>
+<h1 class="topictitle1">Examples</h1>
+
+
+ <div>
+<p>A well called HORIZ with 6 connections in two amalgamated local
+grids.</p>
+
+<div class="section" id="wfrictnl_example_1"><a name="wfrictnl_example_1"><!-- --></a><h4 class="sectiontitle">Example 1</h4><p>This example
+sets the tubing lengths manually for each connection of the well HORIZ
+which is completed in local grids WEST and EAST.</p>
+<pre><code>WFRICTNL
+-- Name      Diam      Roughness     Scalefac
+   HORIZ     0.25      1.0E-3        1.0  /
+-- Local Grid -  I J K  Tlen1  Tlen2  Dirn  RangeEnd  Diam
+   WEST          3 5 6  0.0    100.0  /
+   WEST          4 5 6  100.0  200.0  /
+   WEST          5 5 6  200.0  400.0  /
+   EAST          1 5 3  400.0  600.0  /
+   EAST          2 5 3  600.0  700.0  /
+   EAST          3 5 3  700.0  800.0  /
+/</code></pre></div>
+
+<div class="section" id="wfrictnl_example_2"><a name="wfrictnl_example_2"><!-- --></a><h4 class="sectiontitle">Example 2</h4><p>This example
+sets the tubing lengths for the same set of well connections grouped
+into two ranges, one for each local grid WEST and EAST. The well is
+assumed to penetrate fully the grid blocks I=3-5, J=5, K=6 in grid
+WEST and I=1-3, J=5, K=3 in grid EAST. The connection at I=3 in grid
+WEST is nearest the wellhead.</p>
+<pre><code>WFRICTNL
+-- Name       Diam      Roughness      Scalefac
+   HORIZ      0.25      1.0E-3         1.0  /
+-- Local Grid -  I J K  Tlen1  Tlen2   Dirn   RangeEnd   Diam
+   WEST          3 5 6  0.0    1*       I       5  /
+   EAST          1 5 3  1*     1*       I       3  /
+/</code></pre><p>The examples of multilateral wells are similarly analogous
+to those in the <a href="WFRICTN.html#WFRICTN"> WFRICTN</a> keyword in the wellbore friction option, and you are referred
+there for this feature. The only difference, as above, is the need
+to specify the name of the local grid.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="MULTREGT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="MULTREGT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>MULTREGT</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="MULTREGT"><a name="MULTREGT"><!-- --></a>
+<h1 class="keyword">MULTREGT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="multregt.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="multregt.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1468e45"> x </th>
+
+<th valign="top" id="d1468e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1468e54"> x </th>
+
+<th valign="top" id="d1468e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1468e45 d1468e54 ">  </td>
+
+<td valign="top" headers="d1468e48 d1468e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1468e45 d1468e54 "> x </td>
+
+<td valign="top" headers="d1468e48 d1468e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1468e45 d1468e54 "> x </td>
+
+<td valign="top" headers="d1468e48 d1468e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1468e45 d1468e54 ">  </td>
+
+<td valign="top" headers="d1468e48 d1468e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1468e45 d1468e54 ">  </td>
+
+<td valign="top" headers="d1468e48 d1468e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1468e45 d1468e54 ">  </td>
+
+<td valign="top" headers="d1468e48 d1468e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1468e45 d1468e54 ">  </td>
+
+<td valign="top" headers="d1468e48 d1468e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1468e45 d1468e54 "> x </td>
+
+<td valign="top" headers="d1468e48 d1468e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">MULTREGT</span> keyword can be used to set a transmissibility
+multiplier between regions. The regions must previously have been
+defined using keyword <a href="FLUXNUM.html#FLUXNUM"> FLUXNUM</a>, <a href="MULTNUM.html#MULTNUM"> MULTNUM</a> or <a href="OPERNUM.html#OPERNUM"> OPERNUM</a> in
+the <span class="keyword">GRID</span> section.</p>
+
+<p>If <span class="keyword">MULTNUM</span> is to be used, then storage for the <span class="keyword">MULTNUM</span> array must be requested by setting the second item
+greater than zero in the <span class="keyword">RUNSPEC</span> section keyword <a href="GRIDOPTS.html#GRIDOPTS"> GRIDOPTS</a>. <span class="keyword">MULTREGT</span> applies to transmissibilities between <span class="keyword">MULTNUM</span> regions.</p>
+
+<p>If <span class="keyword">FLUXNUM</span> is to be used, then storage for the
+flux region data should be reserved by setting the fourth item in
+the <span class="keyword">RUNSPEC</span> section keyword <a href="REGDIMS.html#REGDIMS"> REGDIMS</a>. <span class="keyword">MULTREGT</span> will
+then apply to transmissibilities between flux regions defined using <span class="keyword">FLUXNUM</span>.</p>
+
+<p>If <span class="keyword">OPERNUM</span> is to be used, then storage for the <span class="keyword">OPERNUM</span> array should be reserved by setting the item 7
+in the <span class="keyword">RUNSPEC</span> section keyword <span class="keyword">REGDIMS</span>. <span class="keyword">MULTREGT</span> will then apply to transmissibilities
+between regions defined using <span class="keyword">OPERNUM</span>.</p>
+
+<p>The <span class="keyword">MULTREGT</span> keyword is followed by any number
+of data records. Each record contains the following six items of data,
+and is terminated with a slash (/).</p>
+
+<ol>
+<li>From region number (I) <p>A non-positive or defaulted value acts
+as a wildcard on all regions.</p>
+ <p>DEFAULT: Negative</p>
+</li>
+
+<li>To region number (J) <p>A non-positive or defaulted value acts
+as a wildcard on all regions.</p>
+ <p>DEFAULT: Negative</p>
+</li>
+
+<li>Transmissibility multiplier for all transmissibilities connecting
+regions I and J</li>
+
+<li>Direction(s) in which to apply the multiplier: <p>Either <samp class="codeph">X</samp>, <samp class="codeph">Y</samp>, <samp class="codeph">Z</samp>, <samp class="codeph">XY</samp>, <samp class="codeph">YZ</samp>, <samp class="codeph">XZ</samp> or <samp class="codeph">XYZ</samp>.</p>
+ <p>DEFAULT:  <samp class="codeph">XYZ</samp> </p>
+</li>
+
+<li>Flag governing application of multiplier to non-neighbor connections: 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">NNC</samp> </td>
+
+<td valign="top"> Apply the transmissibility multiplier only to non-neighbor
+connections between regions I and J</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NONNC</samp> </td>
+
+<td valign="top"> Do not apply the transmissibility multiplier to any non-neighbor
+connections between regions I and J</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">ALL</samp> </td>
+
+<td valign="top"> Apply the transmissibility multiplier to all connections between
+regions I and J</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NOAQUNNC</samp> </td>
+
+<td valign="top"> Do not apply the transmissibility multiplier to numerical
+aquifer connections.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>DEFAULT:   <samp class="codeph">ALL</samp> </p>
+</li>
+
+<li>Choice of region: <samp class="codeph">MULTNUM</samp> (M), <samp class="codeph">FLUXNUM</samp> (F) or <samp class="codeph">OPERNUM</samp> (O) <p>DEFAULT:  M</p>
+</li>
+
+</ol>
+
+<p>The set of records must end with a blank record containing only
+a slash (/).</p>
+
+<p>When using <span class="keyword">MULTREGT</span> in the <span class="keyword">SCHEDULE</span> section with ECLIPSE 100, only the first three
+items (and item 6 if required) should be specified; the remaining
+items assume that values are defaulted. </p>
+
+<p>The effect of using <span class="keyword">MULTREGT</span> in the <span class="keyword">SCHEDULE</span> section is cumulative. Hence if <span class="keyword">MULTREGT</span> is specified twice for the same connection between regions, the
+product of the transmissibility multipliers is used.</p>
+
+<p>ECLIPSE 100</p>
+<p>The effect of <span class="keyword">MULTREGT</span> in the <span class="keyword">GRID</span> section is not cumulative.</p>
+
+<div class="section" id="multregt_notes"><a name="multregt_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li>The multipliers specified in the <span class="keyword">MULTREGT</span> keyword
+are applied <strong>after</strong> accounting for any values of <a href="MULTX.html#MULTX"> MULTX</a>, <a href="MULTY.html#MULTY"> MULTY</a>, <a href="MULTZ.html#MULTZ"> MULTZ</a>, or <a href="MULTFLT.html#MULTFLT"> MULTFLT</a> entered in either the <span class="keyword">GRID</span> or <span class="keyword">EDIT</span> sections, and after processing the <a href="EDITNNC.html#EDITNNC"> EDITNNC</a> and <a href="EDITNNCR.html#EDITNNCR"> EDITNNCR</a> keywords.</li>
+
+<li>Similarly, the multipliers specified in this keyword are applied
+after accounting for any values of <a href="MULTX-.html#MULTX-"> MULTX-</a>, <a href="MULTY-.html#MULTY-"> MULTY-</a> or <a href="MULTZ-.html#MULTZ-"> MULTZ-</a>.</li>
+
+<li>If either region number I or J is set non-positive or defaulted,
+then that region identifier is taken as a wildcard and the multiplier
+is applied between all regions I and J, with                     
+  <math><mi>I</mi><mo>≠</mo>
+<mi>J</mi></math>, matching the template.</li>
+
+<li>If the region numbers I and J are equal and positive, then the
+transmissibilities <strong>within</strong> that region in the specified direction(s)
+are multiplied by the given value, as well as any transmissibilities
+connecting <strong>any</strong> other regions.</li>
+
+<li>The keyword does <strong>not</strong> affect the non-neighbor connections
+between matrix and fracture blocks in a dual porosity simulation.</li>
+
+<li>Non-neighbor connections arising from numerical aquifer connections
+to the grid are modified by <span class="keyword">MULTREGT</span> unless the <samp class="codeph">NOAQUNNC</samp> flag is set in item 5.</li>
+
+<li><p>ECLIPSE 100</p>
+<p>In ECLIPSE 100, 
+if a combination of region numbers I and J is specified twice, then the latest multiplier is
+applied for the transmissibilities between the two regions; the multipliers
+are not cumulative. This is true even if different region sets are
+specified - it is not possible to specify a multiplier between regions
+I and J using <span class="keyword">MULTNUM</span> and a different multiplier
+between regions I and J using <span class="keyword">FLUXNUM</span>. However,
+an individual transmissibility may be modified by more than one multiplier,
+if it is between different region number combinations for different
+region sets.</p>
+</li>
+
+<li><p>ECLIPSE 100</p>
+<p>In ECLIPSE 100, this facility can be used
+to modify connections between PVT regions by assigning <span class="keyword">FLUXNUM</span> or <span class="keyword">MULTNUM</span> in the <span class="keyword">GRID</span> section
+equal to the PVT regions, and then <a href="COPY.html#COPY"> COPY</a> ing <span class="keyword">FLUXNUM</span> or <span class="keyword">MULTNUM</span> to <a href="PVTNUM.html#PVTNUM"> PVTNUM</a> in the <span class="keyword">REGIONS</span> section.</p>
+</li>
+
+<li>In order to use <span class="keyword">MULTREGT</span> in the <span class="keyword">EDIT</span> section, <a href="TRANX.html#TRANX"> TRANX</a>, <a href="TRANY.html#TRANY"> TRANY</a>, <a href="TRANZ.html#TRANZ"> TRANZ</a> values should also be specified in
+the <span class="keyword">EDIT</span> section. If the transmissibility values
+are not specified, ECLIPSE 300 will output an error message. If the
+ transmissibility values are not specified, ECLIPSE 100 will output
+a  warning message, and the simulation may not behave as expected.
+ </li>
+
+<li>If <span class="keyword">MULTREGT</span> is specified in the <span class="keyword">GRID</span> section, it will be applied only to transmissibilities calculated
+at the end of the <span class="keyword">GRID</span> section. It will have no
+effect on transmissibilities which are specified in the <span class="keyword">EDIT</span> section.</li>
+
+<li>The multipliers between regions can be output to the print file
+using the mnemonic <span class="keyword">MULTREGT</span> in the <a href="RPTGRID.html#RPTGRID"> RPTGRID</a> keyword.</li>
+
+<li>This keyword cannot be used in conjunction with nested LGRs.</li>
+
+<li><p>ECLIPSE 300</p>
+<p>In ECLIPSE 300, 
+if the first three arguments of a record are all defaulted or set to the default values, 
+this is treated as equivalent to a record containing only a slash (/) and
+the set of records will be considered to have ended.</p>
+</li>
+
+<li><p>ECLIPSE 300</p>
+<p>In ECLIPSE 300, 
+when specifying region numbers for individual LGR cells for use with <span class="keyword">MULTREGT</span>,
+global host cell values which are greater than 1 will overwrite local
+cell region numbers which are equal to 1, even if these have been
+explicitly set rather than defaulted. Region numbers greater than
+1 should be used for LGR cells which have host cells not in region
+1.</p>
+<div class="caution"><span class="cautiontitle">CAUTION:</span> For backward compatibility reasons, while the
+default region set is <span class="keyword">MULTNUM</span>, if some lines of
+data have a different region set specified, the first region specified
+is used as the default for all lines which have no region set specified.
+Defaulting some region sets while specifying others is not recommended.</div>
+              </li>
+
+</ul>
+</div>
+
+<div class="section"><h4 class="sectiontitle">Example</h4><pre><code>MULTREGT
+-- 'From' region   'To' region   Transmissibility   Directions    NNCs
+                                 multiplier                            
+      1                2              0.5   /
+      1                3              0.0   /
+      4                4              0.4           'XY'    /
+      5                1*             0.75 /  Between region 5 and any region.
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Changing well ALQ values (applying lift)"/>
+<meta name="DC.subject" content="Group production rules"/>
+<meta name="keywords" content="Group production rules"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="groupprd_changing_well_alq_values__applying_lift_"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Changing well ALQ values (applying lift)</title>
+</head>
+<body>
+
+
+<div class="nested0" id="groupprd_changing_well_alq_values__applying_lift_"><a name="groupprd_changing_well_alq_values__applying_lift_"><!-- --></a>
+<h1 class="topictitle1">Changing well ALQ values (applying lift)</h1>
+
+
+ <div>
+<p>Each production well can be given a secondary ALQ value in item
+5 of keyword <a href="../ecl_rm/WLIFT.html#WLIFT">WLIFT</a>, which represents the application of a fixed quantity of
+artificial lift (for example, a fixed rate of lift gas injection).
+An increment value may also be set in item 10 of <span class="keyword">WLIFT</span>, in which case ECLIPSE increases the ALQ to its secondary value
+in stages, an increment at a time. A new well efficiency factor can
+also be defined in item 6 of keyword <span class="keyword">WLIFT</span> if required,
+which comes into effect at the same time as the secondary ALQ value
+(or the first ALQ increment) is applied. There is an option to restrict
+the total amount of lift applied within a particular group, and the
+number of wells on lift within a group (keyword <a href="../ecl_rm/GLIFTLIM.html#GLIFTLIM">GLIFTLIM</a>). When a group cannot
+achieve its target rate of the required phase, ECLIPSE examines each
+open production well in turn, rejecting the well if:</p>
+
+<ul>
+<li>   it has no secondary ALQ value set in keyword <span class="keyword">WLIFT</span>, or it has already switched fully to this ALQ value</li>
+
+<li>it is currently operating under a control mode other than THP
+control</li>
+
+<li>it is not subordinate to the group that is unable to achieve its
+production target</li>
+
+<li>it is subordinate to an intermediate level group that is already
+operating at its target or limiting rate for the required phase, and
+so cannot increase its flow further</li>
+
+<li>its group, or any superior group, would exceed its limit on total
+lift or the number of wells on lift, set in keyword <span class="keyword">GLIFTLIM</span>.</li>
+
+</ul>
+
+<p>For each well that survives all these tests, ECLIPSE obtains an
+estimate of the possible increase in production rate resulting from
+an increase in ALQ by its next increment (or to its secondary value
+if no increments are specified), using the current values of the phase
+mobilities at its connections. The effects of a new efficiency factor,
+if specified, are also taken into account. The well with the highest
+estimated increase will have its ALQ value increased by the next increment.
+If no increments are specified for the well, or if its next increment
+would cross the secondary ALQ value, the ALQ will be increased to
+its secondary value.</p>
+
+<p>Thus the wells are given lift in decreasing order of the resulting
+increase in production rate. The lift switching process is treated
+as instantaneous, and there is no limit on the rate at which wells
+can be switched.</p>
+
+<p>If the Network option is in use, the estimate of production increase
+will not take account of the increased pressure losses in the network;
+if these are important, you should use the Gas Lift Optimization facility
+instead of <span class="keyword">WLIFT</span> and <span class="keyword">GLIFTLIM</span> (see <a href="gasliftintro_Introduction.html#gasliftintro_gas_lift_optimization"> "Gas lift optimization"</a>). This offers a much more sophisticated
+means of optimizing the distribution of lift gas to the individual
+wells. The facility automatically allocates lift gas to the wells
+until group production targets are met or other operating limits are
+reached. Gas lift allocations are calculated at specified intervals,
+or during the first <a href="../ecl_rm/NUPCOL.html#NUPCOL">NUPCOL</a> Newton iterations of each timestep, depending on the instructions
+in keyword <a href="../ecl_rm/LIFTOPT.html#LIFTOPT">LIFTOPT</a> (regardless of the presence or absence of the <samp class="codeph">LIFT</samp> mnemonic in <a href="../ecl_rm/PRORDER.html#PRORDER">PRORDER</a>). By default, all the requested production rule actions will
+be attempted <strong>before</strong> gas lift is allocated. However, if <samp class="codeph">LIFT</samp> is entered in the <span class="keyword">PRORDER</span> keyword,
+gas lift allocation takes precedence over any production rule actions
+whose mnemonics are entered after <samp class="codeph">LIFT</samp>. Thus, for
+example, it is possible to specify that drilling new wells should
+only be attempted if group targets cannot be met by applying gas lift.
+Essentially, all production rule actions entered after <samp class="codeph">LIFT</samp> are only performed immediately after a gas lift optimization calculation,
+and not at any other time or Newton iteration, if a group production
+target still cannot be met. In this case it is best to configure <span class="keyword">LIFTOPT</span> so that gas lift is optimized during each of the
+first <samp class="codeph">NUPCOL</samp> iterations of every timestep.</p>
+
+<p>Note that wells can also be made to switch on lift if their production
+rate falls below a specified value (keyword <span class="keyword">WLIFT</span> item 2), or if their water cut or gas-liquid ratio exceeds a specified
+limit (keyword <span class="keyword">WLIFT</span> items 7 and 9), or if the
+well dies under THP control. This triggers the switch according to
+the behavior of the individual wells, irrespective of whether or not
+group targets are being met. If you wish lift to be applied only through
+the group production rules to help meet a group target, or if the
+well dies under THP control, then you must give the rate, water cut
+and GLR limits in items 2, 7 and 9 of keyword <span class="keyword">WLIFT</span> a default, zero or negative value.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Efficiency factors"/>
+<meta name="DC.subject" content="Well modeling efficiency factors, Well, Efficiency factor, Group, Downtime"/>
+<meta name="keywords" content="Well modeling efficiency factors, Well, Efficiency factor, Group, Downtime"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wellmode_efficiency_factors"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Efficiency factors</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="wellmode_efficiency_factors"><a name="wellmode_efficiency_factors"><!-- --></a>
+<h1 class="topictitle1">Efficiency factors</h1>
+
+
+ <div>
+<p>Wells can be given ‘efficiency factors’ to take account of regular
+downtime (see keyword <a href="../ecl_rm/WEFAC.html#WEFAC">WEFAC</a>). For example, if a well is ‘down’ for 10 percent of the
+time, its efficiency factor will be 0.9.</p>
+
+<p>The well rates and pressures given in the well reports describe
+the state of the flowing well. The full rates are also used in the
+well economic limit checks. The efficiency factors are applied when
+updating the cumulative well and connection flows.</p>
+
+<p>The efficiency factors are also applied when summing the well rates
+to obtain the group and field flow rates. Thus the group and field
+flow rates represent the average rates over the timestep, rather than
+the full rates reached when all the wells are operating.</p>
+
+<p>The underlying formulation used to implement the above is that
+the well model is solved using inflow equations <a href="wellinfl_Inflow_performance_relationship_in_ECLIPSE_100.html#wellinfl.XID-00000024">513.1</a>  and <a href="wellinfl_Inflow_performance_relationship_in_ECLIPSE_300.html#wellinfl.equ.003d">514.1</a>  while the reservoir model is solved using well source terms <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellmodeefac.equ.001"/>
+ <math><mrow><msub>
+<mrow><mi>q</mi></mrow><mrow><mi>p</mi><mo>,</mo>
+<mi>j</mi></mrow></msub><mo>=</mo><msub><mrow><mi>E</mi><mi>T</mi></mrow><mrow><mi>w</mi><mi>j</mi>
+</mrow></msub><msub><mrow><mi>M</mi></mrow><mrow><mi>p</mi><mo>,</mo><mi>j</mi></mrow></msub><mrow><mo>(</mo><msub><mrow><mi>P</mi></mrow><mrow><mi>j</mi>
+</mrow></msub><mo>−</mo><msub><mrow><mi>P</mi></mrow>
+<mrow><mi>w</mi></mrow></msub><mo>−</mo><msub><mrow>
+<mi>H</mi></mrow><mrow><mi>w</mi><mi>j</mi></mrow>
+</msub><mo>)</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 533.1]
+              </td></tr></tbody></table> and <table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="wellmodeefac.equ.002"/>
+ <math><mrow><msub><mrow>
+<mover><mrow><mi>q</mi></mrow><mrow><mo>^</mo></mrow>
+</mover></mrow><mrow><mi>p</mi><mo>,</mo><mi>j</mi>
+</mrow></msub><mo>=</mo><mi>E</mi><msub><mrow><mi>T</mi></mrow><mrow><mi>w</mi><mo>,</mo><mi>j</mi>
+</mrow></msub><mrow><mo>(</mo><mfrac><mrow><msub>
+<mrow><mi>K</mi></mrow><mrow><mi>r</mi><mi>p</mi>
+<mo>,</mo><mi>j</mi></mrow></msub></mrow><mrow><msub>
+<mrow><mi>μ</mi></mrow><mrow><mi>p</mi><mo>,</mo>
+<mi>j</mi></mrow></msub></mrow></mfrac><mo>)</mo>
+</mrow><mrow><mo>(</mo><msub><mrow><mi>P</mi></mrow>
+<mrow><mi>j</mi></mrow></msub><mo>−</mo><msub><mrow>
+<mi>P</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>−</mo><msub><mrow><mi>H</mi></mrow><mrow><mi>w</mi>
+<mi>j</mi></mrow></msub><mo>)</mo></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 533.2]
+              </td></tr></tbody></table> where <math>
+<mrow><mi>E</mi></mrow></math> is the well efficiency factor
+and other terms are as defined for equations  <a href="wellinfl_Inflow_performance_relationship_in_ECLIPSE_100.html#wellinfl.XID-00000024">513.1</a>  and <a href="wellinfl_Inflow_performance_relationship_in_ECLIPSE_300.html#wellinfl.equ.003d">514.1</a>. Cumulative production and injection are determined using
+the same rates as the reservoir solve, so the cumulative production,
+injection and fluid in place sum to a constant assuming no other source
+terms such as analytic aquifers or sector model boundary conditions.</p>
+
+<p>The <span class="keyword">WEFAC</span> keyword is best used when wells are
+brought down individually on a regular basis for short periods of
+maintenance. But if all the wells in a group are brought down together
+for regular maintenance, then the efficiency factor should instead
+be applied to the group. Group efficiency factors are defined with
+the keyword <a href="../ecl_rm/GEFAC.html#GEFAC"> GEFAC</a>. The treatment of group downtime is entirely analogous to
+the treatment of well downtime. The group’s flow rates reported in
+the <span class="keyword">PRINT</span> and <samp class="codeph">SUMMARY</samp> files reflect
+its full flow rate. Any flow targets and limits for the group will
+apply to its full flow rate. But the group rates will be multiplied
+by the group efficiency factor when summing the group’s contribution
+to its parent group in the hierarchy. Thus the flows of any superior
+groups will reflect this group’s time-averaged flow rate.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

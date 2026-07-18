@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Notes"/>
+<meta name="DC.subject" content="WVFPEXP"/>
+<meta name="keywords" content="WVFPEXP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wvfpexp_notes"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Notes</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wvfpexp_notes"><a name="wvfpexp_notes"><!-- --></a>
+<h1 class="topictitle1">Notes</h1>
+
+
+ <div>
+<div class="section" id="wvfpexp_implicit_explicit_water_and_gas_fractions"><a name="wvfpexp_implicit_explicit_water_and_gas_fractions"><!-- --></a><h4 class="sectiontitle">Implicit/explicit water and gas fractions</h4><p>When a well is
+under THP control, its flow rate is determined by the intersection
+of its inflow performance relationship (IPR) and the VFP curve interpolated
+at the current value of its water and gas flowing fractions, on a
+plane of BHP versus flow rate. Often the VFP curve is U-shaped, and
+when there are two intersections the one with the higher flow rate
+is chosen (the other being unstable). If the IPR does not intersect
+the VFP curve, the well is deemed to have died.</p>
+<p>Engineering
+calculations of the intersection point usually plot the VFP curve
+at a constant water cut and GOR. However, if the well is completed
+in a number of layers having different water cut values, the overall
+water cut of the well will depend on the BHP, especially if due to
+poor vertical communication the layers are at different pressures.
+Because ECLIPSE uses the latest (implicit) values of the water and
+gas fractions to interpolate the VFP tables, it sees a VFP curve that
+is plotted at water cut and GOR values that vary with the BHP. This
+can alter the shape of the VFP curve away from its usual monotonic
+or U-shaped nature, perhaps introducing extra minima and unstable
+regions. If the well enters one of these extra unstable regions, ECLIPSE
+thinks the well has died and will close it prematurely.</p>
+<p>This
+problem can be overcome by using the explicit (previous timestep’s)
+values of the well’s flowing water and gas fractions to look up the
+VFP table. The VFP curve is no longer be distorted by the variation
+of water cut or GOR with BHP, thus reducing the risk of premature
+shut-in. The <span class="keyword">WVFPEXP</span> keyword can be used to designate
+particular wells to have their VFP tables interpolated at explicit
+values of the water and gas fractions. Furthermore, if ECLIPSE detects
+that a well has entered an unstable region of the VFP curve while
+using implicit values of the flowing fractions, it will automatically
+change the well to use explicit values, and print a warning message.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Explicit water and gas fractions are only used to look up the
+VFP tables to obtain the flowing BHP. The actual water cut and GOR
+of the well are still calculated implicitly as usual.</span></div>
+<p>ECLIPSE 100</p>
+<p>Item
+2 essentially replaces <span class="keyword">OPTIONS</span> keyword <a href="OPTIONS.html#options.9">item 9</a>. However, for back-compatibility,
+if <span class="keyword">OPTIONS</span> item 9 is set greater than zero then
+all wells use explicit values of the water and gas fractions to interpolate
+the VFP tables, irrespective of any instructions in <span class="keyword">WVFPEXP</span>.</p>
+</div>
+
+<div class="section" id="wvfpexp_stabilized_vfp_curves"><a name="wvfpexp_stabilized_vfp_curves"><!-- --></a><h4 class="sectiontitle">Stabilized VFP
+curves</h4><p>Another use of the <span class="keyword">WVFPEXP</span> keyword
+is to activate a check for wells operating on the flat part of a stabilized
+VFP curve. The VFP <em>i</em> program can output stabilized VFP tables,
+in which the unstable part of the VFP curves to the left of the minimum
+is replaced with a horizontal line at the minimum BHP value. This
+can overcome problems caused by the sudden death of a well when its
+IPR drops off the minimum of the VFP curve, since the flow continuously
+reduces to zero as the grid block pressure decreases instead of stopping
+suddenly. However, it does allow wells to continue to operate at lower
+flow rates when physically they would be unable to flow. By setting
+item 3 in this keyword, ECLIPSE can be instructed to shut the well
+in at the end of the timestep when it has converged on a solution
+in the stabilized part of the VFP curve, which is identified by a
+zero gradient of BHP versus flow rate. In ECLIPSE 100, the switch
+also prevents wells being reopened by the <a href="WTEST.html#WTEST"> WTEST</a> keyword if they would be operating on the
+flat stabilized part of the VFP curve.</p>
+</div>
+
+<div class="section" id="wvfpexp_flow_limits_within_the_unstable_region"><a name="wvfpexp_flow_limits_within_the_unstable_region"><!-- --></a><h4 class="sectiontitle">Flow limits within the unstable region</h4><p>The U-shape of a
+VFP curve can also cause problems if a well is constrained by a rate
+limit (or a group control rate target) to operate within the unstable
+part of the curve. In this region the THP of the flowing well decreases
+as the flow rate decreases, and at a low enough flow rate the THP
+may fall below its minimum limit. The well would normally then switch
+to THP control, and it could either start hunting between control
+modes or die prematurely. ECLIPSE 100 and ECLIPSE 300 differ in their
+behavior at this point as described below.</p>
+<p>ECLIPSE 100</p>
+<p>By setting item 4 to <samp class="codeph">YES1</samp> or <samp class="codeph">YES2</samp> the well is prevented from
+changing to THP control as long as it would produce at a <strong>higher</strong> rate under THP control. Under these circumstances the well continues
+to operate at its rate constraint, while its calculated THP is allowed
+to fall below the minimum limit. But it is still allowed to die if
+its IPR falls off the bottom of the VFP curve. This item replaces <a href="OPTIONS.html#options.73">item 73</a> in <span class="keyword">OPTIONS</span> keyword, which was formerly used to prevent control mode switching
+from happening in these circumstances for all wells.</p>
+<p>ECLIPSE 300</p>
+<p>The well
+will <strong>always</strong> be prevented from changing to THP control if it
+would produce at a <strong>higher</strong> rate under THP control. item 4 only
+controls the reporting of this action.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

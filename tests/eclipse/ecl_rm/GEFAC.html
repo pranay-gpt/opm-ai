@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GEFAC"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GEFAC"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GEFAC</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GEFAC"><a name="GEFAC"><!-- --></a>
+<h1 class="keyword">GEFAC</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gefac.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gefac.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d844e45"> x </th>
+
+<th valign="top" id="d844e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d844e54"> x </th>
+
+<th valign="top" id="d844e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d844e45 d844e54 ">  </td>
+
+<td valign="top" headers="d844e48 d844e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d844e45 d844e54 ">  </td>
+
+<td valign="top" headers="d844e48 d844e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d844e45 d844e54 ">  </td>
+
+<td valign="top" headers="d844e48 d844e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d844e45 d844e54 ">  </td>
+
+<td valign="top" headers="d844e48 d844e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d844e45 d844e54 ">  </td>
+
+<td valign="top" headers="d844e48 d844e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d844e45 d844e54 ">  </td>
+
+<td valign="top" headers="d844e48 d844e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d844e45 d844e54 ">  </td>
+
+<td valign="top" headers="d844e48 d844e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d844e45 d844e54 "> x </td>
+
+<td valign="top" headers="d844e48 d844e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The keyword allocates efficiency factors to groups, rather than
+individual wells. Group efficiency factors may be applied when all
+the wells subordinate to a group have their downtimes synchronized,
+so that the group either flows with its full rate or not at all. If
+the wells are taken down individually, rather than all together, efficiency
+factors should be allocated to the wells (with keyword <a href="WEFAC.html#WEFAC">  WEFAC</a>) instead of the
+group.</p>
+
+<p>The <span class="keyword">GEFAC</span> keyword is followed by any number
+of records, each containing the following items of data, and each
+terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li> Group name or group name root <p>A group name root, enclosed
+in quotes and ending with an asterisk (*), can be used to refer to
+several groups in one record.</p>
+ <div class="note"><span class="notetitle">Note:</span> <span class="notebody"> The <samp class="codeph">FIELD</samp> cannot have an efficiency factor. </span></div>
+ </li>
+
+<li> Efficiency factor for the group <p>This is the fractional time
+for which the group is operational. For example, if the group is down
+for 10 percent of the time, its efficiency factor is 0.9.</p>
+ <p>The
+efficiency factor must be greater than zero.</p>
+<p>DEFAULT: 1.0</p>
+ </li>
+
+<li> Should the group’s efficiency factor be automatically transferred
+to its corresponding node in the Extended Network option? (See <a href="../ecl_td/extended_Well_and_group_efficiency_factors.html#extended_well_and_group_efficiency_factors">"Well and group
+efficiency factors"</a> in the <cite>ECLIPSE Technical Description</cite>). 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top">The node’s flow contribution to the flow rate of its parent
+node in the network will be multiplied by the group’s efficiency factor.
+Thus the branch pressure losses downstream of the parent node reflects
+the time-averaged contribution of this group. (Note that the pressure
+losses in the outlet branch of this group’s node still reflect the
+full, or reported, group flow rate.)</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top">The node’s contribution to the flow rate of its parent node
+in the network is <strong>not</strong> multiplied by the group’s efficiency
+factor. Thus all downstream branch pressure losses reflect the full
+flow rate of this group.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>This flag applies only to the Extended Network Model. If
+the Standard Network Model is being run, the groups’ <strong>reported</strong> flows are always used to calculate the pressure losses in the branch
+to their parent group.</p>
+<p>The flag also applies only if there is
+a node in the extended network that has the same name as the group.
+Otherwise, the <a href="NEFAC.html#NEFAC">  NEFAC</a> keyword can be used to apply efficiency factors directly to the
+network nodes.</p>
+<p>DEFAULT: <samp class="codeph">YES</samp> </p>
+ </li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<p>The efficiency factors for groups not specified with this keyword
+are defaulted to 1.0.</p>
+
+<div class="section" id="gefac_treatment_of_group_downtime"><a name="gefac_treatment_of_group_downtime"><!-- --></a><h4 class="sectiontitle">Treatment of
+group downtime</h4><p>If wells are brought down individually on
+a regular basis for short periods of maintenance, each should be given
+its own efficiency factors with keyword <a href="WEFAC.html#WEFAC">  WEFAC</a>. The treatment of well downtime is described
+in the <span class="keyword">WEFAC</span> keyword documentation.</p>
+<p>If all
+the wells in a group are brought down together for regular maintenance,
+then the efficiency factor should be applied to the group. The treatment
+of group downtime is entirely analogous to the treatment of well downtime.
+The group is solved with its full flow rate, which is the sum of its
+wells’ full flow rates (unless any wells or subordinate groups also
+have efficiency factors allocated). The group’s flow rates reported
+in the Print and Summary files also reflect its full flow rate. Any
+flow targets and limits for the group will apply to its full flow
+rate. But the group rates are multiplied by the group efficiency factor
+when summing the group’s contribution to its parent group in the hierarchy.
+Thus the flows of any superior groups will reflect this group’s time-averaged
+flow rate.</p>
+<p>Below the group, the flows of the wells and any subordinate
+groups reflect the full flowing rates (subject to any efficiency factors
+applied at a lower level). But the well and group flows are multiplied
+by the efficiency factor when incrementing their cumulative flows
+over the timestep, and the group efficiency factor is also applied
+to the subordinate well connections when determining the source/sink
+terms in the reservoir grid blocks.</p>
+<p>If the Standard Network
+option is in use, the groups’ <strong>reported</strong> flows are always used
+to calculate the pressure losses in the branch to their parent group.
+Thus if a group (but none of its subordinate groups or wells) has
+an efficiency factor set &lt; 1.0, the flow in the branch to its parent
+group, and any branches below it in the group tree, reflects the full
+flow rate, while the flow in its parent group’s network branch and
+any branches above it in the group tree reflects the group’s time-averaged
+rate.</p>
+<p>The Extended Network option has more flexibility in handling
+downtime. If an efficiency factor is applied to a group that has the
+same name as a node in the network, by default the efficiency factor
+is also applied to the corresponding node. The node’s flow rates are
+multiplied by the efficiency factor when adding them to the flow in
+its parent node. The pressure drop in a node’s outlet branch is calculated
+from the node’s flow rate. Thus the node’s outlet branch and the branches
+upstream of the node reflects the full flow rates, while the branches
+downstream of its parent node reflects the time-average flows. (This
+is equivalent to the Standard Network Model’s treatment of group efficiency
+factors.) However, by setting item 3 of this keyword to '<samp class="codeph">NO</samp>' it is possible to specify that the group’s full flow rates should
+be used for calculating all downstream pressure losses, by not assigning
+the group’s efficiency factor to the corresponding network node.</p>
+<p>If the wells are receiving gas lift, their gas lift injection
+rates reflects the full flows. But the group’s contribution to the
+lift gas supply rate of its superior groups are multiplied by its
+efficiency factor to reflect the time-averaged rate.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> It
+is not normal for efficiency factors to be allocated on more than
+one level of the well/group hierarchy. If they are, then the efficiency
+factors are multiplicative. That is, if a group has an efficiency
+factor of 0.9 (implying that all its wells are down together for 10
+percent of the time), and also one of its wells is given an efficiency
+factor of 0.9 in <span class="keyword">WEFAC</span>, then that well’s contribution
+to the field’s production rate and its cumulative totals is reduced
+to 81 percent of its full rate. A well’s efficiency factor product
+(multiplied with the efficiency factors of all its superior groups)
+may be written to the Summary file using the <a href="SUMMARY.html#SUMMARY">  SUMMARY</a> section keyword <span class="keyword">WEFFG</span>. </span></div>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> If you are using the Reservoir Coupling option, there
+are some subtle issues related to the use of the group efficiency
+factor. Due to possible differences in timestepping between the Master
+and Slave simulations, the actual mechanism for passing rates from
+the Slave to the Master is to pass the cumulative flow, then the Master
+calculates the difference in cumulative flow over its timestep to
+work out the flow rates. The efficiency factor from the Slave group
+is also passed to the Master so that its effect can be removed, allowing
+the master group to calculate the peak flow. The Master group cumulative
+values are subsequently calculated from the calculated peak flow,
+the Master group efficiency factor and the Master group timestep.  <strong>If you want the Master group’s time averaged rate to be based on
+the same efficiency factor as the Slave, you need to re-specify the
+Slave group efficiency in the Master group. </strong> In some situations,
+you may need to specify different efficiency factors for the Master
+group and Slave group, for example if you have an efficiency factor
+in the group hierarchy <em> above</em> the Master group, then this can
+be specified for the Slave group so that it reports the correct peak
+and averaged flows. One further issue to be aware of is that Master
+group cumulative quantities will revert to the Slave cumulative quantity
+if a Master timestep is chopped. </span></div>
+</div>
+
+<div class="section" id="gefac_example"><a name="gefac_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>GEFAC
+ PLAT-A    0.9 /
+ PLAT-B    0.8 /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

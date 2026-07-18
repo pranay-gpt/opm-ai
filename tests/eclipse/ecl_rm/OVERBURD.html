@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="OVERBURD"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="OVERBURD"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>OVERBURD</title>
+</head>
+<body>
+
+
+<div class="nested0" id="OVERBURD"><a name="OVERBURD"><!-- --></a>
+<h1 class="keyword">OVERBURD</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="overburd.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="overburd.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1704e45"> x </th>
+
+<th valign="top" id="d1704e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1704e54"> x </th>
+
+<th valign="top" id="d1704e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1704e45 d1704e54 ">  </td>
+
+<td valign="top" headers="d1704e48 d1704e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1704e45 d1704e54 ">  </td>
+
+<td valign="top" headers="d1704e48 d1704e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1704e45 d1704e54 ">  </td>
+
+<td valign="top" headers="d1704e48 d1704e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1704e45 d1704e54 "> x </td>
+
+<td valign="top" headers="d1704e48 d1704e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1704e45 d1704e54 ">  </td>
+
+<td valign="top" headers="d1704e48 d1704e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1704e45 d1704e54 ">  </td>
+
+<td valign="top" headers="d1704e48 d1704e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1704e45 d1704e54 ">  </td>
+
+<td valign="top" headers="d1704e48 d1704e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1704e45 d1704e54 ">  </td>
+
+<td valign="top" headers="d1704e48 d1704e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data comprises <samp class="codeph">NTROCC</samp> (see item 2 in keyword <a href="ROCKCOMP.html#ROCKCOMP"> ROCKCOMP</a> in the <span class="keyword">RUNSPEC</span> section) tables of rock overburden data, each terminated
+by a slash (/). Each table consists of 2 columns of data:</p>
+
+<ol>
+<li>The depth. <p>Values should increase monotonically down the column.</p>
+ <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li>The overburden pressure values should increase monotonically down
+the column. <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+</ol>
+
+<p>Each table must contain at least two, and no more than <a href="TABDIMS.html#TABDIMS.NPPVT"> NPPVT</a> (set
+in the <span class="keyword">TABDIMS</span> keyword) rows. Each row must be complete, containing
+an entry in every column of the table.</p>
+
+<p>The <samp class="codeph">NTROCC</samp> records correspond to the rock compaction
+table region numbers, which are set using keyword <a href="ROCKNUM.html#ROCKNUM"> ROCKNUM</a>.</p>
+
+<p>The <span class="keyword">OVERBURD</span> keyword can be used if the rock
+compaction option is selected (keyword <span class="keyword">ROCKCOMP</span> in <span class="keyword">RUNSPEC</span>). The overburden
+pressure at the grid block depth is subtracted from the pore pressure
+to look up the pore volume and transmissibility multiplier values.
+If the keyword is not present then the overburden pressure is taken
+to be zero.</p>
+
+<p>ECLIPSE by default tabulates the rock compaction multipliers against
+fluid pressure. But if the <span class="keyword">OVERBURD</span> keyword is
+specified, the <span class="keyword">ROCKTAB</span>, <span class="keyword">ROCKTABH</span> or <span class="keyword">ROCK2D</span> and <span class="keyword">ROCK2DTR</span> keywords
+tabulate the compaction multipliers against the effective fluid pressure
+instead (P<sub>eff fl</sub> = P<sub>fluid</sub> - Overburden). If
+the overburden pressure is greater than the fluid pressure, as it
+usually is, then the effective fluid pressure (or stress) is negative.
+This leads to non-intuitive compaction tables with negative effective
+pressures in the first column.</p>
+
+<p>The compaction tables can be input in a more intuitive manner by
+selecting the ‘ <samp class="codeph">STRESS</samp> ’ option in the <span class="keyword">ROCKOPTS</span> keyword before the <span class="keyword">ROCKTAB</span>, <span class="keyword">ROCKTABH</span> or <span class="keyword">ROCK2D</span> and <span class="keyword">ROCK2DTR</span> keywords.
+In this case the pore volume and transmissibility multipliers are
+tabulated against the effective overburden pressure,</p>
+
+<p>P<sub>eff ov </sub>= Overburden - P<sub>fluid</sub>, which is -
+P<sub>eff fl</sub>.</p>
+
+<p>See also keywords <a href="ROCKTAB.html#ROCKTAB"> ROCKTAB</a>, <a href="ROCKTABH.html#ROCKTABH"> ROCKTABH</a>, <a href="ROCK2D.html#ROCK2D"> ROCK2D</a>, <a href="ROCK2DTR.html#ROCK2DTR"> ROCK2DTR</a> and <a href="ROCKOPTS.html#ROCKOPTS"> ROCKOPTS</a>, and <a href="../ecl_td/rockcomp_Rock_Compaction.html#rockcomp_rock_compaction">"Rock compaction"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<div class="section" id="overburd_example"><a name="overburd_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTROCC=1</samp> and <samp class="codeph">NPPVT</samp> ≥5:</p>
+ <pre><code>OVERBURD
+  2000  600
+  4000 1200
+  6000 1800
+  8000 2300
+ 10000 2800
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

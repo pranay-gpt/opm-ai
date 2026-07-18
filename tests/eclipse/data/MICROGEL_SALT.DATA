@@ -1,0 +1,924 @@
+-- Bright water model with Adsorption depending on temperature 
+-- Bright WaterTM Polymer injection
+-- And its effect in solving thief zone issues 
+-- Simple "2D" model with 1 INJ and 1 PROD well
+-- April 2013
+-- Keywords specific for Bright WaterTM: 
+-- PLYTRRF
+-- PLYKRRF
+-- PLYATEMP
+-- PLYADS
+
+---------------------------------------------------------------------------
+----------------------------- RUNSPEC SECTION -----------------------------
+---------------------------------------------------------------------------
+
+RUNSPEC     ==============================================================
+
+TITLE
+Bright water model with Adsorption depending on temperature
+
+-- Reservoir dimension 50*3*5, surrounding by 1 block thick layer in all directions of 0 permeability 
+-- to simulate the heat flow form the surrounding
+DIMENS
+  52 5 7 /
+
+OIL
+
+WATER
+
+GAS
+
+POLYMER
+
+BRINE
+
+UNIFIN
+UNIFOUT
+
+FIELD
+
+TABDIMS
+    2    1   40   20  1   20 /
+
+START
+   1 'MAY' 1990  /
+
+NSTACK
+    50 /
+
+MESSAGES
+3* 10000 5* 10000 /
+
+TEMP
+
+
+---------------------------------------------------------------------------
+----------------------------- GRID SECTION --------------------------------
+---------------------------------------------------------------------------
+
+GRID      ==============================================================
+
+GRIDFILE
+ 1 1 /
+
+INIT
+
+TOPS
+260*3790 /
+DX
+   1820*20 /
+DY
+   1820*20 /
+DZ
+   1820*10 /
+
+
+-- Porosity of the outer layer 0.01 %  
+EQUALS
+PORO 0.01/
+/
+-- Porosity of the permeable reservoir 20 %
+MULTIPLY
+PORO 20 2 51 2 4 2 6 /
+/
+
+-- Definition of the 0 permeability layer
+PERMX 
+1820*0/
+PERMY 
+1820*0/
+PERMZ 
+1820*0/
+
+--Definition of the thief zone in the x-direction (2 block thick)
+BOX 
+2 51 2 4 2 6 /  
+PERMX
+300*50
+150*1000    -- Thief zone
+300*50 /
+
+COPY
+PERMX PERMY /
+PERMX PERMZ /
+/
+MULTIPLY
+PERMZ .1 /
+/
+ENDBOX
+
+THCONR
+1820*25/
+
+
+---------------------------------------------------------------------------
+----------------------------- EDIT SECTION --------------------------------
+---------------------------------------------------------------------------
+
+EDIT      ==============================================================
+
+---------------------------------------------------------------------------
+----------------------------- PROPS SECTION -------------------------------
+---------------------------------------------------------------------------
+
+PROPS     ==============================================================
+
+PLMIXPAR
+ 1.0 /
+
+SPECHEAT
+0.0 .5 1.5 .5
+300.0 .5 1.5 .5
+/
+
+SPECROCK
+0.0 10000.0
+300.0 10000.0
+/  -- For the two blocks thick layer surrounding the reservoir, for an 'infinite' heat flux
+0.0 25.0
+300.0 25.0
+/
+
+
+SOF3
+.0000 .0000 .0000
+.08000 .0000 .0000
+.3800 1* .0000
+.4000 .0048 1*
+.4800 1* .0200
+.5000 .0649 1*
+.5800 1* .1000
+.6000 .1250 1*
+.6800 1* .3300
+.7000 .4000 1*
+.7400 1* .6000
+.7800 1.0000 1.0000 /
+/
+
+
+
+SGFN
+-- Sg      krgo   Pcog
+   0.0000  0.0000 0.000
+   0.0500  0.0000 0.000
+   0.0900  0.0320 0.000
+   0.1800  0.0890 0.000
+   0.2700  0.1640 0.000
+   0.3600  0.2530 0.000
+   0.4500  0.3540 0.000
+   0.5400  0.4650 0.000
+   0.6300  0.5860 0.000
+   0.7200  0.7160 0.000
+   0.8100  0.8540 0.000
+   0.9000  1.0000 0.000 /
+/
+
+
+SWFN
+--  Sw     krwo    Pcow
+	0.1000	0	0
+   0.22000 0.000   0
+   0.2800  0.0135  1*
+   0.3400  0.0320  1*
+   0.4000  0.0625  1*
+   0.4600  0.1080  1*
+   0.5200  0.1720  1*
+   0.5800  0.2560  1*
+   0.6400  0.3650  1*
+   0.7000  0.5000  1*
+   0.8000  0.6670  1*
+   0.9000  0.8330  1*
+   1.0000  1.0000  0.000 /
+/
+
+
+ 
+PVTW
+3600.0000 1.00341 3.00E-06 0.52341 0.00E-01 / 
+
+
+PLYVSCST
+.0000 	1.0 1.0 1.0/  --set of records for salt concentration value #1
+		1.0 1.0 1.0/  --set of records for salt concentration value #2
+		1.0 1.0 1.0/  --set of records for salt concentration value #3
+		/
+.500 	5 10 14/  --set of records for salt concentration value #1
+		4 9 13/  --set of records for salt concentration value #2
+		3 8 12/  --set of records for salt concentration value #3
+		/
+1		7 12 19/  --set of records for salt concentration value #1
+		6 11 18/  --set of records for salt concentration value #2
+		5 10 17/  --set of records for salt concentration value #3
+		/
+2	 	10 17 25/  --set of records for salt concentration value #1
+		9 16 24/  --set of records for salt concentration value #2
+		8 15 23/  --set of records for salt concentration value #3
+		/
+/
+
+ 
+TEMPNODE
+70
+125
+200/
+ 
+SALTNODE
+7.01 --20 kg/m3
+10.515 --30 kg/m3
+14.02 / --40 Kg/m3
+
+ADSALNOD
+5
+10
+15/
+/
+
+
+PVDG
+400.000 5.90000 .01300
+800.000 2.95000 .01350
+1200.00 1.96000 .01400
+1600.00 1.47000 .01450
+2000.00 1.18000 .01500
+2400.00 .98000 .01550
+2800.00 .84000 .01600
+3200.00 .74000 .01650
+3600.00 .65000 .01700
+4000.00 .59000 .01750
+4400.00 .54000 .01800
+4800.00 .49000 .01850
+5200.00 .45000 .01900
+5600.00 .42000 .01950 / 
+
+PVDO
+     .0     1.0     2.0
+ 8000.0      .92    2.0
+/
+
+DENSITY
+-- oil      water   gas
+   49.94    62.43   0.061  /
+   
+-- Rock data
+ROCK
+ 3214.70       0.40E-05 /
+
+PLYROCK
+0.13 1.5 2650 2 0.000012 /
+0.13 1.5 2650 2 0.000012 /
+
+
+PLYKRRF
+780*1.5 260*1.75 780*1.5 /
+
+PLYTRRF
+20 1
+100 1
+110 8
+150 17
+200 20/
+20 1
+100 1
+110 8
+150 17
+200 20/
+
+PLYATEMP
+ 100 /
+PLYADSS
+0   0        0 0 /
+0.1 0.000000 0 0 /
+0.5 0.000000 0 0 /
+1   0.000000 0 0 /
+2   0.000000 0 0 /
+/
+/
+
+
+PLYATEMP
+ 120 /
+PLYADSS
+0   0        0         0        /
+0.1 0.000003 0.000003 0.000003 /
+0.5 0.000004 0.000004 0.000004 /
+1   0.000005 0.000005 0.000005 /
+2   0.000005 0.000005 0.000005 /
+/
+/
+
+
+PLYATEMP
+ 130 /
+PLYADSS
+0   0        0         0        /
+0.1 0.000007 0.000007 0.000007 /
+0.5 0.00001  0.00001  0.00001 /
+1   0.000012 0.000012  0.000012 /
+2   0.000012 0.000012  0.000012 /
+/
+/
+
+PLYATEMP
+ 140 /
+PLYADSS
+0   0         0         0 / 
+0.1 0.0000086 0.0000086 0.0000086 /
+0.5 0.0000116 0.0000116  0.0000116 /
+1   0.000014  0.000014 0.000014 /
+2   0.000014  0.000014 0.000014 /
+/
+/
+
+
+PLYMAX
+ 2.0  15.0 /
+ 
+RPTPROPS
+PLYKRRF PLYRMDAN PLYCAMAX /
+
+
+---------------------------------------------------------------------------
+----------------------------- REGIONS SECTION -----------------------------
+---------------------------------------------------------------------------
+
+REGIONS    =============================================================
+
+--SATNUM defined as 1 in the outer layer and 2 in the permeable reservoir
+SATNUM
+1820*1 /
+
+MULTIPLY
+SATNUM 2 2 51 2 4 2 6 /
+/
+
+---------------------------------------------------------------------------
+----------------------------- SOLUTION SECTION ----------------------------
+---------------------------------------------------------------------------
+
+SOLUTION   =============================================================
+
+RTEMP
+180/
+
+PRESSURE
+1820*2000	/
+
+SWAT
+1820*0.1600	/
+
+SGAS
+1820*0.0
+/
+
+SALT
+1820*10.0
+/
+
+RPTSOL
+-- Initialisation Print Output
+'PRES' 'SOIL' 'SWAT' 'SGAS' 'SME' 'RESTART=1' 'OILAPI' 'FIPTR=2' 'TBLK' 'FIPPLY=2' 'SURFBLK' 
+'FIPSURF=2' /
+
+RPTRST
+ BASIC=2  /
+
+---------------------------------------------------------------------------
+----------------------------- SUMMARY SECTION -----------------------------
+--------------------------------------------------------------------------- 
+ 
+SUMMARY    ===========================================================
+
+ALL
+
+PERFORMA
+
+BTCNFHEA 
+-- block temperature
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BSCN 
+-- salt cell concentration
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BPR 
+-- Oil phase pressure
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BSOIL 
+-- Oil saturation
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BSWAT 
+-- Water saturation
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BSGAS 
+-- Gas saturation
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BVOIL 
+-- Oil Viscosity
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BVWAT 
+-- Water viscosity
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BEWV_SAL 
+-- Effective water viscosity due to salt concentration.
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BEWV_POL 
+-- Effective water viscosity
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BEMVIS 
+-- Effective mixture viscosity
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BEPVIS 
+-- Effective Polymer solution viscosity
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BDENO 
+-- Oil reservoir density
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BDENW 
+-- Water reservoir density
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BCAD 
+-- Polymer adsorption concentration
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BCIP 
+-- Polymer in solution
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BCCN 
+-- Polymer concentration
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BSIP 
+-- Salt in place
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BVELOI 
+-- Oil velocity for positive I direction
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BVELOJ 
+-- Oil velocity for positive J direction
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BVELOK 
+-- Oil velocity for positive K direction
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BVELWI 
+-- Water velocity in the positive I direction
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BVELWJ 
+-- Water velocity in the positive J direction
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BVELWK 
+-- Water velocity in the positive K direction
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BRPV 
+-- Pore Volume at Reservoir conditions
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BCDCS 
+-- Polymer thermal degradation - total mass degraded in previous timestep
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BCDCR 
+-- Polymer thermal degradation - total degradation rate
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BCDCA 
+-- Polymer thermal degradation - adsorbed degradation rate
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BRK 
+-- Water relative permeability reduction factor due to polymer
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+BEWKR 
+-- Water effective relative permeability due to polymer
+ 2 3 2 /
+ 2 3 4 /
+ 2 3 6 /
+ 25 3 2 /
+ 25 3 4 /
+ 25 3 6 /
+ 51 3 2 /
+ 51 3 4 /
+ 51 3 6 /
+/
+
+FCIP 
+-- Polymer in solution
+FCIT 
+-- Polymer Injection Total
+FCIC 
+-- Polymer Injection Concentration
+FCIR 
+-- Polymer Injection Rate
+FCPR 
+-- Polymer Production Rate
+FCPC 
+-- Polymer Production Concentration
+FCPT 
+-- Polymer Production Total
+FCAD 
+-- Polymer Adsorption total
+FSPR 
+-- Salt Production Rate
+FSPT 
+-- Salt Production Total
+FSIR 
+-- Salt Injection Rate
+FSIT 
+-- Salt Injection Total
+FSIP 
+-- Salt In Place
+
+WBHP 
+-- Well bottom hole pressure
+/
+
+WLPR 
+-- Liquid production rate
+/
+
+WLPT 
+-- Well liquid production total
+/
+
+WMCTL 
+-- Mode of Control
+/
+
+FOSAT 
+-- Oil SATuration average value
+
+FOE 
+-- (OIP(initial) - OIP(now)) / OIP(initial)
+
+FWSAT 
+-- Water SATuration average value
+
+FGSAT 
+-- Gas SATuration average value
+
+RUNSUM
+SEPARATE
+
+MSUMLINS
+MSUMNEWT
+
+---------------------------------------------------------------------------
+----------------------------- SCHEDULE SECTION ----------------------------
+---------------------------------------------------------------------------
+
+SCHEDULE   ===========================================================
+
+TUNING
+1 10 0.1 0.1 3 0.3 0.1 1.25 1E20 1* /
+0.1 0.001 1E-7 0.0001 10.0 0.01 1* 0.001/
+20 10 50 10 /
+
+RPTSCHED                                         FIELD   16:55 18 APR 86
+'PRES' 'SOIL' 'SWAT' 'SGAS' 'SME' 'SALT' 'RESTART=2' 'FIP=2' 'WELLS=2' 'SUMMARY=2' 'CPU=2' 
+'NEWTON=2' 'PBLK' 'SALT' 'PLYADS' 'RK' 'FIPSALT=2'
+/
+
+
+WELSPECS
+'INJ' 'G'   2  3  1*  'WAT'  /
+'OP'  'G'   51 3  1*  'OIL'  /
+/
+
+COMPDAT
+'OP      '   1*  1*   2  6 'OPEN'   0  .0   1.0 /
+'INJ     '   1*  1*   2  5 'OPEN'   0  .0   1.0 /
+/
+
+WCONPROD
+'OP' 'OPEN' 'BHP' 3*  600  1*  300 /
+/
+
+WCONINJE
+'INJ' 'WAT' 'OPEN' 'RATE' 200 1* 5000.0 /
+/
+
+
+WTEMP
+INJ 60/
+/
+
+TSTEP
+10*15 /
+
+
+WTEMP
+INJ 60/
+/
+
+----------------------------------
+-- Microgel 1 month slug
+WPOLYMER
+INJ 2 20 /
+/
+
+TSTEP
+1*15 /
+
+----------------------------------
+WPOLYMER
+INJ 0 20 /
+/
+
+WTEMP
+INJ 60/
+/
+
+TSTEP
+1*15 /
+
+WTEMP
+INJ 60/
+/
+
+TSTEP
+15*15 /
+
+END
+

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Examples"/>
+<meta name="DC.subject" content="GCONSALE"/>
+<meta name="keywords" content="GCONSALE"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gconsale_examples"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Examples</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gconsale_examples"><a name="gconsale_examples"><!-- --></a>
+<h1 class="topictitle1">Examples</h1>
+
+
+ <div>
+<div class="section" id="gconsale_example_1"><a name="gconsale_example_1"><!-- --></a><h4 class="sectiontitle">Example 1</h4><p>The field
+gas sales target is 50,000 Mscf/day. The surplus gas is to be reinjected
+by the gas injectors in proportion to their guide rates or injection
+potentials. If the surplus is too much for the injectors to handle,
+the worst-offending well will be shut in.</p>
+<pre><code>GCONSALE
+ FIELD  50000 55000 45000  WELL /
+/</code></pre></div>
+
+<div class="section" id="gconsale_example_2"><a name="gconsale_example_2"><!-- --></a><h4 class="sectiontitle">Example 2</h4><p>As example
+1, but the field is subject to a gas injection limit of 30,000 Mscf/day.
+The rate limit is imposed with the keyword <span class="keyword">GCONINJE</span>. The field is placed under reinjection control (since this is the
+control mode for sales gas control), but the reinjection fraction
+set here will be ignored. The field will switch to gas production
+rate control if it is unable to reinject all the surplus gas.</p>
+<pre><code>GCONSALE
+ FIELD  50000 55000 45000  RATE /
+/
+GCONINJE
+ FIELD  GAS  REIN  30000 1* 1.0 /
+/</code></pre></div>
+
+<div class="section" id="gconsale_example_3"><a name="gconsale_example_3"><!-- --></a><h4 class="sectiontitle">Example 3</h4><p>As example
+1, but the keyword <span class="keyword">GCONINJE</span> is used to control
+the distribution of reinjected gas. The grouping hierarchy is the
+same as that given in the examples for the <span class="keyword">GCONINJE</span> keyword. The injected gas is to be distributed between the bottom-level
+groups in proportion to their voidage production, subject to PLAT-A
+and PLAT-B not injecting more than their own available gas.</p>
+<pre><code>GCONSALE
+ FIELD  50000 55000 45000  WELL /
+/ 
+GCONINJE
+ 'PLAT*'  GAS  NONE  2*    1.0             /
+ 'GR-*'   GAS  FLD   6*              VOID  /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

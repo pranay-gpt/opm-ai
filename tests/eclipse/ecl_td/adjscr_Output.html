@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Output"/>
+<meta name="DC.subject" content="Optimization, Adjoint gradient output"/>
+<meta name="keywords" content="Optimization, Adjoint gradient output"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="adjscr_output"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Output</title>
+</head>
+<body>
+
+
+<div class="nested0" id="adjscr_output"><a name="adjscr_output"><!-- --></a>
+<h1 class="topictitle1">Output</h1>
+
+
+ <div>
+<p>In the <span class="keyword">SCHEDULE</span> section, the <a href="../ecl_rm/RPTRST.html#RPTRST">RPTRST</a> keyword must be specified
+with <samp class="codeph">BASIC=2</samp> or <samp class="codeph">BASIC=6</samp> so that
+the restart information is saved for every report/timestep.</p>
+
+<p>At the end of the simulation, the sensitivities are calculated
+for all objective functions and at every report step. These are stored
+as real arrays in an additional section at the end of each restart
+file. The sensitivities can be plotted by loading restart data into
+FloViz, Petrel or other visualization packages, and then displaying <samp class="codeph">AJGFN</samp> restart properties.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The sensitivities output to the restart file will be encoded
+unless the <a href="../ecl_rm/UNCODHMD.html#UNCODHMD">UNCODHMD</a> keyword is present in the <span class="keyword">RUNSPEC</span> section.
+The encoded sensitivities are not decoded by ECLIPSE Office or FloViz
+and so are not meaningful when visualized in those programs. </span></div>
+
+<div class="section" id="adjscr_example1"><a name="adjscr_example1"><!-- --></a><h4 class="sectiontitle">Example</h4><p>For the example
+in <a href="adjscr_keywords.html#adjscr_keywords"> "Keywords"</a>, which has 25
+simulation grid cells, the section added to the restart file for report
+step 49 will be as shown:</p>
+<pre><code>'AJGRADNT'           0 'MESS'
+'AJGNAMES'          24 'CHAR'
+'AJGFN  1' 'P1    ' 'WBHP    ' 'PERMXY  ' 'AJGFN  2' 'P2    ' 'WBHP   '
+'PERMXY  ' 'AJGFN  3' 'I1    ' 'WBHP   ' 'PERMXY  ' 'AJGFN  4' 'P1    '
+'WBHP    ' 'PORO    ' 'AJGFN  5' 'P2    ' 'WBHP    ' 'PORO ' 'AJGFN  6'
+'I1      ' 'WBHP    ' 'PORO    '
+'AJGPARA '           5 'INTE'
+ 49           1           1          25           0
+'AJGFN  1'          25 'REAL'
+0.26733625E+00   0.28940764E+00   0.15707164E+00   0.82344688E-01
+0.53730132E-02  -0.60202714E-01  -0.42874895E-01  -0.30267414E-01
+-0.30209363E-01  -0.54189377E-01  -0.10426258E-01  -0.54382261E-01
+-0.51501323E-01  -0.38832009E-01  -0.45974124E-01   0.63967048E-02
+-0.14613148E-01  -0.23543639E-01  -0.24201822E-01  -0.31580176E-01
+-0.64227316E-02  -0.27032575E-01  -0.31063568E-01  -0.24502732E-01
+-0.17454501E-01
+'AJGPARA '           5 'INTE'
+49           2           1          25           0
+'AJGFN  2'          25 'REAL'
+0.12758227E+00   0.28352138E+00   0.15206486E+00   0.75946450E-01
+0.50332956E-02  -0.70431128E-01  -0.43791033E-01  -0.33293936E-01
+-0.32356218E-01  -0.46265345E-01   0.21185523E-01  -0.51040705E-01
+-0.59991647E-01  -0.43821692E-01  -0.33047505E-01   0.98482676E-01
+-0.37209673E-02  -0.28060049E-01  -0.27350528E-01  -0.15706640E-01
+0.32918173E+00   0.45060366E-01   0.36429397E-02  -0.28943263E-02
+-0.19188058E-02
+                           
+...
+Lines skipped here
+...
+                           
+'ENDAJG  '           0 'MESS'</code></pre><p>The new records appended
+to the restart file are:</p>
+<ul>
+<li> <samp class="codeph">AJGRADNT</samp> - the header marking the start of the
+section</li>
+
+<li> <samp class="codeph">AJGNAMES</samp> - a character array consisting of blocks
+of four fields containing the following information<ul>
+<li>Name of the sensitivity (internally assigned by ECLIPSE)</li>
+
+<li>Name of the well</li>
+
+<li>Name of the dynamic parameter on the well</li>
+
+<li>Name of the static grid property</li>
+
+</ul>
+</li>
+
+<li> <samp class="codeph">AJGPARA</samp> - an integer array containing the following
+information for the record that appears next in the file<ul>
+<li>Report step number</li>
+
+<li>Well number</li>
+
+<li>Parameter number</li>
+
+<li>Number of sensitivity values that will be output</li>
+
+<li>Reserved for future use</li>
+
+</ul>
+</li>
+
+<li> <samp class="codeph">AJGFN 1</samp> - a real array containing one sensitivity
+value for every active grid cell. Further arrays are numbered sequentially <samp class="codeph">AJGFN 2</samp>, <samp class="codeph">AJGFN 3</samp> and so on. </li>
+
+<li> <samp class="codeph">ENDAJG</samp> - the header marking the end of the adjoint
+gradient section.</li>
+
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

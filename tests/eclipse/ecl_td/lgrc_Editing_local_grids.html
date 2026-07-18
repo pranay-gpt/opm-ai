@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Editing local grids"/>
+<meta name="DC.subject" content="Local grid refinement, Editing"/>
+<meta name="keywords" content="Local grid refinement, Editing"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrc_editing_local_grids"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Editing local grids</title>
+</head>
+<body>
+
+
+<div class="nested0" id="lgrc_editing_local_grids"><a name="lgrc_editing_local_grids"><!-- --></a>
+<h1 class="topictitle1">Editing local grids</h1>
+
+
+ <div>
+<p>It is possible to modify data for local grids in the <span class="keyword">EDIT</span> section by inserting modifications between a <a href="../ecl_rm/REFINE.html#REFINE">REFINE</a> / <a href="../ecl_rm/ENDFIN.html#ENDFIN">ENDFIN</a> pair, just as for
+the global grid, in order to modify pore volume, depth and transmissibility
+data. This is not recommended for general use and should be used with
+care. For example:</p>
+
+<pre><code>REFINE  'NORTH'  /
+EQUALS  'PORV'  1000.0  1 18 1 18 1 8 /  'TRANZ'    0.0  1 18 1 18 4 4 / /
+ENDFIN</code></pre>
+<p>edits <samp class="codeph">PORV</samp> and <samp class="codeph">TRANZ</samp> within the
+local grid <samp class="codeph">NORTH</samp>.</p>
+
+<p>If the pore volume is edited for any cells in the global grid that
+have been refined, then ECLIPSE carries over the modification to local
+cells by applying an additional pore volume multiplier to the local
+grid, which is defined as the ratio of edited to unedited pore volumes
+for the global host cells. Similarly, when transmissibilities are
+edited on the global grid, ECLIPSE imposes an additional transmissibility
+multiplier to the local grids which is determined in the same manner.
+This additional transmissibility multiplier applies to regular as
+well as to non-neighbor connections within the local grids, and also
+to connections between the local and global grids.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

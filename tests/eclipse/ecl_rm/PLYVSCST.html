@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PLYVSCST"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PLYVSCST"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PLYVSCST</title>
+</head>
+<body>
+
+
+<div class="nested0" id="PLYVSCST"><a name="PLYVSCST"><!-- --></a>
+<h1 class="keyword">PLYVSCST</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="plyvscst.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="plyvscst.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1852e45">x</th>
+
+<th valign="top" id="d1852e48">ECLIPSE 100</th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1852e54">&nbsp;</th>
+ 
+<th valign="top" id="d1852e56">ECLIPSE 300</th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1852e45 d1852e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1852e48 d1852e56 ">RUNSPEC</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1852e45 d1852e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1852e48 d1852e56 ">GRID</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1852e45 d1852e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1852e48 d1852e56 ">EDIT</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1852e45 d1852e54 ">x</td>
+
+<td valign="top" headers="d1852e48 d1852e56 ">PROPS</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1852e45 d1852e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1852e48 d1852e56 ">REGIONS</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1852e45 d1852e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1852e48 d1852e56 ">SOLUTION</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1852e45 d1852e54 ">&nbsp;</td>
+ 
+<td valign="top" headers="d1852e48 d1852e56 ">SUMMARY</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1852e45 d1852e54 ">x</td>
+
+<td valign="top" headers="d1852e48 d1852e56 ">SCHEDULE</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is for polymer studies when the salt-sensitivity option
+has been activated (keyword <a href="BRINE.html#BRINE"> BRINE</a> in the <span class="keyword">RUNSPEC</span> section) and when the temperature
+option has been activated (keyword <a href="TEMP.html#TEMP"> TEMP</a> in the <span class="keyword">RUNSPEC</span> section).
+You use <span class="keyword">PLYVSCST</span> with associated settings in keywords <a href="SALTNODE.html#SALTNODE"> SALTNODE</a> and <a href="TEMPNODE.html#TEMPNODE"> TEMPNODE</a> to specify
+a full three-dimensional polymer/salt solution/temperature viscosity
+function.</p>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTPVT"> NTPVT</a>  (set in the <span class="keyword">TABDIMS</span> keyword)
+tables of polymer viscosity multiplier functions, each terminated
+by a slash (/). These describe the effect on the viscosity of pure
+water of increasing the concentration of polymer and salt in the solution,
+and the temperature of the solution.</p>
+
+<p>Each table consists of up to <a href="TABDIMS.html#TABDIMS.NPPVT"> NPPVT</a> (set in keyword <span class="keyword">TABDIMS</span>) sets of data records, one for each polymer concentration. Each
+set contains a subset of information for each salt concentration defined
+in <span class="keyword">SALTNODE</span>. Each subset has an entry for the temperatures
+specified in <span class="keyword">TEMPNODE</span>. </p>
+
+<p>For example, to show a single table containing three sets of records
+for polymer concentrations (PC1, PC2 and PC3), with the polymer viscosity
+multipliers (PCMs) for two salt concentrations (SC1 and SC2) and three
+temperatures (T1, T2 and T3):</p>
+
+<pre><code>SALTNODE
+  SC1
+  SC2 /
+TEMPNODE
+  T1
+  T2
+  T3 /
+PLYVSCST
+&lt;PC1&gt;  &lt;PCM for SC1, T1&gt;
+       &lt;PCM for SC1, T2&gt;
+       &lt;PCM for SC1, T3&gt;  / PCMs for PC1 at SC1 and temperatures T1, T2, T3
+       &lt;PCM for SC2, T1&gt;
+       &lt;PCM for SC2, T2&gt;
+       &lt;PCM for SC2, T3&gt;  / PCMs for PC1 at SC2 and temperatures T1, T2, T3
+/ end of record set for polymer concentration PC1
+</code></pre>
+<p>The <span class="keyword">SALTNODE</span> and <span class="keyword">TEMPNODE</span> keywords provide SC1, SC2, T1, T2 and T3. The first set of records
+in <span class="keyword">PLYVSCST</span> is for PC1. The first subset of data
+terminated by the first slash (/), defines the polymer viscosity multipliers
+(PCMs) for a polymer concentration PC1 at a salt concentration of
+SC1 for the three temperatures T1, T2 and T3. The second subset of
+data, terminated by the second slash, contains similar information
+for SC2. The set of records for PC1 is terminated by a slash. The
+remaining sets of records for PC2 and PC3 in <span class="keyword">PLYVSCST</span> follow the same pattern, with a final terminating slash for the
+end of the table.</p>
+
+<pre><code>&lt;PC2&gt;  &lt;PCM for SC1, T1&gt;
+       &lt;PCM for SC1, T2&gt;
+       &lt;PCM for SC1, T3&gt;  / PCMs for PC2 at SC1 and temperatures T1, T2, T3
+       &lt;PCM for SC2, T1&gt;
+       &lt;PCM for SC2, T2&gt;
+       &lt;PCM for SC2, T3&gt;  / PCMs for PC2 at SC2 and temperatures T1, T2, T3
+/ end of record set for polymer concentration PC2
+&lt;PC3&gt;  &lt;PCM for SC1, T1&gt;
+       &lt;PCM for SC1, T2&gt;
+       &lt;PCM for SC1, T3&gt;  / PCMs for PC3 at SC1 and temperatures T1, T2, T3
+       &lt;PCM for SC2, T1&gt;
+       &lt;PCM for SC2, T2&gt;
+       &lt;PCM for SC2, T3&gt;  / PCMs for PC3 at SC2 and temperatures T1, T2, T3
+/ end of record set for polymer concentration PC3
+/ end of the table</code></pre>
+<p>Each elementary set of records refers to one polymer concentration
+and one salt concentration, and gives a single column of viscosity
+multipliers, one record for each temperature in the <span class="keyword">TEMPNODE</span> keyword. Successive subsets of records contain data for the next
+salt concentration specified by the <span class="keyword">SALTNODE</span> keyword.
+When the record set for the largest <span class="keyword">SALTNODE</span> value
+has been completed, the next set of records refers to a new polymer
+concentration, and restarts at the first <span class="keyword">TEMPNODE</span> and <span class="keyword">SALTNODE</span> values. The multiplier is preceded
+by the polymer concentration value in the very first entry of a record
+set. In combination this allows the specification of a full three-dimensional
+polymer/salt solution/temperature viscosity function.</p>
+
+<p>The multipliers should be greater than or equal to unity. Activating <a href="OPTIONS.html#options.208">item 208</a> in <span class="keyword">OPTIONS</span> relaxes this constraint by allowing any positive value.</p>
+
+<p>Note that:</p>
+
+<ul>
+<li>The polymer concentration in the solution should increase monotonically
+down the table.</li>
+
+<li>The first entry must be 0.0</li>
+
+</ul>
+
+<p>UNITS: kg/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), lb/stb (<samp class="codeph">FIELD</samp>), gm/scc (<samp class="codeph">LAB</samp>)</p>
+
+<p>The set of records for one polymer concentration is terminated
+by a null record (that is a record with no data before the terminating
+slash) and the table is also terminated by a null record.</p>
+
+<p>See the <a href="../ecl_td/polymer_Polymer_Flood_Model.html#polymer_polymer_flood_model">"Polymer flood model"</a> in the <cite>ECLIPSE Technical Description</cite> for further information.</p>
+
+<div class="section" id="plyvscst_example"><a name="plyvscst_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>In this
+example, there is one <span class="keyword">PLYVSCST</span> table as <samp class="codeph">NTPVT</samp> = 1. The table contains three set of records for three
+polymer concentrations (.0000, .0100 and .0300) which is at the limit
+set by <samp class="codeph">NPPVT</samp> = 3. Two brine concentrations (1.0 and
+5.0) are specified in keyword <span class="keyword">SALTNODE</span> and three
+temperatures (10, 50 and 100) are specified in keyword <span class="keyword">TEMPNODE</span>.</p>
+ <pre><code>SALTNODE
+  1.0
+  5.0 /
+TEMPNODE
+  10
+  50
+  100 /
+PLYVSCST
+.0000   1.0
+        1.0
+        1.0  / multipliers for salt concentration 1.0 and temperatures 10,50 and 100 
+        1.0
+        1.0
+        1.0  / multipliers for salt concentration 5.0 and temperatures 10,50 and 100
+/ end of record set for polymer concentration 0.0000
+.0100  10.0
+        8.0
+        6.0  / multipliers for salt concentration 1.0 and temperatures 10,50 and 100
+        8.0
+        4.0
+        2.0  / multipliers for salt concentration 1.0 and temperatures 10,50 and 100
+/ end of record set for polymer concentration 0.0100
+.0300   50.0
+        25.0
+        15.0  / multipliers for salt concentration 1.0 and temperatures 10,50 and 100
+        40.0
+        30.0
+        18.0  / multipliers for salt concentration 1.0 and temperatures 10,50 and 100
+/ end of record set for polymer concentration 0.0300
+/ end of table 1</code></pre><p>The number of entries in <span class="keyword">SALTNODE</span> and <span class="keyword">TEMPNODE</span> cannot exceed the limit set by <samp class="codeph">NPPVT</samp>. </p>
+ </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

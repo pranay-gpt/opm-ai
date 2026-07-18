@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ECLIPSE 100 and 300 differences"/>
+<meta name="DC.subject" content="Temperature option"/>
+<meta name="keywords" content="Temperature option"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="temperat_eclipse_100_and_300_differences"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ECLIPSE 100 and 300 differences</title>
+</head>
+<body>
+
+
+<div class="nested0" id="temperat_eclipse_100_and_300_differences"><a name="temperat_eclipse_100_and_300_differences"><!-- --></a>
+<h1 class="topictitle1">ECLIPSE 100 and 300 differences</h1>
+
+
+ <div>
+<div class="section" id="temperat_differences_between_the_temperature_option_in_eclipse_100_and_eclipse_300"><a name="temperat_differences_between_the_temperature_option_in_eclipse_100_and_eclipse_300"><!-- --></a><h4 class="sectiontitle">Differences between the temperature option in ECLIPSE 100
+and ECLIPSE 300</h4><p>The temperature option is handled differently
+in the two simulators. In ECLIPSE 100 temperature is treated like
+a tracer, while in ECLIPSE 300 the <a href="../ecl_rm/TEMP.html#TEMP">TEMP</a> keyword invokes the thermal option, see <a href="thermalintro_Thermal_Option.html#thermalintro_thermal_option"> "Thermal option"</a>. This leads to a number of important differences:</p>
+<ul>
+<li>In ECLIPSE 100 an energy conservation equation
+is solved at the end of each converged timestep, and the grid block
+temperatures are updated. The new temperatures are then used to calculate
+the oil and water viscosities for the subsequent timestep. In ECLIPSE
+300 the energy conservation equation is solved simultaneously with
+the flow equations. In both cases, the rock and all fluids in a grid
+block are assumed to be at the same temperature.</li>
+
+<li>In ECLIPSE 300 water is allowed in the vapor
+phase.</li>
+
+<li>In ECLIPSE 300 the equilibrium state depends
+on the temperature.</li>
+
+<li>In ECLIPSE 300 the reservoir temperature
+changes if the reservoir pressure changes. Similarly the injection
+temperature changes as the well BHP changes.</li>
+
+<li> The ECLIPSE 300 thermal option is designed
+for a number of specialized processes, including steam injection,
+hot fluid or gas injection, well bore heaters and combustion. Note
+that when modeling steam injection, it should not be used for pressures
+or temperatures above the critical point of water (221.2 bar / 3208
+psi, 374.15°C / 705.5°F)    </li>
+
+</ul>
+<p>These differences mean that there will be a difference in
+performance between the two simulators, and there may be some difference
+in the results.</p>
+</div>
+
+<div class="section" id="temperat_differences_between_the_temperature_option_in_eclipse_300_and_the_thermal_option"><a name="temperat_differences_between_the_temperature_option_in_eclipse_300_and_the_thermal_option"><!-- --></a><h4 class="sectiontitle">Differences between the temperature option
+in ECLIPSE 300 and the thermal option</h4><p>The Thermal option
+can be used to run Temperature option data sets by replacing the <a href="../ecl_rm/TEMP.html#TEMP">TEMP</a> keyword with the <a href="../ecl_rm/THERMAL.html#THERMAL">THERMAL</a> and <a href="../ecl_rm/BLACKOIL.html#BLACKOIL">  BLACKOIL</a> keywords. This uses
+exactly the same code as the ECLIPSE 300 temperature option, but allows <span class="keyword">THERMAL</span> keywords to be used as well. For example, heat
+loss, steam injection and heater keywords can all be added to the
+data set.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

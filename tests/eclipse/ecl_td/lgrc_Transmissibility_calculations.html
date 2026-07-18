@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Transmissibility calculations"/>
+<meta name="DC.subject" content="Local grid refinement transmissibility calculations, Transmissibility calculations"/>
+<meta name="keywords" content="Local grid refinement transmissibility calculations, Transmissibility calculations"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrc_transmissibility_calculations"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Transmissibility calculations</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="lgrc_transmissibility_calculations"><a name="lgrc_transmissibility_calculations"><!-- --></a>
+<h1 class="topictitle1">Transmissibility calculations</h1>
+
+
+ <div>
+<p>For radial local grid refinements, the standard method based on
+pressure equivalent radii is used for flow between local radial blocks.
+Flow between the outer local block and the adjoining host block is
+treated as linear, but with the ‘transmissibility center' taken
+at the pressure equivalent radius of the local block, rather than
+the geometric center.</p>
+
+<p>For Cartesian refinements, transmissibilities between the local
+and global grid are calculated from the usual formulae (described
+in <a href="transmiss_Transmissibility_Calculations.html#transmiss_transmissibility_calculations"> "Transmissibility calculations"</a>) when the <a href="../ecl_rm/NEWTRAN.html#NEWTRAN">NEWTRAN</a> method is used. However,
+when <a href="../ecl_rm/OLDTRAN.html#OLDTRAN">OLDTRAN</a> or <a href="../ecl_rm/OLDTRANR.html#OLDTRANR">OLDTRANR</a> is used for block-centered grids, then the representative
+area chosen for the transmissibility between local and global cells
+is the face area of the local grid cells. For example, for the transmissibility
+in the X-direction between a local cell l and a global cell g, when <span class="keyword">OLDTRAN</span> is used</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="lgrc.equ.02ac"/>
+ <math><mrow><msub><mrow>
+<mtext>TRANN</mtext></mrow><mrow><mi>l</mi><mi>g</mi>
+</mrow></msub><mo>=</mo><mfrac><mrow><mtext>CDARCY</mtext>
+<mo>⋅</mo><msub><mrow><mtext>TMLTX</mtext></mrow><mrow>
+<mi>l</mi></mrow></msub><mo>⋅</mo><mtext>DIPC</mtext>
+</mrow><mrow><mi>B</mi></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 47.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mtext>CDARCY</mtext>
+</math> </td>
+
+<td valign="top">is Darcy's constant in the appropriate units</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mtext>TMLTX</mtext>
+<mi>l</mi></msub></math> </td>
+
+<td valign="top">is the X+ transmissibility multiplier for global cell g</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mtext>DIPC</mtext>
+</math> </td>
+
+<td valign="top">  is the dip correction</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>and</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="lgrc.equ.02b7"/>
+ <math><mrow><mi>B</mi>
+<mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mn>2</mn><msub><mrow><mi>A</mi></mrow><mrow><mi>l</mi>
+</mrow></msub></mrow></mfrac><mo>⋅</mo><mo>(</mo>
+<mfrac><mrow><msub><mrow><mtext>DX</mtext></mrow><mrow>
+<mi>g</mi></mrow></msub></mrow><mrow><msub><mrow>
+<mtext>PERMX</mtext></mrow><mrow><mi>g</mi></mrow>
+</msub></mrow></mfrac><mo>+</mo><mfrac><mrow><msub>
+<mrow><mtext>DX</mtext></mrow><mrow><mi>l</mi></mrow>
+</msub></mrow><mrow><msub><mrow><mtext>PERMX</mtext>
+</mrow><mrow><mi>l</mi></mrow></msub></mrow></mfrac>
+<mo>)</mo></mrow></math> 
+</td><td align="right">[Eq. 47.2]
+              </td></tr></tbody></table>
+<p>The area is given by</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="lgrc.equ.02bb"/>
+ <math><mrow><msub><mrow>
+<mi>A</mi></mrow><mrow><mi>l</mi></mrow></msub><mo>=</mo><msub><mrow><mtext>DY</mtext></mrow><mrow><mi>l</mi></mrow></msub><mo>⋅</mo><msub><mrow><mtext>DZ</mtext></mrow><mrow><mi>l</mi></mrow></msub><mo>⋅</mo><msub><mrow><mtext>NTG</mtext></mrow><mrow><mi>l</mi></mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 47.3]
+              </td></tr></tbody></table>
+<p>The dip correction is given by</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="lgrc.equ.02bf"/>
+ <math><mtext>DIPC</mtext>
+<mo>=</mo><mfrac><mrow><mtext>DHS</mtext></mrow><mrow>
+<mtext>DHS</mtext><mo>+</mo><mtext>DVS</mtext></mrow>
+</mfrac></math> 
+</td><td align="right">[Eq. 47.4]
+              </td></tr></tbody></table>
+<p>with</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="lgrc.equ.02c3"/>
+ <math><mtext>DHS</mtext>
+<mo>=</mo><msup><mrow><mo>(</mo><mfrac><mrow><msub>
+<mtext>DX</mtext><mi>l</mi></msub><mo>+</mo><msub>
+<mtext>DX</mtext><mi>g</mi></msub></mrow><mrow><msub>
+<mn>2</mn><mtext> </mtext></msub></mrow></mfrac>
+<mo>)</mo></mrow><mn>2</mn></msup></math> 
+</td><td align="right">[Eq. 47.5]
+              </td></tr></tbody></table>
+<p>and</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="lgrc.equ.02c7"/>
+ <math><mrow><mtext>DVS</mtext>
+<mo>=</mo><msup><mrow><mo>(</mo><msub><mrow><mtext>DEPTH</mtext></mrow><mrow><mi>l</mi></mrow></msub><mo>⁢</mo><mrow><mo>-</mo><mtext> </mtext><msub><mrow>
+<mtext>DEPTH</mtext></mrow><mrow><mi>g</mi></mrow>
+</msub></mrow><mo>)</mo></mrow><mrow><mn>2</mn></mrow>
+</msup></mrow></math> 
+</td><td align="right">[Eq. 47.6]
+              </td></tr></tbody></table>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The convention used for transmissibility multipliers: For connections
+in the X-, Y-, Z- directions, the global value for the adjoining block
+is used. For connections in the X+, Y+, Z+ directions, the local grid
+block value is used. </span></div>
+
+<p>Transmissibilities between local cells in adjacent amalgamated
+local grids are calculated from the usual formulae when the <span class="keyword">NEWTRAN</span> method is used. When <span class="keyword">OLDTRAN</span> or <span class="keyword">OLDTRANR</span> is used, connections are possible
+between local cells on faces of adjacent refined cells in the global
+grid. The interface areas used for the calculation account for partial
+overlap. These overlap areas are obtained by projecting the refinements
+on the faces of adjacent refined cells in the global grid onto the
+unit square; then the proportion of cell areas in each overlap is
+applied as a multiplier to the actual local face areas in the <span class="keyword">OLDTRAN</span> formula.</p>
+
+<p>A report on transmissibilities between the local and global grids
+and between any amalgamated local grids can be obtained by using the
+mnemonic <samp class="codeph">ALLNNC</samp> (switch 24) in <a href="../ecl_rm/RPTGRIDL.html#RPTGRIDL">RPTGRIDL</a>.</p>
+
+<div class="section" id="lgrc_treatment_of_transmissibility_multipliers_in_local_grids"><a name="lgrc_treatment_of_transmissibility_multipliers_in_local_grids"><!-- --></a><h4 class="sectiontitle">Treatment of transmissibility multipliers in local grids</h4><p>It is possible to enter transmissibility multipliers <a href="../ecl_rm/MULTX.html#MULTX">MULTX</a>, <a href="../ecl_rm/MULTY.html#MULTY">MULTY</a> and <a href="../ecl_rm/MULTZ.html#MULTZ">MULTZ</a> for example for local
+grids between the <a href="../ecl_rm/CARFIN.html#CARFIN">CARFIN</a> / <a href="../ecl_rm/ENDFIN.html#ENDFIN">ENDFIN</a>, <a href="../ecl_rm/RADFIN.html#RADFIN">RADFIN</a> /<span class="keyword">ENDFIN</span>, <a href="../ecl_rm/RADFIN4.html#RADFIN4">RADFIN4</a> /<span class="keyword">ENDFIN</span> and <a href="../ecl_rm/REFINE.html#REFINE"> REFINE</a> /<span class="keyword">ENDFIN</span> pairs in the <span class="keyword">GRID</span> section. If any of these multipliers are not defined for the local
+grid, they are inherited from the host cells of the global grid according
+to the following rule: The multiplier on the transmissibility between
+two adjacent local grid cells is set to the global multiplier in the
+appropriate direction at a cell boundary of the global grid, and is
+set to 1.0 otherwise. When the local <a href="../ecl_rm/MULTR.html#MULTR">MULTR</a> and <a href="../ecl_rm/MULTTHT.html#MULTTHT">MULTTHT</a> are undefined within
+a radial local grid, these are inherited from the appropriate global <span class="keyword">MULTX</span> and <span class="keyword">MULTY</span> respectively.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

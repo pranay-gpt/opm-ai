@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Cell ordering and geometry"/>
+<meta name="DC.subject" content="Transmissibility calculations cell ordering and geometry"/>
+<meta name="keywords" content="Transmissibility calculations cell ordering and geometry"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="transmiss_cell_ordering_and_geometry"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Cell ordering and geometry</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="transmiss_cell_ordering_and_geometry"><a name="transmiss_cell_ordering_and_geometry"><!-- --></a>
+<h1 class="topictitle1">Cell ordering and geometry</h1>
+
+
+ <div>
+<p>The basic grid indexing system is by natural order. Cells may be
+identified by their (i ,j, k) indices in the Cartesian indexing grid,
+and in natural ordering, the i index changes most quickly, the k index
+most slowly. Internally, cells are held by active order, with any
+inactive cells (that is, those with zero pore volume) not requiring
+any storage.</p>
+
+<p>Details of cell geometry may be entered using keywords such as <a href="../ecl_rm/DX.html#DX">DX</a>, <a href="../ecl_rm/DY.html#DY">DY</a> and <a href="../ecl_rm/DZ.html#DZ">DZ</a> to specify cell sizes. This is a block center description,
+and cells are assumed to have a simple, regular shape.</p>
+
+<p>For example, the pore volume of each cell is then  <math><mrow><mtext>DX</mtext>
+<mo>⋅</mo><mtext>DY</mtext><mo>⋅</mo><mtext>DZ</mtext>
+<mo>⋅</mo><mi>φ</mi><mo>⋅</mo><mtext>RNTG</mtext>
+</mrow></math>         </p>
+
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mi>φ</mi></math> </td>
+
+<td valign="top"> is the porosity</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mtext>RNTG</mtext>
+</math> </td>
+
+<td valign="top"> the net to gross ratio, and</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mtext>DX</mtext>
+</math>,  <math><mtext>DY</mtext>
+</math>  and  <math><mtext>DZ</mtext>
+</math> </td>
+
+<td valign="top">the cell dimensions.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>An alternative is the entry of cell corner points using the <a href="../ecl_rm/COORD.html#COORD">COORD</a> and <a href="../ecl_rm/ZCORN.html#ZCORN">  ZCORN</a> keywords. The data
+associated with these keywords is usually prepared using a pre-processor
+such as PETREL, and entered from an included file. The cell is assumed
+to have edges defined as straight lines between the corner points,
+and the cell faces may be bilinear surfaces. Pore volumes may be calculated
+exactly for such a shape.</p>
+
+<p>It is possible to have more than one set of <span class="keyword">COORD</span> data, using the <a href="../ecl_rm/NUMRES.html#NUMRES">NUMRES</a> keyword in the <span class="keyword">RUNSPEC</span> section, and <a href="../ecl_rm/COORDSYS.html#COORDSYS">COORDSYS</a> to assign layers to
+these sets.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

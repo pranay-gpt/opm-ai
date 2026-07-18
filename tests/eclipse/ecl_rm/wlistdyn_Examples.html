@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Examples"/>
+<meta name="DC.subject" content="WLISTDYN"/>
+<meta name="keywords" content="WLISTDYN"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="wlistdyn_examples"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Examples</title>
+</head>
+<body>
+
+
+<div class="nested0" id="wlistdyn_examples"><a name="wlistdyn_examples"><!-- --></a>
+<h1 class="topictitle1">Examples</h1>
+
+
+ <div>
+<div class="section" id="wlistdyn_example_1"><a name="wlistdyn_example_1"><!-- --></a><h4 class="sectiontitle">Example 1</h4><p>In this
+example a dynamic well list (*HIGHGOR) is created that contains all
+the wells that currently have a GOR exceeding 100 Mscf/stb. The <a href="ACTIONX.html#ACTIONX"> ACTIONX</a> keyword checks whether the combined oil production rate of all the
+wells in this well list falls below 50 stb/day. (Note that the condition
+on there being some oil production ensures that the action is not
+triggered for a list of empty wells.) When this is true, all the wells
+in this list are shut and the dynamic well list is disabled. This
+action is only performed once.</p>
+<pre><code>WLISTDYN
+ '*HIGHGOR'  '*'   WGOR  &gt;  100 /
+/
+
+ACTIONX
+ACT1 1 /
+GOPR '*HIGHGOR' &gt; 0  AND /
+GOPR '*HIGHGOR' &lt; 50     /
+/
+WELOPEN
+'*HIGHGOR' SHUT /
+/
+WLISTDYN
+ '*HIGHGOR'  OFF /
+/
+ENDACTIO</code></pre></div>
+
+<div class="section" id="wlistdyn_example_2"><a name="wlistdyn_example_2"><!-- --></a><h4 class="sectiontitle">Example 2</h4><p>In this
+example a dynamic well list (*HIGHWCT) is created that contains the
+3 wells from group GRP1 that currently have the highest water cut.
+These 3 wells then have their oil rate target reduced by 5%. The simulation
+is then advanced (and the dynamic well list automatically updated)
+and again the 3 highest water cut wells have their oil rate reduced
+by 5%.</p>
+<pre><code>WLISTDYN
+ '*HIGHWCT'   'GRP1' 'WWCT' 'HIGHEST' 3   /
+/
+WTMULT
+'*HIGHWCT'  ORAT  0.95 /
+/
+TSTEP
+100.0 /
+WTMULT
+'*HIGHWCT'  ORAT  0.95 /
+/
+TSTEP
+100.0 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

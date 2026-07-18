@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="FIPSEP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="FIPSEP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>FIPSEP</title>
+</head>
+<body>
+
+
+<div class="nested0" id="FIPSEP"><a name="FIPSEP"><!-- --></a>
+<h1 class="keyword">FIPSEP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="fipsep.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="fipsep.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d696e45">  </th>
+
+<th valign="top" id="d696e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d696e54"> x </th>
+
+<th valign="top" id="d696e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d696e45 d696e54 ">  </td>
+
+<td valign="top" headers="d696e48 d696e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d696e45 d696e54 ">  </td>
+
+<td valign="top" headers="d696e48 d696e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d696e45 d696e54 ">  </td>
+
+<td valign="top" headers="d696e48 d696e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d696e45 d696e54 ">  </td>
+
+<td valign="top" headers="d696e48 d696e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d696e45 d696e54 ">  </td>
+
+<td valign="top" headers="d696e48 d696e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d696e45 d696e54 "> x </td>
+
+<td valign="top" headers="d696e48 d696e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d696e45 d696e54 ">  </td>
+
+<td valign="top" headers="d696e48 d696e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d696e45 d696e54 ">  </td>
+
+<td valign="top" headers="d696e48 d696e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword introduces a separator that will be used to define
+separator oil- and gas-in-place volumes for a specific fluid-in-place
+region. Several lines of <span class="keyword">FIPSEP</span> data may be used
+to build up a multi-stage separator. The maximum number of stages
+can be defined by the <a href="WELLDIMS.html#WELLDIMS"> WELLDIMS</a> keyword. Stages must be specified in increasing order.</p>
+
+<p>The default limit on the number of stages per separator is 5. This
+may be increased using the item 5 in the <span class="keyword">WELLDIMS</span> keyword. The default limit on the number of separators (including
+the <a href="FIELDSEP.html#FIELDSEP"> FIELDSEP</a> separator)
+is 4. This may be increased using the 8<sup>th</sup> item in the <span class="keyword">WELLDIMS</span> keyword.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the items of data described below, and each terminated by a slash
+(/).</p>
+
+<p>The records can be terminated early with a slash (/), the remaining
+items taking default values. Defaults can also be specified by a null
+repeat count of the form n*, where n is the number of consecutive
+items to be defaulted.</p>
+
+<p>The set of records is ended by a blank record, containing only
+a slash.</p>
+
+<ol>
+<li> The number of the fluid-in-place region in which this separator
+is used for oil-and gas-in-place volume calculation. The region numbers
+should not be less than 1 or greater than <samp class="codeph">NTFIP</samp> (see
+keyword <a href="REGDIMS.html#REGDIMS"> REGDIMS</a>). </li>
+
+<li> The stage index. </li>
+
+<li> The separator stage temperature. <p>UNITS: °C (<samp class="codeph">METRIC</samp>), °F (<samp class="codeph">FIELD</samp>), °C (<samp class="codeph">LAB</samp>),
+°C (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 15.56 °C (<samp class="codeph">METRIC</samp>, <samp class="codeph">LAB</samp> and <samp class="codeph">PVT-M</samp>),
+60 °F (<samp class="codeph">FIELD</samp>)</p>
+</li>
+
+<li> The separator stage pressure. <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma
+(<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 1.01325 barsa (<samp class="codeph">METRIC</samp>), 14.6959 psia (<samp class="codeph">FIELD</samp>), 1 atma (<samp class="codeph">LAB</samp> and <samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li> This defines the destination of the liquid output from the separator. <p>For all but the last stage in a separator, this is to a later stage,
+usually the next stage.</p>
+<p>Setting this item to 0 implies the next
+stage for all except the last stage, and the stock tank for the last
+stage.</p>
+<p>If -1 is specified for a stage before the last, this
+volume is added to the stock tank oil. Care must be taken, as this
+may result in the accumulation of oil volumes at different pressures
+or temperatures.</p>
+<p>DEFAULT: 0</p>
+</li>
+
+<li> This defines the destination stage of the vapor output from the
+separator. <p>This is usually accumulated with the stock tank or separator
+vapor, the volume rate being taken by conversion to a volume at standard
+conditions. This is done when the destination stage is set to 0.</p>
+<p>In the unusual case in which the vapor output from the separator
+is fed to a subsequent stage, a non-default value of the destination
+stage may be entered.</p>
+<p>DEFAULT: 0</p>
+</li>
+
+<li> The K-value table number. <p>This is required if a K-value table
+rather than an equation of state is being used for the separator.
+A value of 0 indicates no K-value table, and implies an equation of
+state calculation.</p>
+<p>DEFAULT: 0</p>
+</li>
+
+<li> The gas plant table number. <p>This is required if a gas plant
+table rather than an equation of state is being used for a stage of
+the separator. A value of 0 indicates no gas plant table, and implies
+an equation of state calculation.</p>
+<p>DEFAULT: 0</p>
+</li>
+
+<li> The surface equation of state number. <p>This should only be
+specified if multiple equations of state are used. When this option
+is employed, it may still be defaulted, in which case the fluid in
+place calculation for a cell uses the equation of state for that cell.</p>
+<p>If an equation of state index is specified, this forces the use
+of a given surface equation of state. The value must lie between 1
+and the maximum number of equations of state for surface conditions
+ specified by <a href="TABDIMS.html#TABDIMS.NMEOSS"> NMEOSS</a> in keyword <span class="keyword">TABDIMS</span>.</p>
+ <p>This is discussed
+further in <a href="../ecl_td/eos_regions_Equations_of_State_Regions.html#eos_regions_equations_of_state_regions">"Equations of state
+regions"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+</li>
+
+<li> Temperature for natural gas liquid (NGL) density evaluation. <p>UNITS: °C (<samp class="codeph">METRIC</samp>), °F (<samp class="codeph">FIELD</samp>), °C (<samp class="codeph">LAB</samp>), °C (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+<li><p>Pressure for NGL density evaluation.</p>
+<p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>), atma (<samp class="codeph">PVT-M</samp>)</p>
+</li>
+
+</ol>
+
+<p>If both items 10 and 11 are specified, an equation of state NGL
+density calculation is performed, rather than using Amagat's law.</p>
+
+<div class="section" id="fipsep_related_keywords"><a name="fipsep_related_keywords"><!-- --></a><h4 class="sectiontitle">Related keywords</h4><p>For fluid-in-place calculations, surface volumes are calculated
+using region separators, defined by this keyword <span class="keyword">FIPSEP</span>. If the region separator is not defined, the field separator <a href="FIELDSEP.html#FIELDSEP">  FIELDSEP</a> is used.
+If the field separator is not defined, a single flash to standard
+conditions given by <a href="STCOND.html#STCOND">  STCOND</a> is used.</p>
+</div>
+
+<div class="section" id="fipsep_notes"><a name="fipsep_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li> This keyword allows different fluid-in-place regions to use different
+separators for calculating the in-place volumes of oil and gas, as
+reported in the print file. If this keyword is omitted, all regions
+use the <a href="FIELDSEP.html#FIELDSEP">  FIELDSEP</a> separator for this calculation. </li>
+
+<li> The in-place total volumes for the whole field are calculated
+using the <span class="keyword">FIELDSEP</span> separator, and so these oil
+and gas totals do not in general equal the sum of the oil and gas
+volumes from fluid-in-place regions with differing separators. </li>
+
+<li> The presence of this keyword does not alter the default separator
+assignment for wells; this is still taken as the <span class="keyword">FIELDSEP</span> separator, regardless of which fluid-in-place region the well is
+in. </li>
+
+</ul>
+</div>
+
+<div class="section" id="fipsep_example"><a name="fipsep_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>Defines a two-stage
+separator for the fluid-in-place region number 1, a one-stage separator
+for region number 2, and a three-stage separator for region number
+3.</p>
+<pre><code>FIPSEP
+1 1 80 815 /
+1 2 60 14.7 /
+2 1 60 14.7 /
+3 1 90 730 /
+3 2 80 345 /
+3 3 60 14.7 /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

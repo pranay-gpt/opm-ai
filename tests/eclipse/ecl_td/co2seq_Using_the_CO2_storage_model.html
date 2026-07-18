@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using the CO2 storage model"/>
+<meta name="DC.subject" content="Enhanced oil recovery, CO2 storage keywords"/>
+<meta name="keywords" content="Enhanced oil recovery, CO2 storage keywords"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="co2seq_using_the_co2_storage_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using the CO2 storage model</title>
+</head>
+<body>
+
+
+<div class="nested0" id="co2seq_using_the_co2_storage_model"><a name="co2seq_using_the_co2_storage_model"><!-- --></a>
+<h1 class="topictitle1">Using the CO<sub>2</sub> storage model</h1>
+
+
+ <div>
+<div class="section"><h4 class="sectiontitle">RUNSPEC section</h4><p>The option is invoked by
+the <a href="../ecl_rm/CO2STORE.html#CO2STORE">CO2STORE</a> keyword. If a solid phase is considered the <a href="../ecl_rm/SOLID.html#SOLID">SOLID</a> keyword must be specified.
+The capillary pressure mode is selected by default so that the capillary
+pressure is added to the gas phase pressure. To subtract the capillary
+pressure from the aqueous phase pressure use <a href="../ecl_rm/OPTIONS3.html#options3.8">item 8</a> of the <span class="keyword">OPTIONS3</span> keyword
+. To run with a saturation weighted capillary pressure option the
+keyword <a href="../ecl_rm/FORMOPTS.html#FORMOPTS">FORMOPTS</a> can be used with the mnemonic <span class="keyword">PCSPLIT</span>.
+For runs with large capillary pressure it is recommended to set item
+8 of <span class="keyword">OPTIONS3</span>, so the system pressure is the gas
+phase pressure. Also note that the <a href="../ecl_rm/WATER.html#WATER">WATER</a> keyword should not be used with the <span class="keyword">CO2STORE</span> option.</p>
+</div>
+
+<div class="section"><h4 class="sectiontitle">PROPS section</h4><p>The fluid components are set
+by specifying the names in the <a href="../ecl_rm/COMPS.html#COMPS">COMPS</a> keyword.</p>
+<p>The water relative permeability is specified
+using the <a href="../ecl_rm/WSF.html#WSF">WSF</a> keyword, while the gas relative permeability and the gas-water
+capillary pressure are entered using the <a href="../ecl_rm/GSF.html#GSF">GSF</a> keyword.</p>
+<p>If only a single phase
+is present the composition may be entered using either <a href="../ecl_rm/ZI.html#ZI">ZI</a> or with respect to depth <a href="../ecl_rm/ZMFVD.html#ZMFVD">ZMFVD</a>.</p>
+<p>If an initial
+gas-water contact exists within the reservoir you may specify either
+the vapor or the aqueous phase composition at the contact (<span class="keyword">ZMFVD</span> or <a href="../ecl_rm/COMPVD.html#COMPVD">COMPVD</a> may be used).</p>
+<p>To enable molecular diffusion, the keywords <a href="../ecl_rm/DIFFCWAT.html#DIFFCWAT">DIFFCWAT</a> and <a href="../ecl_rm/DIFFCGAS.html#DIFFCGAS">DIFFCGAS</a> should be used. Cross
+phase diffusion can be included by the keywords <a href="../ecl_rm/DIFFCWG.html#DIFFCWG">DIFFCWG</a> and <a href="../ecl_rm/DIFFCGW.html#DIFFCGW">DIFFCGW</a>. Note that without
+the cross phase diffusion option no diffusive flow is computed between
+two neighbor cells that are single phase, one being aqueous and the
+other gas. The interaction with the formation water could therefore
+be slightly under predicted without including the cross phase diffusion
+term. For more information see <a href="Diffusion.html#Diffusion"> "Diffusion"</a>.</p>
+<p><span class="keyword">SOLID</span> properties need
+to be assigned in the usual way. The component reference density is
+assigned using the keyword <a href="../ecl_rm/SDREF.html#SDREF">SDREF</a>. The <a href="../ecl_rm/SOLIDMMS.html#SOLIDMMS">SOLIDMMS</a> keyword can be used to specify mobility multipliers.</p>
+<p>For temperatures above 160 °C an alternative activity coefficient
+model for the aqueous CO<sub>2</sub> should be considered using the
+keyword <a href="../ecl_rm/ACTCO2S.html#ACTCO2S">ACTCO2S</a>.</p>
+</div>
+
+<div class="section"><h4 class="sectiontitle">SUMMARY section</h4><p>The keywords <span class="keyword">FWCD</span>, <span class="keyword">FGCDI</span> and <span class="keyword">FGCDM</span> can be used
+to output the field total molar amount of CO<sub>2</sub>. <span class="keyword">RWCD</span>, <span class="keyword">RGCDI</span> and <span class="keyword">RGCDM</span> can be used to output the same quantities on a regional basis.</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">  
+ 
+<thead align="left">
+<tr>
+<th valign="top" id="d148e193">Field</th>
+
+<th valign="top" id="d148e196">Region</th>
+
+<th valign="top" id="d148e199">Description</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d148e193 "><span class="keyword">FWCD</span></td>
+
+<td valign="top" headers="d148e196 "><span class="keyword">RWCD</span></td>
+
+<td valign="top" headers="d148e199 ">Dissolved in water </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d148e193 "><span class="keyword">FGCDI</span></td>
+
+<td valign="top" headers="d148e196 "><span class="keyword">RGCDI</span></td>
+
+<td valign="top" headers="d148e199 ">In an immobile gas phase</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d148e193 "><span class="keyword">FGCDM</span></td>
+
+<td valign="top" headers="d148e196 "><span class="keyword">RGCDM</span> </td>
+
+<td valign="top" headers="d148e199 ">In a mobile gas phase  </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p> <strong>Notes</strong> </p>
+<ul>
+<li>Quantities such as <span class="keyword">FGIP</span>, <span class="keyword">FGIPL</span> and <span class="keyword">FGIPG</span> depend on the state of the CO<sub>2</sub> at standard conditions. This means that if all the CO<sub>2</sub> injected is in a dissolved state these quantities are zero. Early
+in a simulation, <span class="keyword">FGIP</span> might be zero (because at
+standard conditions, all the CO<sub>2</sub> injected could be dissolved
+in the amount of water in the field) while <span class="keyword">FGIPG</span> is non-zero (because there is a high concentration of CO<sub>2</sub> close to the injector and it cannot all dissolve in its current
+location). The field molar amount injected for a given component can
+be obtained using the keywords <span class="keyword">FCMIT</span> and <span class="keyword">FCMIP</span>. </li>
+
+<li>Also the aqueous phase is considered as “hydrocarbon” when calculating
+the “hydrocarbon weighted” field pressure reported by <span class="keyword">FPR</span> and <span class="keyword">FPRH</span>. For a comparison with a simulation
+involving an oil phase such as <a href="../ecl_rm/CO2SOL.html#CO2SOL">CO2SOL</a>, the “pore volume weighted” pressure returned by <samp class="codeph">FPRP</samp> can be used. Additionally, setting <a href="../ecl_rm/OPTIONS3.html#options3.151">item 151</a> of the <span class="keyword">OPTIONS3</span> keyword to 1 ensures that only the gas phase is
+treated as “hydrocarbon”.</li>
+
+</ul>
+</div>
+
+<div class="section"><h4 class="sectiontitle">SOLUTION section</h4><p>The <a href="../ecl_rm/EQUIL.html#EQUIL">EQUIL</a> keyword is used for
+equilibration. An initial solid saturation and corresponding composition
+can be assigned by the keywords <a href="../ecl_rm/SSOLID.html#SSOLID">SSOLID</a> and <a href="../ecl_rm/SMF.html#SMF">SMF</a>. Some care must be taken as this might not be in equilibrium.
+The initial flash will however put the minerals in equilibrium with
+the formation water.</p>
+</div>
+
+<div class="section"><h4 class="sectiontitle">SCHEDULE section</h4><p>To specify a CO<sub>2</sub> injector the keyword <a href="../ecl_rm/WINJGAS.html#WINJGAS">WINJGAS</a> can be used to define the composition of the injector. The
+composition of a water injector can also be specified by using this
+keyword. However, to specify the composition of an injected water
+stream, the keywords <a href="../ecl_rm/WELLSTRW.html#WELLSTRW">WELLSTRW</a> and <a href="../ecl_rm/WINJW.html#WINJW">WINJW</a> are available with the <a href="../ecl_rm/CO2STORE.html#CO2STORE">CO2STORE</a> option. When using
+the <a href="../ecl_rm/SOLID.html#SOLID">SOLID</a> option it is possible to specify a target solid saturation
+change by using item 21 of <a href="../ecl_rm/TSCRIT.html#TSCRIT">TSCRIT</a>.</p>
+<p>If the adaptive implicit solution technique (the <a href="../ecl_rm/AIM.html#AIM">AIM</a> option) is used, the <a href="../ecl_rm/AIMCON.html#AIMCON">AIMCON</a> keyword can be used
+in order to increase the number of implicit cells allowing large stable
+timesteps. Typically this will be the case at the end of a simulation
+when CO<sub>2 </sub>injection has stopped.</p>
+</div>
+
+<div class="section" id="co2seq_compatibility"><a name="co2seq_compatibility"><!-- --></a><h4 class="sectiontitle">Compatibility</h4><p>The <a href="../ecl_rm/CO2STORE.html#CO2STORE">CO2STORE</a> option is currently not compatible with the multisegment
+well option.</p>
+<div class="note" id="co2seq_11405"><a name="co2seq_11405"><!-- --></a><span class="notetitle">Note:</span> <span class="notebody">Salt precipitation is enabled
+by the use of the <span class="keyword">SOLID</span> option. If the <span class="keyword">SOLID</span> option is not used, salts are assumed to stay in
+the liquid phase. For such cases some residual water might become
+more and more concentrated, with salt resulting in unphysically dense
+water. However, this water will typically become immobile, so the
+overall simulation is only marginally affected. Typically this will
+only occur near a CO<sub>2</sub> injection well, due to injection
+of dry CO<sub>2</sub>. The model applies a maximum NaCl concentration
+for the CO<sub>2</sub> solubility model, corresponding to the value
+of salting out while other salts are limited to a fixed value of 5
+Molar in the CO<sub>2</sub> solubility model</span></div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

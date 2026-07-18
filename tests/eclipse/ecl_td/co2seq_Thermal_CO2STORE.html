@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Thermal CO2STORE"/>
+<meta name="DC.subject" content="Enhanced oil recovery, CO2 storage"/>
+<meta name="keywords" content="Enhanced oil recovery, CO2 storage"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="co2seq_thermal_co2store"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Thermal CO2STORE</title>
+</head>
+<body>
+
+
+<div class="nested0" id="co2seq_thermal_co2store"><a name="co2seq_thermal_co2store"><!-- --></a>
+<h1 class="topictitle1">Thermal CO2STORE</h1>
+
+
+ <div>
+<p>The <a href="../ecl_rm/CO2STORE.html#CO2STORE">CO2STORE</a> option can be used with the <a href="../ecl_rm/THERMAL.html#THERMAL">THERMAL</a> option for live oil
+and gas. The fluid properties are defined similarly to a standard
+thermal case, but the CO<sub>2</sub> component is allowed to dissolve
+in the aqueous phase. When using the <span class="keyword">CO2STORE</span> option
+together with <span class="keyword">THERMAL</span> it is assumed that the temperature
+range of the reservoir is limited to 12-250 °C in a model with additional
+hydrocarbons. For models with no additional hydrocarbons, the range
+is 1-250 °C.</p>
+
+<p>If no oil K-values are supplied the phases assumed is as for a
+standard <span class="keyword">CO2STORE</span> case, a aqueous water rich phase
+and a CO<sub>2</sub> rich gas phase. The density of the CO<sub>2</sub> rich phase and the water vapor is computed as for the standard <span class="keyword">CO2STORE</span> option. Additional components are taken as water
+components unless you supply water K-values for these components or
+define them as gas only components. This is done by the keywords <a href="../ecl_rm/KWTABTn.html#KWTABTn">KWTABTn</a> and <a href="../ecl_rm/CVTYPE.html#CVTYPE">CVTYPE</a>. Note that the CO<sub>2</sub> and H<sub>2</sub>O component is allowed to be defaulted when
+using the <span class="keyword">CO2STORE</span> option. If this is done the
+usual computations for the solubilities of CO<sub>2</sub> and H<sub>2</sub>O will be applied.</p>
+
+<p>Additional oil/gas components can be made non-soluble
+in water by defaulting them in the <span class="keyword">KWTABTn</span> keyword.
+Their viscosities can be defined in the <a href="../ecl_rm/GASVISCT.html#GASVISCT">GASVISCT</a> and <a href="../ecl_rm/OILVISCT.html#OILVISCT">OILVISCT</a> keywords, and if the
+viscosities of CO<sub>2</sub> and H<sub>2</sub>O are defaulted, the
+usual computations for their viscosities will be applied.</p>
+
+<p>In <span class="keyword">THERMAL</span> it is possible to define the H<sub>2</sub>O components as part of the components defined in <a href="../ecl_rm/CNAMES.html#CNAMES">CNAMES</a>, or if left out it will
+be added as the last component of the system. If the H<sub>2</sub>O component is specified it is also possible for H<sub>2</sub>O to
+be in the oil phase. However this is only allowed if oil K-values
+are supplied using <a href="../ecl_rm/KVTABTn.html#KVTABTn">KVTABTn</a>, where you need to supply the split of H<sub>2</sub>O between
+oil and vapor.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">With thermal <span class="keyword">CO2STORE</span>, the aqueous mole fractions
+are named <a href="../ecl_rm/AMF.html#AMF">AMF</a>, while <a href="../ecl_rm/XMF.html#XMF">XMF</a> refers to the oil phase mole fractions. </span></div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">If the only explicitly supplied
+component is  CO<sub>2</sub>, the <span class="keyword">CNAMES</span> keyword
+is not required.</span></div>
+
+<dl>
+
+<dt class="dlterm">Density and viscosity</dt>
+
+<dd>The density of the aqueous phase is computed as described by the
+keyword <a href="../ecl_rm/DENAQA.html#DENAQA">DENAQA</a>, equation <a href="gassol_Aqueous_phase_properties.html#gassol.equ.004e">432.1</a>) and <a href="../ecl_rm/VISCAQA.html#VISCAQA">VISCAQA</a>, equation <a href="gassol_Aqueous_phase_properties.html#gassol.equ.006b">432.3</a>. Default values will be assigned for CO<sub>2</sub>/CH<sub>4</sub>, NACL/CACL<sub>2</sub>/CACO<sub>3</sub> component. The vapor phase
+density is computed as for a standard thermal case, but the CO<sub>2</sub> and H<sub>2</sub>O contribution to the phase specific volume
+is computed internally.<p>Similarly for vapor phase viscosity the
+CO<sub>2</sub> and H<sub>2</sub>O contribution when calculating the
+phase viscosity are computed internally unless a component specific
+value for the viscosity is assigned.</p>
+</dd>
+
+
+<dt class="dlterm">Enthalpy</dt>
+
+<dd>The aqueous enthalpy is computed by the parameters given in the
+keywords <a href="../ecl_rm/SPECHW1.html#SPECHW1">SPECHW1</a> and <a href="../ecl_rm/SPECHW2.html#SPECHW2">SPECHW2</a>.<p>For the gas phase the usual parameters given for a thermal
+live oil run should be supplied, note that for CO<sub>2</sub> the
+parameters defining the enthalpies for both an oil and a vapor should
+be given even if not an oil phase is considered.</p>
+<p>The H<sub>2</sub>O molar enthalpy in the vapor phase is computed internally.</p>
+<p>An alternative enthalpy formulation
+for all phases is available for systems with CO<sub>2</sub> and H<sub>2</sub>O without additional hydrocarbon, which takes the CO<sub>2</sub> enthalpy from internal tables generated with the Symmetry* process
+software platform. These tables contain enthalpy as a function of
+pressure, temperature, and (optionally) CO<sub>2</sub> molar fraction
+of the phase, up to a pressure of 600 bar and a temperature of 250°C.
+Within the table, values are linearly interpolated. Above these values,
+extrapolation is linear for pressure and constant for temperature. </p>
+<p>This option is controlled using
+the <a href="../ecl_rm/CO2ENTH.html#CO2ENTH">CO2ENTH</a> keyword. When it is activated, the <span class="keyword">SPECHx</span>, <span class="keyword">HEATVAPx</span> and <a href="../ecl_rm/ZFACT1.html#ZFACT1">ZFACT1</a> keywords are not required.
+Zero enthalpy is taken to be the enthalpy of the liquid phase at the
+temperature and pressure specified in the <a href="../ecl_rm/STCOND.html#STCOND">STCOND</a> keyword.</p>
+</dd>
+
+
+
+<dt class="dlterm">Relative permeability</dt>
+
+<dd>The relative permeability needs to be of the three phase type.
+If an oil phase is not considered, the oil relative permeability needs
+to be assigned dummy values.<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> <a href="../ecl_rm/WSF.html#WSF"> WSF</a> and <a href="../ecl_rm/GSF.html#GSF">GSF</a> cannot be used to specify the relative permeabilities. </span></div>
+</dd>
+
+
+<dt class="dlterm">Low temperature option</dt>
+
+<dd>The Spycher-Pruess (<cite><span> <a href="biblio_Bibliography.html#biblio_58116">Spycher and Pruess (2005)</a> </span></cite> and <cite><span> <a href="biblio_Bibliography.html#biblio_77219">Spycher and Pruess (2009)</a> </span></cite>) method is normally limited to a temperature range of
+12-250 °C. For systems with CO<sub>2</sub> and H<sub>2</sub>O without
+additional hydrocarbon, lower temperatures are allowed and calculations
+are based on a linear extrapolation of CO<sub>2</sub> and H<sub>2</sub>O k-values from 12 °C downward to 1 °C. At these low temperatures,
+both component k-values are approximately linear with temperature.
+This option can be disabled by setting <a href="../ecl_rm/OPTIONS3.html#options3.438">item 438</a> of the <span class="keyword">OPTIONS3</span> keyword to 1.</dd>
+
+
+<dt class="dlterm">Detection of hydrate formation</dt>
+
+<dd>An additional CO2STORE option exists to detect the formation of
+CO<sub>2</sub>/H<sub>2</sub>O hydrates at low temperatures. It is
+only applicable to systems with CO<sub>2</sub> and H<sub>2</sub>O
+without additional hydrocarbon. Several salts can be modeled using
+the CO2STORE option. These have the effect of depressing temperatures
+at which hydrates can form in this fluid system or, in other words,
+are hydrate inhibitors. A hydrate formation envelope was fitted as
+a function of pressure and salt concentration from predictions with
+the Multiflash hydrate calculator (<cite><span> <a href="biblio_Bibliography.html#biblio.infochem">Infochem, 2019</a> </span></cite>). The effect of all salts is modeled using an equivalent
+set of NaCl ions in solution. The accuracy of these envelope predictions
+is ± 2 ° and the accuracy of the fit is ±1.2 °. Two methods are available
+to report hydrate formation:<ul>
+<li> A summary vector can be defined that reports hydrate formation
+in grid blocks using the summary keyword <span class="keyword">BHYD</span> (or <span class="keyword">LBHYD</span> for local grid blocks).</li>
+
+<li>A 3D array can be requested where a value of 1 indicates hydrate
+formation, invoked with the <span class="keyword">HYDRATE</span> mnemonic in
+the <a href="../ecl_rm/RPTRST.html#RPTRST"> RPTRST</a> or <a href="../ecl_rm/RPTSCHED.html#RPTSCHED"> RPTSCHED</a> keyword.</li>
+
+</ul>
+</dd>
+
+</dl>
+
+<dl>
+
+<dt class="dlterm">Initializing the study</dt>
+
+<dd>The typical conditions is that the reservoir is water. It is possible
+to assign the initial aqueous mole fractions by the <a href="../ecl_rm/AMFVD.html#AMFVD">AMFVD</a> keyword when using the <a href="../ecl_rm/EQUIL.html#EQUIL">EQUIL</a> keyword. If the reservoir
+is initialized by enumeration the aqua mole fractions are assigned
+by the <a href="../ecl_rm/AMF.html#AMF">AMF</a> keyword.</dd>
+
+
+<dt class="dlterm">Compatibility</dt>
+
+<dd>The thermal <a href="../ecl_rm/CO2STORE.html#CO2STORE">CO2STORE</a> option is currently not compatible with the multisegment
+well option.</dd>
+
+</dl>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

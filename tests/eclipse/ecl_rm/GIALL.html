@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GIALL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GIALL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GIALL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GIALL"><a name="GIALL"><!-- --></a>
+<h1 class="keyword">GIALL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="giall.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="giall.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d854e45"> x </th>
+
+<th valign="top" id="d854e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d854e54">  </th>
+
+<th valign="top" id="d854e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d854e45 d854e54 ">  </td>
+
+<td valign="top" headers="d854e48 d854e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d854e45 d854e54 ">  </td>
+
+<td valign="top" headers="d854e48 d854e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d854e45 d854e54 ">  </td>
+
+<td valign="top" headers="d854e48 d854e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d854e45 d854e54 "> x </td>
+
+<td valign="top" headers="d854e48 d854e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d854e45 d854e54 ">  </td>
+
+<td valign="top" headers="d854e48 d854e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d854e45 d854e54 ">  </td>
+
+<td valign="top" headers="d854e48 d854e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d854e45 d854e54 ">  </td>
+
+<td valign="top" headers="d854e48 d854e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d854e45 d854e54 ">  </td>
+
+<td valign="top" headers="d854e48 d854e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword is an alternative method of specifying the variation
+of R<sub>v</sub>,  R<sub>s</sub>,  B<sub>g</sub>  and  B<sub>o</sub>  with pressure and Gi. <span class="keyword">GIALL</span> replaces the <a href="RSGI.html#RSGI"> RSGI</a>, <a href="RVGI.html#RVGI"> RVGI</a>, <a href="BOGI.html#BOGI"> BOGI</a> and <a href="BGGI.html#BGGI"> BGGI</a> keywords
+with the constraint that for all four properties the same pressure
+nodes are used. This can be a more convenient format when the data
+is supplied by the PVT <em>i</em> package. </p>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTPVT"> NTPVT</a>  (set in the <span class="keyword">TABDIMS</span> keyword)
+tables of multiplier functions, describing the variation of saturated
+R<sub>v</sub>,  R<sub>s</sub>,  B<sub>g</sub>  and  B<sub>o</sub> 
+with pressure and Gi value. Each table is terminated by a slash(/).
+Each table contains a maximum of <a href="TABDIMS.html#TABDIMS.NPPVT"> NPPVT</a>  (set in the <span class="keyword">TABDIMS</span> keyword) records terminated by a slash (/) and each record contains
+a maximum of <samp class="codeph">NPPVT</samp> rows of data.</p>
+
+<p>The first row of data in a record contains:</p>
+
+<ol>
+<li> The oil pressure value. <p>The values should increase monotonically
+down the column.</p>
+ <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia
+(<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>)</p>
+<p>Following
+this pressure entry, there are four columns defining the two-dimensional
+(P, Gi) functions that multiply the saturated values of R<sub>v</sub>,  R<sub>s</sub>,  B<sub>g</sub>  and  B<sub>o</sub>  at (P, Gi=0)
+to give the true saturated value at (P, Gi).</p>
+ </li>
+
+<li> The gas R<sub>v</sub>  multiplying factor at a Gi value specified
+as the first item in the <a href="GINODE.html#GINODE">  GINODE</a> table. </li>
+
+<li> The oil R<sub>s</sub>  multiplying factor at a Gi value specified
+as the first item in the <span class="keyword">GINODE</span> table. </li>
+
+<li> The gas B<sub>g</sub>  multiplying factor at a Gi value specified
+as the first item in the <span class="keyword">GINODE</span> table. </li>
+
+<li> The oil  B<sub>o</sub>  multiplying factor at a Gi value specified
+as the first item in the <span class="keyword">GINODE</span> table. </li>
+
+</ol>
+
+<p>The other rows in the record each contain the four items which
+define the corresponding factors for the Gi values specified in the <span class="keyword">GINODE</span> keyword.</p>
+
+<p>See <a href="../ecl_td/gipscomp_Gi_pseudo-compositional_model.html#gipscomp">"Gi pseudo-compositional
+model"</a> in the <cite>ECLIPSE Technical Description</cite> for
+further information.</p>
+
+<div class="section" id="giall_example"><a name="giall_example"><!-- --></a><h4 class="sectiontitle">Example</h4> <p>In this example <samp class="codeph">NTPVT</samp> = 1 and there is one table of data, terminated by
+the final slash (/). Also <samp class="codeph">NPPVT</samp> = 2 and the table
+contains two records, each terminated by a slash and each record contains
+two rows of data. The first row of each record contains the oil pressure
+and a the four required multiplication factors, while the second row
+contains the four multiplication factors.</p>
+ <pre><code>--      RV     RS     BG     BO
+GIALL
+ 100.0  1.0    1.0    1.0    1.0
+        0.97   0.93   0.98   0.93   /
+ 200.0  1.0    1.0    1.0    1.0
+        0.952  0.941  0.927  0.898  /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

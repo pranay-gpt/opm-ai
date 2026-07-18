@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="STOG"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="STOG"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>STOG</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="STOG"><a name="STOG"><!-- --></a>
+<h1 class="keyword">STOG</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="stog.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="stog.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2450e45"> x </th>
+
+<th valign="top" id="d2450e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2450e54">  </th>
+
+<th valign="top" id="d2450e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2450e45 d2450e54 ">  </td>
+
+<td valign="top" headers="d2450e48 d2450e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2450e45 d2450e54 ">  </td>
+
+<td valign="top" headers="d2450e48 d2450e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2450e45 d2450e54 ">  </td>
+
+<td valign="top" headers="d2450e48 d2450e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2450e45 d2450e54 "> x </td>
+
+<td valign="top" headers="d2450e48 d2450e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2450e45 d2450e54 ">  </td>
+
+<td valign="top" headers="d2450e48 d2450e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2450e45 d2450e54 ">  </td>
+
+<td valign="top" headers="d2450e48 d2450e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2450e45 d2450e54 ">  </td>
+
+<td valign="top" headers="d2450e48 d2450e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2450e45 d2450e54 ">  </td>
+
+<td valign="top" headers="d2450e48 d2450e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword supplies tables of oil-gas surface tension versus
+pressure. They are used by two facilities in ECLIPSE: the <span class="keyword">SURFTENS</span> option and multisegment wells. The keyword should
+not be present if neither of these options are in use.</p>
+
+<p>The <span class="keyword">SURFTENS</span> option calculates a pressure-dependent
+adjustment to the capillary pressure. It is activated by requesting
+the <span class="keyword">SURFTENS</span> option in the <span class="keyword">RUNSPEC</span> section keyword <a href="SATOPTS.html#SATOPTS">  SATOPTS</a>. If the <span class="keyword">STOG</span> keyword is not supplied,
+the oil-gas capillary pressure retains the values specified in the
+keyword <a href="SGFN.html#SGFN">  SGFN</a>, <a href="SGOF.html#SGOF">  SGOF</a> or <a href="SLGOF.html#SLGOF">  SLGOF</a>, independently
+of the pressure.</p>
+
+<p>The keyword may also be used if there are any multisegment wells
+in the run. The phase interfacial tensions are required by the drift
+flux model (see <a href="../ecl_td/driftflx_The_drift_flux_slip_model.html#driftflx_the_drift_flux_slip_model">"The drift flux
+slip model"</a> in the <cite>ECLIPSE Technical Description</cite>). If surface tension data is supplied for the table corresponding
+to the well’s PVT region number (see <a href="WELSPECS.html#WELSPECS"> WELSPECS</a> keyword item 11), the interfacial tension
+is taken from this table. If there is no surface tension data supplied
+for the well’s PVT table number, the interfacial tension is calculated
+from a built-in correlation.</p>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTPVT"> NTPVT</a> 
+(set in the <span class="keyword">TABDIMS</span> keyword) tables of oil-gas surface tension versus
+pressure.</p>
+
+<p>Each table consists of two records, each record terminated with
+a slash (/).</p>
+
+<div class="section" id="stog_record_1"><a name="stog_record_1"><!-- --></a><h4 class="sectiontitle">Record 1</h4><p>A reference
+oil phase pressure, at which the oil-gas capillary pressure has the
+values specified in keyword <span class="keyword">SGFN</span>, <span class="keyword">SGOF</span> or <span class="keyword">SLGOF</span>.</p>
+<p>(This data item is only used
+by the <span class="keyword">SURFTENS</span> option. It is not needed to calculate
+the interfacial tension in the multisegment well drift flux model,
+and the value entered here does not affect its results.)</p>
+<p>UNITS:
+barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma
+(<samp class="codeph">LAB</samp>)</p>
+</div>
+
+<div class="section" id="stog_record_2"><a name="stog_record_2"><!-- --></a><h4 class="sectiontitle">Record 2</h4><p>A table consisting
+of two columns of data.</p>
+<ol>
+<li>The oil phase pressure. Values should increase monotonically down
+the column. <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>)</p>
+</li>
+
+<li>The corresponding oil-gas surface tension.<p>UNITS: N/m (<samp class="codeph">METRIC</samp>), lbf/in (<samp class="codeph">FIELD</samp>), dynes/cm (<samp class="codeph">LAB</samp>)</p>
+</li>
+
+</ol>
+<p>Each table must contain at least two, and no more than <a href="TABDIMS.html#TABDIMS.NPPVT"> NPPVT</a> (set
+in the <span class="keyword">TABDIMS</span> keyword) rows. Each row must be complete, 
+containing an entry in every column of the table. </p>
+</div>
+
+<div class="section" id="stog_calculations_for_the_surftens_option"><a name="stog_calculations_for_the_surftens_option"><!-- --></a><h4 class="sectiontitle">Calculations
+for the SURFTENS option</h4><p>The oil-gas capillary pressures
+(entered in keyword <a href="SGFN.html#SGFN"> SGFN</a>, <a href="SGOF.html#SGOF"> SGOF</a> or <a href="SLGOF.html#SLGOF">  SLGOF</a>) are adjusted according
+to the ratio of the surface tension at the grid block oil phase pressure
+to the surface tension at the reference pressure. The capillary pressures
+input in the <span class="keyword">SGFN</span>, <span class="keyword">SGOF</span> or <span class="keyword">SLGOF</span> keyword are assumed to be at the reference pressure
+specified in the <span class="keyword">STOG</span> keyword.</p>
+<p>Thus the effective
+oil-gas capillary pressure is:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="stog.equ.007c"/>
+ <math><mrow><mrow><msub>
+<mrow><mi>P</mi></mrow><mrow><mi>c</mi><mi>o</mi>
+<mi>g</mi></mrow></msub><mo>⁡</mo><mrow><mo>(</mo>
+<mrow><mtext>oil pressure</mtext></mrow><mo>)</mo></mrow>
+</mrow><mo>=</mo><mrow><msub><mrow><mi>P</mi></mrow>
+<mrow><mi>c</mi><mi>o</mi><mi>g</mi></mrow></msub>
+<mo>⁡</mo><mrow><mo>(</mo><mrow><mtext>input by user</mtext>
+</mrow><mo>)</mo></mrow></mrow><mfrac><mrow><mtext>ST</mtext><mo>⁡</mo><mrow><mo>(</mo><mrow><mtext>oil pressure</mtext></mrow><mo>)</mo></mrow></mrow><mrow>
+<mtext>ST</mtext><mo>(</mo><mtext>reference pressure</mtext>
+<mo>)</mo></mrow></mfrac></mrow></math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table><div class="note"><span class="notetitle">Note:</span> <span class="notebody">The surface tension is only used as a ratio in the <span class="keyword">SURFTENS</span> option, and hence the units used does not affect
+the results of the calculation. </span></div>
+</div>
+
+<div class="section" id="stog_example"><a name="stog_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>With <samp class="codeph">NTPVT</samp> = 1 and <samp class="codeph">NPPVT</samp> ≥ 11:</p>
+<pre><code>STOG
+--
+-- REFERENCE PRESSURE
+--
+        5545 /
+--
+-- PRESSURE   SURFACE TENSION
+--
+   1674             6.0
+   2031             4.7
+   2530             3.3 
+   2991             2.2
+   3553             1.28
+   4110             0.72
+   4544             0.444
+   4935             0.255
+   5255             0.155
+   5545             0.090
+   7000             0.050         /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

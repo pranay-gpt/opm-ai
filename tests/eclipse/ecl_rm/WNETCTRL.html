@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WNETCTRL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WNETCTRL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WNETCTRL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="WNETCTRL"><a name="WNETCTRL"><!-- --></a>
+<h1 class="keyword">WNETCTRL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="wnetctrl.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wnetctrl.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d3002e45">                         x </th>
+
+<th valign="top" id="d3002e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d3002e54"> </th>
+
+<th valign="top" id="d3002e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d3002e45 d3002e54 "> </td>
+
+<td valign="top" headers="d3002e48 d3002e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3002e45 d3002e54 "> </td>
+
+<td valign="top" headers="d3002e48 d3002e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3002e45 d3002e54 "> </td>
+
+<td valign="top" headers="d3002e48 d3002e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3002e45 d3002e54 "> </td>
+
+<td valign="top" headers="d3002e48 d3002e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3002e45 d3002e54 "> </td>
+
+<td valign="top" headers="d3002e48 d3002e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3002e45 d3002e54 "> </td>
+
+<td valign="top" headers="d3002e48 d3002e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3002e45 d3002e54 "> </td>
+
+<td valign="top" headers="d3002e48 d3002e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d3002e45 d3002e54 ">                         x </td>
+
+<td valign="top" headers="d3002e48 d3002e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword can be used when running the network option (see <a href="../ecl_td/networkintro_Network_Option.html#networkintro_network_option">"Network option"</a> in the <cite>ECLIPSE Technical Description</cite>), to select the
+well control quantity that is held constant after the network has
+been balanced and until the next balancing calculation. Normally this
+quantity is the well THP limit, which is fixed equal to its group’s
+nodal pressure in the network (plus any fixed pressure drop specified
+in keyword <a href="WNETDP.html#WNETDP"> WNETDP</a>). By default, this will be the network control quantity for all
+the wells if the <span class="keyword">WNETCTRL</span> keyword is absent.</p>
+
+<p>Consider, for example, the gas flow rate selected as the control
+quantity. The network will be balanced as usual by setting the wells’
+THP limits from their group’s nodal pressure. However, any wells constrained
+by the network (that is that are under THP control in the balanced
+network) will have their gas flow rate limit fixed at its current
+value until the next network balancing calculation, and their THP
+limit removed. Any gas flow rate limit that you set will still
+be honored, if that becomes the acting constraint.</p>
+
+<p>It is expected that the default control quantity of THP will be
+the most suitable one for most simulations. Circumstances where it
+may be worth considering the flow rate as a control quantity are high-permeability
+fields with a low drawdown at the wells, which are coupled to a network
+in which the pressure losses are strongly sensitive to the flow rate.
+This may be the case in high-permeability gas reservoirs with compressors
+in the network. Keeping the well THP fixed until the next balancing
+calculation would generate large errors in the well flow rate if the
+change in reservoir pressure over the timestep is a significant fraction
+of the drawdown.</p>
+
+<p>In general, this keyword should only be used if problems arise
+with THP as the control quantity; for example if large network balancing
+errors are reported at the end of the timestep. If large network balancing
+errors are reported, first check the <a href="NETBALAN.html#NETBALAN"> NETBALAN</a> keyword to ensure the convergence criteria
+are suitable and that the network is being balanced at every timestep.
+If this is so, then try setting a negative balancing interval to make
+ECLIPSE balance the network in each of the first <a href="NUPCOL.html#NUPCOL"> NUPCOL</a> Newton iterations of the timestep.
+If problems persist, or if the Newton iteration convergence is badly
+affected, then try selecting the flow rate to be the network control
+quantity.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).
+The set of records must end with a blank record, containing only a
+slash (/).</p>
+
+<ol>
+<li>Well name, well name template, well list or well list template
+               <p>A template enclosed in quotes can be used to refer
+to multiple wells or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+             </li>
+
+<li>Control quantity to remain fixed after each network balancing
+calculation when the well is limited by the network   
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">THP</samp> </td>
+
+<td valign="top">Tubing head pressure</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">LRAT</samp> </td>
+
+<td valign="top">Liquid rate (Production wells only)</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">GRAT</samp> </td>
+
+<td valign="top"> Gas rate</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">WRAT</samp> </td>
+
+<td valign="top">Water rate (Water injection wells only)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">THP</samp> </p>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="section" id="wnetctrl_example"><a name="wnetctrl_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WNETCTRL
+'PROD*'  THP  /
+'GINJ*'  GRAT /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

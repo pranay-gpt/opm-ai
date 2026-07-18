@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Special extensions"/>
+<meta name="DC.subject" content="Gradient option"/>
+<meta name="keywords" content="Gradient option"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="datafile_special_extensions"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Special extensions</title>
+</head>
+<body>
+
+
+<div class="nested0" id="datafile_special_extensions"><a name="datafile_special_extensions"><!-- --></a>
+<h1 class="topictitle1">Special extensions</h1>
+
+
+ <div>
+<p>When unencoded derivatives are enabled, some extra summary keywords
+are available: these mnemonics have first character ‘Q’ and are only
+activated if the <samp class="codeph">HMD</samp> file is unencrypted. The Q*
+mnemonics should be specified at the end of the summary section, after
+all the normal ECLIPSE <span class="keyword">SUMMARY</span> keywords.</p>
+
+<div class="section"><h4 class="sectiontitle">Analytic and Numerical Aquifer derivatives</h4><p>These are analogous to <span class="keyword">AAQR</span>, <span class="keyword">AAQT</span> and <span class="keyword">AAQP</span> for analytic aquifers (and <span class="keyword">ANQR</span>, <span class="keyword">ANQT</span>, <span class="keyword">ANQP</span> for
+numerical aquifers):</p>
+<p>Derivative of influx rate for analytic
+aquifers:</p>
+<pre><code>QAAQR
+ iaq ihm /</code></pre><p>Derivative of total influx for analytic aquifers:</p>
+<pre><code>QAAQT
+ iaq ihm /</code></pre><p>Derivative of aquifer pressure (Fetkovich
+only):</p>
+<pre><code>QAAQP
+ iaq ihm /</code></pre><p>Derivative of influx rate for numerical aquifers:</p>
+<pre><code>QANQR
+ iaq ihm /</code></pre><p>Derivative of total influx for numerical
+aquifers:</p>
+<pre><code>QANQT
+ iaq ihm /</code></pre><p>Derivative of average numerical aquifer pressure:</p>
+<pre><code>QANQP
+ iaq ihm /</code></pre><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <em>iaq </em> </td>
+
+<td valign="top"> = aquifer number as specified in <span class="keyword">AQUCT</span>, <span class="keyword">AQUFETP</span> or <span class="keyword">AQUNUM (</span> this may be defaulted
+to refer to all aquifers,</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <em>ihm </em> </td>
+
+<td valign="top">= number of derivative for aquifer (this item may be defaulted
+to refer to all parameters for a given aquifer).</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<div class="p">For a Carter-Tracy aquifer, <em>ihm</em> is used as follows:<ol>
+<li>derivative with respect to permeability multiplier</li>
+
+<li>derivative with respect to opening angle multiplier</li>
+
+<li> derivative with respect to aquifer depth.</li>
+
+</ol>
+</div>
+<p>For a Fetkovich aquifer:</p>
+<ol>
+<li>derivative with respect to multiplier on initial water volume</li>
+
+<li>derivative with respect to Productivity Index multiplier</li>
+
+<li>derivative with respect to aquifer depth.</li>
+
+</ol>
+<p>For a Numerical aquifer:</p>
+<ol>
+<li>derivative with respect to multiplier on total aquifer pore volume</li>
+
+<li>derivative with respect to aquifer permeability multiplier</li>
+
+<li>derivative with respect to aquifer to grid transmissibility multiplier.</li>
+
+</ol>
+<p>The derivatives are only calculated when the aquifer parameters <span class="keyword">HMAQUCT</span>, <span class="keyword">HMAQUFET</span> or <span class="keyword">HMAQUNUM</span> are selected.</p>
+<dl>
+
+<dt class="dlterm">Example</dt>
+
+<dd><pre><code>QAAQR
+ 1 2 /
+ 2 2 /
+ 3 1 /
+
+/</code></pre></dd>
+
+</dl>
+</div>
+
+<div class="section"><h4 class="sectiontitle">Derivatives of well quantities</h4><p>For derivatives
+of <samp class="codeph"> WBP </samp> with respect to all gradient parameters</p>
+<pre><code>QWBP
+ WELL1 /
+ WELL2 /
+
+/</code></pre><p>The available arguments are:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d256e221">Keyword</th>
+
+<th valign="top" id="d256e224">Description</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d256e221 "> <samp class="codeph">QWBP</samp> </td>
+
+<td valign="top" headers="d256e224 ">derivative of <samp class="codeph">WBP</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d256e221 "> <samp class="codeph">QWBP4</samp> </td>
+
+<td valign="top" headers="d256e224 "> derivative of <samp class="codeph">WBP5</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d256e221 "> <samp class="codeph">QWBP9</samp> </td>
+
+<td valign="top" headers="d256e224 ">derivative of <samp class="codeph">WBP9</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d256e221 "> <samp class="codeph">QWOFR</samp> </td>
+
+<td valign="top" headers="d256e224 ">derivative of <samp class="codeph">WOPR</samp> or <samp class="codeph">WOIR</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d256e221 "> <samp class="codeph">QWWFR</samp> </td>
+
+<td valign="top" headers="d256e224 ">derivative of <samp class="codeph">WWPR</samp> or <samp class="codeph">WWIR</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d256e221 "> <samp class="codeph">QWGFR</samp> </td>
+
+<td valign="top" headers="d256e224 ">derivative of <samp class="codeph">WGPR</samp> or <samp class="codeph">WGIR</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d256e221 "> <samp class="codeph">QWWCT</samp> </td>
+
+<td valign="top" headers="d256e224 "> derivative of <samp class="codeph">WWCT</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d256e221 "> <samp class="codeph">QWGOR</samp> </td>
+
+<td valign="top" headers="d256e224 ">derivative of <samp class="codeph">WGOR</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d256e221 "> <samp class="codeph">QWBHP</samp> </td>
+
+<td valign="top" headers="d256e224 "> derivative of <samp class="codeph">WBHP</samp> </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>The corresponding quantities in local grids are preceded
+by the letter L, for example:</p>
+<pre><code>LQWBP
+ LGR1  WELL1 /
+ LGR2  WELL2 /
+/</code></pre><p>To get derivatives of <samp class="codeph"> <span class="keyword">WBP</span> </samp> for all parameters at each well:</p>
+<pre><code>QWBP
+
+/
+
+WBP
+
+/
+RUNSUM
+SEPARATE
+RPTSMRY
+ 1 /</code></pre></div>
+
+<div class="section"><h4 class="sectiontitle">Derivatives of grid block quantities</h4><p>The
+available mnemonics are:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d256e408">Argument</th>
+
+<th valign="top" id="d256e411">Description</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d256e408 "> <samp class="codeph">QBPR</samp> </td>
+
+<td valign="top" headers="d256e411 ">derivative of <samp class="codeph">BPR</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d256e408 "> <samp class="codeph">QBRS</samp> </td>
+
+<td valign="top" headers="d256e411 ">derivative of <samp class="codeph">BRS</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d256e408 "> <samp class="codeph">QBRV</samp> </td>
+
+<td valign="top" headers="d256e411 ">derivative of <samp class="codeph">BRV</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d256e408 "> <samp class="codeph">QBOSAT</samp> </td>
+
+<td valign="top" headers="d256e411 ">derivative of <samp class="codeph">BOSAT</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d256e408 "> <samp class="codeph">QBWSAT</samp> </td>
+
+<td valign="top" headers="d256e411 ">derivative of <samp class="codeph">BWSAT</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d256e408 "> <samp class="codeph">QBGSAT</samp> </td>
+
+<td valign="top" headers="d256e411 ">derivative of <samp class="codeph">BGSAT</samp> </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d256e408 "> <samp class="codeph">QBNSAT</samp> </td>
+
+<td valign="top" headers="d256e411 ">derivative of <samp class="codeph">BNSAT</samp> </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>For example:</p>
+<pre><code>QBPR
+  7 1 1 idm /
+ 17 1 1 idm /
+/</code></pre><p>where <em>idm</em> is the index of the derivative. If <em>idm</em> is defaulted, then block derivative for all parameters are
+obtained. The <em> idm </em> parameter is the internal ECLIPSE numbering
+of each parameter. Usually, <em>idm</em> is defaulted and gradients
+for every parameter are output.</p>
+<p>The corresponding quantities
+in local grids are preceded by the letter L, for example:</p>
+<pre><code>LQBPR
+ 'LGR1'   7 1 1 idm /
+ 'LGR2'  17 1 1 idm /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

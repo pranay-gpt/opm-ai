@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Secondary wells"/>
+<meta name="DC.subject" content="Multisegment wells secondary wells"/>
+<meta name="keywords" content="Multisegment wells secondary wells"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="multiseg_secondary_wells"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Secondary wells</title>
+</head>
+<body>
+
+
+<div class="nested0" id="multiseg_secondary_wells"><a name="multiseg_secondary_wells"><!-- --></a>
+<h1 class="topictitle1">Secondary wells</h1>
+
+
+ <div>
+<p> ECLIPSE 300     </p>
+
+<p>As an extension to the facilities afforded
+by the keyword <a href="../ecl_rm/WSEGEXSS.html#WSEGEXSS">WSEGEXSS</a>, further controls may be exerted over well segments by defining
+one or more segments to be secondary wells. This is accomplished using
+the keyword <a href="../ecl_rm/WSEGWELL.html#WSEGWELL">WSEGWELL</a> which associates a specified well segment with a secondary
+well name. Once this association has been established, the secondary
+well keywords <a href="../ecl_rm/SCONPROD.html#SCONPROD">SCONPROD</a>, <a href="../ecl_rm/SCONINJE.html#SCONINJE">SCONINJE</a> and <a href="../ecl_rm/STEST.html#STEST">STEST</a> may be employed to control the production from and injection
+into the segments. The keywords <span class="keyword">WSEGEXSS</span> and <span class="keyword">WSEGWELL</span> are mutually exclusive for a given well segment.
+With the exception of the top segment, any segment in the well topology
+may be associated with a secondary well name.</p>
+
+<p>There are a number of possible applications for this facility.
+For example, a dual-tubing well may be modeled in terms of a multisegment
+well where the conventional (primary) well can be used to represent
+one tubing and a well segment can be used to represent the other tubing
+by defining this as a secondary well. There are, however, a number
+of factors to consider when constructing this form of model. For example,
+if the primary well shuts, the secondary well will also shut. Moreover,
+the multisegment well topology can become complex if both secondary
+producers and injectors are modeled via secondary wells. In addition,
+the controls available with a secondary well are more limited than
+those available with a conventional well.</p>
+
+<p>The fluid production and injection rates for secondary wells may
+be specified in terms of a target rate plus one or more limits. The
+limits include the minimum operating pressure for secondary producers
+(item 10 of the <a href="../ecl_rm/SCONPROD.html#SCONPROD">SCONPROD</a> keyword) and the maximum operating pressure for secondary
+injectors (item 8 of the <a href="../ecl_rm/SCONINJE.html#SCONINJE">SCONINJE</a> keyword). In some cases, depending upon the multisegment
+well topology, it may be conveniently an additional pressure constraint
+to an alternative segment to that nominated as the secondary well.
+For example, for a producer, it may be more appropriate to specify
+a minimum operating pressure for the secondary tubing segment whose
+depth is similar to the reference depth for the primary well BHP than
+for the secondary well segment itself with a surface outlet.</p>
+
+<p>The alternative pressure constraint is optional and is specified
+in terms of an alternative segment number and associated pressure
+limit (items 12 and 13 respectively of the <span class="keyword">SCONPROD</span> keyword for producers and items 13 and 14 respectively of the <span class="keyword">SCONINJE</span> keyword for injectors). For secondary producers,
+the calculation of the molar rate required to provide the specified
+target fluid rate utilizes the minimum operating pressure of the secondary
+well segment (item 10 of the <span class="keyword">SCONPROD</span> keyword).
+If the pressure in the secondary segment reduces to within a few percent
+of this minimum operating pressure, in some circumstances fluctuations
+in the secondary production rate can occur. In such cases, items 12
+and 13 of the <span class="keyword">SCONPROD</span> keyword may be used to define
+a cutoff pressure for the secondary well segment by specifying item
+12 as the secondary well segment number and item 13 as the cutoff
+pressure. In this case a suggested value for item 13 is 10% higher
+than the value for item 10.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

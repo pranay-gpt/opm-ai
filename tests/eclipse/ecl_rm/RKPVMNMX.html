@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="RKPVMNMX"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="RKPVMNMX"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>RKPVMNMX</title>
+</head>
+<body>
+
+
+<div class="nested0" id="RKPVMNMX"><a name="RKPVMNMX"><!-- --></a>
+<h1 class="keyword">RKPVMNMX</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="rkpvmnmx.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="rkpvmnmx.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2020e45">  </th>
+
+<th valign="top" id="d2020e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2020e54"> x </th>
+
+<th valign="top" id="d2020e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2020e45 d2020e54 ">  </td>
+
+<td valign="top" headers="d2020e48 d2020e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2020e45 d2020e54 ">  </td>
+
+<td valign="top" headers="d2020e48 d2020e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2020e45 d2020e54 ">  </td>
+
+<td valign="top" headers="d2020e48 d2020e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2020e45 d2020e54 "> x </td>
+
+<td valign="top" headers="d2020e48 d2020e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2020e45 d2020e54 ">  </td>
+
+<td valign="top" headers="d2020e48 d2020e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2020e45 d2020e54 ">  </td>
+
+<td valign="top" headers="d2020e48 d2020e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2020e45 d2020e54 ">  </td>
+
+<td valign="top" headers="d2020e48 d2020e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2020e45 d2020e54 ">  </td>
+
+<td valign="top" headers="d2020e48 d2020e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data comprises <samp class="codeph">NTROCC</samp> (see item 1 in keyword <a href="ROCKCOMP.html#ROCKCOMP">  ROCKCOMP</a> in the <span class="keyword">RUNSPEC</span> section) tables of pore volume multiplier limits
+for hysteretic rock data, each terminated by a slash (/). Each table
+consists of 2 columns of data:</p>
+
+<ol>
+<li>The minimum pore volume multiplier. <p>UNITS: dimensionless</p>
+</li>
+
+<li>The maximum pore volume multiplier. <p>UNITS: dimensionless</p>
+</li>
+
+</ol>
+
+<p>No default values are defined. Data must be provided for each column
+of a given table.</p>
+
+<p>The <samp class="codeph">NTROCC</samp> records correspond to the Rock Compaction
+table region numbers, which are set using keyword  <a href="ROCKNUM.html#ROCKNUM"> ROCKNUM</a> (item 1).</p>
+
+<p>The <span class="keyword">RKPVMNMX</span> keyword cannot be used in <a href="THERMAL.html#THERMAL">  THERMAL</a> simulations.
+It can only be used if the Rock Compaction option is selected (keyword <span class="keyword">ROCKCOMP</span> in the <span class="keyword">RUNSPEC</span> section with
+item 1 set to the BOBERG option).</p>
+
+<p>For the BOBERG model, elastic curves are provided in a tabular
+format using the <a href="ROCKTABH.html#ROCKTABH">  ROCKTABH</a> keyword, and based on these elastic curves, ECLIPSE defines
+the deflation and dilation curves.</p>
+
+<p>Without this keyword, the dilation curve, for instance, is unbounded
+and so if the maximum pore volume multiplier in the <span class="keyword">ROCKTABH</span> table is reached and the pressure continues to increase, then ECLIPSE
+performs a table extrapolation which can result in extremely high
+pore volume and transmissibility multipliers.</p>
+
+<p>Use of the <span class="keyword">RKPVMNMX</span> keyword is a way of preventing
+unlimited extrapolation of the deflation and dilation curves. For
+instance, when the maximum pore volume multiplier defined using this
+keyword is reached and the pressure continues to increase, the model
+does not dilate anymore, instead the elastic curves are used to describe
+the rock expansion for the current pressure.</p>
+
+<p>Using the pore volume multipliers specified with this keyword,
+a corresponding minimum/maximum pressure is obtained in addition to
+a minimum/maximum transmissibility multiplier at these pressure values.
+If the current grid cell pressure is outside of the minimum/maximum
+pressure values, then a new pore volume multiplier and transmissibility
+multiplier is found using the elastic curves, otherwise the original <span class="keyword">ROCKTABH</span> algorithm will be used.</p>
+
+<p>See also keywords <a href="ROCKOPTS.html#ROCKOPTS">  ROCKOPTS</a>, and <a href="../ecl_td/rockcomp_Rock_Compaction.html#rockcomp_rock_compaction">"Rock compaction"</a> in the <cite>ECLIPSE Technical Description</cite>.</p>
+
+<div class="section" id="rkpvmnmx_example"><a name="rkpvmnmx_example"><!-- --></a><h4 class="sectiontitle">Example</h4>           <p>With <samp class="codeph">NTROCC</samp> =1</p>
+          <pre><code>RKPVMNMX
+  0.3  0.8 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

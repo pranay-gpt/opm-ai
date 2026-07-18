@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GSATPROD"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GSATPROD"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GSATPROD</title>
+</head>
+<body>
+
+
+<div class="nested0" id="GSATPROD"><a name="GSATPROD"><!-- --></a>
+<h1 class="keyword">GSATPROD</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="gsatprod.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="gsatprod.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d946e45"> x </th>
+
+<th valign="top" id="d946e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d946e54"> x </th>
+
+<th valign="top" id="d946e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d946e45 d946e54 ">  </td>
+
+<td valign="top" headers="d946e48 d946e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d946e45 d946e54 ">  </td>
+
+<td valign="top" headers="d946e48 d946e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d946e45 d946e54 ">  </td>
+
+<td valign="top" headers="d946e48 d946e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d946e45 d946e54 ">  </td>
+
+<td valign="top" headers="d946e48 d946e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d946e45 d946e54 ">  </td>
+
+<td valign="top" headers="d946e48 d946e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d946e45 d946e54 ">  </td>
+
+<td valign="top" headers="d946e48 d946e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d946e45 d946e54 ">  </td>
+
+<td valign="top" headers="d946e48 d946e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d946e45 d946e54 "> x </td>
+
+<td valign="top" headers="d946e48 d946e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword specifies the rate at which oil, water and gas is
+produced by a satellite group.</p>
+
+<p>Satellite groups provide a means of incorporating known production
+and injection flows from other reservoirs or regions that are not
+part of the simulation grid. They have no associated wells or subordinate
+groups, but act as sources of production flow and/or sinks of injection
+flow. The <span class="keyword">GSATPROD</span> keyword is used to specify the
+production rates of one or more satellite groups. These rates are
+held constant until they are reset in a subsequent <span class="keyword">GSATPROD</span> keyword. If the satellite groups are also injecting fluid, their
+injection rates must be set with keyword <a href="GSATINJE.html#GSATINJE"> GSATINJE</a>.</p>
+
+<p>For ECLIPSE 300, in compositional runs, the
+composition of the produced hydrocarbon fluids should be defined with
+keyword <a href="GSATCOMP.html#GSATCOMP"> GSATCOMP</a>. If the fluid compositions are left undefined, the produced oil
+and gas compositions default to the compositions obtained by flashing
+the initial reservoir fluids-in-place through the field separator.</p>
+
+<p>The group control facilities will take account of flows to and
+from satellite groups. If a superior group has a rate target, the
+flows from satellite groups, and any other groups declared unavailable
+for control from a higher level, will first be determined. Then the
+other subordinate groups or wells make up the remainder of the flow
+target, if they have sufficient potential.</p>
+
+<p>The first time a group is referenced in either keyword <span class="keyword">GSATPROD</span> or <span class="keyword">GSATINJE</span> it is defined to
+be a satellite group. In a multilevel group hierarchy, the satellite
+group should previously be declared in keyword <a href="GRUPTREE.html#GRUPTREE"> GRUPTREE</a> to define its position in the
+grouping hierarchy, otherwise by default the group is placed on level
+1 immediately subordinate to the <samp class="codeph">FIELD</samp>. An error
+message is issued if the group has already been given wells or subordinate
+groups. Once defined as a satellite group, only keywords <span class="keyword">GSATPROD</span> and <span class="keyword">GSATINJE</span> should be used
+to set its flow rates; <a href="GCONPROD.html#GCONPROD"> GCONPROD</a> and <a href="GCONINJE.html#GCONINJE">  GCONINJE</a> should not be used.</p>
+
+<p>When running the network option, satellite groups can be included
+in the production or injection network with the keyword <a href="GRUPNET.html#GRUPNET"> GRUPNET</a> or <a href="GNETINJE.html#GNETINJE"> GNETINJE</a> respectively.
+Nodal pressures will be calculated for these groups, as for all other
+groups in the network, but of course the satellite groups' flow rates
+are fixed at their specified values and do not depend on their nodal
+pressures. When running the extended network model, satellite groups
+are source groups and must therefore have a network node with the
+same name; they are included in the network with the keywords <a href="NODEPROP.html#NODEPROP"> NODEPROP</a> and <a href="BRANPROP.html#BRANPROP"> BRANPROP</a>. When running
+the gas field operations model, satellite groups cannot be made contract
+groups.</p>
+
+<p>The <span class="keyword">GSATPROD</span> keyword is followed by any number
+of records, each containing the following items of data, and each
+terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li> Satellite group name or group name root  <p>A group name root,
+enclosed in quotes and ending with an asterisk (*), can be used to
+refer to several groups in one record. The groups must previously
+have been declared with keyword <span class="keyword">GRUPTREE</span>, to define
+their position in the grouping hierarchy.</p>
+ <p>If a complete group
+name (without an asterisk) is entered, and the group has not been
+declared earlier, ECLIPSE creates a new group with that name and places
+it on level 1 directly subordinate to the <samp class="codeph">FIELD</samp>.</p>
+ <p>Satellite groups cannot have wells or subordinate groups.</p>
+ </li>
+
+<li class="newcontent"> Oil production rate from the
+group. User-defined arguments can be set with keywords <a href="UDQ.html#UDQ"> UDQ</a> and <a href="UDADIMS.html#UDADIMS"> UDADIMS</a>. <p>The value must be greater than
+or equal to zero.</p>
+ <p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), stb/day (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: Zero</p>
+ </li>
+
+<li class="newcontent"> Water production rate from
+the group. User-defined arguments can be set with keywords <a href="UDQ.html#UDQ"> UDQ</a> and <a href="UDADIMS.html#UDADIMS"> UDADIMS</a>. <p>The value must be greater than
+or equal to zero.</p>
+ <p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), stb/day (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: Zero</p>
+ </li>
+
+<li class="newcontent"> Gas production rate from the
+group.  User-defined arguments can be set with keywords <a href="UDQ.html#UDQ"> UDQ</a> and <a href="UDADIMS.html#UDADIMS"> UDADIMS</a>.<p>The value must be greater than
+or equal to zero.</p>
+ <p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), Mscf/day (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: Zero</p>
+ </li>
+
+<li class="newcontent"> Reservoir fluid volume production
+rate from the group.  User-defined arguments can be set with keywords <a href="UDQ.html#UDQ"> UDQ</a> and <a href="UDADIMS.html#UDADIMS"> UDADIMS</a>.<p>The value must be greater than
+or equal to zero.</p>
+ <p>Only enter a value here if you want the reservoir
+fluid volume rate of the superior groups and the field to include
+the reservoir fluid volume rate from the satellite group. If this
+quantity is left as zero for all the satellite groups, the field's
+reservoir fluid volume rate will only represent the fluid produced
+from the simulation grid. The choice is important if a superior group
+has a reservoir fluid volume production rate target or production
+balancing fraction, or a voidage replacement injection target.</p>
+ <p>UNITS: rm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), rb/day (<samp class="codeph">FIELD</samp>), rcc/hr (<samp class="codeph">LAB</samp>), rm<sup>3</sup>/day
+(<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: Zero</p>
+ </li>
+
+<li><p>Lift gas supply rate to the group. User-defined
+arguments can be set with keywords <a href="UDQ.html#UDQ"> UDQ</a> and <a href="UDADIMS.html#UDADIMS"> UDADIMS</a>. </p>
+<p>Only enter a value here if lift gas is being supplied to
+the group and you are running the Network option (ECLIPSE 100) or
+the Gas Lift Optimization facility.</p>
+ <p>ECLIPSE
+100</p>
+ <p>The lift gas is added to the production
+network flows, for the purpose of calculating the pressure drop along
+each network branch, in branches that have item 6 of the <a href="GRUPNET.html#GRUPNET">  GRUPNET</a> keyword
+set to <samp class="codeph">FLO</samp>, or in extended network nodes that have
+item 4 of keyword <a href="NODEPROP.html#NODEPROP"> NODEPROP</a> set to <samp class="codeph">YES</samp> (see the <a href="../ecl_td/networkintro_Network_Option.html#networkintro_network_option">"Network option"</a> in the <cite>ECLIPSE Technical Description</cite>).</p>
+ <p>When
+running the Gas Lift Optimization facility (see the <a href="../ecl_td/gasliftintro_Introduction.html#gasliftintro_gas_lift_optimization">"Gas lift optimization"</a> in the <cite>ECLIPSE Technical Description</cite>), the group's
+lift gas supply rate is accounted against any superior group's lift
+gas supply limit set with keyword <a href="GLIFTOPT.html#GLIFTOPT">  GLIFTOPT</a>.</p>
+ <p>The value must be greater than
+or equal to zero.</p>
+ <p>UNITS: sm<sup>3</sup>/day (<samp class="codeph">METRIC</samp>), Mscf/day (<samp class="codeph">FIELD</samp>), scc/hr (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: Zero</p>
+ <p>ECLIPSE 100</p>
+</li>
+
+<li class="newcontent"> Mean
+calorific value of gas produced by the group. User-defined arguments
+can be set with keywords <a href="UDQ.html#UDQ"> UDQ</a> and <a href="UDADIMS.html#UDADIMS"> UDADIMS</a>.<p>Only enter a value here if the gas calorific value control option
+is being used (see <a href="../ecl_td/gcalvalintro_Gas_Calorific_Value_Control.html#gcalvalintro_gas_calorific_value_control">"Gas calorific value
+control"</a> in the <cite>ECLIPSE Technical Description</cite>).</p>
+ <p>The value must be greater than or equal to zero.</p>
+ <p>UNITS:
+kJ/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), Btu/Mscf (<samp class="codeph">FIELD</samp>), J/scc (<samp class="codeph">LAB</samp>), kJ/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: Zero</p>
+ </li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<p>End the set of records with a blank record, containing just a slash.</p>
+
+<div class="section" id="gsatprod_notes"><a name="gsatprod_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li> <p>ECLIPSE 300</p>
+<p>Separators only act on the component molar rates produced from
+wells; the resultant phase surface volume rates from each well in
+a group are then summed to form the group's phase surface volume rates.
+This summation is also done for the gas volume rates at each stage
+of the separator to give group level stage gas volume rates. Satellite
+groups do not have any wells so, for reporting purposes, the satellite
+group stage 1 gas volume rate is set to the group gas production rate
+(so that the group rate and the sum of the group stage rates match). </p>
+ </li>
+
+<li>In complex separator chains, where the stage 1 separator gas is
+used as a feed further down the separator chain, the setting of the
+satellite group stage 1 gas volume rate to the group gas production
+rate may cause confusion, as it is not added to the latter feed. <a href="OPTIONS3.html#options3.113">Item 113</a> in <span class="keyword">OPTIONS3</span> can be used to turn off the setting of satellite group stage 1 gas
+volume rate to the group gas production rate to avoid such confusion.</li>
+
+</ul>
+</div>
+
+<div class="section" id="gsatprod_example"><a name="gsatprod_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>GSATPROD
+-- group   oil     water    gas     void   lift
+-- name    rate    rate     rate    rate   gas
+   SAT-A   14500   2640    17600   /
+   SAT-B   12700   3270    15800   /
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

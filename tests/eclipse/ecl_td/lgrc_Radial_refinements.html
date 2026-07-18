@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Radial refinements"/>
+<meta name="DC.subject" content="Radial local grid refinements, Local grid refinement, Radial, Numbering convention"/>
+<meta name="keywords" content="Radial local grid refinements, Local grid refinement, Radial, Numbering convention"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="lgrc_radial_refinements"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Radial refinements</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="lgrc_radial_refinements"><a name="lgrc_radial_refinements"><!-- --></a>
+<h1 class="topictitle1">Radial refinements</h1>
+
+
+ <div>
+<ol>
+<li>A local radial grid may be defined in either a single column of
+cells (using <a href="../ecl_rm/RADFIN.html#RADFIN">RADFIN</a>), or in a box consisting of four columns of cells (using <a href="../ecl_rm/RADFIN4.html#RADFIN4">RADFIN4</a>). The geometry of the
+local grid may be defined using one of the following methods:    
+           <ol type="a">
+<li>Refinements in the R-direction may be defined by user-given <a href="../ecl_rm/DR.html#DR">DR</a> values. In the Z-direction, refinements
+can be specified by <a href="../ecl_rm/NZFIN.html#NZFIN">NZFIN</a> / <a href="../ecl_rm/HZFIN.html#HZFIN">HZFIN</a> data. Missing data are calculated automatically, so that
+a radial grid can be defined by a minimum set of one <span class="keyword">RADFIN</span> or <span class="keyword">RADFIN4</span> keyword and one <a href="../ecl_rm/INRAD.html#INRAD">INRAD</a> keyword.            
+      </li>
+
+<li>In a block-centered host, <a href="../ecl_rm/DZ.html#DZ">DZ</a> values may be input directly, with radii defined as for the
+case (a). Use of user-defined <a href="../ecl_rm/DTHETA.html#DTHETA">DTHETA</a> values is not recommended, as the local angles are usually
+restricted by the host cell geometry.</li>
+
+<li>In a corner-point host, a local radial grid may be defined by
+corner-point coordinates. Note that the local <a href="../ecl_rm/COORD.html#COORD">COORD</a> data are expected in
+cylindrical coordinates, relative to an origin at the center of the
+refinement. (Note: Cartesian local <span class="keyword">COORD</span> data are
+defined relative to the global grid origin.)     </li>
+
+</ol>
+</li>
+
+<li>A local radial refinement defined through <span class="keyword">RADFIN</span> can only be inserted in a single column of host cells, with <samp class="codeph">NTHETA </samp> = 1 or <samp class="codeph">NTHETA</samp> = 4. Such a radial
+grid defined by user-specified corner points (in a corner-point host)
+must be 3-dimensional (that is, <samp class="codeph">NTHETA</samp> = 4).     <p>A local radial refinement defined through <span class="keyword">RADFIN4</span> can only be inserted in a box of four columns of host cells, with <samp class="codeph">NTHETA</samp> = 4 or <samp class="codeph">NTHETA</samp> = 8. Such a radial
+grid defined by user-specified corner points (in a corner-point host)
+must be 3-dimensional (that is, <samp class="codeph">NTHETA</samp> = 8).</p>
+ 
+              <p>A local radial grid cell must fit inside a single
+host cell.</p>
+             </li>
+
+<li>The center of a radial refinement defined through <span class="keyword">RADFIN</span> is assumed to be at the geometric center of the top host block.<p>The center of a radial refinement defined through <span class="keyword">RADFIN4</span> is assumed to lie at the central node of the top of the refined
+box.</p>
+             </li>
+
+<li>The sides of the inner radial cells are assumed to be vertical.</li>
+
+<li>The innermost radius must be defined by <samp class="codeph">INRAD</samp>.             </li>
+
+<li>The radius for the inside of the outer local block can be defined
+by <a href="../ecl_rm/OUTRAD.html#OUTRAD">OUTRAD</a>. Otherwise it is calculated as <samp class="codeph">RMAX</samp> /3.0
+where <samp class="codeph">RMAX</samp> is the maximum radius of a circle contained
+within the radial refinement.             </li>
+
+<li id="lgrc_Radial_36482"><a name="lgrc_Radial_36482"><!-- --></a> You may provide some or all <span class="keyword">DR</span> values. Any missing radii are completed as a geometric series (ECLIPSE
+100), as follows:  <p>No. of radii =  <math><mtext>NR</mtext></math> </p>
+                <p>No. of user-defined radii
+=  <math><mtext>NU</mtext>
+</math> </p>
+<p>Radius of inside of outer local block =  <math><mrow><mtext>RREF</mtext>
+<mo>=</mo><msub><mrow><mi>R</mi></mrow><mrow><mtext> </mtext><mtext>NR</mtext><mrow><mo>-</mo><mn>1</mn>
+</mrow></mrow></msub></mrow></math>  </p>
+<p>Last user-defined
+radius  =  <math><mtext>RU</mtext>
+</math> </p>
+<p>Then for  <math><mi>i</mi><mo>=</mo>
+<mtext>NU</mtext><mo>+</mo><mn>1</mn></math>  to  <math><mtext>NR</mtext>
+<mrow><mo>-</mo><mn>2</mn></mrow></math> </p>
+<p> <math><mrow><msub><mrow>
+<mi>R</mi></mrow><mrow><mi>i</mi><mo>+</mo><mn>1</mn>
+</mrow></msub><mo>=</mo><mtext>FAC</mtext><mo>⋅</mo>
+<msub><mrow><mi>R</mi></mrow><mrow><mi>i</mi></mrow>
+</msub></mrow></math>  where  <math><mtext>FAC</mtext><mo>=</mo><msup><mrow><mo>(</mo><mfrac>
+<mrow><mtext>RREF</mtext></mrow><mrow><mtext>RU</mtext>
+</mrow></mfrac><mo>)</mo></mrow><mrow><mn>1</mn><mo>/</mo><mo>(</mo><mtext>NR</mtext><mrow><mo>-</mo>
+<mtext>NU</mtext><mrow><mo>-</mo><mn>1</mn></mrow>
+</mrow><mo>)</mo></mrow></msup></math> </p>
+          
+  </li>
+
+<li>For local transmissibility calculations using <span class="keyword">RADFIN</span>, the outer radius is taken as the area equivalent radius of the
+host grid block, based on the top area of the host cell. When <span class="keyword">RADFIN4</span> is used, the equivalent radius is based on the
+top area of the four host cells. For volumetrics and connections to
+the global grid, the sides of the local grid are taken from the coordinate
+lines for the host.  <p>Note that the equivalent radii are shown in
+the output reports for the local <span class="keyword">COORD</span> values.</p>
+</li>
+
+<li>The figure below shows the numbering convention used for connecting
+local radial grids to the host when <span class="keyword">RADFIN</span> is used:
+       <div class="fignone" id="lgrc.XID-000003eb"><a name="lgrc.XID-000003eb"><!-- --></a>
+
+ <br/><img src="../img/lgr7.png" width="331px"/><br/> 
+<br/><span class="figcap">
+           Figure 56.1  The numbering convention used by RADFIN for connecting radial
+LGRs to host cells</span></div>
+<p>The radial cells are numbered so that Theta increases in
+an anti-clockwise direction, starting from the quadrant corresponding
+to the Y- face of the global cell. If necessary, the local coordinates
+are rotated to align the radial cell with its host.</p>
+          
+        <p>Reported <span class="keyword">COORD</span> data will show the corrected
+Theta values.</p>
+<p>ECLIPSE 100     </p>
+<p>For a local radial refinement defined with <span class="keyword">RADFIN4</span>, the topology is also arranged with theta increasing
+anti-clockwise, but starting from the middle of the X+ (I+) face of
+the refinement as shown in the following figure.</p>
+<div class="fignone" id="lgrc.XID-000003f6"><a name="lgrc.XID-000003f6"><!-- --></a>
+
+ <br/><img src="../img/lgr8.png" width="352px"/><br/> 
+<br/><span class="figcap">
+           Figure 56.2  The numbering conventions used by RADFIN4 for connecting radial
+LGRs to host cells</span></div>
+                   <p>In the above case, Theta increases anti-clockwise
+in (I,J) space, but there is of course no reason why the coordinate
+system should not be right handed, in which case theta increases clockwise.</p>
+                             </li>
+
+<li>Transmissibility calculations<p>For flow between local radial
+blocks, the standard ECLIPSE method based on pressure equivalent radii
+is used to compute transmissibilities.</p>
+                <p>Flow
+between the outer local block and the adjoining host block is treated
+as linear, but with the transmissibility center for the local block
+taken at the pressure equivalent radius. With radii computed as described
+earlier, and host cells which are approximately square in cross-section,
+this method corresponds to the approach described by <cite><span> <a href="biblio_Bibliography.html#biblio_92471">Pedrosa and Aziz (1986)</a> </span></cite> and <cite><span> <a href="biblio_Bibliography.html#biblio_13676">Ewing et al (1989)</a> </span></cite>.</p>
+</li>
+
+</ol>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

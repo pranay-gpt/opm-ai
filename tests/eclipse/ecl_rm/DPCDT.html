@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="DPCDT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="DPCDT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>DPCDT</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="DPCDT"><a name="DPCDT"><!-- --></a>
+<h1 class="keyword">DPCDT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="dpcdt.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="dpcdt.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d488e45">                                             
+ </th>
+
+<th valign="top" id="d488e48">                         ECLIPSE 100         
+            </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d488e54">                         x                   
+  </th>
+
+<th valign="top" id="d488e57">                         ECLIPSE 300         
+            </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d488e45 d488e54 ">                         x                   
+  </td>
+
+<td valign="top" headers="d488e48 d488e57 ">                         RUNSPEC             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d488e45 d488e54 ">                                             
+ </td>
+
+<td valign="top" headers="d488e48 d488e57 ">                         GRID                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d488e45 d488e54 ">                                             
+ </td>
+
+<td valign="top" headers="d488e48 d488e57 ">                         EDIT                
+     </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d488e45 d488e54 ">                                             
+ </td>
+
+<td valign="top" headers="d488e48 d488e57 ">                         PROPS               
+      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d488e45 d488e54 ">                                             
+ </td>
+
+<td valign="top" headers="d488e48 d488e57 ">                         REGIONS             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d488e45 d488e54 ">                                             
+ </td>
+
+<td valign="top" headers="d488e48 d488e57 ">                         SOLUTION            
+         </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d488e45 d488e54 ">                                             
+ </td>
+
+<td valign="top" headers="d488e48 d488e57 ">                         SUMMARY             
+        </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d488e45 d488e54 ">                                             
+ </td>
+
+<td valign="top" headers="d488e48 d488e57 ">                         SCHEDULE            
+         </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data consists of a single item:</p>
+
+<ol>
+<li>The maximum rate of change of capillary pressure in explicit cells.
+ <p>UNITS: bars/day (<samp class="codeph">METRIC</samp>), psi/day (<samp class="codeph">FIELD</samp>), atm/hr (<samp class="codeph">LAB</samp>), atm/day (<samp class="codeph">PVT-M</samp>)</p>
+                <p>DEFAULT: 0.0099972 psi/day in <span class="keyword">IMPES</span> and <span class="keyword">AIM</span> runs, no limit in fully implicit runs.</p>
+</li>
+
+</ol>
+
+<p>Rather than freezing the capillary pressure the simulator limits
+the rate at which it can change from step to step. This stabilizes
+the run without seriously affecting the modeling of imbibition driven
+recovery. In the implicit cells in AIM cases this limit can cause
+convergence problems, in these cells the limit is replaced by a limit
+of the rate of change with respect to saturation.</p>
+
+<p>By default <a href="IMPES.html#IMPES"> IMPES</a> and <a href="AIM.html#AIM"> AIM</a> modes have
+a maximum rate of change of capillary pressure                   
+    <math><mrow><mi>d</mi>
+<msub><mi>P</mi><mi>c</mi></msub></mrow><mo>/</mo>
+<mrow><mi>d</mi><mi>t</mi></mrow></math>  = 0.0099972
+psi/day. This limit can be reset using the <span class="keyword">DPCDT</span> keyword. The option of freezing the capillary pressures is retained
+through the <a href="FREEZEPC.html#FREEZEPC"> FREEZEPC</a> keyword. This has the same effect as setting <samp class="codeph">DPCDT</samp> to 0 in <span class="keyword">IMPES</span> mode. </p>
+
+<p>The <span class="keyword">DPCDT</span> limit may be disabled by using the <a href="NODPCDT.html#NODPCDT"> NODPCDT</a> keyword.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">  By default, if you are using the <a href="CFLLIMIT.html#CFLLIMIT"> CFLLIMIT</a> keyword, then no limit is applied
+to the capillary pressure change.          </span></div>
+
+<div class="section" id="dpcdt_example"><a name="dpcdt_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>Allow capillary
+pressure to change at up to 1 psi/day:</p>
+<pre><code>DPCDT
+1 /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

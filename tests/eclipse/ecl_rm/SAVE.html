@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="SAVE"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="SAVE"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>SAVE</title>
+</head>
+<body>
+
+
+<div class="nested0" id="SAVE"><a name="SAVE"><!-- --></a>
+<h1 class="keyword">SAVE</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="save.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="save.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2200e45"> x </th>
+
+<th valign="top" id="d2200e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2200e54"> x </th>
+
+<th valign="top" id="d2200e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2200e45 d2200e54 "> x </td>
+
+<td valign="top" headers="d2200e48 d2200e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2200e45 d2200e54 ">  </td>
+
+<td valign="top" headers="d2200e48 d2200e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2200e45 d2200e54 ">  </td>
+
+<td valign="top" headers="d2200e48 d2200e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2200e45 d2200e54 ">  </td>
+
+<td valign="top" headers="d2200e48 d2200e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2200e45 d2200e54 ">  </td>
+
+<td valign="top" headers="d2200e48 d2200e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2200e45 d2200e54 ">  </td>
+
+<td valign="top" headers="d2200e48 d2200e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2200e45 d2200e54 ">  </td>
+
+<td valign="top" headers="d2200e48 d2200e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2200e45 d2200e54 "> x </td>
+
+<td valign="top" headers="d2200e48 d2200e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">SAVE</span> keyword in the <span class="keyword">RUNSPEC</span> section is used to write a <samp class="codeph">SAVE</samp> file containing
+the initial non-recurrent data. In ECLIPSE 300, <samp class="codeph">SAVE</samp> file output can be controlled using the <a href="MULTSAVE.html#MULTSAVE"> MULTSAVE</a> keyword.</p>
+
+<p>The <span class="keyword">SAVE</span> keyword can be used in the <span class="keyword">SCHEDULE</span> section of either simulator to write the current
+solution to the <samp class="codeph">SAVE</samp> file.</p>
+
+<p>The <span class="keyword">SAVE</span> file contains the data entered in the <span class="keyword">RUNSPEC</span>, <span class="keyword">GRID</span>, <span class="keyword">EDIT</span>, <span class="keyword">PROPS</span> and <span class="keyword">REGIONS</span> sections,
+in a processed form so that, for example, the grid block transmissibilities
+do not have to be recalculated. This data is read in a fast restart.
+A fast restart cannot be performed without a <samp class="codeph">SAVE</samp> file.</p>
+
+<p>In addition for ECLIPSE 100, the time-dependent
+data (for example grid block solution variables and the status of
+wells) can optionally be written to the <samp class="codeph">SAVE</samp> file
+instead of the Restart file, leaving the latter free for graphics
+output. (Use the <span class="keyword">SAVE</span> keyword in the <span class="keyword">SCHEDULE</span> section or the <samp class="codeph">SAVE</samp> mnemonic in keyword <a href="RPTRST.html#RPTRST"> RPTRST</a> to control data
+written to the <samp class="codeph">SAVE</samp> file.) The <span class="keyword">SAVE</span> keyword must be present in the <span class="keyword">RUNSPEC</span> section
+if you wish to do this, irrespective of whether you will be performing
+Fast Restarts or Flexible Restarts.</p>
+
+<p>The <span class="keyword">SAVE</span> keyword is required either if you subsequently
+want to perform a fast restart on the run, or if you wish to write
+the time-dependent data to the <samp class="codeph">SAVE</samp> file instead
+of the Restart file. A <samp class="codeph">SAVE</samp> file is not required
+for flexible restarts when the time-dependent data is written to the
+Restart file.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>ECLIPSE 300 does not allow a <samp class="codeph">SAVE</samp> file to be written during a parallel run. Fast restarts are not
+supported for parallel runs.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>The current solution can only be written to
+the <samp class="codeph">SAVE</samp> file by using the <span class="keyword">SAVE</span> keyword in the <span class="keyword">SCHEDULE</span> section.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>The <span class="keyword">SAVE</span> keyword in the <span class="keyword">RUNSPEC</span> section is followed by one record of data, terminated
+with a slash (/). The record contains a single word (in quotes):</p>
+
+<p>either <samp class="codeph">FORMATTED</samp> or <samp class="codeph">UNFORMATTED</samp> </p>
+
+<p>which sets the formatted/unformatted status
+of the <samp class="codeph">SAVE</samp> file, irrespective of whether formatted
+output is specified using keyword <a href="FMTOUT.html#FMTOUT">  FMTOUT</a> in the <span class="keyword">RUNSPEC</span> section.
+The default status is <span class="keyword">UNFORMATTED</span>. The word may
+be shortened to <samp class="codeph">F</samp> or <samp class="codeph">U</samp>. The use
+of multiple Save files is not supported in ECLIPSE 100.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>The formatted/unformatted and multiple/unified
+attributes of the <samp class="codeph">SAVE</samp> files are controlled by the <a href="FMTSAVE.html#FMTSAVE"> FMTSAVE</a> and <a href="UNIFSAVE.html#UNIFSAVE"> UNIFSAVE</a> /<span class="keyword">MULTSAVE</span> keywords.</p>
+
+<p>The <span class="keyword">SAVE</span> keyword in the <span class="keyword">SCHEDULE</span> section contains <strong>no</strong> items.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

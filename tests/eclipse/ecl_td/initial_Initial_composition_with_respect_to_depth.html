@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Initial composition with respect to depth"/>
+<meta name="DC.subject" content="Initial conditions, Equilibration"/>
+<meta name="keywords" content="Initial conditions, Equilibration"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="initial_initial_composition_with_respect_to_depth"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Initial composition with respect to depth</title>
+</head>
+<body>
+
+
+<div class="nested0" id="initial_initial_composition_with_respect_to_depth"><a name="initial_initial_composition_with_respect_to_depth"><!-- --></a>
+<h1 class="topictitle1">Initial composition with respect to depth</h1>
+
+
+ <div>
+<p> ECLIPSE 300 </p>
+
+<p>In ECLIPSE 300 compositional mode, an extra
+complication exists. As well as ensuring that the initial saturations
+are in equilibrium, the thermodynamic equilibrium between phases must
+be considered. Three methods exist for setting up the initial compositions,
+which usually vary with depth:</p>
+
+<ol>
+<li>For single hydrocarbon phase initial states, such as condensates
+above the dew point, or oils above the bubble point, or for "supercritical"
+reservoirs in which a smooth transition exists between the oil and
+gas properties and the saturation pressure is less than the fluid
+pressure throughout the depth range: <p>Use <a href="../ecl_rm/ZMFVD.html#ZMFVD">ZMFVD</a> to specify the initial
+composition with respect to depth. The gas-oil contact may be set
+above or below the reservoir if the single phase hydrocarbon is an
+oil or gas. In the supercritical case the gas-oil contact depth may
+be set to a point within the reservoir. The simulator then sets the
+phase identification method to produce a phase change at this depth.
+For a condensate field the gas-oil contact depth is set to the oil-water
+contact depth. This identifies the study as a condensate to the simulator.</p>
+</li>
+
+<li id="initial.XID-00000078"><a name="initial.XID-00000078"><!-- --></a>For cases in which there is a gas-oil
+contact within the reservoir, and the vapor composition is known: <p>Use <span class="keyword">ZMFVD</span> to specify the initial vapor composition.
+A retrograde dew point pressure calculation is performed for the vapor
+and the pressure is set to this at the contact. The composition of
+the liquid in equilibrium with the saturated vapor is used below the
+contact. As pressure increases with depth this is undersaturated.</p>
+                <p>Alternatively, <a href="../ecl_rm/COMPVD.html#COMPVD">COMPVD</a> may be used to specify
+a compositional variation in the liquid as well as in the vapor. However,
+the composition specified at the gas-oil contact must be that of a
+gas.</p>
+</li>
+
+<li id="initial.XID-0000007e"><a name="initial.XID-0000007e"><!-- --></a>For cases in which there is a gas-oil
+contact within the reservoir, and the liquid composition is known:
+ <p>Use <span class="keyword">ZMFVD</span> to specify the initial oil composition.
+A bubble point pressure calculation is performed for the liquid and
+the pressure is set to this at the contact. The composition of the
+vapor in equilibrium with the saturated liquid is used above the contact.
+As pressure decreases above the contact this may yield an oil phase
+upon flashing. If so, only the vapor is used, so that saturated vapor
+only exists above the contact.</p>
+                <p>Alternatively, <span class="keyword">COMPVD</span> may be used to specify a compositional variation
+in the vapor as well as in the liquid. However, the composition specified
+at the gas-oil contact must be that of an oil.</p>
+</li>
+
+</ol>
+
+<p>After the calculations described in cases 2 and 3 above, the oil
+composition is known below the gas-oil contact, and the vapor composition
+is known above the gas-oil contact. Oil may be present above the contact,
+and vapor below, depending on the capillary pressure. Therefore it
+is necessary to determine the composition of these phases:</p>
+
+<ul>
+<li>If there is any vapor below the contact then it will be in equilibrium
+with the oil below the contact. Therefore a bubble point calculation
+is performed on the oil below the contact. If the reservoir pressure
+is below the oil bubble point then the vapor composition can be set
+equal to the composition of the vapor in equilibrium with the oil
+at the reservoir pressure. If however the reservoir pressure is above
+the oil bubble point then the vapor composition will be set equal
+to the bubble point vapor composition. In this case the oil and vapor
+will not be in equilibrium, and as a result - if vapor is in fact
+present at these depths - the algorithm will fail to match the required
+compositions and saturations.</li>
+
+<li>If there is any oil above the contact then it will be in equilibrium
+with the vapor above the contact. Therefore a dew point calculation
+is performed on the vapor above the contact. If the reservoir pressure
+is above the vapor dew point then the oil composition can be set equal
+to the composition of the oil in equilibrium with the vapor at the
+reservoir pressure. If however the reservoir pressure is below the
+vapor dew point then the oil composition will be set equal to the
+dew point oil composition. In this case the oil and vapor will not
+be in equilibrium, and as a result - if oil is in fact present at
+these depths - the algorithm will fail to match the required compositions
+and saturations.</li>
+
+</ul>
+
+<p>The calculated saturation pressures, and oil and vapor compositions
+and phase saturations can be output as a function of depth by specifying
+the <samp class="codeph">SOLVD</samp> mnemonic with the <a href="../ecl_rm/RPTSOL.html#RPTSOL">RPTSOL</a> keyword. The compositions
+and saturations will match the actual values in the reservoir if the
+oil and vapor are in equilibrium. However they will fail to match
+when the oil and vapor are not in equilibrium which can occur if the
+reservoir pressure is above the oil bubble point or below the vapor
+dew point. In these cases the specified composition (<span class="keyword">COMPVD</span> or <span class="keyword">ZMFVD</span>) should be adjusted so that the fluid
+is two phase at the reservoir pressures.</p>
+
+<p>The three cases above correspond to the initialization type specified
+by the tenth argument of the <a href="../ecl_rm/EQUIL.html#EQUIL">EQUIL</a> keyword. In addition, the eleventh argument may be set to
+1 to suppress the setting of the pressure at the contact to the saturation
+pressure at the contact in options 2 and 3 above. This yields a system
+that is not in initial equilibrium, but honors the specified pressure.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

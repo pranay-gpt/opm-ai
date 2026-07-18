@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Summary Files"/>
+<meta name="DC.subject" content="Separate files, Unified file"/>
+<meta name="keywords" content="Separate files, Unified file"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="summary_summary_files"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Summary Files</title>
+</head>
+<body>
+
+
+<div class="nested0" id="summary_summary_files"><a name="summary_summary_files"><!-- --></a>
+<h1 class="topictitle1">Summary Files</h1>
+
+
+ <div>
+<p>Summary data can be output in either separate files or in a single,
+unified file.</p>
+
+<ul>
+<li>For separate files, ECLIPSE creates one summary file at each simulation
+report step with a suffix such as <span class="keyword">Snnnn</span> where <span class="keyword">nnnn</span> can be between 0000 and 9999. If the summary files
+originate from a restart run, the suffix numbers will correspond to
+the restart report step sequence. (For example, for a run started
+from a restart file created at report step 9, the new summary files
+will have suffixes S0010, S0011 and so on.)</li>
+
+<li>For unified file output, data for all report steps are written
+to the same file, with a new header for each step. </li>
+
+</ul>
+
+<p>The file naming convention is described in <a href="filename_ECLIPSE_File_Names.html#filename_eclipse_file_names"> "ECLIPSE File Names"</a>.</p>
+
+<p>For each report step, there may be one or more timesteps, also
+called ministeps, corresponding to the simulation steps taken between
+reports. Parameter values for the data vectors are output at each
+ministep. In a complete sequence of summary data, the first ministep
+will be ministep 0 (written at time 0.0), but the first report step
+will be report step 1 (written at the end of the first report period).
+In a restarted run, the ministep numbers are incremented from the
+previous run.</p>
+
+<p>The summary file contents for each report step are as follows:</p>
+
+
+<div class="tablenoborder"><a name="summary.XID-00000125"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="summary.XID-00000125" frame="border" border="1" rules="all"><caption>
+           Table 11.1  Summary file keywords</caption>    
+<thead align="left">
+<tr>
+<th valign="top" id="d114e81">Keyword </th>
+
+<th valign="top" id="d114e84">No. of Items</th>
+
+<th valign="top" id="d114e87">Data Type</th>
+
+<th valign="top" id="d114e90">Contents</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d114e81 "><span class="keyword">SEQHDR</span></td>
+
+<td valign="top" headers="d114e84 ">1</td>
+
+<td valign="top" headers="d114e87 ">INTE<p/>
+                            </td>
+
+<td valign="top" headers="d114e90 ">Sequence header, with data value<p>ISNUM = an
+encoded integer corresponding to the time the file was created.</p>
+<p>For files not originating from ECLIPSE, this value may be set
+to zero.</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d114e81 "><span class="keyword">MINISTEP</span> </td>
+
+<td valign="top" headers="d114e84 ">1</td>
+
+<td valign="top" headers="d114e87 ">INTE</td>
+
+<td valign="top" headers="d114e90 ">Ministep number (starting at zero and incremented
+by 1 at each subsequent step)</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d114e81 "><span class="keyword">PARAMS</span>                   </td>
+
+<td valign="top" headers="d114e84 ">NLIST</td>
+
+<td valign="top" headers="d114e87 ">REAL</td>
+
+<td valign="top" headers="d114e90 ">Vector parameter values at this ministep (corresponding
+to the vectors defined in the specification file)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>One <span class="keyword">SEQHDR</span> keyword appears at the start of each
+report step, followed by pairs of <span class="keyword">MINISTEP</span> and <span class="keyword">PARAMS</span> keywords for each ministep.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">FrontSim uses -0.99999999E+33 as a null value for some summary
+vector output. This applies to properties that are only calculated
+once per report step and written out at the end of the step. The values
+for intermediate ministeps are undefined. The missing data can be
+filled in by FrontSim, but will give a stair-step effect. To request
+removal of null values, use the FrontSim keyword <span class="keyword">OPTIONFS</span> and set control switch 2.</span></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

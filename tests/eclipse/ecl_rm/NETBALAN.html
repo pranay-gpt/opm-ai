@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="NETBALAN"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="NETBALAN"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>NETBALAN</title>
+</head>
+<body>
+
+
+<div class="nested0" id="NETBALAN"><a name="NETBALAN"><!-- --></a>
+<h1 class="keyword">NETBALAN</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="netbalan.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="netbalan.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1512e45"> x </th>
+
+<th valign="top" id="d1512e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1512e54"> x </th>
+
+<th valign="top" id="d1512e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1512e45 d1512e54 ">  </td>
+
+<td valign="top" headers="d1512e48 d1512e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1512e45 d1512e54 ">  </td>
+
+<td valign="top" headers="d1512e48 d1512e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1512e45 d1512e54 ">  </td>
+
+<td valign="top" headers="d1512e48 d1512e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1512e45 d1512e54 ">  </td>
+
+<td valign="top" headers="d1512e48 d1512e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1512e45 d1512e54 ">  </td>
+
+<td valign="top" headers="d1512e48 d1512e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1512e45 d1512e54 ">  </td>
+
+<td valign="top" headers="d1512e48 d1512e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1512e45 d1512e54 ">  </td>
+
+<td valign="top" headers="d1512e48 d1512e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1512e45 d1512e54 "> x </td>
+
+<td valign="top" headers="d1512e48 d1512e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>In ECLIPSE 100 this keyword forces a network
+balancing calculation to be performed at the next timestep, and controls
+the frequency of subsequent balancing calculations in the network
+option (see <a href="../ecl_td/networkintro_Network_Option.html#networkintro_network_option">"Network option"</a> in the <cite>ECLIPSE Technical Description</cite>). The keyword
+can also reset the convergence tolerance and iteration limit for the
+network balancing calculations, and the calculation of the THP for
+subsea completion manifold groups under production rate control. In
+addition, you may enter instructions to control the end of timestep
+balancing error by limiting the timestep size.</p>
+
+<p>In ECLIPSE 300 this keyword just controls
+the convergence tolerance and iteration limit. The network will automatically
+be rebalanced during the first <span class="keyword">NUPCOL</span> Newton iterations
+of each timestep (equivalent to a negative entry in item 1), and there
+is no facility to control the timestep size according to the end of
+timestep balancing error.</p>
+
+<p>The keyword should be followed by a line containing the following
+data items, ending with a slash (/). If the record is terminated early,
+the remaining items assume their default values. Default values can
+be specified before the slash by null value indicators (n* , where
+n is the number of consecutive items to be defaulted). Defaulted items
+retain their previous values; initial default values are shown below.</p>
+
+<ol>
+<li> Network balancing interval (ECLIPSE 100) 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">&gt; 0.0</td>
+
+<td valign="top">The network is balanced at the beginning of each timestep that
+starts after the specified interval has elapsed since the previous
+balancing calculation. Balancing errors build up if the reservoir
+conditions change significantly over this balancing interval. </td>
+
+</tr>
+
+<tr>
+<td valign="top">= 0.0</td>
+
+<td valign="top">The network is balanced at the beginning (that is the zeroth
+Newton iteration) of every timestep. Balancing errors are only significant
+if the reservoir conditions change appreciably over the timestep.</td>
+
+</tr>
+
+<tr>
+<td valign="top">&lt; 0.0 </td>
+
+<td valign="top">The network will be balanced in each of the first <span class="keyword">NUPCOL</span> Newton iterations of every timestep. (The value
+of <span class="keyword">NUPCOL</span> may be set using keyword <a href="NUPCOL.html#NUPCOL"> NUPCOL</a> or keyword <a href="GCONTOL.html#GCONTOL"> GCONTOL</a>.) The magnitude
+of the negative value is not significant. This option may cause the
+timestep to require more Newton iterations to converge, as the wells’
+THP limits are changed at each balancing calculation. However, the
+balancing errors at the end of the timestep will generally be small,
+and are less than the value set in item 2 if the timestep converges
+within <span class="keyword">NUPCOL</span> Newton iterations.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>UNITS: day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: 0.0</p>
+ </li>
+
+<li> Convergence tolerance for network nodal pressures <p>In ECLIPSE 300 the convergence tolerance for
+the network is a factor of 10 smaller than the tolerance set here
+for the network to reservoir coupling. In ECLIPSE 100 these iterations
+are performed simultaneously and have the same convergence tolerance.</p>
+ <p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+ <p>ECLIPSE 100 DEFAULT: 0.1 bars (<samp class="codeph">METRIC</samp>), 1.45 psi (<samp class="codeph">FIELD</samp>), 0.09869 atm (<samp class="codeph">LAB</samp>, <span class="keyword">PVT-M</span>).</p>
+ <p>ECLIPSE
+300 DEFAULT: 1E-5 bars (<samp class="codeph">METRIC</samp>), 1.45E-4 psi (<samp class="codeph">FIELD</samp>), 9.869 E-6 atm (<samp class="codeph">LAB</samp>, <span class="keyword">PVT-M</span>).</p>
+ </li>
+
+<li> Maximum number of iterations allowed in the network balancing
+calculation <p>In ECLIPSE 300 this item governs
+both the iterations for the network solution and the iterations for
+coupling the network to the reservoir.</p>
+ <p>DEFAULT: 10</p>
+ </li>
+
+<li> Convergence tolerance for calculating the
+THP for subsea completion manifold groups under rate control, and
+for calculating the pressure drop across automatic chokes controlling
+a group’s production rate (ECLIPSE 100). <p>The quantity required
+is the <strong>fraction</strong> of each group’s rate target that is an acceptable
+error.</p>
+ <p>The group’s production rate may differ from the target
+by more than this tolerance if the timestep takes more than <span class="keyword">NUPCOL</span> Newton iterations to converge - see keyword <a href="NUPCOL.html#NUPCOL">  NUPCOL</a> or <a href="GCONTOL.html#GCONTOL">  GCONTOL</a>.</p>
+ <p>If
+the value entered here is greater than the tolerance fraction entered
+in item 1 of keyword <span class="keyword">GCONTOL</span>, the value entered
+in <span class="keyword">GCONTOL</span> is used.</p>
+ <p>DEFAULT: 0.01 Which
+converges the iterations when the group’s rate target is met within
+one percent.</p>
+ </li>
+
+<li> Maximum number of iterations allowed in
+the calculation of the THP for manifold groups under rate control
+(ECLIPSE 100). <p>DEFAULT: 10</p>
+ <div class="note"><span class="notetitle">Note:</span> <span class="notebody">The maximum number of iterations
+for automatic chokes is governed by item 3, since their pressure drops
+are calculated during the network balancing iterations.</span></div>
+ </li>
+
+<li> Target value for the largest branch balancing
+error at the end of each timestep (ECLIPSE 100). <p>The balancing
+error is defined as the difference between the pressure drop along
+the branch when the network was last balanced, and the pressure drop
+calculated using the current flow rates at the end of the timestep.
+The largest error in any branch is printed at the end of each timestep.
+If a value is entered for the target error, ECLIPSE attempts to adjust
+the timestep length so as to keep the balancing error at approximately
+its target value, subject of course to any other constraints on the
+timestep. timesteps limited by the target balancing error can be identified
+by the mnemonic <span class="keyword">NETW</span> printed in the timestep information
+line.</p>
+ <p>The target error should be large enough to allow for
+the convergence tolerances in items 2 and 4.</p>
+ <p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: Infinity (1.0E20)
+which leaves the timestep sizes unaffected.</p>
+ </li>
+
+<li> Maximum permitted value for the largest
+branch balancing error at the end of the timestep (ECLIPSE 100). <p>If the maximum permitted balancing error is exceeded, ECLIPSE chops
+the timestep and rebalance the network. Since timestep chops can severely
+increase the running time of a simulation, a maximum permitted balancing
+error should only be used with caution, and its value should be several
+times larger than the target error in item 6.</p>
+ <p>UNITS: bars (<samp class="codeph">METRIC</samp>), psi (<samp class="codeph">FIELD</samp>), atm (<samp class="codeph">LAB</samp>), atm (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: Infinity (1.0E20)</p>
+  </li>
+
+<li> Minimum size for timesteps limited by network
+balancing error (ECLIPSE 100) <p>A large balancing error is sometimes
+unavoidable during the timestep in which a well dies. If a target
+or maximum balancing error has been set in items 6 and 7, it is advisable
+to set a suitable minimum timestep size to prevent a large reduction
+in step size when wells die. (The minimum step size does not affect
+timesteps limited by other reasons, for example time truncation error
+or convergence difficulty.)</p>
+ <p>UNITS: day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+ <p>DEFAULT: <span class="keyword">TSMINZ</span> in keyword <a href="TUNING.html#TUNING"> TUNING</a>.</p>
+ </li>
+
+</ol>
+
+<p>If the keyword is omitted, all items take their default values.</p>
+
+<p>The keyword may be used any number of times in the <span class="keyword">SCHEDULE</span> section. Defaulted items retain their previous values.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Fast restarts from a SAVE file"/>
+<meta name="DC.subject" content="Restarts"/>
+<meta name="keywords" content="Restarts"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="restarts_fast_restarts_from_a_save_file"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Fast restarts from a SAVE file</title>
+</head>
+<body>
+
+
+<div class="nested0" id="restarts_fast_restarts_from_a_save_file"><a name="restarts_fast_restarts_from_a_save_file"><!-- --></a>
+<h1 class="topictitle1">Fast restarts from a SAVE file</h1>
+
+
+ <div>
+<p>ECLIPSE 100    </p>
+
+<p>Restarting a run from a <samp class="codeph">SAVE</samp> is usually quicker to initialize than a restart from a complete
+data file. This method can be used for simple restarts where only
+the <span class="keyword">SCHEDULE</span> section data is to be modified.</p>
+
+<p>The procedure is as follows:</p>
+
+<ol>
+<li>In the base run, use the <a href="../ecl_rm/SAVE.html#SAVE">SAVE</a> keyword to instruct ECLIPSE to create a <samp class="codeph">SAVE</samp> file, and use the <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a> or <a href="../ecl_rm/RPTRST.html#RPTRST">RPTRST</a> keywords to control the frequency with which the solution
+data is to be written to the <samp class="codeph">RESTART</samp> file.      
+      </li>
+
+<li>Set up the data file for the restart run, consisting of a <a href="../ecl_rm/LOAD.html#LOAD">LOAD</a> keyword, a <a href="../ecl_rm/RESTART.html#RESTART">RESTART</a> keyword, the <span class="keyword">SUMMARY</span> and <span class="keyword">SCHEDULE</span> section data. 
+  <p>For example,</p>
+                <pre><code>LOAD
+ BASE /
+RESTART
+ BASE 11 /
+SUMMARY
+INCLUDE
+ SUMMARY.DAT /
+SCHEDULE
+ ...
+ ...</code></pre><div class="note"><span class="notetitle">Note:</span> <span class="notebody">The <span class="keyword">LOAD</span> keyword replaces
+the <span class="keyword">RUNSPEC</span>, <span class="keyword">GRID</span>, <span class="keyword"> EDIT</span>, <span class="keyword">PROPS</span> and <span class="keyword">REGIONS</span> sections, and opens the <span class="keyword">SOLUTION</span> section where
+the <span class="keyword">RESTART</span> keyword is expected. The <samp class="codeph">SAVE</samp> file that it names must have been produced by the current version
+of ECLIPSE - fast restarts cannot be performed from <samp class="codeph">SAVE</samp> files produced by earlier versions.      </span></div>
+<p>ECLIPSE 100         </p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">In ECLIPSE 100, for a parallel fast restart run the <a href="../ecl_rm/PARALLEL.html#PARALLEL">PARALLEL</a> keyword should not
+be present in the restart data file since the record is read from
+the <samp class="codeph">SAVE</samp> file instead. However, a parallel fast restart
+run must be executed on the same number of processors as the base
+run. </span></div>
+<p>ECLIPSE 100         </p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Fast restarts are not supported in with the <a href="../ecl_rm/PARALLEL.html#PARALLEL">PARALLEL</a> option in ECLIPSE
+100 runs containing local grid refinements</span></div>
+<p>ECLIPSE 300        </p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The use of fast
+restarts is not compatible with the <span class="keyword">PARALLEL</span> option
+in ECLIPSE 300.                   </span></div>
+                   <ol type="a">
+<li>In the <span class="keyword">SCHEDULE</span> section, unless keyword <a href="../ecl_rm/SKIPREST.html#SKIPREST">SKIPREST</a> has been entered,
+delete the well and timestepping keywords up to and including the
+restart time at report number 11 in the example (but keep any VFP
+tables, as these are not passed over in the Restart file). If keyword <span class="keyword">SKIPREST</span> is present, you need not delete these keywords
+as ECLIPSE automatically skips the unwanted keywords until the restart
+time has been reached in the Schedule data. Modify the Schedule data
+after the restart time as required.                      </li>
+
+</ol>
+</li>
+
+<li>Restarting from time-dependent data stored in the <samp class="codeph">SAVE</samp> file:                 <ol type="a">
+<li>If the time-dependent restart data has been stored in the <samp class="codeph">SAVE</samp> file, the <a href="../ecl_rm/RESTART.html#RESTART">RESTART</a> keyword requires up to two extra items of data, for example:
+                   <pre><code>RESTART
+ BASE 11 SAVE FORMATTED /</code></pre> </li>
+
+<li>The string <samp class="codeph">SAVE</samp> indicates that the restart data
+is present in the <samp class="codeph">SAVE</samp> file, and the string <samp class="codeph">FORMATTED</samp> indicates that the SAVE file is formatted. By
+default the <samp class="codeph">SAVE</samp> file is assumed to be unformatted.
+  </li>
+
+</ol>
+ </li>
+
+</ol>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

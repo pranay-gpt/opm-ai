@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="COORDSYS"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="COORDSYS"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>COORDSYS</title>
+</head>
+<body>
+
+
+<div class="nested0" id="COORDSYS"><a name="COORDSYS"><!-- --></a>
+<h1 class="keyword">COORDSYS</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="coordsys.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="coordsys.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d330e45"> x </th>
+
+<th valign="top" id="d330e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d330e54"> x </th>
+
+<th valign="top" id="d330e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d330e45 d330e54 "> </td>
+
+<td valign="top" headers="d330e48 d330e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d330e45 d330e54 "> x </td>
+
+<td valign="top" headers="d330e48 d330e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d330e45 d330e54 "> </td>
+
+<td valign="top" headers="d330e48 d330e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d330e45 d330e54 "> </td>
+
+<td valign="top" headers="d330e48 d330e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d330e45 d330e54 "> </td>
+
+<td valign="top" headers="d330e48 d330e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d330e45 d330e54 "> </td>
+
+<td valign="top" headers="d330e48 d330e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d330e45 d330e54 "> </td>
+
+<td valign="top" headers="d330e48 d330e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d330e45 d330e54 "> </td>
+
+<td valign="top" headers="d330e48 d330e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword supplies information about the coordinate system for
+each reservoir in the grid. For instance, it can assign layers of
+cells to multiple reservoirs. </p>
+
+<p>This keyword is required only if the grid contains more than one
+reservoir (see keyword <a href="NUMRES.html#NUMRES">  NUMRES</a>). In ECLIPSE 100 the keyword may also be used if the grid
+completes the circle. </p>
+
+<p>The keyword line is followed by <span class="keyword">NUMRES</span> data
+records, each ending with a slash (/). Each record contains the following
+data items: </p>
+
+<ol>
+<li> Lower bound for block index in K-direction (<samp class="codeph">K1</samp>) <p>For grid blocks in this reservoir (integer) </p>
+ </li>
+
+<li> Upper bound for block index in K-direction (<samp class="codeph">K2</samp>) <p>For grid blocks in this reservoir (integer) </p>
+ <p>ECLIPSE 100 </p>
+</li>
+
+<li> Completion of circle, for grid blocks in
+this reservoir 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">COMP</samp> </td>
+
+<td valign="top"> Circle is completed in the Theta-(or Y-) direction </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">INCOMP</samp> </td>
+
+<td valign="top"> Circle is not completed </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>For the circle to be completed, the coordinate lines to
+be identified must be coincident. In the case of cylindrical coordinates,
+this means that the Theta coordinates for nodes 1 and (<samp class="codeph">NDIVIY</samp> + 1) in the Theta-direction must differ by 360 degrees </p>
+ <p>DEFAULT: <samp class="codeph">INCOMP</samp> (global grids)</p>
+<p>DEFAULT: <samp class="codeph">COMP</samp> (local grids)</p>
+ <div class="note"><span class="notetitle">Note:</span> <span class="notebody">For radial local grids in both ECLIPSE 100
+and ECLIPSE 300, circle completion (<samp class="codeph">COMP</samp>) is the
+default - see <a href="../ecl_td/lgrc_Local_Grid_Refinement_and_Coarsening.html#lgrc_local_grid_refinement_and_coarsening">"Local grid refinement
+and coarsening"</a> in the <cite>ECLIPSE Technical Description</cite>. </span></div>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody"> In ECLIPSE 300, this argument is ignored and by default
+the circle is not completed for radial global grids. The <a href="CIRCLE.html#CIRCLE">  CIRCLE</a> keyword can be
+used to complete the circle for E300 radial global grids. The <a href="NOCIRCLE.html#NOCIRCLE">  NOCIRCLE</a> keyword can
+be used to disable circle completion for E300 radial local grids.</span></div>
+ </li>
+
+<li> Connection to the reservoir below <p>Should be one of: </p>
+ 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">JOIN</samp> </td>
+
+<td valign="top"> Transmissibilities are calculated to the reservoir below. </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">SEPARATE</samp> </td>
+
+<td valign="top"> The reservoir is isolated from the reservoir below. </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ <p>This option calculates a transmissibility between cells
+(i,j,k) and (i,j,k+1) when the layers are in different reservoirs.
+This allows the description of bending coordinate lines. Care needs
+to be taken that the reservoirs coincide in a sensible manner. Note
+that fault non-neighbor connections are not calculated between different
+reservoirs. </p>
+ <p>DEFAULT: <samp class="codeph">SEPARATE</samp> </p>
+ <p>ECLIPSE 100 </p>
+</li>
+
+<li> Lower bound for reservoir number for lateral
+connection to cells in different reservoirs (integer) (R1) <p>DEFAULT:
+Current reservoir number </p>
+ <p>ECLIPSE 100 </p>
+</li>
+
+<li> Upper bound for reservoir number for lateral
+connection to cells in different reservoirs (integer) (R2) <p>DEFAULT:
+Current reservoir number </p>
+ </li>
+
+</ol>
+
+<p>The first two items of data for this keyword must have values which
+are less than or equal to the number of global grid cells in the Z-direction
+(specified using item 3 in the <a href="DIMENS.html#DIMENS">  DIMENS</a> keyword in the <span class="keyword">RUNSPEC</span> section). </p>
+
+<p>ECLIPSE 100 </p>
+
+<p>Items 5 and 6 may be used to allow fault NNCs
+between cells in different reservoirs. R1 and R2 should lie between
+1 and <a href="NUMRES.html#NUMRES">  NUMRES</a>, with
+R1 ≤ R2. This allows a fault NNC to be calculated between cells (i,j,kl)
+in reservoir number l, and (i+1,j,km) in reservoir m, if the limits
+R1 and R2 specified for reservoir l satisfy R1 ≤ m ≤ R2. This may
+be useful in accounting for 'bending' coordinate lines near faults.
+If horizontal pinchouts are enabled by using <a href="PINCHXY.html#PINCHXY">  PINCHXY</a> in the <span class="keyword">GRID</span> section, then fault NNCs may also be created between different reservoirs
+across inactive columns of cells which are pinched-out horizontally.
+ </p>
+
+<p>ECLIPSE 100 </p>
+
+<p>The values of R1 and R2 should be consistent
+between different reservoirs: if the data record for reservoir l allows
+lateral connection to reservoir m, then the values of R1 and R2 specified
+for reservoir m should also allow lateral connection to reservoir
+l. The program issues an error message if this is not so. </p>
+
+<p>If <span class="keyword">NUMRES</span> is 1, the bounds of the reservoir
+defaults to the whole grid. </p>
+
+<div class="section" id="coordsys_example"><a name="coordsys_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>ECLIPSE 100 </p>
+<p>Here <samp class="codeph">NDIVIX=5</samp>, <samp class="codeph">NDIVIY=3</samp>, <samp class="codeph">NDIVIZ=4</samp>, as specified
+in <span class="keyword">RUNSPEC</span> keyword <a href="DIMENS.html#DIMENS">  DIMENS</a>, and <a href="NUMRES.html#NUMRES"> NUMRES</a> =2. </p>
+<pre><code>----------- K1 K2  completed    join below    lateral limits
+COORDSYS
+    1  2  COMP        /
+    3  4  INCOMP       /</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

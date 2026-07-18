@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="GUIDERAT"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="GUIDERAT"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>GUIDERAT</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="GUIDERAT"><a name="GUIDERAT"><!-- --></a>
+<h1 class="keyword">GUIDERAT</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="guiderat.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="guiderat.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d964e45"> x </th>
+
+<th valign="top" id="d964e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d964e54"> x </th>
+
+<th valign="top" id="d964e57"> ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d964e45 d964e54 ">  </td>
+
+<td valign="top" headers="d964e48 d964e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d964e45 d964e54 ">  </td>
+
+<td valign="top" headers="d964e48 d964e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d964e45 d964e54 ">  </td>
+
+<td valign="top" headers="d964e48 d964e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d964e45 d964e54 ">  </td>
+
+<td valign="top" headers="d964e48 d964e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d964e45 d964e54 ">  </td>
+
+<td valign="top" headers="d964e48 d964e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d964e45 d964e54 ">  </td>
+
+<td valign="top" headers="d964e48 d964e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d964e45 d964e54 ">  </td>
+
+<td valign="top" headers="d964e48 d964e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d964e45 d964e54 "> x </td>
+
+<td valign="top" headers="d964e48 d964e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword can be used to specify a general formula for calculating
+production guide rates used for group control (see keyword <a href="GCONPROD.html#GCONPROD">  GCONPROD</a>). Subsequently,
+the formula is used to calculate the production guide rates for:</p>
+
+<ul>
+<li> All production wells that do not have fixed guide rates set with
+keyword <a href="WGRUPCON.html#WGRUPCON">  WGRUPCON</a>, and </li>
+
+<li> Any group whose guide rate definition is set to '<samp class="codeph">FORM</samp>' in item 10 of keyword <span class="keyword">GCONPROD</span>. </li>
+
+</ul>
+
+<p>Group flow rate targets are apportioned between the individual
+wells in proportion to their guide rates (see <a href="../ecl_td/wellmode_Group_production_control_options.html#wellmode_group_production_rate_targets_-_guide_rate_control">"Group production
+rate targets - guide rate control"</a> in the <cite>ECLIPSE Technical
+Description</cite>). By default, each well has its guide rate set
+equal to its potential flow rate (that is what it could flow immediately
+in the absence of any rate constraints, at the current grid block
+conditions) at the beginning of each timestep, subject to limits defined
+in the keyword <a href="DGRDT.html#DGRDT">  DGRDT</a> for ECLIPSE 300. But it could be advantageous to weight the guide
+rates to discriminate against wells with high GOR or water cut. This
+keyword provides a means of automatically weighting production well
+guide rates to take account of their production ratios.</p>
+
+<p>Groups may also be given guide rates, but only if they are required
+to produce a particular proportion of a rate target applied to a superior
+group. The formula in this keyword can optionally be applied to calculate
+production guide rates for individual groups as a function of their
+potential production rates, if requested in item 10 of keyword <span class="keyword">GCONPROD</span>. Group potentials are the sum of the potentials
+of their subordinate open wells.</p>
+
+<p>At the beginning of the next timestep, the guide rates (<math><msub><mtext>GR</mtext>
+<mi>p</mi></msub></math>) for a nominated phase  <math><mi>p</mi></math>  is calculated from the formula </p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="guiderat.equ.0055"/>
+ <math><msub><mtext>GR</mtext>
+<mi>p</mi></msub><mo>=</mo><mfrac><mrow><msup><mrow>
+<mo>(</mo><msub><mtext>POT</mtext><mi>p</mi></msub>
+<mo>)</mo></mrow><mi>A</mi></msup></mrow><mrow><mi>B</mi><mo>+</mo><mrow><mi>C</mi><msup><mrow><mo>(</mo><msub><mi>R</mi><mn>1</mn></msub><mo>)</mo>
+</mrow><mi>D</mi></msup></mrow><mo>+</mo><mrow><mi>E</mi><msup><mrow><mo>(</mo><msub><mi>R</mi><mn>2</mn></msub><mo>)</mo></mrow><mi>F</mi></msup>
+</mrow></mrow></mfrac></math> 
+</td><td align="right">[Eq. 247.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">POT<sub>p</sub></td>
+
+<td valign="top">is the well’s or group’s potential flow rate of
+the nominated phase p (see <a href="../ecl_td/potential_Well_potentials.html#potential_well_potentials">"Well potentials"</a> in the <cite>ECLIPSE Technical Description</cite>)</td>
+
+</tr>
+
+<tr>
+<td valign="top">A, B, C, D, E and F   </td>
+
+<td valign="top">are user-supplied powers and coefficients</td>
+
+</tr>
+
+<tr>
+<td valign="top">R<sub>1</sub> and R<sub>2</sub>  </td>
+
+<td valign="top">are ratios of phase potentials, which depend on the nominated
+phase p (see item <a href="GUIDERAT.html#guiderat.XID-00000078">2</a>).</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>For the rest of the simulation, the guide rates are recalculated
+at the beginning of each timestep that starts after a specified interval
+(item <a href="GUIDERAT.html#guiderat.XID-0000006e">1</a>) has elapsed from
+the previous guide rate calculation. The interval defaults to zero,
+giving a guide rate calculation at the beginning of each timestep.
+However, a longer interval may be preferred if the guide rates oscillate
+due to rate-dependent coning, or alternatively a damping factor may
+be applied in item <a href="GUIDERAT.html#guiderat.XID-000000fd">10</a>.</p>
+
+<p>The denominator is not allowed to become negative. If the power
+D or F is negative, the ratio R<sub>1 </sub>or R<sub>2</sub> is limited
+to be not less than 1.0E-6.</p>
+
+<p>If the nominated phase p differs from the phase under group control, <math><msub><mtext>GR</mtext>
+<mi>p</mi></msub></math>  is converted into a guide rate for
+the controlled phase using the well’s or group’s production
+ratios at the beginning of the timestep. </p>
+
+<p>The <span class="keyword">GUIDERAT</span> keyword is followed by a line containing
+some or all of the following data items, terminated with a slash (/).</p>
+
+<p>The items are:</p>
+
+<ol>
+<li id="guiderat.XID-0000006e"><a name="guiderat.XID-0000006e"><!-- --></a> The minimum time interval between
+guide rate calculations. <p>The guide rates are calculated from the
+formula above at the beginning of each timestep that starts after
+the specified interval has elapsed since the previous guide rate calculation.</p>
+ <p>A zero value causes the guide rates to be recalculated every
+timestep. A longer interval may be preferred if the guide rates oscillate
+due to rate-dependent coning phenomena, or alternatively a damping
+factor may be applied in item 10.</p>
+<p>UNITS: day (<samp class="codeph">METRIC</samp>), day (<samp class="codeph">FIELD</samp>), hr (<samp class="codeph">LAB</samp>), day (<samp class="codeph">PVT-M</samp>)</p>
+<p>DEFAULT: 0.0</p>
+ </li>
+
+<li id="guiderat.XID-00000078"><a name="guiderat.XID-00000078"><!-- --></a> The nominated phase p 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">OIL</samp> </td>
+
+<td valign="top">GR<sub>p</sub> is the oil phase guide rate.<p>The phase potential
+ratios are:</p>
+<p>R<sub>1</sub> = water-oil ratio (dimensionless)</p>
+<p>R<sub>2</sub> = gas-oil ratio</p>
+<p>UNITS: sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), Mscf/stb (<samp class="codeph">FIELD</samp>), scc/scc (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">LIQ</samp> </td>
+
+<td valign="top"> GR<sub>p</sub> is the liquid phase guide rate (oil + water).<p>The phase potential ratios are:</p>
+<p>R<sub>1</sub> = water cut (dimensionless)</p>
+<p>R<sub>2</sub> = gas-liquid ratio</p>
+<p>UNITS: sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), Mscf/stb (<samp class="codeph">FIELD</samp>), scc/scc (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">GAS</samp> </td>
+
+<td valign="top">GR<sub>p</sub> is the gas phase guide rate.<p>The phase potential
+ratios are:</p>
+<p>R<sub>1</sub> = water-gas ratio</p>
+<p>R<sub>2</sub> = oil-gas ratio</p>
+<p>UNITS: sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), stb/Mscf (<samp class="codeph">FIELD</samp>), scc/scc (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">RES</samp> </td>
+
+<td valign="top"> GR<sub>p</sub> is the reservoir fluid volume guide rate.<p>The phase potential ratios are:</p>
+<p>R<sub>1</sub> = water-oil ratio
+(dimensionless)</p>
+<p>R<sub>2</sub> = gas-oil ratio</p>
+<p>UNITS: sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">METRIC</samp>), Mscf/stb (<samp class="codeph">FIELD</samp>), scc/scc (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/sm<sup>3</sup> (<samp class="codeph">PVT-M</samp>)</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">COMB</samp> </td>
+
+<td valign="top">GR<sub>p</sub> is the linearly combined phase guide rate (coefficients
+must be set with <a href="LINCOM.html#LINCOM">  LINCOM</a>).<p>The phase potential ratios are:</p>
+<p>R<sub>1</sub> =
+water to linearly combined phase ratio (dimensionless)</p>
+<p>UNITS:
+sm<sup>3</sup>/U (<samp class="codeph">METRIC</samp>), stb/U (<samp class="codeph">FIELD</samp>), scc/U (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/U (<samp class="codeph">PVT-M</samp>) where U represents the units specified in <a href="LCUNIT.html#LCUNIT">  LCUNIT</a>.</p>
+<p>R<sub>2</sub> = gas to
+linearly combined phase ratio</p>
+<p>UNITS: sm<sup>3</sup>/U (<samp class="codeph">METRIC</samp>), Mscf/U (<samp class="codeph">FIELD</samp>), scc/U (<samp class="codeph">LAB</samp>), sm<sup>3</sup>/U (<samp class="codeph">PVT-M</samp>) where U
+represents the units specified in <span class="keyword">LCUNIT</span>. </p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NONE</samp> </td>
+
+<td valign="top"> The general formula is not applied.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>The well guide rates is set equal to their production potentials
+at every timestep, with no damping, just as if this keyword had not
+been entered. An error is flagged if any group requires its guide
+rate to be calculated from the formula.</p>
+<p>DEFAULT: <samp class="codeph">NONE</samp>.</p>
+ </li>
+
+<li> The power A of the phase potential rate. <p>This must lie between
+3.0 and -3.0.</p>
+ <p>DEFAULT: 0.0</p>
+ </li>
+
+<li> The constant B on the denominator. <p>This must not be negative.</p>
+ <p>DEFAULT:   0.0</p>
+ </li>
+
+<li> The coefficient C of the phase ratio R<sub>1</sub>. <p>DEFAULT:   0.0</p>
+ </li>
+
+<li> The power D of the phase ratio R<sub>1</sub>. <p>This must lie
+between 3.0 and -3.0.</p>
+ <p>DEFAULT:   0.0</p>
+ </li>
+
+<li> The coefficient E of the phase ratio R<sub>2</sub>. <p>DEFAULT:   0.0</p>
+ </li>
+
+<li> The power F of the phase ratio R<sub>2</sub>. <p>This must lie
+between 3.0 and -3.0.</p>
+ <p>DEFAULT:   0.0</p>
+ </li>
+
+<li id="guiderat.XID-000000f5"><a name="guiderat.XID-000000f5"><!-- --></a> Should guide rates be allowed to increase? 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top">Guide rates are allowed to increase if the formula results
+in a higher value (for example due to a reduced water cut or GOR).</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top">The guide rate of the nominated phase is only allowed to decrease.
+If the formula results in a higher value than the current one, the
+value remains unchanged. (This option decreases the tendency for guide
+rates to oscillate due to rate-dependent coning phenomena.)</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">YES</samp> </p>
+ </li>
+
+<li id="guiderat.XID-000000fd"><a name="guiderat.XID-000000fd"><!-- --></a> Damping factor, <samp class="codeph">GRDAMP</samp> <p>This must lie between 0.0 and 1.0. It provides a means (as an
+alternative to setting item <a href="GUIDERAT.html#guiderat.XID-000000f5">9</a> to <samp class="codeph">NO</samp>) of damping guide rate oscillations that
+may result from rate-dependent water cut or GOR. Each time a new guide
+rate is calculated for a well or group, it is averaged with its previous
+value according to the formula</p>
+<p><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="guiderat.equ.0102"/>
+ <math><mrow><msub><mrow>
+<mtext>GR</mtext></mrow><mrow><mtext>used</mtext></mrow>
+</msub><mo>=</mo><mrow><mtext>GRDAMP</mtext><msub><mrow>
+<mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext> </mtext><mtext>GR</mtext></mrow><mrow><mtext>calculated</mtext>
+</mrow></msub></mrow><mo>+</mo><mrow><mo>(</mo><mn>1</mn><mrow><mo>-</mo><mtext>GRDAMP</mtext></mrow><mo>)</mo><msub><mrow><mtext>GR</mtext></mrow><mrow><mtext>previous</mtext></mrow></msub></mrow></mrow></math> 
+</td><td align="right">[Eq. 247.2]
+              </td></tr></tbody></table></p>
+<p>A damping factor of 1.0 allows the guide rates to
+change instantaneously with the phase potentials. As the damping factor
+reduces towards 0.0, the guide rates will be weighted increasingly
+towards their previous values, reducing any tendency to oscillate.</p>
+<p>DEFAULT: 1.0</p>
+ <p>ECLIPSE 100</p>
+</li>
+
+<li> Use free gas and not total gas potential
+rates in the phase potential ratio R<sub>2</sub>.
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">YES</samp> </td>
+
+<td valign="top">Only use free gas (at well-block conditions) in the potential
+ratio.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NO</samp> </td>
+
+<td valign="top"> Use total (free and dissolved) gas in the potential ratio.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">NO</samp> </p>
+ <p>ECLIPSE 300</p>
+</li>
+
+<li> Minimum guide rate <math><msub>
+<mtext>GR</mtext><mrow><mi>m</mi><mi>i</mi><mi>n</mi>
+</mrow></msub></math>. If the calculated guide rate  <math><msub><mtext>GR</mtext>
+<mi>p</mi></msub></math>  is less than the minimum  <math><msub><mtext>GR</mtext>
+<mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub>
+</math>, it will be set to the minimum. Very small guide rates may
+cause a group to be ignored, particularly if the group flow is large.
+Setting a minimum value prevents this. The minimum should be chosen
+to ensure  <math><msub><mtext>GR</mtext>
+<mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub>
+<mo>&gt;</mo><msup><mn>10</mn><mrow><mo>-</mo><mn>19</mn>
+</mrow></msup><mo>×</mo><mrow><mi>f</mi><mi>l</mi><mi>o</mi><mi>w</mi></mrow></math>  <p>DEFAULT:
+10<sup>-6</sup></p>
+ </li>
+
+</ol>
+
+<p>In the absence of keyword <span class="keyword">GUIDERAT</span>, the well
+guide rates are set equal to the wells’ potential rates at the
+beginning of each timestep (unless fixed values have been supplied
+with keyword <a href="WGRUPCON.html#WGRUPCON">  WGRUPCON</a>).</p>
+
+<p>The keyword affects production guide rates only. Guide rates for
+injection wells are still by default set equal to their potential
+injection rates.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

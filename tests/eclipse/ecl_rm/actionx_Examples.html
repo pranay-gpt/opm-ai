@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Examples"/>
+<meta name="DC.subject" content="ACTIONX"/>
+<meta name="keywords" content="ACTIONX"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="actionx_examples"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Examples</title>
+</head>
+<body>
+
+
+<div class="nested0" id="actionx_examples"><a name="actionx_examples"><!-- --></a>
+<h1 class="topictitle1">Examples</h1>
+
+
+ <div>
+<div class="section" id="actionx_example_1"><a name="actionx_example_1"><!-- --></a><h4 class="sectiontitle">Example 1</h4><p>The action
+named <samp class="codeph">ACT1</samp> reduces the liquid rate target by 20%
+of all wells starting with ‘PR’ whose GOR exceeds that of the FIELD
+when the gas production rate of the FIELD exceeds 50000 Mscf/day.
+The action will be repeated at the end of each timestep whilst the
+condition set is true.</p>
+<pre><code>ACTIONX
+ ACT1 100000 /
+ GGPR FIELD &gt; 50000 AND  /
+ WGOR 'PR*' &gt; GGOR FIELD /
+/
+
+WTMULT
+ '?' LRAT 0.8 /
+ /
+
+ENDACTIO</code></pre></div>
+
+<div class="section" id="actionx_example_2"><a name="actionx_example_2"><!-- --></a><h4 class="sectiontitle">Example 2</h4><p>The action
+named <samp class="codeph">ACT2</samp> opens well PR-A5 when the combined water
+cut of all the wells in list <samp class="codeph">*LIST1</samp> exceeds 0.7 and
+when the water production rate of list <samp class="codeph">*LIST1</samp> exceeds
+the water production rate of either list <samp class="codeph">*LIST2</samp> or <samp class="codeph">*LIST3</samp>. Action <samp class="codeph">ACT2</samp> is performed once only.</p>
+<pre><code>ACTIONX
+ ACT2 1 /
+  GWCT '*LIST1' &gt; 0.7           AND   /
+( GWPR '*LIST1' &gt; GWPR '*LIST2' OR    /
+  GWPR '*LIST1' &gt; GWPR '*LIST3'     ) /
+/
+
+WELOPEN
+ PR-A5 OPEN /
+ /
+
+ENDACTIO</code></pre></div>
+
+<div class="section" id="actionx_example_3"><a name="actionx_example_3"><!-- --></a><h4 class="sectiontitle">Example
+3</h4><p>ECLIPSE 300</p>
+<p>The dynamic well
+list <samp class="codeph">*HIGHWCT</samp> contains all wells that have a water
+cut exceeding 0.8. In any year between March and October, the action <samp class="codeph">WORKOVER</samp> will be triggered if the list <samp class="codeph">*HIGHWCT</samp> contains more than 4 wells. This action will set an economic limit
+on the wells in the <samp class="codeph">*HIGHWCT</samp> list such that they
+will be worked over. The <samp class="codeph">WORKOVER</samp> action also contains
+a nested action <samp class="codeph">WECONOFF</samp> that is triggered when the
+simulation advances past October. <samp class="codeph">WECONOFF</samp> stops
+any further workovers in the winter by re-specifying the <samp class="codeph">WECON</samp> keyword with a high water cut limit.</p>
+<pre><code>WLISTDYN
+'*HIGHWCT' '*' WWCT &gt; 0.8 /
+/
+
+ACTIONX
+  WORKOVER 10000 /
+  MNTH  .GE. MAR  AND /
+  MNTH  .LE. OCT  AND /
+  GMWL '*HIGHWCT' .GE. 4 /
+/
+
+WECON
+  '*HIGHWCT' 2* 0.75 2* CON /
+/
+
+ACTIONX
+  WECONOFF 1 /
+  MNTH .GT. OCT /
+/
+
+WECON
+  '*' 2* 1.0 2* CON /
+/
+
+ENDACTIO
+
+ENDACTIO</code></pre></div>
+
+<div class="section" id="actionx_example_4"><a name="actionx_example_4"><!-- --></a><h4 class="sectiontitle">Example 4</h4><p>The action
+named DELAY opens well PR-A5 when the simulation has advanced past
+the 1st June on a year after 2020 and the FIELD’s water cut exceeds
+0.8.</p>
+<pre><code>ACTIONX
+ DELAY 1 /
+  GWCT 'FIELD' &gt; 0.8   AND /
+  DAY  &gt;  1            AND /
+  MNTH &gt;=  JUN          AND /
+  YEAR &gt;= 2021             /
+/
+
+WELOPEN
+ PR-A5 OPEN /
+ /
+
+ENDACTIO</code></pre></div>
+
+<div class="section" id="actionx_example_5"><a name="actionx_example_5"><!-- --></a><h4 class="sectiontitle">Example
+5</h4><p>ECLIPSE 300</p>
+<p>The action named
+ACT5 reduces the liquid rate target by 20% of all wells starting with
+‘PR’ when the 2nd component molar rate in the gas phase of the well
+‘PROD1’exceeds 5th component molar rate in the gas phase of the well
+‘PROD2’ and when the 3rd component molar rate in the gas phase of
+the group ‘G1’exceeds 7th component molar rate in the gas phase of
+the group ‘G2’ or when the 1st component molar rate in the gas phase
+of the FIELD exceeds the 7th component molar rate in the gas phase
+of the FIELD. That is, the first two conditions must be true, or the
+third. The action will be repeated at the end of each timestep whilst
+the condition set is true.</p>
+<pre><code>ACTIONX
+ ACT5 100000 /
+ WCGMR_2 'PROD1' &gt; WCGMR_5 'PROD2' AND /
+ GCGMR_3 'G1' &gt; GCGMR_7 'G2' OR /
+ FCGMR_1 &gt; FCGMR_7 /
+/
+
+WTMULT
+ 'PR*' LRAT 0.8 /
+ /
+
+ENDACTIO</code></pre></div>
+
+<div class="section" id="actionx_example_6"><a name="actionx_example_6"><!-- --></a><h4 class="sectiontitle">Example
+6</h4><p>ECLIPSE 300</p>
+<p>The action named <samp class="codeph">ACT4</samp> reduces the liquid rate target by 50% of all wells
+starting with ‘PR’ when the user-defined quantity <samp class="codeph">WUMW</samp> of the well ‘PROD1’ exceeds <samp class="codeph">WUMW</samp> of the well ‘PROD2’
+and when the user-defined quantity <samp class="codeph">GUMW</samp> of the group
+‘G1’ exceeds <samp class="codeph">GUMW</samp> of the group ‘G2’ or when the user-
+defined quantity <samp class="codeph">FUMW</samp> of the FIELD less than 1. The
+action will be repeated at the end of each timestep whilst the condition
+set is true.</p>
+<pre><code>UDQ
+-- A COUPLE OF CONNECTION QUANTITES
+DEFINE WUMW WCGMR_2/(MAX(WCGMR_5)+1) /
+UNITS  WUMW WELL/
+DEFINE GUMW GCGMR_3/(GCGMR_5+GCGMR_1) /
+UNITS  GUMW GROUP/
+DEFINE FUMW FCGMR_3/(FCGMR_5+FCGMR_7) /
+UNITS  FUMW FIELD/
+
+ACTIONX
+ ACT4 100000 /
+ WUMW 'PROD1' &gt; WUMW'PROD2' AND /
+ GUMW 'G1' &gt; GUMW 'G2' OR /
+ FUMW &lt; 1 /
+/
+
+WTMULT
+ '?' LRAT 0.5 /
+ /
+
+ENDACTIO</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

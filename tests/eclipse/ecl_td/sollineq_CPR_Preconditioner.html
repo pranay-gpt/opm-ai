@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The Constrained Pressure Residual (CPR) Preconditioner"/>
+<meta name="DC.subject" content="Solution of the linear equations, Solution of the linear equations constrained pressure residual (CPR) preconditioner, Constrained pressure residual (CPR) preconditioner"/>
+<meta name="keywords" content="Solution of the linear equations, Solution of the linear equations constrained pressure residual (CPR) preconditioner, Constrained pressure residual (CPR) preconditioner"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sollineq_CPR_Preconditioner"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The Constrained Pressure Residual (CPR) Preconditioner</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="sollineq_CPR_Preconditioner"><a name="sollineq_CPR_Preconditioner"><!-- --></a>
+<h1 class="topictitle1">The Constrained Pressure Residual (CPR) Preconditioner</h1>
+
+
+ <div>
+<p>The Constrained Pressure Residual (CPR) preconditioner (<cite><span> <a href="biblio_Bibliography.html#linearsolver_wallis">Wallis et
+al, 1985</a> </span></cite>) is employed by the <a href="../ecl_rm/CPR.html#CPR">CPR</a> linear solver and the <a href="../ecl_rm/JALS.html#JALS">JALS</a> linear solver.</p>
+
+<p>The reservoir equations encountered in reservoir simulation are
+of mixed character. The pressure equations are often elliptic dominated
+with long range coupling, whilst the saturation equations can exhibit
+hyperbolic behavior, with steep local gradients. The CPR preconditioner
+is designed to tackle the linear equations that arise from the mixed
+character of the reservoir equations. This section outlines the ECLIPSE
+implementation, which is used by the CPR linear solver.</p>
+
+<p>The CPR preconditioner consists of a two stage approximation to
+the inverse of the Jacobian matrix <math><mrow><mi>A</mi>
+</mrow></math>. The equations can be arranged so that all of the
+pressure equations appear first, followed by the saturation equations
+(or molar density equations, for compositional). The Jacobian matrix
+can then be decomposed into the pressure terms <math><mrow><msub><mi>A</mi><mi>pp</mi></msub></mrow></math>, the saturation
+terms <math><mrow>
+<msub><mi>A</mi><mi>ss</mi></msub></mrow></math>,
+and the pressure-saturation coupling terms, <math><mrow><msub><mi>A</mi><mi>ps</mi></msub></mrow></math> and <math><mrow><msub><mi>A</mi><mi>sp</mi></msub></mrow></math>. Similarly, the
+solution vector, <math>
+<mrow><mi>x</mi></mrow></math>, and the residual vector, <math><mrow><mi>R</mi>
+</mrow></math>, are also decomposed into the pressure terms and
+the saturation terms. This results in the following system of linear
+equations:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.01cpr"/>
+ <math><mrow><mrow>
+<mo>[</mo><mtable><mtr><mtd><msub><mi>A</mi><mi>pp</mi></msub></mtd><mtd><msub><mi>A</mi><mi>ps</mi>
+</msub></mtd></mtr><mtr><mtd><msub><mi>A</mi><mi>sp</mi></msub></mtd><mtd><msub><mi>A</mi><mi>ss</mi>
+</msub></mtd></mtr></mtable><mo>]</mo></mrow><mrow>
+<mo>[</mo><mtable><mtr><mtd><msub><mi>x</mi><mi>p</mi></msub></mtd></mtr><mtr><mtd><msub><mi>x</mi>
+<mi>s</mi></msub></mtd></mtr></mtable><mo>]</mo>
+</mrow><mo>=</mo><mrow><mo>[</mo><mtable><mtr><mtd>
+<msub><mi>R</mi><mi>p</mi></msub></mtd></mtr><mtr>
+<mtd><msub><mi>R</mi><mi>s</mi></msub></mtd></mtr>
+</mtable><mo>]</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 685.1]
+              </td></tr></tbody></table>
+<p>The full system contains <math><mrow><msub><mi>n</mi><mi>cell</mi></msub></mrow></math> cells, with <math><mrow><msub><mi>n</mi><mi>eqn</mi></msub></mrow></math> equations per
+cell. The pressure system consists of just <math><mrow><msub><mi>n</mi><mi>cell</mi></msub></mrow></math> equations. An <math><mrow><mo>(</mo>
+<msub><mi>n</mi><mi>cell</mi></msub><mo>⋅</mo><msub>
+<mi>n</mi><mi>eqn</mi></msub></mrow><mo>)</mo></math>  by <math><mrow>
+<msub><mi>n</mi><mi>cell</mi></msub></mrow></math> matrix <math><mrow>
+<mi>C</mi></mrow></math> can be defined, together with its
+transpose <math><mrow>
+<msup><mi>C</mi><mi>T</mi></msup></mrow></math>, to
+transform between the full system and the pressure system:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.02cpr"/>
+ <math><mrow><mi>C</mi><mo>=</mo><mrow><mo>[</mo><mtable><mtr><mtd>
+<msub><mi>I</mi><mi>p</mi></msub></mtd></mtr><mtr>
+<mtd><mn>0</mn></mtd></mtr></mtable><mo>]</mo></mrow>
+</mrow></math> 
+</td><td align="right">[Eq. 685.2]
+              </td></tr></tbody></table>
+<p>Where <math><mrow>
+<msub><mi>I</mi><mi>p</mi></msub></mrow></math> is
+the <math><mrow>
+<msub><mi>n</mi><mi>cell</mi></msub></mrow></math> by <math><mrow>
+<msub><mi>n</mi><mi>cell</mi></msub></mrow></math> identity matrix, with the same dimensions as the pressure system.
+ To facilitate the first stage of the preconditioner, the full system
+is restricted to a smaller pressure system:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.03cpr"/>
+ <math><mrow><msub>
+<mi>A</mi><mi>p</mi></msub><mo>=</mo><mrow><msup>
+<mi>C</mi><mi>T</mi></msup><mi>G</mi><mi>A</mi><mi>C</mi></mrow></mrow></math> 
+</td><td align="right">[Eq. 685.3]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.04cpr"/>
+ <math><mrow><msub>
+<mi>r</mi><mi>p</mi></msub><mo>=</mo><mrow><msup>
+<mi>C</mi><mi>T</mi></msup><mi>G</mi><mi>R</mi>
+</mrow></mrow></math> 
+</td><td align="right">[Eq. 685.4]
+              </td></tr></tbody></table>
+<p>The additional transformation matrix, <math><mrow><mi>G</mi>
+</mrow></math>, depends on the chosen method of solving the pressure
+system. In this case, <math><mrow><mi>G</mi>
+</mrow></math> is constructed to approximately  decouple the pressure
+system from the full system:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.05cpr"/>
+ <math><mrow><mi>G</mi><mo>=</mo><mrow><mo>[</mo><mtable><mtr><mtd>
+<msub><mi>I</mi><mi>p</mi></msub></mtd><mtd><mo>-</mo><msub><mi>A</mi><mi>ps</mi></msub><msubsup>
+<mover><mi>A</mi><mo>^</mo></mover><mi>ss</mi><mrow>
+<mo>-</mo><mn>1</mn></mrow></msubsup></mtd></mtr><mtr>
+<mtd><mn>0</mn></mtd><mtd><msub><mi>I</mi><mi>s</mi>
+</msub></mtd></mtr></mtable><mo>]</mo></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 685.5]
+              </td></tr></tbody></table>
+<p>The matrix <math>
+<mrow><msub><mover><mi>A</mi><mo>^</mo></mover><mi>ss</mi></msub></mrow></math>  is a simple approximation to
+the saturation matrix. Note that if <math><mrow><msub><mover>
+<mi>A</mi><mo>^</mo></mover><mi>ss</mi></msub></mrow>
+</math> was chosen as the true inverse of <math><mrow><msub><mi>A</mi><mi>ss</mi></msub></mrow></math>, the pressure
+equations would be fully decoupled, since the matrix <math><mrow><mi>A</mi>
+</mrow></math> would have a zero block in the position of <math><mrow><msub><mover>
+<mi>A</mi><mo>^</mo></mover><mi>ps</mi></msub></mrow>
+</math>. However, it is not efficient to do this in general as the
+inverse of <math><mrow>
+<msub><mi>A</mi><mi>ss</mi></msub></mrow></math> is
+generally dense. For this reason, we replace it with a simple approximation,
+such as the diagonal matrix <math><mrow><mi>Diag</mi>
+<mo>(</mo><msub><mi>A</mi><mi>ss</mi></msub><mo>)</mo></mrow></math>.  Therefore:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.06cpr"/>
+ <math><mrow><mrow>
+<msub><mi>A</mi><mi>p</mi></msub></mrow><mo>=</mo>
+<mrow><mrow><mrow><mo>[</mo><mtable><mtr><mtd><msub>
+<mi>I</mi><mi>p</mi></msub></mtd><mtd><mn>0</mn>
+</mtd></mtr></mtable><mo>]</mo></mrow><mo>⁢</mo><mrow>
+<mo>[</mo><mtable><mtr><mtd><msub><mi>I</mi><mi>p</mi></msub></mtd><mtd><mo>-</mo><msub><mi>A</mi>
+<mi>ps</mi></msub><msubsup><mover><mi>A</mi><mo>^</mo>
+</mover><mi>ss</mi><mrow><mo>-</mo><mn>1</mn></mrow>
+</msubsup></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd>
+<msub><mi>I</mi><mi>s</mi></msub></mtd></mtr></mtable>
+<mo>]</mo></mrow><mo>⁢</mo><mrow><mo>[</mo><mtable>
+<mtr><mtd><msub><mi>A</mi><mi>pp</mi></msub></mtd>
+<mtd><msub><mi>A</mi><mi>ps</mi></msub></mtd></mtr>
+<mtr><mtd><msub><mi>A</mi><mi>sp</mi></msub></mtd>
+<mtd><msub><mi>A</mi><mi>ss</mi></msub></mtd></mtr>
+</mtable><mo>]</mo></mrow><mo>⁢</mo><mrow><mo>[</mo>
+<mtable><mtr><mtd><msub><mi>I</mi><mi>p</mi></msub>
+</mtd></mtr><mtr><mtd><mn>0</mn></mtd></mtr></mtable>
+<mo>]</mo></mrow></mrow><mo>=</mo><mrow><msub><mi>A</mi><mi>pp</mi></msub><mo>-</mo><msub><mi>A</mi>
+<mi>ps</mi></msub><msubsup><mover><mi>A</mi><mo>^</mo>
+</mover><mi>ss</mi><mrow><mo>-</mo><mn>1</mn></mrow>
+</msubsup><msub><mi>A</mi><mi>sp</mi></msub></mrow>
+</mrow></mrow></math> 
+</td><td align="right">[Eq. 685.6]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.07cpr"/>
+ <math><mrow><msub>
+<mi>r</mi><mi>p</mi></msub></mrow><mo>=</mo><mrow>
+<mrow><mrow><mo>[</mo><mtable><mtr><mtd><msub><mi>I</mi><mi>p</mi></msub></mtd><mtd><mn>0</mn></mtd>
+</mtr></mtable><mo>]</mo></mrow><mo>⁢</mo><mrow><mo>[</mo><mtable><mtr><mtd><msub><mi>I</mi><mi>p</mi>
+</msub></mtd><mtd><mo>-</mo><msub><mi>A</mi><mi>ps</mi></msub><msubsup><mover><mi>A</mi><mo>^</mo>
+</mover><mi>ss</mi><mrow><mo>-</mo><mn>1</mn></mrow>
+</msubsup></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd>
+<msub><mi>I</mi><mi>s</mi></msub></mtd></mtr></mtable>
+<mo>]</mo></mrow><mo>⁢</mo><mrow><mo>[</mo><mtable>
+<mtr><mtd><msub><mi>R</mi><mi>p</mi></msub></mtd>
+</mtr><mtr><mtd><msub><mi>R</mi><mi>s</mi></msub>
+</mtd></mtr></mtable><mo>]</mo></mrow></mrow><mo>=</mo>
+<mrow><msub><mi>R</mi><mi>p</mi></msub><mo>-</mo>
+<msub><mi>A</mi><mi>ps</mi></msub><msubsup><mover><mi>A</mi><mo>^</mo></mover><mi>ss</mi><mrow><mo>-</mo>
+<mn>1</mn></mrow></msubsup><msub><mi>R</mi><mi>s</mi>
+</msub></mrow></mrow></math> 
+</td><td align="right">[Eq. 685.7]
+              </td></tr></tbody></table>
+<p>ECLIPSE employs the CPR preconditioner within the Flexible GMRES
+(FGMRES) algorithm. The reduced pressure system is also solved using
+the GMRES algorithm, which results in two levels of GMRES iterations.
+At the outer level the full solution is obtained by performing a number
+of outer iterations with the two stage CPR preconditioner. For each
+outer iteration, a number of inner iterations are performed to obtain
+the pressure solution. The algorithm consists of the following steps:</p>
+
+<ol>
+<li>The residual vector is restricted to the pressure system:<p><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.08cpr"/>
+ <math><mrow><msub>
+<mi>r</mi><mi>p</mi></msub><mo>=</mo><mrow><msup>
+<mi>C</mi><mi>T</mi></msup><mi>G</mi><mi>R</mi>
+</mrow></mrow></math> 
+</td><td align="right">[Eq. 685.8]
+              </td></tr></tbody></table></p>
+</li>
+
+<li>The reduced pressure system is solved:<p><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.09cpr"/>
+ <math><mrow><msub>
+<mi>A</mi><mi>p</mi></msub><msub><mi>x</mi><mi>p</mi>
+</msub><mo>=</mo><msub><mi>r</mi><mi>p</mi></msub>
+</mrow></math> 
+</td><td align="right">[Eq. 685.9]
+              </td></tr></tbody></table></p>
+<p>To solve the pressure system, ECLIPSE performs inner
+GMRES iterations with a nested factorization preconditioner, <math><mrow><msub><mi>M</mi><mi>p</mi></msub></mrow></math>. When the pressure
+system has been solved to the desired accuracy, the inner GMRES iterations
+ are terminated.</p>
+</li>
+
+<li>The solution to  the pressure system is then expanded to the full
+system, and provides a correction to the original residual:<p><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.11cpr"/>
+ <math><mrow><mover>
+<mi>r</mi><mo>~</mo></mover><mo>=</mo><mrow><mi>r</mi><mo>-</mo><mi>A</mi><mi>C</mi><msub><mi>x</mi>
+<mi>p</mi></msub></mrow></mrow></math> 
+</td><td align="right">[Eq. 685.10]
+              </td></tr></tbody></table></p>
+</li>
+
+<li>A second stage nested factorization preconditioner, <math><mrow><mover><mi>M</mi><mn>~</mn></mover></mrow></math>, is applied to
+the remaining  residual to obtain a correction to the solution of
+the pressure system:<p><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.12cpr"/>
+ <math><mrow><mover>
+<mi>x</mi><mo>~</mo></mover><mo>=</mo><msup><mover>
+<mi>M</mi><mo>~</mo></mover><mrow><mo>-</mo><mn>1</mn></mrow></msup><mover><mi>r</mi><mo>~</mo>
+</mover></mrow></math> 
+</td><td align="right">[Eq. 685.11]
+              </td></tr></tbody></table></p>
+</li>
+
+<li> The first and second stage solutions are combined, to provide
+the CPR preconditioned vector <math><mrow><mi>x</mi>
+</mrow></math> to the FGMRES algorithm:<p><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sollineq.equ.13cpr"/>
+ <math><mrow><mi>x</mi><mo>=</mo><mover><mi>x</mi><mo>~</mo></mover>
+<mo>+</mo><mi>C</mi><msub><mi>x</mi><mi>p</mi>
+</msub></mrow></math> 
+</td><td align="right">[Eq. 685.12]
+              </td></tr></tbody></table></p>
+</li>
+
+</ol>
+
+<p>Steps 1 to 5 are repeated within each outer FGMRES iteration, until
+ the full solution has converged to within the required tolerance.</p>
+
+<p>Information regarding the outer iterations can be reported with
+the usual performance summary quantities <span class="keyword">NLINEARS</span>, <span class="keyword">MLINEARS</span> and <span class="keyword">MSUMLINS</span>.  Information
+regarding the inner pressure iterations can be reported with the summary
+quantities <span class="keyword">NCPRLINS</span>, <span class="keyword">NLINEARP</span>, <span class="keyword">MLINEARP</span> and <span class="keyword">MSUMLINP</span>. Alternatively,
+the <span class="keyword">PERFORMA</span> summary keyword  can be used to provide
+all of this information.</p>
+
+<p> It is more expensive to apply the two stage CPR preconditioner
+than the single stage nested factorization preconditioner that is
+used by  default. Each linear iteration has a higher computational
+cost, and therefore takes longer to perform. However, convergence
+can usually be obtained in a smaller  number of iterations of the
+full system. This makes the CPR preconditioner particularly suitable
+for simulations when the default  linear solver is frequently failing
+to converge. In these cases, the more robust preconditioning could
+significantly reduce the number of linear iterations required and
+reduce the simulation time. The CPR preconditioner is also most suitable
+for fully implicit simulations, where the pressure system is  significantly
+smaller than the full system.</p>
+
+<p>In ECLIPSE 100, the CPR linear solver is compatible with the <a href="rescouplintro_coupling_and_synchronization.html#rescouplintro_coupling_and_synchronization"> "Reservoir Coupling"</a> option. However, inserting
+the  <span class="keyword">CPR</span> keyword in the master data file will not
+activate the CPR linear solver in any of the slave reservoirs. To
+activate the CPR linear solver in a particular slave reservoir, the <span class="keyword">CPR</span> keyword must be used in the corresponding slave data
+file. </p>
+
+<p>In ECLIPSE 100, there are some options that cannot be used with
+the CPR linear solver. These include <a href="../ecl_rm/IMPES.html#IMPES">IMPES</a>, the multiple independent
+reservoirs option, the Russian Doll option, the friction well option,
+triple porosity, nested local grid refinements, single phase simulations,
+item 1 of keyword <a href="../ecl_rm/WSEGSOLV.html#WSEGSOLV">WSEGSOLV</a>, <a href="../ecl_rm/BTOBALFA.html#BTOBALFA">BTOBALFA</a>, <a href="../ecl_rm/BTOBALFV.html#BTOBALFV">BTOBALFV</a> and the rivers option. The use of  <a href="../ecl_rm/PINCHXY.html#PINCHXY"> PINCHXY</a> with the  <a href="../ecl_rm/PARALLEL.html#PARALLEL"> PARALLEL</a> option may result
+in an error,  if there are horizontal pinchout connections that cross
+domain boundaries.</p>
+
+<p>In ECLIPSE 300, it is currently not possible to use the CPR linear
+solver for the thermal option (the thermal option uses the  <span class="keyword">JALS</span> linear solver), the multiple (including triple) porosity
+option, in a dual porosity (or dual permeability) run containing local
+grid refinements and the <span class="keyword">IMPES</span> option. </p>
+
+<p>In ECLIPSE 300, the CPR linear solver generally performs best when
+the simulation is fully implicit. For simulations that use the  adaptive
+implicit (<a href="../ecl_rm/AIM.html#AIM">AIM</a>) scheme, the performance may  deteriorate if the fraction
+of fully implicit cells is small.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

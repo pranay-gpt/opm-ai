@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Water saturation properties"/>
+<meta name="DC.subject" content="Saturation functions, Saturation functions one dimensional tables for water, Saturation functions two dimensional tables for water, Water saturation properties"/>
+<meta name="keywords" content="Saturation functions, Saturation functions one dimensional tables for water, Saturation functions two dimensional tables for water, Water saturation properties"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="satfunct_water_saturation_properties"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Water saturation properties</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="satfunct_water_saturation_properties"><a name="satfunct_water_saturation_properties"><!-- --></a>
+<h1 class="topictitle1">Water saturation properties</h1>
+
+
+
+ <div>
+<div class="section"><h4 class="sectiontitle">One dimensional tables</h4><p>An example data table
+for the <a href="../ecl_rm/SWFN.html#SWFN">SWFN</a> keyword is given below. The data for the <a href="../ecl_rm/SWOF.html#SWOF">SWOF</a> keyword is similar but
+with an additional column containing oil relative permeabilities.</p>
+<pre><code>-- SWAT KRW PCOW
+--          (PSIA)
+SWFN
+  .22  .0   7.0
+  .3   .07  4.0
+  .4   .15  3.0
+  .5   .24  2.5
+  .6   .33  2.0
+  .8   .65  1.0
+  .9   .83   .5
+ 1.0  1.0    .0   /</code></pre><p>The water saturations must be entered in ascending order.</p>
+<p>The third column is the oil-water capillary pressure (<math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>o</mi><mi>w</mi></mrow></msub>
+<mo>=</mo><msub><mi>P</mi><mi>o</mi></msub><mrow>
+<mo>-</mo><msub><mi>P</mi><mi>w</mi></msub></mrow>
+</math>). The values can become negative with increasing water saturation,
+if required. They should all be set to zero if there is no water-oil
+capillary pressure. In saturation tables intended for well completions
+only (that is, not referenced for any grid block in keyword <a href="../ecl_rm/SATNUM.html#SATNUM">SATNUM</a>) the capillary pressure
+data is not used, and the values entered are disregarded. In gas-water
+problems, the water capillary pressure is interpreted as the gas-water
+capillary pressure (<math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>g</mi><mi>w</mi></mrow></msub>
+<mo>=</mo><msub><mi>P</mi><mi>g</mi></msub><mrow>
+<mo>-</mo><msub><mi>P</mi><mi>w</mi></msub></mrow>
+</math>).</p>
+<p>Three saturation values in the table are of special
+interest:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">S<sub>wcr</sub> The <strong>critical</strong> water saturation.</td>
+
+<td valign="top">This is the highest saturation value for which the water relative
+permeability is zero. At saturations above this value, water is mobile.
+Note that a critical water saturation <strong>must</strong> be defined (the <span class="keyword">SWFN</span> or <span class="keyword">SWOF</span> table must contain a water
+saturation for which  <math><msub><mi>k</mi>
+<mrow><mi>r</mi><mi>w</mi></mrow></msub><mo>=</mo>
+<mn>0</mn></math>). In the example above,  <math><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>c</mi><mi>r</mi></mrow></msub>
+<mo>=</mo><mn>0.22</mn></math>.</td>
+
+</tr>
+
+<tr>
+<td valign="top">S<sub>wco</sub> The minimum water saturation value in the table.</td>
+
+<td valign="top">The equilibration calculation (see keyword <a href="../ecl_rm/EQUIL.html#EQUIL">EQUIL</a>) sets the water saturation
+to this value in grid blocks that lie above the water contact (or
+water transition zone). In this respect  S<sub>wco</sub>  is the <strong>connate</strong> water saturation. In the example shown above,  <math><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow></msub>
+<mo>=</mo><msub><mi>S</mi><mrow><mi>w</mi><mi>c</mi>
+<mi>r</mi></mrow></msub></math>. If for any reason the connate
+water saturation is less than the critical value, the table should
+begin with the connate value. For example for  <math><msub>
+<mi>S</mi><mrow><mi>w</mi><mi>c</mi><mi>o</mi>
+</mrow></msub><mo>=</mo><mn>0.2</mn></math>  and  <math><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>c</mi><mi>r</mi></mrow></msub>
+<mo>=</mo><mn>0.22</mn></math>, the table should begin with
+the lines<pre><code> .20  .0   7.0
+ .22  .0   7.0
+ .3   .07  4.0
+...
+...</code></pre><p>(Note that ECLIPSE can handle zero gradients in
+the capillary pressure versus saturation, as shown in the above example
+between the  S<sub>w</sub>  values 0.2 &amp; 0.22.)</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top">S<sub>w max</sub>The maximum water saturation value in the
+table.</td>
+
+<td valign="top">The equilibration calculation sets the water saturation to
+this value in grid blocks that lie below the water transition zone.<p>In the example shown above,  <math><msub>
+<mi>S</mi><mrow><mi>w</mi><mtext> max</mtext>
+</mrow></msub><mo>=</mo><mn>1.0</mn></math>, which results
+in the water zone being fully saturated with water.</p>
+<p>In an <strong>oil-wet system</strong>, in order to use correctly the Killough wetting
+phase model on the oil phase (option 7, item 2 of <a href="../ecl_rm/EHYSTR.html#EHYSTR">EHYSTR</a> keyword),  S<sub>w max</sub>  should equal  <math><mn>1.0</mn><mrow>
+<mo>-</mo><msub><mi>S</mi><mrow><mi>o</mi><mi>c</mi>
+<mi>o</mi></mrow></msub></mrow></math>,  <math><msub><mi>S</mi>
+<mrow><mi>o</mi><mi>c</mi><mi>o</mi></mrow></msub>
+</math>  being the connate oil saturation.</p>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+<div class="section"><h4 class="sectiontitle">Two dimensional tables</h4><p>A full 2-dimensional
+table of water relative permeability versus oil and gas saturations
+can be entered in three-phase runs using the <a href="../ecl_rm/SWF32D.html#SWF32D">SWF32D</a> keyword.</p>
+<p>When
+using <span class="keyword">SWF32D</span> the connate water is defined as  <math><msub><mi>S</mi>
+<mrow><mi>w</mi><mi>c</mi><mi>o</mi></mrow></msub>
+<mo>=</mo><mn>1.</mn><mrow><mo>-</mo><msub><mi>S</mi>
+<mrow><mi>o</mi><mo>,</mo><mrow><mi>m</mi><mi>a</mi>
+<mi>x</mi></mrow></mrow></msub></mrow></math>.</p>
+<p>Keyword <a href="../ecl_rm/PCW32D.html#PCW32D">PCW32D</a> can be used in conjunction with <span class="keyword">SWF32D</span> to enter the water/oil capillary pressure if required.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

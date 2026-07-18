@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Basic hydrostatic equilibration"/>
+<meta name="DC.subject" content="Initial conditions, Initialization, Equilibration, Algorithm, Basic hydrostatic equilibration"/>
+<meta name="keywords" content="Initial conditions, Initialization, Equilibration, Algorithm, Basic hydrostatic equilibration"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="initial_basic_hydrostatic_equilibration"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Basic hydrostatic equilibration</title>
+</head>
+<body>
+
+
+<div class="nested0" id="initial_basic_hydrostatic_equilibration"><a name="initial_basic_hydrostatic_equilibration"><!-- --></a>
+<h1 class="topictitle1">Basic hydrostatic equilibration</h1>
+
+
+ <div>
+<p>For a reservoir containing a single phase fluid, the vertical pressure
+gradient can be determined from the fluid density. If the reservoir
+pressure is given at a datum depth, then the fluid density can be
+calculated at that depth and the pressure in the reservoir can be
+determined by marching up (and down) the reservoir in small steps,
+recalculating the density at each step.</p>
+
+<p>The algorithm is more complicated when more than one phase is present.
+Contact depths (where two phases meet) must be provided, together
+with the capillary pressure at these depths. In addition sufficient
+information must be provided to allow the densities of all phases
+to be calculated as described in <a href="initial_density_calculations.html#initial_density_calculations"> "Density calculations"</a>. Starting at the datum depth, the hydrostatic pressure for the "datum"
+phase can be calculated by marching up and down the reservoir. Pressures
+in the other phases can then be determined at the contact depths,
+and then the hydrostatic pressures can be determined throughout the
+reservoir by marching up and down again. Once the phase pressures
+are known, phase saturations can be determined at each depth so that
+the hydrostatic pressure variation is balanced by the capillary pressure
+between the phases. Further details are given in <a href="initial_calculating_the_initial_conditions.html#initial_calculating_the_initial_conditions"> "Calculating
+the initial conditions"</a>.</p>
+
+<p>When two or more phases are present, the algorithm assumes that
+water is heavier than oil which is heavier than gas. If this condition
+does not hold, then the algorithm will not work properly and the results
+will not be as expected. Failure of the condition can be a sign that
+the fluid has not been properly characterized, or, if heavy oil is
+being modeled, that the oil may in fact be heavier than water. For
+more information, see <a href="initial_heavy_oil.html#initial_heavy_oil"> "Heavy oil"</a>.</p>
+
+<p>The hydrostatic equilibration provides tables of pressure and saturation
+as a function of depth. The equilibration can be performed on a finer
+grid than that used for the simulation, in which case the resulting
+saturations are integrated over the cell volumes at the end of the
+equilibration to provide a starting point for the simulation. In general,
+the use of a fine grid equilibration will yield a more accurate fluid
+in place, but may lead to some fluid movement upon starting the simulation;
+see <a href="initial_the_quiescence_option.html#initial_the_quiescence_option"> "The quiescence
+option"</a>.</p>
+
+<p>The aim of equilibration is to set up a static initial configuration
+in which the phases present are in equilibrium and in which the inter-block
+flows are zero. Successful equilibration can be verified by running
+the simulation without wells to check that no flows occur.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

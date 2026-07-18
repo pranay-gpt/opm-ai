@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Flexible restarts from a data file"/>
+<meta name="DC.subject" content="Restarts"/>
+<meta name="keywords" content="Restarts"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="restarts_flexible_restarts_from_a_data_file"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Flexible restarts from a data file</title>
+</head>
+<body>
+
+
+<div class="nested0" id="restarts_flexible_restarts_from_a_data_file"><a name="restarts_flexible_restarts_from_a_data_file"><!-- --></a>
+<h1 class="topictitle1">Flexible restarts from a data file</h1>
+
+
+ <div>
+<p>A run can be restarted by supplying a complete data file, and taking
+the initial solution from the restart file. This method has the advantages
+of not requiring the <samp class="codeph">SAVE</samp> file, and of allowing restarts
+from older versions of ECLIPSE. It is also enables the restart to
+be run with modified data, for example the maximum number of wells
+can be increased (but not reduced). It is possible to restart a run
+with, for example, altered permeability data, but in general such
+changes are not recommended.</p>
+
+<p>To do a restart from, say, the 11th report time of run <samp class="codeph">BASE</samp>, the procedure is:</p>
+
+<ol>
+<li> Think of a new file name root - say <samp class="codeph"> R1 </samp>. </li>
+
+<li> Copy the data file <samp class="codeph">BASE.DATA </samp> into <samp class="codeph">R1.DATA</samp>. </li>
+
+<li> Edit <samp class="codeph">R1.DATA</samp> <ol type="a">
+<li> In the <span class="keyword">SOLUTION</span> section, delete all equilibration
+or enumeration keywords, and any analytic aquifer keywords. Insert
+the <span class="keyword">RESTART</span> keyword to specify the restart file
+and report number, <pre><code>RESTART
+ BASE 11 /</code></pre> </li>
+
+<li> In the <span class="keyword">SCHEDULE</span> section, unless keyword <a href="../ecl_rm/SKIPREST.html#SKIPREST"> SKIPREST</a> has been entered,
+delete the well and timestepping keywords up to and including the
+restart time at report number 11 in the example (but keep any VFP
+tables and thermal Temperature Cutback tables, as these are not passed
+over in the restart file). If keyword <span class="keyword">SKIPREST</span> is
+present, you need not delete these keywords as ECLIPSE automatically
+skips the unwanted keywords until the restart time has been reached
+in the <span class="keyword">SCHEDULE</span> data. Modify the schedule data
+after report 11 as required. </li>
+
+</ol>
+ </li>
+
+<li> Submit the run with <samp class="codeph">R1</samp> as the root filename. </li>
+
+</ol>
+
+<p>The restart run is slower to initialize than a restart from a <samp class="codeph">SAVE</samp> file, because the geometry data has to be processed
+to calculate the pore volumes and transmissibilities for example.</p>
+
+<p>It is possible also to do a flexible restart from time-dependent
+restart information stored in a <samp class="codeph">SAVE</samp> file, even though
+the <samp class="codeph">SAVE</samp> file has not been used to provide the non-recurrent
+data as it would in a fast restart. In this case the <span class="keyword">RESTART</span> keyword needs up to two extra items of data, for example:</p>
+
+<pre><code>RESTART
+ BASE 11 SAVE UNFORMATTED /
+</code></pre>
+<p>This keyword requests that the time dependent data for the restart
+is taken from the unformatted <samp class="codeph">SAVE</samp> file generated
+by the base run.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="WEFAC"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="WEFAC"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>WEFAC</title>
+</head>
+<body>
+
+<div class="nested0" id="WEFAC"><a name="WEFAC"><!-- --></a><h1 class="keyword">WEFAC</h1>
+
+ <div>
+<div class="tablenoborder"><a name="wefac.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="wefac.tab.0005" class="flagtable" frame="border" border="1" rules="all">  <thead align="left"><tr><th valign="top" id="d2868e35">x</th>
+<th valign="top" id="d2868e37">ECLIPSE 100</th>
+</tr>
+<tr><th valign="top" id="d2868e40">x</th>
+<th valign="top" id="d2868e42">ECLIPSE 300</th>
+</tr>
+</thead>
+<tbody><tr><td valign="top" headers="d2868e35 d2868e40 ">&nbsp;</td>
+ <td valign="top" headers="d2868e37 d2868e42 ">RUNSPEC</td>
+</tr>
+<tr><td valign="top" headers="d2868e35 d2868e40 ">&nbsp;</td>
+ <td valign="top" headers="d2868e37 d2868e42 ">GRID</td>
+</tr>
+<tr><td valign="top" headers="d2868e35 d2868e40 ">&nbsp;</td>
+ <td valign="top" headers="d2868e37 d2868e42 ">EDIT</td>
+</tr>
+<tr><td valign="top" headers="d2868e35 d2868e40 ">&nbsp;</td>
+ <td valign="top" headers="d2868e37 d2868e42 ">PROPS</td>
+</tr>
+<tr><td valign="top" headers="d2868e35 d2868e40 ">&nbsp;</td>
+ <td valign="top" headers="d2868e37 d2868e42 ">REGIONS</td>
+</tr>
+<tr><td valign="top" headers="d2868e35 d2868e40 ">&nbsp;</td>
+ <td valign="top" headers="d2868e37 d2868e42 ">SOLUTION</td>
+</tr>
+<tr><td valign="top" headers="d2868e35 d2868e40 ">&nbsp;</td>
+ <td valign="top" headers="d2868e37 d2868e42 ">SUMMARY</td>
+</tr>
+<tr><td valign="top" headers="d2868e35 d2868e40 ">x</td>
+<td valign="top" headers="d2868e37 d2868e42 ">SCHEDULE</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+<ol><li>Well name, well name template, well list or well list template <p>A template enclosed in quotes can be used to refer to multiple wells
+or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">"Well name and well
+list template matching"</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names should be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+                  </li>
+<li>Efficiency factor for the well(s)  <p>This is the fractional time
+for which the well is operational. For example, if the well is 'down'
+for 10 percent of the time, its efficiency factor will be 0.9.</p>
+           <p>The efficiency factor must be greater than zero.</p>
+           <p>DEFAULT: 1.0</p>
+         </li>
+<li> <strong>Extended Network option</strong> Should a well's efficiency factor
+be included when calculating the branch flows and pressure losses
+in the extended network option? (See <a href="../ecl_td/extended_Well_and_group_efficiency_factors.html#extended_well_and_group_efficiency_factors">"Well and group
+efficiency factors"</a> in the <cite>ECLIPSE Technical Description</cite>).   
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  <tbody><tr><td valign="top"> <samp class="codeph">YES</samp> </td>
+<td valign="top"> The extended network branch pressure losses is calculated
+using the well's time-averaged flow rate (that is the well rate multiplied
+by its efficiency factor).</td>
+</tr>
+<tr><td valign="top"> <samp class="codeph">NO</samp> </td>
+<td valign="top"> The extended network branch pressure losses is calculated
+using the well's maximum flow (that is the well rate <strong>not</strong> multiplied
+by its efficiency factor).</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This flag applies only to the extended network model (constructed
+with keywords <a href="BRANPROP.html#BRANPROP"> BRANPROP</a> and <a href="NODEPROP.html#NODEPROP"> NODEPROP</a>). If the Standard Network Model is being run (<a href="GRUPNET.html#GRUPNET"> GRUPNET</a>, <a href="GNETINJE.html#GNETINJE"> GNETINJE</a>), the time-averaged well flows are always used to calculate
+the branch pressure losses.</p>
+           <p>DEFAULT: <samp class="codeph">YES</samp> </p>
+</li>
+</ol>
+<div class="caution"><span class="cautiontitle">CAUTION:</span> Do not select the <samp class="codeph">NO</samp> option
+in item 3 if group rate constraints are to be handled by automatic
+chokes (if <a href="NODEPROP.html#NODEPROP"> NODEPROP</a> item 3 is <samp class="codeph">YES</samp> for any network node). The
+constraints are then applied to the flow in the network (the sum of
+the wells' maximum flow rates), which are inconsistent with the group
+flows (which are always the sum of the subordinate wells' time averaged
+flows).</div>
+<p>End the data record with a slash (/).</p>
+<p>End the set of records with a blank record, containing just a slash.</p>
+<p>The efficiency factors for wells not specified with this keyword
+are defaulted to 1.0.</p>
+
+<div class="section" id="wefac_treatment_of_downtime"><a name="wefac_treatment_of_downtime"><!-- --></a><h4 class="sectiontitle">Treatment of downtime</h4>
+<p>The implementation of efficiency factors is explained in the 
+ <a href="../ecl_td/wellmode_Efficiency_factors.html#wellmode_efficiency_factors">"Efficiency factors"</a> 
+section in the <cite>ECLIPSE Technical Description</cite>.
+Each well is solved at its full flowing conditions, and the well
+rates and pressures given in the well reports describe the state of
+the flowing well. However, the flow rates are multiplied by the well’s
+efficiency factor when:</p>
+
+<ul>
+<li>The well rates are summed to give the group flow rates,  </li>
+
+<li>The well rates are multiplied by the timestep and added to the cumulative flows,</li>
+
+<li>The connection flows are applied as source/sink terms in the reservoir material balance equations.</li>
+
+</ul>
+
+<p>Therefore bottom hole pressures and top hole
+pressures reflect  the actual operating conditions of flowing wells
+while reservoir material  balance equations take into account only
+effective volumes of fluids injected or produced. This essentially
+treats the wells as going down individually for random short intervals
+within each timestep, rather than all going down simultaneously. (If
+all the wells in a group are brought down together for regular maintenance,
+then the efficiency factor should be applied to the group with keyword <a href="GEFAC.html#GEFAC"> GEFAC</a>, currently
+available in ECLIPSE 100.)  The group and field flows represent the
+average flow rates over the period. For example, if the efficiency
+factors are all 0.5, the well’s individual flow rates sum to twice
+the group rate, but only half of them are flowing at any given instant
+on average.</p>
+
+<p>If a group flow target is applied (for example with <a href="GCONPROD.html#GCONPROD"> GCONPROD</a>), this is interpreted as the target average flow rate of the group
+with the wells flowing intermittently according to their efficiency
+factors. The effect of the wells’ downtime is to make the wells flow
+proportionately more while they are operating. For example, consider
+a group with a target oil rate of 10,000 stb/day to be divided equally
+between its 10 wells. If all wells had zero downtime, each would produce
+1,000 stb/day. However, if they all have an efficiency factor of 0.8,
+each well must produce 1,250 stb/day while it is flowing to make up
+the group’s target rate, provided that the wells’ flowing conditions
+at this rate do not violate any of their operating limits.</p>
+<p>ECLIPSE 100</p>
+<p>If wells
+are receiving gas lift, their lift gas injection rates are multiplied
+by their efficiency factors when summing the group lift gas supply
+rates. The group lift gas supply rates are needed if there are restrictions
+on the total lift gas supply (that is, if using the <a href="GLIFTLIM.html#GLIFTLIM"> GLIFTLIM</a> keyword or the ECLIPSE 100 gas lift optimization facility).</p>
+<p>When the standard network option is in use, the network pressure
+losses are calculated at the group average flow rates (that is the
+sum of the well rates multiplied by their efficiency factors). However,
+the extended network model, in which the network structure can be
+different from the group hierarchy, offers more flexibility (see <a href="../ecl_td/extended_Well_and_group_efficiency_factors.html#extended_well_and_group_efficiency_factors">"Well and group
+efficiency factors"</a> in the <cite>ECLIPSE Technical Description</cite>). If <span class="keyword">WEFAC</span> keyword item 3 is set to <samp class="codeph">NO</samp> for each well, the pressure losses in the extended network are calculated
+using the maximum flows instead (that is the sum of the well rates <strong>not</strong> multiplied by their efficiency factors). The branch flows
+are then of course be different from the reported flows of the corresponding
+groups, which are their time-averaged rates. 		 </p>
+<p>An efficiency
+factor will still be applied to a well whose status is currently set
+to <samp class="codeph">STOP</samp>. This includes flow across the well bore
+if the crossflow model is active. As the well efficiency factor assumes
+that the well is solved at operating conditions and that there is
+zero flow across the well during downtime, <span class="keyword">WEFAC</span> is inappropriate for modeling downtime of wells with crossflow.
+To model crossflow accurately during downtime it is advised that the
+well's status is defined explicitly by manually opening and shutting
+the well for the appropriate time rather than using <span class="keyword">WEFAC</span>.</p>
+</div>
+<div class="section" id="wefac_example"><a name="wefac_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>WEFAC
+ 'P*'    0.9 /
+ PROD2   0.8 /
+/</code></pre></div>
+</div>
+</div>
+
+</body>
+</html>

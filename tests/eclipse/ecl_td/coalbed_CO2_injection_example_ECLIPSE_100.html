@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="CO2 injection example ECLIPSE 100"/>
+<meta name="DC.subject" content="Unconventionals, Coal bed methane, Coal bed methane ECLIPSE 100 examples, ECLIPSE 100 example, CO2 injection"/>
+<meta name="keywords" content="Unconventionals, Coal bed methane, Coal bed methane ECLIPSE 100 examples, ECLIPSE 100 example, CO2 injection"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="coalbed_co2_injection_example_eclipse_100"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>CO2 injection example ECLIPSE 100</title>
+</head>
+<body>
+
+
+<div class="nested0" id="coalbed_co2_injection_example_eclipse_100"><a name="coalbed_co2_injection_example_eclipse_100"><!-- --></a>
+<h1 class="topictitle1">CO<sub>2</sub> injection example ECLIPSE 100</h1>
+
+
+ <div>
+<div class="section" id="coalbed_runspec1"><a name="coalbed_runspec1"><!-- --></a><h4 class="sectiontitle">RUNSPEC</h4><p>ECLIPSE 100 CO<sub>2</sub> injection example
+in the <span class="keyword">RUNSPEC</span> section:</p>
+<pre><code>RUNSPEC    ======================================
+TITLE
+                  CO2 Injection Example
+DIMENS
+ 8    8    2  /
+DUALPORO
+WATER
+GAS
+SOLVENT
+COAL
+FIELD
+EQLDIMS
+ 1  100    2    1   20 /
+TABDIMS
+ 1    1   20   20    2    5 /
+
+ 2    1    0    0    0    1 /
+WELLDIMS
+ 2   13    1    2 /
+NUPCOL
+ 4 /
+START
+ 26 'JAN' 1983  /
+NSTACK
+ 20 /</code></pre></div>
+
+<div class="section" id="coalbed_grid1"><a name="coalbed_grid1"><!-- --></a><h4 class="sectiontitle">GRID</h4><p>ECLIPSE 100 CO<sub>2</sub> injection example in the <span class="keyword">GRID</span> section:</p>
+<pre><code>GRID      ============================================================
+EQUALS
+ 'DX'       75    /    PROPERTIES COMMON TO MATRIX AND FRACTURES
+ 'DY'       75    /
+ 'DIFFMMF'  1.0   /
+ 'DZ'       30    /
+ 'PERMZ'     0    /
+ 'PORO'   0.005      1  8  1  8  2  2  /  FRACTURE PROPERTIES
+ 'PERMX' 500000    /
+ 'PERMY' 500000    /
+ 'NTG'  0.0  3 3 3 3   1 1 /
+ 'NTG'  1.0  3 3 3 3   2 2 /
+-- 10 per cent dip in the X - direction.
+ 'TOPS'   4000     1 1   1 8  1 2   /
+ 'TOPS'   4007.5   2 2   1 8  1 2   /
+ 'TOPS'   4015     3 3   1 8  1 2   /
+ 'TOPS'   4022.5   4 4   1 8  1 2   /
+ 'TOPS'   4030     5 5   1 8  1 2   /
+ 'TOPS'   4037.5   6 6   1 8  1 2   /
+ 'TOPS'   4045     7 7   1 8  1 2   /
+ 'TOPS'   4052.5   8 8   1 8  1 2   /
+/
+SIGMA
+ 0.08   /</code></pre></div>
+
+<div class="section" id="coalbed_props1"><a name="coalbed_props1"><!-- --></a><h4 class="sectiontitle">PROPS</h4><p>ECLIPSE 100 CO<sub>2</sub> injection example in the <span class="keyword">PROPS</span> section:</p>
+<pre><code>PROPS   ============================================================
+DIFFCOAL
+ 20.0 1.0 /
+
+LANGMUIR
+   0.0   0.0
+  257.   0.092
+  528.   0.14
+ 1000.   0.20
+/
+
+--
+-- Coal quality improves in the Y direction
+--
+EQUALS
+ 'MLANG'     5   1 8  1 1  1 1 /
+ 'MLANG'     7   1 8  2 2  1 1 /
+ 'MLANG'     9   1 8  3 3  1 1 /
+ 'MLANG'    12   1 8  4 4  1 1 /
+ 'MLANG'    15   1 8  5 5  1 1 /
+ 'MLANG'    20   1 8  6 6  1 1 /
+ 'MLANG'    30   1 8  7 7  1 1 /
+ 'MLANG'    35   1 8  8 8  1 1 /
+/
+
+--
+-- The same trend in the CO2 isotherm.
+--
+COPY
+ 'MLANG' 'MLANGSLV'  /
+/
+
+MULTIPLY
+ 'MLANGSLV'  1.4 /
+/
+
+LANGSOLV
+ 0.0        0.080
+ 279.       0.092
+ 661.       0.227
+1000.       0.260
+/
+
+COALADS
+ 0.0  0.0   1.0
+ 0.5  0.5   0.2 
+ 1.0  1.0   0.0
+/
+
+--
+-- Connate gas saturation of 10 per cent
+--
+SWFN
+  0.0    0.0   0.0
+  0.2    0.0   0.0
+  0.9    1.0   0.0
+/
+
+SGFN
+  0.0     0.0   0.0
+  0.1     0.0   0.0
+  1.0     1.0   0.0
+/
+
+SSFN
+ 0     0  0 
+ 0.01  0  0 
+ 1     1  1 
+/
+
+PVTW       
+  .0000000   1.00000    3.03E-06    .50000    0.00E-01 /
+
+--   PGAS   BGAS   VISGAS
+PVDG
+      400    5.9   0.013
+      800    2.95  0.0135
+     1200    1.96  0.014
+     1600    1.47  0.0145
+     2000    1.18  0.015
+     2400    0.98  0.0155
+     2800    0.84  0.016
+     3200    0.74  0.0165
+     3600    0.65  0.017
+     4000    0.59  0.0175
+     4400    0.54  0.018
+     4800    0.49  0.0185
+     5200    0.45  0.019
+     5600    0.42  0.0195 /
+
+--   PGAS   BGAS   VISGAS
+PVDS
+      400    5.9   0.013
+      800    2.95  0.0135
+     1200    1.96  0.014
+     1600    1.47  0.0145
+     2000    1.18  0.015
+     2400    0.98  0.0155
+     2800    0.84  0.016
+     3200    0.74  0.0165
+     3600    0.65  0.017
+     4000    0.59  0.0175
+     4400    0.54  0.018
+     4800    0.49  0.0185
+     5200    0.45  0.019
+     5600    0.42  0.0195 /
+
+ROCK
+ 4000.00        .30E-05 /
+
+DENSITY
+ 52.0000  64.0000   .04400 /
+
+SDENSITY
+ 0.3   /
+
+RPTPROPS 
+ 'SOF2' 'SWFN' 'SGFN' 'PVTO'
+ 'PVTW' 'PVTG' 'DENSITY'  'ROCK'  'DIFFC'
+ 'LANGMUIR'  / 
+
+REGIONS
+
+EQUALS
+ 'FIPNUM' 1  1 8 1 8 1 1 / 
+ 'FIPNUM' 2  1 8 1 8 2 2/  
+/</code></pre></div>
+
+<div class="section" id="coalbed_solution1"><a name="coalbed_solution1"><!-- --></a><h4 class="sectiontitle">SOLUTION</h4><p>ECLIPSE
+100 CO<sub>2</sub> injection example in the <span class="keyword">SOLUTION</span> section:</p>
+<pre><code>SOLUTION  ==========================================================
+EQUIL
+ 4015 528 3000 0 /
+--
+-- Initial 40 per cent of the fracture gas is CO2
+--
+SOLVFRAC
+ 128*0.4 /
+RPTSOL
+ 'PRES'  'SWAT'  'SGAS'  'FIP=2' 'EQUIL'  'SSOL'
+ 'FIPSOL' 'GASCONC'  /</code></pre></div>
+
+<div class="section" id="coalbed_summary1"><a name="coalbed_summary1"><!-- --></a><h4 class="sectiontitle">SUMMARY</h4><p>ECLIPSE 100 CO<sub>2</sub> injection example
+in the <span class="keyword">SUMMARY</span> section:</p>
+<pre><code>SUMMARY    ==========================================================
+FPR
+FWGR
+FGPR
+FWPR
+FNPR
+FNIR
+FCGC
+FCSC
+RGIP
+/
+RCGC
+ /
+RCSC
+ /
+RNIP
+ /
+BCGC
+ 1 1 1 /
+/
+BCSC
+ 1 1 1 /
+/
+WBHP
+/
+WWGR
+/
+WGPR
+/
+WNPR
+/
+RUNSUM
+SEPARATE</code></pre></div>
+
+<div class="section" id="coalbed_schedule1"><a name="coalbed_schedule1"><!-- --></a><h4 class="sectiontitle">SCHEDULE</h4><p>ECLIPSE 100 CO<sub>2</sub> injection example
+in the <span class="keyword">SCHEDULE</span> section:</p>
+<pre><code>SCHEDULE  ==========================================================
+RPTSCHED                                         
+ 'PRES'  'SWAT'  'SGAS'  'RESTART=2' 'FIP=2'
+ 'WELLS=2' 'CPU=2' 'NEWTON=2' 'SSOL'
+ 'FIPSOL' 'GASCONC'  /
+--
+-- Initial period with no production
+--
+TSTEP
+ 1 9 90 /
+WELSPECS
+'P'  'G'   8  8  4000  'GAS'  /
+'I'  'G'   1  1  4000  'GAS'  /
+/
+COMPDAT                                         
+'P'    2*   2   2 'OPEN'   0  .000000  .5000  .00000   .0000 0.000E-01 /
+'I'    2*   2   2 'OPEN'   0  .000000  .5000  .00000   .0000 0.000E-01 /
+/
+WCONPROD                                         
+'P'  'OPEN'  'WRAT'     1*         1000.0      100000.00000
+     1*          1*      50.000  0.000000   1*  0.00000000/
+/
+WCONINJE
+ 'I'  'GAS'  'SHUT'  'RATE'  1000.0  /
+/
+--
+-- Initial production
+--
+NEXTSTEP
+ 0.1 /
+TSTEP
+ 1.0 9.0 90.0 900.0 1000.0 
+/
+--
+-- Inject Co2
+--
+WCONINJE
+ 'I'  'GAS'  'OPEN'  'RATE'  100000.0  /
+/
+
+WSOLVENT
+ 'I' 1.0 /
+/
+NEXTSTEP
+ 0.1 /
+TSTEP
+ 1.0 9.0 90.0 900.00 3*1000
+/
+--
+-- Blow down
+--
+WCONPROD                                         
+'P'  'OPEN'  'GRAT'     1*         1000.0      100000.00000
+     1*          1*      50.000  0.000000   1*  0.00000000/
+/
+WCONINJE
+ 'I'  'GAS'  'SHUT'  'RATE'  100000.0  /
+/
+NEXTSTEP
+ 0.1 /
+TSTEP
+ 1.0 9.0 90.0 900.00 3*1000
+/
+END</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

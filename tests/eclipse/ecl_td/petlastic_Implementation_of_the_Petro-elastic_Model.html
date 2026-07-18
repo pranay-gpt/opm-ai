@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Implementation of the petro-elastic model"/>
+<meta name="DC.subject" content="Petro-elastic model inputs, Petro-elastic model outputs"/>
+<meta name="keywords" content="Petro-elastic model inputs, Petro-elastic model outputs"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="petlastic_implementation_of_the_petro-elastic_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Implementation of the petro-elastic model</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="petlastic_implementation_of_the_petro-elastic_model"><a name="petlastic_implementation_of_the_petro-elastic_model"><!-- --></a>
+<h1 class="topictitle1">Implementation of the petro-elastic model</h1>
+
+
+ <div>
+<div class="section" id="petlastic_inputs"><a name="petlastic_inputs"><!-- --></a><h4 class="sectiontitle">Inputs</h4> <p>The following
+values, which are not normally present in the simulation model, are
+required to specify the Petro-elastic Model:</p>
+<p>These are specified
+as constants on each petro-elastic region</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mi>S</mi></math> </td>
+
+<td valign="top">the salinity of the water in equation  <a href="petlastic_Bulk_modulus_of_water.html#petlastic.XID-00000134">854.2</a> </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>T</mi></math> </td>
+
+<td valign="top">the temperature in equation  <a href="petlastic_Bulk_modulus_of_oil.html#petlastic.XID-0000011a">853.2</a>,  equation <a href="petlastic_Bulk_modulus_of_water.html#petlastic.XID-00000134">854.2</a>,  and equation <a href="petlastic_Bulk_modulus_of_gas.html#petlastic.XID-00000151">855.1</a>   (this may be available elsewhere in the simulation model but the
+petro-elastic temperature is specified separately) </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>ρ</mi>
+<mrow><mi>m</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>r</mi><mi>a</mi><mi>l</mi><mi>s</mi></mrow></msub>
+</math> </td>
+
+<td valign="top">the effective density of the minerals in equation <a href="petlastic_Level_2__Effective_bulk_shear_modulus_and_density.html#petlastic.XID-00000089">843.3</a>      </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>C</mi>
+<mn>1</mn></msub></math> </td>
+
+<td valign="top">the first order coefficient of effective porosity in the calculation
+of the effective bulk modulus of the minerals in equation <a href="petlastic_Effective_bulk_modulus_of_the_minerals.html#petlastic.XID-000000db">848.1</a>     </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>C</mi>
+<mn>0</mn></msub></math> </td>
+
+<td valign="top"> the zeroth order coefficient of effective porosity in the
+calculation of the effective bulk modulus of the minerals in equation <a href="petlastic_Effective_bulk_modulus_of_the_minerals.html#petlastic.XID-000000db">848.1</a>   </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>C</mi>
+<mi>K</mi></msub></math> </td>
+
+<td valign="top"> is the coefficient of the  <math><msub>
+<mi>K</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>r</mi><mi>a</mi><mi>l</mi><mi>s</mi>
+</mrow></msub></math>  term in the calculation of  <math><msub><mi>K</mi>
+<mrow><mi>f</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>e</mi></mrow></msub></math>  in equation <a href="petlastic_Effective_bulk_modulus_of_the_frame.html#petlastic.XID-000000e9">850.1</a>              </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>C</mi>
+<mi>G</mi></msub></math> </td>
+
+<td valign="top">the coefficient of the  <math><msub>
+<mi>G</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>r</mi><mi>a</mi><mi>l</mi><mi>s</mi>
+</mrow></msub></math>  term in the calculation of  <math><msub><mi>G</mi>
+<mrow><mi>f</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>e</mi></mrow></msub></math>  in equation <a href="petlastic_Effective_shear_modulus_of_the_frame.html#petlastic.XID-000000fa">851.1</a>                      </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>G</mi>
+<mrow><mi>m</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>r</mi><mi>a</mi><mi>l</mi><mi>s</mi></mrow></msub>
+</math> </td>
+
+<td valign="top"> the effective shear modulus of the minerals in equation <a href="petlastic_Effective_shear_modulus_of_the_frame.html#petlastic.XID-000000fa">851.1</a>   </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>α</mi>
+</math> </td>
+
+<td valign="top">the exponent in the calculation of the effective bulk/shear
+modulus of the dry rock frame in equation <a href="petlastic_Effective_bulk_modulus_of_the_frame.html#petlastic.XID-000000e9">850.1</a>  and <a href="petlastic_Effective_shear_modulus_of_the_frame.html#petlastic.XID-000000fa">851.1</a>          </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>e</mi></math> </td>
+
+<td valign="top">the "patchy saturation" exponent in equation <a href="petlastic_Effective_bulk_modulus_of_the_fluid.html#petlastic.XID-000000cc">847.2</a>  (only used if Wood's Law with Brie et al is requested).
+ Switch to select between Generalized Wood's Law and Wood's
+Law with Brie et al in the calculation of the effective bulk modulus
+of the fluid     </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>C</mi></mrow><mrow><mi>K</mi><mo>,</mo><mi>i</mi>
+</mrow></msub><mrow><mo>(</mo><mi>P</mi><mo>)</mo>
+</mrow></mrow></math> </td>
+
+<td valign="top">the tabular functions of pressure in the calculation of the
+effective bulk modulus of the dry rock frame in equation <a href="petlastic_Effective_bulk_modulus_of_the_frame.html#petlastic.XID-000000e9">850.1</a>        </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msub><mrow>
+<mi>C</mi></mrow><mrow><mi>G</mi><mo>,</mo><mi>i</mi>
+</mrow></msub><mrow><mo>(</mo><mi>P</mi><mo>)</mo>
+</mrow></mrow></math> </td>
+
+<td valign="top">the tabular functions of pressure in the calculation of the
+effective shear modulus of the dry rock frame in equation <a href="petlastic_Effective_shear_modulus_of_the_frame.html#petlastic.XID-000000fa">851.1</a>      </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ </div>
+
+<div class="section" id="petlastic_outputs"><a name="petlastic_outputs"><!-- --></a><h4 class="sectiontitle">Outputs</h4>  <p>The output
+from the Petro-elastic Model depends on which simulated seismic-derived
+properties are requested (from the list of P-wave impedance, S-wave
+impedance and Poisson's ratio). When a simulated seismic-derived
+property is requested, it is output as a value on each active grid
+cell at each report time.</p>
+ <p>One use of these seismic-derived
+quantities is in history-matching using seismic data. In this application,
+gradients of simulated seismic-derived quantities with respect to
+uncertain reservoir model parameters may be required. In addition
+to simulated seismic-derived quantities, the Petro-elastic Model can
+calculate and output these gradients. For these calculations to be
+performed, you must specify a Petro-elastic Model (using the keywords
+described in <a href="petlastic_summary_of_keywords.html#petlastic_summary_of_keywords"> "Summary
+of keywords"</a>) and request gradients. For further information
+on requesting gradients, see <a href="gradientintro_Gradient.html#gradientintro_gradient_option"> "Gradient
+Option"</a>.</p>
+ </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

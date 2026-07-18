@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Solution of the linear equations"/>
+<meta name="DC.subject" content="Grid and reservoir modeling, Dual porosity, Linear equation solution"/>
+<meta name="keywords" content="Grid and reservoir modeling, Dual porosity, Linear equation solution"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="dualporo_solution_of_the_linear_equations"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Solution of the linear equations</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="dualporo_solution_of_the_linear_equations"><a name="dualporo_solution_of_the_linear_equations"><!-- --></a>
+<h1 class="topictitle1">Solution of the linear equations</h1>
+
+
+ <div>
+<p>The linear equations associated with dual porosity/permeability
+simulations can be written in the form</p>
+
+<p> <math><mrow><mi>A</mi><mi>x</mi></mrow><mo>+</mo><mrow><mi>U</mi>
+<mi>y</mi></mrow><mo>=</mo><msub><mi>R</mi><mi>m</mi>
+</msub></math>          </p>
+
+<p> <math><mrow><mi>L</mi><mi>x</mi></mrow><mo>+</mo><mrow><mi>B</mi>
+<mi>y</mi></mrow><mo>=</mo><msub><mi>R</mi><mi>f</mi>
+</msub></math>          </p>
+
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mi>A</mi></math> </td>
+
+<td valign="top">  is the usual banded matrix for the matrix cells</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>B</mi></math> </td>
+
+<td valign="top">  is the banded matrix for the fracture cells</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<msub><mrow><mi>R</mi></mrow><mrow><mi>m</mi></mrow>
+</msub></mrow></math> </td>
+
+<td valign="top"> is the matrix residual</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub>
+<mi>R</mi><mi>f</mi></msub></math> </td>
+
+<td valign="top">  is the fracture residual</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>L</mi></math>  and  <math><mi>U</mi></math> </td>
+
+<td valign="top">  are diagonal matrices coupling the fracture and matrix systems</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mi>x</mi></math>  and  <math><mi>y</mi></math> </td>
+
+<td valign="top">  are the solutions (pressure and saturation changes) in the
+matrix and fracture cells respectively.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>In the dual-porosity, single-permeability case, there is no direct
+communication between neighboring matrix cells and the matrix A is
+diagonal. This greatly enhances the efficiency of the solution procedure
+used by ECLIPSE because the equations can now be simplified to the
+form</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.0450"/>
+ <math><mrow><mrow>
+<mo>(</mo><mi>B</mi><mrow><mo>-</mo><mi>L</mi><mo>⋅</mo><mrow><msup><mrow><mi>A</mi></mrow><mrow><mo>-</mo><mn>1</mn></mrow></msup><mi>U</mi></mrow>
+</mrow><mo>)</mo><mi>y</mi></mrow><mo>=</mo><msub>
+<mrow><mi>R</mi></mrow><mrow><mi>f</mi></mrow></msub>
+<mrow><mo>-</mo><mi>L</mi><mo>⋅</mo><mrow><msup>
+<mrow><mi>A</mi></mrow><mrow><mo>-</mo><mn>1</mn>
+</mrow></msup><msub><mrow><mi>R</mi></mrow><mrow><mi>m</mi></mrow></msub></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 89.1]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.0453"/>
+ <math><mi>x</mi>
+<mo>=</mo><mrow><msup><mi>A</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup><mo>(</mo><msub><mi>R</mi><mi>m</mi></msub><mrow><mo>-</mo><mrow><mi>U</mi><mi>y</mi></mrow></mrow><mo>)</mo></mrow></math> 
+</td><td align="right">[Eq. 89.2]
+              </td></tr></tbody></table>
+<p>where  <math><msup>
+<mi>A</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup>
+</math>  is the inverse of A.</p>
+
+<p>Because  <math>
+<mrow><mi>L</mi><mo>⋅</mo><mrow><msup><mrow><mi>A</mi></mrow><mrow><mo>-</mo><mn>1</mn></mrow></msup>
+<mi>U</mi></mrow></mrow></math> is diagonal it does not
+alter the banded structure of  <math><mi>B</mi></math>. The problem size is effectively halved because the equation for
+y only involves fracture cells. The equations are solved sequentially,
+first for the fracture solution, y, and then for the matrix solution,
+x. In the more expensive dual porosity/dual permeability case above
+simplification does not apply and the equations are solved simultaneously.</p>
+
+<p>Data for single porosity regions in a dual porosity run is copied
+internally to the fracture cells, so that the above simplification
+still applies.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>In dual permeability simulations, the linear
+equations can be solved more efficiently by pairing together the corresponding
+matrix and fracture cells. For a three-phase run, the diagonal entries
+of the Jacobian matrix are then  <math><mn>6</mn><mo>×</mo>
+<mn>6</mn></math>  matrices of the form.</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.045f"/>
+ <math><mrow><mi>D</mi><mo>=</mo><mrow><mo>[</mo><mtable><mtr><mtd>
+<msub><mrow><mi>D</mi></mrow><mrow><mi>m</mi></mrow>
+</msub></mtd><mtd><mi>U</mi></mtd></mtr><mtr><mtd>
+<mi>L</mi></mtd><mtd><msub><mrow><mi>D</mi></mrow>
+<mrow><mi>f</mi></mrow></msub></mtd></mtr></mtable>
+<mo>]</mo></mrow></mrow></math> 
+</td><td align="right">[Eq. 89.3]
+              </td></tr></tbody></table>
+<p>where  <math><msub>
+<mi>D</mi><mi>m</mi></msub></math>  and  <math><msub><mi>D</mi>
+<mi>f</mi></msub></math>  are the diagonal terms of the matrix
+and fracture Jacobian matrices. To account for the extra dimension,
+a fourth nesting has been used in the Nested Factorization preconditioner
+(see <a href="sollineq_Solution_of_the_Linear_Equations.html#sollineq_solution_of_the_linear_equations"> "Solution of the linear equations"</a>). Using the notation of
+that chapter, an approximation, B, is constructed to the full Jacobian
+matrix.</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.0467"/>
+ <math><mrow><mi>A</mi><mo>=</mo><mi>D</mi><mo>+</mo><mi>L</mi><mn>1</mn><mo>+</mo><mrow><mi>U</mi><mn>1</mn></mrow>
+<mo>+</mo><mi>L</mi><mn>2</mn><mo>+</mo><mrow><mi>U</mi><mn>2</mn></mrow><mo>+</mo><mi>L</mi><mn>3</mn><mo>+</mo><mrow><mi>U</mi><mn>3</mn></mrow>
+</mrow></math> 
+</td><td align="right">[Eq. 89.4]
+              </td></tr></tbody></table>
+<p>where the band terms  <math><mrow><mi>L</mi>
+<mn>1</mn></mrow></math>  and  <math><mrow><mi>U</mi>
+<mn>1</mn></mrow></math>  and so on represent flows between
+matrix or fracture cells. The following nested sequence of factorizations
+is used</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="dualporo.equ.046d"/>
+ <math><mrow><mtable>
+<mtr><mtd><mi>B</mi><mo>⁢</mo><mo>=</mo><mtext> </mtext>
+<mrow><mo>(</mo><mi>P</mi><mo>⁢</mo><mo>+</mo>
+<mtext> </mtext><mi>L</mi><mn>3</mn><mo>)</mo><msup>
+<mrow><mi>P</mi></mrow><mrow><mo>−</mo><mn>1</mn>
+</mrow></msup><mrow><mo>(</mo><mi>P</mi><mo>⁢</mo>
+<mo>+</mo><mtext> </mtext><mi>U</mi><mn>3</mn><mo>)</mo></mrow></mrow></mtd></mtr><mtr><mtd><mi>P</mi>
+<mo>⁢</mo><mo>=</mo><mtext> </mtext><mrow><mo>(</mo>
+<mi>T</mi><mo>⁢</mo><mo>+</mo><mtext> </mtext><mi>L</mi><mn>2</mn><mo>)</mo><msup><mrow><mi>T</mi>
+</mrow><mrow><mo>−</mo><mn>1</mn></mrow></msup>
+<mrow><mo>(</mo><mi>T</mi><mo>⁢</mo><mo>+</mo>
+<mtext> </mtext><mi>U</mi><mn>2</mn><mo>)</mo></mrow>
+</mrow></mtd></mtr><mtr><mtd><mi>T</mi><mo>⁢</mo>
+<mo>=</mo><mtext> </mtext><mrow><mo>(</mo><mi>G</mi>
+<mo>⁢</mo><mo>+</mo><mtext> </mtext><mi>L</mi><mn>1</mn><mo>)</mo><msup><mrow><mi>G</mi></mrow><mrow>
+<mo>−</mo><mn>1</mn></mrow></msup><mrow><mo>(</mo><mi>G</mi><mo>⁢</mo><mo>+</mo><mtext> </mtext>
+<mi>U</mi><mn>1</mn><mo>)</mo></mrow></mrow></mtd>
+</mtr><mtr><mtd><mi>G</mi><mo>⁢</mo><mo>=</mo>
+<mtext> </mtext><mrow><mo>(</mo><mi>Γ</mi><mo>⁢</mo><mo>+</mo><mtext> </mtext><mi>L</mi><mo>)</mo><msup><mrow><mi>Γ</mi></mrow><mrow><mo>−</mo><mn>1</mn>
+</mrow></msup><mrow><mo>(</mo><mi>Γ</mi><mo>+</mo><mtext> </mtext><mi>U</mi><mo>)</mo></mrow></mrow></mtd></mtr></mtable></mrow></math> 
+</td><td align="right">[Eq. 89.5]
+              </td></tr></tbody></table>
+<p>where  <math><mi>Γ</mi></math>  is a diagonal matrix (whose elements are
+all  <math><mn>3</mn>
+<mo>×</mo><mn>3</mn></math>  matrices in the three-phase
+case), and  <math><mi>G</mi></math>  has the same structure as  <math><mi>D</mi></math>.</p>
+
+<p>ECLIPSE 100 </p>
+
+<p>If <a href="../ecl_rm/OPTIONS.html#options.60">item 60</a> of the <span class="keyword">OPTIONS</span> keyword is set greater than zero, the less efficient
+dual permeability solver for pre-97A versions of ECLIPSE is restored.
+If you encounter problems with your simulation run you may also wish
+to use this option.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

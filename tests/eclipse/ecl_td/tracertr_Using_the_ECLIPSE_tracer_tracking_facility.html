@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Using the ECLIPSE tracer tracking facility"/>
+<meta name="DC.subject" content="Tracer tracking, Using"/>
+<meta name="keywords" content="Tracer tracking, Using"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="tracertr_using_the_eclipse_tracer_tracking_facility"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Using the ECLIPSE tracer tracking facility</title>
+</head>
+<body>
+
+
+<div class="nested0" id="tracertr_using_the_eclipse_tracer_tracking_facility"><a name="tracertr_using_the_eclipse_tracer_tracking_facility"><!-- --></a>
+<h1 class="topictitle1">Using the ECLIPSE tracer tracking facility</h1>
+
+
+ <div>
+<p>ECLIPSE 100</p>
+
+<p>The tracer tracking facility in ECLIPSE 100
+is activated by means of three integers <samp class="codeph">NOTRAC</samp>, <samp class="codeph">NWTRAC</samp>, <samp class="codeph">NGTRAC</samp> set in keyword <a href="../ecl_rm/TRACERS.html#TRACERS">TRACERS</a> in the <span class="keyword">RUNSPEC</span> section. These three integers represent the maximum number of tracers
+to be defined in each of the three stock tank phases: water, oil and
+dry gas. It is recommended that the precise number of tracers to be
+tracked should be specified in keyword <span class="keyword">TRACERS</span> in
+the <span class="keyword">RUNSPEC</span> section in order to minimize the memory
+requirements of the model.</p>
+
+<p>ECLIPSE 300  </p>
+
+<p>The tracer tracking facility in ECLIPSE 300
+does not require the keyword <span class="keyword">TRACERS</span> in the <span class="keyword">RUNSPEC</span> section; it is activated by entering the <a href="../ecl_rm/TRACER.html#TRACER">TRACER</a> keyword in the <span class="keyword">PROPS</span> section of the input data.</p>
+
+<p>The names of each tracer and their associated stock tank phases
+are defined using the <span class="keyword">TRACER</span> keyword in the <span class="keyword">PROPS</span> section of the input data. In ECLIPSE 100 the maximum
+number of rows of data is (<samp class="codeph">NOTRAC</samp> + <samp class="codeph">NWTRAC</samp> + <samp class="codeph">NGTRAC </samp>). Each tracer name is, at present, limited
+to be a name of up to 3 characters in length. The output of <samp class="codeph">TRACER </samp> data is controlled by the <samp class="codeph">TRACER</samp> argument in the <a href="../ecl_rm/RPTPROPS.html#RPTPROPS">RPTPROPS</a> keyword.</p>
+
+<p>ECLIPSE 100   </p>
+
+<p>In the case of tracers defined to exist in
+the gas phase when <a href="../ecl_rm/DISGAS.html#DISGAS">DISGAS</a> is specified in the <span class="keyword">RUNSPEC</span> section, or
+tracers defined in the oil phase when <a href="../ecl_rm/VAPOIL.html#VAPOIL">VAPOIL</a> is specified in <span class="keyword">RUNSPEC</span>, the full tracer solution consists of a concentration
+in both the free and solution states of its associated phase. ECLIPSE
+100 automatically allocates space for tracers which may exist in the
+free or solution state, and issues error messages whenever insufficient
+data is provided to calculate the initial tracer conditions.</p>
+
+<p>The initial tracer concentrations may be supplied in one of two
+ways. The most direct method is enumeration using the keyword <a href="../ecl_rm/TBLK.html#TBLK">TBLK</a> in the <span class="keyword">SOLUTION</span> section of the input data. An alternative method is to define a
+series of tracer concentration versus depth tables in the <span class="keyword">SOLUTION</span> section, together with the associated region numbers
+in the <span class="keyword">REGIONS</span> section of the input data. The data
+is entered by means of the keywords <a href="../ecl_rm/TVDP.html#TVDP">TVDP</a> and <a href="../ecl_rm/TNUM.html#TNUM">TNUM</a> respectively, and control of the depth table and region data
+output is achieved using the <a href="../ecl_rm/RPTSOL.html#RPTSOL">RPTSOL</a> and <a href="../ecl_rm/RPTREGS.html#RPTREGS">RPTREGS</a> keywords. The keywords <span class="keyword">TBLK</span>, <span class="keyword">TNUM</span> and <span class="keyword">TVDP</span> must be used in conjunction
+with the character F or S (free or solution), together with the tracer
+name, to make a composite keyword of up to 8 characters in length.
+For example, to initialize a water phase tracer whose name is ‘WTR’,
+the keywords required for the region/depth table method of input would
+be <span class="keyword">TVDPFWTR</span> and <span class="keyword">TNUMFWTR</span>.</p>
+
+<p>It is possible to restart a run with more tracers defined than
+in the original base run; this allows a tracer run to be restarted
+from a non-tracer base case. The extra tracers must be initialized
+using either <span class="keyword">TBLK</span> for <span class="keyword">TVDP</span> keywords
+as described above. If the <span class="keyword">TBLK</span> or <span class="keyword">TVDP</span> keywords are used for tracers that have read from the <span class="keyword">RESTART</span> file, then the data is ignored.</p>
+
+<p>You may specify the initial concentration of a water phase tracer
+in each of the analytic aquifers in a simulation run. This can be
+achieved using the <a href="../ecl_rm/AQANTRC.html#AQANTRC">AQANTRC</a> keyword in the <span class="keyword">SOLUTION</span> section of the
+input data. Output of the status of each water tracer for each analytic
+aquifer is obtained at each report time using the argument <samp class="codeph">AQUCT</samp> or <samp class="codeph">AQUFET</samp> in the <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a> keyword.</p>
+
+<p>Tracer injection control is achieved by means of the <a href="../ecl_rm/WTRACER.html#WTRACER">WTRACER</a> keyword in the <span class="keyword">SCHEDULE</span> section. This keyword allows the specification
+of the concentration of a particular tracer in the injection stream
+for each well. A default injection concentration value of zero is
+assumed for tracers not defined under the <span class="keyword">WTRACER</span> keyword. The <span class="keyword">WTRACER</span> keyword optionally allows
+the injected tracer concentration to be a function of the total cumulative
+fluid injected, which can be useful for modeling H<sub>2</sub>S generating
+processes.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Injection/production of tracers in wells having significant
+crossflow may lead to tracer mass balance errors due to current limitations
+in the tracer model. The mass balance errors can be examined in the
+tracer-in-place reports in the print file, enabled by argument <samp class="codeph">FIPTR</samp> in keyword <span class="keyword">RPTSCHED</span>. For non-linear
+tracers, for example environmental tracers with adsorption enabled,
+the issue with crossflow in wells may lead to convergence problems.
+The problem can be resolved by disabling crossflow (see item 10 of
+the <a href="../ecl_rm/WELSPECS.html#WELSPECS">WELSPECS</a> keyword).                      </span></div>
+
+<p> ECLIPSE 100               </p>
+
+<p>Reporting of the tracer concentration in each
+grid cell is activated using the argument <samp class="codeph">TBLK</samp> or <samp class="codeph">TRACER</samp> in the <span class="keyword">RPTSCHED</span> keyword. Output
+of tracer volumes within each reporting region and the inter-region
+tracer flows are available using the argument <samp class="codeph">FIPTR</samp> in the <span class="keyword">RPTSCHED</span> keyword. Grid block arrays of
+tracer concentration are reported under a mnemonic consisting of the
+tracer name together with the character F and/or S. For example, if
+IGS is a gas phase tracer in a run with dissolved gas (<a href="../ecl_rm/DISGAS.html#DISGAS">DISGAS</a> is specified in the <span class="keyword">RUNSPEC</span> section), then two grid block concentration arrays
+are produced under the arguments <samp class="codeph">IGSF</samp> and <samp class="codeph">IGSS</samp> which represent the local concentration of IGS in the
+free and dissolved gas respectively.</p>
+
+<p>ECLIPSE 300                  </p>
+
+<p>Each tracer sets up a solution array, with
+its own name, which may be reported using <a href="../ecl_rm/RPTSOL.html#RPTSOL">RPTSOL</a> and <span class="keyword">RPTSCHED</span>, or output to graphics using <a href="../ecl_rm/RPTRST.html#RPTRST">RPTRST</a>. For example:</p>
+
+<pre><code>RPTSOL
+PRESSURE SWAT TR1 TR2 /
+RPTRST
+PRESSURE SWAT TR1 TR2 /</code></pre>
+<p>Completion, well, group and field reports for production/injection
+rates and cumulative production/injection of each tracer are provided
+with the well reports in the <samp class="codeph">PRINT</samp> file, which may
+be requested by using the argument <samp class="codeph">WELLS</samp> in the <span class="keyword">RPTSCHED</span> keyword.</p>
+
+<p>ECLIPSE 100</p>
+
+<p>Tracers can be injected in rivers using the
+keyword <a href="../ecl_rm/RIVTRACE.html#RIVTRACE">RIVTRACE</a> in the <span class="keyword">SCHEDULE</span> section. Tracers can
+be injected in a specified reach of the river and through the upstream
+end of a river branch. The <span class="keyword">RIVTRACE</span> keyword optionally
+allows the injected tracer concentration to be a function of the total
+cumulative water flow.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Converting a black-oil data set to thermal"/>
+<meta name="DC.subject" content="Thermal conversion of a blackoil data set to a thermal dataset, Thermal option, Converting data"/>
+<meta name="keywords" content="Thermal conversion of a blackoil data set to a thermal dataset, Thermal option, Converting data"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="conve100_converting_a_blackoil_data_set_to_thermal"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Converting a black-oil data set to thermal</title>
+</head>
+<body>
+
+
+<div class="nested0" id="conve100_converting_a_blackoil_data_set_to_thermal"><a name="conve100_converting_a_blackoil_data_set_to_thermal"><!-- --></a>
+<h1 class="topictitle1">Converting a black-oil data set to thermal</h1>
+
+
+ <div>
+<p>To convert a black-oil data set to run with the thermal option,
+the black-oil fluid description must be modified to a compositional
+fluid description and the thermal and temperature dependent properties
+of the reservoir, fluids and wells must be described. A first step
+in this process is to use thermal keywords to create a data set that
+mimics the isothermal black-oil run. At this stage many of the temperature
+dependent properties can be defaulted. Once it has been confirmed
+that this gives similar results, the data set can be enhanced, by
+adding more components to improve the fluid description, and by including
+temperature effects and tuning the temperature dependent properties.
+This section gives suggestions for carrying out the first step of
+this process - running a black-oil simulation with the thermal simulator.</p>
+
+<div class="section" id="conve100_converting_eclipse_100_to_eclipse_300_blackoil"><a name="conve100_converting_eclipse_100_to_eclipse_300_blackoil"><!-- --></a><h4 class="sectiontitle">Converting ECLIPSE 100 to ECLIPSE 300 black oil</h4><p>If the black-oil data set is an ECLIPSE 100 data set, then you should
+check that it runs in ECLIPSE 300 too. If necessary remove any ECLIPSE
+100 keywords that are not recognized by ECLIPSE 300.</p>
+<p>ECLIPSE
+100 data sets using the Temperature option (<a href="temperat_Temperature_option.html#temperat_temperature_option"> "Temperature option"</a>) can be run with ECLIPSE 300 if the <span class="keyword">SCHEDULE</span> section data is converted to Thermal keywords
+- in particular <a href="../ecl_rm/WTEMP.html#WTEMP">WTEMP</a> data should be changed to <a href="../ecl_rm/WINJTEMP.html#WINJTEMP">WINJTEMP</a> data.</p>
+</div>
+
+<div class="section" id="conve100_runspec_section"><a name="conve100_runspec_section"><!-- --></a><h4 class="sectiontitle">RUNSPEC section</h4><p>Add the keyword <a href="../ecl_rm/THERMAL.html#THERMAL">THERMAL</a> and remove the keyword <a href="../ecl_rm/BLACKOIL.html#BLACKOIL">BLACKOIL</a>.</p>
+<p>If there is
+no gas in the black-oil simulation, the thermal simulation can be
+run as a dead oil simulation by adding keyword <a href="../ecl_rm/DEADOIL.html#DEADOIL">DEADOIL</a>. Otherwise the thermal
+simulation can be run as a live oil with two components, one representing
+the black-oil oil, and the other representing the black-oil gas.</p>
+<p>The number of hydrocarbon components must be defined with the <a href="../ecl_rm/COMPS.html#COMPS">COMPS</a> keyword. As a first
+step use two components if both oil and gas are being simulated, and
+one component if only one hydrocarbon phase is being simulated.</p>
+<p>If the data set contains horizontal wells, add the <a href="../ecl_rm/HWELLS.html#HWELLS">   HWELLS</a> keyword to the <span class="keyword">RUNSPEC</span> section.</p>
+</div>
+
+<div class="section" id="conve100_reservoir_properties"><a name="conve100_reservoir_properties"><!-- --></a><h4 class="sectiontitle">Reservoir properties</h4><p>The rock heat capacity (<a href="../ecl_rm/HEATCR.html#HEATCR">HEATCR</a>) and thermal conductivity (<a href="../ecl_rm/THCONR.html#THCONR">THCONR</a>) must be specified in
+the <span class="keyword">GRID</span> section. For an isothermal run the actual
+values are not important - a high rock heat capacity can be used to
+dampen any temperature fluctuations and the thermal conductivity can
+be set to zero.</p>
+<p>In the <span class="keyword">PROPS</span> section the
+reservoir temperature can be set using the <a href="../ecl_rm/RTEMP.html#RTEMP">RTEMP</a> or <a href="../ecl_rm/TEMPVD.html#TEMPVD">TEMPVD</a> keyword The surface
+temperature and pressure can be set using the <a href="../ecl_rm/STCOND.html#STCOND">STCOND</a> keyword.</p>
+</div>
+
+<div class="section" id="conve100_dead_oil_fluid_properties"><a name="conve100_dead_oil_fluid_properties"><!-- --></a><h4 class="sectiontitle">Dead-oil fluid
+properties</h4><p>Keywords, <a href="../ecl_rm/OILCOMPR.html#OILCOMPR"> OILCOMPR</a>, <a href="../ecl_rm/OILVISCT.html#OILVISCT">OILVISCT</a>, <a href="../ecl_rm/OILSPECH.html#OILSPECH">OILSPECH</a> and <a href="../ecl_rm/OILMW.html#OILMW">OILMW</a> have to be added. The
+black-oil keywords (<a href="../ecl_rm/PVTO.html#PVTO">PVTO</a> and <a href="../ecl_rm/PVDG.html#PVDG">PVDG</a>) must be removed.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The CO2STORE option"/>
+<meta name="DC.subject" content="Enhanced oil recovery, CO2 storage, CO2 storage and salts, CO2 storage phase splitting, CO2 storage density, CO2 storage viscosity, CO2 storage aqueous speciation, CO2 storage pH calculation, CO2 storage analytic water aquifers"/>
+<meta name="keywords" content="Enhanced oil recovery, CO2 storage, CO2 storage and salts, CO2 storage phase splitting, CO2 storage density, CO2 storage viscosity, CO2 storage aqueous speciation, CO2 storage pH calculation, CO2 storage analytic water aquifers"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="co2seq_the_co2store_option"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The CO2STORE option</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="co2seq_the_co2store_option"><a name="co2seq_the_co2store_option"><!-- --></a>
+<h1 class="topictitle1">The CO2STORE option</h1>
+
+
+ <div>
+<p>For the <a href="../ecl_rm/CO2STORE.html#CO2STORE">CO2STORE</a> option three phases are considered, a CO<sub>2</sub> rich
+phase, an H<sub>2</sub>O rich phase and a solid phase. The CO<sub>2</sub> rich phase is labeled the gas phase while the H<sub>2</sub>O rich phase is labeled the aqueous phase (liquid phase). The mutual
+solubilities of CO<sub>2</sub> and H<sub>2</sub>O are calculated to
+match experimental data for CO<sub>2</sub> - H<sub>2</sub>O systems
+under typical CO<sub>2</sub> storage conditions: 12-100 °C and up
+to 600 bar. The model is also applicable at elevated temperatures
+as detailed in <cite><span> <a href="biblio_Bibliography.html#biblio_77219">Spycher and Pruess (2009)</a> </span></cite>, up to 250 °C. Fluid components are specified with the <a href="../ecl_rm/COMPS.html#COMPS">COMPS</a> keyword. Allowed component
+names are currently <samp class="codeph">CO2</samp>, <samp class="codeph">H20</samp> and
+the salts <samp class="codeph">NACL</samp>, <samp class="codeph">CACL2</samp> and <samp class="codeph">CAC03</samp>.</p>
+
+
+<div class="tablenoborder"><a name="co2seq.tab.004a"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="co2seq.tab.004a" frame="border" border="1" rules="all"><caption>
+           Table 862.1  Components that can be used with the CO<sub>2</sub>STORE option</caption>  
+<thead align="left">
+<tr>
+<th valign="top" id="d144e126"> Component name                        </th>
+
+<th valign="top" id="d144e129">Phases                      </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d144e126 "> <samp class="codeph">CO2</samp> </td>
+
+<td valign="top" headers="d144e129 ">  Aqueous/Gas                      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d144e126 "> <samp class="codeph">H20</samp> </td>
+
+<td valign="top" headers="d144e129 "> Aqueous/Gas                      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d144e126 "> <samp class="codeph">NACL</samp> </td>
+
+<td valign="top" headers="d144e129 ">Aqueous/Solid                      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d144e126 "> <samp class="codeph">CACL2</samp> </td>
+
+<td valign="top" headers="d144e129 ">Aqueous/Solid                      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d144e126 "> <samp class="codeph">CAC03</samp> </td>
+
+<td valign="top" headers="d144e129 ">Aqueous/Solid                      </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The option is similar to the <a href="../ecl_rm/GASWAT.html#GASWAT">GASWAT</a> option, but the salt components of the aqueous or solid phase
+are tracked as part of the fluid system. Also the partitioning of
+the component H<sub>2</sub>O in the gas phase has been matched accurately.
+Fluid properties are assigned internally based on the names; this
+means that a minimum amount of data is needed in order to supply the
+fluid properties.</p>
+
+<div class="section" id="co2seq_phase_splitting"><a name="co2seq_phase_splitting"><!-- --></a><h4 class="sectiontitle">Phase splitting</h4><p>The partitioning of CO<sub>2</sub> and H<sub>2</sub>O in the aqueous
+and gas phase follows the procedure given by Spycher and Pruess (<a href="biblio_Bibliography.html#biblio_58116">2005</a> and <a href="biblio_Bibliography.html#biblio_77219">2009</a>). The salts
+are assumed to stay in the aqueous phase unless the <a href="../ecl_rm/SOLID.html#SOLID">SOLID</a> option is activated.</p>
+<p>With the <span class="keyword">SOLID</span> option the components NaCl,
+CaCl<sub>2</sub> and CaCO<sub>3</sub> can be present in both the aqueous
+phase and the solid phase according to the following equilibrium reactions:</p>
+<ul>
+<li>H<sub>2</sub>O <math>
+<mrow><mo>⇌</mo></mrow></math> H<sup>+</sup> + OH<sup>-</sup>             </li>
+
+<li><p>CO<sub>2</sub> + H<sub>2</sub>O <math><mrow><mo>⇌</mo>
+</mrow></math> HCO<sub>3</sub><sup>-</sup> + H<sup>+</sup></p>
+</li>
+
+<li>HCO<sub>3</sub><sup>-</sup> <math><mrow><mo>⇌</mo>
+</mrow></math> CO<sub>3</sub><sup>-</sup> + H<sup>+</sup>    
+        </li>
+
+<li>CaCl<sup>+</sup> <math>
+<mrow><mo>⇌</mo></mrow></math> Ca<sub>2</sub><sup>+</sup> + Cl<sup>-</sup>             </li>
+
+<li>NaCl(s) <math><mrow>
+<mo>⇌</mo></mrow></math> Na<sup>+</sup> + Cl<sup>-</sup> 
+           </li>
+
+<li>CaCl<sub>2</sub>(s) <math><mrow><mo>⇌</mo>
+</mrow></math> CaCl<sup>+</sup>+ Cl<sup>-</sup>             </li>
+
+<li>CaCO<sub>3</sub>(s) <math><mrow><mo>⇌</mo>
+</mrow></math> Ca<sup>2+</sup> + CO<sub>3</sub><sup>-</sup></li>
+
+</ul>
+<p>If only NaCl is present a simplified procedure can be used
+and the maximum NaCl solubility in the aqueous phase is calculated
+by <cite><span> <a href="biblio_Bibliography.html#biblio_78317">Potter
+II et al (1977)</a> </span></cite>.</p>
+<p> <math><mrow><mi>W</mi>
+<mi>t</mi><mi>N</mi><mi>a</mi><mi>C</mi><mi>l</mi>
+</mrow><mo>=</mo><mn>26.218</mn><mo>+</mo><mrow><mn>0.0072</mn><mi>T</mi></mrow><mo>+</mo><msup><mrow>
+<mn>0.000106</mn><mi>T</mi></mrow><mn>2</mn></msup>
+</math> </p>
+<p>where  <math><mi>T</mi></math>  is the temperature in °C.</p>
+<p>It is recommended that the <a href="../ecl_rm/SOLIDMMS.html#SOLIDMMS">SOLIDMMS</a> keyword is also used
+in order to model the decrease in mobility as a function of the solid
+saturations. The gas and aqueous saturations are normalized to be
+between zero and unity, so the two phase water and gas relative permeability
+curves can be used. However it should be noted that the effective
+fluid volume is given by</p>
+<p> <math><mrow><mi>F</mi>
+<mi>V</mi></mrow><mo>=</mo><mrow><mo>(</mo><mn>1</mn>
+<mrow><mo>-</mo><mi>S</mi></mrow><mo>)</mo><mi>P</mi>
+<mi>V</mi></mrow></math> </p>
+<p>where  <math><mrow><mi>P</mi>
+<mi>V</mi></mrow></math>  is the pore volume and  <math><mi>S</mi></math>  is the solid saturation. It is possible to specify a target solid
+saturation change for each timestep by using item 21 of <a href="../ecl_rm/TSCRIT.html#TSCRIT">TSCRIT</a>. A small value will
+usually enhance the stability.</p>
+</div>
+
+<div class="section" id="co2seq_activity_coefficient_models"><a name="co2seq_activity_coefficient_models"><!-- --></a><h4 class="sectiontitle">Activity coefficient
+models</h4><p>The CO<sub>2 </sub>and H<sub>2</sub>O activity are
+computed following <cite><span> <a href="biblio_Bibliography.html#biblio_58116">Spycher and Pruess (2005)</a> </span></cite> and <cite><span> <a href="biblio_Bibliography.html#biblio_77219">Spycher and Pruess (2009)</a> </span></cite>. This is done using Margules expressions:</p>
+<p> <math><mrow><mi>ln</mi>
+<mrow><mo>(</mo><msub><mrow><mi>γ</mi></mrow><mrow>
+<mi>H</mi><mn>2</mn><mi>O</mi></mrow></msub><mo>)</mo></mrow><mo>=</mo><mrow><mo>(</mo><msub><mrow>
+<mi>A</mi></mrow><mrow><mi>M</mi></mrow></msub><mrow>
+<mo>-</mo><mrow><mn>2</mn><msub><mrow><mi>A</mi>
+</mrow><mrow><mi>M</mi></mrow></msub><msub><mrow><mi>x</mi></mrow><mrow><mi>H</mi><mn>2</mn><mi>O</mi>
+</mrow></msub></mrow></mrow><mo>)</mo><msubsup><mrow>
+<mi>x</mi></mrow><mrow><mi>C</mi><mi>O</mi><mn>2</mn>
+</mrow><mrow><mn>2</mn></mrow></msubsup></mrow></mrow>
+</math> </p>
+<p> <math>
+<mrow><mrow><mi>ln</mi><mo>⁡</mo><mrow><mo>(</mo>
+<msub><mrow><mi>γ</mi></mrow><mrow><mi>C</mi><mi>O</mi><mn>2</mn></mrow></msub><mo>)</mo></mrow>
+</mrow><mo>=</mo><mrow><mn>2</mn><msub><mrow><mi>A</mi></mrow><mrow><mi>M</mi></mrow></msub><msub>
+<mrow><mi>x</mi></mrow><mrow><mi>C</mi><mi>O</mi>
+<mn>2</mn></mrow></msub><msubsup><mrow><mi>x</mi>
+</mrow><mrow><mi>H</mi><mn>2</mn><mi>O</mi></mrow>
+<mrow><mn>2</mn></mrow></msubsup><msup><mrow><mi>e</mi>
+</mrow><mrow><mrow><mo>(</mo><msub><mrow><mi>γ</mi>
+</mrow><mrow><mi>C</mi><mi>O</mi><mn>2</mn></mrow>
+</msub><mo>′</mo><mo>)</mo></mrow></mrow></msup>
+</mrow></mrow></math> </p>
+<p>where:</p>
+<p> <math><msub><mi>A</mi>
+<mi>M</mi></msub><mo>=</mo><mrow><mn>0</mn><mtext>    </mtext><mo>(</mo><mi>T</mi><mo>≤</mo><mrow><mn>100</mn><mi>°</mi><mi>C</mi></mrow><mo>)</mo></mrow>
+</math> </p>
+<p> <math>
+<mrow><msub><mrow><mi>A</mi></mrow><mrow><mi>M</mi>
+</mrow></msub><mo>=</mo><mi>a</mi><mo>⋅</mo><mrow>
+<mo>(</mo><mi>T</mi><mrow><mo>-</mo><mn>100</mn>
+</mrow><mo>)</mo></mrow><mo>+</mo><mrow><msup><mrow>
+<mi>b</mi><mo>⋅</mo><mo>(</mo><mi>T</mi><mrow><mo>-</mo><mn>100</mn></mrow><mo>)</mo></mrow><mrow><mn>2</mn></mrow></msup><mtext>    </mtext><mrow><mo>(</mo>
+<mi>T</mi><mo>&gt;</mo><mrow><mn>100</mn><mi>°</mi><mi>C</mi></mrow><mo>)</mo></mrow></mrow></mrow></math> </p>
+<p>In these expressions, a and b are regressed parameters and
+ <math><msub><mi>x</mi><mrow><mi>C</mi><mi>O</mi><mn>2</mn></mrow>
+</msub></math> and  <math><msub><mi>x</mi>
+<mrow><mi>H</mi><mn>2</mn><mi>O</mi></mrow></msub>
+</math>  denote the aqueous phase mole fractions. The CO<sub>2</sub> activity coefficient is modified for salting out effects by  <math><mrow><msub><mi>γ</mi><mrow><mi>C</mi><mi>O</mi><mn>2</mn></mrow>
+</msub><mi>′</mi></mrow></math>.</p>
+<p>There are two models
+that can be applied in order to compute  <math><mrow><msub><mi>γ</mi><mrow><mi>C</mi><mi>O</mi><mn>2</mn></mrow>
+</msub><mi>′</mi></mrow></math>:</p>
+<ul>
+<li>The Rumpf et. al 1994 model as detailed in <cite><span> <a href="biblio_Bibliography.html#biblio_58116">Spycher and Pruess (2005)</a> </span></cite>, applicable up to 160  <math><mrow><mi>°</mi>
+<mi>C</mi></mrow></math>.                </li>
+
+<li>The model given in <cite><span> <a href="biblio_Bibliography.html#biblio_77219">Spycher and Pruess (2009)</a> </span></cite>, applicable up to 250 °C.</li>
+
+</ul>
+<p>To choose the model, use the keyword <a href="../ecl_rm/ACTCO2S.html#ACTCO2S">ACTCO2S</a>.</p>
+</div>
+
+<div class="section" id="co2seq_density"><a name="co2seq_density"><!-- --></a><h4 class="sectiontitle">Density</h4><p>The gas density
+is obtained by a cubic equation of state tuned to accurately give
+the density of the compressed gas phase, following <cite><span> <a href="biblio_Bibliography.html#biblio_58116">Spycher and Pruess (2005)</a> </span></cite>. A modified Redlich-Kwong equation of state is used,
+where the attraction parameter is made temperature dependent:</p>
+<p> <math><mrow><mi>P</mi>
+<mo>=</mo><mo>(</mo><mfrac><mrow><mi>R</mi><msub>
+<mrow><mi>T</mi></mrow><mrow><mi>K</mi></mrow></msub>
+</mrow><mrow><mi>V</mi><mrow><mo>-</mo><msub><mrow>
+<mi>b</mi></mrow><mrow><mi>m</mi><mi>i</mi><mi>x</mi>
+</mrow></msub></mrow></mrow></mfrac><mo>)</mo><mrow>
+<mo>-</mo><mo>(</mo><mfrac><mrow><msub><mrow><mi>a</mi></mrow><mrow><mi>m</mi><mi>i</mi><mi>x</mi>
+</mrow></msub></mrow><mrow><msup><mrow><msub><mrow>
+<mi>T</mi></mrow><mrow><mi>K</mi></mrow></msub></mrow>
+<mrow><mn>1</mn><mo>/</mo><mn>2</mn></mrow></msup>
+<mi>V</mi><mrow><mo>(</mo><mi>V</mi><mo>+</mo><msub>
+<mrow><mi>b</mi></mrow><mrow><mi>m</mi><mi>i</mi>
+<mi>x</mi></mrow></msub><mo>)</mo></mrow></mrow>
+</mfrac><mo>)</mo></mrow></mrow></math> </p>
+<p>where V
+is the molar volume, P is the pressure, T<sub>K</sub> the temperature
+in Kelvin, R is the universal gas constant and a<sub>mix</sub> and
+b<sub>mix</sub> are the attraction and repulsion parameters. For more
+information see also <cite><span> <a href="biblio_Bibliography.html#biblio_77219">Spycher and Pruess (2009)</a> </span></cite>.</p>
+<p>The transition between liquid CO<sub>2</sub> and
+gaseous CO<sub>2</sub> will lead to rapid density changes for the
+CO<sub>2</sub>-rich phase. The simulator uses a narrow transition
+interval between the liquid state and gaseous state.</p>
+<p>For the
+brine density the simulator first computes the density of pure water.
+The default model uses an analytical form of the water density as
+detailed by <em>The International Association for the Properties of
+Water and Steam </em> (IAPWS-IF97). In order to use the pre-2010.1
+water density calculations as detailed in <cite><span> <a href="biblio_Bibliography.html#biblio_31324">Kell and Whalley (1975)</a> </span></cite>, <a href="../ecl_rm/OPTIONS3.html#options3.232">item 232</a> in <span class="keyword">OPTIONS3</span> can be put to unity. The Ezrokhi’s method is then
+applied to calculate the effect of salt and CO<sub>2</sub> as described
+in <cite><span> <a href="biblio_Bibliography.html#biblio_42894">Zaytsev
+and Aseyev (1993)</a> </span></cite>.</p>
+</div>
+
+<div class="section" id="co2seq_viscosity"><a name="co2seq_viscosity"><!-- --></a><h4 class="sectiontitle">Viscosity</h4><p>The CO<sub>2</sub> gas viscosity is calculated from <cite><span> <a href="biblio_Bibliography.html#biblio_79370">Vesovic et al (1990)</a> </span></cite> and <cite><span> <a href="biblio_Bibliography.html#biblio_15281">Fenghour et al (1998)</a> </span></cite>.</p>
+</div>
+
+<div class="section" id="co2seq_aqueous_speciation"><a name="co2seq_aqueous_speciation"><!-- --></a><h4 class="sectiontitle">Aqueous speciation</h4><p>It is possible to output the different ions and chemical components
+in the aqueous phase by adding AQSP to the <a href="../ecl_rm/RPTRST.html#RPTRST">RPTRST</a> , <a href="../ecl_rm/RPTSOL.html#RPTSOL">RPTSOL</a>, or <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a> keyword. Similarly
+the pH is output by adding AQPH. Additionally, the <span class="keyword">SUMMARY</span> keywords <span class="keyword">BAQSP</span> and  <span class="keyword">BAQPH</span> can
+be used.</p>
+<p>Names of the species considered are given below</p>
+
+<div class="tablenoborder"><a name="co2seq.tab.0100"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="co2seq.tab.0100" frame="border" border="1" rules="all"><caption>
+           Table 862.2  Aqueous Species</caption>  
+<thead align="left">
+<tr>
+<th valign="top" id="d144e1159"> Aqueous species                             
+               </th>
+
+<th valign="top" id="d144e1162">                                              </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d144e1159 "> <samp class="codeph">aH2O</samp> </td>
+
+<td valign="top" headers="d144e1162 ">Pure water                      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d144e1159 "> <samp class="codeph">aCO2</samp> </td>
+
+<td valign="top" headers="d144e1162 ">Carbon dioxide                      </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d144e1159 "> <samp class="codeph">aH+</samp> </td>
+
+<td valign="top" headers="d144e1162 ">Hydrogen ion                                 
+            </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d144e1159 "> <samp class="codeph">aOH-</samp> </td>
+
+<td valign="top" headers="d144e1162 "> Hydroxide ion                               
+             </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d144e1159 "> <samp class="codeph">aCO3-2</samp> </td>
+
+<td valign="top" headers="d144e1162 "> Carbonate ion                               
+             </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d144e1159 "> <samp class="codeph">aHCO3-1</samp> </td>
+
+<td valign="top" headers="d144e1162 "> Bicarbonate ion                             
+               </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d144e1159 "> <samp class="codeph">aCl-</samp> </td>
+
+<td valign="top" headers="d144e1162 ">  Chloride ion                               
+            </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d144e1159 "> <samp class="codeph">aNa+</samp> </td>
+
+<td valign="top" headers="d144e1162 ">  Sodium ion                                 
+          </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d144e1159 "> <samp class="codeph">aCa++</samp> </td>
+
+<td valign="top" headers="d144e1162 "> Calcium ion                                 
+           </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d144e1159 "> <samp class="codeph">aCaCl+</samp> </td>
+
+<td valign="top" headers="d144e1162 "> Calcium monochloride ion                    
+                        </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">As an example, the total amount of aqueous NaCl is given
+by the molar density, named MLSC followed by the component index,
+while the speciation outputs the ions a NA<sup>+ </sup>and a CL<sup>-</sup>.</span></div>
+</div>
+
+<div class="section" id="co2seq_ph_calculation"><a name="co2seq_ph_calculation"><!-- --></a><h4 class="sectiontitle">pH calculation</h4><p>The pH is calculated as</p>
+<p> <math><mrow>
+<mrow><mi>p</mi><mi>H</mi></mrow><mo>=</mo><mo>-</mo>
+<mrow><mi>log</mi><mo>(</mo><mrow><msub>
+<mrow><mi>ζ</mi></mrow><mrow><mi>H</mi></mrow></msub>
+<mo>⋅</mo><msub><mrow><mi>m</mi></mrow><mrow><mi>H</mi></mrow></msub><mo>)</mo></mrow>
+</mrow></mrow></math> </p>
+<p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>ζ</mi>
+<mi>H</mi></msub></math> </td>
+
+<td valign="top">is the activity coefficient of the H<sup>+ </sup> ion and</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>m</mi>
+<mi>H</mi></msub></math> </td>
+
+<td valign="top">is the molality of the H<sup>+ </sup> ion.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+<div class="section" id="co2seq_analytic_water_aquifers"><a name="co2seq_analytic_water_aquifers"><!-- --></a><h4 class="sectiontitle">Analytic water
+aquifers</h4><p>An analytic water aquifer defined by <a href="../ecl_rm/AQUCHWAT.html#AQUCHWAT">AQUCHWAT</a>, <a href="../ecl_rm/AQUCT.html#AQUCT">AQUCT</a>, <a href="../ecl_rm/AQUFETP.html#AQUFETP">AQUFETP</a> or <a href="../ecl_rm/AQUFLUX.html#AQUFLUX">AQUFLUX</a> contains only the “H2O”
+component. It is possible to modify the aquifer composition using
+the <a href="../ecl_rm/AQSTREAM.html#AQSTREAM">AQSTREAM</a> keyword. Any component is allowed to leave or enter the reservoir.
+Additionally, the aquifer water properties are calculated as described
+above.</p>
+<p>If <a href="../ecl_rm/OPTIONS3.html#options3.131">item 131</a> of the <span class="keyword">OPTIONS3</span> keyword is set to 1, this reverts to the pre-2007.2
+behavior where the water entering / leaving the reservoir is made
+up entirely of the “H<sub>2</sub>O” component. If <a href="../ecl_rm/OPTIONS3.html#options3.119">item 119</a> of <span class="keyword">OPTIONS3</span> is set to 1, this reverts to the pre-2007.1 behavior
+where the aquifer water properties were calculated using the water
+PVT tables. See <a href="aquifer_Aquifer_Modeling_Facilities.html#aquifer_aquifer_modeling_facilities"> "Aquifer modeling facilities"</a>.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

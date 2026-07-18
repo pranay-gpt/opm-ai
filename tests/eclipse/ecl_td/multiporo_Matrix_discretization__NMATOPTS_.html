@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Matrix discretization (NMATOPTS)"/>
+<meta name="DC.subject" content="Multi porosity matrix discretization"/>
+<meta name="keywords" content="Multi porosity matrix discretization"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="multiporo_matrix_discretization__nmatopts_"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Matrix discretization (NMATOPTS)</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="multiporo_matrix_discretization__nmatopts_"><a name="multiporo_matrix_discretization__nmatopts_"><!-- --></a>
+<h1 class="topictitle1">Matrix discretization (NMATOPTS)</h1>
+
+
+ <div>
+<p>When the <a href="../ecl_rm/NMATOPTS.html#NMATOPTS">NMATOPTS</a> option is invoked, the matrix sub-grid cell properties are
+copied from the outer primary matrix grid-cells. Only the bulk volume,
+porosities and/or rock fraction of the primary matrix grid cells are
+used to generate the matrix sub-grid cells’ new volumes. The pore
+volume and transmissibility/diffusivity follow what is described in
+the <a href="dualporo_Discretized_matrix_model__ECLIPSE_100_.html#dualporo_discretized_matrix_model__eclipse_100_"> "Discretized matrix model (ECLIPSE 100)"</a>. However ECLIPSE
+300 does not generate the transmissibilities directly, but generates
+new sigma (<a href="../ecl_rm/SIGMAV.html#SIGMAV"> SIGMAV</a>) values following the geometric partitioning of the matrix
+block, and updates the block volumes, pore volumes and rock volumes
+of the matrix grid cells. In addition, the ECLIPSE 300 model can be
+used with <samp class="codeph">UNIFORM</samp> partitioning. The pore volumes
+are evenly distributed between the matrix sub-grid cells and the transmissibilities
+are calculated following a 1D computation where the distance DX of
+the matrix cells is assumed to be partitioned as <samp class="codeph">DX</samp> / <samp class="codeph">NMATRIX</samp>.</p>
+
+<div class="fignone" id="multiporo.discretization"><a name="multiporo.discretization"><!-- --></a>
+
+ <br/><img src="../img/multi2.png" width="376px"/><br/> 
+<br/><span class="figcap">
+           Figure 107.1  Structure of the matrix discretization and nomenclature</span></div>
+
+<p>In the figure above, the uniform partitioning is used with <samp class="codeph">NMATRIX=4</samp>. Each block is partitioned uniformly and sigma
+values generated for the connections. The pore volume of the primary
+matrix cell is divided into  <math><mstyle><mrow><mrow>
+<mi>P</mi><mi>V</mi><mn>1</mn></mrow><mo>=</mo>
+<mrow><mi>P</mi><mi>V</mi><mn>2</mn></mrow><mo>=</mo>
+<mrow><mi>P</mi><mi>V</mi><mn>3</mn></mrow><mo>=</mo>
+<mrow><mi>P</mi><mi>V</mi><mn>4</mn></mrow><mo>=</mo>
+<mfrac><mrow><mi>P</mi><mi>V</mi><mi>M</mi></mrow>
+<mrow><mn>4</mn></mrow></mfrac></mrow></mstyle></math>. The assumptions for the UNIFORM partitioning is the same as for
+the LINEAR except that each matrix block is uniformly partitioned.
+The available methods with <span class="keyword">NMATOPTS</span> are:</p>
+
+
+<div class="tablenoborder"><a name="multiporo.tab.008c"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="multiporo.tab.008c" frame="border" border="1" rules="all"><caption>
+           Table 107.1  Available methods with NMATOPTS</caption>   
+<thead align="left">
+<tr>
+<th valign="top" id="d970e146">NMATOPS                      </th>
+
+<th valign="top" id="d970e149">Assumption for initial matrix- fracture transmissibility/diffusivity
+                      </th>
+
+<th valign="top" id="d970e152">Partitioning method   </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d970e146 "><span class="keyword">UNIFORM</span>                   
+  </td>
+
+<td valign="top" headers="d970e149 "> 1D flow over the distance d and through area
+A                      </td>
+
+<td valign="top" headers="d970e152 ">Partitions the distance d uniformly          
+           </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d970e146 "><span class="keyword">LINEAR</span>                    
+ </td>
+
+<td valign="top" headers="d970e149 "> 1D flow over the distance d and through area
+A                       </td>
+
+<td valign="top" headers="d970e152 "> Logarithmic growth factor of the distances  </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d970e146 "><span class="keyword">RADIAL</span></td>
+
+<td valign="top" headers="d970e149 "> 2D flow, four times flow, over a distance d and
+through area A                      </td>
+
+<td valign="top" headers="d970e152 ">Logarithmic growth factor of the distances   </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d970e146 ">  <span class="keyword">SPHERICAL</span></td>
+
+<td valign="top" headers="d970e149 ">3D flow, six times flow, over a distance d the
+and through area A                      </td>
+
+<td valign="top" headers="d970e152 ">Logarithmic growth factor of the distances   
+                    </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d970e146 "><span class="keyword">VERTICAL</span>                  
+   </td>
+
+<td valign="top" headers="d970e149 ">For gravity drainage. A depth assigned to the
+sub-matrix grid cells.                      </td>
+
+<td valign="top" headers="d970e152 ">Partitioned uniformly (vertically)           
+          </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>Based on the method, a new internal grid is generated, representing
+the initial matrix-fracture connection. The distance “d” is partitioned
+resulting in new bulk volumes, pore volumes and rock volumes. Based
+on the initial sigma factor assigned to the primary matrix grid, new
+sigma factors are calculated and populated in the matrix grid.</p>
+
+<p>As an example consider the <samp class="codeph">UNIFORM</samp> partitioning
+above and then how to calculate new sigma values.</p>
+
+<p>For a unit m<sup>3</sup> cube, BV=1m<sup>3</sup>. The distance
+d =1m and the area A=1 m<sup>2</sup>. Partitioning d into 1/4m gives
+the flow over 1/4m for each connection through an area A. Since “d”
+and “A” are already embedded in the initial sigma value, multiplication
+gives (sigma*4) for the connection. This needs to be scaled to apply
+to the new block volumes of the cells and so this gives the factor
+(sigma*4)*BV/(BV/4) for the new sigmas, that is (sigma*16).</p>
+
+<p>For more information about the discretization, see the <a href="dualporo_Discretized_matrix_model__ECLIPSE_100_.html#dualporo_discretized_matrix_model__eclipse_100_"> "Discretized matrix model (ECLIPSE 100)"</a>.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

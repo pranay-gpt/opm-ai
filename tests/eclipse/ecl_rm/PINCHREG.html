@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="PINCHREG"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="PINCHREG"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>PINCHREG</title>
+</head>
+<body>
+
+
+<div class="nested0" id="PINCHREG"><a name="PINCHREG"><!-- --></a>
+<h1 class="keyword">PINCHREG</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="pinchreg.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="pinchreg.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1806e45">x               </th>
+
+<th valign="top" id="d1806e48">ECLIPSE 100               </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1806e54">                </th>
+
+<th valign="top" id="d1806e57">ECLIPSE 300               </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1806e45 d1806e54 ">                </td>
+
+<td valign="top" headers="d1806e48 d1806e57 ">RUNSPEC               </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1806e45 d1806e54 ">x               </td>
+
+<td valign="top" headers="d1806e48 d1806e57 ">GRID               </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1806e45 d1806e54 ">                </td>
+
+<td valign="top" headers="d1806e48 d1806e57 ">EDIT               </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1806e45 d1806e54 ">                </td>
+
+<td valign="top" headers="d1806e48 d1806e57 ">PROPS               </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1806e45 d1806e54 ">                </td>
+
+<td valign="top" headers="d1806e48 d1806e57 ">REGIONS               </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1806e45 d1806e54 ">                </td>
+
+<td valign="top" headers="d1806e48 d1806e57 ">SOLUTION               </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1806e45 d1806e54 ">               </td>
+
+<td valign="top" headers="d1806e48 d1806e57 ">SUMMARY               </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1806e45 d1806e54 ">                </td>
+
+<td valign="top" headers="d1806e48 d1806e57 ">SCHEDULE               </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword supplies data for calculating pinchouts in multiple
+regions. The regions should be identified using keyword <a href="PINCHNUM.html#PINCHNUM"> PINCHNUM</a>. If <span class="keyword">PINCHNUM</span> is not specified, then <span class="keyword">PINCHREG</span> applies to flux regions defined by <a href="FLUXNUM.html#FLUXNUM"> FLUXNUM</a>. If neither <span class="keyword">PINCHNUM</span> nor <span class="keyword">FLUXNUM</span> is specified then  <span class="keyword">PINCHREG</span> 
+is ignored.</p>
+
+<p>The <span class="keyword">PINCHREG</span> keyword should be followed by <samp class="codeph">NRPINC</samp> records (item 3 of keyword <a href="GRIDOPTS.html#GRIDOPTS"> GRIDOPTS</a>) when using <span class="keyword">PINCHNUM</span>, or <samp class="codeph">NTFREG</samp> records (item 4 of keyword <a href="REGDIMS.html#REGDIMS"> REGDIMS</a>) when using <span class="keyword">FLUXNUM</span>, with each record terminated by a slash (/).</p>
+
+<p>Each record refers to a separate <span class="keyword">PINCHNUM</span> or <span class="keyword">FLUXNUM</span> region and consists of some or all of the items,
+detailed below, which are the same as in the <a href="PINCH.html#PINCH"> PINCH</a> keyword. If the record is defaulted
+for a region, then no pinchouts are generated in that region. When
+calculating a pinchout between cells in different regions, the <span class="keyword">PINCHREG</span> data is taken from the region containing the upper
+of the two cells.</p>
+
+<ol>
+<li>Pinchout threshold thickness. <p>UNITS: m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+           <p>DEFAULT: 0.001 (all unit sets)</p>
+         </li>
+
+<li>   Option controlling generation of pinchouts when a minimum pore
+volume has been set using <a href="MINPV.html#MINPV"> MINPV</a> or <a href="MINPVV.html#MINPVV"> MINPVV</a>. 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">GAP</samp> </td>
+
+<td valign="top"> Allow NNCs across cells that are inactive due to  <span class="keyword">MINPV</span> even if the thickness exceeds the threshold.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">NOGAP</samp> </td>
+
+<td valign="top"> The threshold thickness is strictly observed whether or not
+the pinched-out cells are inactive due to <span class="keyword">MINPV</span>.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">GAP</samp> </p>
+         </li>
+
+<li>Maximum empty gap allowed between cells in adjacent grid layers
+for a non-zero transmissibility to exist between them.   <p>UNITS:
+m (<samp class="codeph">METRIC</samp>), ft (<samp class="codeph">FIELD</samp>), cm (<samp class="codeph">LAB</samp>), m (<samp class="codeph">PVT-M</samp>)</p>
+           <p>DEFAULT:
+Infinity (1.0E20 in all unit sets)</p>
+</li>
+
+<li>   Option for calculating the pinchout transmissibility.  
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">TOPBOT</samp> </td>
+
+<td valign="top"> The pinchout transmissibility is formed from the half-cell
+Z-direction transmissibilities of the active cells on either side
+of the pinched-out layer(s).</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">ALL</samp> </td>
+
+<td valign="top"> The pinchout transmissibility is a harmonic average of the
+Z-direction transmissibilities of all the cells between the active
+cells on either side of the pinched-out layer(s).</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+    <p>DEFAULT: <samp class="codeph">TOPBOT</samp> </p>
+         </li>
+
+<li>Option for accounting for <a href="MULTZ.html#MULTZ"> MULTZ</a> through a pinched-out column, if item 4 has been set to <samp class="codeph">TOPBOT</samp>. This item is ignored if item 4 is set to <samp class="codeph">ALL</samp>.    
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <samp class="codeph">TOP</samp> </td>
+
+<td valign="top"> The transmissibility multiplier applied to the pinchout is
+the <span class="keyword">MULTZ</span> for the active cell at the top of the
+pinchout.</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <samp class="codeph">ALL</samp> </td>
+
+<td valign="top"> The transmissibility multiplier applied to the pinchout is
+the minimum of the <span class="keyword">MULTZ</span> values for the active
+cell at the top of the pinchout and all the inactive cells in the
+pinched-out column. This replaces <a href="OPTIONS.html#options.17">item 17</a> in <span class="keyword">OPTIONS</span>.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>DEFAULT: <samp class="codeph">TOP</samp> </p>
+         </li>
+
+</ol>
+
+<p>See the <a href="PINCH.html#PINCH"> PINCH</a> keyword
+for further information.</p>
+
+<div class="section" id="pinchreg_example"><a name="pinchreg_example"><!-- --></a><h4 class="sectiontitle">Example</h4>            
+     <p>With <samp class="codeph">NRPINC=4</samp> </p>
+         <pre><code>PINCHREG
+--Threshold   Gap or   Empty 
+--thickness   No Gap   Gap
+     0.1       1*      10.0   /
+                              /
+     0.2       1*      20.0   /
+     1.0       'NOGAP'        /</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

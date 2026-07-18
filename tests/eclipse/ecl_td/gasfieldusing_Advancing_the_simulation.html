@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Advancing the simulation"/>
+<meta name="DC.subject" content="Gas field operations"/>
+<meta name="keywords" content="Gas field operations"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="gasfieldusing_advancing_the_simulation"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Advancing the simulation</title>
+</head>
+<body>
+
+
+<div class="nested0" id="gasfieldusing_advancing_the_simulation"><a name="gasfieldusing_advancing_the_simulation"><!-- --></a>
+<h1 class="topictitle1">Advancing the simulation</h1>
+
+
+ <div>
+<p>The gas field operations model is turned on when the keyword <a href="../ecl_rm/SWINGFAC.html#SWINGFAC">SWINGFAC</a> is entered. The keyword
+is used to set the monthly swing factors and profile factors for the
+FIELD. For example, consider a case where the swing factors are the
+same as the profile factors, which are in ratio 1.0, 1.5, 1.0 and
+0.5 for Autumn, Winter, Spring and Summer respectively. Their normalized
+values are 1.0024, 1.5036, 1.0024 and 0.5012. Since the swing and
+profile factors are the same, the swing factor requirement is equivalent
+to checking that the seasonality profile fits inside the delivery
+capacity decline curve.</p>
+
+<pre><code>SWINGFAC
+-- JAN  FEB  MAR  APR  MAY  JUN  JUL  AUG  SEP  OCT  NOV  DEC
+   2*1.5036  3*1.0024       3*0.5012       3*1.0024       1.5036
+   2*1.5036  3*1.0024       3*0.5012       3*1.0024       1.5036 /</code></pre>
+<p>Once the <span class="keyword">SWINGFAC</span> keyword has been entered,
+the features labelled 3, 4 and 5 in the Introduction are activated.
+This means that all group and field gas targets will refer to sales
+gas, the delivery capacity will be calculated at each timestep, and
+any automatic compressors are turned on and off as required.</p>
+
+<p>If you wish to disable all rate limits for wells and groups when
+calculating the delivery capacity, the keyword <a href="../ecl_rm/GASFDELC.html#GASFDELC">GASFDELC</a> must be used to indicate
+this requirement. The delivery capacity is then the sum of the well
+production rates when operating at their BHP or THP limits, minus
+any gas consumption.</p>
+
+<pre><code>GASFDELC
+ 2 /</code></pre>
+<p>To use features 1 and 2, that is, seasonality profile generation
+and DCQ adjustment, the keyword <a href="../ecl_rm/GASYEAR.html#GASYEAR">GASYEAR</a> or <a href="../ecl_rm/GASPERIO.html#GASPERIO">GASPERIO</a> must be used instead
+of <a href="../ecl_rm/TIME.html#TIME">TIME</a>, <a href="../ecl_rm/TSTEP.html#TSTEP">TSTEP</a> or <a href="../ecl_rm/DATES.html#DATES">DATES</a>. This advances the simulation
+through an integral number of contract periods, starting at the current
+date (which must be the first day of a month). <span class="keyword">GASYEAR</span> may be used if the contract period is a year, otherwise <span class="keyword">GASPERIO</span> must be used. At the end of each contract period,
+reports are printed and restarts are written as requested with <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a> or <a href="../ecl_rm/RPTPRINT.html#RPTPRINT">RPTPRINT</a>. Reports can also
+be printed during the contract period if an Annual Scheduling File
+has been set up requesting them. For example, to request a printed
+report for the timestep ending 1st March each year:</p>
+
+<pre><code>GASBEGIN
+GASMONTH
+-- MONTH  REPORT
+   'MAR'   'YES'  /
+GASEND</code></pre>
+<p>The Annual Scheduling File can also contain keywords defining well
+operations to be performed at the same time each year. More detailed
+examples can be found in the documentation for keywords <a href="../ecl_rm/GASBEGIN.html#GASBEGIN">GASBEGIN</a> and <a href="../ecl_rm/GASMONTH.html#GASMONTH">GASMONTH</a>.</p>
+
+<p>With the first entry of the <a href="../ecl_rm/GASYEAR.html#GASYEAR">GASYEAR</a> or <a href="../ecl_rm/GASPERIO.html#GASPERIO">GASPERIO</a> keyword, the initial DCQ must be specified. For example,
+to advance the simulation through four contract years, with the DCQ
+initially 150,000 but reduced when necessary to obey the swing requirement:</p>
+
+<pre><code>GASYEAR
+-- No of   Initial  Swing  Monthly   Lim DCQ   Ant DCQ   Max no   Conv
+-- years     DCQ      req   t/steps    reduc     reduc    DCQ its  tol
+      4     150000   'YEAR'   /</code></pre>
+<p>The interpretation of the swing requirement most appropriate for
+cases where the swing factors are the same as the profile factors
+has been chosen (this is in fact the default option). Defaulting the
+remaining items forces a new timestep to start on the first of each
+month, applies no limit to the DCQ reduction in a single first pass,
+and applies no anticipated reduction factor to the DCQ at the start
+of a new contract year.</p>
+
+<p>If you wish to model separate gas supply contracts for two or more
+groups, instead of a single contract for the FIELD, you must use the
+keyword <a href="../ecl_rm/GSWINGF.html#GSWINGF">GSWINGF</a> instead of <a href="../ecl_rm/SWINGFAC.html#SWINGFAC">SWINGFAC</a>. <span class="keyword">GSWINGF</span> identifies the groups that have
+gas supply contracts, and sets their individual swing and profile
+factors. You must also set the initial DCQs of the contract groups
+individually, using keyword <span class="keyword">GDCQ</span>. Keyword <span class="keyword">GASYEAR</span> or <span class="keyword">GASPERIO</span> is still used to
+advance the simulation through one or more contract periods, but the
+initial DCQ in item 2 or 3 will be ignored, so leave it defaulted.
+For example, to specify swing and profile factors and initial DCQs
+of two contract groups, PLAT-A and PLAT-B, and advance the simulation
+through four contract years, reducing their DCQs as necessary to obey
+their swing requirements:</p>
+
+<pre><code>GSWINGF
+-- GROUP    JAN  FEB  MAR  APR  MAY  JUN  JUL  AUG  SEP  OCT  NOV  DEC
+  'PLAT-A'  2*1.5036  3*1.0024       3*0.5012       3*1.0024       1.5036
+            2*1.5036  3*1.0024       3*0.5012       3*1.0024       1.5036 /
+  'PLAT-B'  2*1.6551  3*1.0031       3*0.3511       3*1.0031       1.6551
+            2*1.6551  3*1.0031       3*0.3511       3*1.0031       1.6551 /
+/
+
+GDCQ
+-- GROUP     INITIAL   VAR/FIX
+-- NAME        DCQ       DCQ
+  'PLAT-A'    60000     'VAR'  /
+  'PLAT-B'    40000     'VAR'  /
+/
+
+GASYEAR
+-- No of   Initial   Swing   Monthly   Lim DCQ   Ant DCQ   Max no    Conv
+-- years     DCQ      req    t/steps    reduc     reduc    DCQ its   tol
+      4       1*       'YEAR'   /</code></pre>
+<p>ECLIPSE 100  </p>
+
+<p>If there are multiple contract groups, remember
+to enter ‘ <samp class="codeph">YES</samp> ’ in item 1 of keyword <a href="../ecl_rm/GASFIELD.html#GASFIELD">GASFIELD</a> in the <span class="keyword">RUNSPEC</span> section.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

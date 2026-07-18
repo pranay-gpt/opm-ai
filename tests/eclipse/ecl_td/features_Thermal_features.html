@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Thermal features"/>
+<meta name="DC.subject" content="Thermal features, Thermal heat loss features, Thermal option, Features"/>
+<meta name="keywords" content="Thermal features, Thermal heat loss features, Thermal option, Features"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="features_thermal_features"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Thermal features</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="features_thermal_features"><a name="features_thermal_features"><!-- --></a>
+<h1 class="topictitle1">Thermal features</h1>
+
+
+ <div>
+<div class="section" id="features_heat_loss"><a name="features_heat_loss"><!-- --></a><h4 class="sectiontitle">Heat loss</h4><p>Heat loss
+to the overburden, underburden and sides of the reservoir can be modeled.
+The <a href="../ecl_rm/ROCKDIMS.html#ROCKDIMS">ROCKDIMS</a>, keyword should be used to define the number of rock types
+outside the reservoir. Each rock type can have different properties,
+defined using the <a href="../ecl_rm/ROCKPROP.html#ROCKPROP">ROCKPROP</a> keyword. The <a href="../ecl_rm/ROCKCON.html#ROCKCON">ROCKCON</a> keyword is used to define which cells on the edge of the
+reservoir connect to each rock type, and the <a href="../ecl_rm/ROCKCONL.html#ROCKCONL">ROCKCONL</a> keyword is used to
+specify the local grid refinement connection data for these cap and
+base rocks.</p>
+<p>Two methods can be used to calculate the heat loss,
+a numerical method and an analytic method. In the numerical method
+the heat loss rate per unit area is given by</p>
+<p> <math><mrow><mo>-</mo>
+<mi>k</mi><mo>⋅</mo><mrow><mfrac><mrow><mo>∂</mo>
+<mi>T</mi></mrow><mrow><mo>∂</mo><mi>n</mi></mrow>
+</mfrac></mrow><msub><mrow><mo>|</mo></mrow><mrow><mi>n</mi><mo>=</mo><mn>0</mn></mrow></msub></mrow>
+</math> </p>
+<p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><mi>k</mi></math> </td>
+
+<td valign="top">is the conductivity, and    </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>the temperature gradient outside the reservoir        
+         <math><mrow><mrow><mfrac>
+<mrow><mo>∂</mo><mi>T</mi></mrow><mrow><mo>∂</mo>
+<mi>n</mi></mrow></mfrac></mrow></mrow></math> is found
+by solving the temperature equation          </p>
+<p> <math><mrow><mi>c</mi>
+<mo>⋅</mo><mrow><mfrac><mrow><mo>∂</mo><mi>T</mi>
+</mrow><mrow><mo>∂</mo><mi>t</mi></mrow></mfrac>
+</mrow><mo>=</mo><mi>k</mi><mo>⋅</mo><mrow><mfrac>
+<mrow><msup><mrow><mo>∂</mo></mrow><mrow><mn>2</mn>
+</mrow></msup><mi>T</mi></mrow><mrow><mo>∂</mo><msup>
+<mrow><mi>n</mi></mrow><mrow><mn>2</mn></mrow></msup>
+</mrow></mfrac></mrow></mrow></math> </p>
+<p>where       
+          <math><mi>c</mi></math>  is the rock heat capacity.          </p>
+<p>In the analytic method,
+Vinsome and Westerveld’s approximate solution of the temperature equation
+is used (<cite><span> <a href="biblio_Bibliography.html#biblio_70647">Vinsome and Westerveld, 1980</a> </span></cite>). The heat loss per
+unit area in time                  <math><mrow>
+<mi>Δ</mi><mi>t</mi></mrow></math>  is given by      
+   </p>
+<p> <math><mrow><msubsup><mrow>
+<mo>∫</mo></mrow><mrow><mn>0</mn></mrow><mrow><mi>∞</mi></mrow></msubsup><mrow>
+<mi>c</mi><mo>⋅</mo><mrow><mi>T</mi><mo>(</mo><mi>t</mi><mo>+</mo><mrow><mi>Δ</mi><mi>t</mi></mrow>
+<mo>)</mo></mrow><mi>d</mi><mi>n</mi></mrow><mo>-</mo><mrow><msubsup><mrow><mo>∫</mo></mrow><mrow><mn>0</mn></mrow><mrow><mi>∞</mi>
+</mrow></msubsup><mrow><mi>c</mi><mo>⋅</mo><mrow><mi>T</mi><mo>(</mo><mi>t</mi><mo>)</mo></mrow><mi>d</mi><mi>n</mi></mrow></mrow></mrow></math> </p>
+<p>Summary keywords <span class="keyword">FHLR</span> and <span class="keyword">FHLT</span> can be used to obtain information on the field heat loss rate and
+field heat loss total.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

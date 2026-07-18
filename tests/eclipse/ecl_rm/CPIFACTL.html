@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="CPIFACTL"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="CPIFACTL"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>CPIFACTL</title>
+</head>
+<body>
+
+
+<div class="nested0" id="CPIFACTL"><a name="CPIFACTL"><!-- --></a>
+<h1 class="keyword">CPIFACTL</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="cpifactl.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="cpifactl.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d342e45"> x </th>
+
+<th valign="top" id="d342e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d342e54"> x </th>
+
+<th valign="top" id="d342e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d342e45 d342e54 ">  </td>
+
+<td valign="top" headers="d342e48 d342e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d342e45 d342e54 ">  </td>
+
+<td valign="top" headers="d342e48 d342e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d342e45 d342e54 ">  </td>
+
+<td valign="top" headers="d342e48 d342e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d342e45 d342e54 ">  </td>
+
+<td valign="top" headers="d342e48 d342e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d342e45 d342e54 ">  </td>
+
+<td valign="top" headers="d342e48 d342e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d342e45 d342e54 ">  </td>
+
+<td valign="top" headers="d342e48 d342e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d342e45 d342e54 ">  </td>
+
+<td valign="top" headers="d342e48 d342e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d342e45 d342e54 "> x </td>
+
+<td valign="top" headers="d342e48 d342e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This keyword can be used to multiply the connection transmissibility
+factors of selected local grid well connections by a specified value.
+To multiply the transmissibility factors of <strong>all</strong> the connections
+in a well, leave items 3 to 8 defaulted. To multiply the transmissibility
+factors of a subset of connections in a well, you can identify the
+subset by their local grid name and I,J,K location (items 3 to 6).
+A subset of connections can also be identified by their completion
+number (items 7 and 8). Completion numbers are set in keyword <a href="COMPLMPL.html#COMPLMPL">  COMPLMPL</a>.</p>
+
+<p> <span class="keyword">CPIFACTL</span> performs the same role as <a href="CPIFACT.html#CPIFACT"> CPIFACT</a>, but the name
+of the local grid that contains the connections specified in the record
+must be entered in item 3 of <span class="keyword">CPIFACTL</span>. This keyword
+should be used when the well is completed in a local grid.</p>
+
+<p>The keyword is followed by any number of records, each containing
+the following items of data, and each terminated with a slash (/).</p>
+
+<p>The set of records must end with a blank record, containing only
+a slash (/).</p>
+
+<ol>
+<li>Well name, well name template, well list, or well list template. <p>A template enclosed in quotes can be used to refer to multiple wells
+or well lists. See <a href="../ecl_td/wellmode_Well_name_and_well_list_template_matching.html#wellmode_well_name_and_well_list_template_matching">Well name and well
+list template matching</a> in the <cite>ECLIPSE Technical Description</cite> for further details. Well list names must be enclosed in quotes
+and begin with an asterisk (*). Well lists are constructed with the
+keyword <a href="WLIST.html#WLIST"> WLIST</a>.</p>
+ </li>
+
+<li>Multiplier to act on the well’s connection transmissibility factors
+and Kh values. This quantity can be a user-defined argument (UDA),
+and can be set with keywords <a href="UDQ.html#UDQ"> UDQ</a> and <a href="UDADIMS.html#UDADIMS"> UDADIMS</a>. <p>The value must be greater than 1.0E-10.</p>
+ <p>DEFAULT: 1.0</p>
+ </li>
+
+<li>Name of local grid that contains the connections in items 4 to
+6. <p>If this item is defaulted or set to a blank string, the local
+grid name is set to the well’s local grid named in keyword <a href="WELSPECL.html#WELSPECL"> WELSPECL</a>. (In ECLIPSE
+100, the local grid name must not be defaulted if the local grid is
+amalgamated.)</p>
+ <p>The local grid name can also be defaulted if
+the connection locations in items 4, 5, and 6 are all defaulted. The
+multiplier in item 2 then applies to all the connections in the well
+(or to specific completions within it if items 7 and 8 are set).</p>
+<p>DEFAULT: ' '</p>
+</li>
+
+<li>I-location of one or more connecting grid blocks. <p>DEFAULT:
+Negative (allows any I-location).</p>
+ </li>
+
+<li>J-location of one or more connecting grid blocks. <p>DEFAULT:
+Negative (allows any J-location).</p>
+ </li>
+
+<li>K-location of one or more connecting grid blocks. <p>DEFAULT:
+Negative (allows any K-location).</p>
+ </li>
+
+<li>Number of first completion in range. <p>DEFAULT: Negative (allows
+any completion number up to item 8, if set).</p>
+ </li>
+
+<li>Number of last completion in range. <p>DEFAULT: Negative (allows
+any completion number from item 7, if set).</p>
+ </li>
+
+</ol>
+
+<p>If items 4 to 8 are all defaulted, the connection factor multiplier
+is applied to all connections in the well (or all connections in the
+specified local grid if a local grid name is entered in item 3).</p>
+
+<p>If any of items 4 to 8 are set positive, the multiplying factor
+applies only to a subset of the connections in the well or local grid.
+The connections in the subset are those with I,J,K locations matching
+the specified location indices in items 4 to 6 in the local grid named
+in item 3, and with a completion number in the range specified by
+items 7 and 8. A zero or negative value for a location index (I, J,
+or K) matches any value of that location index. Similarly, a zero
+or negative value for a lower or upper end-point of a completion range
+indicates that there is no lower or upper bound on the completion
+numbers.</p>
+
+<div class="section" id="cpifactl_notes"><a name="cpifactl_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li>When <a href="CPIFACT.html#CPIFACT"> CPIFACT</a> (<span class="keyword">CPIFACTL</span>)
+is read, the reference connection factors of the chosen set of connections
+are immediately multiplied by the specified factor to provide the
+connection factor used in calculations. If the <a href="COMPDAT.html#COMPDAT"> COMPDAT</a> (<a href="COMPDATL.html#COMPDATL"> COMPDATL</a>) keyword is subsequently used to reset
+any of their connection data, this causes both the reference connection
+factors and the currently applied factors from <span class="keyword">CPIFACT</span> or <span class="keyword">CPIFACTL</span> to be reset. If the multiplier is
+still required, <span class="keyword">CPIFACT</span> (<span class="keyword">CPIFACTL</span>) 
+must be entered again after <span class="keyword">COMPDAT</span> (<span class="keyword">COMPDATL</span>). </li>
+
+<li><span class="keyword">CPIFACTL</span> is <strong>not</strong> cumulative—if it is
+used more than once on the same set of well connections, the multiplying
+factor is applied to the reference connection factors of the chosen
+set of connections each time the <span class="keyword">CPIFACTL</span> keyword
+is applied. The reference connection factor is the connection factor
+set using keywords other than <span class="keyword">CPIFACTL</span>.</li>
+
+<li>Keywords <a href="WELPI.html#WELPI"> WELPI</a> and <span class="keyword">CPIFACT</span> (<span class="keyword">CPIFACTL</span>) must
+not both be used on the same well at the same time without an intervening <a href="TIME.html#TIME"> TIME</a>, <a href="TSTEP.html#TSTEP"> TSTEP</a>, or <a href="DATES.html#DATES"> DATES</a> keyword. </li>
+
+<li>The only difference between the <span class="keyword">CPIFACTL</span> and <a href="WPIMULTL.html#WPIMULTL"> WPIMULTL</a> keywords is
+that <span class="keyword">CPIFACTL</span> is not cumulative. This
+allows item 2 to be set using a UDA to provide a varying but non-cumulative
+multiplier.</li>
+
+<li>Only one UDA can be defined for each item per well at any one
+time.  For any particular item, if two UDAs are defined for different
+connections on the same well, then the corresponding value will be
+calculated for all UDA-controlled connections using the most recently
+requested UDA.</li>
+
+</ul>
+ </div>
+
+<div class="section" id="cpifactl_example"><a name="cpifactl_example"><!-- --></a><h4 class="sectiontitle">Example</h4><pre><code>CPIFACTL
+ PROD1 1.3 / (all connections in the well PROD1)
+ PROD2 0.82 LGR2 / (all connections that the well PROD2 has in LGR 'LGR2')
+ PROD3 0.98 4* 5 8 / (applies to completions 5,6,7 and 8 of well PROD3)
+ PROD4 0.5 LGREAST 2* 3 / (all connections in layer 3 of LGR 'LGREAST')
+ PROD5 0.75 LGRWEST 3 19 7 / (Only applies to connection (3,19,7) of LGR 'LGRWEST')
+ PROD6 CU_PIF / (all connections in the well PROD1 have their reference connection factor multiplied by the current value of the CU_PIF UDQ at each timestep)
+/</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

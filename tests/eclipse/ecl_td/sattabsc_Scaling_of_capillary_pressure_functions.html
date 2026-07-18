@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Scaling of capillary pressure functions"/>
+<meta name="DC.subject" content="End-point scaling, Saturation table scaling, Capillary pressure"/>
+<meta name="keywords" content="End-point scaling, Saturation table scaling, Capillary pressure"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="sattabsc_scaling_of_capillary_pressure_functions"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Scaling of capillary pressure functions</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="sattabsc_scaling_of_capillary_pressure_functions"><a name="sattabsc_scaling_of_capillary_pressure_functions"><!-- --></a>
+<h1 class="topictitle1">Scaling of capillary pressure functions</h1>
+
+
+ <div>
+<p>The end points of the oil-water capillary pressure functions are
+taken to be the connate water and maximum water saturations. The values
+of  P<sub>cow</sub>  at the saturation nodes <a href="../ecl_rm/swl_SWL_ISWL.html#swl_swl_iswl"> SWL</a> and <a href="../ecl_rm/swu_SWU_ISWU.html#swu_swu_iswu">SWU</a> are preserved during the scaling process. Similarly, the
+gas-oil capillary pressure end points are <a href="../ecl_rm/sgl_SGL_ISGL.html#sgl_sgl_isgl">SGL</a> and <a href="../ecl_rm/sgu_SGU_ISGU.html#sgu_sgu_isgu">SGU</a>.</p>
+
+<p>It is possible to modify the water (or gas) connate saturation
+for the capillary pressure scaling without modifying the connate saturation
+used for the oil relative permeability scaling.</p>
+
+<p>ECLIPSE 100                 </p>
+
+<p>The keywords <a href="../ecl_rm/SWLPC.html#SWLPC">SWLPC</a> and <a href="../ecl_rm/SGLPC.html#SGLPC">SGLPC</a> are used to input the connate saturation in this case. If
+both of the <span class="keyword">SWL</span> and <span class="keyword">SWLPC</span> keywords
+are present, the capillary pressure scaling will use <span class="keyword">SWLPC</span> and the relative permeability scaling will use <span class="keyword">SWL</span>.</p>
+
+<div class="section" id="sattabsc_scaling_of_the_capillary_pressure_values__vertical__scaling_"><a name="sattabsc_scaling_of_the_capillary_pressure_values__vertical__scaling_"><!-- --></a><h4 class="sectiontitle">Scaling of the capillary pressure values (vertical scaling)</h4><p>It is possible to scale the maximum capillary pressure value on
+a grid block by grid block basis.</p>
+<p>The maximum values are specified
+using the <a href="../ecl_rm/pcw_PCW_IPCW.html#pcw_pcw_ipcw">PCW</a> and <a href="../ecl_rm/pcg_PCG_IPCG.html#pcg_pcg_ipcg">PCG</a> keywords for the oil-water and gas-oil capillary pressures
+respectively.</p>
+<p>In the water-oil case:</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="sattabsc.equ.00b6"/>
+ <math><msub><mi>P</mi>
+<mi>c</mi></msub><mo>=</mo><mrow><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>t</mi></mrow></msub><mfrac><mrow>
+<mtext>PCW</mtext></mrow><mrow><msub><mi>P</mi><mrow>
+<mi>c</mi><mi>m</mi></mrow></msub></mrow></mfrac>
+</mrow></math> 
+</td><td align="right">[Eq. 160.1]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>t</mi></mrow></msub></math> </td>
+
+<td valign="top">capillary pressure from the table</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>P</mi>
+<mrow><mi>c</mi><mi>m</mi></mrow></msub></math> </td>
+
+<td valign="top">maximum  <math><msub><mi>P</mi>
+<mi>c</mi></msub></math>  in the table - at  <math><msub><mi>S</mi>
+<mi>w</mi></msub><mo>=</mo><msub><mi>S</mi><mrow>
+<mi>w</mi><mi>c</mi><mi>o</mi></mrow></msub></math>, connate water (this is the entry capillary pressure in the table)</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow>
+<mi>P</mi><mi>C</mi><mi>W</mi></mrow></math> </td>
+
+<td valign="top">maximum  <math><msub><mi>P</mi>
+<mi>c</mi></msub></math>  from the <span class="keyword">PCW</span> data.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

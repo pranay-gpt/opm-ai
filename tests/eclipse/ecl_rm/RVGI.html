@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="RVGI"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="RVGI"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>RVGI</title>
+</head>
+<body>
+
+
+<div class="nested0" id="RVGI"><a name="RVGI"><!-- --></a>
+<h1 class="keyword">RVGI</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="rvgi.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="rvgi.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d2156e45">                         x </th>
+
+<th valign="top" id="d2156e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d2156e54"> </th>
+
+<th valign="top" id="d2156e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d2156e45 d2156e54 "> </td>
+
+<td valign="top" headers="d2156e48 d2156e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2156e45 d2156e54 "> </td>
+
+<td valign="top" headers="d2156e48 d2156e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2156e45 d2156e54 "> </td>
+
+<td valign="top" headers="d2156e48 d2156e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2156e45 d2156e54 ">                         x </td>
+
+<td valign="top" headers="d2156e48 d2156e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2156e45 d2156e54 "> </td>
+
+<td valign="top" headers="d2156e48 d2156e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2156e45 d2156e54 "> </td>
+
+<td valign="top" headers="d2156e48 d2156e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2156e45 d2156e54 "> </td>
+
+<td valign="top" headers="d2156e48 d2156e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d2156e45 d2156e54 "> </td>
+
+<td valign="top" headers="d2156e48 d2156e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The data comprises <a href="TABDIMS.html#TABDIMS.NTPVT"> NTPVT</a> 
+(set in the <span class="keyword">TABDIMS</span> keyword) tables of
+saturated gas oil-gas ratio multiplier functions, each terminated
+by a slash (/), describing the variation of the maximum possible OGR
+of gas with pressure and Gi values. Each table consists of up to 
+ <a href="TABDIMS.html#TABDIMS.NPPVT"> NPPVT</a> 
+(set in the <span class="keyword">TABDIMS</span> keyword) sets of data records. Each set of records within a
+table consists of up to <samp class="codeph">NPPVT</samp> records of data items
+to allow the specification of a two-dimensional (P, Gi) function which
+multiplies the saturated OGR value at (P, Gi=0) to give the true saturated
+OGR at (P, Gi). The saturated OGR value at (P, Gi=0) is obtained from
+the corresponding <span class="keyword">PVTG</span> table.</p>
+
+<p>The first record of each elementary set of records contains the
+following items of data:</p>
+
+<ol>
+<li> The gas pressure value.    <p>The values should increase monotonically
+down the column.</p>
+                <p>UNITS: barsa (<samp class="codeph">METRIC</samp>), psia (<samp class="codeph">FIELD</samp>), atma (<samp class="codeph">LAB</samp>)</p>
+ </li>
+
+<li> The factor by which the saturated OGR calculated from the <samp class="codeph">PVTG</samp> keyword at a pressure corresponding to item 1 has to
+be multiplied to give the true saturated OGR at a pressure corresponding
+to item 1 and a Gi value given by item 1 in the corresponding <span class="keyword">GINODE</span> table. </li>
+
+</ol>
+
+<p>For record 2 to the maximum of <samp class="codeph">NPPVT</samp>, 
+there should be only 1 data item in the record. This
+item defines the corresponding factor by which the saturated OGR at
+(P, Gi=0) (computed from the <samp class="codeph">PVTG</samp> data) has to be
+multiplied to give the true saturated OGR for gas at a pressure value
+given in item 1 above and whose Gi value is specified in the corresponding
+record in the <a href="GINODE.html#GINODE">  GINODE</a> keyword.</p>
+
+<p>See <a href="../ecl_td/gipscomp_Gi_pseudo-compositional_model.html#gipscomp">"Gi pseudo-compositional
+model"</a> in the <cite>ECLIPSE Technical Description</cite> for
+further information.</p>
+
+<div class="section" id="rvgi_example"><a name="rvgi_example"><!-- --></a><h4 class="sectiontitle">Example</h4>  <p>With <samp class="codeph">NTPVT=1</samp> and <samp class="codeph">NPPVT=2</samp> </p>
+ <pre><code>RVGI
+ 100.0  1.0
+        0.75  /
+ 200.0  1.0
+        0.72  /
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

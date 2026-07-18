@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Group production rules"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="groupprd_group_production_rules"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Group production rules</title>
+</head>
+<body>
+
+
+<div class="nested0" id="groupprd_group_production_rules"><a name="groupprd_group_production_rules"><!-- --></a>
+<h1 class="keyword">Group production rules</h1>
+
+
+ <div>
+
+<div class="tablenoborder"><a name="groupprd.tab.0009"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="groupprd.tab.0009" class="flagtable" frame="border" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">                         x                   
+  </td>
+
+<td valign="top">                         ECLIPSE 100         
+            </td>
+
+</tr>
+
+<tr>
+<td valign="top">                               
+               </td>
+
+<td valign="top">                         ECLIPSE 300         
+            </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>This chapter gives details of the implementation of the <a href="../ecl_rm/PRORDER.html#PRORDER">PRORDER</a> keyword actions, which
+are performed by ECLIPSE 100 whenever a group fails to meet its target
+production rate set in keyword <a href="../ecl_rm/GCONPROD.html#GCONPROD">GCONPROD</a>. This feature is currently
+not available in ECLIPSE 300.</p>
+
+<p>The available actions are:</p>
+
+<ol>
+<li>Drill new wells from the drilling queue</li>
+
+<li>Open new connections on AUTO in existing wells</li>
+
+<li>Reduce each well's THP limit to a specified lower value</li>
+
+<li>Change VFP table numbers (for example to model a retubing operation)</li>
+
+<li>Change well ALQ values (that is apply a fixed amount of artificial
+lift)</li>
+
+<li>Switch on, or increase power of, compressors linked to the group.
+(This option is only available if the Extended Network model is in
+use - see <a href="extended_The_extended_network_model.html#extended_the_extended_network_model"> "The extended network model"</a>).</li>
+
+</ol>
+
+<p>The order in which the actions are performed is dictated by the
+order in which their respective mnemonics are entered in record 1
+of the <span class="keyword">PRORDER</span> keyword. Whenever a group fails
+to meet its target production rate set in keyword <span class="keyword">GCONPROD</span>, ECLIPSE first looks for a well on which to perform the first action.
+If no suitable well can be found, or if rig availability constraints
+prevent this action from being performed at that time, ECLIPSE looks
+for a well on which to perform the second action in the list. If it
+cannot perform the second action on a well, it looks for a well on
+which to perform the third action, and so on. The implementation of
+each of the five actions is described in detail below.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Control of numerical diffusion in miscible flow simulation"/>
+<meta name="DC.subject" content="Solvent model numerical diffusion in miscible flow, Solvent, Numerical diffusion, Diffusion, Miscible flow"/>
+<meta name="keywords" content="Solvent model numerical diffusion in miscible flow, Solvent, Numerical diffusion, Diffusion, Miscible flow"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="solvent_control_of_numerical_diffusion_in_miscible_flow_simulation"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Control of numerical diffusion in miscible flow simulation</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="solvent_control_of_numerical_diffusion_in_miscible_flow_simulation"><a name="solvent_control_of_numerical_diffusion_in_miscible_flow_simulation"><!-- --></a>
+<h1 class="topictitle1">Control of numerical diffusion in miscible flow simulation</h1>
+
+
+ <div>
+<p>The relative permeability of the oil and solvent components in
+the Todd- Longstaff model are specified by equation <a href="solvent_Model_formulation.html#solvent.XID-00000056">404.4</a>.
+The relative permeability of each component is essentially proportional
+to the saturation of each component for low saturations. In such cases
+the influence of numerical diffusion in spreading the miscible components
+can be unacceptably high and some control of the numerical diffusion
+errors is required.</p>
+
+<p>A two point upstream algorithm, operating only on the miscible
+component relative permeabilities, is available for use in the ECLIPSE
+Miscible Flood option to control the numerical diffusion of oil and
+solvent. In the present version of ECLIPSE the two-point upstreaming
+algorithm is only available for three-phase cases and hence cannot
+be used with the separate solvent option.</p>
+
+<p>The two-point upstream projection technique is illustrated in the
+following figure.</p>
+
+<div class="fignone" id="solvent.XID-00000266"><a name="solvent.XID-00000266"><!-- --></a>
+
+ <br/><img src="../img/twopoint1.png" width="368px"/><br/> 
+<br/><span class="figcap">
+           Figure 414.1  The two point upstream projection technique</span></div>
+
+<p>We need to compute the flow of component C between cells I and
+J which we take to be aligned along the X-axis. Suppose that cell
+I is the upstream cell for the flow of component C between I and J.
+Let cell K be the second upstream cell to cell J and K<sub>ck</sub>, K<sub>ci</sub> and K<sub>cj</sub> denote the component relative
+permeabilities in cells K, I and J respectively. DX<sub>k</sub>, DX<sub>i</sub> and DX<sub>j</sub> are the X-direction cell sizes.</p>
+
+<p>For single point upstream weighting, the flow rate of component
+C across the I-J cell interface is F<sub>ij,c</sub> where</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="solvent.XID-00000273"/>
+ <math><mrow><msub><mrow>
+<mi>F</mi></mrow><mrow><mi>i</mi><mi>j</mi><mo>,</mo>
+<mi>c</mi></mrow></msub><mo>=</mo><msub><mrow><mi>T</mi></mrow><mrow><mi>i</mi><mi>j</mi></mrow></msub>
+<mo>⋅</mo><mfrac><mrow><msub><mrow><mi>K</mi></mrow>
+<mrow><mi>c</mi><mi>i</mi></mrow></msub></mrow><mrow>
+<msub><mrow><mi>B</mi></mrow><mrow><mi>c</mi><mi>i</mi><mtext> </mtext></mrow></msub><msub><mrow>
+<mi>μ</mi></mrow><mrow><mi>c</mi><mi>i</mi></mrow>
+</msub></mrow></mfrac><mo>⋅</mo><msub><mrow><mi>δ</mi>
+<mi>Φ</mi></mrow><mrow><mi>i</mi><mi>j</mi><mo>,</mo><mi>c</mi></mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 414.1]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>T</mi>
+<mrow><mi>i</mi><mi>j</mi></mrow></msub></math> </td>
+
+<td valign="top"> is the transmissibility between cells I and J</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><mi>δ</mi>
+<msub><mi>Φ</mi><mrow><mi>i</mi><mi>j</mi><mo>,</mo><mi>c</mi></mrow></msub></mrow></math> </td>
+
+<td valign="top">is the potential difference between cells I and J for component
+C</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>B</mi>
+<mi>c</mi></msub></math>,  <math><msub>
+<mi>μ</mi><mi>c</mi></msub></math>  </td>
+
+<td valign="top">are the formation volume factor and viscosity of component
+C</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The two point upstreaming algorithm operating on component relative
+permeabilities replaces  <math><msub><mi>K</mi>
+<mrow><mi>c</mi><mi>i</mi></mrow></msub></math>  in
+the equation <a href="solvent_Control_of_numerical_diffusion_in_miscible_flow_simulation.html#solvent.XID-00000273">414.1</a>  by a linearly
+extrapolated relative permeability,  <math><mrow><msubsup><mrow>
+<mi>K</mi></mrow><mrow><mi>c</mi><mi>i</mi></mrow>
+<mrow><mo>*</mo></mrow></msubsup></mrow></math>, obtained
+from cells I and K,</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="solvent.equ.0283"/>
+ <math><mrow><msubsup><mrow>
+<mi>K</mi></mrow><mrow><mi>c</mi><mi>i</mi></mrow>
+<mrow><mo>*</mo></mrow></msubsup><mo>=</mo><mrow>
+<mfrac><mrow><mrow><mn>2</mn><msub><mrow><mtext>DX</mtext>
+</mrow><mrow><mi>i</mi></mrow></msub></mrow><mo>+</mo>
+<msub><mrow><mtext>DX</mtext></mrow><mrow><mi>k</mi>
+</mrow></msub></mrow><mrow><msub><mrow><mtext>DX</mtext>
+</mrow><mrow><mi>i</mi></mrow></msub><mo>+</mo><msub>
+<mrow><mtext>DX</mtext></mrow><mrow><mi>k</mi></mrow>
+</msub></mrow></mfrac><msub><mrow><mi>K</mi></mrow>
+<mrow><mi>c</mi><mi>i</mi></mrow></msub><mo>⁢</mo>
+<mo>-</mo><mrow><mtext> </mtext><mfrac><mrow><msub>
+<mrow><mtext>DX</mtext></mrow><mrow><mi>i</mi></mrow>
+</msub></mrow><mrow><msub><mrow><mtext>DX</mtext></mrow>
+<mrow><mi>i</mi></mrow></msub><mo>+</mo><msub><mrow>
+<mtext>DX</mtext></mrow><mrow><mi>k</mi></mrow></msub>
+</mrow></mfrac><msub><mrow><mi>K</mi></mrow><mrow><mi>c</mi><mi>k</mi></mrow></msub></mrow></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 414.2]
+              </td></tr></tbody></table>
+<p>The above expression for  <math><mrow><msubsup><mrow>
+<mi>K</mi></mrow><mrow><mi>c</mi><mi>i</mi></mrow>
+<mrow><mo>*</mo></mrow></msubsup></mrow></math> can
+yield negative values or values greater than unity, and in such cases
+needs to be restricted to physical values. This is most simply achieved
+by constraining  <math>
+<mrow><msubsup><mrow><mi>K</mi></mrow><mrow><mi>c</mi>
+<mi>i</mi></mrow><mrow><mo>*</mo></mrow></msubsup>
+</mrow></math> to lie between the values  <math><msub>
+<mi>K</mi><mrow><mi>c</mi><mi>i</mi></mrow></msub>
+</math>  and  <math><msub><mi>K</mi>
+<mrow><mi>c</mi><mi>j</mi></mrow></msub></math>. Thus,</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="solvent.equ.028b"/>
+ <math><mrow><mrow><mtext>MIN</mtext><mo>⁡</mo><mrow><mo>(</mo><mrow><msub>
+<mrow><mi>K</mi></mrow><mrow><mi>c</mi><mi>i</mi>
+<mtext> </mtext></mrow></msub><mo>,</mo><msub>
+<mrow><mtext> </mtext><mi>K</mi></mrow><mrow><mi>c</mi><mi>j</mi><mtext> </mtext></mrow></msub>
+</mrow><mo>)</mo></mrow></mrow><mo>&lt;</mo><msubsup>
+<mrow><mi>K</mi></mrow><mrow><mi>c</mi><mi>i</mi>
+</mrow><mrow><mo>*</mo></mrow></msubsup><mo>&lt;</mo>
+<mrow><mtext>MAX</mtext><mo>⁡</mo><mrow><mo>(</mo>
+<mrow><msub><mrow><mi>K</mi></mrow><mrow><mi>c</mi>
+<mi>i</mi><mtext> </mtext></mrow></msub><mo>,</mo>
+<msub><mrow><mtext> </mtext><mi>K</mi></mrow><mrow>
+<mi>c</mi><mi>j</mi><mtext> </mtext></mrow></msub>
+</mrow><mo>)</mo></mrow></mrow></mrow></math> 
+</td><td align="right">[Eq. 414.3]
+              </td></tr></tbody></table>
+<p>In some cases a single point upstream calculation of  <math><mrow><msubsup><mrow>
+<mi>K</mi></mrow><mrow><mi>c</mi><mi>i</mi></mrow>
+<mrow><mo>*</mo></mrow></msubsup></mrow></math> (that
+is,  <math><mrow>
+<msubsup><mrow><mi>K</mi></mrow><mrow><mi>c</mi><mi>i</mi></mrow><mrow><mo>*</mo></mrow></msubsup></mrow>
+</math> = <math><msub><mi>K</mi>
+<mrow><mi>c</mi><mi>i</mi></mrow></msub></math>) should
+be used instead of the two point upstream value. Such cases are</p>
+
+<ul>
+<li>Cell K lies outside the reservoir mesh (that is the K-I cell boundary
+is an edge of the reservoir)</li>
+
+<li>Cell K is inactive</li>
+
+<li>The K-I cell boundary contains a zero transmissibility multiplier</li>
+
+<li>Cells I and J are coupled by a non-neighbor connection.</li>
+
+</ul>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

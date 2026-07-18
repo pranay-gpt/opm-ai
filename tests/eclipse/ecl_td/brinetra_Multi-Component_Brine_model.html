@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Multi-component brine model"/>
+<meta name="DC.subject" content="Fluid model, Brine model, Multi-component brine model, Multi-component brine model cation exchange"/>
+<meta name="keywords" content="Fluid model, Brine model, Multi-component brine model, Multi-component brine model cation exchange"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="brinetra_multi-component_brine_model"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Multi-component brine model</title>
+<script language="JavaScript" type="text/javascript" src="../resources/js/MathJax/MathJax.js">
+    MathJax.Hub.Config({
+      extensions: ["mml2jax.js", "tex2jax.js", "asciimath2jax.js"],
+      jax: ["input/MathML","input/TeX","input/AsciiMath","output/SVG"],
+      tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+      menuSettings: { zoom: "Click", zscale: "200%" }
+    });
+     </script></head>
+<body>
+
+
+<div class="nested0" id="brinetra_multi-component_brine_model"><a name="brinetra_multi-component_brine_model"><!-- --></a>
+<h1 class="topictitle1">Multi-component brine model</h1>
+
+
+ <div>
+<p>ECLIPSE 100</p>
+
+<p>In the standard brine tracking option all
+salt species are lumped into a single salt. The multi-component brine
+model enables the modeling of processes where different salt species
+affect fluid properties in different ways. For example, when used
+in conjunction with the surfactant and polymer options, effective
+salinities are calculated based on the transport and exchange of different
+ions. These effective salinities can then be used when modeling surfactant
+phase behavior and polymer/surfactant adsorption.</p>
+
+<p>Other salinity effects (for example, the low salinity option discussed
+below) do not use the multi-component brine model, and they are not
+active when the multi-component brine model is active. Certain combinations
+are explicitly banned; in particular, the <a href="../ecl_rm/SALTNODE.html#SALTNODE">SALTNODE</a> keyword and other
+keywords depending on it will not work with <a href="../ecl_rm/ECLMC.html#ECLMC">ECLMC</a>.</p>
+
+<p>In the current multi-component brine model three different ion
+species are considered: anions, monovalent cations, and divalent cations.
+All salts are assumed to be fully dissociated into their ion constituents,
+and salt precipitation/dissolution is therefore not accounted for.
+In this release, the ion species are transported as water phase tracers
+according to:</p>
+
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.XID-00000057"/>
+ <math><mrow><mfrac>
+<mrow><mi>d</mi></mrow><mrow><mi>d</mi><mi>t</mi>
+</mrow></mfrac><mrow><mo>(</mo><mfrac><mrow><msub>
+<mrow><mi>V</mi><mi>S</mi></mrow><mrow><mi>w</mi>
+</mrow></msub><mrow><mo>(</mo><msub><mrow><mi>C</mi>
+</mrow><mrow><mo>+</mo><mo>+</mo></mrow></msub><mo>+</mo><msubsup><mrow><mi>C</mi></mrow><mrow><mo>+</mo>
+<mo>+</mo></mrow><mrow><mi>S</mi></mrow></msubsup><mo>)</mo></mrow></mrow><mrow><msub><mrow><mi>B</mi>
+</mrow><mrow><mi>w</mi></mrow></msub></mrow></mfrac>
+<mo>+</mo><msubsup><mrow><mi>V</mi><mi>C</mi></mrow>
+<mrow><mo>+</mo><mo>+</mo></mrow><mrow><mi>r</mi>
+</mrow></msubsup><mo>)</mo></mrow><mo>=</mo><mi>Σ</mi><mrow><mo>[</mo><mfrac>
+<mrow><msub><mrow><mi>T</mi><mi>k</mi></mrow><mrow>
+<mi>r</mi><mi>w</mi></mrow></msub></mrow><mrow><msub>
+<mrow><mi>B</mi></mrow><mrow><mi>w</mi></mrow></msub>
+<msub><mrow><mi>μ</mi></mrow><mrow><mi>w</mi>
+</mrow></msub></mrow></mfrac><mrow><mo>(</mo><msub>
+<mrow><mi>δ</mi><mi>P</mi></mrow><mrow><mi>w</mi>
+</mrow></msub><mo>−</mo><msub><mrow><mi>ρ</mi>
+</mrow><mrow><mi>w</mi></mrow></msub><msub><mrow><mi>g</mi><mi>D</mi></mrow><mrow><mi>z</mi></mrow></msub>
+<mo>)</mo></mrow><mo>]</mo></mrow><msub><mrow><mi>C</mi></mrow><mrow><mo>+</mo><mo>+</mo></mrow></msub>
+<mo>+</mo><msub><mrow><mi>Q</mi></mrow><mrow><mi>W</mi></mrow></msub><msub><mrow><mi>C</mi></mrow>
+<mrow><mo>+</mo><mo>+</mo></mrow></msub></mrow></math> 
+</td><td align="right">[Eq. 206.1]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.XID-0000005a"/>
+ <math><mrow><mfrac>
+<mrow><mi>d</mi></mrow><mrow><mi>d</mi><mi>t</mi>
+</mrow></mfrac><mrow><mo>(</mo><mfrac><mrow><msub>
+<mrow><mi>V</mi><mi>S</mi></mrow><mrow><mi>w</mi>
+</mrow></msub><msub><mrow><mi>C</mi></mrow><mrow><mo>−</mo></mrow></msub></mrow><mrow><msub><mrow><mi>B</mi></mrow><mrow><mi>w</mi></mrow></msub></mrow>
+</mfrac><mo>)</mo></mrow><mo>=</mo><mi>Σ</mi><mrow><mo>[</mo><mfrac><mrow><msub><mrow>
+<mi>T</mi><mi>k</mi></mrow><mrow><mi>r</mi><mi>w</mi>
+</mrow></msub></mrow><mrow><msub><mrow><mi>B</mi>
+</mrow><mrow><mi>w</mi></mrow></msub><msub><mrow><mi>μ</mi></mrow><mrow><mi>w</mi></mrow></msub></mrow>
+</mfrac><mrow><mo>(</mo><msub><mrow><mi>δ</mi>
+<mi>P</mi></mrow><mrow><mi>w</mi></mrow></msub><mo>−</mo><msub><mrow><mi>ρ</mi></mrow><mrow><mi>w</mi></mrow></msub><msub><mrow><mi>g</mi><mi>D</mi>
+</mrow><mrow><mi>z</mi></mrow></msub><mo>)</mo></mrow>
+<mo>]</mo></mrow><msub><mrow><mi>C</mi></mrow><mrow>
+<mo>−</mo></mrow></msub><mo>+</mo><msub><mrow>
+<mi>Q</mi></mrow><mrow><mi>w</mi></mrow></msub><msub>
+<mrow><mi>C</mi></mrow><mrow><mo>−</mo></mrow>
+</msub></mrow></math> 
+</td><td align="right">[Eq. 206.2]
+              </td></tr></tbody></table>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.equ.005d"/>
+ <math><mrow><msub><mrow>
+<mi>C</mi></mrow><mrow><mtext>+</mtext></mrow></msub>
+<mo>=</mo><msub><mrow><mi>C</mi></mrow><mrow><mtext>-</mtext></mrow></msub><mo>−</mo><msub><mrow><mi>C</mi></mrow><mrow><mo>+</mo><mo>+</mo></mrow></msub>
+</mrow></math> 
+</td><td align="right">[Eq. 206.3]
+              </td></tr></tbody></table>
+<p>where</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msub><mi>C</mi>
+<mtext>++</mtext></msub></math> </td>
+
+<td valign="top">denotes the equivalent molar concentration of divalent cations
+    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>C</mi>
+<mtext>+</mtext></msub></math> </td>
+
+<td valign="top">denotes the equivalent molar concentration of monovalent cations
+ </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msub><mi>C</mi>
+<mtext>-</mtext></msub></math> </td>
+
+<td valign="top">denotes the equivalent molar concentration of anions    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msubsup><mrow>
+<mi>C</mi></mrow><mrow><mo>+</mo><mo>+</mo></mrow>
+<mrow><mi>s</mi></mrow></msubsup></mrow></math> </td>
+
+<td valign="top">denotes the concentration of divalent cations associated with
+surfactant    </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><mrow><msubsup><mrow>
+<mi>C</mi></mrow><mrow><mo>+</mo><mo>+</mo></mrow>
+<mrow><mi>r</mi></mrow></msubsup></mrow></math> </td>
+
+<td valign="top">denotes the concentration of divalent cations associated with
+rock     </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The condition of electroneutrality in the water phase,  <math><msub><mi>C</mi>
+<mtext>-</mtext></msub><mo>=</mo><msub><mi>C</mi>
+<mtext>++</mtext></msub><mo>+</mo><msub><mi>C</mi>
+<mtext>+</mtext></msub></math>, is eliminated explicitly,
+and therefore only two of the three ion concentration transport equations
+need solving. Hence, when activating the Multi-component brine model
+an additional two conservation equations (<a href="brinetra_Multi-Component_Brine_model.html#brinetra.XID-00000057">206.1</a>  and <a href="brinetra_Multi-Component_Brine_model.html#brinetra.XID-0000005a">206.2</a>) are solved for the anion and
+divalent cation concentrations, respectively. As for the standard
+brine tracking option the ion concentrations are updated at the end
+of a timestep after solving the primary equations for the phase flows.
+         </p>
+
+<p>The multi-component brine model is activated using keyword <a href="../ecl_rm/BRINE.html#BRINE">BRINE</a> in the <span class="keyword">RUNSPEC</span> section in conjunction with the <a href="../ecl_rm/ECLMC.html#ECLMC">ECLMC</a> keyword. The salts are specified in the <span class="keyword">BRINE</span> keyword by their chemical formula and must be chosen from the list
+given in table <a href="brinetra_Multi-Component_Brine_model.html#brinetra.XID-00000078">206.2</a>. Internally,
+all salt concentrations are converted and lumped into equivalent molar
+concentrations of anions, monovalent cations, and divalent cations.
+The equivalent molar concentration of an ion is the molar concentration
+multiplied by the ion valence. Thus, a calcium ion (Ca<sup>2+</sup>) concentration of 0.1 kg-M/m<sup>3</sup> corresponds to an equivalent
+concentration of 0.2 kg-M/m<sup>3</sup>. All reporting of ion concentrations
+is done in equivalent concentrations.</p>
+
+
+<div class="tablenoborder"><a name="brinetra.XID-00000078"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="brinetra.XID-00000078" frame="border" border="1" rules="all"><caption>
+           Table 206.2  List of available salts in the Multi-Component Brine mode.</caption>   
+<thead align="left">
+<tr>
+<th valign="top" id="d94e644">Salt name</th>
+
+<th valign="top" id="d94e647">Chemical formula</th>
+
+<th valign="top" id="d94e650">Molecular weight [kg/kg-M]</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d94e644 ">Sodium Chloride</td>
+
+<td valign="top" headers="d94e647 ">NaCl</td>
+
+<td valign="top" headers="d94e650 ">58.44</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d94e644 ">Potassium Chloride</td>
+
+<td valign="top" headers="d94e647 ">KCl</td>
+
+<td valign="top" headers="d94e650 ">74.55</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d94e644 ">Calcium Chloride</td>
+
+<td valign="top" headers="d94e647 ">CaCl<sub>2</sub></td>
+
+<td valign="top" headers="d94e650 ">110.98</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d94e644 ">Magnesium Chloride</td>
+
+<td valign="top" headers="d94e647 ">MgCl<sub>2</sub></td>
+
+<td valign="top" headers="d94e650 ">95.21</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d94e644 ">Sodium Carbonate</td>
+
+<td valign="top" headers="d94e647 ">Na<sub>2</sub>CO<sub>3</sub></td>
+
+<td valign="top" headers="d94e650 ">105.99</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d94e644 ">Potassium Carbonate</td>
+
+<td valign="top" headers="d94e647 ">K<sub>2</sub>CO<sub>3</sub></td>
+
+<td valign="top" headers="d94e650 ">138.20</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d94e644 ">Calcium Carbonate</td>
+
+<td valign="top" headers="d94e647 ">CaCO<sub>3</sub></td>
+
+<td valign="top" headers="d94e650 ">100.09</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d94e644 ">Magnesium Carbonate</td>
+
+<td valign="top" headers="d94e647 ">MgCO<sub>3</sub></td>
+
+<td valign="top" headers="d94e650 ">84.31</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d94e644 ">Sodium Sulfate</td>
+
+<td valign="top" headers="d94e647 ">Na<sub>2</sub>SO<sub>4</sub></td>
+
+<td valign="top" headers="d94e650 ">142.04</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d94e644 ">Potassium Sulfate</td>
+
+<td valign="top" headers="d94e647 ">K<sub>2</sub>SO<sub>4</sub></td>
+
+<td valign="top" headers="d94e650 "><p>174.26</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d94e644 ">Calcium Sulfate</td>
+
+<td valign="top" headers="d94e647 ">CaSO<sub>4</sub></td>
+
+<td valign="top" headers="d94e650 ">136.14</td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d94e644 ">Magnesium Sulfate </td>
+
+<td valign="top" headers="d94e647 ">MgSO<sub>4</sub></td>
+
+<td valign="top" headers="d94e650 ">120.37</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<div class="section" id="brinetra_cation_exchange"><a name="brinetra_cation_exchange"><!-- --></a><h4 class="sectiontitle">Cation exchange</h4><p>In surfactant processes the activity of the surfactant changes
+with changing salt concentrations. Divalent cations have a much greater
+effect on surfactant activity, and thereby on phase behavior, than
+monovalent cations. The cation exchange with rock surfaces will change
+the flowing concentrations of monovalent and divalent cations and
+is therefore important to the performance of surfactant floods. The
+exchange capacity of the rock generally depends on the clay content
+in the reservoir. In the same way that rock surfaces act as cation
+exchangers, anionic surfactant micelles can also act as cation exchangers.
+The cation exchange model accounts for exchange of cations on both
+rock surfaces and surfactant micelles.</p>
+<p>The exchange equilibrium
+reactions, exemplified here for sodium and calcium, are</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.equ.00e0"/>
+ <math><mrow><msup><mrow>
+<mn>2</mn><mi>N</mi><mi>a</mi></mrow><mrow><mo>+</mo>
+</mrow></msup><mrow><mo>(</mo><mi>a</mi><mi>q</mi>
+<mo>)</mo></mrow><mo>⁢</mo><mtext> </mtext><mo>+</mo>
+<mtext> </mtext><mover><mrow><msup><mrow><mi>C</mi>
+<mi>a</mi></mrow><mrow><mo>+</mo><mo>+</mo></mrow>
+</msup><mrow><mo>(</mo><mi>r</mi><mo>)</mo></mrow>
+</mrow><mrow><mo> ¯</mo></mrow></mover><mo>↔</mo>
+<mover><mrow><msup><mrow><mn>2</mn><mi>N</mi><mi>a</mi></mrow><mrow><mo>+</mo></mrow></msup><mrow><mo>(</mo><mi>r</mi><mo>)</mo></mrow></mrow><mrow><mo> ¯</mo></mrow></mover><mo>⁢</mo><mo>+</mo><mtext> </mtext><msup><mrow><mi>C</mi><mi>a</mi></mrow>
+<mrow><mo>+</mo><mo>+</mo></mrow></msup><mrow><mo>(</mo><mi>a</mi><mi>q</mi><mo>)</mo></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 206.4]
+              </td></tr></tbody></table><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.equ.00e3"/>
+ <math><mrow><msup><mrow>
+<mn>2</mn><mi>N</mi><mi>a</mi></mrow><mrow><mo>+</mo>
+</mrow></msup><mrow><mo>(</mo><mi>a</mi><mi>q</mi>
+<mo>)</mo></mrow><mo>⁢</mo><mtext> </mtext><mo>+</mo>
+<mtext> </mtext><mover><mrow><msup><mrow><mi>C</mi>
+<mi>a</mi></mrow><mrow><mo>+</mo><mo>+</mo></mrow>
+</msup><mrow><mo>(</mo><mi>s</mi><mo>)</mo></mrow>
+</mrow><mrow><mo> ¯</mo></mrow></mover><mo>↔</mo>
+<mover><mrow><msup><mrow><mn>2</mn><mi>N</mi><mi>a</mi></mrow><mrow><mo>+</mo></mrow></msup><mrow><mo>(</mo><mi>s</mi><mo>)</mo></mrow></mrow><mrow><mo> ¯</mo></mrow></mover><mo>⁢</mo><mo>+</mo><mtext> </mtext><msup><mrow><mi>C</mi><mi>a</mi></mrow>
+<mrow><mo>+</mo><mo>+</mo></mrow></msup><mrow><mo>(</mo><mi>a</mi><mi>q</mi><mo>)</mo></mrow></mrow>
+</math> 
+</td><td align="right">[Eq. 206.5]
+              </td></tr></tbody></table><p>where the bar indicates that the ion is associated with
+either the rock surface (r) or surfactant micelles (s) and (aq) stands
+for aqueous. The exchange equilibria are modeled as</p>
+<table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.XID-000000e7"/>
+ <math><mrow><mfrac><mrow>
+<mrow><mo>(</mo><msub><mrow><mi>C</mi></mrow><mrow>
+<mo>+</mo><mo>+</mo></mrow></msub><mo>)</mo></mrow>
+<mrow><mo>(</mo><msubsup><mrow><mi>C</mi></mrow><mrow>
+<mo>+</mo></mrow><mrow><mi>r</mi></mrow></msubsup>
+<msup><mrow><mo>)</mo></mrow><mrow><mn>2</mn></mrow>
+</msup></mrow></mrow><mrow><msup><mrow><mrow><mo>(</mo>
+<msubsup><mrow><mi>C</mi></mrow><mrow><mo>+</mo><mo>+</mo></mrow><mrow><mi>r</mi></mrow></msubsup><mo>)</mo></mrow><mo>(</mo><msub><mrow><mi>C</mi></mrow>
+<mrow><mo>+</mo></mrow></msub><mo>)</mo></mrow><mrow>
+<mn>2</mn></mrow></msup></mrow></mfrac><mo>⁢</mo><mo>=</mo><mtext> </mtext><msup><mrow><mi>β</mi>
+</mrow><mrow><mi>r</mi></mrow></msup><msup><mrow><mi>q</mi></mrow><mrow><mi>r</mi></mrow></msup><mo>,</mo>
+</mrow></math> 
+</td><td align="right">[Eq. 206.6]
+              </td></tr></tbody></table><table cellpadding="4" cellspacing="0" border="0" rules="none" width="100%" frame="void"><tbody><tr><td align="left"><a name="brinetra.XID-000000ea"/>
+ <math><mrow><mfrac><mrow>
+<mrow><mo>(</mo><msub><mrow><mi>C</mi></mrow><mrow>
+<mtext>++</mtext></mrow></msub><mo>)</mo></mrow><msup>
+<mrow><mo>(</mo><msubsup><mrow><mi>C</mi></mrow><mrow>
+<mtext>+</mtext></mrow><mrow><mi>s</mi></mrow></msubsup>
+<mo>)</mo></mrow><mrow><mn>2</mn></mrow></msup></mrow>
+<mrow><mrow><mo>(</mo><msub><mrow><msup><mrow><mi>C</mi></mrow><mrow><mi>s</mi></mrow></msup></mrow>
+<mrow><mtext>++</mtext></mrow></msub><mo>)</mo></mrow>
+<msup><mrow><mo>(</mo><msub><mrow><mi>C</mi></mrow>
+<mrow><mtext>+</mtext></mrow></msub><mo>)</mo></mrow>
+<mrow><mn>2</mn></mrow></msup></mrow></mfrac><mo>=</mo>
+<mrow><msup><mrow><mi>β</mi></mrow><mrow><mi>s</mi></mrow></msup><msup><mrow><mi>C</mi></mrow>
+<mrow><mi>s</mi></mrow></msup></mrow><mo>⁢</mo><mo>,</mo></mrow></math> 
+</td><td align="right">[Eq. 206.7]
+              </td></tr></tbody></table><p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msup><mi>q</mi>
+<mi>r</mi></msup></math> </td>
+
+<td valign="top">denotes the rock cation exchange capacity</td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msup><mi>C</mi>
+<mi>s</mi></msup></math> </td>
+
+<td valign="top">denotes the equivalent molar concentration of surfactant  </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msup><mi>β</mi>
+<mi>r</mi></msup></math> </td>
+
+<td valign="top">denotes the cation exchange constant for rock     </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <math><msup><mi>β</mi>
+<mi>s</mi></msup></math> </td>
+
+<td valign="top">denotes the cation exchange constant for surfactant    </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<p>Together with the conditions of electroneutrality on both
+rock surfaces,                  <math><msup>
+<mi>q</mi><mi>r</mi></msup><mo>=</mo><msubsup><mi>C</mi><mtext>+</mtext><mi>r</mi></msubsup><mo>+</mo>
+<msubsup><mi>C</mi><mtext>++</mtext><mi>r</mi></msubsup>
+</math>, and surfactant micelles,  <math><msup>
+<mi>C</mi><mi>s</mi></msup><mo>=</mo><msubsup><mi>C</mi><mtext>+</mtext><mi>s</mi></msubsup><mo>+</mo>
+<msubsup><mi>C</mi><mtext>++</mtext><mi>s</mi></msubsup>
+</math>, equations <a href="brinetra_Multi-Component_Brine_model.html#brinetra.XID-000000e7">206.6</a>  and <a href="brinetra_Multi-Component_Brine_model.html#brinetra.XID-000000ea">206.7</a>  are solved to obtain the equilibrium
+partitioning of monovalent and divalent cations.          </p>
+<p>The
+cation exchange model can be activated independently for rock exchanges
+and surfactant micelle exchanges using keywords <a href="../ecl_rm/IONXROCK.html#IONXROCK">IONXROCK</a> and <a href="../ecl_rm/IONXSURF.html#IONXSURF">IONXSURF</a> in the <span class="keyword">PROPS</span> section, respectively. For rock ion exchanges the cation exchange
+constant, <math><msup><mi>β</mi>
+<mi>r</mi></msup></math>, should be provided using the <span class="keyword">IONXROCK</span> keyword. The rock exchange capacity must be entered
+for each grid block using keyword <span class="keyword">IONROCK</span> in the <span class="keyword">GRID</span> section. For surfactant micelle exchanges the surfactant
+option must first be activated using keyword <a href="../ecl_rm/SURFACT.html#SURFACT">SURFACT</a> in the <span class="keyword">RUNSPEC</span> section. The cation exchange constant for surfactant,  <math><msup><mi>β</mi>
+<mi>s</mi></msup></math>, should be provided using the <span class="keyword">IONXSURF</span> keyword along with the equivalent molecular weight
+of the surfactant. Since the equations solve for the surfactant’s
+mass concentration, an equivalent molecular weight is required to
+calculate the number of active sites available on surfactant micelles
+for ion exchange.          </p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">The equivalent molecular weight
+refers to the weight of surfactant per mole of “active sites”.
+A surfactant molecule may have more than one active anionic site.
+For example, a divalent surfactant with a molecular weight of 500
+kg/kg-M has an equivalent weight of 250 kg/kg-M.</span></div>
+<p>When the
+flowing concentrations of cations are zero, the exchange equilibria
+are ignored and the rock and surfactant micelle associated concentrations
+are zero. This corresponds to ignoring the exchange capacity of the
+rock and surfactant along with the respective electroneutrality conditions.
+To ensure continuous behavior in the vicinity of zero cation concentrations,
+a damping function is imposed on the exchange capacities. The damping
+function satisfies                     <math><mrow>
+<mi>W</mi><mo>(</mo><mn>0</mn><mo>)</mo></mrow><mo>=</mo><mn>0</mn></math>  and  <math><mrow>
+<mi>W</mi><mo>(</mo><mi>ε</mi><mo>)</mo></mrow>
+<mo>=</mo><mn>1</mn></math>, where  <math><mi>ε</mi></math>  is a small threshold value. The damping is
+only imposed for  <math>
+<mrow><msub><mrow><mi>C</mi></mrow><mrow><mo>+</mo>
+<mo>+</mo></mrow></msub><mo>∈</mo><mrow><mo>[</mo>
+<mrow><mn>0</mn><mo>,</mo><mi>ε</mi></mrow><mo>]</mo></mrow></mrow></math>. The threshold value is set according
+to</p>
+<p> <math><mrow><mi>ε</mi>
+<mo>=</mo><mrow><mi>T</mi><mi>H</mi><mi>I</mi><mi>O</mi><mrow><mi>N</mi><mi>X</mi></mrow><mo>×</mo>
+<msubsup><mrow><mi>C</mi></mrow><mrow><mtext>++</mtext>
+</mrow><mrow><mi>r</mi><mi>e</mi><mi>f</mi></mrow>
+</msubsup></mrow></mrow></math> <math><mrow><msubsup><mrow>
+<mi>C</mi></mrow><mrow><mtext>++</mtext></mrow><mrow>
+<mi>r</mi><mi>e</mi><mi>f</mi></mrow></msubsup><mo>=</mo><mrow><mtext>max</mtext><mo>(</mo><msubsup><mrow>
+<mi>C</mi></mrow><mrow><mtext>++</mtext></mrow><mrow>
+<mi>i</mi><mi>n</mi><mi>j</mi></mrow></msubsup><mo>,</mo><msup><mrow><mn>10</mn></mrow><mrow><mo>-</mo>
+<mn>2</mn></mrow></msup><mo>)</mo></mrow></mrow>
+</math>,  </p>
+<p>where</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top"> <math><msubsup><mi>C</mi>
+<mtext>++</mtext><mrow><mi>i</mi><mi>n</mi><mi>j</mi>
+</mrow></msubsup></math> </td>
+
+<td valign="top"> is the maximum injection concentration and      </td>
+
+</tr>
+
+<tr>
+<td valign="top"> <em>THIONX</em> </td>
+
+<td valign="top">is a relative threshold concentration, which can be set using
+the <a href="../ecl_rm/TUNING.html#TUNING">TUNING</a> keyword. The default value for <samp class="codeph">THIONX</samp> is
+10<sup>-2</sup>.</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

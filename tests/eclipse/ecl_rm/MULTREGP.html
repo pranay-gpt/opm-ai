@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="MULTREGP"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="MULTREGP"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>MULTREGP</title>
+</head>
+<body>
+
+
+<div class="nested0" id="MULTREGP"><a name="MULTREGP"><!-- --></a>
+<h1 class="keyword">MULTREGP</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="multregp.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="multregp.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d1466e45"> x </th>
+
+<th valign="top" id="d1466e48"> ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d1466e54"> x </th>
+
+<th valign="top" id="d1466e57"> ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d1466e45 d1466e54 ">  </td>
+
+<td valign="top" headers="d1466e48 d1466e57 "> RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1466e45 d1466e54 "> x </td>
+
+<td valign="top" headers="d1466e48 d1466e57 "> GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1466e45 d1466e54 "> x </td>
+
+<td valign="top" headers="d1466e48 d1466e57 "> EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1466e45 d1466e54 ">  </td>
+
+<td valign="top" headers="d1466e48 d1466e57 "> PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1466e45 d1466e54 ">  </td>
+
+<td valign="top" headers="d1466e48 d1466e57 "> REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1466e45 d1466e54 ">  </td>
+
+<td valign="top" headers="d1466e48 d1466e57 "> SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1466e45 d1466e54 ">  </td>
+
+<td valign="top" headers="d1466e48 d1466e57 "> SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d1466e45 d1466e54 ">  </td>
+
+<td valign="top" headers="d1466e48 d1466e57 "> SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">MULTREGP</span> keyword can be used to set a pore
+volume multiplier for a specific region. The regions must previously
+have been defined using keyword <a href="FLUXNUM.html#FLUXNUM"> FLUXNUM</a>, <a href="MULTNUM.html#MULTNUM"> MULTNUM</a> or <a href="OPERNUM.html#OPERNUM"> OPERNUM</a> in the <span class="keyword">GRID</span> section.</p>
+
+<p>If <span class="keyword">MULTNUM</span> is to be used, then storage for the <span class="keyword">MULTNUM</span> array must be requested by setting the 2nd item
+greater than zero in the <span class="keyword">RUNSPEC</span> section keyword <a href="GRIDOPTS.html#GRIDOPTS"> GRIDOPTS</a>. <span class="keyword">MULTREGP</span> applies to pore volumes to the <span class="keyword">MULTNUM</span> regions.</p>
+
+<p>If <span class="keyword">FLUXNUM</span> is to be used, then storage for the
+flux region data should be reserved by setting the fourth item in
+the <span class="keyword">RUNSPEC</span> section keyword <a href="REGDIMS.html#REGDIMS"> REGDIMS</a>. <span class="keyword">MULTREGP</span> will
+then apply to pore volumes between flux regions defined using <span class="keyword">FLUXNUM</span>.</p>
+
+<p>If <span class="keyword">OPERNUM</span> is to be used, then storage for the <span class="keyword">OPERNUM</span> array should be reserved by setting item 7 in the <span class="keyword">RUNSPEC</span> section keyword <span class="keyword">REGDIMS</span>. <span class="keyword">MULTREGP</span> will then apply to pore volumes between flux regions
+defined using <span class="keyword">OPERNUM</span>.</p>
+
+<p>The <span class="keyword">MULTREGP</span> keyword is followed by any number
+of data records. Each record contains the following three items of
+data, and is terminated with a slash (/).</p>
+
+<ol>
+<li>Region number (I) <p>DEFAULT: Negative</p>
+</li>
+
+<li>Pore volume multiplier for region I</li>
+
+<li>Choice of region: <span class="keyword">MULTNUM</span> (M), <span class="keyword">FLUXNUM</span> (F) or <span class="keyword">OPERNUM</span> (O) <p>DEFAULT:  M</p>
+</li>
+
+</ol>
+
+<p>The set of records must end with a blank record containing only
+a slash (/).</p>
+
+<div class="section" id="multregp_notes"><a name="multregp_notes"><!-- --></a><h4 class="sectiontitle">Notes</h4><ul>
+<li>The multipliers specified in the <span class="keyword">MULTREGP</span> keyword
+are applied <strong>after</strong> accounting for any <a href="MULTPV.html#MULTPV"> MULTPV</a> values specified in the <span class="keyword">GRID</span> or <span class="keyword">EDIT</span> sections.             </li>
+
+<li> If a region number is specified twice, then the latest multiplier
+is applied for that region; the multipliers are not cumulative. This
+is true even if different region sets are specified - it is not possible
+to specify a multiplier for region 1 using <span class="keyword">MULTNUM</span> and a different multiplier for region 1 using <a href="FLUXNUM.html#FLUXNUM"> FLUXNUM</a>. However, an individual grid block’s pore volume may
+be modified by more than one multiplier, if it is in different region
+numbers for different region sets.             </li>
+
+<li>The multipliers for specific regions can be output to the Print
+file using the mnemonic <span class="keyword">MULTREGP</span> in the <a href="RPTGRID.html#RPTGRID"> RPTGRID</a> keyword.    
+        </li>
+
+<li> For <span class="keyword">MULTREGP</span> to be used in the <span class="keyword">EDIT</span> section, <a href="PORV.html#PORV"> PORV</a> values
+should also be specified in the <span class="keyword">EDIT</span> section. </li>
+
+<li>If the pore volume values are not specified, a warning message
+will be produced.</li>
+
+<li>A pore volume multiplier assigned to a zero, negative or defaulted
+region number will act on all regions.</li>
+
+<li>This keyword cannot be used in conjunction with nested LGRs. </li>
+
+<li>In ECLIPSE 300, if the first two items of
+a record are all defaulted or set to the default values, this is treated
+as equivalent to a record containing only a slash (/) and the set
+of records will be considered to have ended.</li>
+
+</ul>
+<div class="caution"><span class="cautiontitle">CAUTION:</span> For backward compatibility reasons, while
+the default region set is <span class="keyword">MULTNUM</span>, if some lines
+of data have a different region set specified, the first region specified
+is used as the default for all lines which have no region set specified.
+Defaulting some region sets while specifying others is not recommended.</div>
+ </div>
+
+<div class="section"><h4 class="sectiontitle">Example</h4>  <pre><code>MULTREGP
+-- Region  Pore Volume Multiplier  Region Set
+      1      0.5                    M/
+      2      0.0                    F/
+      4      0.4                    M/
+      5      0.75                   O/  
+/</code></pre> </div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

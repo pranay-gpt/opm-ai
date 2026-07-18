@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Output"/>
+<meta name="DC.subject" content="Fluid modeling, Chemical reaction output, Chemical reactions, Output"/>
+<meta name="keywords" content="Fluid modeling, Chemical reaction output, Chemical reactions, Output"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="reactionsexamples_output"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Output</title>
+</head>
+<body>
+
+
+<div class="nested0" id="reactionsexamples_output"><a name="reactionsexamples_output"><!-- --></a>
+<h1 class="topictitle1">Output</h1>
+
+
+ <div>
+<p>The reaction rate equation <a href="reactionsequations_Reaction_rate.html#reactionsequations.equ.arrhenius">263.1</a>  can be output to the summary file or the <span class="keyword">RESTART</span> file for graphical display or to the print file.</p>
+
+<p>To output the reaction rate to the summary file the mnemonics <span class="keyword">BREAC</span>, <span class="keyword">FREAC</span> and <span class="keyword">FREAT</span> can be used in the <span class="keyword">SUMMARY</span> section.</p>
+
+<p><span class="keyword">BREAC</span> outputs the reaction rate for specified
+cells and specified reactions.</p>
+
+<p><span class="keyword">FREAC</span> outputs the reaction rate for the whole
+field for specified reactions.</p>
+
+<p> <span class="keyword">FREAT</span> outputs the reaction total since the
+beginning of the simulation for the whole field for specified reactions.</p>
+
+<p>If the reaction number is defaulted in keywords <span class="keyword">FREAC</span> or <span class="keyword">FREAT</span>, then data are output for all reactions.</p>
+
+<p>For example:</p>
+
+<pre><code>BREAC
+--  I  J  K  R
+    3  4  5  1 /  -- Rate for reaction 1 in cell (3,4,5)
+    3  4  5  2 /  -- Rate for reaction 2 in cell (3,4,5)
+    6  7  8  2 /  -- Rate for reaction 2 in cell (6,7,8)
+ /
+
+FREAC
+1 2/  -- Reaction rates summed over all cells for reactions 1 and 2
+
+FREAT
+/  -- Reaction totals summed over all cells for all reactions</code></pre>
+<p>To output the reaction rate to the <samp class="codeph">RESTART</samp> file
+the <span class="keyword">REAC</span> mnemonic can be used with the <a href="../ecl_rm/RPTRST.html#RPTRST">RPTRST</a> keyword. The reaction
+rate is printed for each cell and each reaction. For example:</p>
+
+<pre><code>RPTRST
+REAC/</code></pre>
+<p>To output the reaction rate to the print file the <span class="keyword">REAC</span> mnemonic can be used with the <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a> keyword. The reaction
+rate is printed for each cell and each reaction. For example:</p>
+
+<pre><code>RPTSCHED
+REAC/</code></pre>
+</div>
+
+</div>
+
+
+</body>
+</html>

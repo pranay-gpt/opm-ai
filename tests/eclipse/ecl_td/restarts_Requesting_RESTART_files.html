@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="Requesting RESTART files"/>
+<meta name="DC.subject" content="Restarts"/>
+<meta name="keywords" content="Restarts"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="restarts_requesting_restart_files"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>Requesting RESTART files</title>
+</head>
+<body>
+
+
+<div class="nested0" id="restarts_requesting_restart_files"><a name="restarts_requesting_restart_files"><!-- --></a>
+<h1 class="topictitle1">Requesting RESTART files</h1>
+
+
+ <div>
+<p>By default, the restart data written at each report time will be
+stored in separate <samp class="codeph">RESTART</samp> files. The files’ suffix
+indicates the report number at which the data was written. Optionally,
+the time-dependent restart data written at each report can be stored
+in a single “Unified” <samp class="codeph">RESTART</samp> file instead. If you
+wish to produce a Unified <samp class="codeph">RESTART</samp> file, enter the
+keyword <a href="../ecl_rm/UNIFOUT.html#UNIFOUT">UNIFOUT</a> in the <span class="keyword">RUNSPEC</span> section. To enable ECLIPSE
+to read a Unified <samp class="codeph">RESTART</samp> file, the keyword <a href="../ecl_rm/UNIFIN.html#UNIFIN">UNIFIN</a> must be present in the <span class="keyword">RUNSPEC</span> section - otherwise ECLIPSE will look for non-unified <samp class="codeph">RESTART</samp> files.</p>
+
+<p>By default, any <samp class="codeph">RESTART</samp> files created are unformatted
+files. If you wish to write formatted <samp class="codeph">RESTART</samp> files
+instead, enter the keyword <a href="../ecl_rm/FMTOUT.html#FMTOUT"> FMTOUT</a> in the <span class="keyword">RUNSPEC</span> section. To enable ECLIPSE
+to read formatted <samp class="codeph">RESTART</samp> files, the keyword <a href="../ecl_rm/FMTIN.html#FMTIN">FMTIN</a> must be present in the <span class="keyword">RUNSPEC</span> section - otherwise ECLIPSE looks for unformatted <samp class="codeph">RESTART</samp> files. Files may be converted from formatted to
+unformatted and vice-versa by means of the utility program Convert.
+See <a href="filehand_File_Handling_in_ECLIPSE.html#filehand_file_handling_in_eclipse"> "File Handling in ECLIPSE"</a> for more details on file formats.</p>
+
+<p>ECLIPSE 100        </p>
+
+<p>To create <samp class="codeph">RESTART</samp> files in
+ECLIPSE 100, from which a later run can restart, the procedure is:</p>
+
+<ol>
+<li>Set either the mnemonic <samp class="codeph">BASIC</samp> in the <a href="../ecl_rm/RPTRST.html#RPTRST">RPTRST</a> keyword &gt; 0, or set
+the mnemonic <samp class="codeph">RESTART</samp> in the <a href="../ecl_rm/RPTSCHED.html#RPTSCHED">RPTSCHED</a> keyword &gt; 0.    
+           <ol type="a">
+<li>If either mnemonic is set to 1, Restart files are created at every
+report time, but deleted when a later restart is available. This facility
+is intended to provide a fail-safe restart. (Note that this facility
+is not available if unified Restart files are being output).</li>
+
+<li>If the mnemonic = 2 (or = 1 also for unified files), Restart files
+are created at every report time until the switch is reset. None are
+deleted.</li>
+
+<li>Giving the mnemonic <samp class="codeph">BASIC</samp> in the <span class="keyword">RPTRST</span> keyword a value &gt; 2 results in the automatic generation of Restart
+files at specific intervals of time.</li>
+
+<li>The arguments of the <a href="../ecl_rm/RPTCPL.html#RPTCPL">RPTCPL</a> keyword can also be
+used to control when <samp class="codeph">RESTART</samp> files are created.</li>
+
+</ol>
+</li>
+
+<li>A restart file can also be generated at time 0.0 days, containing
+the initial solution, either by setting the mnemonic <samp class="codeph">RESTAR</samp> in the <a href="../ecl_rm/RPTSOL.html#RPTSOL">RPTSOL</a> keyword to 2, or by setting the mnemonic <samp class="codeph">BASIC</samp> to 2 in keyword <span class="keyword">RPTRST</span> in the <span class="keyword">SOLUTION</span> section. There must be at least one <a href="../ecl_rm/TIME.html#TIME">TIME</a>, <a href="../ecl_rm/TSTEP.html#TSTEP">TSTEP</a> or <a href="../ecl_rm/DATES.html#DATES">DATES</a> keyword present to generate
+the time zero restart file.             </li>
+
+<li> A <samp class="codeph">SAVE </samp> file, containing the non-recurrent data
+of the base run, is generated by specifying the <a href="../ecl_rm/SAVE.html#SAVE">SAVE</a> keyword in the <span class="keyword">RUNSPEC</span> section. A <samp class="codeph">SAVE </samp> file is required
+if a fast restart is to be performed.             </li>
+
+<li> If you want the time-dependent restart data to be appended to
+the <samp class="codeph">SAVE</samp> file, use the <samp class="codeph">SAVE</samp> mnemonic
+in keyword <span class="keyword">RPTRST</span>. This controls the frequency
+with which the restart data is written to the <samp class="codeph">SAVE</samp> file, in an analogous manner to the <samp class="codeph">BASIC</samp> mnemonic.
+The <span class="keyword">SAVE</span> keyword must also be present in the <span class="keyword">RUNSPEC</span> section. If the <samp class="codeph">RESTART</samp> file is
+to be used for graphics output only, unwanted restart arrays may be
+prevented from being written to this file by using the <samp class="codeph">NORST</samp> mnemonic (switch 16) in the <span class="keyword">RPTRST</span> keyword. 
+                                         </li>
+
+</ol>
+
+<p>ECLIPSE 300                             
+   </p>
+
+<p>In ECLIPSE 300, use keyword <span class="keyword">RPTRST</span> to control the output and contents of the <samp class="codeph">RESTART</samp> file.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="ACTIONG"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Reference"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="ACTIONG"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>ACTIONG</title>
+</head>
+<body>
+
+
+<div class="nested0" id="ACTIONG"><a name="ACTIONG"><!-- --></a>
+<h1 class="keyword">ACTIONG</h1>
+
+
+
+ <div>
+
+<div class="tablenoborder"><a name="actiong.tab.0005"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="actiong.tab.0005" class="flagtable" frame="border" border="1" rules="all">  
+<thead align="left">
+<tr>
+<th valign="top" id="d14e45">                         x </th>
+
+<th valign="top" id="d14e48">                         ECLIPSE 100 </th>
+
+</tr>
+
+<tr>
+<th valign="top" id="d14e54">                         x </th>
+
+<th valign="top" id="d14e57">                         ECLIPSE 300 </th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td valign="top" headers="d14e45 d14e54 "> </td>
+
+<td valign="top" headers="d14e48 d14e57 ">                         RUNSPEC </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d14e45 d14e54 "> </td>
+
+<td valign="top" headers="d14e48 d14e57 ">                         GRID </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d14e45 d14e54 "> </td>
+
+<td valign="top" headers="d14e48 d14e57 ">                         EDIT </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d14e45 d14e54 "> </td>
+
+<td valign="top" headers="d14e48 d14e57 ">                         PROPS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d14e45 d14e54 "> </td>
+
+<td valign="top" headers="d14e48 d14e57 ">                         REGIONS </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d14e45 d14e54 "> </td>
+
+<td valign="top" headers="d14e48 d14e57 ">                         SOLUTION </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d14e45 d14e54 "> </td>
+
+<td valign="top" headers="d14e48 d14e57 ">                         SUMMARY </td>
+
+</tr>
+
+<tr>
+<td valign="top" headers="d14e45 d14e54 ">                         x </td>
+
+<td valign="top" headers="d14e48 d14e57 ">                         SCHEDULE </td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p>The <span class="keyword">ACTIONG</span> keyword is one of a group of keywords
+that trigger actions in the simulation when certain conditions are
+met. While the <span class="keyword">ACTIONG</span> keyword will work as documented
+in simulation data sets, it is recommended that you use the <a href="ACTIONX.html#ACTIONX"> ACTIONX</a> keyword for new
+or updated data sets as it offers the greatest functionality and flexibility. </p>
+
+<p>The <span class="keyword">ACTIONG</span> keyword marks the start of a set
+of <span class="keyword">SCHEDULE</span> section keywords that are to be stored
+for later processing when a nominated <strong>group</strong> satisfies a specified
+condition. The set of keywords may be indented with one or more blank
+spaces for clarity and must be terminated with the <a href="ENDACTIO.html#ENDACTIO"> ENDACTIO</a> keyword. The
+keywords between the <span class="keyword">ACTIONG</span> and <span class="keyword">ENDACTIO</span> keywords are processed at the end of the timestep when the condition
+defined in the <span class="keyword">ACTIONG</span> keyword is satisfied by
+a group named in item 2. You can choose whether the action is to be
+performed only once, or repeatedly each timestep while the triggering
+condition is satisfied.</p>
+
+<p>If a group keyword (for example <a href="GRUPTARG.html#GRUPTARG"> GRUPTARG</a>) is placed between <span class="keyword">ACTIONG</span> and <span class="keyword">ENDACTIO</span>, instead of entering the name of
+a specific group in the keyword you may enter a question mark. ECLIPSE
+then applies the keyword data to whichever group (or groups) triggered
+the action. For example, an action can be placed on a set of groups
+(‘ <samp class="codeph">G*</samp> ’ in item 2 of <span class="keyword">ACTIONG</span>) to
+change a group’s rate limit when its water cut exceeds a certain value.
+The keyword <span class="keyword">GRUPTARG</span> would be entered between <span class="keyword">ACTIONG</span> and <span class="keyword">ENDACTIO</span>, specifying the
+new rate limit and applying it to a group named ‘?’ in item 1.</p>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Some keywords cannot have the group name entered as a question
+mark to be inherited from an <span class="keyword">ACTIONG</span> keyword. These
+exceptions are those keywords where name roots are not allowed for
+the group name. These keywords, however, may still be used within
+an action if the group name is explicitly defined.</span></div>
+
+<p>ECLIPSE 100</p>
+
+<p>Practically any <span class="keyword">SCHEDULE</span> section keyword may be placed between <span class="keyword">ACTIONG</span> and <span class="keyword">ENDACTIO</span>, with the exception of timestepping
+keywords (for example <a href="TIME.html#TIME"> TIME</a>, <a href="TSTEP.html#TSTEP">  TSTEP</a>, <a href="DATES.html#DATES"> DATES</a> and <a href="GASYEAR.html#GASYEAR">  GASYEAR</a>), the global
+keywords and the <a href="INCLUDE.html#INCLUDE">  INCLUDE</a> keyword. The <a href="RPTRST.html#RPTRST"> RPTRST</a> keyword can be used but any changes to the frequency of output
+will not the implemented until the report step following the satisfaction
+of the triggering condition.</p>
+
+<p>ECLIPSE 300</p>
+
+<p>Any keyword specifying data for wells, groups
+or separators may be placed between <span class="keyword">ACTION</span> and <span class="keyword">ENDACTIO</span>. The <span class="keyword">RPTRST</span> keyword can also
+be used but any changes to the frequency of output will not the implemented
+until the report step following the satisfaction of the triggering
+condition.</p>
+
+<p>The amount of storage space reserved for these keywords is controlled
+by the <span class="keyword">RUNSPEC</span> section keyword <a href="ACTDIMS.html#ACTDIMS"> ACTDIMS</a>. The number of
+lines between an <span class="keyword">ACTIONG</span> keyword and its corresponding <span class="keyword">ENDACTIO</span> keyword (including the <span class="keyword">ENDACTIO</span> keyword itself) is limited to <samp class="codeph">MNLPAC</samp> in <span class="keyword">ACTDIMS</span> item 2. The length of each line is limited to <samp class="codeph">NCPLIN</samp> in <span class="keyword">ACTDIMS</span> item 3.</p>
+
+<p>Any number of action keyword sets may be declared, each with its
+own triggering condition; the maximum number being limited to <samp class="codeph">MAXACT</samp> in <span class="keyword">ACTDIMS</span> item 1. Each action
+keyword set must be bracketed by a pair of <span class="keyword">ACTION</span> (<span class="keyword">ACTIONG</span>, <span class="keyword">ACTIONR</span>, <span class="keyword">ACTIONW</span>, <span class="keyword">ACTIONS</span>) and <span class="keyword">ENDACTIO</span> keywords, and is distinguished by its action name defined in item
+1.This name must be unique across all the action keyword family, including <a href="DELAYACT.html#DELAYACT"> DELAYACT</a>. If any <span class="keyword">ACTION</span> family keyword is reentered with the same action
+name as a previously declared action, the previously declared action
+is deleted and replaced with the new action.</p>
+
+<p>The <span class="keyword">ACTIONG</span> keyword contains the following items
+of data, terminated with a slash (/):</p>
+
+<ol>
+<li>The action name. <p>A name of up to 8 characters, to distinguish
+this action from any others.</p>
+                <p>If an action with
+this name has already been declared in any of the action keyword family <span class="keyword">ACTION</span> (<span class="keyword">ACTIONG</span>, <span class="keyword">ACTIONR</span>, <span class="keyword">ACTIONW</span>, <span class="keyword">ACTIONS</span>), it is
+overwritten with the action data specified below.</p>
+ </li>
+
+<li>Group name (or name root) of the group(s) that triggers this action,
+    <p>or <samp class="codeph">FIELD</samp> (for an action triggered by a field
+quantity).</p>
+ <p>A group name root, enclosed in quotes and ending
+with an asterisk (*), can be used to make this action’s triggering
+condition apply to more than one group. The action will then be performed
+if one or more groups having this name root satisfy the triggering
+condition. Note that the action is performed at most once per timestep,
+even if more than one group satisfies the triggering condition at
+the end of the timestep.</p>
+</li>
+
+<li>The quantity to which the triggering condition applies. <p>This
+must be one of:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all"> 
+  
+<tbody>
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GOPR</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Group oil production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GPOT</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Group oil production cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GOIR</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Group oil injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GOIT</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Group oil injection cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GWPR</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Group water production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GWPT</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Group water production cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GWIR</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Group water injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GWIT</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Group water injection cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GGPR</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Group gas production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GGPT</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Group gas production cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GGIR</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Group gas injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GGIT</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Group gas injection cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GVPR</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Group voidage production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GVPT</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Group voidage production cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GVIR</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Group voidage injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GVIT</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Group voidage injection cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GLPR</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Group liquid production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GLPT</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Group liquid production cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 300</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GWGPR</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Group wet gas production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 300</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GWGPT</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Group wet gas production cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 300</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GWGIR</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Group wet gas injection rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 300</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GWGIT</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Group wet gas injection cumulative total</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GGOR</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Group gas oil ratio</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GWCT</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Group water cut</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GWGR</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Group water gas ratio</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GGLR</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Group gas liquid ratio</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GCPR</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Group polymer production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GCPC</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Group polymer production concentration</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GSPR</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Group salt production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 100</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GSPC</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Group salt production concentration</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GTPR</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Group tracer production rate (the tracer name must be added)</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GTPC</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Group tracer production concentration (the tracer name must
+be added)</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 300</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GEXGR</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Group excess gas rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 300</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GNLPR</samp> </td>
+
+<td valign="top" width="33.33333333333333%"> Group NGL Production rate</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%"><p>ECLIPSE 300</p>
+</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GCNMR</samp> </td>
+
+<td valign="top" width="33.33333333333333%">Group component molar rates in NGL phase</td>
+
+</tr>
+
+<tr>
+<td valign="top" width="33.33333333333333%">&nbsp;</td>
+
+<td valign="top" width="33.33333333333333%"> <samp class="codeph">GUxxxxxx</samp> </td>
+
+<td valign="top" width="33.33333333333333%">User-defined group quantity</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</li>
+
+<li> The operator for the triggering condition. <p>This must be one
+of:</p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="void" border="1" rules="all">  
+<tbody>
+<tr>
+<td valign="top">‘&gt;’ </td>
+
+<td valign="top">Greater than</td>
+
+</tr>
+
+<tr>
+<td valign="top">‘&lt;’</td>
+
+<td valign="top"> Less than</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</li>
+
+<li>The value of the triggering condition. <p>The units depend upon
+the quantity selected in item 3.</p>
+   </li>
+
+<li> Number of times this action can be triggered.  <p>The action
+is performed once at the end of each timestep while any group named
+in item 2 satisfies the triggering condition, until it has been performed
+the specified number of times. A number of 10,000 or greater is interpreted
+as ‘infinity’.</p>
+ <p>DEFAULT:  1</p>
+</li>
+
+<li>Increment to the triggering condition. <p>After each time the
+action is performed, the specified increment is added to the triggering
+condition value (initialized in item 5). The increment may be negative,
+if desired.</p>
+<p>DEFAULT:  0.0</p>
+</li>
+
+</ol>
+
+<p>End the data record with a slash (/).</p>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> If you wish to define an action to be triggered
+when a group cannot meet its target flow rate, set the trigger value
+in item 5 to be slightly less than the target rate to allow for the
+fact that group control targets may not be met exactly (see keyword <a href="NUPCOL.html#NUPCOL"> NUPCOL</a>).</div>
+
+<div class="caution"><span class="cautiontitle">CAUTION:</span> It is possible to nest actions by including the
+definition of the ‘inner’ action within the keyword set of the ‘outer’
+action (that is before its <a href="ENDACTIO.html#ENDACTIO"> ENDACTIO</a> keyword). This offers great flexibility, but care should
+be exercised and the consequences of the nested actions should be
+thought through. For example: suppose that in the <a href="ACTDIMS.html#ACTDIMS"> ACTDIMS</a> keyword you have
+set <samp class="codeph">MAXACT=1</samp> and have then defined an action <samp class="codeph">ACT1</samp>. Suppose also that as part of this action you have
+defined another action, <samp class="codeph">ACT2</samp>. ECLIPSE will only issue
+an error when <samp class="codeph">ACT1</samp> is actually implemented, which
+may, of course, be well into the run. Alternatively you may call the
+inner action by the same name as the outer action, <samp class="codeph">ACT1</samp>. This is perfectly allowable, but it must be remembered that each
+time an action of a given name is defined it overwrites the properties
+that the action may previously have had. Suppose that you have an
+outer action that can be repeated a number of times. Within this action
+is an inner one that can also be repeated and that also increments
+its triggering condition each time. No matter how many times the inner
+action has been called when the outer action is invoked again the
+inner action is redefined to its original specification.</div>
+
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Full checking of the keywords entered with an action keyword
+cannot be performed until the action is actually implemented, since
+it is possible to use wild cards in many of the keywords. However,
+before a simulation run is attempted the data can be run in <a href="NOSIM.html#NOSIM"> NOSIM</a> mode. This then does
+whatever checks it can on the keywords within any action keyword blocks
+that have been defined. All the most common types of ‘grammatical’
+and typographical errors will be found, but errors resulting from
+wild cards feeding inappropriate well/group names to keywords are
+not found.</span></div>
+
+<div class="section" id="actiong_example"><a name="actiong_example"><!-- --></a><h4 class="sectiontitle">Example</h4><p>This shows
+three action keyword sets. The first action (named <samp class="codeph">ACT1</samp>) applies to all groups whose names begin with G, and reduces a group’s
+oil rate target by 20% whenever its gas oil ratio exceeds the value
+of 3.0. The second action (named <samp class="codeph">ACT2</samp>) opens well
+PROD5 when the oil production rate of group GR3 falls below 5,000.
+The third action (named <samp class="codeph">ACT3</samp>) increases the field’s
+water rate limit by 50% each time the cumulative oil production increases
+by 1.0E6, for a total of 3 times.</p>
+<pre><code>ACTIONG
+ ACT1 'G*' GGOR &gt; 3.0 10000 /
+GTMULT
+ '?' ORAT 0.8 /
+ /
+ENDACTIO
+ACTIONG
+ ACT2 GR3 GOPR &lt; 5000.0 /
+WELOPEN
+ PROD5 OPEN /
+ /
+ENDACTIO
+ACTIONG
+ ACT3 FIELD GOPT &gt; 1.0E6 3 1.0E6 /
+GTMULT
+ FIELD WRAT 1.5 /
+ /
+ENDACTIO</code></pre></div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

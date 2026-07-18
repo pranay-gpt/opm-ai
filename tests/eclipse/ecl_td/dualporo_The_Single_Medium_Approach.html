@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=10"/>
+<meta name="copyright" content="(C) Copyright 2020"/>
+
+<meta name="DC.Type" content="topic"/>
+<meta name="DC.Title" content="The single medium approach"/>
+<meta name="DC.subject" content="Grid and reservoir modeling, Dual porosity, Single medium conductive fractures"/>
+<meta name="keywords" content="Grid and reservoir modeling, Dual porosity, Single medium conductive fractures"/>
+<meta name="domain" content="Reservoir Engineering"/>
+<meta name="difficulty" content="Intermediate"/>
+<meta name="pagetype" content="Theory"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="dualporo_the_single_medium_approach"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/commonltr.css"/>
+<link rel="stylesheet" type="text/css" href="../../eclipse\resources\css/sis-abtc-rs.css"/>
+<title>The single medium approach</title>
+</head>
+<body>
+
+
+<div class="nested0" id="dualporo_the_single_medium_approach"><a name="dualporo_the_single_medium_approach"><!-- --></a>
+<h1 class="topictitle1">The single medium approach</h1>
+
+
+ <div>
+<p>For a given input fracture swarm distribution map, and associated
+fracture properties, there are three subsequent main areas of implementation:</p>
+
+<ul>
+<li>  Grid property modifications  </li>
+
+<li>   Pseudo generation  </li>
+
+<li>  Well PI modifications  </li>
+
+</ul>
+
+<p>The implementation of the technique in these areas is described
+in the following paragraphs.</p>
+
+<div class="section" id="dualporo_grid_property_modifications"><a name="dualporo_grid_property_modifications"><!-- --></a><h4 class="sectiontitle">Grid property
+modifications</h4><p>Firstly grid block properties are modified
+to take account of the physical void introduced by the fractures.
+The porosities are increased by proportional volume averaging, and
+permeabilities flow-averaged using Darcy's Law, either arithmetically
+(parallel to fracture) or harmonically (perpendicular to the fracture).</p>
+<p>The approach taken in ECLIPSE 300 differed to that in the paper
+in</p>
+<ul>
+<li>the full use of all cell dimensions (rather than assuming square
+cells)                            </li>
+
+<li>the calculation of directional permeability enhancements (parallel
+and perpendicular components)                            </li>
+
+<li>  allowing for vertical permeability enhancement             
+            </li>
+
+<li>  allowing for fracture volumes in porosity modifications.   
+                                     </li>
+
+</ul>
+<p>One further modification is to recognize fractures being defined
+in a zigzag rasterized format. When the path of a fracture changes
+direction by 90 degrees within one cell, the effective length of the
+fracture is halved. This attempts to model the intention that the
+fracture does not traverse the cell in question twice, but rather
+somehow ‘turns a corner’.</p>
+</div>
+
+<div class="section" id="dualporo_pseudo_generation"><a name="dualporo_pseudo_generation"><!-- --></a><h4 class="sectiontitle">Pseudo generation</h4><p>The saturation curves of the fractures and affected grid blocks
+are combined under the assumption that oil is displaced from fractures
+by either gas or water before any oil is displaced from the matrix
+volume of a grid block, which requires that any capillary imbibition
+is dominated by viscous and gravity effects. Under this assumption,
+the saturation tables are averaged by determining end point saturations
+from mass conservation, and end point relative permeabilities by Darcy's
+Law arithmetic averaging of effective phase flows. The original fracture
+tables are then used in a scaled form during the fracture invasion
+by gas or water, and scaled matrix tables are used for matrix invasion.
+Notice that (as in the paper) the fracture tables are assumed straight
+lines; no attempt is made to combine the full shape of the curve with
+that of the matrix.</p>
+<p>Since the permeabilities and saturation
+tables used potentially vary on a grid block basis, the above could
+feasibly result in one set of pseudo tables for each affected cell.
+To reduce the dimensionality, a grouping technique is used that averages
+the pseudo end points used over cells with common attributes, these
+being saturation region, permeability value, and the number of contained
+fractures. This extended the paper’s treatment which assumed that
+layers represented the saturation regions.</p>
+<p>If velocity dependent
+relative permeability effects are being modeled,  the values used
+for the internally generated tables for the  <a href="../ecl_rm/VDKRG.html#VDKRG">VDKRG</a>,  <a href="../ecl_rm/VDKRO.html#VDKRO">VDKRO</a> and  <a href="../ecl_rm/VDKRGC.html#VDKRGC">VDKRGC</a> keywords will be taken
+from the associated input matrix tables. For example, if input saturation
+function table sets 1 and 2 correspond to the input matrix and fracture
+properties respectively of a grid block required to model a single
+medium conductive fracture using the internally generated table set
+3, the <span class="keyword">VDKRG</span>, <span class="keyword">VDKRO</span> and <span class="keyword">VDKRGC</span> properties for table 3 will be taken from those
+specified for table 1. The <span class="keyword">VDKRG</span>, <span class="keyword">VDKRO</span> and <span class="keyword">VDKRGC</span> properties assigned to the internal
+tables can be reported using the <a href="../ecl_rm/RPTPROPS.html#RPTPROPS">RPTPROPS</a> keyword. Prior to
+2016.1, these values were not defined for the internally generated
+tables. Pre-2016.1 behavior can be restored by setting <a href="OPTIONS3.html#options3.342">item 342</a> of the <span class="keyword">OPTIONS3</span> keyword
+to 1.</p>
+<div class="note"><span class="notetitle">Note:</span> <span class="notebody">Capillary curves are not included in this treatment,
+and are merely extrapolated at constant value from the matrix end-point
+values.</span></div>
+</div>
+
+<div class="section" id="dualporo_well_pi"><a name="dualporo_well_pi"><!-- --></a><h4 class="sectiontitle">Well PI</h4><p>By default,
+wells completed in grid blocks containing conductive fractures will
+experience enhanced flows due to the increased effective permeability,
+due to both the permeability and relative permeability changes. <cite><span> <a href="biblio_Bibliography.html#biblio_57214">Van Lingen
+et al (2001)</a> </span></cite> argues that this only arises if the
+fracture actually cuts the well bore in a connection cell. Because
+of this, you are required to specify whether or not a well connection
+cell is to be modified by this treatment by indicating whether it
+is cut by fractures or not. If not, then the well PI is modified so
+as to reverse the changes in permeability, and the connection cell
+saturation table reverts to that of the original matrix block. You
+are also given the chance to enter a PI multiplier to indicate perhaps
+some degree of connection with conductive faults.</p>
+</div>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

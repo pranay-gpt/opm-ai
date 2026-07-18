@@ -1,0 +1,329 @@
+RUNSPEC 
+
+TITLE
+Example Surfactant Flood Case.
+DIMENS
+ 5 5 1 /
+NONNC
+OIL
+WATER
+BRINE
+SURFACT
+FIELD
+TRACERS
+ 0 1 0 0 'DIFF ' /
+TABDIMS
+ 2 2 20 5 6 20 /
+REGDIMS
+ 6 1 0 0 0 1 /
+WELLDIMS
+ 2 1 1 2 /
+START
+ 1 'JAN' 1983 /
+NSTACK
+ 8 /
+ 
+ 
+ 
+GRID        ===========================================================
+DXV
+ 5*75.0 /
+PERMX
+ 25*50.0 /
+PERMY
+ 25*50.0 /
+DYV
+ 5*75.0 /
+DZ
+ 25*30.0 /
+TOPS
+ 25*4000.0 /
+PERMY
+ 25*50.0 /
+PORO
+ 25*0.2 /
+RPTGRID
+ 'DX' 'DY' 'DZ' 'PERMX' 'PERMY' 'PERMZ' 'MULTX'
+ 'MULTY' 'MULTZ' 'PORO' 'NTG' 'TOPS' 'PORV'
+ 'DEPTH' 'TRANX' 'TRANY' 'TRANZ' 'COORDSYS'
+ 'COORD' 'ZCORN' 'NNC' 'AQNUM' 'AQCON'
+ 'ALLNNC' 'SIGMAV' 'DZMTRXV' 'DIFFMX' 'DIFFMY'
+ 'DIFFMZ' 'DIFFMMF' 'DIFFX' 'DIFFY' 'DIFFZ'
+ 'KOVERD' /
+ 
+PROPS        ============================================================
+
+TRACER
+ 'ONE' 'WAT' /
+/
+SWFN
+-- Table 1 - Immiscible curves - SATNUM
+ .25 .0 4.0
+ .7 1.0 .0
+/
+-- Table 2 - Miscible curves - SURFNUM
+ .25 .0 4.0
+ .99 1.0 .0
+/
+SOF2 
+-- Table 1 - Immiscible curves - SATNUM
+ .3000 .0000
+ .7600 1.0000
+/
+-- Table 2 - Miscible curves - SURFNUM
+ .0100 .0000
+ .7600 1.0000
+/
+
+--PVTW
+-- 4000.0 1.0 3.03E-06 .5  1.0 /
+-- 4000.0 1.0 3.03E-06 .5  1.0 /
+-- brine properties
+PVTWSALT
+--   Pref      Cref
+     2700   	0  /
+--     SaltConc    Bw      Cw         Vw           Cvw
+--                         1/bar     CPOISE        1/psi
+         0        1.030   4.6E-5     0.34 0.0  
+        20        1.000   4.6E-5     0.34 0.0  
+        30        0.98    4.6E-5     0.34 0.0  
+        50        0.95    4.6E-5     0.34 0.0  /
+ 3000 /
+--     SaltConc    Bw      Cw         Vw           Cvw
+--                         1/bar     CPOISE        1/psi
+         0        1.030   4.6E-5     0.34 0.0  
+        20        1.000   4.6E-5     0.34 0.0  
+        30        0.98    4.6E-5     0.34 0.0  
+        50        0.95    4.6E-5     0.34 0.0  /
+
+ 
+PVDO
+ .0 1.0 2.0
+ 8000.0 .92 2.0
+/
+ .0 1.0 2.0
+ 8000.0 .92 2.0
+/
+ROCK
+ 4000.0 .30E-05 /
+ 4000.0 .30E-05 /
+ 
+DENSITY
+ 52.0000 64.0000 .04400 /
+ 52.0000 64.0000 .04400 /
+ 
+-- Water Viscosity vs surfactant concentration tables.
+SURFVISC
+-- Surfactant Water viscosity at 4000 psi
+-- concentration
+-- LB/STB CENTIPOISE
+ 0.0  0.34 
+ 0.1  1.1
+ 0.2  1.2 
+ 0.8  1.3 /
+ 0.0  0.34 
+ 0.1  0.6
+ 0.2  0.7
+ 0.8  0.8 /
+ 
+-- Surfactant Adsorption tables
+SURFADS
+-- Surfactant Adsorbed mass
+-- concentration
+-- LB/STB LB/LB
+ 0.0 0.00000
+ 0.1 0.00005
+ 0.2 0.00005 
+ 1.0 0.00005 /
+ 0.0 0.00000
+ 0.1 0.00005
+ 0.2 0.00005 
+ 1.0 0.00005 /
+ 
+SURFSTES
+-- surf     water-oil
+-- conc     surface tension
+-- LB/STB     (LB/IN)
+0.0     5.0E-04	
+	    5.0E-04	
+	    5.0E-04    	/ 
+0.7	   2.23E-05	
+	   2.12E-05	
+	   2.00E-05	/
+3.5	   2.07E-06	
+	   1.79E-06	
+	   1.47E-06	/
+4.9	   1.04E-06	
+	   8.76E-07	
+	   7.18E-07	/
+7.0	   4.95E-07	
+	   4.16E-07	
+	   3.45E-07	/
+/
+/	
+ESSNODE
+0    10   30  /
+/
+
+ 
+-- Capillary de-saturation curve
+SURFCAPD
+-- LOG10(Capillary Number) Miscibility 
+-- Function
+ -9 0.0
+ 2 0.0 
+ 5 1.0
+ 10 1.0 /
+ -10 0.0
+ 2 0.0 
+ 5 1.0
+ 10 1.0 /
+ 
+-- Extra rock properties.
+SURFROCK
+-- De-adsorption model Rock mass 
+-- indicator Density
+-- 1 - reversible 
+-- 2 - irreversible LB/RB
+ 1 1000 /
+ 1 1000 / 
+RPTPROPS
+ 'SURFVISC' /
+ 
+REGIONS      ===========================================================
+
+FIPNUM
+ 1 2 5 6 6
+ 3 4 5 6 6
+ 5 5 5 6 6
+ 6 6 6 6 6
+ 6 6 6 6 6 /
+-- Immiscible table numbers
+SATNUM
+ 25*1 /
+-- Miscible table numbers
+SURFNUM
+ 25*2 /
+RPTREGS
+ 'PVTNUM' 'SATNUM' 'EQLNUM' 'FIPNUM' 'KRNUMX'
+ 'KRNUMX-' 'KRNUMY' 'KRNUMY-' 'KRNUMZ' 'KRNUMZ-'
+ 'IMBNUM' 'IMBNUMX' 'IMBNUMX-' 'IMBNUMY' 'IMBNUMY-'
+ 'IMBNUMZ' 'IMBNUMZ-' 'ROCKNUM' 'ENDNUM' 'TNUM'
+ 'MISCNUM' 'KRNUMMF' 'IMBNUMMF' 'SURFNUM' /
+ 
+SOLUTION      ==========================================================
+
+TBLKFONE
+ 25*0 /
+EQUIL
+4000 4000 6000 0 0 0 0 0 0 /
+SALTVD 
+  2000 0
+  4000 0 /
+
+
+RPTSOL
+'PRES' 'SOIL' 'SWAT' 'RESTART' 'OILAPI'
+'FIPTR=2' 'TBLK' 'FIPPLY' 'SURFBLK'
+'FIPSURF=2' /
+
+SUMMARY       ===========================================================
+
+CTFRSUR
+ 'P' 5 5 1 /
+/
+FTPRSUR
+WTPRSUR
+'P' /
+FTPTSUR
+WTPTSUR
+'P' /
+FTITSUR
+WTITSUR
+'I' /
+BTCNFSUR
+1 1 1 /
+2 2 1 /
+5 5 1 /
+/
+FTIPTSUR
+FTIPFSUR
+RTIPTSUR
+1 /
+RTIPFSUR
+1 /
+BTIPTSUR
+1 1 1 /
+/
+FTADSUR
+RTADSUR
+ 1 /
+BTADSUR
+1 1 1 /
+2 2 1 /
+5 5 1 /
+/
+BTCASUR
+1 1 1 /
+2 2 1 /
+5 5 1 /
+/
+BTSTSUR
+1  1 1 /
+2 2 1 /
+5 5 1 /
+/
+-- block salt concentration = salinity
+BSCN
+1  1 1 /
+2 2 1 /
+5 5 1 /
+/
+  
+SCHEDULE ==========================================================
+RPTSCHED 
+'PRES' 'SOIL' 'SWAT' 'RESTART=2' 'FIP=2'
+'WELLS=2' 'SUMMARY=2' 'CPU=2' 'NEWTON=2'
+'OILAPI' 'FIPTR=2' 'TBLK' 'FIPSALT=2'
+'SURFBLK' 'SURFADS' 'FIPSURF=2' /
+WELSPECS
+'I' 'G' 1 1 4000 'WAT' /
+'P' 'G' 5 5 4000 'OIL' /
+/
+COMPDAT
+'I ' 1 1 1 1 'OPEN' 0 .0 1.0 /
+'P ' 5 5 1 1 'OPEN' 0 .0 1.0 /
+/
+WCONPROD
+'P' 'OPEN' 'BHP' 5* 3999.0 /
+/
+WCONINJE
+'I' 'WAT' 'OPEN' 'RATE' 200.0 /
+/
+WSALT
+ 'I'  0.6 /
+/
+WTRACER
+ 'I' 'ONE' 0.8 /
+/
+-- Start injecting the Surfactant Slug
+WSURFACT
+ 'I' 0.9 /
+ /
+TUNING
+ 1 /
+ 10* 0.4 /
+ /
+TSTEP
+ 2*100
+/
+WTRACER
+ 'I' 'ONE' 0.0 /
+/
+-- Water chase 
+WSURFACT
+ 'I' 0.0 /
+ /
+TSTEP
+ 5*100 /
+END

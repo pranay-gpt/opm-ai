@@ -1,11 +1,67 @@
 """Simulation runner for OPM Flow."""
 
+import re
 import subprocess
-import time
 from pathlib import Path
-from typing import Optional
 
 from opm_ai.runner.models import CrashReport, SimulationJob, SimulationResult
+from opm_ai.settings import settings
+
+
+def _parse_crash_report(stderr: str, returncode: int) -> CrashReport:
+    """Parse stderr for crash information and extract keyword/line if possible."""
+    message = stderr.strip() if stderr else f"Process exited with code {returncode}"
+    keyword: str | None = None
+    line: int | None = None
+
+    # Look for "Error:" pattern and try to extract keyword/line
+    error_lines = [line for line in stderr.splitlines() if "Error:" in line]
+    if error_lines:
+        last_error = error_lines[-1]
+        # Try to extract keyword: "Problem with keyword DATES" -> "DATES"
+        keyword_match = re.search(r"keyword\s+([A-Z0-9_]+)", last_error, re.IGNORECASE)
+        if keyword_match:
+            keyword = keyword_match.group(1)
+        # Try to extract line number: "line 123" or "at line 123"
+        line_match = re.search(r"line\s+(\d+)", last_error, re.IGNORECASE)
+        if line_match:
+            line = int(line_match.group(1))
+        message = last_error.strip()
+
+    # Special handling for SIGABRT (exit code 134)
+    if returncode == 134:
+        message = f"flow aborted (assertion/core dump): {message}"
+    elif returncode == 1:
+        message = f"flow error: {message}"
+
+    return CrashReport(keyword=keyword, line=line, message=message)
+
+
+def _parse_timeout_crash(timeout: int) -> CrashReport:
+    """Create a crash report for timeout."""
+    return CrashReport(
+        keyword=None,
+        line=None,
+        message=f"Simulation timed out after {timeout} seconds",
+    )
+
+
+def _parse_file_not_found_crash(binary_path: str) -> CrashReport:
+    """Create a crash report for missing binary."""
+    return CrashReport(
+        keyword=None,
+        line=None,
+        message=f"Flow binary not found at {binary_path}",
+    )
+
+
+def _parse_exception_crash(exc: Exception) -> CrashReport:
+    """Create a crash report for unexpected exceptions."""
+    return CrashReport(
+        keyword=None,
+        line=None,
+        message=f"Unexpected error: {exc!r}",
+    )
 
 
 def run_simulation(job: SimulationJob) -> SimulationResult:
@@ -16,109 +72,74 @@ def run_simulation(job: SimulationJob) -> SimulationResult:
         job: SimulationJob configuration.
 
     Returns:
-        SimulationResult with success status and output paths.
+        SimulationResult with success status and output paths or crash report.
+        NEVER raises; always returns a result.
     """
+    flow_binary = str(settings.flow_path)
+    output_dir = job.output_dir
+    deck_path = job.deck_path
+
     # Ensure output directory exists
-    job.output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-    deck_name = job.deck_path.stem
-    stdout_log = job.output_dir / f"{deck_name}.out"
-    stderr_log = job.output_dir / f"{deck_name}.err"
-
-    # Build command - OMIT --threads per BUILD_GUIDE
-    # Use = syntax for output-dir per flow CLI
-    cmd = [
-        job.flow_binary,
-        str(job.deck_path),
-        f"--output-dir={job.output_dir}",
+    # Build command - OMIT --threads per spec (flow 2026.04 compatibility)
+    argv = [
+        flow_binary,
+        f"--output-dir={output_dir}",
+        str(deck_path),
     ]
 
     try:
-        with open(stdout_log, "w") as sout, open(stderr_log, "w") as serr:
-            start_time = time.time()
-            proc = subprocess.run(
-                cmd,
-                stdout=sout,
-                stderr=serr,
-                timeout=job.timeout,
-                cwd=job.output_dir,
-            )
-            elapsed = time.time() - start_time
-
-        # Check for output files
-        smspec_files = list(job.output_dir.glob("*.SMSPEC"))
-        unrst_files = list(job.output_dir.glob("*.UNRST"))
-
-        if proc.returncode == 0 and smspec_files:
-            return SimulationResult(
-                success=True,
-                job=job,
-                output_dir=job.output_dir,
-                smspec_path=smspec_files[0],
-                unrst_path=unrst_files[0] if unrst_files else None,
-            )
-        else:
-            # Read stderr for crash report
-            stderr_content = stderr_log.read_text() if stderr_log.exists() else ""
-            stdout_content = stdout_log.read_text() if stdout_log.exists() else ""
-            error_type = _classify_error(proc.returncode, stderr_content)
-            return SimulationResult(
-                success=False,
-                job=job,
-                output_dir=job.output_dir,
-                crash_report=CrashReport(
-                    exit_code=proc.returncode,
-                    stderr=stderr_content,
-                    stdout=stdout_content,
-                    error_type=error_type,
-                ),
-            )
-
+        proc = subprocess.run(
+            argv,
+            cwd=deck_path.parent,
+            capture_output=True,
+            text=True,
+            timeout=job.timeout,
+            start_new_session=True,
+        )
     except subprocess.TimeoutExpired:
         return SimulationResult(
             success=False,
-            job=job,
-            output_dir=job.output_dir,
-            crash_report=CrashReport(
-                exit_code=-1,
-                stderr=f"Simulation timed out after {job.timeout} seconds",
-                stdout="",
-                error_type="TIMEOUT",
-            ),
+            output_dir=output_dir,
+            crash_report=_parse_timeout_crash(job.timeout),
+            returncode=-1,
         )
     except FileNotFoundError:
         return SimulationResult(
             success=False,
-            job=job,
-            output_dir=job.output_dir,
-            crash_report=CrashReport(
-                exit_code=-1,
-                stderr=f"Flow binary not found at {job.flow_binary}",
-                stdout="",
-                error_type="INPUT_ERROR",
-            ),
+            output_dir=output_dir,
+            crash_report=_parse_file_not_found_crash(flow_binary),
+            returncode=-1,
         )
-    except Exception as e:
+    except Exception as exc:
         return SimulationResult(
             success=False,
-            job=job,
-            output_dir=job.output_dir,
-            crash_report=CrashReport(
-                exit_code=-1,
-                stderr=str(e),
-                stdout="",
-                error_type="CRASH",
-            ),
+            output_dir=output_dir,
+            crash_report=_parse_exception_crash(exc),
+            returncode=-1,
         )
 
+    # Handle exit codes per spec (section 4.3)
+    returncode = proc.returncode
 
-def _classify_error(exit_code: int, stderr: str) -> str:
-    """Classify error type from exit code and stderr."""
-    stderr_lower = stderr.lower()
-    if "error" in stderr_lower and ("keyword" in stderr_lower or "syntax" in stderr_lower or "parse" in stderr_lower):
-        return "INPUT_ERROR"
-    if "numerical" in stderr_lower or "convergence" in stderr_lower or "linear solver" in stderr_lower:
-        return "NUMERICAL"
-    if exit_code == -1 or "timeout" in stderr_lower:
-        return "TIMEOUT"
-    return "CRASH"
+    if returncode == 0:
+        # Success - discover output files
+        smspec_files = list(output_dir.glob("*.SMSPEC"))
+        unrst_files = list(output_dir.glob("*.UNRST"))
+
+        return SimulationResult(
+            success=True,
+            output_dir=output_dir,
+            crash_report=None,
+            returncode=returncode,
+        )
+
+    # Failure - parse crash report from stderr
+    crash_report = _parse_crash_report(proc.stderr, returncode)
+    return SimulationResult(
+        success=False,
+        output_dir=output_dir,
+        crash_report=crash_report,
+        returncode=returncode,
+    )

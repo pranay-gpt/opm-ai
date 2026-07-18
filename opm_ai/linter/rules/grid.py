@@ -16,7 +16,8 @@ def _has_keyword(section_text: str, keyword: str) -> bool:
 def _get_keyword_values(section_text: str, keyword: str) -> list[str]:
     """Extract all values for a keyword (handles multipliers like 500*100)."""
     values = []
-    pattern = rf"(?is)^\s*{re.escape(keyword)}\b\s*(.*?)(?=^\s*[A-Z][A-Z0-9_]*\b|^\s*--|$)"
+    # Use \Z (end of string) instead of $ (end of line in MULTILINE mode)
+    pattern = rf"(?is)^\s*{re.escape(keyword)}\b\s*(.*?)(?=^\s*[A-Z][A-Z0-9_]*\b|^\s*--|\Z)"
     match = re.search(pattern, section_text, re.MULTILINE | re.DOTALL)
     if match:
         content = match.group(1)

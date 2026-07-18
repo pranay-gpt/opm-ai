@@ -16,7 +16,8 @@ def _has_keyword(section_text: str, keyword: str) -> bool:
 def _get_keyword_values(section_text: str, keyword: str) -> list[str]:
     """Extract all values for a keyword."""
     values = []
-    pattern = rf"(?is)^\s*{re.escape(keyword)}\b\s*(.*?)(?=^\s*[A-Z][A-Z0-9_]*\b|^\s*--|$)"
+    # Use \Z (end of string) instead of $ (end of line in MULTILINE mode)
+    pattern = rf"(?is)^\s*{re.escape(keyword)}\b\s*(.*?)(?=^\s*[A-Z][A-Z0-9_]*\b|^\s*--|\Z)"
     match = re.search(pattern, section_text, re.MULTILINE | re.DOTALL)
     if match:
         content = match.group(1)
@@ -28,15 +29,22 @@ def _get_keyword_values(section_text: str, keyword: str) -> list[str]:
 
 
 def _extract_well_names(section_text: str, keyword: str) -> list[str]:
-    """Extract well names from WELSPECS keyword."""
+    """Extract well names from a well keyword block (WELSPECS/COMPDAT/WCON*).
+
+    Each record ends with '/'; the well name is the FIRST quoted token of a
+    record. Taking all quoted tokens would wrongly treat values like 'OPEN'
+    or 'G1' as well names.
+    """
     wells = []
-    pattern = rf"(?is)^\s*{re.escape(keyword)}\b\s*(.*?)(?=^\s*[A-Z][A-Z0-9_]*\b|^\s*--|$)"
+    # Use \Z (end of string) instead of $ (end of line in MULTILINE mode)
+    pattern = rf"(?is)^\s*{re.escape(keyword)}\b\s*(.*?)(?=^\s*[A-Z][A-Z0-9_]*\b|^\s*--|\Z)"
     match = re.search(pattern, section_text, re.MULTILINE | re.DOTALL)
     if match:
         content = match.group(1)
-        # Well names are typically in single quotes
-        well_names = re.findall(r"'([^']+)'", content)
-        wells.extend(well_names)
+        for record in content.split("/"):
+            name_match = re.search(r"'([^']+)'", record)
+            if name_match:
+                wells.append(name_match.group(1))
     return wells
 
 

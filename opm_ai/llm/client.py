@@ -85,3 +85,39 @@ class LLMClient:
                 pass
 
         return None
+
+    def summarize_issues(self, issues: list) -> str | None:
+        """
+        Summarize lint issues as a student-friendly block comment.
+
+        Renders opm_ai/linter/prompts/summarize.j2 as the system prompt and
+        sends the structured issues as the user message.
+
+        Args:
+            issues: List of LintIssue objects.
+
+        Returns:
+            Summary string, or None if offline/unavailable/error.
+        """
+        if not self._available or not issues:
+            return None
+
+        try:
+            from pathlib import Path
+            prompt_path = (
+                Path(__file__).parent.parent / "linter" / "prompts" / "summarize.j2"
+            )
+            system_prompt = prompt_path.read_text(encoding="utf-8")
+
+            issue_lines = [
+                f"- [{i.severity}] {i.section or '?'}/{i.keyword or '?'} "
+                f"(line {i.line if i.line is not None else '?'}): {i.message}"
+                for i in issues
+            ]
+            messages = [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": "\n".join(issue_lines)},
+            ]
+            return self.chat(messages)
+        except Exception:
+            return None

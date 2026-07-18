@@ -41,13 +41,12 @@ def lint_deck(deck_path: Path) -> LintResult:
         issues=issues
     )
 
-    # Optional LLM enhancement - graceful degradation
+    # Optional LLM enhancement - graceful degradation.
+    # Never flips `passed`; only fills lint_summary when a provider is available.
     try:
-        from opm_ai.settings import Settings
-        settings = Settings()
-        if settings.LLM_AVAILABLE:
-            from opm_ai.llm.client import LLMClient
-            client = LLMClient()
+        from opm_ai.llm.client import LLMClient
+        client = LLMClient()
+        if client.available:
             summary = client.summarize_issues(issues)
             if summary:
                 result.lint_summary = summary

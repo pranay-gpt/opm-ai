@@ -14,19 +14,32 @@ def _has_keyword(section_text: str, keyword: str) -> bool:
 
 
 def _get_keyword_values(section_text: str, keyword: str) -> list[float]:
-    """Extract all values for a keyword as floats."""
+    """Extract all values for a keyword as floats (handles multipliers like 500*100)."""
     values = []
-    pattern = rf"(?is)^\s*{re.escape(keyword)}\b\s*(.*?)(?=^\s*[A-Z][A-Z0-9_]*\b|^\s*--|$)"
+    # Use \Z (end of string) instead of $ (end of line in MULTILINE mode)
+    pattern = rf"(?is)^\s*{re.escape(keyword)}\b\s*(.*?)(?=^\s*[A-Z][A-Z0-9_]*\b|^\s*--|\Z)"
     match = re.search(pattern, section_text, re.MULTILINE | re.DOTALL)
     if match:
         content = match.group(1)
         tokens = content.split()
         for token in tokens:
-            if token != "/":
-                try:
-                    values.append(float(token))
-                except ValueError:
-                    pass
+            if token == "/":
+                continue
+            # Handle multiplier syntax: 500*100
+            if "*" in token:
+                parts = token.split("*")
+                if len(parts) == 2:
+                    try:
+                        count = int(parts[0])
+                        value = float(parts[1])
+                        values.extend([value] * count)
+                        continue
+                    except ValueError:
+                        pass
+            try:
+                values.append(float(token))
+            except ValueError:
+                pass
     return values
 
 
@@ -106,9 +119,9 @@ def rule_L012_sat_endpoint_consistency(deck: Deck) -> list[LintIssue]:
     if not _has_keyword(regions, "SATNUM"):
         return issues
 
-    # Get SATNUM values
+    # Get SATNUM values (floats from _get_keyword_values; regions are whole numbers)
     satnum_values = _get_keyword_values(regions, "SATNUM")
-    max_satnum = max([int(v) for v in satnum_values if v.isdigit()], default=0)
+    max_satnum = max([int(v) for v in satnum_values if float(v).is_integer()], default=0)
 
     # Check number of SWOF tables
     swof_count = 0

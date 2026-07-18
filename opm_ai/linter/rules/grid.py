@@ -91,11 +91,20 @@ def rule_L003b_missing_grid_keywords(deck: Deck) -> list[LintIssue]:
     """L003b: Required GRID keywords missing (ERROR).
 
     Required: DX, DY, DZ, TOPS, PORO, PERMX
+
+    Skipped when the GRID section contains INCLUDE (keywords may live in the
+    included file, which the v1 linter does not resolve) or corner-point
+    geometry (COORD/ZCORN replace DX/DY/DZ/TOPS).
     """
     issues = []
 
     grid = deck.get_section("GRID")
     if not grid:
+        return issues
+
+    if _has_keyword(grid, "INCLUDE"):
+        return issues
+    if _has_keyword(grid, "COORD") or _has_keyword(grid, "ZCORN"):
         return issues
 
     required_keywords = ["DX", "DY", "DZ", "TOPS", "PORO", "PERMX"]

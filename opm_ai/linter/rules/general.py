@@ -31,21 +31,35 @@ NO_TERMINATOR_KEYWORDS = frozenset({
     "DENSITY", "PVCDO", "PVCGW", "PVCO",
     "FOPR", "FGOR", "FOPT", "FWPT", "FGPT", "FWIR", "FGIR",
     "END",
-    # Keywords that take text/string data without terminators
-    # Values like "SPE1 - CASE 1" after TITLE can look like keywords
-    "SPE1",  # Value after TITLE in SPE1
 })
+
+
+def _line_terminates(stripped: str) -> bool:
+    """True if the line contains a record terminator '/'.
+
+    Eclipse ignores everything after '/' on a line, so
+    `8300.0 1.270 / RS VS DEPTH` IS terminated. Quoted strings (well names,
+    INCLUDE paths) are removed first so a '/' inside them does not count,
+    and inline '--' comments are cut before checking.
+    """
+    unquoted = re.sub(r"'[^']*'", "", stripped)
+    unquoted = unquoted.split("--")[0]
+    return "/" in unquoted
 
 
 def rule_L001_missing_terminator(deck: Deck) -> list[LintIssue]:
     """L001: Missing terminating '/' on keyword (ERROR).
 
     Scans each section for keywords that don't end with '/' before next keyword or section.
+    The SUMMARY section is exempt: its mnemonics (FGPR, ALL, RUNSUM, ...) are
+    bare flags or self-terminating and Flow accepts them without '/'.
     """
     issues = []
-    terminator_pattern = re.compile(r"/\s*$")
 
     for section_name in deck.sections:
+        if section_name.upper() == "SUMMARY":
+            continue
+
         text = deck.get_section(section_name)
         if not text:
             continue
@@ -61,9 +75,16 @@ def rule_L001_missing_terminator(deck: Deck) -> list[LintIssue]:
             if not stripped or stripped.startswith("--"):
                 continue
 
-            # Check if line ends with /
-            if terminator_pattern.search(stripped):
+            # Check if line contains a record terminator
+            if _line_terminates(stripped):
                 # This line terminates the current keyword
+                current_keyword = None
+                keyword_start_line = None
+                continue
+
+            # TITLE takes exactly one line of free text (no terminator);
+            # consume it so a title like "SPE 9" is not mistaken for a keyword.
+            if current_keyword == "TITLE":
                 current_keyword = None
                 keyword_start_line = None
                 continue

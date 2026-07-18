@@ -46,10 +46,17 @@ def _get_keyword_values(section_text: str, keyword: str) -> list[float]:
 def rule_L005_pvt_phase_mismatch(deck: Deck) -> list[LintIssue]:
     """L005: Phase declared in RUNSPEC but missing companion PROPS keyword (ERROR).
 
-    OIL -> PVTO, SWOF
-    GAS -> PVTG, SGOF
-    WATER -> PVTW
-    DISGAS -> PVTG, SGOF
+    Requirements modelled on what Flow actually accepts:
+    - WATER  -> PVTW
+    - OIL    -> one of PVTO/PVDO/PVCDO/PVCO
+    - GAS    -> one of PVTG/PVDG
+    - DISGAS -> PVTO (live oil table)
+    - VAPOIL -> PVTG (wet gas table)
+    Saturation functions depend on the ACTIVE phase pairs, accepting both
+    family I (SWOF/SGOF/SLGOF) and family II (SWFN/SGFN/SOF2/SOF3/SGWFN):
+    - oil+water          -> SWOF, or SWFN with SOF2/SOF3
+    - oil+gas            -> SGOF/SLGOF, or SGFN with SOF2/SOF3
+    - gas+water (no oil) -> SGWFN, or SWFN with SGFN
     """
     issues = []
 
@@ -59,43 +66,56 @@ def rule_L005_pvt_phase_mismatch(deck: Deck) -> list[LintIssue]:
     if not runspec or not props:
         return issues
 
-    phase_requirements = {
-        "OIL": ["PVTO", "SWOF"],
-        "GAS": [["PVTG", "PVDG"], "SGOF"],  # PVTG or PVDG acceptable
-        "WATER": ["PVTW"],
-        "DISGAS": [["PVTG", "PVDG"], "SGOF"],  # PVTG or PVDG acceptable
-        "VAPOIL": ["PVDO", "SWOF"],
-    }
+    def _err(keyword: str, message: str) -> None:
+        props_lines = deck.get_section_lines("PROPS")
+        line_num = props_lines[0] if props_lines else None
+        issues.append(LintIssue(
+            severity="ERROR",
+            section="PROPS",
+            keyword=keyword,
+            line=line_num,
+            message=message,
+            rule_id="L005"
+        ))
 
-    for phase, required_keywords in phase_requirements.items():
-        if _has_keyword(runspec, phase):
-            for req_kw in required_keywords:
-                # Handle alternative keywords (list means OR)
-                if isinstance(req_kw, list):
-                    # Need at least one of the alternatives
-                    if not any(_has_keyword(props, alt) for alt in req_kw):
-                        props_lines = deck.get_section_lines("PROPS")
-                        line_num = props_lines[0] if props_lines else None
-                        issues.append(LintIssue(
-                            severity="ERROR",
-                            section="PROPS",
-                            keyword="/".join(req_kw),
-                            line=line_num,
-                            message=f"Phase '{phase}' declared in RUNSPEC but none of {req_kw} found in PROPS",
-                            rule_id="L005"
-                        ))
-                else:
-                    if not _has_keyword(props, req_kw):
-                        props_lines = deck.get_section_lines("PROPS")
-                        line_num = props_lines[0] if props_lines else None
-                        issues.append(LintIssue(
-                            severity="ERROR",
-                            section="PROPS",
-                            keyword=req_kw,
-                            line=line_num,
-                            message=f"Phase '{phase}' declared in RUNSPEC but '{req_kw}' not found in PROPS",
-                            rule_id="L005"
-                        ))
+    def _any(keywords: list[str]) -> bool:
+        return any(_has_keyword(props, kw) for kw in keywords)
+
+    oil = _has_keyword(runspec, "OIL")
+    gas = _has_keyword(runspec, "GAS")
+    water = _has_keyword(runspec, "WATER")
+    disgas = _has_keyword(runspec, "DISGAS")
+    vapoil = _has_keyword(runspec, "VAPOIL")
+
+    # PVT tables per active phase
+    if water and not _has_keyword(props, "PVTW"):
+        _err("PVTW", "Phase 'WATER' declared in RUNSPEC but 'PVTW' not found in PROPS")
+    if oil and not _any(["PVTO", "PVDO", "PVCDO", "PVCO"]):
+        _err("PVTO", "Phase 'OIL' declared in RUNSPEC but no oil PVT table "
+                     "(PVTO/PVDO/PVCDO/PVCO) found in PROPS")
+    if gas and not _any(["PVTG", "PVDG"]):
+        _err("PVTG/PVDG", "Phase 'GAS' declared in RUNSPEC but no gas PVT table "
+                          "(PVTG/PVDG) found in PROPS")
+    if disgas and not _has_keyword(props, "PVTO"):
+        _err("PVTO", "'DISGAS' declared in RUNSPEC but live-oil table 'PVTO' not found in PROPS")
+    if vapoil and not _has_keyword(props, "PVTG"):
+        _err("PVTG", "'VAPOIL' declared in RUNSPEC but wet-gas table 'PVTG' not found in PROPS")
+
+    # Saturation functions per active phase pair
+    family2_oil = _any(["SOF2", "SOF3"])
+    if oil and water:
+        if not (_has_keyword(props, "SWOF") or (_has_keyword(props, "SWFN") and family2_oil)):
+            _err("SWOF", "Phases 'OIL'+'WATER' active but no oil-water saturation "
+                         "function (SWOF, or SWFN with SOF2/SOF3) found in PROPS")
+    if oil and gas:
+        if not (_any(["SGOF", "SLGOF"]) or (_has_keyword(props, "SGFN") and family2_oil)):
+            _err("SGOF", "Phases 'OIL'+'GAS' active but no gas-oil saturation "
+                         "function (SGOF/SLGOF, or SGFN with SOF2/SOF3) found in PROPS")
+    if gas and water and not oil:
+        if not (_has_keyword(props, "SGWFN")
+                or (_has_keyword(props, "SWFN") and _has_keyword(props, "SGFN"))):
+            _err("SGWFN", "Phases 'GAS'+'WATER' active but no gas-water saturation "
+                          "function (SGWFN, or SWFN with SGFN) found in PROPS")
 
     return issues
 

@@ -1,10 +1,15 @@
-"""Jinja2 template for base depletion deck (SPE1-style)."""
+{# Jinja2 template for base depletion deck (SPE1-style) - NO docstring, ONLY deck text #}
 
 RUNSPEC
-{{ title }}
+
+TITLE
+{{ title }} /
 
 DIMENS
     {{ reservoir.nx }} {{ reservoir.ny }} {{ reservoir.nz }} /
+
+TABDIMS
+/
 
 OIL
 GAS
@@ -23,6 +28,7 @@ UNIFIN
 UNIFOUT
 
 GRID
+
 INIT
 
 NOECHO
@@ -34,13 +40,13 @@ DY
     {{ (reservoir.dy ~ ' ') * (reservoir.nx * reservoir.ny * reservoir.nz) }} /
 
 DZ
-    {% if reservoir.dz is iterable and not reservoir.dz is string %}
-    {% for i in range(reservoir.nx * reservoir.ny) %}
-    {% for d in reservoir.dz %}{{ d }} {% endfor %}
-    {% endfor %}
-    {% else %}
+{% if reservoir.dz is iterable and not reservoir.dz is string %}
+{% for layer in range(reservoir.nz) %}
+    {{ (reservoir.dz[layer] ~ ' ') * (reservoir.nx * reservoir.ny) }}
+{% endfor %} /
+{% else %}
     {{ (reservoir.dz ~ ' ') * (reservoir.nx * reservoir.ny * reservoir.nz) }} /
-    {% endif %}
+{% endif %}
 
 TOPS
     {{ (reservoir.top_depth ~ ' ') * (reservoir.nx * reservoir.ny * reservoir.nz) }} /
@@ -49,31 +55,31 @@ PORO
     {{ (reservoir.porosity ~ ' ') * (reservoir.total_cells) }} /
 
 PERMX
-    {% if reservoir.permx is iterable and not reservoir.permx is string %}
-    {% for i in range(reservoir.nx * reservoir.ny) %}
-    {% for p in reservoir.permx %}{{ p }} {% endfor %}
-    {% endfor %}
-    {% else %}
+{% if reservoir.permx is iterable and not reservoir.permx is string %}
+{% for layer in range(reservoir.nz) %}
+    {{ (reservoir.permx[layer] ~ ' ') * (reservoir.nx * reservoir.ny) }}
+{% endfor %} /
+{% else %}
     {{ (reservoir.permx ~ ' ') * (reservoir.total_cells) }} /
-    {% endif %}
+{% endif %}
 
 PERMY
-    {% if reservoir.permy is iterable and not reservoir.permy is string %}
-    {% for i in range(reservoir.nx * reservoir.ny) %}
-    {% for p in reservoir.permy %}{{ p }} {% endfor %}
-    {% endfor %}
-    {% else %}
+{% if reservoir.permy is iterable and not reservoir.permy is string %}
+{% for layer in range(reservoir.nz) %}
+    {{ (reservoir.permy[layer] ~ ' ') * (reservoir.nx * reservoir.ny) }}
+{% endfor %} /
+{% else %}
     {{ (reservoir.permy ~ ' ') * (reservoir.total_cells) }} /
-    {% endif %}
+{% endif %}
 
 PERMZ
-    {% if reservoir.permz is iterable and not reservoir.permz is string %}
-    {% for i in range(reservoir.nx * reservoir.ny) %}
-    {% for p in reservoir.permz %}{{ p }} {% endfor %}
-    {% endfor %}
-    {% else %}
+{% if reservoir.permz is iterable and not reservoir.permz is string %}
+{% for layer in range(reservoir.nz) %}
+    {{ (reservoir.permz[layer] ~ ' ') * (reservoir.nx * reservoir.ny) }}
+{% endfor %} /
+{% else %}
     {{ (reservoir.permz ~ ' ') * (reservoir.total_cells) }} /
-    {% endif %}
+{% endif %}
 
 ECHO
 
@@ -147,6 +153,7 @@ PVTO
 	9014.7	1.5790	0.7400 /
 1.6180	5014.7	1.8270	0.4490
 	9014.7	1.7370	0.6310 /
+/
 
 SOLUTION
 
@@ -159,13 +166,16 @@ RSVD
 
 SUMMARY
 
-FOPR
-FGPR
-FWPR
-FGOR
-FWCT
-FPR
+FOPR /
+FGPR /
+FWPR /
+FGOR /
+FWCT /
+FPR /
 BPR
+1  1  1 /
+{{ reservoir.nx }} {{ reservoir.ny }} {{ reservoir.nz }} /
+/
 
 WBHP
 {% for well in wells %}  '{{ well.name }}'
@@ -197,24 +207,22 @@ WELSPECS
 
 COMPDAT
 {% for well in wells %}
-	'{{ well.name }}'	{{ well.i }}	{{ well.j }}	{{ well.k1 }}	{{ well.k2 }}	'OPEN'	1*	1*	0.5 /
+	'{{ well.name }}'	{{ well.i }}	{{ well.j }}	{{ well.k1 }}	{{ well.k2 }}	OPEN	1*	1*	0.5 /
 {% endfor %}/
 
 WCONPROD
 {% for well in wells if well.well_type.value == "PROD" %}
-	'{{ well.name }}' 'OPEN' 'ORAT' {{ '%.0f'|format(well.target_rate) }} 4* {{ '%.0f'|format(well.bhp_limit) }} /
+	'{{ well.name }}' OPEN ORAT {{ '%.0f'|format(well.target_rate) }} 4* {{ '%.0f'|format(well.bhp_limit) }} /
 {% endfor %}/
 
 WCONINJE
 {% for well in wells if well.well_type.value == "INJ" %}
-	'{{ well.name }}'	'{{ well.inject_fluid.value }}'	'OPEN'	'RATE'	{{ '%.0f'|format(well.inject_rate) }} 1* {{ '%.0f'|format(well.bhp_max) }} /
+	'{{ well.name }}' {{ well.inject_fluid.value }} OPEN RATE {{ '%.0f'|format(well.inject_rate) }} 1* {{ '%.0f'|format(well.bhp_max) }} /
 {% endfor %}/
 
 TSTEP
 {% for dt in timesteps %}
-{{ '%.0f'|format(dt) }}{{ ' ' if loop.index % 6 != 0 else ' /' }}
+{{ '%.0f'|format(dt) }}{{ ' ' }}
 {% endfor %}
-{% if timesteps|length % 6 != 0 %} /
-{% endif %}
-
+/
 END

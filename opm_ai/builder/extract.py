@@ -33,6 +33,16 @@ def extract_parameters_offline(desc: str) -> ModelSpec:
         spec.reservoir.nx = int(grid_match.group(1))
         spec.reservoir.ny = int(grid_match.group(2))
         spec.reservoir.nz = int(grid_match.group(3))
+        # Expand dz to match nz layers (repeat SPE1 pattern: 20, 30, 50)
+        default_dz = [20.0, 30.0, 50.0]
+        spec.reservoir.dz = [default_dz[i % len(default_dz)] for i in range(spec.reservoir.nz)]
+        # Expand permx, permy, permz to match nz layers (repeat SPE1 pattern: 500, 50, 200)
+        default_permx = [500.0, 50.0, 200.0]
+        spec.reservoir.permx = [default_permx[i % len(default_permx)] for i in range(spec.reservoir.nz)]
+        default_permy = [500.0, 50.0, 200.0]
+        spec.reservoir.permy = [default_permy[i % len(default_permy)] for i in range(spec.reservoir.nz)]
+        default_permz = [500.0, 50.0, 200.0]
+        spec.reservoir.permz = [default_permz[i % len(default_permz)] for i in range(spec.reservoir.nz)]
 
     # Parse scenario keywords
     if "depletion" in desc_lower:

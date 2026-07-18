@@ -1,6 +1,7 @@
-"""Linter module for OPM Flow deck validation."""
+"""opm_ai.linter - Offline-first OPM Flow deck linter."""
 
-from opm_ai.linter.deck import Deck, LintResult, LintError
+from opm_ai.linter.deck import Deck
 from opm_ai.linter.linter import lint_deck
+from opm_ai.linter.models import LintIssue, LintResult
 
-__all__ = ["Deck", "LintResult", "LintError", "lint_deck"]
+__all__ = ["Deck", "lint_deck", "LintResult", "LintIssue"]

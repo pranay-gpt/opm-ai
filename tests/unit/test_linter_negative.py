@@ -1,10 +1,9 @@
 """Negative tests for linter: decks that SHOULD fail linting.
 
-These tests document known defect #2 from STATUS.md:
-The linter has no real severity model - it downgrades most keyword problems
-to warnings so both fixtures pass. It will also pass genuinely broken decks.
-
-Marked xfail until linter severity model is implemented per 02-linter.md section 4.3.
+Originally documented defect #2 from STATUS.md (linter had no severity model and
+downgraded real errors to warnings). Resolved in Stage 2: the linter now
+implements the ERROR/WARNING/INFO model from 02-linter.md section 4.3, so these
+tests assert real ERRORs and pass normally (xfail markers removed 2026-07-18).
 """
 import pytest
 import tempfile
@@ -14,7 +13,6 @@ from opm_ai.linter import lint_deck
 
 
 @pytest.mark.unit
-@pytest.mark.xfail(reason="Linter lacks severity model, see STATUS.md defect #2")
 def test_lint_deck_missing_required_runspec_dimension():
     """Deck missing DIMENS in RUNSPEC should fail linting (error, not warning)."""
     deck_content = """
@@ -59,7 +57,6 @@ SCHEDULE
 
 
 @pytest.mark.unit
-@pytest.mark.xfail(reason="Linter lacks severity model, see STATUS.md defect #2")
 def test_lint_deck_missing_grid_keywords():
     """Deck missing required GRID keywords (DX, DY, DZ, TOPS, PORO, PERMX) should fail."""
     deck_content = """
@@ -90,7 +87,6 @@ SCHEDULE
 
 
 @pytest.mark.unit
-@pytest.mark.xfail(reason="Linter lacks severity model, see STATUS.md defect #2")
 def test_lint_deck_missing_props_for_phases():
     """Deck declaring OIL/GAS in RUNSPEC but missing PVTO/PVTG in PROPS should fail."""
     deck_content = """
@@ -136,7 +132,6 @@ SCHEDULE
 
 
 @pytest.mark.unit
-@pytest.mark.xfail(reason="Linter lacks severity model, see STATUS.md defect #2")
 def test_lint_deck_wellspecs_without_compdat():
     """Deck with WELSPECS but no COMPDAT should fail (error, not warning)."""
     deck_content = """
@@ -193,7 +188,6 @@ TSTEP
 
 
 @pytest.mark.unit
-@pytest.mark.xfail(reason="Linter lacks severity model, see STATUS.md defect #2")
 def test_lint_deck_producers_without_wconprod():
     """Deck with producer wells but no WCONPROD should fail."""
     deck_content = """
@@ -253,7 +247,6 @@ TSTEP
 
 
 @pytest.mark.unit
-@pytest.mark.xfail(reason="Linter lacks severity model, see STATUS.md defect #2")
 def test_lint_deck_injectors_without_wconinje():
     """Deck with injector wells but no WCONINJE should fail."""
     deck_content = """
@@ -313,7 +306,6 @@ TSTEP
 
 
 @pytest.mark.unit
-@pytest.mark.xfail(reason="Linter lacks severity model, see STATUS.md defect #2")
 def test_lint_deck_missing_schedule():
     """Deck completely missing SCHEDULE section should fail."""
     deck_content = """
@@ -357,7 +349,6 @@ PROPS
 
 
 @pytest.mark.unit
-@pytest.mark.xfail(reason="Linter lacks severity model, see STATUS.md defect #2")
 def test_lint_deck_missing_runspec():
     """Deck completely missing RUNSPEC section should fail."""
     deck_content = """
@@ -400,7 +391,6 @@ SCHEDULE
 
 
 @pytest.mark.unit
-@pytest.mark.xfail(reason="Linter lacks severity model, see STATUS.md defect #2")
 def test_lint_deck_missing_grid():
     """Deck completely missing GRID section should fail."""
     deck_content = """
@@ -433,7 +423,6 @@ SCHEDULE
 
 
 @pytest.mark.unit
-@pytest.mark.xfail(reason="Linter lacks severity model, see STATUS.md defect #2")
 def test_lint_deck_empty_file():
     """Completely empty deck file should fail."""
     with tempfile.NamedTemporaryFile(mode='w', suffix='.DATA', delete=False) as f:
@@ -450,7 +439,6 @@ def test_lint_deck_empty_file():
 
 
 @pytest.mark.unit
-@pytest.mark.xfail(reason="Linter lacks severity model, see STATUS.md defect #2")
 def test_lint_deck_only_comments():
     """Deck with only comments (no sections) should fail."""
     deck_content = """

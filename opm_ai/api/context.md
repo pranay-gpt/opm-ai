@@ -51,6 +51,26 @@ All route handlers in `routes/` are thin adapters that:
 | `routes/run.py` | POST `/api/run` (start job), GET `/api/run/{job_id}` (poll status) |
 | `routes/results.py` | GET `/api/results/{job_id}` - KPIs + Plotly JSON plots |
 | `routes/chat.py` | WebSocket `/api/chat` + HTTP fallback - LLM chat with tool calling |
+| `routes/explainer.py` | POST `/api/explain`, `/api/quiz`, `/api/learning-report` - Educational explainer API |
+
+### Explainer Endpoints
+
+| Endpoint | Method | Request Body | Response |
+|----------|--------|--------------|----------|
+| `/api/explain` | POST | `{topic?: str, kpis?: dict, level: "beginner"\|"intermediate"\|"advanced", context?: dict}` | `{topic, level, text, citations[{source_id,title,url_or_path,snippet}], follow_up_questions[str]}` |
+| `/api/quiz` | POST | `{scenario_summary: str, level?, n_questions: int=3 (1-10), topic_focus?: list[str]}` | `{scenario_summary, questions[{question, options[4], correct_index, explanation, level, topic_tags}]}` |
+| `/api/learning-report` | POST | `{session_id: str, conversation_history: list[{role,content}], kpis_history?: list[dict]}` | `{session_id, topics_covered[str], explanations_generated, questions_asked, quiz_scores?, key_concepts[str], citations_used, markdown}` |
+
+### Chat Tools (WebSocket /api/chat)
+
+| Tool | Parameters | Returns |
+|------|------------|---------|
+| `build_deck` | `{description: str, output_path?: str}` | `{deck, lint{deck_path, errors[], passed}}` |
+| `lint_deck` | `{deck_path: str}` | `{deck_path, errors[], passed}` |
+| `run_simulation` | `{deck_path: str, timeout?: int}` | `{job_id, status: "pending"}` |
+| `get_kpis` | `{job_id: str}` | `{kpis, plots{production, pressure}}` |
+| `explain_concept` | `{topic: str, level: "beginner"\|"intermediate"\|"advanced"}` | `{topic, level, text (~1500 chars), citations[str], follow_up_questions[str]}` |
+| `generate_quiz` | `{scenario_summary: str, n_questions?: int}` | `{scenario_summary, questions_text (Q/A-D/Answer/Explanation format), n_questions}` |
 
 ## Future Plan
 

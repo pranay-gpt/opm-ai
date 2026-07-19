@@ -5,8 +5,8 @@ Natural language -> valid OPM Flow .DATA deck that lints clean and runs in Flow.
 Spec: `docs/conversations/03-builder.md`.
 
 ## API
-- `build_deck(desc, output_path=None, use_llm=False) -> tuple[str, LintResult]`
-- `build_deck_from_spec(spec, output_path=None) -> tuple[str, LintResult]`
+- `build_deck(desc, output_path=None, use_llm=False, fluid=None) -> tuple[str, LintResult]`
+- `build_deck_from_spec(spec, output_path=None) -> tuple[str, LintResult>`
 - `extract_parameters_offline(desc) -> ModelSpec` (regex/heuristics, no LLM)
 
 `use_llm=True` is still a stub (Phase 2); it currently falls through to the
@@ -46,9 +46,41 @@ Learned the hard way; each of these broke `flow` when violated:
   (injector+producer) = GAS injector (1,1,1) + producer (nx,ny,nz);
   5-spot = WATER injector center + 4 corner producers.
 
+## Preprocess Integration (Fluid-Specific PVT)
+The builder now supports optional fluid-specific PVT tables via
+`opm_ai.preprocess`. When a `FluidDescriptor` is passed to `build_deck()`
+or attached to `ModelSpec.fluid`, the PROPS section is generated from
+correlations instead of using hard-coded SPE1 tables.
+
+Integration flow:
+1. If `spec.fluid` is set, `_compute_template_context()` calls
+   `build_pvt_blocks(fluid)` to generate all 7 PROPS blocks.
+2. Validates via `validate_pvt_blocks(blocks, "FIELD"|"METRIC")` - errors raise `ValueError`.
+3. Computes `rsvd_rs` (Rs at EQUIL datum pressure 4800 psia) using Standing
+   correlation, clamped to the max Rs in the generated PVTO table so RSVD
+   stays within the table range.
+4. Injects `pvt_blocks` and `rsvd_rs` into Jinja2 context.
+5. Template `base.j2` uses `{% if pvt_blocks %}` to emit fluid tables,
+   otherwise falls back to hard-coded SPE1 tables.
+6. RSVD lines use `{{ rsvd_rs }}` (defaults to 1.270 when no fluid).
+
+Guard: if `fluid.pressure_range` max < 4800 psia, raises `ValueError` because
+the default EQUIL datum (4800 psia) must lie within the PVTO/PVDG pressure range.
+
+Usage:
+```python
+from opm_ai.preprocess import FluidDescriptor
+from opm_ai.builder import build_deck
+
+fluid = FluidDescriptor(api_gravity=35, gas_specific_gravity=0.75, gor=800,
+                        reservoir_temp_f=200, salinity_ppm=50000,
+                        pressure_range_psi=(14.7, 5000), unit_system="FIELD")
+deck, lint = build_deck("10x10x3 grid, simple depletion, one producer", fluid=fluid)
+```
+
 ## Validation Ground Truth
 - Deck validation: `flow --enable-dry-run=true --output-dir=DIR DECK`, exit 0.
-  Bare `flow --check` does NOT work in Flow 2026.04 (Check requires a value).
+  Bare `flow --check` does NOT work in Flow 2026.04 (--check requires a value).
 - Full run: `flow --output-dir=DIR DECK`; Flow writes output next to the deck
   unless `--output-dir` is given (cwd is irrelevant).
 
@@ -56,11 +88,10 @@ Learned the hard way; each of these broke `flow` when violated:
 - `tests/integration/test_builder.py`: extraction + deck structure
 - `tests/integration/test_builder_roundtrip.py`: 4 roundtrip tests (dry-run x3, full run x1)
 - `tests/integration/test_dataset_validation.py`: 9 scenario descriptions must lint clean and pass dry-run
+- `tests/integration/test_preprocess.py`: fluid-specific PVT block generation + builder integration + Flow dry-run/full-run
 
 ## Future / Plan
 - Phase 2: LLM extraction path (function calling) behind `use_llm=True`
 - Scenario-specific templates (WAG cycles via WCONINJE schedule changes,
   gas-cap EQUIL variants, CO2 via GAS injector with CO2 stream) - currently
   all scenarios render through the single SPE1-style base.j2
-- Preprocess integration: replace hard-coded SPE1 PROPS tables with
-  build_pvt_blocks() output (04-preprocess.md)

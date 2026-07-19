@@ -1,8 +1,10 @@
 """Pydantic models for the builder module."""
 
 from enum import Enum
-from typing import Literal
-from pydantic import BaseModel, Field
+from typing import Literal, Optional
+from pydantic import BaseModel, Field, ConfigDict
+
+from opm_ai.preprocess.models import FluidDescriptor
 
 
 class WellType(str, Enum):
@@ -92,6 +94,8 @@ Scenario = ScenarioType
 class ModelSpec(BaseModel):
     """Complete model specification for deck generation."""
 
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     scenario: ScenarioType = ScenarioType.DEPLETION
     title: str = "OPM-AI Generated Deck"
     reservoir: ReservoirSpec = Field(default_factory=ReservoirSpec)
@@ -99,6 +103,7 @@ class ModelSpec(BaseModel):
     start_date: str = "1 'JAN' 2015"
     timesteps: list[float] = Field(default_factory=lambda: [30.0] * 12 + [90.0] * 4)  # Monthly then quarterly
     field_units: bool = Field(default=True, description="Use FIELD units (vs METRIC)")
+    fluid: FluidDescriptor | None = None
 
     def total_cells(self) -> int:
         return self.reservoir.total_cells

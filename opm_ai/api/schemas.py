@@ -6,6 +6,13 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, ConfigDict, Field
 
+# Import explainer types
+try:
+    from opm_ai.explainer.models import ExplanationLevel
+except ImportError:
+    # Fallback for when explainer not yet available
+    ExplanationLevel = Literal["beginner", "intermediate", "advanced"]
+
 
 class BuildRequest(BaseModel):
     """Request to build a deck from natural language description."""
@@ -221,10 +228,110 @@ OPEN_RESINSIGHT_PLOT_TOOL = {
     },
 }
 
+# Explainer tool schemas for chat
+EXPLAIN_CONCEPT_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "explain_concept",
+        "description": "Explain a reservoir engineering concept at a specified pedagogical level",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "topic": {"type": "string", "description": "Topic or question to explain (e.g., 'why did watercut spike after 3 years?')"},
+                "level": {"type": "string", "enum": ["beginner", "intermediate", "advanced"], "default": "intermediate", "description": "Explanation level"},
+            },
+            "required": ["topic"],
+            "additionalProperties": False,
+        },
+    },
+}
+
+GENERATE_QUIZ_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "generate_quiz",
+        "description": "Generate a multiple-choice quiz from a scenario description",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "scenario_summary": {"type": "string", "description": "Description of the simulation scenario"},
+                "n_questions": {"type": "integer", "default": 3, "minimum": 1, "maximum": 10, "description": "Number of questions"},
+            },
+            "required": ["scenario_summary"],
+            "additionalProperties": False,
+        },
+    },
+}
+
 TOOLS = [
     BUILD_DECK_TOOL,
     LINT_DECK_TOOL,
     RUN_SIMULATION_TOOL,
     GET_KPIS_TOOL,
     OPEN_RESINSIGHT_PLOT_TOOL,
+    EXPLAIN_CONCEPT_TOOL,
+    GENERATE_QUIZ_TOOL,
 ]
+
+
+# Explainer request/response schemas
+class ExplainRequest(BaseModel):
+    """Request for explanation generation."""
+    model_config = ConfigDict(from_attributes=True)
+
+    topic: str | None = None
+    kpis: dict[str, Any] | None = None
+    level: ExplanationLevel = "intermediate"
+    context: dict | None = None
+
+
+class ExplainResponse(BaseModel):
+    """Response from explanation generation."""
+    model_config = ConfigDict(from_attributes=True)
+
+    topic: str
+    level: ExplanationLevel
+    text: str
+    citations: list[dict[str, str]]
+    follow_up_questions: list[str]
+
+
+class QuizRequest(BaseModel):
+    """Request for quiz generation."""
+    model_config = ConfigDict(from_attributes=True)
+
+    scenario_summary: str
+    level: ExplanationLevel = "intermediate"
+    n_questions: int = Field(default=3, ge=1, le=10)
+    topic_focus: list[str] | None = None
+
+
+class QuizResponse(BaseModel):
+    """Response from quiz generation."""
+    model_config = ConfigDict(from_attributes=True)
+
+    scenario_summary: str
+    questions: list[dict[str, Any]]
+
+
+class LearningReportRequest(BaseModel):
+    """Request for learning report generation."""
+    model_config = ConfigDict(from_attributes=True)
+
+    session_id: str
+    conversation_history: list[dict[str, Any]]
+    kpis_history: list[dict] | None = None
+
+
+class LearningReportResponse(BaseModel):
+    """Response from learning report generation."""
+    model_config = ConfigDict(from_attributes=True)
+
+    session_id: str
+    topics_covered: list[str]
+    explanations_generated: int
+    questions_asked: int
+    quiz_scores: dict[str, float] | None
+    key_concepts: list[str]
+    citations_used: list[dict[str, str]]
+    markdown: str

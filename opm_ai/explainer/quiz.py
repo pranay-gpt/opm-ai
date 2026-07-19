@@ -298,7 +298,7 @@ def generate_quiz(
     Returns:
         Quiz object with scenario summary and questions
     """
-    n_questions = max(3, min(5, n_questions))
+    n_questions = max(1, min(10, n_questions))
 
     # Try LLM first
     llm = LLMClient()

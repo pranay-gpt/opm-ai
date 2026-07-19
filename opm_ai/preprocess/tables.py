@@ -61,9 +61,11 @@ def build_pvt_oil_table(
     # Use provided GOR if it's less than computed Rs (undersaturated)
     if gor < rs_res:
         rs_res = gor
-        # Find bubble point for this Rs
-        _, pb = standing_rs_bubble(api, gas_grav, temp_f, p_max)
-        # We'll use Standing to invert - but for simplicity just use p_max as reference
+        # Recompute bubble point for the capped Rs
+        # Invert Standing: Pb = 18.2 * ((Rs/gas_grav)^0.83 * 10^(0.00091*T - 0.0125*API) - 1.4)
+        inv_term = 10 ** (0.00091 * temp_f - 0.0125 * api)
+        pb = 18.2 * ((rs_res / gas_grav) ** 0.83 * inv_term - 1.4)
+        pb = max(pb, 0.0)
 
     # Saturated section: ~8 points from p_min to pb
     n_sat = 8

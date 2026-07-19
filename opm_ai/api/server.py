@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from opm_ai.api.routes import build, lint, run, results, chat
+from opm_ai.api.routes import build, lint, run, results, chat, explainer
 
 
 @asynccontextmanager
@@ -47,6 +47,7 @@ def create_app() -> FastAPI:
     app.include_router(run.router, prefix="/api")
     app.include_router(results.router, prefix="/api")
     app.include_router(chat.router, prefix="/api")
+    app.include_router(explainer.router, prefix="/api")
 
     @app.get("/health")
     async def health_check():

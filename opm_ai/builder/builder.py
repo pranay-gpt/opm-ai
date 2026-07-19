@@ -8,6 +8,9 @@ from opm_ai.builder.models import ModelSpec, Scenario, ReservoirSpec, WellSpec, 
 from opm_ai.builder.extract import extract_parameters_offline
 from opm_ai.linter import lint_deck, LintResult
 from opm_ai.settings import settings
+from opm_ai.preprocess import build_pvt_blocks, validate_pvt_blocks, FluidDescriptor
+from opm_ai.preprocess.correlations import standing_rs_bubble
+from opm_ai.preprocess.tables import build_pvt_oil_table
 
 
 def _get_template_env() -> Environment:
@@ -33,6 +36,51 @@ def _compute_template_context(spec: ModelSpec) -> dict:
     # Add enumerate for template
     timesteps_with_index = list(enumerate(timesteps))
 
+    # Build PVT blocks if fluid is specified
+    pvt_blocks = None
+    rsvd_rs = 1.270  # Default SPE1 value
+
+    if spec.fluid is not None:
+        fluid = spec.fluid
+        # Validate pressure range - EQUIL uses 4800 psia default
+        p_min, p_max = fluid.pressure_range
+        if p_max < 4800:
+            raise ValueError(
+                f"Fluid pressure range max ({p_max} psia) must be >= 4800 psia "
+                f"(EQUIL datum pressure). Extend pressure_range_psi to at least 4800."
+            )
+
+        # Build PVT blocks
+        pvt_blocks = build_pvt_blocks(fluid)
+
+        # Validate
+        unit_system = "FIELD" if spec.field_units else "METRIC"
+        validation_errors = validate_pvt_blocks(pvt_blocks, unit_system)
+        if validation_errors:
+            raise ValueError(f"PVT block validation failed: {validation_errors}")
+
+        # Compute RSVD RS value at initial pressure (4800 psia default EQUIL pressure)
+        # Using Standing correlation to get Rs at 4800 psia, then clamp to max Rs in PVTO table
+        p_init = 4800.0
+        if fluid.pressure_range_psi:
+            # Use the max pressure from the fluid descriptor if it's different
+            p_init = max(p_init, fluid.pressure_range_psi[1])
+
+        rs_at_pinit, _ = standing_rs_bubble(
+            fluid.api_gravity, fluid.gas_specific_gravity, fluid.temp_f, p_init
+        )
+
+        # Get max Rs from the PVTO table
+        pvt_oil_table = build_pvt_oil_table(
+            fluid,
+            "Standing",  # Use Standing for consistency with standing_rs_bubble
+            {"swc": 0.12, "sorw": 0.20, "krw_max": 0.50, "kro_max": 1.0, "nw": 2.0, "no": 2.0}
+        )
+        max_table_rs = max(row["RS"] for row in pvt_oil_table) if pvt_oil_table else rs_at_pinit
+
+        # Clamp to max table Rs
+        rsvd_rs = min(rs_at_pinit, max_table_rs)
+
     return {
         "title": spec.title,
         "reservoir": reservoir,
@@ -42,6 +90,8 @@ def _compute_template_context(spec: ModelSpec) -> dict:
         "timesteps": timesteps,
         "timesteps_with_index": timesteps_with_index,
         "field_units": spec.field_units,
+        "pvt_blocks": pvt_blocks,
+        "rsvd_rs": rsvd_rs,
     }
 
 
@@ -49,6 +99,7 @@ def build_deck(
     desc: str,
     output_path: Optional[Path] = None,
     use_llm: bool = False,
+    fluid: Optional[FluidDescriptor] = None,
 ) -> tuple[str, LintResult]:
     """
     Build an OPM Flow deck from natural language description.
@@ -57,6 +108,7 @@ def build_deck(
         desc: Natural language description (e.g., "10x10x5 grid, simple depletion, one producer")
         output_path: Optional path to write the deck file
         use_llm: Whether to use LLM for parameter extraction (requires API key)
+        fluid: Optional FluidDescriptor for fluid-specific PVT tables
 
     Returns:
         Tuple of (deck_string, lint_result)
@@ -70,6 +122,10 @@ def build_deck(
         spec = extract_parameters_offline(desc)
     else:
         spec = extract_parameters_offline(desc)
+
+    # Attach fluid if provided
+    if fluid is not None:
+        spec.fluid = fluid
 
     # Get template context
     context = _compute_template_context(spec)

@@ -7,6 +7,8 @@ from typing import Any
 
 from opm_ai.api.schemas import (
     ChatMessage, ChatRequest, TOOLS,
+    EXPLAIN_CONCEPT_TOOL,
+    GENERATE_QUIZ_TOOL,
 )
 from opm_ai.api.job_store import create_job, set_job_running, set_job_completed, set_job_failed, get_job
 from opm_ai.builder import build_deck
@@ -140,11 +142,76 @@ async def tool_get_kpis(args: dict) -> dict:
     return {"kpis": kpis, "plots": plots}
 
 
+async def tool_explain_concept(args: dict) -> dict:
+    """Explain a reservoir engineering concept."""
+    from opm_ai.explainer import explain
+    import asyncio
+
+    topic = args.get("topic", "")
+    level = args.get("level", "intermediate")
+
+    loop = asyncio.get_event_loop()
+    explanation = await loop.run_in_executor(
+        None,
+        lambda: explain(topic, level=level)
+    )
+
+    # Return compact result for tool: text + citation titles (truncated to ~1500 chars)
+    text = explanation.text
+    if len(text) > 1500:
+        text = text[:1500] + "..."
+
+    citation_titles = [c.title for c in explanation.citations[:3]]
+
+    return {
+        "topic": explanation.topic,
+        "level": explanation.level,
+        "text": text,
+        "citations": citation_titles,
+        "follow_up_questions": list(explanation.follow_up_questions),
+    }
+
+
+async def tool_generate_quiz(args: dict) -> dict:
+    """Generate a multiple-choice quiz from a scenario."""
+    from opm_ai.explainer import generate_quiz
+    import asyncio
+
+    scenario = args.get("scenario_summary", "")
+    n_questions = args.get("n_questions", 3)
+
+    loop = asyncio.get_event_loop()
+    quiz = await loop.run_in_executor(
+        None,
+        lambda: generate_quiz(scenario, n_questions=n_questions)
+    )
+
+    # Return compact text format: Q / options A-D / answer letter
+    lines = [f"Quiz: {quiz.scenario_summary}\n"]
+    for i, q in enumerate(quiz.questions, 1):
+        lines.append(f"Q{i}: {q.question}")
+        for j, opt in enumerate(q.options):
+            letter = chr(ord('A') + j)
+            lines.append(f"  {letter}) {opt}")
+        correct_letter = chr(ord('A') + q.correct_index)
+        lines.append(f"  Answer: {correct_letter}")
+        lines.append(f"  Explanation: {q.explanation}")
+        lines.append("")
+
+    return {
+        "scenario_summary": quiz.scenario_summary,
+        "questions_text": "\n".join(lines),
+        "n_questions": len(quiz.questions),
+    }
+
+
 TOOL_FUNCTIONS = {
     "build_deck": tool_build_deck,
     "lint_deck": tool_lint_deck,
     "run_simulation": tool_run_simulation,
     "get_kpis": tool_get_kpis,
+    "explain_concept": tool_explain_concept,
+    "generate_quiz": tool_generate_quiz,
 }
 
 

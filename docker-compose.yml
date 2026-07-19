@@ -1,0 +1,30 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - ./decks:/app/decks
+      - ./results:/app/results
+    healthcheck:
+      test: ["CMD", "/healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    depends_on:
+      resinsight:
+        condition: service_started
+
+  resinsight:
+    image: ghcr.io/opm/resinsight:2026.04
+    ports:
+      - "50051:50051"
+    command: ["--grpc-port", "50051"]
+    # Note: ResInsight GUI needs X11; headless gRPC works without display
+    # For headless operation, may need: xvfb-run -a ResInsight --grpc-port 50051

@@ -55,7 +55,8 @@ def create_app() -> FastAPI:
         return {"status": "ok"}
 
     # Optional static mount of frontend/dist at "/" for production
-    frontend_dist = Path("frontend/dist")
+    # Must be AFTER all /api routes so API routes take precedence
+    frontend_dist = Path("/app/static")
     if frontend_dist.exists():
         app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")
 

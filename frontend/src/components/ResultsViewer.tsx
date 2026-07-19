@@ -1,11 +1,37 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useSimulationStore, useLastResults, useCurrentJob, useSimulationActions } from '../stores/useAppStore';
+import { useLastResults, useCurrentJob, useSimulationActions } from '../stores/useAppStore';
 import { api } from '../api/client';
 import type { KPIsResponse } from '../api/client';
-import Plot from 'react-plotly.js';
+// @ts-expect-error plotly.js-dist ships no types; @types/plotly.js covers the API
+import Plotly from 'plotly.js-dist-min';
 
-// Access Plotly directly for newPlot
-const Plotly = (window as any).Plotly;
+function PlotCard({ plotName, plotJson }: { plotName: string; plotJson: string }) {
+  const divRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (divRef.current) {
+      try {
+        const plotData = JSON.parse(plotJson);
+        Plotly.newPlot(divRef.current, plotData.data, plotData.layout, { responsive: true, displayModeBar: true });
+      } catch (e) {
+        console.error(`Failed to render ${plotName}:`, e);
+      }
+    }
+    return () => {
+      if (divRef.current) Plotly.purge(divRef.current);
+    };
+  }, [plotName, plotJson]);
+
+  return (
+    <div className="card">
+      <div className="panel-header">
+        <h3 className="panel-title capitalize">{plotName.replace(/_/g, ' ')}</h3>
+      </div>
+      <div className="p-4 h-[500px]">
+        <div ref={divRef} className="plotly-chart" />
+      </div>
+    </div>
+  );
+}
 
 interface KPICard {
   key: string;
@@ -212,30 +238,9 @@ export default function ResultsViewer() {
               </div>
             ) : (
               <div className="space-y-6">
-                {Object.entries(results.plots).map(([plotName, plotJson]) => {
-                  const divRef = useRef<HTMLDivElement>(null);
-                  useEffect(() => {
-                    if (divRef.current) {
-                      try {
-                        const plotData = JSON.parse(plotJson);
-                        Plotly.newPlot(divRef.current!, plotData.data, plotData.layout, { responsive: true, displayModeBar: true });
-                      } catch (e) {
-                        console.error(`Failed to render ${plotName}:`, e);
-                      }
-                    }
-                  }, [plotJson]);
-
-                  return (
-                    <div key={plotName} className="card">
-                      <div className="panel-header">
-                        <h3 className="panel-title capitalize">{plotName.replace(/_/g, ' ')}</h3>
-                      </div>
-                      <div className="p-4 h-[500px]">
-                        <div ref={divRef} className="plotly-chart" />
-                      </div>
-                    </div>
-                  );
-                })}
+                {Object.entries(results.plots).map(([plotName, plotJson]) => (
+                  <PlotCard key={plotName} plotName={plotName} plotJson={plotJson} />
+                ))}
               </div>
             )}
           </div>

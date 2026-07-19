@@ -102,7 +102,8 @@ def rule_L003b_missing_grid_keywords(deck: Deck) -> list[LintIssue]:
     if not grid:
         return issues
 
-    if _has_keyword(grid, "INCLUDE"):
+    # IMPORT loads binary grid data (EGRID) - same unresolvable-in-v1 class
+    if _has_keyword(grid, "INCLUDE") or _has_keyword(grid, "IMPORT"):
         return issues
     if _has_keyword(grid, "COORD") or _has_keyword(grid, "ZCORN"):
         return issues

@@ -12,22 +12,30 @@ class LLMClient:
         """Initialize client. Never raises; falls back to offline mode if no keys."""
         self._groq_client = None
         self._openai_client = None
+        self._openai_model = settings.openai_model
         self._available = False
         self._init_clients()
 
     def _init_clients(self) -> None:
-        """Initialize available clients based on available API keys."""
-        # Try Groq
-        if settings.groq_api_key:
+        """Initialize the provider selected by settings.active_llm_client.
+
+        Gated on the LLM_PROVIDER opt-in (default "offline"): the mere
+        presence of API keys in a .env must not cause network calls -
+        otherwise lint_deck silently gains 1-2s latency whenever the CWD
+        holds a .env with keys.
+        """
+        provider = settings.active_llm_client
+        if provider == "offline":
+            return
+
+        if provider == "groq":
             try:
                 from groq import Groq
                 self._groq_client = Groq(api_key=settings.groq_api_key)
                 self._available = True
             except Exception:
                 self._groq_client = None
-
-        # Try OpenAI-compatible (including NVIDIA NIM)
-        if settings.openai_api_key:
+        elif provider == "openai":
             try:
                 from openai import OpenAI
                 self._openai_client = OpenAI(
@@ -37,10 +45,18 @@ class LLMClient:
                 self._available = True
             except Exception:
                 self._openai_client = None
-
-        # If neither available, offline mode
-        if not self._groq_client and not self._openai_client:
-            self._available = False
+        elif provider == "nim":
+            # NVIDIA NIM is OpenAI-compatible
+            try:
+                from openai import OpenAI
+                self._openai_client = OpenAI(
+                    api_key=settings.nvidia_nim_api_key,
+                    base_url=settings.nvidia_nim_base_url,
+                )
+                self._openai_model = settings.nvidia_nim_model
+                self._available = True
+            except Exception:
+                self._openai_client = None
 
     @property
     def available(self) -> bool:
@@ -72,11 +88,11 @@ class LLMClient:
             except Exception:
                 pass  # Fall through to OpenAI
 
-        # Try OpenAI-compatible
+        # Try OpenAI-compatible (OpenAI or NVIDIA NIM)
         if self._openai_client:
             try:
                 response = self._openai_client.chat.completions.create(
-                    model=settings.openai_model,
+                    model=self._openai_model,
                     messages=messages,
                     temperature=0.1,
                 )

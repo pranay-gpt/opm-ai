@@ -33,8 +33,19 @@ class Settings(BaseSettings):
     openai_base_url: Optional[str] = Field(default=None, validation_alias="OPENAI_BASE_URL")
     openai_model: str = Field(default="gpt-4o", validation_alias="OPENAI_MODEL")
 
-    # LLM provider selection: "groq" | "openai" | "offline"
+    # LLM provider selection: "groq" | "openai" | "nim" | "auto" | "offline"
+    # Default "offline": presence of API keys alone must NOT enable network
+    # calls (lint_deck would silently gain 1-2s latency whenever a .env with
+    # keys is in CWD). Opt in via LLM_PROVIDER.
     llm_provider: str = Field(default="offline", validation_alias="LLM_PROVIDER")
+
+    # NVIDIA NIM OpenAI-compatible endpoint
+    nvidia_nim_base_url: str = Field(
+        default="https://integrate.api.nvidia.com/v1",
+        validation_alias="NVIDIA_NIM_BASE_URL")
+    nvidia_nim_model: str = Field(
+        default="meta/llama-3.3-70b-instruct",
+        validation_alias="NVIDIA_NIM_MODEL")
 
     # Tavily API for web search
     tavily_api_key: Optional[str] = Field(default=None, validation_alias="TAVILY_API")
@@ -62,11 +73,13 @@ class Settings(BaseSettings):
 
     @property
     def active_llm_client(self) -> str:
-        """Return the active LLM provider name."""
+        """Return the active LLM provider name ("offline" unless opted in)."""
         if self.groq_api_key and self.llm_provider in ("groq", "auto"):
             return "groq"
         if self.openai_api_key and self.llm_provider in ("openai", "auto"):
             return "openai"
+        if self.nvidia_nim_api_key and self.llm_provider in ("nim", "auto"):
+            return "nim"
         return "offline"
 
 

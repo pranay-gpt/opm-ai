@@ -1,15 +1,14 @@
 # OPM-AI: Context for New Sessions
 
 Last updated: 2026-07-19  
-Status: Parts 1-3 complete and hardened; Parts 4-8 not started  
-Suite: 66 passed / 0 failed
+Status: Parts 1-3 and 5-8 complete; Part 4 not started  
+Suite: 80 passed / 0 failed
 
 ## What This Is
 
 OPM-AI is an AI-assisted reservoir simulation workbench for petroleum engineering education. Vision: user types plain English ("10x10x3 grid, one injector one producer, 5-year waterflood, API 35 oil"), system converts it to an Eclipse .DATA deck, runs OPM Flow, and returns visual results + educational explanations. Open source, offline-first, single `docker compose up`.
 
 ## Where We Are (Progress Against the 8-Part Plan)
-
 | Part | Spec | Status | Test Coverage |
 |------|------|--------|---------------|
 | 0 | skeleton/settings | ✅ DONE | settings unit tests |
@@ -17,12 +16,12 @@ OPM-AI is an AI-assisted reservoir simulation workbench for petroleum engineerin
 | 2 | Linter (deck validation) | ✅ DONE + calibrated | 14 unit tests + dataset validation (133 fixtures, FP=0) |
 | 3 | Builder+LLM+CLI | ✅ DONE (offline path) | 8 integration tests (scenarios + grid sweep) |
 | 4 | Preprocess (PVT/relperm) | ❌ NOT STARTED | - |
-| 5 | Postprocess (ResInsight/plots) | 🟡 Reference sketch | works on SPE1; Stage 4 gaps known |
-| 6 | API + React frontend | ❌ NOT STARTED | `opm_ai/api/` empty, no `frontend/` |
+| 5 | Postprocess (ResInsight/plots) | ✅ DONE | spec KPIs, NaN sanitization |
+| 6 | API + React frontend | ✅ DONE | build/lint/run/results routes, WebSocket chat, 8 routes, dark blue palette, Monaco editor, Plotly, zustand |
 | 7 | Explainer/RAG | ❌ NOT STARTED | Phase 3 by design |
-| 8 | Deployment (Docker/CI) | ❌ NOT STARTED | no Dockerfile yet |
+| 8 | Deployment (Docker/CI) | ✅ DONE | Docker multi-stage + compose + smoke.sh (7/7 passing locally), CI workflows, README rewrite |
 
-**Working pipeline today:** plain English → ModelSpec → .DATA deck → lint → flow run → DataFrame/KPIs/plots
+**Working pipeline today:** plain English → ModelSpec → .DATA deck → lint → flow run → DataFrame/KPIs/plots → API → frontend
 
 ## Critical Knowledge (Read Before Changing Anything)
 
@@ -77,7 +76,7 @@ Rule IDs: L001 (missing `/`), L003/L003b (grid), L004 (negative perm), L005 (pha
 2. **Builder Phase 2** (spec 03-builder.md): scenario-specific templates (WAG alternation, gas-cap EQUIL, CO2 stream), METRIC units, DATES schedules, LLM extraction (`use_llm=True` end-to-end).
 3. **Linter future**: deep-parse mode for the 9 FN classes (runtime/parser errors), INCLUDE resolution, rules for GCONPROD/VFP/ACTIONX families.
 4. **Template cleanup**: NOECHO/ECHO in base.j2 draw "not supported" warnings from Flow (harmless, remove when next editing).
-5. **Stages 4-8**: Parts 4 (preprocess), 5 (API backend), 6 (React frontend), 7 (explainer/RAG), 8 (deployment) not started.
+5. **Stages 4-8**: Part 4 (preprocess) not started; Parts 5, 6, 8 complete; Part 7 not started.
 
 ## What the Last Audit Found (2026-07-19)
 

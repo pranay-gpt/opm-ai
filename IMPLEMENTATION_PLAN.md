@@ -112,6 +112,7 @@ table in `STATUS.md`.
 - `postprocess/resinsight_bridge.py`: optional `rips` 3D snapshots.
 - **Done when:** `pytest tests/unit/test_plots.py -v` passes and the Stage 1 SPE1
   integration test reads summary + KPIs end to end.
+- **STATUS: COMPLETE (2026-07-19).**
 
 ## Stage 5 - FastAPI backend (Phase 2)
 
@@ -125,6 +126,7 @@ table in `STATUS.md`.
 - Add `fastapi` + `uvicorn[standard]` to `pyproject.toml`; drop `streamlit`.
 - **Done when:** `uvicorn opm_ai.api.server:create_app --factory` serves; add
   `tests/integration/test_api.py` (FastAPI `TestClient`) covering build/lint happy paths.
+- **STATUS: COMPLETE (2026-07-19).**
 
 ## Stage 6 - React frontend (Phase 2)
 
@@ -136,6 +138,7 @@ table in `STATUS.md`.
   ResInsight snapshots), LinterPanel, SettingsPanel (keys/provider), Dark Void theme.
 - **Done when:** `npm run build` succeeds; dev flow (`uvicorn` + `npm run dev`) runs a
   full build -> lint -> run -> results loop against a fixture.
+- **STATUS: COMPLETE (2026-07-19).**
 
 ## Stage 7 - Preprocess + Deployment (Phase 2 tail / Part 8)
 
@@ -146,6 +149,7 @@ table in `STATUS.md`.
 - Update `README.md` quick-start: backend (`uvicorn`) + frontend (`npm run dev` / build)
   instead of `streamlit run`.
 - GitHub Actions CI: `pytest` (SPE1) + `npm run build`.
+- **STATUS: COMPLETE (2026-07-19).**
 
 ## Phase 3 - Explainer / RAG (deferred)
 

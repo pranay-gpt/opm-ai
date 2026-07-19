@@ -260,7 +260,7 @@ SCHEDULE
                 <div className={`p-4 rounded border ${isPassed ? 'bg-success/20 border-success' : 'bg-error/20 border-error'}`}>
                   <div className="flex items-center gap-3">
                     <span className={`text-2xl ${isPassed ? 'text-success' : 'text-error'}`}>
-                      {isPassed ? '✓' : '✗'}
+                      {isPassed ? '[OK]' : '[FAIL]'}
                     </span>
                     <div>
                       <div className="font-semibold text-textPrimary">

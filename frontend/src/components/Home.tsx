@@ -7,10 +7,10 @@ export default function Home() {
   const lastBuildResponse = useLastBuildResponse();
 
   const stats = [
-    { label: 'Decks Built', value: jobHistory.length, icon: '📋' },
-    { label: 'Simulations Run', value: jobHistory.filter((j) => j.status === 'completed').length, icon: '⚙️' },
-    { label: 'Last Run', value: lastResults ? 'Complete' : '—', icon: '📊' },
-    { label: 'Active Job', value: currentJob?.status ?? 'None', icon: '🔄' },
+    { label: 'Decks Built', value: jobHistory.length, icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg> },
+    { label: 'Simulations Run', value: jobHistory.filter((j) => j.status === 'completed').length, icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> },
+    { label: 'Last Run', value: lastResults ? 'Complete' : '-', icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg> },
+    { label: 'Active Job', value: currentJob?.status ?? 'None', icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg> },
   ];
 
   const recentJobs = jobHistory.slice(0, 5);
@@ -153,9 +153,9 @@ export default function Home() {
                         </span>
                       </td>
                       <td className="text-textSecondary">
-                        {job.result?.output_dir ? job.result.output_dir.split('/').pop() : '—'}
+                        {job.result?.output_dir ? job.result.output_dir.split('/').pop() : '-'}
                       </td>
-                      <td className="text-textSecondary">—</td>
+                      <td className="text-textSecondary">-</td>
                       <td>
                         <a
                           href={`/results?id=${job.job_id}`}
@@ -181,7 +181,7 @@ export default function Home() {
             href="/deck-builder"
             className="card p-5 card-hover flex flex-col items-center text-center gap-3"
           >
-            <span className="text-3xl">📋</span>
+            <span className="text-3xl"><svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg></span>
             <span className="font-semibold text-textPrimary">Build a Deck</span>
             <span className="text-sm text-textSecondary">Describe your model in plain English</span>
           </a>
@@ -189,7 +189,7 @@ export default function Home() {
             href="/deck-editor"
             className="card p-5 card-hover flex flex-col items-center text-center gap-3"
           >
-            <span className="text-3xl">📝</span>
+            <span className="text-3xl"><svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 4H9a2 2 0 00-2 2v12a2 2 0 002 2h2a2 2 0 002-2V6a2 2 0 00-2-2z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 10h10M7 14h10M7 18h10" /></svg></span>
             <span className="font-semibold text-textPrimary">Edit a Deck</span>
             <span className="text-sm text-textSecondary">Syntax-highlighted Monaco editor</span>
           </a>
@@ -197,7 +197,7 @@ export default function Home() {
             href="/simulator"
             className="card p-5 card-hover flex flex-col items-center text-center gap-3"
           >
-            <span className="text-3xl">⚙️</span>
+            <span className="text-3xl"><svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg></span>
             <span className="font-semibold text-textPrimary">Run Simulation</span>
             <span className="text-sm text-textSecondary">Submit jobs and monitor progress</span>
           </a>

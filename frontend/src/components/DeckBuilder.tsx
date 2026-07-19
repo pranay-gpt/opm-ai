@@ -162,7 +162,7 @@ export default function DeckBuilder() {
               }`}>
                 <div className="flex items-center gap-2 text-sm">
                   <span className={lastBuildResponse.lint.passed ? 'text-success' : 'text-error'}>
-                    {lastBuildResponse.lint.passed ? '✓' : '✗'}
+                    {lastBuildResponse.lint.passed ? '[OK]' : '[FAIL]'}
                   </span>
                   <span className="font-medium">
                     {lastBuildResponse.lint.passed ? 'Lint Passed' : 'Lint Issues Found'}

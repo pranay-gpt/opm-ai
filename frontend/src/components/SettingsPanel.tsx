@@ -45,7 +45,7 @@ export default function SettingsPanel() {
           <p className="text-sm text-textSecondary">Configure API keys and preferences</p>
         </div>
         <button onClick={handleSave} className="btn-primary" disabled={saved}>
-          {saved ? 'Saved ✓' : 'Save Settings'}
+          {saved ? 'Saved [OK]' : 'Save Settings'}
         </button>
       </div>
 
@@ -55,7 +55,7 @@ export default function SettingsPanel() {
           {/* LLM Provider */}
           <section className="card p-5">
             <h2 className="text-lg font-semibold text-textPrimary mb-4 flex items-center gap-2">
-              <span className="text-2xl">🤖</span>
+              <span className="text-2xl"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg></span>
               LLM Provider
             </h2>
             <p className="text-sm text-textSecondary mb-4">
@@ -97,7 +97,7 @@ export default function SettingsPanel() {
           {provider === 'groq' && (
             <section className="card p-5">
               <h2 className="text-lg font-semibold text-textPrimary mb-4 flex items-center gap-2">
-                <span className="text-2xl">🔑</span>
+                <span className="text-2xl"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg></span>
                 Groq API Key
               </h2>
               <p className="text-sm text-textSecondary mb-4">
@@ -136,7 +136,7 @@ export default function SettingsPanel() {
           {provider === 'nim' && (
             <section className="card p-5">
               <h2 className="text-lg font-semibold text-textPrimary mb-4 flex items-center gap-2">
-                <span className="text-2xl">🔑</span>
+                <span className="text-2xl"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg></span>
                 NVIDIA NIM API Key
               </h2>
               <p className="text-sm text-textSecondary mb-4">
@@ -186,7 +186,7 @@ export default function SettingsPanel() {
           {/* UI Preferences */}
           <section className="card p-5">
             <h2 className="text-lg font-semibold text-textPrimary mb-4 flex items-center gap-2">
-              <span className="text-2xl">🎨</span>
+              <span className="text-2xl"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg></span>
               UI Preferences
             </h2>
             <div className="space-y-4">
@@ -210,7 +210,7 @@ export default function SettingsPanel() {
           {/* Data Management */}
           <section className="card p-5 border-error/30">
             <h2 className="text-lg font-semibold text-textPrimary mb-4 flex items-center gap-2">
-              <span className="text-2xl">🗑️</span>
+              <span className="text-2xl"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></span>
               Data Management
             </h2>
             <p className="text-sm text-textSecondary mb-4">
@@ -233,7 +233,7 @@ export default function SettingsPanel() {
           <section className="card p-5 bg-primary/5 border-primary/20">
             <h3 className="font-medium text-textPrimary mb-2">About OPM-AI</h3>
             <p className="text-sm text-textSecondary">
-              OPM-AI Frontend v0.1.0 — React + Vite + TypeScript + Tailwind CSS
+              OPM-AI Frontend v0.1.0 - React + Vite + TypeScript + Tailwind CSS
             </p>
             <p className="text-sm text-textSecondary mt-1">
               Backend: FastAPI on port 8000 | Frontend dev server: port 5173

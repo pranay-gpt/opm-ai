@@ -41,14 +41,14 @@ interface KPICard {
 }
 
 const KPI_CARDS: KPICard[] = [
-  { key: 'days', label: 'Simulation Days', unit: 'days', format: (v: number) => v.toFixed(1) },
-  { key: 'field_oil_recovery', label: 'Oil Recovery', unit: '%', format: (v: number) => (v * 100).toFixed(2) },
+  { key: 'days', label: 'Simulation Days', unit: 'days', format: (v: number) => v.toFixed(0) },
+  { key: 'field_oil_recovery', label: 'Cumulative Oil', unit: 'STB', format: (v: number) => v.toLocaleString() },
+  { key: 'field_water_recovery', label: 'Cumulative Water', unit: 'STB', format: (v: number) => v.toLocaleString() },
+  { key: 'field_gas_recovery', label: 'Cumulative Gas', unit: 'MSCF', format: (v: number) => v.toLocaleString() },
   { key: 'max_watercut', label: 'Max Water Cut', unit: '%', format: (v: number) => (v * 100).toFixed(1) },
-  { key: 'final_gor', label: 'Final GOR', unit: 'sm³/sm³', format: (v: number) => v.toFixed(1) },
-  { key: 'cum_oil', label: 'Cumulative Oil', unit: 'sm³', format: (v: number) => v.toLocaleString() },
-  { key: 'cum_water', label: 'Cumulative Water', unit: 'sm³', format: (v: number) => v.toLocaleString() },
-  { key: 'cum_gas', label: 'Cumulative Gas', unit: 'sm³', format: (v: number) => v.toLocaleString() },
-  { key: 'avg_pressure', label: 'Avg Reservoir Pressure', unit: 'bar', format: (v: number) => v.toFixed(1) },
+  { key: 'final_gor', label: 'Final GOR', unit: 'MSCF/STB', format: (v: number) => v.toFixed(2) },
+  { key: 'producer_count', label: 'Producers', unit: '', format: (v: number) => v.toFixed(0) },
+  { key: 'plateau_duration_days', label: 'Plateau Duration', unit: 'days', format: (v: number) => v.toFixed(0) },
 ];
 
 export default function ResultsViewer() {
@@ -86,9 +86,9 @@ export default function ResultsViewer() {
 
   // KPI value getter
   const getKpiValue = (kpi: KPICard) => {
-    if (!results?.kpis) return '—';
+    if (!results?.kpis) return '-';
     const value = results.kpis[kpi.key];
-    if (value === undefined || value === null) return '—';
+    if (value === undefined || value === null) return '-';
     if (typeof value === 'number') return kpi.format(value);
     return String(value);
   };
@@ -150,9 +150,9 @@ export default function ResultsViewer() {
       {/* Tab Navigation */}
       <div className="flex border-b border-border bg-surface">
         {[
-          { id: 'kpis', label: 'KPIs', icon: '📊' },
-          { id: 'plots', label: 'Plots', icon: '📈' },
-          { id: '3d', label: '3D View', icon: '🌐' },
+          { id: 'kpis', label: 'KPIs', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg> },
+          { id: 'plots', label: 'Plots', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg> },
+          { id: '3d', label: '3D View', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg> },
         ].map((tab) => (
           <button
             key={tab.id}

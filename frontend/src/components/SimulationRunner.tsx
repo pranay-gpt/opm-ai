@@ -244,7 +244,7 @@ export default function SimulationRunner() {
                         </span>
                       </div>
                       <div className="text-xs text-textSecondary mt-1">
-                        {job.result?.success ? '✓ Completed' : job.error ? '✗ Failed' : '⏳ Running...'}
+                        {job.result?.success ? '[OK] Completed' : job.error ? '[FAIL] Failed' : '[RUN] Running...'}
                       </div>
                     </button>
                   ))}

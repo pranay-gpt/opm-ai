@@ -49,14 +49,14 @@ npm run dev   # http://localhost:5173 (proxies /api to :8000)
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Build deck from natural language | ✅ | Jinja2 templates + offline extractor |
-| Lint deck (offline rule engine) | ✅ | 0 false positives on 133 SPE decks |
-| Run simulation (OPM Flow) | ✅ | Subprocess with crash parsing |
-| Post-process results | ✅ | KPIs + Plotly charts |
-| ResInsight 3D visualization | ✅ | Headless gRPC bridge (optional) |
-| Chat / LLM explanations | ✅ | Groq / OpenAI / NVIDIA NIM / Offline |
-| Pre-process PVT correlations | 🚧 | Phase 3 |
-| Educational RAG explainer | 🚧 | Phase 3 |
+| Build deck from natural language | [OK] | Jinja2 templates + offline extractor |
+| Lint deck (offline rule engine) | [OK] | 0 false positives on 133 SPE decks |
+| Run simulation (OPM Flow) | [OK] | Subprocess with crash parsing |
+| Post-process results | [OK] | KPIs + Plotly charts |
+| ResInsight 3D visualization | [OK] | Headless gRPC bridge (optional) |
+| Chat / LLM explanations | [OK] | Groq / OpenAI / NVIDIA NIM / Offline |
+| Pre-process PVT correlations | [WIP] | Phase 3 |
+| Educational RAG explainer | [WIP] | Phase 3 |
 
 ## LLM Configuration
 

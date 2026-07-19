@@ -186,6 +186,23 @@ BPR
 WBHP
 {% for well in wells %}  '{{ well.name }}'
 {% endfor %}/
+{% if wells | selectattr('well_type.value', 'equalto', 'PROD') | list %}
+
+WOPR
+{% for well in wells if well.well_type.value == 'PROD' %}  '{{ well.name }}'
+{% endfor %}/
+
+WOPT
+{% for well in wells if well.well_type.value == 'PROD' %}  '{{ well.name }}'
+{% endfor %}/
+
+WGPR
+{% for well in wells if well.well_type.value == 'PROD' %}  '{{ well.name }}'
+{% endfor %}/
+
+WGPT
+{% for well in wells if well.well_type.value == 'PROD' %}  '{{ well.name }}'
+{% endfor %}/
 
 WGOR
 {% for well in wells if well.well_type.value == 'PROD' %}  '{{ well.name }}'
@@ -198,6 +215,8 @@ WWPR
 WWPT
 {% for well in wells if well.well_type.value == 'PROD' %}  '{{ well.name }}'
 {% endfor %}/
+{% endif %}
+{% if wells | selectattr('well_type.value', 'equalto', 'INJ') | list %}
 
 WWIR
 {% for well in wells if well.well_type.value == 'INJ' %}  '{{ well.name }}'
@@ -210,6 +229,7 @@ WWIT
 WGIR
 {% for well in wells if well.well_type.value == 'INJ' %}  '{{ well.name }}'
 {% endfor %}/
+{% endif %}
 
 SCHEDULE
 

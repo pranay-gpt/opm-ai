@@ -47,10 +47,16 @@ def extract_parameters_offline(desc: str) -> ModelSpec:
     # Parse scenario keywords
     if "depletion" in desc_lower:
         spec.scenario = ScenarioType.DEPLETION
-    elif "5-spot" in desc_lower or "5 spot" in desc_lower or "five spot" in desc_lower:
-        spec.scenario = ScenarioType.WATERFLOOD_5SPOT
     elif "line drive" in desc_lower or "line-drive" in desc_lower:
         spec.scenario = ScenarioType.WATERFLOOD_LINE_DRIVE
+    elif (
+        "5-spot" in desc_lower or "5 spot" in desc_lower or "five spot" in desc_lower
+        or "waterflood" in desc_lower or "water flood" in desc_lower
+        or "water injection" in desc_lower
+    ):
+        # Plain "waterflood"/"water injection" maps to the 5-spot pattern
+        # (the only waterflood template in v1) unless line drive was named.
+        spec.scenario = ScenarioType.WATERFLOOD_5SPOT
     elif "wag" in desc_lower:
         spec.scenario = ScenarioType.WAG
     elif "gas cap" in desc_lower or "gas-cap" in desc_lower:
@@ -62,26 +68,38 @@ def extract_parameters_offline(desc: str) -> ModelSpec:
     elif "buildup" in desc_lower or "build up" in desc_lower:
         spec.scenario = ScenarioType.BUILDUP
 
+    # Parse rates: "produce at 2000 stb/day", "inject 3000 bbl/day"
+    target_rate = None
+    inject_rate = None
+    rate_prod_match = re.search(
+        r"produc\w*\s+(?:at\s+|of\s+)?(\d+(?:\.\d+)?)\s*(?:stb|bbl|bopd)", desc_lower)
+    if rate_prod_match:
+        target_rate = float(rate_prod_match.group(1))
+    rate_inj_match = re.search(
+        r"inject\w*\s+(?:at\s+|of\s+)?(\d+(?:\.\d+)?)\s*(?:stb|bbl|mscf|bwpd)", desc_lower)
+    if rate_inj_match:
+        inject_rate = float(rate_inj_match.group(1))
+
     # Parse wells
     wells = []
 
-    # Producer patterns
-    prod_match = re.search(r"(?:one|1|a|single)\s+(?:producer|production\s+well|prod)", desc_lower)
-    prod_count_match = re.search(r"(\d+)\s*(?:producer|production\s+well|prod)", desc_lower)
-    num_producers = 1
-    if prod_count_match:
-        num_producers = int(prod_count_match.group(1))
-    elif prod_match:
-        num_producers = 1
+    _WORD_COUNTS = {"one": 1, "two": 2, "three": 3, "four": 4,
+                    "five": 5, "six": 6, "a": 1, "single": 1}
 
-    # Injector patterns
-    inj_match = re.search(r"(?:one|1|a|single)\s+(?:injector|injection\s+well|inj)", desc_lower)
-    inj_count_match = re.search(r"(\d+)\s*(?:injector|injection\s+well|inj)", desc_lower)
-    num_injectors = 0
-    if inj_count_match:
-        num_injectors = int(inj_count_match.group(1))
-    elif inj_match:
-        num_injectors = 1
+    def _count(kind_pattern: str) -> int | None:
+        """Explicit well count from digits or word forms; None if not stated."""
+        digit = re.search(rf"(\d+)\s*{kind_pattern}", desc_lower)
+        if digit:
+            return int(digit.group(1))
+        word = re.search(rf"({'|'.join(_WORD_COUNTS)})\s+{kind_pattern}", desc_lower)
+        if word:
+            return _WORD_COUNTS[word.group(1)]
+        return None
+
+    explicit_producers = _count(r"(?:producers?|production\s+wells?|prod\b)")
+    explicit_injectors = _count(r"(?:injectors?|injection\s+wells?|inj\b)")
+    num_producers = explicit_producers if explicit_producers is not None else 1
+    num_injectors = explicit_injectors if explicit_injectors is not None else 0
 
     # SPE1-like pattern: injector + producer
     spe1_pattern = "spe1" in desc_lower or ("injector" in desc_lower and "producer" in desc_lower)
@@ -179,6 +197,53 @@ def extract_parameters_offline(desc: str) -> ModelSpec:
                 k2=spec.reservoir.nz,
                 reference_depth=spec.reservoir.top_depth + sum(spec.reservoir.dz),
             ))
+
+    # WAG pattern - alternate water and gas injection
+    if spec.scenario == ScenarioType.WAG:
+        wells = []  # Reset for pattern
+        # Injector at (1,1), producer at (nx, ny)
+        wells.append(WellSpec(
+            name="INJ",
+            well_type=WellType.INJ,
+            i=1,
+            j=1,
+            k1=1,
+            k2=spec.reservoir.nz,
+            reference_depth=spec.reservoir.top_depth + sum(spec.reservoir.dz) / 2,
+            inject_fluid=InjectFluid.WATER,
+            inject_rate=5000.0,
+            bhp_max=5000.0,
+        ))
+        wells.append(WellSpec(
+            name="PROD",
+            well_type=WellType.PROD,
+            i=spec.reservoir.nx,
+            j=spec.reservoir.ny,
+            k1=1,
+            k2=spec.reservoir.nz,
+            reference_depth=spec.reservoir.top_depth + sum(spec.reservoir.dz),
+        ))
+
+    # Explicit well counts override scenario patterns: "one injector and one
+    # producer" waterflood must yield 2 wells, not the 5-spot's 5.
+    if explicit_producers is not None:
+        producers = [w for w in wells if w.well_type == WellType.PROD]
+        others = [w for w in wells if w.well_type != WellType.PROD]
+        wells = others + producers[:explicit_producers]
+    if explicit_injectors is not None:
+        injectors = [w for w in wells if w.well_type == WellType.INJ]
+        others = [w for w in wells if w.well_type != WellType.INJ]
+        wells = injectors[:explicit_injectors] + others
+
+    # Apply rates parsed from the description to every matching well
+    if target_rate is not None:
+        for w in wells:
+            if w.well_type == WellType.PROD:
+                w.target_rate = target_rate
+    if inject_rate is not None:
+        for w in wells:
+            if w.well_type == WellType.INJ:
+                w.inject_rate = inject_rate
 
     spec.wells = wells
     return spec

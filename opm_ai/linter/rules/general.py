@@ -31,6 +31,9 @@ NO_TERMINATOR_KEYWORDS = frozenset({
     "DENSITY", "PVCDO", "PVCGW", "PVCO",
     "FOPR", "FGOR", "FOPT", "FWPT", "FGPT", "FWIR", "FGIR",
     "END",
+    # Flag keywords verified against Flow 2026.04 fixture decks (no data, no '/')
+    "THERMAL", "BLACKOIL", "TEMP", "RADIAL",
+    "NEWTRAN", "ENDBOX", "FILLEPS", "NOINSPEC", "NORSSPEC", "SKIPREST",
 })
 
 
@@ -89,8 +92,10 @@ def rule_L001_missing_terminator(deck: Deck) -> list[LintIssue]:
                 keyword_start_line = None
                 continue
 
-            # Check if this looks like a new keyword (uppercase word at start of line)
-            kw_match = re.match(r"^([A-Z][A-Z0-9_]*)\b", stripped)
+            # A new keyword stands ALONE on its line (Eclipse convention).
+            # A looser match would treat data lines like 'BASIC = 2' (inside
+            # RPTRST) as keywords and falsely flag the enclosing keyword.
+            kw_match = re.match(r"^([A-Z][A-Z0-9_]*)\s*(?:--.*)?$", stripped)
             if kw_match:
                 # If we had a previous keyword without terminator, flag it
                 if current_keyword and current_keyword not in NO_TERMINATOR_KEYWORDS:

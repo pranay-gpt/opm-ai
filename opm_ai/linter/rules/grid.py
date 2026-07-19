@@ -106,6 +106,10 @@ def rule_L003b_missing_grid_keywords(deck: Deck) -> list[LintIssue]:
         return issues
     if _has_keyword(grid, "COORD") or _has_keyword(grid, "ZCORN"):
         return issues
+    # Radial geometry replaces DX/DY/PERMX with INRAD/DRV/DTHETAV/PERMR/PERMTHT
+    runspec = deck.get_section("RUNSPEC") or ""
+    if _has_keyword(runspec, "RADIAL") or _has_keyword(grid, "COORDSYS") or _has_keyword(grid, "INRAD"):
+        return issues
 
     required_keywords = ["DX", "DY", "DZ", "TOPS", "PORO", "PERMX"]
     for keyword in required_keywords:

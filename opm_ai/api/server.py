@@ -50,13 +50,13 @@ def create_app() -> FastAPI:
     app.include_router(results.router, prefix="/api")
     app.include_router(chat.router, prefix="/api")
 
+    @app.get("/health")
+    async def health_check():
+        return {"status": "ok"}
+
     # Optional static mount of frontend/dist at "/" for production
     frontend_dist = Path("frontend/dist")
     if frontend_dist.exists():
         app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")
-
-    @app.get("/health")
-    async def health_check():
-        return {"status": "ok"}
 
     return app

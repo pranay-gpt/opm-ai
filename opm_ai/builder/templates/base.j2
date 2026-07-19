@@ -8,6 +8,9 @@ TITLE
 DIMENS
     {{ reservoir.nx }} {{ reservoir.ny }} {{ reservoir.nz }} /
 
+EQLDIMS
+/
+
 TABDIMS
 /
 
@@ -234,10 +237,12 @@ WCONPROD
 	'{{ well.name }}' OPEN ORAT {{ '%.0f'|format(well.target_rate) }} 4* {{ '%.0f'|format(well.bhp_limit) }} /
 {% endfor %}/
 
+{% if wells | selectattr("well_type.value", "equalto", "INJ") | list | length > 0 %}
 WCONINJE
 {% for well in wells if well.well_type.value == "INJ" %}
 	'{{ well.name }}' {{ well.inject_fluid.value }} OPEN RATE {{ '%.0f'|format(well.inject_rate) }} 1* {{ '%.0f'|format(well.bhp_max) }} /
 {% endfor %}/
+{% endif %}
 
 TSTEP
 {% for dt in timesteps %}

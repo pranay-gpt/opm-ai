@@ -19,13 +19,15 @@ def extract_kpis(df: pd.DataFrame) -> dict[str, Any]:
         - field_oil_recovery: cumulative oil produced (STB)
         - field_water_recovery: cumulative water produced (STB)
         - field_gas_recovery: cumulative gas produced (MSCF)
-        - max_watercut: maximum water cut observed
-        - breakthrough_day: day when watercut first exceeds threshold
-        - plateau_days: days with oil rate above 90% of initial
+        - max_watercut: maximum water cut observed (fraction 0-1)
+        - water_breakthrough_day: day when watercut first exceeds 1%
+        - plateau_duration_days: days with oil rate above 90% of initial
         - avg_gor: average GOR over simulation
-        - sweep_efficiency: estimated sweep efficiency
-        - well_count: number of producing wells
-        - For each producer: woe, wwe, gwe, cumulative rates, final rates
+        - sweep_efficiency: estimated sweep efficiency (0.0 if unknown)
+        - producer_count: number of producing wells
+        - For each producer: *_cum_oil, *_cum_water, *_cum_gas, *_final_bhp,
+          *_max_watercut, *_final_watercut, *_avg_gor, *_final_gor, *_initial_oil_rate,
+          *_final_oil_rate, *_avg_oil_rate, *_avg_bhp
     """
     if df.empty or 'TIME' not in df.columns:
         return {"days": 0.0}
@@ -54,16 +56,41 @@ def extract_kpis(df: pd.DataFrame) -> dict[str, Any]:
         kpis["field_final_oil_rate"] = float(df[fopr_col].iloc[-1])
         kpis["field_avg_oil_rate"] = float(df[fopr_col].mean())
 
+    # Field oil recovery: use FOPT if available, else sum WOPT:*
     if foip_col and len(df) > 0:
         kpis["field_oil_recovery"] = float(df[foip_col].iloc[-1])
-        kpis["field_oil_recovery_final"] = float(df[foip_col].iloc[-1])
+    else:
+        # Sum well-level cumulative oil
+        woip_sum = 0.0
+        for col in well_cols:
+            if col.startswith('WOPT:'):
+                if len(df) > 0:
+                    woip_sum += float(df[col].iloc[-1])
+        kpis["field_oil_recovery"] = woip_sum
 
+    # Field water recovery: use FWPT if available, else sum WWPT:*
     if fwpt_col and len(df) > 0:
         kpis["field_water_recovery"] = float(df[fwpt_col].iloc[-1])
+    else:
+        wwpt_sum = 0.0
+        for col in well_cols:
+            if col.startswith('WWPT:'):
+                if len(df) > 0:
+                    wwpt_sum += float(df[col].iloc[-1])
+        kpis["field_water_recovery"] = wwpt_sum
 
+    # Field gas recovery: use FGPT if available, else sum WGPT:*
     if fgpt_col and len(df) > 0:
         kpis["field_gas_recovery"] = float(df[fgpt_col].iloc[-1])
+    else:
+        wgpt_sum = 0.0
+        for col in well_cols:
+            if col.startswith('WGPT:'):
+                if len(df) > 0:
+                    wgpt_sum += float(df[col].iloc[-1])
+        kpis["field_gas_recovery"] = wgpt_sum
 
+    # Field GOR
     if fg_or_col and len(df) > 0:
         kpis["avg_gor"] = float(df[fg_or_col].mean())
         kpis["final_gor"] = float(df[fg_or_col].iloc[-1])
@@ -83,8 +110,14 @@ def extract_kpis(df: pd.DataFrame) -> dict[str, Any]:
             kpis["water_breakthrough_day"] = float(df.loc[bt_idx, 'TIME'])
         else:
             kpis["water_breakthrough_day"] = None
+    else:
+        # No water production - watercut is 0
+        kpis["max_watercut"] = 0.0
+        kpis["final_watercut"] = 0.0
+        kpis["avg_watercut"] = 0.0
+        kpis["water_breakthrough_day"] = None
 
-    # Oil plateau duration (days with rate > 90% of initial)
+    # Oil plateau duration (days with rate >= 90% of initial)
     if fopr_col and len(df) > 1:
         initial_rate = df[fopr_col].iloc[0]
         if initial_rate > 0:
@@ -94,14 +127,20 @@ def extract_kpis(df: pd.DataFrame) -> dict[str, Any]:
                 kpis["plateau_duration_days"] = float(plateau_days.max() - plateau_days.min())
             else:
                 kpis["plateau_duration_days"] = 0.0
+    else:
+        kpis["plateau_duration_days"] = 0.0
+
+    # Sweep efficiency placeholder (0.0 if pore volume not known)
+    kpis["sweep_efficiency"] = 0.0
 
     # Well-level KPIs
     producer_cols = [c for c in well_cols if _is_producer(c)]
-    kpis["producer_count"] = len(producer_cols)
+    # Filter to only actual producers (positive oil production)
+    well_names = set(c.split(':')[-1] for c in producer_cols)
+    actual_producers = [w for w in well_names if _is_producer_well(df, w)]
+    kpis["producer_count"] = len(actual_producers)
 
-    for well_col in producer_cols:
-        well_name = well_col.split(':')[-1]
-        prefix = well_col.split(':')[0]
+    for well_name in actual_producers:
 
         woip = _find_col(df, f'WOPT:{well_name}')
         wopr = _find_col(df, f'WOPR:{well_name}')
@@ -129,10 +168,12 @@ def extract_kpis(df: pd.DataFrame) -> dict[str, Any]:
             kpis[f"{well_name}_final_bhp"] = float(df[wbhp].iloc[-1])
             kpis[f"{well_name}_avg_bhp"] = float(df[wbhp].mean())
 
-        # Well watercut
+        # Well watercut (fraction 0-1)
         if wopr and wwpr and len(df) > 0:
             liq_rate = df[wopr] + df[wwpr]
-            wc = df[wwpr] / liq_rate.replace(0, np.nan)
+            # Handle -0.0 in water rate by using absolute value
+            wwpr_pos = df[wwpr].abs()
+            wc = wwpr_pos / liq_rate.replace(0, np.nan)
             kpis[f"{well_name}_max_watercut"] = float(wc.max())
             kpis[f"{well_name}_final_watercut"] = float(wc.iloc[-1])
 
@@ -142,9 +183,7 @@ def extract_kpis(df: pd.DataFrame) -> dict[str, Any]:
             kpis[f"{well_name}_avg_gor"] = float(gor.mean())
             kpis[f"{well_name}_final_gor"] = float(gor.iloc[-1])
 
-    # Sweep efficiency estimate (if we have pore volume info)
-    # This is a simplified estimate: recovery / (1 - Swi) * (poro * vol)
-    # For SPE1, we can estimate from WOPT/FOPT ratio if FOPT exists
+    # Recovery factor estimate (if we have FOPT)
     if foip_col and len(df) > 0:
         kpis["recovery_factor"] = float(df[foip_col].iloc[-1]) / 1e6  # rough STB to MMSTB
 
@@ -162,7 +201,23 @@ def _find_col(df: pd.DataFrame, pattern: str) -> str | None:
 def _is_producer(col: str) -> bool:
     """Check if column belongs to a producer well."""
     # Producers typically have WOPT, WOPR, WWPT, WWPR
+    # But we need to distinguish from injectors (INJ) which may have zero rates
     return any(prefix in col for prefix in ['WOPR:', 'WOPT:', 'WWPR:', 'WWPT:'])
+
+
+def _is_producer_well(df: pd.DataFrame, well_name: str) -> bool:
+    """Check if a well is a producer (has positive oil production)."""
+    wopr_col = _find_col(df, f'WOPR:{well_name}')
+    woip_col = _find_col(df, f'WOPT:{well_name}')
+    if wopr_col and len(df) > 0:
+        # Check if well has positive oil production
+        if df[wopr_col].max() > 0:
+            return True
+    if woip_col and len(df) > 0:
+        # Check cumulative oil
+        if df[woip_col].iloc[-1] > 0:
+            return True
+    return False
 
 
 def _compute_watercut(df: pd.DataFrame) -> tuple[pd.Series, str] | None:
@@ -171,6 +226,8 @@ def _compute_watercut(df: pd.DataFrame) -> tuple[pd.Series, str] | None:
     fwpr = _find_col(df, 'FWPR')
     if fopr and fwpr and len(df) > 0:
         liq = df[fopr] + df[fwpr]
-        wc = df[fwpr] / liq.replace(0, np.nan)
+        # Handle -0.0 in water rate
+        fwpr_pos = df[fwpr].clip(lower=0)
+        wc = fwpr_pos / liq.replace(0, np.nan)
         return wc, 'FIELD_WC'
     return None

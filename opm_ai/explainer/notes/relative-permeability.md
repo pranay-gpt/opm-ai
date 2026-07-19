@@ -62,9 +62,9 @@ Where $k_{ro}^o$ is two-phase oil relperm at $S_w$ (ignoring gas).
 
 ## Impact on Waterflood
 
-- **High $n_w$**: Water relperm rises slowly → delayed breakthrough, lower watercut
-- **High $n_o$**: Oil relperm drops fast → early oil rate decline
-- **Low $S_{or}$**: More oil recovered → higher recovery factor
+- **High $n_w$**: Water relperm rises slowly -> delayed breakthrough, lower watercut
+- **High $n_o$**: Oil relperm drops fast -> early oil rate decline
+- **Low $S_{or}$**: More oil recovered -> higher recovery factor
 - **Endpoint $k_{rw}^{max}$**: Controls injectivity and watercut after breakthrough
 
 **Typical values** (sandstone):

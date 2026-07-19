@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any, Literal, Optional
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 # Import explainer types
 try:
@@ -18,14 +18,21 @@ class FluidDescriptorRequest(BaseModel):
     """Fluid descriptor for PVT table generation (optional)."""
     model_config = ConfigDict(from_attributes=True)
 
-    api_gravity: float
-    gas_specific_gravity: float
-    gor: float
-    reservoir_temp_f: float | None = None
-    reservoir_temp_c: float | None = None
-    salinity_ppm: float = 0.0
+    api_gravity: float = Field(gt=0, le=80, description="Oil API gravity (0-80)")
+    gas_specific_gravity: float = Field(gt=0, le=2.0, description="Gas specific gravity (0-2.0)")
+    gor: float = Field(ge=0, description="Gas-oil ratio (scf/stb), >= 0")
+    reservoir_temp_f: float | None = Field(default=None, ge=-459.67, description="Reservoir temperature in degF")
+    reservoir_temp_c: float | None = Field(default=None, ge=-273.15, description="Reservoir temperature in degC")
+    salinity_ppm: float = Field(ge=0, default=0.0, description="Water salinity in ppm")
     pressure_range_psi: list[float] | None = None  # [min, max]
     unit_system: Literal["FIELD", "METRIC"] = "FIELD"
+
+    @model_validator(mode="after")
+    def _check_temperatures(self) -> "FluidDescriptorRequest":
+        """Validate that not both temperature fields are provided."""
+        if self.reservoir_temp_f is not None and self.reservoir_temp_c is not None:
+            raise ValueError("Provide only one of reservoir_temp_f or reservoir_temp_c, not both")
+        return self
 
 
 class BuildRequest(BaseModel):

@@ -1,4 +1,4 @@
-# opm_ai/runner — Subprocess wrapper for OPM Flow
+# opm_ai/runner  -  Subprocess wrapper for OPM Flow
 
 **Purpose:** Thin subprocess wrapper around `/usr/bin/flow` (OPM Flow 2026.04). Never raises exceptions; always returns a structured `SimulationResult` with `success: bool`, `output_dir: Path`, `crash_report: CrashReport | None`, and `returncode: int | None`.
 
@@ -30,5 +30,5 @@ proc = subprocess.run(argv, cwd=deck_path.parent, capture_output=True, text=True
 - MPI parallel mode via `mpirun -n N flow ...` (requires the Python binding for proper callback handling)
 
 ## Cross-references
-- **Full spec:** `docs/conversations/01-runner.md` (sections 4.2–4.5)
+- **Full spec:** `docs/conversations/01-runner.md` (sections 4.2-4.5)
 - **Contract test:** `tests/integration/test_runner_spe1.py` (asserts `success`, `output_dir`, `WOPT:PROD` KPI)

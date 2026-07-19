@@ -106,6 +106,73 @@ class TestPVTBlocks:
         errors = validate_pvt_blocks(blocks, "METRIC")
         assert errors == [], f"Validation errors: {errors}"
 
+    def test_dead_oil_no_inf(self):
+        """Dead oil (gor=0) should produce clean PVT blocks with no inf/nan values."""
+        fluid = FluidDescriptor(
+            api_gravity=35.0,
+            gas_specific_gravity=0.75,
+            gor=0.0,
+            reservoir_temp_f=200.0,
+            salinity_ppm=50000.0,
+            pressure_range_psi=(14.7, 5000.0),
+            unit_system="FIELD",
+        )
+        blocks = build_pvt_blocks(fluid)
+        errors = validate_pvt_blocks(blocks, "FIELD")
+        assert errors == [], f"Dead oil validation errors: {errors}"
+
+        # Additionally check that rendered strings contain no 'inf' or 'nan'
+        import math
+        for block_name, block_str in [
+            ("PVTO", blocks.pvt_oil),
+            ("PVDG", blocks.pvdg),
+            ("PVTW", blocks.pvt_water),
+            ("ROCK", blocks.rock),
+            ("DENSITY", blocks.density),
+            ("SWOF", blocks.swof),
+            ("SGOF", blocks.sgof),
+        ]:
+            # Check for inf/nan in rendered strings (case-insensitive)
+            block_lower = block_str.lower()
+            assert "inf" not in block_lower, f"{block_name} contains 'inf': {block_str}"
+            assert "nan" not in block_lower, f"{block_name} contains 'nan': {block_str}"
+
+    def test_sorw_zero_swof_valid(self):
+        """SORW=0.0 should produce valid SWOF table (no duplicate Sw=1.0 rows)."""
+        fluid = self._make_spe1_fluid()
+        # Build with custom endpoints where sorw=0
+        from opm_ai.preprocess.pvt_builder import build_pvt_blocks
+        from opm_ai.preprocess.correlations import corey_swof
+        from opm_ai.preprocess.tables import build_swof_table
+
+        # Test the table builder directly with sorw=0
+        endpoints = {
+            "swc": 0.12,
+            "sorw": 0.0,
+            "krw_max": 0.50,
+            "kro_max": 1.0,
+            "nw": 2.0,
+            "no": 2.0,
+        }
+        swof_table = build_swof_table(fluid, endpoints, "Corey")
+
+        # Check no duplicate Sw=1.0
+        sw_values = [row["SW"] for row in swof_table]
+        sw_1_count = sum(1 for sw in sw_values if abs(sw - 1.0) < 1e-6)
+        assert sw_1_count == 1, f"Should have exactly one Sw=1.0 row, found {sw_1_count}"
+
+        # Check strictly increasing
+        for i in range(1, len(sw_values)):
+            assert sw_values[i] > sw_values[i-1], f"Sw not strictly increasing at index {i}: {sw_values[i-1]} -> {sw_values[i]}"
+
+        # Validate through full PVT blocks with custom endpoints
+        blocks = build_pvt_blocks(fluid)
+        # Manually replace the SWOF block with our custom one
+        # (We can't easily inject endpoints into build_pvt_blocks, so test the table builder)
+        errors = validate_pvt_blocks(blocks, "FIELD")
+        # The default build should still pass (SORW=0.2 default)
+        assert "SWOF" not in " ".join(errors), f"SWOF validation errors: {errors}"
+
 
 class TestRecommendCorrelation:
     """Tests for the correlation advisor (offline fallback)."""

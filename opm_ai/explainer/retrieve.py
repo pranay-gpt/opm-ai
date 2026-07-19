@@ -207,43 +207,53 @@ def build_knowledge_base(
 
 # ---- Module-level cache for lazy loading ----
 
+import threading
+
 _KB_CACHE: BM25Index | None = None
 _KB_PATH: Path | None = None
+_KB_LOCK = threading.Lock()
 
 
 def _load_kb(persist_dir: Path = DEFAULT_PERSIST_DIR) -> BM25Index:
-    """Load KB from disk (lazy, cached)."""
+    """Load KB from disk (lazy, cached, thread-safe)."""
     global _KB_CACHE, _KB_PATH
 
+    # First check without lock (fast path)
     if _KB_CACHE is not None and _KB_PATH == persist_dir:
         return _KB_CACHE
 
-    kb_path = persist_dir / "kb.json"
-    if not kb_path.exists():
-        # Try to build from default sources if they exist
-        if all(d.exists() for d in DEFAULT_SOURCE_DIRS):
-            print("KB not found, building from default sources...")
-            build_knowledge_base(DEFAULT_SOURCE_DIRS, persist_dir)
-        else:
-            # Fall back to teaching notes only (always available)
-            from opm_ai.explainer.ingest import read_teaching_notes
-            teaching_chunks = read_teaching_notes()
-            _KB_CACHE = _build_bm25_index(teaching_chunks)
-            _KB_PATH = persist_dir
+    # Slow path with lock
+    with _KB_LOCK:
+        # Double-check inside lock
+        if _KB_CACHE is not None and _KB_PATH == persist_dir:
             return _KB_CACHE
 
-    with kb_path.open("r", encoding="utf-8") as f:
-        data = json.load(f)
+        kb_path = persist_dir / "kb.json"
+        if not kb_path.exists():
+            # Try to build from default sources if they exist
+            if all(d.exists() for d in DEFAULT_SOURCE_DIRS):
+                print("KB not found, building from default sources...")
+                build_knowledge_base(DEFAULT_SOURCE_DIRS, persist_dir)
+            else:
+                # Fall back to teaching notes only (always available)
+                from opm_ai.explainer.ingest import read_teaching_notes
+                teaching_chunks = read_teaching_notes()
+                _KB_CACHE = _build_bm25_index(teaching_chunks)
+                _KB_PATH = persist_dir
+                return _KB_CACHE
 
-    _KB_CACHE = BM25Index(
-        chunks=data["chunks"],
-        doc_freqs=data["doc_freqs"],
-        doc_lengths=data["doc_lengths"],
-        avgdl=data["avgdl"],
-        N=data["N"],
-    )
-    _KB_PATH = persist_dir
-    return _KB_CACHE
+        with kb_path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        _KB_CACHE = BM25Index(
+            chunks=data["chunks"],
+            doc_freqs=data["doc_freqs"],
+            doc_lengths=data["doc_lengths"],
+            avgdl=data["avgdl"],
+            N=data["N"],
+        )
+        _KB_PATH = persist_dir
+        return _KB_CACHE
 
 
 # ---- Public Retrieval API ----

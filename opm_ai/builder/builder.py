@@ -42,6 +42,16 @@ def _compute_template_context(spec: ModelSpec) -> dict:
 
     if spec.fluid is not None:
         fluid = spec.fluid
+        # METRIC unit system is not supported by the OPM Flow deck template (which uses FIELD units).
+        # The preprocess module supports METRIC tables internally, but the deck template
+        # uses FIELD units (FIELD keyword in RUNSPEC). METRIC tables are not emitted.
+        if fluid.unit_system == "METRIC":
+            raise ValueError(
+                "METRIC unit system is not supported by the OPM Flow deck template "
+                "(which emits FIELD units in RUNSPEC). The preprocess module supports "
+                "METRIC tables internally, but the deck template does not emit METRIC units."
+            )
+
         # Validate pressure range - EQUIL uses 4800 psia default
         p_min, p_max = fluid.pressure_range
         if p_max < 4800:

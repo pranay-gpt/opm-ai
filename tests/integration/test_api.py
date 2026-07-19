@@ -338,3 +338,71 @@ class TestHealthEndpoint:
         assert response.status_code == 200
         data = response.json()
         assert data["status"] == "ok"
+
+
+class TestBuildFluidValidation:
+    """Tests for fluid descriptor validation in build endpoint."""
+
+    @pytest.mark.integration
+    def test_build_metric_fluid_rejected(self, client):
+        """POST /api/build with METRIC fluid -> 400 (METRIC not supported end-to-end)."""
+        response = client.post("/api/build", json={
+            "description": "10x10x3 grid, one producer, 2 year depletion",
+            "fluid": {
+                "api_gravity": 35.0,
+                "gas_specific_gravity": 0.75,
+                "gor": 800,
+                "reservoir_temp_c": 93.33,
+                "salinity_ppm": 50000,
+                "pressure_range_psi": [1.01325, 344.74],  # 14.7 psi, 5000 psi in bar (>= 4800 psi = 330 bar)
+                "unit_system": "METRIC"
+            }
+        })
+
+        assert response.status_code == 400, f"Expected 400 for METRIC fluid, got {response.status_code}: {response.text}"
+        data = response.json()
+        assert "detail" in data
+        assert "METRIC" in data["detail"].upper(), f"Error should mention METRIC: {data['detail']}"
+
+    @pytest.mark.integration
+    def test_build_fluid_bad_pressure_range_400(self, client):
+        """POST /api/build with pressure_range_psi max < 4800 -> 400 not 500."""
+        response = client.post("/api/build", json={
+            "description": "10x10x3 grid, one producer, 2 year depletion",
+            "fluid": {
+                "api_gravity": 35.0,
+                "gas_specific_gravity": 0.75,
+                "gor": 800,
+                "reservoir_temp_f": 200,
+                "salinity_ppm": 50000,
+                "pressure_range_psi": [14.7, 3000],  # max < 4800
+                "unit_system": "FIELD"
+            }
+        })
+
+        assert response.status_code == 400, f"Expected 400 for bad pressure range, got {response.status_code}: {response.text}"
+        data = response.json()
+        assert "detail" in data
+        assert "4800" in data["detail"] or "pressure" in data["detail"].lower()
+
+    @pytest.mark.integration
+    def test_build_fluid_both_temps_422(self, client):
+        """POST /api/build with both reservoir_temp_f and reservoir_temp_c -> 422."""
+        response = client.post("/api/build", json={
+            "description": "10x10x3 grid, one producer, 2 year depletion",
+            "fluid": {
+                "api_gravity": 35.0,
+                "gas_specific_gravity": 0.75,
+                "gor": 800,
+                "reservoir_temp_f": 200,
+                "reservoir_temp_c": 93.33,  # Both provided - should fail
+                "salinity_ppm": 50000,
+                "pressure_range_psi": [14.7, 5000],
+                "unit_system": "FIELD"
+            }
+        })
+
+        assert response.status_code == 422, f"Expected 422 for both temps, got {response.status_code}: {response.text}"
+        data = response.json()
+        # FastAPI validation error format
+        assert "detail" in data

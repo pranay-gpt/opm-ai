@@ -123,7 +123,7 @@ OFFLINE_TEMPLATES = {
             "Near bubble point, the Jacobian becomes ill-conditioned due to phase "
             "appearance; OPM Flow uses **phase appearance/disappearance logic** with "
             "switching variables to maintain quadratic convergence. **Constraint "
-            "switching** (rate ↔ BHP) adds complementarity conditions solved via "
+            "switching** (rate <-> BHP) adds complementarity conditions solved via "
             "active-set method."
         ),
     },

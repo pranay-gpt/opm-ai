@@ -18,7 +18,7 @@ Depletion drive is the primary recovery mechanism when reservoir pressure drops 
 3. **Below bubble point** ($P < P_b$):
    - Two-phase flow: oil + free gas
    - Free gas has high mobility ($\mu_g \ll \mu_o$, $k_{rg} > 0$)
-   - Gas flows to producers → GOR increases sharply
+   - Gas flows to producers -> GOR increases sharply
    - Oil relative permeability drops as $S_g$ increases
    - Pressure declines more slowly (gas expansion helps)
    - Ultimate recovery: 15-30% OOIP typically
@@ -52,7 +52,7 @@ $$ GOR_{prod} = R_s + \frac{k_{rg} \mu_o B_o}{k_{ro} \mu_g B_g} $$
 1. **PVT accuracy critical**: $R_s$, $B_o$, $B_g$, $\mu_o$, $\mu_g$ near $P_b$ must be accurate
 2. **Relative permeability**: Gas-oil relperm ($k_{rg}$, $k_{ro}$ at low $S_g$) controls GOR
 3. **Grid resolution**: Gas saturation fronts can be sharp; fine grid near wells helps
-4. **Timestep control**: Crossing $P_b$ causes nonlinearity → Newton iterations, timestep chops
+4. **Timestep control**: Crossing $P_b$ causes nonlinearity -> Newton iterations, timestep chops
 5. **Well constraints**: BHP control often needed as rate drops and GOR increases
 
 ## Comparison with Other Drive Mechanisms

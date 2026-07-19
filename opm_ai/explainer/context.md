@@ -91,7 +91,7 @@ The spec originally mentioned `chromadb` + `sentence-transformers` + `llama-inde
 
 **Trade-offs**:
 - No semantic similarity (exact keyword matching only)
-- Won't match "water breakthrough" ↔ "waterfront arrival" without shared terms
+- Won't match "water breakthrough" <-> "waterfront arrival" without shared terms
 - Mitigated by teaching notes covering conceptual synonyms
 
 ## Testing

@@ -6,9 +6,22 @@ for self-validation.
 
 from __future__ import annotations
 
+import math
 from typing import Literal
 
 from opm_ai.preprocess.pvt_builder import PVTBlocks, UnitSystem
+
+
+def _is_bad(x: float) -> bool:
+    """Check if a float is NaN or infinite."""
+    return math.isnan(x) or math.isinf(x)
+
+
+def _check_bad(block_name: str, row_idx: int, field: str, value: float) -> list[str]:
+    """Check if value is NaN/Inf and return error message if so."""
+    if _is_bad(value):
+        return [f"{block_name} row {row_idx}: {field} is NaN/Inf ({value!r})"]
+    return []
 
 
 def validate_pvt_blocks(
@@ -184,6 +197,8 @@ def _validate_pvto(rows: list[dict]) -> list[str]:
     prev_rs = -1.0
     for i, row in enumerate(rows):
         rs = row["RS"]
+        # Check for NaN/Inf
+        errors.extend(_check_bad("PVTO", i, "RS", rs))
         if rs < prev_rs - 1e-6:
             errors.append(f"PVTO row {i}: Rs decreases ({prev_rs:.4f} -> {rs:.4f})")
         prev_rs = rs
@@ -191,14 +206,17 @@ def _validate_pvto(rows: list[dict]) -> list[str]:
     # Check Bo >= 1.0 for saturated rows (where P <= Pb, approximated by Rs < max Rs)
     max_rs = max(r["RS"] for r in rows)
     for i, row in enumerate(rows):
-        if row["RS"] < max_rs - 1e-6:  # saturated region
-            if row["BO"] < 1.0 - 1e-6:
-                errors.append(f"PVTO row {i}: Bo < 1.0 in saturated region ({row['BO']:.6f})")
+        bo = row["BO"]
+        muo = row["MUO"]
+        errors.extend(_check_bad("PVTO", i, "BO", bo))
+        errors.extend(_check_bad("PVTO", i, "MUO", muo))
 
-    # Check MUO > 0
-    for i, row in enumerate(rows):
-        if row["MUO"] <= 0:
-            errors.append(f"PVTO row {i}: MUO <= 0 ({row['MUO']:.6f})")
+        if row["RS"] < max_rs - 1e-6:  # saturated region
+            if bo < 1.0 - 1e-6:
+                errors.append(f"PVTO row {i}: Bo < 1.0 in saturated region ({bo:.6f})")
+
+        if muo <= 0:
+            errors.append(f"PVTO row {i}: MUO <= 0 ({muo:.6f})")
 
     return errors
 
@@ -216,6 +234,10 @@ def _validate_pvdg(rows: list[dict]) -> list[str]:
         p = row["P"]
         bg = row["BG"]
         mug = row["MUG"]
+
+        errors.extend(_check_bad("PVDG", i, "P", p))
+        errors.extend(_check_bad("PVDG", i, "BG", bg))
+        errors.extend(_check_bad("PVDG", i, "MUG", mug))
 
         if p <= prev_p + 1e-6:
             errors.append(f"PVDG row {i}: pressure not strictly increasing ({prev_p:.4f} -> {p:.4f})")
@@ -240,10 +262,16 @@ def _validate_pvtw(rows: list[dict]) -> list[str]:
         return errors
 
     for i, row in enumerate(rows):
-        if row["BW"] <= 0:
-            errors.append(f"PVTW row {i}: BW <= 0 ({row['BW']:.6f})")
-        if row["MUW"] <= 0:
-            errors.append(f"PVTW row {i}: MUW <= 0 ({row['MUW']:.6f})")
+        bw = row["BW"]
+        muw = row["MUW"]
+
+        errors.extend(_check_bad("PVTW", i, "BW", bw))
+        errors.extend(_check_bad("PVTW", i, "MUW", muw))
+
+        if bw <= 0:
+            errors.append(f"PVTW row {i}: BW <= 0 ({bw:.6f})")
+        if muw <= 0:
+            errors.append(f"PVTW row {i}: MUW <= 0 ({muw:.6f})")
 
     return errors
 
@@ -256,8 +284,10 @@ def _validate_rock(rows: list[dict]) -> list[str]:
         return errors
 
     for i, row in enumerate(rows):
-        if row["CR"] < 0:
-            errors.append(f"ROCK row {i}: CR < 0 ({row['CR']:.6e})")
+        cr = row["CR"]
+        errors.extend(_check_bad("ROCK", i, "CR", cr))
+        if cr < 0:
+            errors.append(f"ROCK row {i}: CR < 0 ({cr:.6e})")
 
     return errors
 
@@ -269,8 +299,11 @@ def _validate_density(vals: dict[str, float]) -> list[str]:
     for key in required:
         if key not in vals:
             errors.append(f"DENSITY: missing {key}")
-        elif vals[key] <= 0:
-            errors.append(f"DENSITY: {key} <= 0 ({vals[key]:.6f})")
+        else:
+            val = vals[key]
+            errors.extend(_check_bad("DENSITY", 0, key, val))
+            if val <= 0:
+                errors.append(f"DENSITY: {key} <= 0 ({val:.6f})")
     return errors
 
 
@@ -286,6 +319,10 @@ def _validate_swof(rows: list[dict]) -> list[str]:
         sw = row["SW"]
         krw = row["KRW"]
         kro = row["KRO"]
+
+        errors.extend(_check_bad("SWOF", i, "SW", sw))
+        errors.extend(_check_bad("SWOF", i, "KRW", krw))
+        errors.extend(_check_bad("SWOF", i, "KRO", kro))
 
         if sw <= prev_sw + 1e-6:
             errors.append(f"SWOF row {i}: Sw not strictly increasing ({prev_sw:.4f} -> {sw:.4f})")
@@ -318,6 +355,10 @@ def _validate_sgof(rows: list[dict]) -> list[str]:
         sg = row["SG"]
         krg = row["KRG"]
         kro = row["KRO"]
+
+        errors.extend(_check_bad("SGOF", i, "SG", sg))
+        errors.extend(_check_bad("SGOF", i, "KRG", krg))
+        errors.extend(_check_bad("SGOF", i, "KRO", kro))
 
         if sg <= prev_sg + 1e-6:
             errors.append(f"SGOF row {i}: Sg not strictly increasing ({prev_sg:.4f} -> {sg:.4f})")

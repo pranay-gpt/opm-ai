@@ -72,6 +72,9 @@ export default function ResultsViewer() {
     if (currentJob?.status === 'completed' && currentJob.job_id && !results) {
       loadResults(currentJob.job_id);
     }
+    if (currentJob?.status === 'failed') {
+      setError(currentJob.error || 'Simulation failed');
+    }
   }, [currentJob, results]);
 
   const loadResults = useCallback(async (jobId: string) => {
@@ -265,7 +268,8 @@ export default function ResultsViewer() {
                 </div>
                 <button
                   onClick={handleExplainResults}
-                  disabled={explainLoading || !results?.kpis}
+                  disabled={explainLoading || !results?.kpis || Object.keys(results.kpis).length === 0}
+                  title={!results?.kpis || Object.keys(results.kpis).length === 0 ? 'No KPIs to explain' : ''}
                   className="btn-primary flex-1 sm:flex-none py-2.5"
                 >
                   {explainLoading ? (

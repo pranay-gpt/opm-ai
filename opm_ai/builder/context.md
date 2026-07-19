@@ -84,6 +84,15 @@ deck, lint = build_deck("10x10x3 grid, simple depletion, one producer", fluid=fl
 - Full run: `flow --output-dir=DIR DECK`; Flow writes output next to the deck
   unless `--output-dir` is given (cwd is irrelevant).
 
+## Unit System Limitation
+The OPM Flow deck template (base.j2) emits the FIELD keyword in RUNSPEC and all
+non-PVT values (grid dimensions in ft, depths in ft, EQUIL datum 4800 psia,
+fallback PROPS tables) use FIELD units. The preprocess module (opm_ai/preprocess)
+supports METRIC table emission internally, but the deck template is the blocker.
+If a FluidDescriptor with unit_system="METRIC" is passed to build_deck(),
+a ValueError is raised with a clear message. METRIC unit system is not
+supported end-to-end at this time.
+
 ## Test Contracts
 - `tests/integration/test_builder.py`: extraction + deck structure
 - `tests/integration/test_builder_roundtrip.py`: 4 roundtrip tests (dry-run x3, full run x1)

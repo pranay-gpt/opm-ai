@@ -85,9 +85,9 @@ export default function Learn() {
     }
   }, [quizScenario, quizLevel, quizNQuestions]);
 
-  // Handle quiz answer selection
+  // Handle quiz answer selection - guard against overwriting existing answer
   const handleAnswer = useCallback((questionIndex: number, selectedIndex: number) => {
-    setQuizAnswers(prev => ({ ...prev, [questionIndex]: selectedIndex }));
+    setQuizAnswers(prev => prev[questionIndex] !== undefined ? prev : { ...prev, [questionIndex]: selectedIndex });
   }, []);
 
   // Calculate score

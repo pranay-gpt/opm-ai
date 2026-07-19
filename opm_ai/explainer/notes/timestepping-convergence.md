@@ -41,7 +41,7 @@ TUNING
 | **Timestep chops** | Repeated "TIMESTEP CHOP" messages | Reduce max timestep, increase `TUNING` chop factor |
 | **Newton divergence** | Residual increases, iterations max out | Reduce timestep, check PVT/relperm tables |
 | **Oscillations** | Solution bounces between states | Add `TUNING` damping, check well constraints |
-| **Well control switching** | Producer switches rate ↔ BHP frequently | Relax constraints, add small tolerance |
+| **Well control switching** | Producer switches rate <-> BHP frequently | Relax constraints, add small tolerance |
 
 ## Linear Solver (CPR-AMG)
 
@@ -60,11 +60,11 @@ OPM Flow uses **CPR (Constrained Pressure Residual)** with **AMG (Algebraic Mult
 - **Fix**: Reduce max timestep near $P_b$, ensure fine PVT table spacing
 
 ### Water Breakthrough
-- Sharp saturation front → large Jacobian entries
+- Sharp saturation front -> large Jacobian entries
 - **Fix**: Use `TSTEP` with smaller steps near expected breakthrough
 
 ### Gas Coning
-- Strong gravity + high rate → sharp gas-oil contact movement
+- Strong gravity + high rate -> sharp gas-oil contact movement
 - **Fix**: Local grid refinement (LGR), smaller timesteps
 
 ### Thermal/Compositional

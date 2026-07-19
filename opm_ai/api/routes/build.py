@@ -54,5 +54,7 @@ async def build_deck_endpoint(request: BuildRequest) -> BuildResponse:
                 lint_summary=lint_result.lint_summary,
             ),
         )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -67,6 +67,18 @@ def build_pvt_oil_table(
         pb = 18.2 * ((rs_res / gas_grav) ** 0.83 * inv_term - 1.4)
         pb = max(pb, 0.0)
 
+    # DEAD OIL / ZERO GOR FIX:
+    # If rs_res is ~0 (dead oil), the saturated section collapses and
+    # undersaturated MUO = muo_pb * (p/pb)**0.2 produces inf when pb=0.
+    # Fix: clamp rs_res to minimum positive value, clamp pb to p_min,
+    # and skip the separate undersaturated ramp when rs is ~0.
+    # PVTO requires Rs > 0 typically; 1e-3 is safe minimum.
+    rs_min = 1.0e-3
+    if rs_res < rs_min:
+        rs_res = rs_min
+    if pb <= p_min:
+        pb = p_min
+
     # Saturated section: ~8 points from p_min to pb
     n_sat = 8
     p_sat = np.linspace(p_min, pb, n_sat)
@@ -103,7 +115,8 @@ def build_pvt_oil_table(
         })
 
     # Undersaturated extension at max Rs for p > pb up to ~1.8 * p_max
-    if pb < p_max:
+    # Only emit if we have meaningful Rs (> rs_min) AND pb < p_max
+    if rs_max > rs_min and pb < p_max:
         p_unsat = np.linspace(pb, min(p_max * 1.8, 1.5 * p_max), 4)[1:]  # skip pb duplicate
         co = 1e-5  # oil compressibility 1/psi
         bo_pb = rows[-1]["BO"]
@@ -253,8 +266,10 @@ def build_swof_table(
     n_points = 12
     s_max = 1.0 - sorw
     sw_nodes = np.linspace(swc, s_max, n_points - 1)
-    # Add Sw=1.0 as final point
-    sw_nodes = np.append(sw_nodes, 1.0)
+    # Add Sw=1.0 as final point only if last linspace node is < 1.0
+    # (avoids duplicate Sw=1.0 when sorw=0.0)
+    if sw_nodes[-1] < 1.0 - 1e-9:
+        sw_nodes = np.append(sw_nodes, 1.0)
 
     rows = []
     for sw in sw_nodes:

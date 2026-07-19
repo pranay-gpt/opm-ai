@@ -88,12 +88,18 @@ export default function DeckBuilder() {
     URL.revokeObjectURL(url);
   }, [currentDeck]);
 
+  // Helper to safely parse numeric strings - returns fallback if NaN or non-finite
+  const num = (v: string, fallback: number) => {
+    const n = parseFloat(v);
+    return Number.isFinite(n) ? n : fallback;
+  };
+
   const handleFluidChange = useCallback((field: keyof FluidDescriptorRequest, value: string | number | [number, number]) => {
     setFluidProps((prev: FluidDescriptorRequest) => {
       if (field === 'pressure_range_psi' && Array.isArray(value)) {
         return { ...prev, [field]: value };
       }
-      return { ...prev, [field]: typeof value === 'string' ? parseFloat(value) || 0 : value };
+      return { ...prev, [field]: typeof value === 'string' ? num(value, 0) : value };
     });
   }, []);
 

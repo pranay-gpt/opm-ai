@@ -194,7 +194,7 @@ tests/fixtures/              # 133 .DATA decks from opm-tests
 ```bash
 cd /home/parallels/opm-ai
 source .venv/bin/activate
-python -m pytest tests/unit tests/integration -v  # should show 66 passed
+python -m pytest tests/unit tests/integration -q  # should show 167 passed
 ```
 
 ## Operational Notes
@@ -205,13 +205,39 @@ python -m pytest tests/unit tests/integration -v  # should show 66 passed
 - Env: Ubuntu 24.04 arm64, no CUDA (GPU accelerator modes fail)
 - Git: main branch = `main`, current branch = `master` (will reconcile)
 
-## For the Next Session
+## Stages 9-12 (2026-07-19, second pass)
 
-If you're asked to build the full working app:
-1. **Stage 4**: Close postprocess gaps (see 05-postprocess.md + debt #1).
-2. **Stage 5**: Implement FastAPI backend (`opm_ai/api/`) per 06-api-frontend.md (routes: /build, /lint, /run, /results, /chat).
-3. **Stage 6**: React frontend (port 8555 per Instructions.txt) with chat UI.
-4. **Stage 7**: Docker + docker-compose.yml packaging.
-5. **Stage 8**: CI (GitHub Actions), README, deployment docs.
+All spec modules now implemented:
+- **Stage 9** `opm_ai/preprocess`: PVT/relperm correlations (Standing, Vasquez-Beggs,
+  Al-Marhoun, Beggs-Robinson, Lee-Gonzalez, Papay, McCain, Corey, LET), PROPS table
+  builders/renderers (PVTO PVDG PVTW ROCK DENSITY SWOF SGOF), validators with NaN/inf
+  detection, offline-degradable correlation advisor. numpy only, no scipy.
+- **Stage 10** builder integration: `ModelSpec.fluid` / `build_deck(fluid=...)` injects
+  generated PVT blocks into `base.j2`; RSVD computed from Standing Rs at datum, clamped
+  to table range; EQUIL pressure-range guard. Verified with real Flow dry-run AND a full
+  5x5x3 simulation on a correlation-built deck. METRIC is rejected with ValueError until
+  the template emits METRIC units (preprocess itself supports METRIC emission).
+- **Stage 11** `opm_ai/explainer`: pure-Python BM25 retrieval (deliberate deviation from
+  the chromadb/sentence-transformers spec; interface unchanged) over Eclipse keyword
+  HTML, deck comments, and 8 original teaching notes in `opm_ai/explainer/notes/`;
+  `explain` / `generate_quiz` / `generate_learning_report`, all LLM-backed with
+  deterministic offline fallbacks that never raise. KB artifact `opm_ai/explainer/kb/`
+  is generated and gitignored.
+- **Stage 12** API + frontend: POST /api/explain, /api/quiz, /api/learning-report;
+  chat tools explain_concept and generate_quiz; /api/build accepts an optional fluid
+  descriptor (validated: bounds, single temp field, FIELD only, 400 on deck validation
+  errors). Frontend: /learn page (Explain + Quiz tabs), fluid inputs in Deck Builder,
+  "Explain These Results" panel on Results page.
 
-Use Sonnet for routine implementation/testing, Opus for architectural decisions.
+Review pass (Sonnet/Haiku finders + verifiers): confirmed and fixed METRIC-as-FIELD
+silent unit bug, dead-oil inf viscosity in PVTO, sorw=0 duplicate SWOF rows, ValueError
+500s, quiz score mutation, missing failed-job UI state. Suite: 167 passed; smoke 7/7.
+
+## Remaining gaps
+
+- ResInsight bridge (rips) unexercised; docker build still unverified (no daemon here).
+- METRIC deck template support (preprocess ready, base.j2 FIELD-only).
+- Explainer vector backend upgrade path documented in opm_ai/explainer/context.md.
+- Path validation on API deck/output paths; in-memory job/session stores unbounded.
+
+Use Sonnet for routine implementation/testing, Opus when Sonnet fails repeatedly.

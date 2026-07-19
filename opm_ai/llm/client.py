@@ -102,6 +102,78 @@ class LLMClient:
 
         return None
 
+    def chat_with_tools(self, messages: list[dict], tools: list[dict]) -> dict:
+        """
+        Send chat messages with tools to LLM.
+
+        Args:
+            messages: List of message dicts with 'role' and 'content' keys.
+            tools: List of OpenAI-style tool schemas.
+
+        Returns:
+            Dict with 'content' (str) and/or 'tool_calls' (list).
+        """
+        if not self._available:
+            return {"content": None, "tool_calls": None}
+
+        # Try Groq first
+        if self._groq_client:
+            try:
+                response = self._groq_client.chat.completions.create(
+                    model=settings.groq_model,
+                    messages=messages,
+                    tools=tools,
+                    tool_choice="auto",
+                    temperature=0.1,
+                )
+                message = response.choices[0].message
+                result = {"content": message.content}
+                if message.tool_calls:
+                    result["tool_calls"] = [
+                        {
+                            "id": tc.id,
+                            "type": "function",
+                            "function": {
+                                "name": tc.function.name,
+                                "arguments": tc.function.arguments,
+                            },
+                        }
+                        for tc in message.tool_calls
+                    ]
+                return result
+            except Exception:
+                pass  # Fall through to OpenAI
+
+        # Try OpenAI-compatible (OpenAI or NVIDIA NIM)
+        if self._openai_client:
+            try:
+                response = self._openai_client.chat.completions.create(
+                    model=self._openai_model,
+                    messages=messages,
+                    tools=tools,
+                    tool_choice="auto",
+                    temperature=0.1,
+                )
+                message = response.choices[0].message
+                result = {"content": message.content}
+                if message.tool_calls:
+                    result["tool_calls"] = [
+                        {
+                            "id": tc.id,
+                            "type": "function",
+                            "function": {
+                                "name": tc.function.name,
+                                "arguments": tc.function.arguments,
+                            },
+                        }
+                        for tc in message.tool_calls
+                    ]
+                return result
+            except Exception:
+                pass
+
+        return {"content": None, "tool_calls": None}
+
     def summarize_issues(self, issues: list) -> str | None:
         """
         Summarize lint issues as a student-friendly block comment.

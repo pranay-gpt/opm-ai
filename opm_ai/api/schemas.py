@@ -1,0 +1,230 @@
+"""Pydantic DTOs for FastAPI routes and tool schemas."""
+
+from pathlib import Path
+from typing import Any, Literal, Optional
+from uuid import UUID, uuid4
+
+from pydantic import BaseModel, ConfigDict, Field
+
+
+class BuildRequest(BaseModel):
+    """Request to build a deck from natural language description."""
+    model_config = ConfigDict(from_attributes=True)
+
+    description: str
+    output_path: str | None = None
+    use_llm: bool = False
+
+
+class BuildResponse(BaseModel):
+    """Response from deck build operation."""
+    model_config = ConfigDict(from_attributes=True)
+
+    deck: str
+    lint: "LintResult"
+
+
+class LintRequest(BaseModel):
+    """Request to lint a deck file."""
+    model_config = ConfigDict(from_attributes=True)
+
+    deck_path: str
+
+
+class LintIssue(BaseModel):
+    """Single lint issue."""
+    model_config = ConfigDict(from_attributes=True)
+
+    severity: Literal["ERROR", "WARNING", "INFO"]
+    section: str | None = None
+    keyword: str | None = None
+    line: int | None = None
+    message: str
+    rule_id: str | None = None
+
+
+class LintResult(BaseModel):
+    """Result of linting a deck."""
+    model_config = ConfigDict(from_attributes=True)
+
+    deck_path: str
+    issues: list[LintIssue] = Field(default_factory=list)
+    lint_summary: str | None = None
+    errors: list[str] = Field(default_factory=list)
+    passed: bool = True
+
+    @property
+    def error_issues(self) -> list[LintIssue]:
+        return [i for i in self.issues if i.severity == "ERROR"]
+
+    @property
+    def warning_issues(self) -> list[LintIssue]:
+        return [i for i in self.issues if i.severity == "WARNING"]
+
+    def compute_fields(self) -> "LintResult":
+        """Compute derived fields."""
+        self.errors = [i.message for i in self.issues if i.severity == "ERROR"]
+        self.passed = len(self.errors) == 0
+        return self
+
+
+class RunRequest(BaseModel):
+    """Request to run a simulation."""
+    model_config = ConfigDict(from_attributes=True)
+
+    deck_path: str
+    timeout: int = 120
+
+
+class JobStatus(BaseModel):
+    """Status of an async simulation job."""
+    model_config = ConfigDict(from_attributes=True)
+
+    job_id: str
+    status: Literal["pending", "running", "completed", "failed"]
+    result: "SimulationResultDTO | None" = None
+    error: str | None = None
+
+
+class SimulationResultDTO(BaseModel):
+    """DTO for simulation result in job store."""
+    model_config = ConfigDict(from_attributes=True)
+
+    success: bool
+    output_dir: str
+    crash_report: "CrashReportDTO | None" = None
+    returncode: int | None = None
+    duration_s: float = 0.0
+    stdout: str = ""
+    stderr: str = ""
+    warnings: list[str] = []
+    summary_files: dict[str, str] = {}
+    prt_path: str | None = None
+
+
+class CrashReportDTO(BaseModel):
+    """DTO for crash report in job store."""
+    model_config = ConfigDict(from_attributes=True)
+
+    keyword: str | None = None
+    line: int | None = None
+    message: str
+
+
+class KPIsResponse(BaseModel):
+    """Response with KPIs and plots."""
+    model_config = ConfigDict(from_attributes=True)
+
+    kpis: dict[str, Any]
+    plots: dict[str, str]  # plot_name -> Plotly JSON (fig.to_json())
+
+
+class ChatMessage(BaseModel):
+    """Chat message with optional tool calls."""
+    model_config = ConfigDict(from_attributes=True)
+
+    role: Literal["user", "assistant", "tool", "system"]
+    content: str
+    tool_calls: list[dict] | None = None
+    tool_call_id: str | None = None
+
+
+class ChatRequest(BaseModel):
+    """Request for chat endpoint."""
+    model_config = ConfigDict(from_attributes=True)
+
+    messages: list[ChatMessage]
+    session_id: str
+
+
+# OpenAI-style tool schemas for function calling
+BUILD_DECK_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "build_deck",
+        "description": "Build an OPM Flow deck from a natural language description (e.g., '10x10x3 grid, one producer, 2 year depletion')",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "description": {"type": "string", "description": "Natural language description of the reservoir model"},
+                "output_path": {"type": "string", "description": "Optional path to write the deck file"},
+            },
+            "required": ["description"],
+            "additionalProperties": False,
+        },
+    },
+}
+
+LINT_DECK_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "lint_deck",
+        "description": "Lint an OPM Flow deck file for syntax and best practices",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "deck_path": {"type": "string", "description": "Path to the .DATA deck file"},
+            },
+            "required": ["deck_path"],
+            "additionalProperties": False,
+        },
+    },
+}
+
+RUN_SIMULATION_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "run_simulation",
+        "description": "Run an OPM Flow simulation as a background job",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "deck_path": {"type": "string", "description": "Path to the .DATA deck file"},
+                "timeout": {"type": "integer", "description": "Timeout in seconds (default 120)"},
+            },
+            "required": ["deck_path"],
+            "additionalProperties": False,
+        },
+    },
+}
+
+GET_KPIS_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "get_kpis",
+        "description": "Get KPIs and plots for a completed simulation job",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "job_id": {"type": "string", "description": "Job ID from run_simulation"},
+            },
+            "required": ["job_id"],
+            "additionalProperties": False,
+        },
+    },
+}
+
+OPEN_RESINSIGHT_PLOT_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "open_resinsight_plot",
+        "description": "Open a ResInsight plot for a simulation result (placeholder for Phase 2)",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "job_id": {"type": "string", "description": "Job ID from run_simulation"},
+                "plot_type": {"type": "string", "description": "Type of plot: production, pressure, 3d, etc."},
+            },
+            "required": ["job_id"],
+            "additionalProperties": False,
+        },
+    },
+}
+
+TOOLS = [
+    BUILD_DECK_TOOL,
+    LINT_DECK_TOOL,
+    RUN_SIMULATION_TOOL,
+    GET_KPIS_TOOL,
+    OPEN_RESINSIGHT_PLOT_TOOL,
+]

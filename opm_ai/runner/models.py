@@ -31,9 +31,20 @@ class SimulationJob(BaseModel):
 
 
 class SimulationResult(BaseModel):
-    """Result of a simulation run."""
+    """Result of a simulation run.
+
+    Contract fields (01-runner.md section 3): success, crash_report, output_dir.
+    The remaining fields are non-contract extras used by postprocess/API.
+    """
 
     success: bool
     output_dir: Path | None = None
     crash_report: CrashReport | None = None
     returncode: int | None = None
+    timed_out: bool = False
+    duration_s: float = 0.0
+    stdout: str = ""
+    stderr: str = ""
+    warnings: list[str] = []
+    summary_files: dict[str, Path] = {}
+    prt_path: Path | None = None

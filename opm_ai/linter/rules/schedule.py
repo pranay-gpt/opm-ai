@@ -29,8 +29,10 @@ def _get_keyword_values(section_text: str, keyword: str) -> list[str]:
 
 
 def _extract_well_names(section_text: str, keyword: str) -> list[str]:
-    """Extract well names from a well keyword block (WELSPECS/COMPDAT/WCON*).
+    """Extract well names from ALL occurrences of a well keyword block.
 
+    A keyword like WELSPECS may appear several times in SCHEDULE (wells are
+    commonly added at later report steps), so every occurrence is scanned.
     Each record ends with '/'; the well name is the FIRST quoted token of a
     record. Taking all quoted tokens would wrongly treat values like 'OPEN'
     or 'G1' as well names.
@@ -38,8 +40,7 @@ def _extract_well_names(section_text: str, keyword: str) -> list[str]:
     wells = []
     # Use \Z (end of string) instead of $ (end of line in MULTILINE mode)
     pattern = rf"(?is)^\s*{re.escape(keyword)}\b\s*(.*?)(?=^\s*[A-Z][A-Z0-9_]*\b|^\s*--|\Z)"
-    match = re.search(pattern, section_text, re.MULTILINE | re.DOTALL)
-    if match:
+    for match in re.finditer(pattern, section_text, re.MULTILINE | re.DOTALL):
         content = match.group(1)
         for record in content.split("/"):
             name_match = re.search(r"'([^']+)'", record)
@@ -166,13 +167,17 @@ def rule_L008_wellspecs_auto_no_gruptree(deck: Deck) -> list[LintIssue]:
     in_wellspecs = False
     for line in lines:
         stripped = line.strip().upper()
+        if stripped.startswith("--"):
+            # Comment lines (e.g. column headers naming 'AutoShut') must not
+            # be mistaken for an AUTO group assignment
+            continue
         if stripped.startswith("WELSPECS"):
             in_wellspecs = True
             continue
         if in_wellspecs and stripped.startswith("/"):
             in_wellspecs = False
             continue
-        if in_wellspecs and "AUTO" in stripped:
+        if in_wellspecs and re.search(r"\bAUTO\b", stripped):
             # Found AUTO group
             if not _has_keyword(schedule, "GRUPTREE") and not _has_keyword(schedule, "GROUP"):
                 # Also check entire deck for GRUPTREE
@@ -213,7 +218,9 @@ def rule_L014_producer_no_wconprod(deck: Deck) -> list[LintIssue]:
     wells = _extract_well_names(schedule, "WELSPECS")
     producer_wells = [w for w in wells if _is_producer(schedule, w)]
 
-    if producer_wells and not _has_keyword(schedule, "WCONPROD"):
+    # WCONHIST is the history-matching control - an accepted alternative
+    if producer_wells and not _has_keyword(schedule, "WCONPROD") \
+            and not _has_keyword(schedule, "WCONHIST"):
         sched_lines = deck.get_section_lines("SCHEDULE")
         line_num = sched_lines[0] if sched_lines else None
         issues.append(LintIssue(
@@ -242,7 +249,9 @@ def rule_L015_injector_no_wconinje(deck: Deck) -> list[LintIssue]:
     wells = _extract_well_names(schedule, "WELSPECS")
     injector_wells = [w for w in wells if _is_injector(schedule, w)]
 
-    if injector_wells and not _has_keyword(schedule, "WCONINJE"):
+    # WCONINJH is the history-matching control - an accepted alternative
+    if injector_wells and not _has_keyword(schedule, "WCONINJE") \
+            and not _has_keyword(schedule, "WCONINJH"):
         sched_lines = deck.get_section_lines("SCHEDULE")
         line_num = sched_lines[0] if sched_lines else None
         issues.append(LintIssue(

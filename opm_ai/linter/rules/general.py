@@ -32,7 +32,7 @@ NO_TERMINATOR_KEYWORDS = frozenset({
     "FOPR", "FGOR", "FOPT", "FWPT", "FGPT", "FWIR", "FGIR",
     "END",
     # Flag keywords verified against Flow 2026.04 fixture decks (no data, no '/')
-    "THERMAL", "BLACKOIL", "TEMP", "RADIAL",
+    "THERMAL", "BLACKOIL", "TEMP", "RADIAL", "BRINE",
     "NEWTRAN", "ENDBOX", "FILLEPS", "NOINSPEC", "NORSSPEC", "SKIPREST",
 })
 

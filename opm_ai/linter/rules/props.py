@@ -66,6 +66,11 @@ def rule_L005_pvt_phase_mismatch(deck: Deck) -> list[LintIssue]:
     if not runspec or not props:
         return issues
 
+    # PVT/saturation tables may live in included files, which the v1 linter
+    # does not resolve - skip rather than false-positive (same policy as L003b)
+    if _has_keyword(props, "INCLUDE"):
+        return issues
+
     def _err(keyword: str, message: str) -> None:
         props_lines = deck.get_section_lines("PROPS")
         line_num = props_lines[0] if props_lines else None
@@ -87,9 +92,9 @@ def rule_L005_pvt_phase_mismatch(deck: Deck) -> list[LintIssue]:
     disgas = _has_keyword(runspec, "DISGAS")
     vapoil = _has_keyword(runspec, "VAPOIL")
 
-    # PVT tables per active phase
-    if water and not _has_keyword(props, "PVTW"):
-        _err("PVTW", "Phase 'WATER' declared in RUNSPEC but 'PVTW' not found in PROPS")
+    # PVT tables per active phase (PVTWSALT is the brine variant of PVTW)
+    if water and not _any(["PVTW", "PVTWSALT"]):
+        _err("PVTW", "Phase 'WATER' declared in RUNSPEC but 'PVTW' (or PVTWSALT) not found in PROPS")
     if oil and not _any(["PVTO", "PVDO", "PVCDO", "PVCO"]):
         _err("PVTO", "Phase 'OIL' declared in RUNSPEC but no oil PVT table "
                      "(PVTO/PVDO/PVCDO/PVCO) found in PROPS")

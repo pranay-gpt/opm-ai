@@ -54,11 +54,18 @@ def rule_L002_phase_mismatch(deck: Deck) -> list[LintIssue]:
 
 
 def rule_L015_missing_dimens(deck: Deck) -> list[LintIssue]:
-    """L015: Missing DIMENS in RUNSPEC (ERROR)."""
+    """L015: Missing DIMENS in RUNSPEC (ERROR).
+
+    Skipped when RUNSPEC contains INCLUDE - DIMENS may live in the included
+    file, which the v1 linter does not resolve.
+    """
     issues = []
 
     runspec = deck.get_section("RUNSPEC")
     if not runspec:
+        return issues
+
+    if _has_keyword(runspec, "INCLUDE"):
         return issues
 
     if not _has_keyword(runspec, "DIMENS"):

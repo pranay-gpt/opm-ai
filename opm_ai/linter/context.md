@@ -30,11 +30,23 @@ False positives fixed during calibration (do not reintroduce):
 - **SUMMARY section** mnemonics (`ALL`, `RUNSUM`, `FGPR`, ...) are bare flags;
   L001 skips the whole section.
 - **Phase/PROPS coupling (L005)**: OIL accepts any of PVTO/PVDO/PVCDO/PVCO;
-  GAS accepts PVTG/PVDG; DISGAS requires PVTO; VAPOIL requires PVTG.
+  GAS accepts PVTG/PVDG; DISGAS requires PVTO; VAPOIL requires PVTG; WATER
+  accepts PVTW or PVTWSALT (brine variant).
   Saturation functions follow ACTIVE phase pairs, in family I (SWOF/SGOF/SLGOF)
   or family II (SWFN/SGFN/SOF2/SOF3/SGWFN). A gas-water deck needs no oil table.
-- **INCLUDE (L003b)**: v1 does not resolve includes; if GRID contains INCLUDE
-  or corner-point keywords (COORD/ZCORN), required-keyword checks are skipped.
+  L005 skips when PROPS contains INCLUDE (tables may come from included file).
+- **INCLUDE/IMPORT (L003b, L015)**: v1 does not resolve includes or binary
+  EGRID imports; if GRID contains INCLUDE/IMPORT or corner-point keywords
+  (COORD/ZCORN/RADIAL), required-keyword checks are skipped. If RUNSPEC or
+  top-level deck contains INCLUDE, missing-section checks downgrade to WARNING.
+- **History controls**: WCONHIST/WCONINJH accepted as alternatives to
+  WCONPROD/WCONINJE (L014/L015 schedule rules).
+- **Incremental well declarations**: _extract_well_names scans ALL keyword
+  occurrences (wells are added at later TSTEP via second WELSPECS blocks).
+- **Comment lines in WELSPECS**: L008 skips `--` lines (column headers naming
+  'AutoShut' triggered the AUTO-group check); AUTO now matched as word `\bAUTO\b`.
+- **Flag keywords** (L001): THERMAL, BLACKOIL, TEMP, RADIAL, BRINE, NEWTRAN,
+  ENDBOX, FILLEPS, NOINSPEC, NORSSPEC, SKIPREST take no data and no `/`.
 
 ## Regex Pitfall (recurring bug, now fixed everywhere)
 Keyword-content extraction helpers use

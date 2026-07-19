@@ -10,6 +10,7 @@ import ResultsViewer from './components/ResultsViewer';
 import ChatPanel from './components/ChatPanel';
 import LinterPanel from './components/LinterPanel';
 import SettingsPanel from './components/SettingsPanel';
+import Learn from './components/Learn';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import './index.css';
@@ -91,6 +92,7 @@ function App() {
           <Route path="deck-editor" element={<DeckEditor />} />
           <Route path="simulator" element={<SimulationRunner />} />
           <Route path="results" element={<ResultsViewer />} />
+          <Route path="learn" element={<Learn />} />
           <Route path="chat" element={<ChatPanel />} />
           <Route path="linter" element={<LinterPanel />} />
           <Route path="settings" element={<SettingsPanel />} />

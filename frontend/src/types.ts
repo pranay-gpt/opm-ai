@@ -1,12 +1,38 @@
 // API types matching backend schemas from 06-chat-and-api.md
 
+export type ExplanationLevel = 'beginner' | 'intermediate' | 'advanced';
+
 export interface BuildRequest {
   description: string;
   output_path?: string;
+  use_llm?: boolean;
+  fluid?: FluidDescriptorRequest | null;
+}
+
+export interface FluidDescriptorRequest {
+  api_gravity: number;
+  gas_specific_gravity: number;
+  gor: number;
+  reservoir_temp_f?: number;
+  reservoir_temp_c?: number;
+  salinity_ppm?: number;
+  pressure_range_psi: [number, number];
+  unit_system?: 'FIELD' | 'METRIC';
+}
+
+export interface LintIssue {
+  severity: 'ERROR' | 'WARNING' | 'INFO';
+  section: string | null;
+  keyword: string | null;
+  line: number | null;
+  message: string;
+  rule_id: string | null;
 }
 
 export interface LintResult {
   deck_path: string;
+  issues: LintIssue[];
+  lint_summary: string | null;
   errors: string[];
   passed: boolean;
 }
@@ -32,6 +58,25 @@ export interface JobStatus {
   status: JobStatusValue;
   result?: SimulationResult | null;
   error?: string | null;
+}
+
+export interface SimulationResultDTO {
+  success: boolean;
+  output_dir: string;
+  crash_report: CrashReportDTO | null;
+  returncode: number | null;
+  duration_s: number;
+  stdout: string;
+  stderr: string;
+  warnings: string[];
+  summary_files: Record<string, string>;
+  prt_path: string | null;
+}
+
+export interface CrashReportDTO {
+  keyword: string | null;
+  line: number | null;
+  message: string;
 }
 
 export interface SimulationResult {
@@ -99,4 +144,65 @@ export interface Settings {
   nimApiKey: string;
   nimBaseUrl: string;
   llmProvider: 'groq' | 'nim' | 'offline';
+}
+
+// Explainer types
+export interface ExplainRequest {
+  topic?: string | null;
+  kpis?: Record<string, any> | null;
+  level: ExplanationLevel;
+  context?: Record<string, any> | null;
+}
+
+export interface Citation {
+  source_id: string;
+  title: string;
+  url_or_path: string;
+  snippet: string;
+}
+
+export interface ExplainResponse {
+  topic: string;
+  level: ExplanationLevel;
+  text: string;
+  citations: Citation[];
+  follow_up_questions: string[];
+}
+
+export interface QuizQuestion {
+  question: string;
+  options: [string, string, string, string];
+  correct_index: number;
+  explanation: string;
+  level: ExplanationLevel;
+  topic_tags: string[];
+}
+
+export interface QuizRequest {
+  scenario_summary: string;
+  level?: ExplanationLevel;
+  n_questions?: number;
+  topic_focus?: string[] | null;
+}
+
+export interface QuizResponse {
+  scenario_summary: string;
+  questions: QuizQuestion[];
+}
+
+export interface LearningReportRequest {
+  session_id: string;
+  conversation_history: Record<string, any>[];
+  kpis_history?: Record<string, any>[] | null;
+}
+
+export interface LearningReportResponse {
+  session_id: string;
+  topics_covered: string[];
+  explanations_generated: number;
+  questions_asked: number;
+  quiz_scores: Record<string, number> | null;
+  key_concepts: string[];
+  citations_used: Citation[];
+  markdown: string;
 }

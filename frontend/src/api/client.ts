@@ -10,6 +10,17 @@ import type {
   WSServerMessage,
   ToolCall,
   Settings,
+  ExplainRequest,
+  ExplainResponse,
+  QuizRequest,
+  QuizResponse,
+  LearningReportRequest,
+  LearningReportResponse,
+  FluidDescriptorRequest,
+  ExplanationLevel,
+  Citation,
+  QuizQuestion,
+  LintIssue,
 } from '../types';
 
 // ============================================
@@ -67,6 +78,25 @@ export const api = {
   // Results
   results: (jobId: string): Promise<KPIsResponse> =>
     fetchJson<KPIsResponse>(`/results/${jobId}`),
+
+  // Explainer
+  explainConcept: (request: ExplainRequest): Promise<ExplainResponse> =>
+    fetchJson<ExplainResponse>('/explain', {
+      method: 'POST',
+      body: JSON.stringify(request),
+    }),
+
+  generateQuiz: (request: QuizRequest): Promise<QuizResponse> =>
+    fetchJson<QuizResponse>('/quiz', {
+      method: 'POST',
+      body: JSON.stringify(request),
+    }),
+
+  learningReport: (request: LearningReportRequest): Promise<LearningReportResponse> =>
+    fetchJson<LearningReportResponse>('/learning-report', {
+      method: 'POST',
+      body: JSON.stringify(request),
+    }),
 };
 
 // Poll job status until completed or failed
@@ -99,12 +129,23 @@ export type {
   BuildResponse,
   LintRequest,
   LintResult,
+  LintIssue,
   RunRequest,
   JobStatus,
   KPIsResponse,
   ChatMessage,
   ToolCall,
   Settings,
+  ExplainRequest,
+  ExplainResponse,
+  QuizRequest,
+  QuizResponse,
+  LearningReportRequest,
+  LearningReportResponse,
+  FluidDescriptorRequest,
+  ExplanationLevel,
+  Citation,
+  QuizQuestion,
 };
 
 // ============================================

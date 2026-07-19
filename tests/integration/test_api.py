@@ -111,6 +111,52 @@ class TestBuildEndpoint:
         assert "RUNSPEC" in deck_content
         assert "SCHEDULE" in deck_content
 
+    @pytest.mark.integration
+    @pytest.mark.slow
+    def test_build_deck_with_fluid_descriptor_returns_pvto(self, client):
+        """POST /api/build with fluid -> deck contains PVTO table (not hardcoded SPE1 Bo)."""
+        response = client.post("/api/build", json={
+            "description": "10x10x3 grid, one producer, 2 year depletion",
+            "fluid": {
+                "api_gravity": 35.0,
+                "gas_specific_gravity": 0.75,
+                "gor": 800,
+                "reservoir_temp_f": 200,
+                "salinity_ppm": 0,
+                "pressure_range_psi": [14.7, 5000],
+                "unit_system": "FIELD"
+            }
+        })
+
+        assert response.status_code == 200, f"Build failed: {response.text}"
+        data = response.json()
+
+        # Verify deck structure
+        deck = data["deck"]
+        assert "RUNSPEC" in deck
+        assert "GRID" in deck
+        assert "PROPS" in deck
+        assert "SOLUTION" in deck
+        assert "SCHEDULE" in deck
+
+        # Verify lint passed
+        lint = data["lint"]
+        assert lint["passed"] is True, f"Lint failed: {lint.get('errors', [])}"
+
+        # Verify deck contains PVTO (not just default SPE1 values)
+        assert "PVTO" in deck, "Deck missing PVTO section when fluid provided"
+
+        # Verify it does NOT contain the hardcoded SPE1 Bo value (1.0620)
+        assert "1.0620" not in deck, "Deck contains hardcoded SPE1 Bo value instead of generated PVTO table"
+
+        # Verify PVTO table has multiple pressure entries (not just 1 row)
+        pvto_section = deck[deck.find("PVTO"):]
+        pvto_section = pvto_section[:pvto_section.find("/")]
+        # Count numeric lines (data rows) in PVTO
+        data_lines = [line for line in pvto_section.split('\n') if line.strip() and not line.strip().startswith('--') and not line.strip().startswith('PVTO')]
+        # Should have more than 1 pressure entry
+        assert len(data_lines) > 1, f"PVTO should have multiple pressure rows, got: {data_lines}"
+
 
 class TestLintEndpoint:
     """Tests for POST /api/lint"""

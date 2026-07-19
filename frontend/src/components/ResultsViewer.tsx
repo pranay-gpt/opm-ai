@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLastResults, useCurrentJob, useSimulationActions } from '../stores/useAppStore';
 import { api } from '../api/client';
-import type { KPIsResponse } from '../api/client';
+import type { KPIsResponse, ExplainRequest, ExplainResponse, ExplanationLevel, Citation } from '../api/client';
 // @ts-expect-error plotly.js-dist ships no types; @types/plotly.js covers the API
 import Plotly from 'plotly.js-dist-min';
 
@@ -61,6 +61,12 @@ export default function ResultsViewer() {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'kpis' | 'plots' | '3d'>('kpis');
 
+  // Explain results state
+  const [explainResponse, setExplainResponse] = useState<ExplainResponse | null>(null);
+  const [explainLoading, setExplainLoading] = useState(false);
+  const [explainError, setExplainError] = useState<string | null>(null);
+  const [explainLevel, setExplainLevel] = useState<ExplanationLevel>('intermediate');
+
   // Load results when job completes
   useEffect(() => {
     if (currentJob?.status === 'completed' && currentJob.job_id && !results) {
@@ -83,6 +89,35 @@ export default function ResultsViewer() {
       setIsLoading(false);
     }
   }, [setLastResults]);
+
+  // Handle explain results
+  const handleExplainResults = useCallback(async () => {
+    if (!results?.kpis) {
+      setExplainError('No KPIs available to explain');
+      return;
+    }
+
+    setExplainLoading(true);
+    setExplainError(null);
+    setExplainResponse(null);
+
+    try {
+      const request: ExplainRequest = {
+        topic: null,
+        kpis: results.kpis,
+        level: explainLevel,
+        context: null,
+      };
+      const response = await api.explainConcept(request);
+      setExplainResponse(response);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to explain results';
+      setExplainError(message);
+      console.error('Explain error:', err);
+    } finally {
+      setExplainLoading(false);
+    }
+  }, [results?.kpis, explainLevel]);
 
   // KPI value getter
   const getKpiValue = (kpi: KPICard) => {
@@ -203,6 +238,121 @@ export default function ResultsViewer() {
                       </div>
                     ))}
                 </>
+              )}
+            </div>
+
+            {/* Explain Results Button */}
+            <div className="card p-4 mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                <div className="flex items-center gap-3">
+                  <label className="text-sm font-medium text-textPrimary">Explanation Level:</label>
+                  <div className="flex gap-2">
+                    {['beginner', 'intermediate', 'advanced'].map((level) => (
+                      <button
+                        key={level}
+                        onClick={() => setExplainLevel(level as ExplanationLevel)}
+                        className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
+                          explainLevel === level
+                            ? 'bg-primary text-base'
+                            : 'bg-surface border border-border text-textSecondary hover:text-textPrimary hover:border-primary/50'
+                        }`}
+                        disabled={explainLoading}
+                      >
+                        {level.charAt(0).toUpperCase() + level.slice(1)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <button
+                  onClick={handleExplainResults}
+                  disabled={explainLoading || !results?.kpis}
+                  className="btn-primary flex-1 sm:flex-none py-2.5"
+                >
+                  {explainLoading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                      Explaining...
+                    </span>
+                  ) : (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      Explain These Results
+                    </span>
+                  )}
+                </button>
+              </div>
+
+              {explainError && (
+                <div className="mt-3 p-3 rounded bg-error/20 border border-error text-error text-sm">
+                  {explainError}
+                </div>
+              )}
+
+              {/* Explanation Panel */}
+              {explainResponse && (
+                <div className="mt-4 pt-4 border-t border-border">
+                  <h3 className="font-semibold text-textPrimary mb-3 flex items-center gap-2">
+                    <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Explanation ({explainResponse.level})
+                  </h3>
+                  <div className="prose prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed">
+                    {explainResponse.text}
+                  </div>
+
+                  {/* Citations */}
+                  {explainResponse.citations.length > 0 && (
+                    <details className="mt-4">
+                      <summary className="cursor-pointer font-medium text-textPrimary flex items-center gap-2 text-sm">
+                        <span>Citations ({explainResponse.citations.length})</span>
+                        <svg className="w-4 h-4 text-textSecondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </summary>
+                      <ul className="mt-2 space-y-2 text-xs">
+                        {explainResponse.citations.map((citation, idx) => (
+                          <li key={idx} className="text-textSecondary">
+                            <div className="font-mono text-textMuted">{citation.source_id}</div>
+                            <div className="font-medium text-textPrimary">{citation.title}</div>
+                            {citation.url_or_path && (
+                              <a href={citation.url_or_path} target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primaryHover underline">
+                                {citation.url_or_path}
+                              </a>
+                            )}
+                            <div className="line-clamp-2">{citation.snippet}</div>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  )}
+
+                  {/* Follow-up Questions */}
+                  {explainResponse.follow_up_questions.length > 0 && (
+                    <div className="mt-4">
+                      <h4 className="font-medium text-textPrimary mb-2 text-sm">Follow-up Questions</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {explainResponse.follow_up_questions.map((q, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => {
+                              // Could trigger a re-explain with the follow-up as topic
+                              setExplainLevel(explainLevel);
+                            }}
+                            className="px-3 py-1.5 text-xs rounded border border-border text-textSecondary hover:text-textPrimary hover:border-primary/50 hover:bg-surfaceHover transition-colors"
+                          >
+                            {q}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
 

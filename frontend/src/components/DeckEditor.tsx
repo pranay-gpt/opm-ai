@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useCurrentDeck, useCurrentDeckPath, useLastBuildResponse, useLastLintResult, useDeckActions, useLintActions } from '../stores/useAppStore';
 import { api } from '../api/client';
-import type { LintRequest } from '../api/client';
+import type { LintRequest, LintResult, LintIssue } from '../api/client';
 import Editor from '@monaco-editor/react';
 
 // Declare monaco for TypeScript
@@ -68,8 +68,17 @@ export default function DeckEditor() {
         errors.push('DIMENS keyword not found or malformed in RUNSPEC');
       }
 
-      const result = {
+      const result: LintResult = {
         deck_path: 'memory://deck.DATA',
+        issues: errors.map((err, i) => ({
+          severity: 'ERROR' as const,
+          section: null,
+          keyword: null,
+          line: null,
+          message: err,
+          rule_id: `client-lint-${i}`,
+        })),
+        lint_summary: errors.length === 0 ? 'All checks passed' : `${errors.length} issue(s) found`,
         errors,
         passed: errors.length === 0,
       };
@@ -87,7 +96,13 @@ export default function DeckEditor() {
     setCurrentDeck(deck);
     setLastBuildResponse({
       deck,
-      lint: lastLintResult || { deck_path: 'memory://deck.DATA', errors: [], passed: true },
+      lint: lastLintResult || {
+        deck_path: 'memory://deck.DATA',
+        issues: [],
+        lint_summary: 'All checks passed',
+        errors: [],
+        passed: true,
+      },
     });
     setIsDirty(false);
   }, [deck, lastLintResult, setCurrentDeck, setLastBuildResponse]);

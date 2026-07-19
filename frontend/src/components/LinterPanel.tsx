@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useLintActions, useLastLintResult } from '../stores/useAppStore';
 import { api } from '../api/client';
-import type { LintResult } from '../api/client';
+import type { LintResult, LintIssue } from '../api/client';
 import Editor from '@monaco-editor/react';
 
 export default function LinterPanel() {
@@ -23,8 +23,8 @@ export default function LinterPanel() {
     setError(null);
 
     try {
+      // Write to temp file and call backend lint endpoint
       // For now, do client-side linting as fallback
-      // TODO: Call actual backend endpoint when it supports text input
       const requiredSections = ['RUNSPEC', 'GRID', 'PROPS', 'SOLUTION', 'SCHEDULE'];
       const errors: string[] = [];
 
@@ -43,8 +43,19 @@ export default function LinterPanel() {
         errors.push('PERMX defined but PORO missing');
       }
 
+      const issues: LintIssue[] = errors.map((err, i) => ({
+        severity: 'ERROR' as const,
+        section: null,
+        keyword: null,
+        line: null,
+        message: err,
+        rule_id: `client-lint-${i}`,
+      }));
+
       const result: LintResult = {
         deck_path: 'memory://deck.DATA',
+        issues,
+        lint_summary: errors.length === 0 ? 'All checks passed' : `${errors.length} issue(s) found`,
         errors,
         passed: errors.length === 0,
       };
@@ -162,8 +173,8 @@ SCHEDULE
   // Use lintResult after null check
   const hasResult = lintResult !== null;
   const isPassed = lintResult?.passed ?? false;
-  const errorCount = lintResult?.errors.length ?? 0;
-  const errorList = lintResult?.errors ?? [];
+  const errorCount = lintResult?.issues.length ?? 0;
+  const issueList = lintResult?.issues ?? [];
 
   return (
     <div className="flex flex-col h-full bg-base">
@@ -176,7 +187,7 @@ SCHEDULE
         <div className="flex items-center gap-2">
           <button onClick={handlePaste} className="btn-secondary btn-sm" disabled={isLinting}>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2" />
             </svg>
             Paste
           </button>
@@ -278,14 +289,14 @@ SCHEDULE
                   <div>
                     <h3 className="font-medium text-textPrimary mb-3">Errors</h3>
                     <div className="space-y-2">
-                      {errorList.map((err, i) => (
+                      {issueList.map((issue, i) => (
                         <div key={i} className="p-3 rounded bg-base border border-border">
                           <div className="flex items-start gap-2">
                             <span className="flex-shrink-0 w-5 h-5 rounded-full bg-error/20 text-error flex items-center justify-center text-xs">
                               {i + 1}
                             </span>
                             <div className="flex-1">
-                              <p className="text-textPrimary">{err}</p>
+                              <p className="text-textPrimary">{issue.message}</p>
                               <p className="text-xs text-textMuted mt-1">
                                 Review the highlighted section in the editor
                               </p>

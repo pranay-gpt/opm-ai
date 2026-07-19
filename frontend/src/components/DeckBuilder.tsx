@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useCurrentDeck, useCurrentDeckPath, useLastBuildResponse, useLastLintResult, useDeckActions, useLintActions } from '../stores/useAppStore';
 import { api } from '../api/client';
-import type { BuildRequest, BuildResponse } from '../api/client';
+import type { BuildRequest, BuildResponse, FluidDescriptorRequest } from '../api/client';
 import Editor from '@monaco-editor/react';
 
 export default function DeckBuilder() {
@@ -17,6 +17,19 @@ export default function DeckBuilder() {
   const [error, setError] = useState<string | null>(null);
   const [showEditor, setShowEditor] = useState(false);
 
+  // Fluid properties state
+  const [useCustomFluid, setUseCustomFluid] = useState(false);
+  const [fluidProps, setFluidProps] = useState<FluidDescriptorRequest>({
+    api_gravity: 35,
+    gas_specific_gravity: 0.75,
+    gor: 800,
+    reservoir_temp_f: 200,
+    salinity_ppm: 0,
+    pressure_range_psi: [14.7, 5000],
+    unit_system: 'FIELD',
+  });
+  const [showFluidSection, setShowFluidSection] = useState(false);
+
   const handleBuild = useCallback(async () => {
     if (!description.trim()) {
       setError('Please enter a description');
@@ -27,7 +40,10 @@ export default function DeckBuilder() {
     setError(null);
 
     try {
-      const request: BuildRequest = { description };
+      const request: BuildRequest = {
+        description,
+        fluid: useCustomFluid ? fluidProps : null,
+      };
       const response: BuildResponse = await api.build(request);
 
       setCurrentDeck(response.deck);
@@ -46,7 +62,7 @@ export default function DeckBuilder() {
     } finally {
       setIsBuilding(false);
     }
-  }, [description, setCurrentDeck, setLastBuildResponse, setLastLintResult]);
+  }, [description, useCustomFluid, fluidProps, setCurrentDeck, setLastBuildResponse, setLastLintResult]);
 
   const handleUseDeck = useCallback(() => {
     if (lastBuildResponse?.deck) {
@@ -71,6 +87,15 @@ export default function DeckBuilder() {
     a.click();
     URL.revokeObjectURL(url);
   }, [currentDeck]);
+
+  const handleFluidChange = useCallback((field: keyof FluidDescriptorRequest, value: string | number | [number, number]) => {
+    setFluidProps((prev: FluidDescriptorRequest) => {
+      if (field === 'pressure_range_psi' && Array.isArray(value)) {
+        return { ...prev, [field]: value };
+      }
+      return { ...prev, [field]: typeof value === 'string' ? parseFloat(value) || 0 : value };
+    });
+  }, []);
 
   return (
     <div className="flex flex-col h-full bg-base">
@@ -121,6 +146,145 @@ export default function DeckBuilder() {
               <p className="text-xs text-textMuted mt-2">
                 Try: "20x20x5 waterflood with 4 injectors and 1 producer" or "depletion deck with 3 layers and gas cap"
               </p>
+            </div>
+
+            {/* Fluid Properties Section (Collapsible) */}
+            <div className="card">
+              <button
+                onClick={() => setShowFluidSection(!showFluidSection)}
+                className="w-full flex items-center justify-between p-4 text-left"
+              >
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-textSecondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  <span className="font-medium text-textPrimary">Fluid properties (optional)</span>
+                </div>
+                <svg className={`w-4 h-4 text-textSecondary transition-transform ${showFluidSection ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {showFluidSection && (
+                <div className="px-4 pb-4 space-y-4 border-t border-border">
+                  <label className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      checked={useCustomFluid}
+                      onChange={(e) => setUseCustomFluid(e.target.checked)}
+                      className="w-4 h-4 rounded border-border text-primary focus:ring-primary"
+                    />
+                    <span className="text-sm font-medium text-textPrimary">Use custom fluid</span>
+                  </label>
+
+                  {useCustomFluid && (
+                    <>
+                      <p className="text-xs text-textMuted italic ml-7">
+                        Tables generated via Standing correlation family
+                      </p>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 ml-7">
+                        <div>
+                          <label className="block text-xs font-medium text-textSecondary mb-1">
+                            API Gravity
+                          </label>
+                          <input
+                            type="number"
+                            step="0.1"
+                            value={fluidProps.api_gravity}
+                            onChange={(e) => handleFluidChange('api_gravity', e.target.value)}
+                            className="input w-full text-sm"
+                            min="1"
+                            max="100"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-textSecondary mb-1">
+                            Gas Specific Gravity
+                          </label>
+                          <input
+                            type="number"
+                            step="0.01"
+                            value={fluidProps.gas_specific_gravity}
+                            onChange={(e) => handleFluidChange('gas_specific_gravity', e.target.value)}
+                            className="input w-full text-sm"
+                            min="0.1"
+                            max="2.0"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-textSecondary mb-1">
+                            GOR (scf/stb)
+                          </label>
+                          <input
+                            type="number"
+                            step="1"
+                            value={fluidProps.gor}
+                            onChange={(e) => handleFluidChange('gor', e.target.value)}
+                            className="input w-full text-sm"
+                            min="0"
+                            max="10000"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-textSecondary mb-1">
+                            Reservoir Temp (&deg;F)
+                          </label>
+                          <input
+                            type="number"
+                            step="1"
+                            value={fluidProps.reservoir_temp_f}
+                            onChange={(e) => handleFluidChange('reservoir_temp_f', e.target.value)}
+                            className="input w-full text-sm"
+                            min="-100"
+                            max="500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-textSecondary mb-1">
+                            Salinity (ppm)
+                          </label>
+                          <input
+                            type="number"
+                            step="1"
+                            value={fluidProps.salinity_ppm}
+                            onChange={(e) => handleFluidChange('salinity_ppm', e.target.value)}
+                            className="input w-full text-sm"
+                            min="0"
+                            max="500000"
+                          />
+                        </div>
+                        <div className="sm:col-span-2">
+                          <label className="block text-xs font-medium text-textSecondary mb-1">
+                            Pressure Range (psia)
+                          </label>
+                          <div className="flex gap-3">
+                            <input
+                              type="number"
+                              step="0.1"
+                              value={fluidProps.pressure_range_psi[0]}
+                              onChange={(e) => handleFluidChange('pressure_range_psi', [parseFloat(e.target.value) || 14.7, fluidProps.pressure_range_psi[1]])}
+                              className="input w-full text-sm"
+                              min="0"
+                              placeholder="Min"
+                            />
+                            <input
+                              type="number"
+                              step="0.1"
+                              value={fluidProps.pressure_range_psi[1]}
+                              onChange={(e) => handleFluidChange('pressure_range_psi', [fluidProps.pressure_range_psi[0], parseFloat(e.target.value) || 5000])}
+                              className="input w-full text-sm"
+                              min="0"
+                              placeholder="Max"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="flex gap-3">
@@ -246,7 +410,7 @@ export default function DeckBuilder() {
           <div className="w-full lg:w-1/2 flex items-center justify-center bg-surface border-l border-border">
             <div className="text-center p-8 text-textSecondary">
               <svg className="w-16 h-16 mx-auto mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
               <p className="text-lg font-medium text-textPrimary mb-1">No Deck Generated</p>
               <p className="text-sm max-w-xs">

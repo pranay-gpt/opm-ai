@@ -14,6 +14,20 @@ except ImportError:
     ExplanationLevel = Literal["beginner", "intermediate", "advanced"]
 
 
+class FluidDescriptorRequest(BaseModel):
+    """Fluid descriptor for PVT table generation (optional)."""
+    model_config = ConfigDict(from_attributes=True)
+
+    api_gravity: float
+    gas_specific_gravity: float
+    gor: float
+    reservoir_temp_f: float | None = None
+    reservoir_temp_c: float | None = None
+    salinity_ppm: float = 0.0
+    pressure_range_psi: list[float] | None = None  # [min, max]
+    unit_system: Literal["FIELD", "METRIC"] = "FIELD"
+
+
 class BuildRequest(BaseModel):
     """Request to build a deck from natural language description."""
     model_config = ConfigDict(from_attributes=True)
@@ -21,6 +35,7 @@ class BuildRequest(BaseModel):
     description: str
     output_path: str | None = None
     use_llm: bool = False
+    fluid: FluidDescriptorRequest | None = None
 
 
 class BuildResponse(BaseModel):

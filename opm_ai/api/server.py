@@ -54,10 +54,13 @@ def create_app() -> FastAPI:
     async def health_check():
         return {"status": "ok"}
 
-    # Optional static mount of frontend/dist at "/" for production
-    # Must be AFTER all /api routes so API routes take precedence
-    frontend_dist = Path("/app/static")
-    if frontend_dist.exists():
-        app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")
+    # Optional static mount of the built frontend at "/" for production.
+    # Must be AFTER all /api routes so API routes take precedence.
+    # Docker bakes the bundle at /app/static; local dev builds to frontend/dist.
+    repo_root = Path(__file__).resolve().parents[2]
+    for candidate in (Path("/app/static"), repo_root / "frontend" / "dist"):
+        if (candidate / "index.html").exists():
+            app.mount("/", StaticFiles(directory=candidate, html=True), name="frontend")
+            break
 
     return app

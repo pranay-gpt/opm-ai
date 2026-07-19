@@ -10,7 +10,7 @@ from opm_ai.api.schemas import (
 )
 from opm_ai.api.job_store import create_job, set_job_running, set_job_completed, set_job_failed, get_job
 from opm_ai.builder import build_deck
-from opm_ai.linter import lint_deck as lint_deck_func
+from opm_ai.linter import lint_deck
 from opm_ai.runner import run_simulation
 from opm_ai.runner.models import SimulationJob
 from opm_ai.postprocess.summary import read_summary
@@ -25,14 +25,24 @@ router = APIRouter()
 # Load system prompt from file
 SYSTEM_PROMPT_PATH = Path(__file__).parent.parent / "system_prompt.md"
 
+# Cache system prompt at module import time
+try:
+    SYSTEM_PROMPT = SYSTEM_PROMPT_PATH.read_text() if SYSTEM_PROMPT_PATH.exists() else (
+        "You are an expert reservoir engineering assistant for OPM Flow.\n"
+        "Help users build, lint, run, and analyze reservoir simulation models.\n"
+        "Use the available tools to execute tasks."
+    )
+except Exception:
+    SYSTEM_PROMPT = (
+        "You are an expert reservoir engineering assistant for OPM Flow.\n"
+        "Help users build, lint, run, and analyze reservoir simulation models.\n"
+        "Use the available tools to execute tasks."
+    )
+
 
 def load_system_prompt() -> str:
-    """Load system prompt from markdown file."""
-    if SYSTEM_PROMPT_PATH.exists():
-        return SYSTEM_PROMPT_PATH.read_text()
-    return """You are an expert reservoir engineering assistant for OPM Flow.
-Help users build, lint, run, and analyze reservoir simulation models.
-Use the available tools to execute tasks."""
+    """Load system prompt from cached module-level constant."""
+    return SYSTEM_PROMPT
 
 
 # Tool implementations
@@ -54,7 +64,7 @@ async def tool_build_deck(args: dict) -> dict:
 async def tool_lint_deck(args: dict) -> dict:
     """Lint a deck file."""
     deck_path = args.get("deck_path", "")
-    result = lint_deck_func(Path(deck_path))
+    result = lint_deck(Path(deck_path))
     return {
         "deck_path": result.deck_path,
         "errors": [i.message for i in result.issues if i.severity == "ERROR"],
@@ -107,7 +117,7 @@ async def tool_get_kpis(args: dict) -> dict:
     if not job or job.status != "completed" or not job.result:
         return {"error": "Job not found or not completed"}
 
-    output_dir = Path(job.result["output_dir"])
+    output_dir = Path(job.result.output_dir)
     df = read_summary(output_dir)
     if df.empty:
         return {"error": "No summary data found"}

@@ -2,6 +2,7 @@
 
 from typing import Any
 
+import math
 import numpy as np
 import pandas as pd
 
@@ -187,7 +188,17 @@ def extract_kpis(df: pd.DataFrame) -> dict[str, Any]:
     if foip_col and len(df) > 0:
         kpis["recovery_factor"] = float(df[foip_col].iloc[-1]) / 1e6  # rough STB to MMSTB
 
+    # Sanitize: replace any NaN or inf float values with None
+    _sanitize_kpis(kpis)
+
     return kpis
+
+
+def _sanitize_kpis(kpis: dict[str, Any]) -> None:
+    """Replace NaN/inf float values with None in-place to allow JSON serialization."""
+    for key, value in list(kpis.items()):
+        if isinstance(value, float) and (math.isnan(value) or math.isinf(value)):
+            kpis[key] = None
 
 
 def _find_col(df: pd.DataFrame, pattern: str) -> str | None:

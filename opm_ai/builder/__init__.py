@@ -12,6 +12,7 @@ from opm_ai.linter import lint_deck, LintResult
 def build_deck(
     description: str,
     output_path: Optional[Path] = None,
+    use_llm: bool = False,
 ) -> tuple[str, LintResult]:
     """
     Build an OPM Flow deck from natural language description.
@@ -19,11 +20,12 @@ def build_deck(
     Args:
         description: Natural language description of the model.
         output_path: Optional path to write the deck file.
+        use_llm: Whether to use LLM for parameter extraction (requires API key)
 
     Returns:
         Tuple of (deck_string, LintResult).
     """
-    return _build_deck(description, output_path)
+    return _build_deck(description, output_path, use_llm)
 
 
 __all__ = ["build_deck"]

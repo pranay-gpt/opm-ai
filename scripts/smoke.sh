@@ -5,6 +5,7 @@
 #        (defaults to BASE_URL=http://localhost:8000)
 
 set -e
+set -o pipefail
 
 BASE_URL="${BASE_URL:-http://localhost:8000}"
 DECK_DIR="${DECK_DIR:-/app/decks}"

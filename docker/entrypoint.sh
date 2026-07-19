@@ -8,7 +8,7 @@ set -e
 if [ -n "$RESINSIGHT_HOST" ] && [ -n "$RESINSIGHT_GRPC_PORT" ]; then
     echo "Waiting for ResInsight gRPC at ${RESINSIGHT_HOST}:${RESINSIGHT_GRPC_PORT}..."
     for i in {1..30}; do
-        if nc -z "$RESINSIGHT_HOST" "$RESINSIGHT_GRPC_PORT" 2>/dev/null; then
+        if timeout 1 bash -c "</dev/tcp/${RESINSIGHT_HOST}/${RESINSIGHT_GRPC_PORT}" 2>/dev/null; then
             echo "ResInsight gRPC is ready"
             break
         fi

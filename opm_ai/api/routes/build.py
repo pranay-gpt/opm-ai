@@ -36,20 +36,6 @@ async def build_deck_endpoint(request: BuildRequest) -> BuildResponse:
                     for issue in lint_result.issues
                 ],
                 lint_summary=lint_result.lint_summary,
-            ).compute_fields() or LintResult(
-                deck_path=lint_result.deck_path,
-                issues=[
-                    LintIssue(
-                        severity=issue.severity,
-                        section=issue.section,
-                        keyword=issue.keyword,
-                        line=issue.line,
-                        message=issue.message,
-                        rule_id=issue.rule_id,
-                    )
-                    for issue in lint_result.issues
-                ],
-                lint_summary=lint_result.lint_summary,
             ),
         )
     except Exception as e:

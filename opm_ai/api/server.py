@@ -12,12 +12,10 @@ from opm_ai.api.routes import build, lint, run, results, chat
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager for startup/shutdown."""
-    # Initialize job store and session store on app state
-    app.state.jobs = {}
+    # Initialize session store on app state
     app.state.sessions = {}
     yield
     # Cleanup on shutdown
-    app.state.jobs.clear()
     app.state.sessions.clear()
 
 

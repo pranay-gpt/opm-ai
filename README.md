@@ -2,57 +2,100 @@
 
 AI-assisted reservoir simulation workbench for petroleum engineering education.
 
-## Features
-
-- **Natural Language Deck Building**: Describe a reservoir in plain English, get a valid OPM Flow deck
-- **Smart Linting**: Static analysis + optional LLM explanations for deck diagnostics
-- **One-Click Simulation**: Run OPM Flow simulations with automatic output parsing
-- **Interactive Results**: Plotly charts + optional ResInsight 3D visualization
-- **Educational Explanations**: LLM-powered concept explanations
-
-## Quick Start
-
-```bash
-# Install dependencies
-pip install -e .
-
-# Configure (copy .env.example to .env and add your API keys)
-cp .env.example .env
-
-# Run the Streamlit app
-streamlit run opm_ai/app/streamlit_app.py
-
-# Or use the CLI
-opm-ai build "10x10x5 grid, simple depletion, one producer"
-opm-ai lint deck.DATA
-opm-ai run deck.DATA
-```
-
 ## Architecture
 
-- **Builder**: Template-based deck generation (Jinja2) with LLM parameter extraction
-- **Linter**: Pure-Python deck parser + rule engine
-- **Runner**: Subprocess to OPM Flow with crash parsing
-- **Postprocess**: resfo-based summary reading, KPI extraction, Plotly charts, ResInsight 3D bridge
-- **LLM**: Unified client (Groq/OpenAI/NVIDIA NIM) with offline fallback
-
-## Development
-
-```bash
-# Run tests
-pytest
-
-# Run specific test
-pytest tests/unit/test_input_parser.py -v
+```
+Plain English → Builder → Linter → OPM Flow Runner → Postprocess → React UI
+                    │         │          │                 │
+                    ▼         ▼          ▼                 ▼
+               Jinja2    Rule      /usr/bin/flow    resfo + rips
+               Templates Engine   (2026.04)        Plotly + 3D
 ```
 
-## Requirements
+- **Builder**: Template-based deck generation (Jinja2) with LLM parameter extraction
+- **Linter**: Pure-Python deck parser + rule engine (works offline)
+- **Runner**: Subprocess to OPM Flow with crash parsing and structured results
+- **Postprocess**: resfo-based summary reading, KPI extraction, Plotly charts, ResInsight 3D bridge
+- **LLM**: Unified client (Groq / OpenAI / NVIDIA NIM / Offline) with offline fallback
 
-- Python 3.12+
-- OPM Flow 2026.04+ (at `/usr/bin/flow`)
-- Optional: ResInsight (at `/usr/bin/ResInsight`) for 3D visualization
-- Optional: Groq/OpenAI API key for LLM features
+## Quick Start (Docker)
+
+```bash
+git clone https://github.com/opm-ai/opm-ai
+cd opm-ai
+cp .env.example .env   # add GROQ_API_KEY or OPENAI_API_KEY for LLM features
+docker compose up -d
+# open http://localhost:8000
+```
+
+The backend serves the React frontend at `/` and the API at `/api`.
+
+## Quick Start (Local Development)
+
+```bash
+# Backend
+python -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+uvicorn opm_ai.api.server:create_app --factory --host 0.0.0.0 --port 8000
+
+# Frontend (separate terminal)
+cd frontend
+npm install
+npm run dev   # http://localhost:5173 (proxies /api to :8000)
+```
+
+## Features
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Build deck from natural language | ✅ | Jinja2 templates + offline extractor |
+| Lint deck (offline rule engine) | ✅ | 0 false positives on 133 SPE decks |
+| Run simulation (OPM Flow) | ✅ | Subprocess with crash parsing |
+| Post-process results | ✅ | KPIs + Plotly charts |
+| ResInsight 3D visualization | ✅ | Headless gRPC bridge (optional) |
+| Chat / LLM explanations | ✅ | Groq / OpenAI / NVIDIA NIM / Offline |
+| Pre-process PVT correlations | 🚧 | Phase 3 |
+| Educational RAG explainer | 🚧 | Phase 3 |
+
+## LLM Configuration
+
+| Provider | Environment Variables | Model |
+|----------|----------------------|-------|
+| Groq | `GROQ_API_KEY` | `llama-3.3-70b-versatile` |
+| NVIDIA NIM | `NVIDIA_NIM_API`, `NVIDIA_NIM_BASE_URL` | Configurable |
+| OpenAI | `OPENAI_API_KEY`, `OPENAI_BASE_URL` | Configurable |
+| Offline | (none) | Rule-based fallback |
+
+Set `LLM_PROVIDER=offline` to disable all LLM calls (default for CI).
+
+## Test Suite
+
+```bash
+# Unit + lint-only integration (no Flow binary needed)
+pytest tests/unit tests/integration/test_dataset_validation.py::test_linter_accepts_known_good_fixture -v
+
+# Full integration (requires /usr/bin/flow 2026.04+)
+pytest tests/integration -v
+```
+
+- 77 tests total
+- Linter calibrated FP=0 over 133 reference decks (SPE1, SPE3, SPE9, WCONPROD)
+- CI runs unit tests + lint-only integration + frontend build on every push/PR
+
+## CI Pipeline
+
+- **`.github/workflows/ci.yml`**: Runs on push/PR to main/master
+  - Backend: pytest unit tests + lint-only integration tests (no Flow binary)
+  - Frontend: `npm ci && npm run build` on Node 20
+- **`.github/workflows/ci-integration.yml`**: Manual trigger, self-hosted runner with OPM Flow
+  - Full SPE1 integration test suite including Flow dry-run and simulation runs
+  - See [docs/ci-selfhosted.md](docs/ci-selfhosted.md) for runner setup
 
 ## License
 
 MIT
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) (to be created).

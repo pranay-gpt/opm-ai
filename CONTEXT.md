@@ -236,8 +236,12 @@ silent unit bug, dead-oil inf viscosity in PVTO, sorw=0 duplicate SWOF rows, Val
 ## Remaining gaps
 
 - ResInsight bridge (rips) unexercised; docker build still unverified (no daemon here).
-- METRIC deck template support (preprocess ready, base.j2 FIELD-only).
 - Explainer vector backend upgrade path documented in opm_ai/explainer/context.md.
-- Path validation on API deck/output paths; in-memory job/session stores unbounded.
+- API path validation and store eviction: COMPLETED (Stage 3 API hardening).
+  - Path validation: shared helper `opm_ai.api.paths.validate_path()` with allowlist of roots (decks/, results/, /tmp); rejects traversal, requires .DATA suffix, maps ValueError -> HTTP 400.
+  - Job store: bounded to 200 entries (configurable via `JOB_STORE_MAX_ENTRIES`), LRU evicts oldest completed/failed, never evicts running/pending, returns HTTP 429 if all slots occupied by running jobs.
+  - Session store: bounded to 100 entries (configurable via `SESSION_STORE_MAX_ENTRIES`), LRU eviction on access/update.
+  - Tests: `tests/integration/test_api_hardening.py` covers traversal, allowed temp paths, job store eviction, session LRU behavior.
+  - Existing API tests updated to use temp paths within allowed roots.
 
 Use Sonnet for routine implementation/testing, Opus when Sonnet fails repeatedly.

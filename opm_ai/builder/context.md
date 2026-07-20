@@ -84,14 +84,35 @@ deck, lint = build_deck("10x10x3 grid, simple depletion, one producer", fluid=fl
 - Full run: `flow --output-dir=DIR DECK`; Flow writes output next to the deck
   unless `--output-dir` is given (cwd is irrelevant).
 
-## Unit System Limitation
-The OPM Flow deck template (base.j2) emits the FIELD keyword in RUNSPEC and all
-non-PVT values (grid dimensions in ft, depths in ft, EQUIL datum 4800 psia,
-fallback PROPS tables) use FIELD units. The preprocess module (opm_ai/preprocess)
-supports METRIC table emission internally, but the deck template is the blocker.
-If a FluidDescriptor with unit_system="METRIC" is passed to build_deck(),
-a ValueError is raised with a clear message. METRIC unit system is not
-supported end-to-end at this time.
+## Unit System Support
+The builder now supports both FIELD and METRIC unit systems end-to-end.
+When a FluidDescriptor with `unit_system="METRIC"` is provided:
+- The RUNSPEC section emits `METRIC` instead of `FIELD`
+- Grid dimensions (DX, DY, DZ, TOPS) are converted from ft to m (factor 0.3048)
+- EQUIL depths and pressures are converted (ft->m, psia->bar, factor 0.0689476)
+- RSVD Rs values are converted from scf/stb to sm3/sm3 (factor 0.17811)
+- Well reference depths and BHP limits are converted to metric units
+- PVT tables are generated in METRIC units by the preprocess module
+
+The reservoir spec (ModelSpec/ReservoirSpec) still stores values in FIELD units
+canonically; conversions happen in `_compute_template_context()` when the fluid
+requests METRIC. This keeps FIELD behavior byte-identical to before.
+
+Guard: `fluid.pressure_range` max must still be >= 4800 psia (EQUIL datum).
+For METRIC fluids, the pressure_range_psi should be provided in bar (e.g.,
+1.01325 to 344.74 for 14.7-5000 psia), and the code converts to psia for the
+4800 psia check.
+
+Usage:
+```python
+from opm_ai.preprocess import FluidDescriptor
+from opm_ai.builder import build_deck
+
+fluid = FluidDescriptor(api_gravity=35, gas_specific_gravity=0.75, gor=800,
+                        reservoir_temp_c=93.33, salinity_ppm=50000,
+                        pressure_range_psi=(1.01325, 344.74), unit_system="METRIC")
+deck, lint = build_deck("10x10x3 grid, simple depletion, one producer", fluid=fluid)
+```
 
 ## Test Contracts
 - `tests/integration/test_builder.py`: extraction + deck structure

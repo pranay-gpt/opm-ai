@@ -7,16 +7,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from opm_ai.api.routes import build, lint, run, results, chat, explainer
+from opm_ai.api.session_store import get_session_store
+from opm_ai.settings import settings
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager for startup/shutdown."""
     # Initialize session store on app state
-    app.state.sessions = {}
+    session_store = get_session_store()
     yield
     # Cleanup on shutdown
-    app.state.sessions.clear()
+    session_store.clear()
 
 
 def create_app() -> FastAPI:

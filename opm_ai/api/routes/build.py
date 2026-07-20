@@ -3,6 +3,7 @@
 from fastapi import APIRouter, HTTPException
 from pathlib import Path
 
+from opm_ai.api.paths import validate_output_path
 from opm_ai.api.schemas import BuildRequest, BuildResponse, LintResult, LintIssue, FluidDescriptorRequest
 from opm_ai.builder import build_deck
 from opm_ai.preprocess import FluidDescriptor
@@ -18,7 +19,10 @@ async def build_deck_endpoint(request: BuildRequest) -> BuildResponse:
     Delegates to opm_ai.builder.builder.build_deck.
     """
     try:
-        output_path = Path(request.output_path) if request.output_path else None
+        # Validate output path if provided
+        output_path = None
+        if request.output_path:
+            output_path = validate_output_path(request.output_path)
 
         # Convert fluid descriptor if provided
         fluid = None

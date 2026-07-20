@@ -74,33 +74,30 @@ All route handlers in `routes/` are thin adapters that:
 
 ## Future Plan
 
-### 1. Path Validation & Sandboxing for `deck_path` Inputs
-- Current: routes accept arbitrary `deck_path` strings and pass to `Path()`
-- Need: Validate paths are within allowed directories (e.g., `/app/decks`, `/app/results`)
-- Implement path traversal protection (`Path.resolve().is_relative_to(allowed_root)`)
-
-### 2. Session Eviction
-- Current: `app.state.sessions` dict grows unbounded (WebSocket chat history)
-- Need: TTL-based eviction or max-sessions limit with LRU cleanup
-- Consider: Redis-backed sessions for multi-worker deployments
-
-### 3. Redis Job Store for Multi-Worker
+### 1. Redis Job Store for Multi-Worker
 - Current: In-memory `job_store._jobs` dict (single process only)
 - Need: Replace with Redis-backed store (`redis-py` + JSON serialization)
 - Maintain same `job_store` API for drop-in replacement
 - Enables horizontal scaling with multiple uvicorn workers
 
-### 4. Structured Logging & Observability
+### 2. Structured Logging & Observability
 - Add structured logging (structlog) with request IDs
 - Prometheus metrics endpoint (`/metrics`)
 - Distributed tracing headers propagation
 
-### 5. Authentication & Authorization
+### 3. Authentication & Authorization
 - API key authentication for `/api/*` routes
 - Role-based access (read-only vs. write operations)
 - Session authentication for WebSocket chat
 
-### 6. Input Validation Hardening
+### 4. Input Validation Hardening (DONE - Stage 3 API hardening)
+- Path validation and sandboxing for `deck_path` inputs ✓
 - Pydantic validators for `deck_path` (must exist, must be .DATA file)
 - Request size limits
 - Rate limiting on expensive endpoints (build, run)
+
+### 5. Session Eviction & Bounded Stores (DONE - Stage 3 API hardening)
+- Job store: max 200 entries (configurable), LRU eviction of completed jobs ✓
+- Session store: max 100 entries (configurable), LRU eviction ✓
+- 429 response when all slots occupied by running jobs ✓
+- Thread-safe with proper locking ✓

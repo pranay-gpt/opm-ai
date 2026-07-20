@@ -5,6 +5,7 @@ from fastapi import APIRouter, HTTPException
 from pathlib import Path
 from uuid import uuid4
 
+from opm_ai.api.paths import validate_deck_path
 from opm_ai.api.schemas import (
     RunRequest, JobStatus, SimulationResultDTO, CrashReportDTO
 )
@@ -25,14 +26,14 @@ async def run_simulation_endpoint(request: RunRequest) -> JobStatus:
     Returns job_id immediately. Poll GET /api/run/{job_id} for status.
     """
     try:
-        deck_path = Path(request.deck_path)
+        deck_path = validate_deck_path(request.deck_path)
         if not deck_path.exists():
             raise HTTPException(status_code=404, detail=f"Deck not found: {deck_path}")
 
         job_id = str(uuid4())
         output_dir = deck_path.parent / f"output_{job_id[:8]}"
 
-        # Create pending job
+        # Create pending job (may raise ValueError if store at capacity)
         create_job(job_id)
 
         # Spawn background task
@@ -41,6 +42,11 @@ async def run_simulation_endpoint(request: RunRequest) -> JobStatus:
         return JobStatus(job_id=job_id, status="pending")
     except HTTPException:
         raise
+    except ValueError as e:
+        # Check if it's a capacity error
+        if "at capacity" in str(e) or "cannot accept new jobs" in str(e):
+            raise HTTPException(status_code=429, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

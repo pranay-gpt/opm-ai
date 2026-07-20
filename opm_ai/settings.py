@@ -60,6 +60,14 @@ class Settings(BaseSettings):
     # Reference decks
     fixtures_path: Path = Field(default=Path("tests/fixtures"), validation_alias="FIXTURES_PATH")
 
+    # API path validation - allowed root directories for file operations
+    decks_path: Path = Field(default=Path("/app/decks"), validation_alias="DECKS_PATH")
+    results_path: Path = Field(default=Path("/app/results"), validation_alias="RESULTS_PATH")
+
+    # API store caps for bounded in-memory stores
+    job_store_max_entries: int = Field(default=200, validation_alias="JOB_STORE_MAX_ENTRIES")
+    session_store_max_entries: int = Field(default=100, validation_alias="SESSION_STORE_MAX_ENTRIES")
+
     # Logging
     log_level: str = Field(default="INFO", validation_alias="LOG_LEVEL")
 

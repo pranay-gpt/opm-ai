@@ -3,6 +3,7 @@
 from fastapi import APIRouter, HTTPException
 from pathlib import Path
 
+from opm_ai.api.paths import validate_deck_path
 from opm_ai.api.schemas import LintRequest, LintResult, LintIssue
 from opm_ai.linter import lint_deck as lint_deck_func
 
@@ -17,11 +18,12 @@ async def lint_deck_endpoint(request: LintRequest) -> LintResult:
     Delegates to opm_ai.linter.linter.lint_deck.
     """
     try:
-        deck_path = Path(request.deck_path)
+        original_path = request.deck_path
+        deck_path = validate_deck_path(original_path)
         result = lint_deck_func(deck_path)
 
         lint_result = LintResult(
-            deck_path=result.deck_path,
+            deck_path=original_path,  # Return original path in response
             issues=[
                 LintIssue(
                     severity=issue.severity,
@@ -37,5 +39,7 @@ async def lint_deck_endpoint(request: LintRequest) -> LintResult:
         )
         lint_result.compute_fields()
         return lint_result
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

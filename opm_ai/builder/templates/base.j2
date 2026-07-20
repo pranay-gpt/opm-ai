@@ -19,7 +19,7 @@ GAS
 WATER
 DISGAS
 
-FIELD
+{{ unit_system }}
 
 START
    {{ start_date }} /
@@ -37,22 +37,22 @@ INIT
 NOECHO
 
 DX
-    {{ (reservoir.dx ~ ' ') * (reservoir.nx * reservoir.ny * reservoir.nz) }} /
+    {{ (dx ~ ' ') * (reservoir.nx * reservoir.ny * reservoir.nz) }} /
 
 DY
-    {{ (reservoir.dy ~ ' ') * (reservoir.nx * reservoir.ny * reservoir.nz) }} /
+    {{ (dy ~ ' ') * (reservoir.nx * reservoir.ny * reservoir.nz) }} /
 
 DZ
-{% if reservoir.dz is iterable and not reservoir.dz is string %}
+{% if dz_list is defined %}
 {% for layer in range(reservoir.nz) %}
-    {{ (reservoir.dz[layer] ~ ' ') * (reservoir.nx * reservoir.ny) }}
+    {{ (dz_list[layer] ~ ' ') * (reservoir.nx * reservoir.ny) }}
 {% endfor %} /
 {% else %}
-    {{ (reservoir.dz ~ ' ') * (reservoir.nx * reservoir.ny * reservoir.nz) }} /
+    {{ (dz ~ ' ') * (reservoir.nx * reservoir.ny * reservoir.nz) }} /
 {% endif %}
 
 TOPS
-    {{ (reservoir.top_depth ~ ' ') * (reservoir.nx * reservoir.ny * reservoir.nz) }} /
+    {{ (top_depth ~ ' ') * (reservoir.nx * reservoir.ny * reservoir.nz) }} /
 
 PORO
     {{ (reservoir.porosity ~ ' ') * (reservoir.total_cells) }} /
@@ -98,7 +98,7 @@ PROPS
 {{ pvt_blocks.pvt_oil }}
 {% else %}
 PVTW
-	    	4017.55 1.038 3.22E-6 0.318 0.0 /
+		4017.55 1.038 3.22E-6 0.318 0.0 /
 
 ROCK
 	14.7 3E-6 /
@@ -111,7 +111,7 @@ SWOF
 0.36	7.43801652892562E-007	0.7	0
 0.42	1.16219008264463E-006	0.35	0
 0.48	1.67355371900826E-006	0.2	0
-0.54	2.27789256198347E-006	0.09	0
+0.54	2.27789256190826E-006	0.09	0
 0.6	2.97520661157025E-006	0.021	0
 0.66	3.7654958677686E-006	0.01	0
 0.72	4.64876033057851E-006	0.001	0
@@ -171,11 +171,11 @@ PVTO
 SOLUTION
 
 EQUIL
-	8400 4800 8450 0 8300 0 1 0 0 /
+	{{ equil_datum_depth }} {{ equil_pressure_datum }} {{ equil_woc }} {{ equil_goc }} {{ equil_owc_depth }} 0 1 0 0 /
 
 RSVD
-8300 {{ rsvd_rs }}
-8450 {{ rsvd_rs }} /
+{{ rsvd_depth1 }} {{ rsvd_rs }}
+{{ rsvd_depth2 }} {{ rsvd_rs }} /
 
 SUMMARY
 

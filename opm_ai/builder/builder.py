@@ -39,32 +39,30 @@ def _compute_template_context(spec: ModelSpec) -> dict:
     # Build PVT blocks if fluid is specified
     pvt_blocks = None
     rsvd_rs = 1.270  # Default SPE1 value
+    unit_system = "FIELD"  # Default unit system for the deck
 
     if spec.fluid is not None:
         fluid = spec.fluid
-        # METRIC unit system is not supported by the OPM Flow deck template (which uses FIELD units).
-        # The preprocess module supports METRIC tables internally, but the deck template
-        # uses FIELD units (FIELD keyword in RUNSPEC). METRIC tables are not emitted.
-        if fluid.unit_system == "METRIC":
-            raise ValueError(
-                "METRIC unit system is not supported by the OPM Flow deck template "
-                "(which emits FIELD units in RUNSPEC). The preprocess module supports "
-                "METRIC tables internally, but the deck template does not emit METRIC units."
-            )
+        unit_system = fluid.unit_system  # Use fluid's unit_system for deck and PVT
 
         # Validate pressure range - EQUIL uses 4800 psia default
+        # fluid.pressure_range returns bar for METRIC, psia for FIELD
+        # We need to compare in psia for the EQUIL check
         p_min, p_max = fluid.pressure_range
-        if p_max < 4800:
+        if fluid.unit_system == "METRIC":
+            p_max_psi = p_max / 0.0689476  # Convert bar to psia
+        else:
+            p_max_psi = p_max
+        if p_max_psi < 4800:
             raise ValueError(
-                f"Fluid pressure range max ({p_max} psia) must be >= 4800 psia "
+                f"Fluid pressure range max ({p_max_psi:.1f} psia) must be >= 4800 psia "
                 f"(EQUIL datum pressure). Extend pressure_range_psi to at least 4800."
             )
 
         # Build PVT blocks
         pvt_blocks = build_pvt_blocks(fluid)
 
-        # Validate
-        unit_system = "FIELD" if spec.field_units else "METRIC"
+        # Validate using fluid's unit_system
         validation_errors = validate_pvt_blocks(pvt_blocks, unit_system)
         if validation_errors:
             raise ValueError(f"PVT block validation failed: {validation_errors}")
@@ -91,7 +89,8 @@ def _compute_template_context(spec: ModelSpec) -> dict:
         # Clamp to max table Rs
         rsvd_rs = min(rs_at_pinit, max_table_rs)
 
-    return {
+    # Build base context with FIELD unit values (original reservoir spec values)
+    context = {
         "title": spec.title,
         "reservoir": reservoir,
         "wells": spec.wells,
@@ -102,6 +101,153 @@ def _compute_template_context(spec: ModelSpec) -> dict:
         "field_units": spec.field_units,
         "pvt_blocks": pvt_blocks,
         "rsvd_rs": rsvd_rs,
+        "unit_system": unit_system,  # "FIELD" or "METRIC" - used in RUNSPEC
+    }
+
+    # Add unit-system-aware values for the template
+    if unit_system == "METRIC":
+        context.update(_compute_metric_context(reservoir, spec.wells, rsvd_rs))
+    else:
+        # FIELD unit system - use original reservoir values directly
+        context.update(_compute_field_context(reservoir, spec.wells, rsvd_rs))
+
+    return context
+
+
+def _compute_field_context(reservoir, wells, rsvd_rs) -> dict:
+    """
+    Compute FIELD unit system values for template.
+
+    Reservoir spec values are stored in FIELD units, so pass through directly.
+    Returns flat variables that the template can use directly.
+    """
+    # FIELD EQUIL defaults from base.j2: 8400 4800 8450 0 8300 0 1 0 0
+    # EQUIL format: datum_depth pressure_datum WOC GOC OWC ...
+    equil_datum_depth = 8400.0
+    equil_pressure_datum = 4800.0
+    equil_woc = 8450.0      # Water-oil contact depth
+    equil_goc = 0.0         # Gas-oil contact depth (0 = not set)
+    equil_owc_depth = 8300.0  # Reference depth for oil-water contact pressure
+
+    # FIELD RSVD defaults: 8300 and 8450 depths
+    rsvd_depth1 = 8300.0
+    rsvd_depth2 = 8450.0
+
+    # Handle dz list
+    if isinstance(reservoir.dz, list):
+        dz_list = reservoir.dz
+    else:
+        dz_list = [reservoir.dz] * reservoir.nz
+
+    return {
+        # Reservoir geometry
+        "dx": reservoir.dx,
+        "dy": reservoir.dy,
+        "dz": reservoir.dz if not isinstance(reservoir.dz, list) else reservoir.dz[0],
+        "dz_list": dz_list,
+        "top_depth": reservoir.top_depth,
+        # EQUIL parameters
+        "equil_datum_depth": equil_datum_depth,
+        "equil_pressure_datum": equil_pressure_datum,
+        "equil_woc": equil_woc,
+        "equil_goc": equil_goc,
+        "equil_owc_depth": equil_owc_depth,
+        # RSVD parameters
+        "rsvd_depth1": rsvd_depth1,
+        "rsvd_depth2": rsvd_depth2,
+        "rsvd_rs": rsvd_rs,
+        # Wells with FIELD values
+        "wells": wells,
+    }
+
+
+def _compute_metric_context(reservoir, wells, rsvd_rs) -> dict:
+    """
+    Compute METRIC unit system converted values for template.
+
+    Reservoir spec values are stored in FIELD units (ft, psia, mD, scf/stb).
+    When unit_system=METRIC, convert to:
+    - Depths/lengths: ft -> m (factor 0.3048)
+    - Pressures: psia -> bar (factor 0.0689476)
+    - Rs: scf/stb -> sm3/sm3 (factor 0.17811)
+
+    Returns flat variables that the template can use directly.
+    """
+    FT_TO_M = 0.3048
+    PSIA_TO_BAR = 0.0689476
+    SCF_STB_TO_SM3_SM3 = 0.17811
+
+    # Convert reservoir geometry
+    dx = reservoir.dx * FT_TO_M
+    dy = reservoir.dy * FT_TO_M
+    if isinstance(reservoir.dz, list):
+        dz = [d * FT_TO_M for d in reservoir.dz]
+        dz_list = dz
+    else:
+        dz = reservoir.dz * FT_TO_M
+        dz_list = [dz] * reservoir.nz
+
+    top_depth = reservoir.top_depth * FT_TO_M
+
+    # Convert EQUIL datum depth and pressures
+    # Default EQUIL in base.j2: 8400 4800 8450 0 8300 0 1 0 0
+    # Format: datum_depth pressure_datum WOC GOC OWC
+    equil_datum_depth = 8400.0 * FT_TO_M
+    equil_pressure_datum = 4800.0 * PSIA_TO_BAR
+    equil_woc = 8450.0 * FT_TO_M      # Water-oil contact depth
+    equil_goc = 0.0                   # Gas-oil contact depth (0 = not set)
+    equil_owc_depth = 8300.0 * FT_TO_M  # Reference depth for oil-water contact pressure
+
+    # Convert RSVD depths and Rs
+    # Default RSVD in base.j2: 8300 and 8450 depths
+    rsvd_depth1 = 8300.0 * FT_TO_M
+    rsvd_depth2 = 8450.0 * FT_TO_M
+    rsvd_rs_metric = rsvd_rs * SCF_STB_TO_SM3_SM3
+
+    # Convert well reference depths
+    wells_metric = []
+    for well in wells:
+        well_metric = {
+            "name": well.name,
+            "well_type": well.well_type,
+            "i": well.i,
+            "j": well.j,
+            "k1": well.k1,
+            "k2": well.k2,
+            "reference_depth": well.reference_depth * FT_TO_M,
+            "well_bore_diameter": well.well_bore_diameter * FT_TO_M,
+            "control_mode": well.control_mode,
+            "target_rate": well.target_rate,
+            "bhp_limit": well.bhp_limit * PSIA_TO_BAR,
+            "inject_fluid": well.inject_fluid,
+            "inject_rate": well.inject_rate,
+            "bhp_max": well.bhp_max * PSIA_TO_BAR,
+        }
+        wells_metric.append(well_metric)
+
+    return {
+        # Reservoir geometry (flat for template)
+        "dx": dx,
+        "dy": dy,
+        "dz": dz,
+        "dz_list": dz_list,
+        "top_depth": top_depth,
+        # EQUIL parameters
+        "equil_datum_depth": equil_datum_depth,
+        "equil_pressure_datum": equil_pressure_datum,
+        "equil_woc": equil_woc,
+        "equil_goc": equil_goc,
+        "equil_owc_depth": equil_owc_depth,
+        # RSVD parameters
+        "rsvd_depth1": rsvd_depth1,
+        "rsvd_depth2": rsvd_depth2,
+        "rsvd_rs": rsvd_rs_metric,
+        # Wells with metric values
+        "wells": wells_metric,
+        # Conversion constants (for reference in template if needed)
+        "FT_TO_M": FT_TO_M,
+        "PSIA_TO_BAR": PSIA_TO_BAR,
+        "SCF_STB_TO_SM3_SM3": SCF_STB_TO_SM3_SM3,
     }
 
 

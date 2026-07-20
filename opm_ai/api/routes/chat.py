@@ -5,12 +5,14 @@ from pathlib import Path
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, HTTPException
 from typing import Any
 
+from opm_ai.api.paths import validate_deck_path, validate_output_path
 from opm_ai.api.schemas import (
     ChatMessage, ChatRequest, TOOLS,
     EXPLAIN_CONCEPT_TOOL,
     GENERATE_QUIZ_TOOL,
 )
 from opm_ai.api.job_store import create_job, set_job_running, set_job_completed, set_job_failed, get_job
+from opm_ai.api.session_store import get_or_create_session, get_session, update_session
 from opm_ai.builder import build_deck
 from opm_ai.linter import lint_deck
 from opm_ai.runner import run_simulation
@@ -52,7 +54,9 @@ async def tool_build_deck(args: dict) -> dict:
     """Build a deck from natural language."""
     description = args.get("description", "")
     output_path = args.get("output_path")
-    deck, lint_result = build_deck(description, Path(output_path) if output_path else None)
+    if output_path:
+        output_path = validate_output_path(output_path)
+    deck, lint_result = build_deck(description, output_path)
     return {
         "deck": deck,
         "lint": {
@@ -66,7 +70,8 @@ async def tool_build_deck(args: dict) -> dict:
 async def tool_lint_deck(args: dict) -> dict:
     """Lint a deck file."""
     deck_path = args.get("deck_path", "")
-    result = lint_deck(Path(deck_path))
+    deck_path = validate_deck_path(deck_path)
+    result = lint_deck(deck_path)
     return {
         "deck_path": result.deck_path,
         "errors": [i.message for i in result.issues if i.severity == "ERROR"],
@@ -76,40 +81,48 @@ async def tool_lint_deck(args: dict) -> dict:
 
 async def tool_run_simulation(args: dict) -> dict:
     """Run a simulation as a background job."""
-    deck_path = args.get("deck_path", "")
-    timeout = args.get("timeout", 120)
-    job_id = create_job()
-    output_dir = Path(deck_path).parent / f"output_{job_id[:8]}"
+    try:
+        deck_path = args.get("deck_path", "")
+        deck_path = validate_deck_path(deck_path)
+        timeout = args.get("timeout", 120)
+        job_id = create_job()
+        output_dir = deck_path.parent / f"output_{job_id[:8]}"
 
-    async def run_bg():
-        set_job_running(job_id)
-        try:
-            job = SimulationJob(
-                deck_path=Path(deck_path),
-                output_dir=output_dir,
-                timeout=timeout,
-            )
-            result = await asyncio.get_event_loop().run_in_executor(None, run_simulation, job)
+        async def run_bg():
+            set_job_running(job_id)
+            try:
+                job = SimulationJob(
+                    deck_path=Path(deck_path),
+                    output_dir=output_dir,
+                    timeout=timeout,
+                )
+                result = await asyncio.get_event_loop().run_in_executor(None, run_simulation, job)
 
-            from opm_ai.api.schemas import SimulationResultDTO
-            result_dto = SimulationResultDTO(
-                success=result.success,
-                output_dir=str(result.output_dir),
-                crash_report=result.crash_report.model_dump() if result.crash_report else None,
-                returncode=result.returncode,
-                duration_s=result.duration_s,
-                stdout=result.stdout,
-                stderr=result.stderr,
-                warnings=result.warnings,
-                summary_files={k: str(v) for k, v in result.summary_files.items()},
-                prt_path=str(result.prt_path) if result.prt_path else None,
-            )
-            set_job_completed(job_id, result_dto)
-        except Exception as e:
-            set_job_failed(job_id, str(e))
+                from opm_ai.api.schemas import SimulationResultDTO
+                result_dto = SimulationResultDTO(
+                    success=result.success,
+                    output_dir=str(result.output_dir),
+                    crash_report=result.crash_report.model_dump() if result.crash_report else None,
+                    returncode=result.returncode,
+                    duration_s=result.duration_s,
+                    stdout=result.stdout,
+                    stderr=result.stderr,
+                    warnings=result.warnings,
+                    summary_files={k: str(v) for k, v in result.summary_files.items()},
+                    prt_path=str(result.prt_path) if result.prt_path else None,
+                )
+                set_job_completed(job_id, result_dto)
+            except Exception as e:
+                set_job_failed(job_id, str(e))
 
-    asyncio.create_task(run_bg())
-    return {"job_id": job_id, "status": "pending"}
+        asyncio.create_task(run_bg())
+        return {"job_id": job_id, "status": "pending"}
+    except ValueError as e:
+        # Path validation errors
+        return {"error": str(e)}
+    except HTTPException as e:
+        # Job store capacity errors (429)
+        return {"error": e.detail}
 
 
 async def tool_get_kpis(args: dict) -> dict:
@@ -239,17 +252,15 @@ async def websocket_chat(websocket: WebSocket):
         session_id = request.session_id
         system_prompt = load_system_prompt()
 
-        # Get or create session history
-        if not hasattr(websocket.app.state, 'sessions'):
-            websocket.app.state.sessions = {}
-        if session_id not in websocket.app.state.sessions:
-            websocket.app.state.sessions[session_id] = []
-
-        history = websocket.app.state.sessions[session_id]
+        # Get or create session history using bounded session store
+        _, history = get_or_create_session(session_id)
 
         # Add user messages from request
         for msg in request.messages:
             history.append(msg)
+
+        # Update session store with modified history
+        update_session(session_id, history)
 
         client = LLMClient()
 
@@ -299,6 +310,9 @@ async def websocket_chat(websocket: WebSocket):
                         tool_call_id=tool_call_id,
                     ))
 
+                    # Update session store
+                    update_session(session_id, history)
+
                     # Send tool result to frontend
                     await websocket.send_text(json.dumps({
                         "type": "tool_result",
@@ -320,6 +334,9 @@ async def websocket_chat(websocket: WebSocket):
 
                 # Add assistant response to history
                 history.append(ChatMessage(role="assistant", content=content))
+
+                # Update session store
+                update_session(session_id, history)
 
             else:
                 # Empty response

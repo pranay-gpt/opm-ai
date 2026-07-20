@@ -193,3 +193,52 @@ def build_deck_from_spec(spec):
     """Helper to build deck from ModelSpec (imports locally to avoid circular)."""
     from opm_ai.builder.builder import build_deck_from_spec
     return build_deck_from_spec(spec)
+
+
+@pytest.mark.integration
+@pytest.mark.slow
+def test_flow_dry_run_with_metric_fluid(tmp_path):
+    """Test Flow dry-run validation with METRIC fluid-specific deck."""
+    fluid = FluidDescriptor(
+        api_gravity=35.0,
+        gas_specific_gravity=0.75,
+        gor=800,
+        reservoir_temp_c=93.33,
+        salinity_ppm=50000,
+        pressure_range_psi=(1.01325, 344.74),  # 14.7 psi to 5000 psi in bar
+        unit_system="METRIC",
+    )
+
+    desc = "10x10x3 grid, simple depletion, one producer"
+    deck_text, lint_result = build_deck(desc, fluid=fluid)
+
+    assert lint_result.passed
+
+    # Write deck to temp file
+    deck_path = tmp_path / "METRIC_FLUID_DECK.DATA"
+    deck_path.write_text(deck_text)
+
+    # Run Flow dry-run
+    output_dir = tmp_path / "out"
+    output_dir.mkdir()
+
+    result = subprocess.run(
+        ["flow", "--enable-dry-run=true", f"--output-dir={output_dir}", str(deck_path)],
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
+
+    assert result.returncode == 0, (
+        f"Flow dry-run failed with exit code {result.returncode}.\n"
+        f"STDOUT: {result.stdout}\n"
+        f"STDERR: {result.stderr}\n"
+        f"Deck (first 3000 chars):\n{deck_text[:3000]}"
+    )
+
+    # No errors in stderr
+    assert "ERROR" not in result.stderr.upper(), f"Flow produced errors: {result.stderr}"
+
+    # Verify METRIC keyword in RUNSPEC
+    assert "METRIC" in deck_text, "METRIC keyword should be in RUNSPEC"
+    assert "FIELD" not in deck_text.split("RUNSPEC")[1].split("START")[0], "FIELD should not be in RUNSPEC when METRIC is used"

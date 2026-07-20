@@ -8,9 +8,21 @@ Spec: `docs/conversations/03-builder.md`.
 - `build_deck(desc, output_path=None, use_llm=False, fluid=None) -> tuple[str, LintResult]`
 - `build_deck_from_spec(spec, output_path=None) -> tuple[str, LintResult>`
 - `extract_parameters_offline(desc) -> ModelSpec` (regex/heuristics, no LLM)
+- `extract_parameters_llm(desc, client=None) -> ModelSpec | None` (Stage B)
 
-`use_llm=True` is still a stub (Phase 2); it currently falls through to the
-offline extractor.
+`use_llm=True` (Stage B): when `settings.active_llm_client` is not "offline",
+build_deck calls `extract_parameters_llm`, which renders
+`opm_ai/llm/prompts/extract_model_spec.j2` (embeds
+`ModelSpec.model_json_schema()` plus few-shot examples), calls
+`LLMClient.extract_json` (provider JSON mode via
+`response_format={"type": "json_object"}`, one repair retry, never raises),
+and validates with `ModelSpec.model_validate`. Any failure returns None and
+build_deck falls back to the offline regex extractor, so CI/offline behavior
+is unchanged. The extraction path taken is logged via loguru.
+
+`ModelSpec.schedule: list[ScheduleEvent]` is a Stage D placeholder
+(date / tstep_days / actions); no template consumes it yet, deck output is
+byte-identical to before.
 
 ## Pipeline
 `desc -> extract_parameters_offline -> ModelSpec -> base.j2 render -> lint_deck -> (deck, LintResult)`
@@ -121,7 +133,7 @@ deck, lint = build_deck("10x10x3 grid, simple depletion, one producer", fluid=fl
 - `tests/integration/test_preprocess.py`: fluid-specific PVT block generation + builder integration + Flow dry-run/full-run
 
 ## Future / Plan
-- Phase 2: LLM extraction path (function calling) behind `use_llm=True`
+- Stage D: consume `ModelSpec.schedule` (DATES/TSTEP events) in base.j2
 - Scenario-specific templates (WAG cycles via WCONINJE schedule changes,
   gas-cap EQUIL variants, CO2 via GAS injector with CO2 stream) - currently
   all scenarios render through the single SPE1-style base.j2

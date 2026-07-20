@@ -91,6 +91,18 @@ class ScenarioType(str, Enum):
 Scenario = ScenarioType
 
 
+class ScheduleEvent(BaseModel):
+    """A single schedule event (calendar date or timestep, plus keyword actions).
+
+    Defined ahead of Stage D (DATES/scenario schedules); no template consumes
+    it yet, so existing deck output is unchanged.
+    """
+
+    date: str | None = Field(default=None, description="Calendar date, e.g. \"1 'JUL' 2015\"")
+    tstep_days: float | None = Field(default=None, description="Timestep length in days")
+    actions: list[str] = Field(default_factory=list, description="Schedule keyword actions for this event")
+
+
 class ModelSpec(BaseModel):
     """Complete model specification for deck generation."""
 
@@ -104,6 +116,10 @@ class ModelSpec(BaseModel):
     timesteps: list[float] = Field(default_factory=lambda: [30.0] * 12 + [90.0] * 4)  # Monthly then quarterly
     field_units: bool = Field(default=True, description="Use FIELD units (vs METRIC)")
     fluid: FluidDescriptor | None = None
+    schedule: list[ScheduleEvent] = Field(
+        default_factory=list,
+        description="Optional schedule events (Stage D; unused by templates for now)",
+    )
 
     def total_cells(self) -> int:
         return self.reservoir.total_cells

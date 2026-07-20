@@ -174,6 +174,98 @@ class LLMClient:
 
         return {"content": None, "tool_calls": None}
 
+    def _chat_json_mode(self, messages: list[dict]) -> str | None:
+        """chat() variant requesting JSON output via response_format.
+
+        Both the Groq and OpenAI SDKs accept
+        response_format={"type": "json_object"} on chat.completions.create
+        (verified against groq 1.5.0 / openai 2.44.0). Returns the raw
+        content string, or None if offline/unavailable/error.
+        """
+        if not self._available:
+            return None
+
+        if self._groq_client:
+            try:
+                response = self._groq_client.chat.completions.create(
+                    model=settings.groq_model,
+                    messages=messages,
+                    temperature=0.1,
+                    response_format={"type": "json_object"},
+                )
+                return response.choices[0].message.content
+            except Exception:
+                pass  # Fall through to OpenAI
+
+        if self._openai_client:
+            try:
+                response = self._openai_client.chat.completions.create(
+                    model=self._openai_model,
+                    messages=messages,
+                    temperature=0.1,
+                    response_format={"type": "json_object"},
+                )
+                return response.choices[0].message.content
+            except Exception:
+                pass
+
+        return None
+
+    def extract_json(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        schema: dict | None = None,
+    ) -> dict | None:
+        """
+        Ask the LLM for a JSON object and parse it.
+
+        Uses provider JSON mode (response_format json_object). On a parse
+        failure, does ONE repair retry that feeds back the error and asks
+        for valid JSON only. Never raises.
+
+        Args:
+            system_prompt: System message (should embed the target schema).
+            user_prompt: User message.
+            schema: Optional JSON schema; advisory only (callers embed it in
+                the prompt; reserved for future json_schema response formats).
+
+        Returns:
+            Parsed dict, or None if offline/unavailable/unparseable.
+        """
+        if not self._available:
+            return None
+
+        import json
+
+        try:
+            messages = [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ]
+            content = self._chat_json_mode(messages)
+            if content is None:
+                return None
+            try:
+                parsed = json.loads(content)
+            except json.JSONDecodeError as exc:
+                # One repair retry: feed back the error, demand JSON only.
+                messages.append({"role": "assistant", "content": content})
+                messages.append({
+                    "role": "user",
+                    "content": (
+                        f"That was not valid JSON ({exc}). "
+                        "Respond with ONLY a valid JSON object, no prose, no code fences."
+                    ),
+                })
+                content = self._chat_json_mode(messages)
+                if content is None:
+                    return None
+                parsed = json.loads(content)
+            return parsed if isinstance(parsed, dict) else None
+        except Exception:
+            return None
+
     def summarize_issues(self, issues: list) -> str | None:
         """
         Summarize lint issues as a student-friendly block comment.

@@ -25,7 +25,7 @@ results (plots + 3D), and explains them educationally — all via
 | Part 1 Runner | DONE | never-raise contract, crash parsing, 8 integration tests |
 | Part 2 Linter | DONE | L001-L015, calibrated FP=0 over 133 decks |
 | Part 3 Builder — offline path | DONE | 8 scenarios, FIELD+METRIC, auto-lint |
-| Part 3 Builder — **LLM extraction** | **STUB** | `build_deck(use_llm=True)` silently falls back to regex (builder.py `TODO: Phase 2`). No extraction prompt, no `extract_json` in LLMClient. This is the headline promise of the aim ("AI layer", "LLM Extraction: Uses Groq to parse description"). |
+| Part 3 Builder — **LLM extraction** | **DONE pending live verify** | Stage B (2026-07-20): `LLMClient.extract_json` (JSON mode + repair retry), `extract_model_spec.j2` prompt, `extract_parameters_llm` with Pydantic validation, wired into `build_deck(use_llm=True)` with offline regex fallback; chat tool passes use_llm=True. Offline tests green; live Groq verification pending (orchestrator, post-merge). |
 | Part 3 Builder — scenario templates | PARTIAL | wag/gas_cap/co2/buildup/multilayer render as depletion-like decks; no DATES schedules |
 | Part 4 Preprocess | DONE | correlations, PROPS renderers, validators, advisor (43 tests) |
 | Part 5 Postprocess — KPIs/plots | DONE | resfo reading, KPI dict, Plotly |
@@ -68,6 +68,11 @@ Before each stage below, and as Stage A in full:
 - Exit criteria: suite green from repo root; smoke 7/7 on live server; SPA served.
 
 ### Stage B — LLM extraction end-to-end (the aim's headline; highest priority)
+STATUS: DONE pending live verify (2026-07-20). Implemented: extract_json in
+LLMClient, extract_model_spec.j2 prompt, extract_parameters_llm with offline
+fallback in build_deck, chat tool_build_deck uses use_llm=True,
+ModelSpec.schedule placeholder for Stage D. Suite 200 passed offline; the
+live-Groq step below remains for the orchestrator (no .env in worktree).
 - `LLMClient.extract_json(prompt, schema) -> dict | None`: provider-agnostic
   structured output (Groq/OpenAI JSON mode where available, else strict-prompt +
   parse + one repair retry). Never raises; None on failure.

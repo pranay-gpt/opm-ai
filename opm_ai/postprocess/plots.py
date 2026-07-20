@@ -4,6 +4,11 @@ import pandas as pd
 import plotly.graph_objects as go
 
 
+def _sanitize_water_rate(series: pd.Series) -> pd.Series:
+    """Sanitize water rate: clip negative values to 0 (handles -0.0)."""
+    return series.clip(lower=0)
+
+
 def plot_production(df: pd.DataFrame) -> go.Figure:
     """
     Create production plot from summary DataFrame.
@@ -12,6 +17,7 @@ def plot_production(df: pd.DataFrame) -> go.Figure:
     - FOPR (field oil production rate)
     - FWPR (field water production rate)
     - FGPR (field gas production rate)
+    - Per-producer traces (WOPR, WWPR, WGPR) if available
 
     Args:
         df: DataFrame from read_summary() with TIME column.
@@ -45,6 +51,56 @@ def plot_production(df: pd.DataFrame) -> go.Figure:
             ))
             traces_added += 1
 
+    # Per-producer traces (always add if available, not just when no field totals)
+    # Find producer wells (those with WOPR)
+    producer_wells = set()
+    for col in df.columns:
+        if col.startswith('WOPR:'):
+            well_name = col.split(':')[-1]
+            # Check if well actually produces oil
+            if df[col].max() > 0:
+                producer_wells.add(well_name)
+
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b']
+    for i, well_name in enumerate(sorted(producer_wells)):
+        color = colors[i % len(colors)]
+        # Well oil rate
+        wopr_col = f'WOPR:{well_name}'
+        if wopr_col in df.columns:
+            fig.add_trace(go.Scatter(
+                x=time,
+                y=df[wopr_col],
+                mode='lines',
+                name=f'Well Oil Rate {well_name}',
+                line=dict(color=color, dash='dot'),
+                hovertemplate=f'Well Oil Rate {well_name}: %{{y:.1f}}<br>Time: %{{x:.1f}} days<extra></extra>'
+            ))
+            traces_added += 1
+        # Well water rate
+        wwpr_col = f'WWPR:{well_name}'
+        if wwpr_col in df.columns:
+            fig.add_trace(go.Scatter(
+                x=time,
+                y=_sanitize_water_rate(df[wwpr_col]),
+                mode='lines',
+                name=f'Well Water Rate {well_name}',
+                line=dict(color='#ff7f0e', dash='dot'),
+                hovertemplate=f'Well Water Rate {well_name}: %{{y:.1f}}<br>Time: %{{x:.1f}} days<extra></extra>'
+            ))
+            traces_added += 1
+        # Well gas rate
+        wgpr_col = f'WGPR:{well_name}'
+        if wgpr_col in df.columns:
+            fig.add_trace(go.Scatter(
+                x=time,
+                y=df[wgpr_col],
+                mode='lines',
+                name=f'Well Gas Rate {well_name}',
+                line=dict(color='#2ca02c', dash='dot'),
+                hovertemplate=f'Well Gas Rate {well_name}: %{{y:.1f}}<br>Time: %{{x:.1f}} days<extra></extra>'
+            ))
+            traces_added += 1
+
     # Also check for well-level production if no field totals
     if traces_added == 0:
         # Look for well-level rates
@@ -56,9 +112,12 @@ def plot_production(df: pd.DataFrame) -> go.Figure:
             well_cols = [c for c in df.columns if c.startswith(prefix)]
             for wc in well_cols:
                 well_name = wc.split(':')[-1]
+                y_data = df[wc]
+                if prefix == 'WWPR:':
+                    y_data = _sanitize_water_rate(y_data)
                 fig.add_trace(go.Scatter(
                     x=time,
-                    y=df[wc],
+                    y=y_data,
                     mode='lines',
                     name=f'{name} {well_name}',
                     line=dict(color=color, dash='dot'),
@@ -200,7 +259,9 @@ def plot_watercut(df: pd.DataFrame) -> go.Figure:
 
     if fopr and fwpr:
         liq = df[fopr] + df[fwpr]
-        wc = (df[fwpr] / liq.replace(0, pd.NA)) * 100
+        # Handle -0.0 in water rate by clipping at 0
+        fwpr_pos = df[fwpr].clip(lower=0)
+        wc = (fwpr_pos / liq.replace(0, pd.NA)) * 100
         fig.add_trace(go.Scatter(
             x=time,
             y=wc,
@@ -224,7 +285,9 @@ def plot_watercut(df: pd.DataFrame) -> go.Figure:
     for i, (well, cols) in enumerate(well_pairs.items()):
         if 'WOPR:' in cols and 'WWPR:' in cols:
             liq = df[cols['WOPR:']] + df[cols['WWPR:']]
-            wc = (df[cols['WWPR:']] / liq.replace(0, pd.NA)) * 100
+            # Handle -0.0 in water rate
+            wwpr_pos = df[cols['WWPR:']].clip(lower=0)
+            wc = (wwpr_pos / liq.replace(0, pd.NA)) * 100
             fig.add_trace(go.Scatter(
                 x=time,
                 y=wc,

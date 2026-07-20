@@ -72,7 +72,7 @@ Rule IDs: L001 (missing `/`), L003/L003b (grid), L004 (negative perm), L005 (pha
 
 ## Debt Register (Known Gaps)
 
-1. **Postprocess Stage 4 gaps** (spec 05-postprocess.md): field-level KPIs (FOPT/FWPT/FGPT recovery, max watercut, breakthrough day), per-producer naming, `plot_production` well fallback (1 trace vs 3), watercut -0.0 vs NaN.
+1. **Postprocess Stage 4 gaps** (spec 05-postprocess.md): ~~field-level KPIs (FOPT/FWPT/FGPT recovery, max watercut, breakthrough day), per-producer naming, `plot_production` well fallback (1 trace vs 3), watercut -0.0 vs NaN.~~ ✅ DONE (Stage E)
 2. **Builder Phase 2 remainder** (spec 03-builder.md): scenario-specific templates (WAG alternation, gas-cap EQUIL, CO2 stream), DATES schedules, LLM extraction (`use_llm=True` end-to-end). METRIC units DONE (Stage 14).
 3. **Linter future**: deep-parse mode for the 9 FN classes (runtime/parser errors), INCLUDE resolution, rules for GCONPROD/VFP/ACTIONX families.
 4. **Template cleanup**: NOECHO/ECHO in base.j2 draw "not supported" warnings from Flow (harmless, remove when next editing). Correlation-built PVTO draws a harmless "Non-Monotonic Oil Formation Volume Factor" warning (FIELD and METRIC).

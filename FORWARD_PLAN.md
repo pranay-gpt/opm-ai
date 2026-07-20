@@ -122,7 +122,7 @@ live-Groq step below remains for the orchestrator (no .env in worktree).
 - Exit criteria: all 8 scenarios render distinct, physically sensible decks that
   run in Flow; suite green.
 
-### Stage E — Results UI completion (snapshots + field KPIs)
+### Stage E — Results UI completion (snapshots + field KPIs) ✅ DONE
 - ResultsViewer: "3D Snapshots" section calling GET /api/results/{id}/snapshots,
   rendering returned PNGs, showing the bridge's error string when unavailable
   (e.g. inside Docker). Small, self-contained.

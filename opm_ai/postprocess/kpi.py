@@ -7,6 +7,13 @@ import numpy as np
 import pandas as pd
 
 
+def _sanitize_float(val: float) -> float:
+    """Normalize negative zero to positive zero, return NaN/Inf as-is for sanitization."""
+    if val == 0.0:
+        return 0.0  # -0.0 becomes 0.0
+    return val
+
+
 def extract_kpis(df: pd.DataFrame) -> dict[str, Any]:
     """
     Extract Key Performance Indicators from summary DataFrame.
@@ -20,6 +27,9 @@ def extract_kpis(df: pd.DataFrame) -> dict[str, Any]:
         - field_oil_recovery: cumulative oil produced (STB)
         - field_water_recovery: cumulative water produced (STB)
         - field_gas_recovery: cumulative gas produced (MSCF)
+        - fopt_recovery: alias for field_oil_recovery (FOPT-based)
+        - fwpt_recovery: alias for field_water_recovery (FWPT-based)
+        - fgpt_recovery: alias for field_gas_recovery (FGPT-based)
         - max_watercut: maximum water cut observed (fraction 0-1)
         - water_breakthrough_day: day when watercut first exceeds 1%
         - plateau_duration_days: days with oil rate above 90% of initial
@@ -59,7 +69,9 @@ def extract_kpis(df: pd.DataFrame) -> dict[str, Any]:
 
     # Field oil recovery: use FOPT if available, else sum WOPT:*
     if foip_col and len(df) > 0:
-        kpis["field_oil_recovery"] = float(df[foip_col].iloc[-1])
+        oil_rec = float(df[foip_col].iloc[-1])
+        kpis["field_oil_recovery"] = oil_rec
+        kpis["fopt_recovery"] = oil_rec  # FOPT-based alias
     else:
         # Sum well-level cumulative oil
         woip_sum = 0.0
@@ -68,10 +80,13 @@ def extract_kpis(df: pd.DataFrame) -> dict[str, Any]:
                 if len(df) > 0:
                     woip_sum += float(df[col].iloc[-1])
         kpis["field_oil_recovery"] = woip_sum
+        kpis["fopt_recovery"] = woip_sum
 
     # Field water recovery: use FWPT if available, else sum WWPT:*
     if fwpt_col and len(df) > 0:
-        kpis["field_water_recovery"] = float(df[fwpt_col].iloc[-1])
+        water_rec = float(df[fwpt_col].iloc[-1])
+        kpis["field_water_recovery"] = water_rec
+        kpis["fwpt_recovery"] = water_rec  # FWPT-based alias
     else:
         wwpt_sum = 0.0
         for col in well_cols:
@@ -79,10 +94,13 @@ def extract_kpis(df: pd.DataFrame) -> dict[str, Any]:
                 if len(df) > 0:
                     wwpt_sum += float(df[col].iloc[-1])
         kpis["field_water_recovery"] = wwpt_sum
+        kpis["fwpt_recovery"] = wwpt_sum
 
     # Field gas recovery: use FGPT if available, else sum WGPT:*
     if fgpt_col and len(df) > 0:
-        kpis["field_gas_recovery"] = float(df[fgpt_col].iloc[-1])
+        gas_rec = float(df[fgpt_col].iloc[-1])
+        kpis["field_gas_recovery"] = gas_rec
+        kpis["fgpt_recovery"] = gas_rec  # FGPT-based alias
     else:
         wgpt_sum = 0.0
         for col in well_cols:
@@ -90,6 +108,7 @@ def extract_kpis(df: pd.DataFrame) -> dict[str, Any]:
                 if len(df) > 0:
                     wgpt_sum += float(df[col].iloc[-1])
         kpis["field_gas_recovery"] = wgpt_sum
+        kpis["fgpt_recovery"] = wgpt_sum
 
     # Field GOR
     if fg_or_col and len(df) > 0:
@@ -100,9 +119,9 @@ def extract_kpis(df: pd.DataFrame) -> dict[str, Any]:
     wc_data = _compute_watercut(df)
     if wc_data is not None:
         wc_series, wc_col = wc_data
-        kpis["max_watercut"] = float(wc_series.max())
-        kpis["final_watercut"] = float(wc_series.iloc[-1])
-        kpis["avg_watercut"] = float(wc_series.mean())
+        kpis["max_watercut"] = _sanitize_float(float(wc_series.max()))
+        kpis["final_watercut"] = _sanitize_float(float(wc_series.iloc[-1]))
+        kpis["avg_watercut"] = _sanitize_float(float(wc_series.mean()))
 
         # Water breakthrough (first time WC > 1%)
         bt_mask = wc_series > 0.01
@@ -175,14 +194,14 @@ def extract_kpis(df: pd.DataFrame) -> dict[str, Any]:
             # Handle -0.0 in water rate by using absolute value
             wwpr_pos = df[wwpr].abs()
             wc = wwpr_pos / liq_rate.replace(0, np.nan)
-            kpis[f"{well_name}_max_watercut"] = float(wc.max())
-            kpis[f"{well_name}_final_watercut"] = float(wc.iloc[-1])
+            kpis[f"{well_name}_max_watercut"] = _sanitize_float(float(wc.max()))
+            kpis[f"{well_name}_final_watercut"] = _sanitize_float(float(wc.iloc[-1]))
 
         # Well GOR
         if wopr and wgpr and len(df) > 0:
             gor = df[wgpr] / df[wopr].replace(0, np.nan)
-            kpis[f"{well_name}_avg_gor"] = float(gor.mean())
-            kpis[f"{well_name}_final_gor"] = float(gor.iloc[-1])
+            kpis[f"{well_name}_avg_gor"] = _sanitize_float(float(gor.mean()))
+            kpis[f"{well_name}_final_gor"] = _sanitize_float(float(gor.iloc[-1]))
 
     # Recovery factor estimate (if we have FOPT)
     if foip_col and len(df) > 0:

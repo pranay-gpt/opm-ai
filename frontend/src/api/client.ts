@@ -6,6 +6,7 @@ import type {
   RunRequest,
   JobStatus,
   KPIsResponse,
+  SnapshotsResponse,
   ChatMessage,
   WSServerMessage,
   ToolCall,
@@ -79,6 +80,10 @@ export const api = {
   results: (jobId: string): Promise<KPIsResponse> =>
     fetchJson<KPIsResponse>(`/results/${jobId}`),
 
+  // Snapshots
+  snapshots: (jobId: string): Promise<SnapshotsResponse> =>
+    fetchJson<SnapshotsResponse>(`/results/${jobId}/snapshots`),
+
   // Explainer
   explainConcept: (request: ExplainRequest): Promise<ExplainResponse> =>
     fetchJson<ExplainResponse>('/explain', {
@@ -133,6 +138,7 @@ export type {
   RunRequest,
   JobStatus,
   KPIsResponse,
+  SnapshotsResponse,
   ChatMessage,
   ToolCall,
   Settings,

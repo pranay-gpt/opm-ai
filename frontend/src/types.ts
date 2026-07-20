@@ -92,6 +92,14 @@ export interface KPIsResponse {
   plots: Record<string, string>; // plot_name -> Plotly JSON (fig.to_json())
 }
 
+// Snapshots types
+export interface SnapshotsResponse {
+  success: boolean;
+  snapshots: string[]; // PNG filenames, served at /results/{job_id}/snapshots/{name}
+  error: string | null;
+  duration_s: number;
+}
+
 export type ChatRole = 'user' | 'assistant' | 'tool';
 
 export interface ChatMessage {

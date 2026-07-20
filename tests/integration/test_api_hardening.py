@@ -44,10 +44,16 @@ class TestPathValidation:
 
     @pytest.mark.integration
     def test_path_traversal_relative_outside_rejected(self, client):
-        """POST /api/build with output_path('../../evil.DATA') -> 400."""
+        """POST /api/build with an output_path outside every allowed root -> 400.
+
+        Uses an absolute path under $HOME (not an allowlisted root) so the result
+        does not depend on the test's CWD depth. A relative '../..' target is a
+        poor probe here: from the repo root it resolves into /tmp, which IS an
+        allowed root, so it would (correctly) be accepted.
+        """
         response = client.post("/api/build", json={
             "description": "Simple depletion case",
-            "output_path": "../../../tmp/evil.DATA"
+            "output_path": str(Path.home() / "evil.DATA"),
         })
         assert response.status_code == 400, f"Expected 400, got {response.status_code}: {response.text}"
         data = response.json()

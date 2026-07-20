@@ -148,3 +148,23 @@ you paste the output.
   (SMSPEC+UNRST produced). Next: Stage 4 (Postprocess to spec 05).
 - 2026-07-19: Stages 4-8 completed. Stage 4 postprocess gaps closed (spec KPIs, NaN sanitization). Stage 5 FastAPI backend (build/lint/run/results routes, WebSocket chat with 5-tool LLM router, in-memory job store, 11 integration tests). Stage 6 React+Vite+TS frontend (8 routes, dark blue palette per UI_DESIGN_SPEC, Monaco editor, Plotly via plotly.js-dist-min, zustand). Stage 7 Docker multi-stage + compose + smoke.sh (7/7 passing locally; docker build untested, no daemon). Stage 8 CI workflows + README rewrite. Code review pass: 10 finder/verifier subagents, 6 confirmed bugs fixed (chat DTO subscript TypeError, NaN JSON 500s, KPI card key mismatches, dead compute_fields fallback, nc missing in container, pipefail). Suite: 80 passed.
 - 2026-07-19 (second pass): Stages 9-12 completed. Stage 9 opm_ai/preprocess (correlations, PROPS table builders, validators, offline advisor; 43 unit tests). Stage 10 builder fluid integration verified with real Flow dry-run and full simulation on a correlation-built deck; METRIC rejected until template support. Stage 11 opm_ai/explainer with pure-Python BM25 (documented deviation from chromadb spec), 8 original teaching notes, explain/quiz/learning-report all offline-degradable. Stage 12 explainer API routes + chat tools + /learn frontend page + fluid inputs in Deck Builder. Review pass fixed: METRIC-as-FIELD unit bug, dead-oil inf viscosity, sorw=0 SWOF duplicates, ValueError 500s, quiz score mutation, failed-job UI state. Suite: 167 passed; smoke 7/7.
+- 2026-07-20: Stages 13-14 completed; docker build VERIFIED for the first time. No host
+  root available (sudo passworded, rootless docker blocked by missing uidmap +
+  apparmor_restrict_unprivileged_userns=1), so dockerd runs inside LXD container
+  `dockerhost` (ubuntu:24.04, security.nesting=true; host user is in the lxd group;
+  port 8000 proxied to host). Three latent Dockerfile bugs fixed that would have failed
+  any build: PPA is ppa:opm/ppa (not opm/opm), package is libopm-simulators-bin (no
+  `opm-simulators` or `resinsight` package exists for noble), and the editable pip
+  install needed a stub opm_ai/__init__.py before the source COPY. Added .dockerignore
+  (context was 400MB+); resinsight compose service moved behind opt-in profile
+  (ghcr.io/opm/resinsight:2026.04 manifest denied). Image 1.67GB, compose healthy,
+  in-container smoke 7/7 incl. a real Flow run. Caveat learned: `docker compose up -d`
+  does NOT rebuild after re-tagging; use `--build`. Stage 14: METRIC deck support
+  (base.j2 emits FIELD or METRIC; builder converts ft/psia/scf-stb at render time;
+  FIELD byte-identical; METRIC deck passes flow dry-run) and API hardening
+  (opm_ai/api/paths.py allowlist validation -> 400 on traversal; job store bounded 200
+  w/ LRU of finished jobs + 429; session store bounded 100). Suite: 180 passed.
+  Commits f785f9c, 0cbf106, 2bbec6f on master. Knowledge wiki initialized at
+  /home/parallels/vaults/opm-ai (llm-wiki plugin, 11 pages from OPM.md + CONTEXT.md).
+  Remaining: ResInsight bridge (image unavailable), scenario templates, DATES
+  schedules, LLM extraction e2e, chat session races.

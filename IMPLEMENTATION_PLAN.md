@@ -149,12 +149,31 @@ table in `STATUS.md`.
 - Update `README.md` quick-start: backend (`uvicorn`) + frontend (`npm run dev` / build)
   instead of `streamlit run`.
 - GitHub Actions CI: `pytest` (SPE1) + `npm run build`.
-- **STATUS: COMPLETE (2026-07-19).**
+- **STATUS: COMPLETE (2026-07-19).** Docker build VERIFIED 2026-07-20 (LXD
+  dockerhost, in-container smoke 7/7; Dockerfile fixes: ppa:opm/ppa,
+  libopm-simulators-bin, editable-install stub, .dockerignore; resinsight
+  service behind opt-in profile - its ghcr image is not publicly pullable).
 
 ## Phase 3 - Explainer / RAG (deferred)
 
 RAG (LlamaIndex/LangChain + chromadb) over the Eclipse keyword references and
 `tests/fixtures` deck comments. Add those deps only at this stage.
+
+- **STATUS: COMPLETE (2026-07-19) as Stage 11**, with a documented deviation:
+  pure-Python BM25 retrieval instead of chromadb/sentence-transformers (interface
+  unchanged; upgrade path in opm_ai/explainer/context.md).
+
+## Stages 13-14 (2026-07-20, post-plan)
+
+- Stage 13: code review pass + fixes + docs for Stages 9-12.
+- Stage 14: METRIC deck support (base.j2 emits FIELD or METRIC, builder converts
+  at render time, FIELD output byte-identical, flow dry-run exit 0 on METRIC) and
+  API hardening (path allowlist -> 400, bounded job store 200 -> 429 when
+  saturated, bounded session store 100).
+- **STATUS: COMPLETE (2026-07-20).** Suite 180 passed; master at 2bbec6f.
+- Remaining backlog (no stage assigned): scenario-specific templates (WAG,
+  gas-cap EQUIL, CO2 stream), DATES schedules, LLM extraction e2e, ResInsight
+  bridge (blocked on image availability), chat session race hardening.
 
 ## Claude Code Tooling (per-stage)
 

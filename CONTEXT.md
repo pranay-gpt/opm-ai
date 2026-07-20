@@ -1,8 +1,8 @@
 # OPM-AI: Context for New Sessions
 
-Last updated: 2026-07-19  
-Status: Parts 1-3 and 5-8 complete; Part 4 not started  
-Suite: 80 passed / 0 failed
+Last updated: 2026-07-20  
+Status: All parts (0-8) complete through Stage 14 (docker verified, METRIC decks, API hardening)  
+Suite: 180 passed / 0 failed
 
 ## What This Is
 
@@ -15,11 +15,11 @@ OPM-AI is an AI-assisted reservoir simulation workbench for petroleum engineerin
 | 1 | Runner (OPM Flow wrapper) | ✅ DONE + hardened | 8 integration tests (SPE1, edge cases, timeout, missing binary) |
 | 2 | Linter (deck validation) | ✅ DONE + calibrated | 14 unit tests + dataset validation (133 fixtures, FP=0) |
 | 3 | Builder+LLM+CLI | ✅ DONE (offline path) | 8 integration tests (scenarios + grid sweep) |
-| 4 | Preprocess (PVT/relperm) | ❌ NOT STARTED | - |
+| 4 | Preprocess (PVT/relperm) | ✅ DONE (Stage 9) | 43 unit tests; correlations, PROPS tables, validators, advisor |
 | 5 | Postprocess (ResInsight/plots) | ✅ DONE | spec KPIs, NaN sanitization |
-| 6 | API + React frontend | ✅ DONE | build/lint/run/results routes, WebSocket chat, 8 routes, dark blue palette, Monaco editor, Plotly, zustand |
-| 7 | Explainer/RAG | ❌ NOT STARTED | Phase 3 by design |
-| 8 | Deployment (Docker/CI) | ✅ DONE | Docker multi-stage + compose + smoke.sh (7/7 passing locally), CI workflows, README rewrite |
+| 6 | API + React frontend | ✅ DONE + hardened | build/lint/run/results routes, WebSocket chat, path allowlist (400), bounded job/session stores (429), Monaco editor, Plotly, zustand |
+| 7 | Explainer/RAG | ✅ DONE (Stage 11) | BM25 retrieval, explain/quiz/learning-report, offline fallbacks, /learn page |
+| 8 | Deployment (Docker/CI) | ✅ DONE + verified | docker build verified 2026-07-20 in LXD dockerhost; in-container smoke 7/7; CI workflows |
 
 **Working pipeline today:** plain English → ModelSpec → .DATA deck → lint → flow run → DataFrame/KPIs/plots → API → frontend
 
@@ -55,7 +55,7 @@ Rule IDs: L001 (missing `/`), L003/L003b (grid), L004 (negative perm), L005 (pha
 - Template: `templates/base.j2` (Jinja2), controlled by ModelSpec fields.
 - Scenarios: depletion (default), waterflood_5spot, waterflood_line_drive, wag, gas_cap, co2_injection, multilayer, buildup. Note: co2/gas_cap/multilayer/buildup currently render as producer-only depletion-like decks (scenario templates are Phase 2 roadmap).
 - Extraction: regex + keyword matching on plain English. Waterflood detection: "waterflood", "water injection", "water flood". Rate parsing: "produce at 2000 stb/day", "inject 8000 bbl/day". Word-form counts: "two producers", "three injectors". Well placement: gridded patterns per scenario enum.
-- Units: FIELD only (v1 scope per 03-builder.md).
+- Units: FIELD and METRIC (Stage 14). ModelSpec numbers stay canonical FIELD; the builder converts at render time when the fluid is METRIC. FIELD output byte-identical to the pre-METRIC builder.
 - Linter auto-runs; if `passed=False`, deck is None and warnings list the issues.
 
 ### LLM Client (`opm_ai/llm/`)
@@ -73,10 +73,10 @@ Rule IDs: L001 (missing `/`), L003/L003b (grid), L004 (negative perm), L005 (pha
 ## Debt Register (Known Gaps)
 
 1. **Postprocess Stage 4 gaps** (spec 05-postprocess.md): field-level KPIs (FOPT/FWPT/FGPT recovery, max watercut, breakthrough day), per-producer naming, `plot_production` well fallback (1 trace vs 3), watercut -0.0 vs NaN.
-2. **Builder Phase 2** (spec 03-builder.md): scenario-specific templates (WAG alternation, gas-cap EQUIL, CO2 stream), METRIC units, DATES schedules, LLM extraction (`use_llm=True` end-to-end).
+2. **Builder Phase 2 remainder** (spec 03-builder.md): scenario-specific templates (WAG alternation, gas-cap EQUIL, CO2 stream), DATES schedules, LLM extraction (`use_llm=True` end-to-end). METRIC units DONE (Stage 14).
 3. **Linter future**: deep-parse mode for the 9 FN classes (runtime/parser errors), INCLUDE resolution, rules for GCONPROD/VFP/ACTIONX families.
-4. **Template cleanup**: NOECHO/ECHO in base.j2 draw "not supported" warnings from Flow (harmless, remove when next editing).
-5. **Stages 4-8**: Part 4 (preprocess) not started; Parts 5, 6, 8 complete; Part 7 not started.
+4. **Template cleanup**: NOECHO/ECHO in base.j2 draw "not supported" warnings from Flow (harmless, remove when next editing). Correlation-built PVTO draws a harmless "Non-Monotonic Oil Formation Volume Factor" warning (FIELD and METRIC).
+5. **Stages status**: all parts 0-8 complete; see the Stage 9-14 sections below for what shipped after the original 8-part plan.
 
 ## What the Last Audit Found (2026-07-19)
 
@@ -113,7 +113,11 @@ Simulation sweeps: 25/25 SPE1 family decks run (19 produce SMSPEC+UNRST); 10/10 
 - Run `tests/integration/test_dataset_validation.py` builder scenarios (10 tests).
 
 ### Suggested next stage
-**Stage 4 (postprocess to spec)** is highest leverage: the KPI/plot layer mostly works (verified on SPE1 family + builder scenarios), and closing the known gaps unlocks the FastAPI backend (Stage 5), which consumes exactly those functions. See `docs/conversations/05-postprocess.md` for spec.
+All planned stages are complete. Highest-leverage next options (pick per user priority):
+1. Scenario-specific templates (WAG alternation, gas-cap EQUIL, CO2 stream) - the remaining Builder Phase 2 items.
+2. LLM extraction end-to-end (`use_llm=True`) now that keys and providers are wired.
+3. ResInsight bridge - blocked externally on the unavailable ghcr image; consider building ResInsight from source or dropping the bridge.
+4. Chat session race hardening for concurrent same-session WebSocket connections.
 
 ## File Map (What Lives Where)
 
@@ -152,9 +156,9 @@ opm_ai/
 │   ├── kpi.py               # extract_kpis() field totals
 │   ├── plots.py             # plot_production() Plotly
 │   └── resinsight_bridge.py # rips gRPC stub (Phase 2)
-├── preprocess/              # NOT STARTED (Phase 2)
-├── api/                     # NOT STARTED (Stage 5)
-└── explainer/               # NOT STARTED (Phase 3)
+├── preprocess/              # PVT/relperm correlations + PROPS renderers (Stage 9)
+├── api/                     # FastAPI backend, hardened (Stages 5, 14)
+└── explainer/               # BM25 RAG, explain/quiz/report (Stage 11)
 
 tests/
 ├── unit/
@@ -194,7 +198,7 @@ tests/fixtures/              # 133 .DATA decks from opm-tests
 ```bash
 cd /home/parallels/opm-ai
 source .venv/bin/activate
-python -m pytest tests/unit tests/integration -q  # should show 167 passed
+python -m pytest tests/unit tests/integration -q  # should show 180 passed
 ```
 
 ## Operational Notes
@@ -254,16 +258,28 @@ and traversal-rejection (400) exercised from the host through the proxy.
 - METRIC deck support: base.j2 emits FIELD or METRIC in RUNSPEC; builder converts
   grid (ft to m), EQUIL/BHP (psia to bar), RSVD Rs (scf/stb to sm3/sm3), well
   depths. FIELD output unchanged. METRIC deck passes flow --enable-dry-run.
+- API hardening:
+  - Path validation: shared helper `opm_ai.api.paths.validate_path()` with allowlist of roots (decks/, results/, fixtures/, tempdir); rejects traversal, requires .DATA suffix, maps ValueError -> HTTP 400.
+  - Job store: bounded to 200 entries (configurable via `JOB_STORE_MAX_ENTRIES`), LRU evicts oldest completed/failed, never evicts running/pending, returns HTTP 429 if all slots occupied by running jobs.
+  - Session store: bounded to 100 entries (configurable via `SESSION_STORE_MAX_ENTRIES`), LRU eviction on access/update.
+  - Tests: `tests/integration/test_api_hardening.py` covers traversal, allowed temp paths, job store eviction, session LRU behavior. Existing API tests updated to use temp paths within allowed roots.
+
+## Knowledge wiki (2026-07-20)
+
+An Obsidian LLM wiki lives at `/home/parallels/vaults/opm-ai` (llm-wiki plugin).
+Seeded with OPM.md and this CONTEXT.md: 11 pages covering flow CLI facts, restart
+workflows (SKIPREST pitfall), linter calibration, Eclipse deck format, unit
+conversions, PVT correlations. Grow it with `/wiki-ingest <path>` (good next
+ingests: opm_ai/linter/context.md, docs/PROGRESS_REPORT.md, docs/conversations/
+specs); query with `/wiki-query "<question>"`.
 
 ## Remaining gaps
 
-- ResInsight bridge (rips) unexercised; its container image is not publicly available.
+- ResInsight bridge (rips) unexercised; ghcr.io/opm/resinsight:2026.04 is not
+  publicly pullable (compose service is behind the opt-in `resinsight` profile).
+- Builder Phase 2 remainder: scenario-specific templates (WAG alternation,
+  gas-cap EQUIL, CO2 stream), DATES schedules, LLM extraction end-to-end.
+- Chat session races on concurrent same-session WebSocket connections.
 - Explainer vector backend upgrade path documented in opm_ai/explainer/context.md.
-- API path validation and store eviction: COMPLETED (Stage 3 API hardening).
-  - Path validation: shared helper `opm_ai.api.paths.validate_path()` with allowlist of roots (decks/, results/, /tmp); rejects traversal, requires .DATA suffix, maps ValueError -> HTTP 400.
-  - Job store: bounded to 200 entries (configurable via `JOB_STORE_MAX_ENTRIES`), LRU evicts oldest completed/failed, never evicts running/pending, returns HTTP 429 if all slots occupied by running jobs.
-  - Session store: bounded to 100 entries (configurable via `SESSION_STORE_MAX_ENTRIES`), LRU eviction on access/update.
-  - Tests: `tests/integration/test_api_hardening.py` covers traversal, allowed temp paths, job store eviction, session LRU behavior.
-  - Existing API tests updated to use temp paths within allowed roots.
 
 Use Sonnet for routine implementation/testing, Opus when Sonnet fails repeatedly.

@@ -233,9 +233,31 @@ Review pass (Sonnet/Haiku finders + verifiers): confirmed and fixed METRIC-as-FI
 silent unit bug, dead-oil inf viscosity in PVTO, sorw=0 duplicate SWOF rows, ValueError
 500s, quiz score mutation, missing failed-job UI state. Suite: 167 passed; smoke 7/7.
 
+## Docker deployment (verified 2026-07-20)
+
+Image builds and runs on arm64. Fixes applied: PPA is `ppa:opm/ppa` (not opm/opm)
+and there is no `opm-simulators` package; `libopm-simulators-bin` provides
+/usr/bin/flow. Editable pip install needs a stubbed `opm_ai/__init__.py` before
+the real COPY. `.dockerignore` added (context was 400MB+ from node_modules).
+ResInsight compose service moved behind the opt-in `resinsight` profile; the
+ghcr.io/opm/resinsight:2026.04 image is not publicly pullable (manifest denied),
+so the bridge remains unexercised.
+
+Verification path on this host (no root, so no host dockerd): LXD container
+`dockerhost` (ubuntu:24.04, security.nesting=true, lxd group grants access
+without sudo) runs docker.io + docker-compose-v2 + docker-buildx; port 8000 is
+proxied to the host. In-container smoke suite 7/7; METRIC build, explain, quiz,
+and traversal-rejection (400) exercised from the host through the proxy.
+
+## Stage 14 (2026-07-20): METRIC decks + API hardening
+
+- METRIC deck support: base.j2 emits FIELD or METRIC in RUNSPEC; builder converts
+  grid (ft to m), EQUIL/BHP (psia to bar), RSVD Rs (scf/stb to sm3/sm3), well
+  depths. FIELD output unchanged. METRIC deck passes flow --enable-dry-run.
+
 ## Remaining gaps
 
-- ResInsight bridge (rips) unexercised; docker build still unverified (no daemon here).
+- ResInsight bridge (rips) unexercised; its container image is not publicly available.
 - Explainer vector backend upgrade path documented in opm_ai/explainer/context.md.
 - API path validation and store eviction: COMPLETED (Stage 3 API hardening).
   - Path validation: shared helper `opm_ai.api.paths.validate_path()` with allowlist of roots (decks/, results/, /tmp); rejects traversal, requires .DATA suffix, maps ValueError -> HTTP 400.

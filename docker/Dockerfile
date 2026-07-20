@@ -28,19 +28,18 @@ FROM ubuntu:24.04 AS runtime
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install OPM PPA and required packages
-# NOTE: OPM PPA package names for noble (24.04) are UNVERIFIED for arm64.
-#       Primary target is amd64. For arm64, OPM Flow may need building from source.
-#       Verify package names with: apt-cache policy opm-simulators resinsight python3-opm-simulators python3-opm-common
+# Package names verified against ppa:opm/ppa for noble on arm64 (2026-07):
+#   libopm-simulators-bin owns /usr/bin/flow (there is no "opm-simulators" package).
+#   ResInsight is NOT installed here; it runs as its own compose service.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         software-properties-common \
         curl \
         ca-certificates && \
-    add-apt-repository -y ppa:opm/opm && \
+    add-apt-repository -y ppa:opm/ppa && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
-        opm-simulators \
-        resinsight \
+        libopm-simulators-bin \
         python3-opm-simulators \
         python3-opm-common \
         python3.12 \
@@ -58,9 +57,13 @@ WORKDIR /app
 RUN python3.12 -m venv /app/.venv
 ENV PATH="/app/.venv/bin:$PATH"
 
-# Install Python dependencies
+# Install Python dependencies.
+# Stub package dir first: the editable install must discover opm_ai at install
+# time to record its import mapping; the real source is copied below into the
+# same path. Keeps the dependency layer cached across code-only changes.
 COPY pyproject.toml ./
-RUN pip install --no-cache-dir -e .
+RUN mkdir -p opm_ai && touch opm_ai/__init__.py && \
+    pip install --no-cache-dir -e .
 
 # Copy frontend build from builder stage
 COPY --from=builder /app/frontend/dist ./static

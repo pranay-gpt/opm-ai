@@ -17,11 +17,12 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-    depends_on:
-      resinsight:
-        condition: service_started
 
+  # Optional: ResInsight gRPC service for 3D snapshots (Phase 2 bridge).
+  # Opt-in because the image is unverified and the backend runs fine without it:
+  #   docker compose --profile resinsight up
   resinsight:
+    profiles: ["resinsight"]
     image: ghcr.io/opm/resinsight:2026.04
     ports:
       - "50051:50051"

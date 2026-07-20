@@ -1,8 +1,8 @@
 # OPM-AI: Context for New Sessions
 
 Last updated: 2026-07-20  
-Status: All parts (0-8) complete through Stage 14 (docker verified, METRIC decks, API hardening)  
-Suite: 180 passed / 0 failed
+Status: All parts (0-8) complete through Stage 15 (ResInsight snapshot bridge via batch CLI)  
+Suite: 189 passed / 0 failed
 
 ## What This Is
 
@@ -116,8 +116,7 @@ Simulation sweeps: 25/25 SPE1 family decks run (19 produce SMSPEC+UNRST); 10/10 
 All planned stages are complete. Highest-leverage next options (pick per user priority):
 1. Scenario-specific templates (WAG alternation, gas-cap EQUIL, CO2 stream) - the remaining Builder Phase 2 items.
 2. LLM extraction end-to-end (`use_llm=True`) now that keys and providers are wired.
-3. ResInsight bridge - blocked externally on the unavailable ghcr image; consider building ResInsight from source or dropping the bridge.
-4. Chat session race hardening for concurrent same-session WebSocket connections.
+3. Chat session race hardening for concurrent same-session WebSocket connections.
 
 ## File Map (What Lives Where)
 
@@ -155,7 +154,7 @@ opm_ai/
 │   ├── summary.py           # read_summary() via resfo
 │   ├── kpi.py               # extract_kpis() field totals
 │   ├── plots.py             # plot_production() Plotly
-│   └── resinsight_bridge.py # rips gRPC stub (Phase 2)
+│   └── resinsight_bridge.py # 3D snapshot export via ResInsight batch CLI (packaged build has no gRPC)
 ├── preprocess/              # PVT/relperm correlations + PROPS renderers (Stage 9)
 ├── api/                     # FastAPI backend, hardened (Stages 5, 14)
 └── explainer/               # BM25 RAG, explain/quiz/report (Stage 11)
@@ -275,11 +274,40 @@ specs); query with `/wiki-query "<question>"`.
 
 ## Remaining gaps
 
-- ResInsight bridge (rips) unexercised; ghcr.io/opm/resinsight:2026.04 is not
-  publicly pullable (compose service is behind the opt-in `resinsight` profile).
 - Builder Phase 2 remainder: scenario-specific templates (WAG alternation,
   gas-cap EQUIL, CO2 stream), DATES schedules, LLM extraction end-to-end.
 - Chat session races on concurrent same-session WebSocket connections.
 - Explainer vector backend upgrade path documented in opm_ai/explainer/context.md.
+- ResInsight snapshots in Docker: the container has no display, so
+  /api/results/{id}/snapshots fails there (clean error). Add xvfb + software GL
+  to the image, or accept host-only snapshots.
+
+## Stage 15 (2026-07-20): ResInsight bridge (batch CLI, gRPC ruled out)
+
+Root cause found for the dead bridge: the Ubuntu noble arm64 `resinsight`
+package (2026.06.0, /usr/bin/ResInsight) is compiled WITHOUT gRPC support.
+`--server`/`--portnumberfile` are accepted but no port is bound and no port
+file written (verified by strace; ldd shows no grpc/protobuf/absl; no gRPC
+service strings in the binary). rips.Instance.find()/launch() can never
+connect to this build, and a running GUI instance exposes no port either. On
+top of that, the old bridge called rips.Instance.find_or_start(), which does
+not exist in rips 2026.6 - it had never worked. Snapshots need real GL:
+QT_QPA_PLATFORM=offscreen segfaults; no xvfb on host.
+
+Rewrite (working path, verified end-to-end):
+- `export_snapshots(output_dir)` shells out to
+  `QT_QPA_PLATFORM=xcb ResInsight --case X.EGRID --savesnapshots views
+  --snapshotfolder D --size W H` against the live display; never raises,
+  returns {success, snapshots, error, duration_s}; PNGs cached in
+  output_dir/resinsight_snapshots.
+- API: GET /api/results/{id}/snapshots (render or reuse) and
+  /api/results/{id}/snapshots/{file} (serves PNG; traversal-safe, 404s).
+- Chat: `export_snapshots` tool replaces the `open_resinsight_plot`
+  placeholder (schema + TOOL_FUNCTIONS + system_prompt.md).
+- Tests: tests/integration/test_resinsight_bridge.py (9 tests; live render
+  test skips without binary/DISPLAY/case). Suite: 189 passed.
+- Wiki: entity `resinsight`, concept `resinsight-headless-automation`, source
+  `resinsight-2026.06-cli-options` added; opm-ai entity's "blocked on image"
+  claim corrected (14 pages total).
 
 Use Sonnet for routine implementation/testing, Opus when Sonnet fails repeatedly.

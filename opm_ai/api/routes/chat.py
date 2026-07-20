@@ -20,6 +20,7 @@ from opm_ai.runner.models import SimulationJob
 from opm_ai.postprocess.summary import read_summary
 from opm_ai.postprocess.kpi import extract_kpis
 from opm_ai.postprocess.plots import plot_production, plot_pressure
+from opm_ai.postprocess.resinsight_bridge import export_snapshots
 from opm_ai.llm.client import LLMClient
 from pathlib import Path
 import asyncio
@@ -218,6 +219,25 @@ async def tool_generate_quiz(args: dict) -> dict:
     }
 
 
+async def tool_export_snapshots(args: dict) -> dict:
+    """Export ResInsight 3D snapshots for a completed job."""
+    job_id = args.get("job_id", "")
+    job = get_job(job_id)
+    if not job or job.status != "completed" or not job.result:
+        return {"error": "Job not found or not completed"}
+
+    output_dir = Path(job.result.output_dir)
+    loop = asyncio.get_event_loop()
+    result = await loop.run_in_executor(None, lambda: export_snapshots(output_dir))
+
+    return {
+        "success": result["success"],
+        "snapshots": [Path(p).name for p in result["snapshots"]],
+        "error": result["error"],
+        "duration_s": result["duration_s"],
+    }
+
+
 TOOL_FUNCTIONS = {
     "build_deck": tool_build_deck,
     "lint_deck": tool_lint_deck,
@@ -225,6 +245,7 @@ TOOL_FUNCTIONS = {
     "get_kpis": tool_get_kpis,
     "explain_concept": tool_explain_concept,
     "generate_quiz": tool_generate_quiz,
+    "export_snapshots": tool_export_snapshots,
 }
 
 

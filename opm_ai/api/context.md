@@ -49,7 +49,7 @@ All route handlers in `routes/` are thin adapters that:
 | `routes/build.py` | POST `/api/build` - build deck from natural language |
 | `routes/lint.py` | POST `/api/lint` - lint a deck file |
 | `routes/run.py` | POST `/api/run` (start job), GET `/api/run/{job_id}` (poll status) |
-| `routes/results.py` | GET `/api/results/{job_id}` - KPIs + Plotly JSON plots |
+| `routes/results.py` | GET `/api/results/{job_id}` - KPIs + Plotly JSON plots; `/snapshots` - ResInsight 3D PNG export (render or reuse cache); `/snapshots/{file}` - serve one PNG |
 | `routes/chat.py` | WebSocket `/api/chat` + HTTP fallback - LLM chat with tool calling |
 | `routes/explainer.py` | POST `/api/explain`, `/api/quiz`, `/api/learning-report` - Educational explainer API |
 

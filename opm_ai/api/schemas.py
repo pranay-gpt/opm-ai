@@ -148,6 +148,16 @@ class KPIsResponse(BaseModel):
     plots: dict[str, str]  # plot_name -> Plotly JSON (fig.to_json())
 
 
+class SnapshotsResponse(BaseModel):
+    """Response with ResInsight 3D snapshot export results."""
+    model_config = ConfigDict(from_attributes=True)
+
+    success: bool
+    snapshots: list[str]  # PNG filenames, served at /results/{job_id}/snapshots/{name}
+    error: str | None = None
+    duration_s: float
+
+
 class ChatMessage(BaseModel):
     """Chat message with optional tool calls."""
     model_config = ConfigDict(from_attributes=True)
@@ -233,16 +243,15 @@ GET_KPIS_TOOL = {
     },
 }
 
-OPEN_RESINSIGHT_PLOT_TOOL = {
+EXPORT_SNAPSHOTS_TOOL = {
     "type": "function",
     "function": {
-        "name": "open_resinsight_plot",
-        "description": "Open a ResInsight plot for a simulation result (placeholder for Phase 2)",
+        "name": "export_snapshots",
+        "description": "Export 3D reservoir view snapshots (PNG images) for a completed simulation using ResInsight",
         "parameters": {
             "type": "object",
             "properties": {
                 "job_id": {"type": "string", "description": "Job ID from run_simulation"},
-                "plot_type": {"type": "string", "description": "Type of plot: production, pressure, 3d, etc."},
             },
             "required": ["job_id"],
             "additionalProperties": False,
@@ -290,7 +299,7 @@ TOOLS = [
     LINT_DECK_TOOL,
     RUN_SIMULATION_TOOL,
     GET_KPIS_TOOL,
-    OPEN_RESINSIGHT_PLOT_TOOL,
+    EXPORT_SNAPSHOTS_TOOL,
     EXPLAIN_CONCEPT_TOOL,
     GENERATE_QUIZ_TOOL,
 ]

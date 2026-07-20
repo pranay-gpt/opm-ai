@@ -168,3 +168,26 @@ you paste the output.
   /home/parallels/vaults/opm-ai (llm-wiki plugin, 11 pages from OPM.md + CONTEXT.md).
   Remaining: ResInsight bridge (image unavailable), scenario templates, DATES
   schedules, LLM extraction e2e, chat session races.
+
+- 2026-07-20 (later): ResInsight bridge REWRITTEN AND WORKING. Root-caused why rips
+  gRPC never connected: the Ubuntu noble arm64 `resinsight` package (2026.06.0-1~noble,
+  installed at /usr/bin/ResInsight) is compiled WITHOUT gRPC support. `--server N
+  --portnumberfile F` is accepted but no port is ever bound and no port file written;
+  ldd shows no grpc/protobuf/absl libs; the binary has no gRPC service strings. A
+  running GUI instance exposes no port either, so rips.Instance.find()/launch() can
+  never work against this build. Also: 3D snapshots need real GL; QT_QPA_PLATFORM=
+  offscreen segfaults ("QOpenGLWidget is not supported"), no xvfb on host. Working
+  path: batch CLI against the live display (DISPLAY=:0 QT_QPA_PLATFORM=xcb ResInsight
+  --case X.EGRID --savesnapshots views --snapshotfolder D --size W H; exits on its
+  own). resinsight_bridge.py rewritten around that (never-raise, returns result dict,
+  PNG cache in output_dir/resinsight_snapshots); old rips-based functions removed
+  (they called rips.Instance.find_or_start(), which does not exist in rips 2026.6 -
+  the bridge had never worked). New: GET /api/results/{id}/snapshots (renders/reuses)
+  + /snapshots/{file} (serves PNG, traversal-safe), chat tool export_snapshots
+  (replaces the open_resinsight_plot placeholder), 9 bridge tests in
+  tests/integration/test_resinsight_bridge.py incl. a live-render test (skips without
+  binary/DISPLAY/smoke case). Suite: 189 passed. Wiki updated (14 pages): entity
+  resinsight, concept resinsight-headless-automation, source
+  resinsight-2026.06-cli-options; opm-ai entity contradiction ("blocked on image")
+  corrected. Docker note: the container has no display, so snapshots are host-only
+  until xvfb + software GL are added to the image.

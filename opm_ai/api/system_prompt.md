@@ -81,9 +81,9 @@ When user description is vague, ask ONE question at a time:
 If LLM provider is unavailable (no API keys configured), respond:
 "LLM provider offline. Configure GROQ_API_KEY, NVIDIA_NIM_API_KEY, or OPENAI_API_KEY to enable chat. You can still use the API endpoints directly: POST /api/build, /api/lint, /api/run, GET /api/run/{id}, /api/results/{id}"
 
-## ResInsight Integration (Future)
+## ResInsight Integration
 
-Tool `open_resinsight_plot` exists but returns placeholder. When implemented, it will launch ResInsight views via gRPC.
+Tool `export_snapshots` renders 3D reservoir view snapshots (PNG) for a completed simulation job via ResInsight batch mode. It requires ResInsight and a live display on the server; if unavailable, it returns an error message you should relay to the user. Snapshot images are served at GET /api/results/{job_id}/snapshots/{filename}.
 
 ---
 

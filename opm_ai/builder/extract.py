@@ -1,6 +1,9 @@
 """Parameter extraction from natural language descriptions."""
 
+import json
 import re
+from pathlib import Path
+
 from opm_ai.builder.models import (
     ModelSpec,
     ReservoirSpec,
@@ -247,3 +250,45 @@ def extract_parameters_offline(desc: str) -> ModelSpec:
 
     spec.wells = wells
     return spec
+
+
+def extract_parameters_llm(desc: str, client=None) -> ModelSpec | None:
+    """
+    Extract reservoir model parameters via LLM structured output.
+
+    Renders opm_ai/llm/prompts/extract_model_spec.j2 (embedding the ModelSpec
+    JSON schema), asks the client for a JSON object, and validates it with
+    Pydantic. Never raises; the caller falls back to
+    extract_parameters_offline on None.
+
+    Args:
+        desc: Natural language description.
+        client: LLMClient (or compatible object with extract_json). A new
+            LLMClient is created when omitted.
+
+    Returns:
+        Validated ModelSpec, or None on any failure (offline, bad JSON,
+        schema violation).
+    """
+    try:
+        if client is None:
+            from opm_ai.llm.client import LLMClient
+            client = LLMClient()
+        if not getattr(client, "available", True):
+            return None
+
+        from jinja2 import Template
+        prompt_path = (
+            Path(__file__).parent.parent / "llm" / "prompts" / "extract_model_spec.j2"
+        )
+        schema = ModelSpec.model_json_schema()
+        system_prompt = Template(prompt_path.read_text(encoding="utf-8")).render(
+            schema=json.dumps(schema, indent=2)
+        )
+
+        data = client.extract_json(system_prompt, desc, schema=schema)
+        if not isinstance(data, dict):
+            return None
+        return ModelSpec.model_validate(data)
+    except Exception:
+        return None

@@ -3,9 +3,10 @@
 from pathlib import Path
 from typing import Optional
 from jinja2 import Environment, FileSystemLoader
+from loguru import logger
 
 from opm_ai.builder.models import ModelSpec, Scenario, ReservoirSpec, WellSpec, WellType
-from opm_ai.builder.extract import extract_parameters_offline
+from opm_ai.builder.extract import extract_parameters_offline, extract_parameters_llm
 from opm_ai.linter import lint_deck, LintResult
 from opm_ai.settings import settings
 from opm_ai.preprocess import build_pvt_blocks, validate_pvt_blocks, FluidDescriptor
@@ -273,11 +274,16 @@ def build_deck(
         ValueError: If deck generation or linting fails
     """
     # Extract parameters (offline by default, LLM path optional)
+    spec = None
     if use_llm and settings.active_llm_client != "offline":
-        # TODO: Add LLM extraction path (Phase 2)
+        spec = extract_parameters_llm(desc)
+        if spec is not None:
+            logger.info("build_deck: parameters extracted via LLM ({})", settings.active_llm_client)
+        else:
+            logger.warning("build_deck: LLM extraction failed, falling back to offline extractor")
+    if spec is None:
         spec = extract_parameters_offline(desc)
-    else:
-        spec = extract_parameters_offline(desc)
+        logger.debug("build_deck: parameters extracted via offline regex extractor")
 
     # Attach fluid if provided
     if fluid is not None:

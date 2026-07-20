@@ -57,7 +57,9 @@ async def tool_build_deck(args: dict) -> dict:
     output_path = args.get("output_path")
     if output_path:
         output_path = validate_output_path(output_path)
-    deck, lint_result = build_deck(description, output_path)
+    # Chat is only reachable with a live provider; LLM extraction is the
+    # right default here (build_deck falls back to offline on any failure).
+    deck, lint_result = build_deck(description, output_path, use_llm=True)
     return {
         "deck": deck,
         "lint": {

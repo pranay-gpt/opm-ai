@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import { useUIStore, useLLMProvider } from '../stores/useAppStore';
 
 const navItems = [
@@ -12,10 +13,8 @@ const navItems = [
   { path: '/settings', label: 'Settings', icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> },
 ] as const;
 
-const getPanelFromPath = (path: string) => path.slice(1) || 'home';
-
 export default function Sidebar() {
-  const { activePanel, setActivePanel, sidebarOpen, setSidebarOpen } = useUIStore();
+  const { sidebarOpen, setSidebarOpen } = useUIStore();
   const llmProvider = useLLMProvider();
 
   return (
@@ -58,24 +57,26 @@ export default function Sidebar() {
         {/* Navigation */}
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto" role="navigation">
           {navItems.map((item) => (
-            <button
+            <NavLink
               key={item.path}
-              onClick={() => {
-                setActivePanel(getPanelFromPath(item.path) as any);
-                setSidebarOpen(false);
-              }}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded text-sm font-medium transition-all duration-150 ${
-                activePanel === getPanelFromPath(item.path)
-                  ? 'bg-primary/15 text-primary border-l-2 border-primary'
-                  : 'text-textSecondary hover:text-textPrimary hover:bg-surfaceHover'
-              }`}
+              to={item.path}
+              className={({ isActive }) =>
+                `w-full flex items-center gap-3 px-3 py-2.5 rounded text-sm font-medium transition-all duration-150 ${
+                  isActive
+                    ? 'bg-primary/15 text-primary border-l-2 border-primary'
+                    : 'text-textSecondary hover:text-textPrimary hover:bg-surfaceHover'
+                }`
+              }
+              onClick={() => setSidebarOpen(false)}
             >
-              <span className="text-base flex-shrink-0">{item.icon}</span>
-              <span>{item.label}</span>
-              {activePanel === getPanelFromPath(item.path) && (
-                <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />
+              {({ isActive }) => (
+                <>
+                  <span className="text-base flex-shrink-0">{item.icon}</span>
+                  <span>{item.label}</span>
+                  {isActive && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />}
+                </>
               )}
-            </button>
+            </NavLink>
           ))}
         </nav>
 

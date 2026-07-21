@@ -16,6 +16,7 @@ export default function DeckBuilder() {
   const [isBuilding, setIsBuilding] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showEditor, setShowEditor] = useState(false);
+  const [useLlmExtraction, setUseLlmExtraction] = useState(false);
 
   // Fluid properties state
   const [useCustomFluid, setUseCustomFluid] = useState(false);
@@ -43,6 +44,7 @@ export default function DeckBuilder() {
       const request: BuildRequest = {
         description,
         fluid: useCustomFluid ? fluidProps : null,
+        use_llm: useLlmExtraction,
       };
       const response: BuildResponse = await api.build(request);
 
@@ -62,7 +64,7 @@ export default function DeckBuilder() {
     } finally {
       setIsBuilding(false);
     }
-  }, [description, useCustomFluid, fluidProps, setCurrentDeck, setLastBuildResponse, setLastLintResult]);
+  }, [description, useCustomFluid, fluidProps, useLlmExtraction, setCurrentDeck, setLastBuildResponse, setLastLintResult]);
 
   const handleUseDeck = useCallback(() => {
     if (lastBuildResponse?.deck) {
@@ -89,6 +91,7 @@ export default function DeckBuilder() {
   }, [currentDeck]);
 
   // Helper to safely parse numeric strings - returns fallback if NaN or non-finite
+  // Uses Number.isFinite to correctly handle valid 0 values
   const num = (v: string, fallback: number) => {
     const n = parseFloat(v);
     return Number.isFinite(n) ? n : fallback;
@@ -151,6 +154,22 @@ export default function DeckBuilder() {
               />
               <p className="text-xs text-textMuted mt-2">
                 Try: "20x20x5 waterflood with 4 injectors and 1 producer" or "depletion deck with 3 layers and gas cap"
+              </p>
+            </div>
+
+            {/* LLM Extraction Checkbox */}
+            <div className="card p-4">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={useLlmExtraction}
+                  onChange={(e) => setUseLlmExtraction(e.target.checked)}
+                  className="w-4 h-4 rounded border-border text-primary focus:ring-primary"
+                />
+                <span className="text-sm font-medium text-textPrimary">Use LLM extraction</span>
+              </label>
+              <p className="text-xs text-textMuted mt-1 ml-7">
+                When enabled, uses the LLM to extract structured parameters from the description (requires configured API key).
               </p>
             </div>
 
@@ -235,7 +254,7 @@ export default function DeckBuilder() {
                         </div>
                         <div>
                           <label className="block text-xs font-medium text-textSecondary mb-1">
-                            Reservoir Temp (&deg;F)
+                            Reservoir Temp (°F)
                           </label>
                           <input
                             type="number"
@@ -270,7 +289,7 @@ export default function DeckBuilder() {
                               type="number"
                               step="0.1"
                               value={fluidProps.pressure_range_psi[0]}
-                              onChange={(e) => handleFluidChange('pressure_range_psi', [parseFloat(e.target.value) || 14.7, fluidProps.pressure_range_psi[1]])}
+                              onChange={(e) => handleFluidChange('pressure_range_psi', [num(e.target.value, 14.7), fluidProps.pressure_range_psi[1]])}
                               className="input w-full text-sm"
                               min="0"
                               placeholder="Min"
@@ -279,7 +298,7 @@ export default function DeckBuilder() {
                               type="number"
                               step="0.1"
                               value={fluidProps.pressure_range_psi[1]}
-                              onChange={(e) => handleFluidChange('pressure_range_psi', [fluidProps.pressure_range_psi[0], parseFloat(e.target.value) || 5000])}
+                              onChange={(e) => handleFluidChange('pressure_range_psi', [fluidProps.pressure_range_psi[0], num(e.target.value, 5000)])}
                               className="input w-full text-sm"
                               min="0"
                               placeholder="Max"

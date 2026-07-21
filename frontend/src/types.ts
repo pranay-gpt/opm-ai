@@ -2,6 +2,15 @@
 
 export type ExplanationLevel = 'beginner' | 'intermediate' | 'advanced';
 
+export interface DeckSaveRequest {
+  content: string;
+  filename?: string;
+}
+
+export interface DeckSaveResponse {
+  deck_path: string;
+}
+
 export interface BuildRequest {
   description: string;
   output_path?: string;
@@ -149,9 +158,10 @@ export interface FetchOptions extends RequestInit {
 // Settings
 export interface Settings {
   groqApiKey: string;
+  openaiApiKey: string;
   nimApiKey: string;
   nimBaseUrl: string;
-  llmProvider: 'groq' | 'nim' | 'offline';
+  llmProvider: 'groq' | 'openai' | 'nim' | 'offline';
 }
 
 // Backend runtime settings API (POST/GET /api/settings).

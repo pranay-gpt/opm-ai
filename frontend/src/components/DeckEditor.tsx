@@ -53,37 +53,18 @@ export default function DeckEditor() {
 
     setIsLinting(true);
     try {
-      // For now, do client-side linting
-      // TODO: call backend when it supports text input
-      const requiredSections = ['RUNSPEC', 'GRID', 'PROPS', 'SOLUTION', 'SCHEDULE'];
-      const errors: string[] = [];
+      // Save deck to backend temp file first
+      const saveResponse = await api.saveDeck({ content: deck, filename: 'DECK.DATA' });
+      const deckPath = saveResponse.deck_path;
 
-      requiredSections.forEach((section) => {
-        if (!new RegExp(`^\\s*${section}\\b`, 'm').test(deck)) {
-          errors.push(`Missing required section: ${section}`);
-        }
-      });
+      // Lint the saved deck
+      const result: LintResult = await api.lint({ deck_path: deckPath });
 
-      if (!/DIMENS\s+.*\/\s*$/m.test(deck)) {
-        errors.push('DIMENS keyword not found or malformed in RUNSPEC');
-      }
-
-      const result: LintResult = {
-        deck_path: 'memory://deck.DATA',
-        issues: errors.map((err, i) => ({
-          severity: 'ERROR' as const,
-          section: null,
-          keyword: null,
-          line: null,
-          message: err,
-          rule_id: `client-lint-${i}`,
-        })),
-        lint_summary: errors.length === 0 ? 'All checks passed' : `${errors.length} issue(s) found`,
-        errors,
-        passed: errors.length === 0,
-      };
-
-      setLintErrors(errors.map((e, i) => ({ line: i + 1, message: e })));
+      setLintErrors(
+        result.issues
+          .filter((i) => i.line !== null)
+          .map((i) => ({ line: i.line!, message: i.message }))
+      );
       setLastLintResult(result);
     } catch (err) {
       console.error('Lint error:', err);

@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useLintActions, useLastLintResult } from '../stores/useAppStore';
-import { api } from '../api/client';
-import type { LintResult, LintIssue } from '../api/client';
+import { api, connectChat } from '../api/client';
+import type { LintResult, LintIssue, DeckSaveRequest } from '../api/client';
 import Editor from '@monaco-editor/react';
 
 export default function LinterPanel() {
@@ -23,42 +23,12 @@ export default function LinterPanel() {
     setError(null);
 
     try {
-      // Write to temp file and call backend lint endpoint
-      // For now, do client-side linting as fallback
-      const requiredSections = ['RUNSPEC', 'GRID', 'PROPS', 'SOLUTION', 'SCHEDULE'];
-      const errors: string[] = [];
+      // Save deck to backend temp file first
+      const saveResponse = await api.saveDeck({ content: deckText, filename: 'DECK.DATA' });
+      const deckPath = saveResponse.deck_path;
 
-      requiredSections.forEach((section) => {
-        if (!new RegExp(`^\\s*${section}\\b`, 'm').test(deckText)) {
-          errors.push(`Missing required section: ${section}`);
-        }
-      });
-
-      if (!/DIMENS\s+.*\/\s*$/m.test(deckText)) {
-        errors.push('DIMENS keyword not found or malformed in RUNSPEC');
-      }
-
-      // Check for common issues
-      if (/PERMX.*\/\s*$/m.test(deckText) && !/PORO.*\/\s*$/m.test(deckText)) {
-        errors.push('PERMX defined but PORO missing');
-      }
-
-      const issues: LintIssue[] = errors.map((err, i) => ({
-        severity: 'ERROR' as const,
-        section: null,
-        keyword: null,
-        line: null,
-        message: err,
-        rule_id: `client-lint-${i}`,
-      }));
-
-      const result: LintResult = {
-        deck_path: 'memory://deck.DATA',
-        issues,
-        lint_summary: errors.length === 0 ? 'All checks passed' : `${errors.length} issue(s) found`,
-        errors,
-        passed: errors.length === 0,
-      };
+      // Lint the saved deck
+      const result = await api.lint({ deck_path: deckPath });
 
       setLintResult(result);
       setLastLintResult(result);
@@ -297,9 +267,11 @@ SCHEDULE
                             </span>
                             <div className="flex-1">
                               <p className="text-textPrimary">{issue.message}</p>
-                              <p className="text-xs text-textMuted mt-1">
-                                Review the highlighted section in the editor
-                              </p>
+                              {issue.section && (
+                                <p className="text-xs text-textMuted mt-1">
+                                  Section: {issue.section} | Rule: {issue.rule_id ?? 'N/A'}
+                                </p>
+                              )}
                             </div>
                           </div>
                         </div>

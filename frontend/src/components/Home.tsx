@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useCurrentJob, useJobHistory, useLastResults, useLastBuildResponse } from '../stores/useAppStore';
 
 export default function Home() {
@@ -101,12 +102,12 @@ export default function Home() {
             <div key={cap.title} className="card p-5 card-hover">
               <h3 className="font-semibold text-textPrimary mb-2">{cap.title}</h3>
               <p className="text-sm text-textSecondary mb-4">{cap.desc}</p>
-              <a
-                href={cap.link}
+              <Link
+                to={cap.link}
                 className="text-sm font-medium text-primary hover:text-primaryHover flex items-center gap-1"
               >
                 Learn More →
-              </a>
+              </Link>
             </div>
           ))}
         </div>
@@ -117,9 +118,9 @@ export default function Home() {
         <section>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-textPrimary">Recent Jobs</h2>
-            <a href="/simulator" className="text-sm font-medium text-primary hover:text-primaryHover">
+            <Link to="/simulator" className="text-sm font-medium text-primary hover:text-primaryHover">
               View All →
-            </a>
+            </Link>
           </div>
           <div className="card overflow-hidden">
             <div className="table-container">
@@ -157,12 +158,12 @@ export default function Home() {
                       </td>
                       <td className="text-textSecondary">-</td>
                       <td>
-                        <a
-                          href={`/results?id=${job.job_id}`}
+                        <Link
+                          to={`/results?id=${job.job_id}`}
                           className="text-sm text-primary hover:text-primaryHover"
                         >
                           View
-                        </a>
+                        </Link>
                       </td>
                     </tr>
                   ))}
@@ -177,30 +178,30 @@ export default function Home() {
       <section>
         <h2 className="text-lg font-semibold text-textPrimary mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <a
-            href="/deck-builder"
+          <Link
+            to="/deck-builder"
             className="card p-5 card-hover flex flex-col items-center text-center gap-3"
           >
             <span className="text-3xl"><svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg></span>
             <span className="font-semibold text-textPrimary">Build a Deck</span>
             <span className="text-sm text-textSecondary">Describe your model in plain English</span>
-          </a>
-          <a
-            href="/deck-editor"
+          </Link>
+          <Link
+            to="/deck-editor"
             className="card p-5 card-hover flex flex-col items-center text-center gap-3"
           >
             <span className="text-3xl"><svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 4H9a2 2 0 00-2 2v12a2 2 0 002 2h2a2 2 0 002-2V6a2 2 0 00-2-2z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 10h10M7 14h10M7 18h10" /></svg></span>
             <span className="font-semibold text-textPrimary">Edit a Deck</span>
             <span className="text-sm text-textSecondary">Syntax-highlighted Monaco editor</span>
-          </a>
-          <a
-            href="/simulator"
+          </Link>
+          <Link
+            to="/simulator"
             className="card p-5 card-hover flex flex-col items-center text-center gap-3"
           >
             <span className="text-3xl"><svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg></span>
             <span className="font-semibold text-textPrimary">Run Simulation</span>
             <span className="text-sm text-textSecondary">Submit jobs and monitor progress</span>
-          </a>
+          </Link>
         </div>
       </section>
     </div>

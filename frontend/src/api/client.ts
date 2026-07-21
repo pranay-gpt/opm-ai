@@ -24,6 +24,8 @@ import type {
   Citation,
   QuizQuestion,
   LintIssue,
+  DeckSaveRequest,
+  DeckSaveResponse,
 } from '../types';
 
 // ============================================
@@ -42,8 +44,20 @@ async function fetchJson<T>(path: string, options: RequestInit = {}): Promise<T>
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: response.statusText }));
-    throw new Error(error.detail || `HTTP ${response.status}: ${response.statusText}`);
+    let errorDetail = response.statusText;
+    try {
+      const errorData = await response.json();
+      errorDetail = errorData.detail || errorDetail;
+    } catch {
+      // If not JSON, try text
+      try {
+        const errorText = await response.text();
+        errorDetail = errorText || errorDetail;
+      } catch {
+        // Fall back to status text
+      }
+    }
+    throw new Error(errorDetail || `HTTP ${response.status}: ${response.statusText}`);
   }
 
   if (response.status === 204) {
@@ -54,6 +68,13 @@ async function fetchJson<T>(path: string, options: RequestInit = {}): Promise<T>
 }
 
 export const api = {
+  // Deck saving
+  saveDeck: (request: DeckSaveRequest): Promise<DeckSaveResponse> =>
+    fetchJson<DeckSaveResponse>('/decks', {
+      method: 'POST',
+      body: JSON.stringify(request),
+    }),
+
   // Build
   build: (request: BuildRequest): Promise<BuildResponse> =>
     fetchJson<BuildResponse>('/build', {
@@ -166,6 +187,8 @@ export type {
   ExplanationLevel,
   Citation,
   QuizQuestion,
+  DeckSaveRequest,
+  DeckSaveResponse,
 };
 
 // ============================================

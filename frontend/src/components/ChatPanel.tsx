@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useChatStore, useSettingsStore } from '../stores/useAppStore';
+import { useChatStore, useSettingsStore, useChatMessages } from '../stores/useAppStore';
 import { api, connectChat } from '../api/client';
 import type { ChatMessage } from '../api/client';
 
 export default function ChatPanel() {
   const {
-    messages,
     sessionId,
     isConnected,
     isStreaming,
@@ -16,11 +15,13 @@ export default function ChatPanel() {
     setStreaming,
   } = useChatStore();
   const { settings } = useSettingsStore();
+  const messages = useChatMessages();
 
   const [input, setInput] = useState('');
   const [isSending, setIsSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const connectionRef = useRef<ReturnType<typeof connectChat> | null>(null);
+  const prevProviderRef = useRef(settings.llmProvider);
 
   // Auto-scroll to bottom
   const scrollToBottom = useCallback(() => {
@@ -31,27 +32,33 @@ export default function ChatPanel() {
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
-  // Initialize WebSocket connection
+  // Initialize WebSocket connection - only depends on sessionId
   useEffect(() => {
     if (!settings.groqApiKey && !settings.nimApiKey && settings.llmProvider !== 'offline') {
       console.warn('[Chat] No API keys configured, using offline mode');
     }
+
+    // Read current messages at connect time
+    const messages = useChatStore.getState().messages;
 
     connectionRef.current = connectChat(
       sessionId,
       messages,
       {
         onToken: (content) => {
-          if (messages.length === 0 || messages[messages.length - 1].role !== 'assistant') {
+          // Use getState to read latest messages
+          const currentMessages = useChatStore.getState().messages;
+          if (currentMessages.length === 0 || currentMessages[currentMessages.length - 1].role !== 'assistant') {
             addMessage({ role: 'assistant', content });
             setStreaming(true);
           } else {
-            updateLastMessage({ content: messages[messages.length - 1].content + content });
+            updateLastMessage({ content: currentMessages[currentMessages.length - 1].content + content });
           }
         },
         onToolCall: (toolCall) => {
+          const currentMessages = useChatStore.getState().messages;
           updateLastMessage({
-            tool_calls: [...(messages[messages.length - 1]?.tool_calls || []), toolCall],
+            tool_calls: [...(currentMessages[currentMessages.length - 1]?.tool_calls || []), toolCall],
           });
         },
         onToolResult: (toolCallId, result) => {
@@ -76,7 +83,7 @@ export default function ChatPanel() {
     return () => {
       connectionRef.current?.close();
     };
-  }, [sessionId, messages, addMessage, updateLastMessage, setConnected, setStreaming]);
+  }, [sessionId, addMessage, updateLastMessage, setConnected, setStreaming]);
 
   const handleSend = useCallback(async () => {
     if (!input.trim() || isSending) return;
@@ -86,9 +93,11 @@ export default function ChatPanel() {
     setInput('');
     setIsSending(true);
 
-    connectionRef.current?.send([...messages, userMessage]);
+    // Read latest messages from store to send full history
+    const messages = useChatStore.getState().messages;
+    connectionRef.current?.send(messages);
     setIsSending(false);
-  }, [input, isSending, messages, addMessage]);
+  }, [input, isSending, addMessage]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -96,6 +105,23 @@ export default function ChatPanel() {
       handleSend();
     }
   }, [handleSend]);
+
+  // Handle provider change with revert on failure
+  const handleProviderChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newProvider = e.target.value as 'groq' | 'nim' | 'offline';
+    const prevProvider = prevProviderRef.current;
+    prevProviderRef.current = newProvider;
+
+    useSettingsStore.getState().setLLMProvider(newProvider);
+    api.updateSettings({ provider: newProvider }).catch((err) => {
+      console.error('[Chat] Failed to update provider:', err);
+      // Revert local store on failure
+      prevProviderRef.current = prevProvider;
+      useSettingsStore.getState().setLLMProvider(prevProvider);
+      // Force re-render by updating the select value
+      e.target.value = prevProvider;
+    });
+  }, []);
 
   return (
     <div className="flex flex-col h-full bg-base">
@@ -115,18 +141,12 @@ export default function ChatPanel() {
         <div className="flex items-center gap-2">
           <select
             value={settings.llmProvider}
-            onChange={(e) => {
-              const newProvider = e.target.value as 'groq' | 'nim' | 'offline';
-              useSettingsStore.getState().setLLMProvider(newProvider);
-              // Apply to the backend too; keys are managed on the Settings page.
-              api.updateSettings({ provider: newProvider }).catch((err) => {
-                console.error('[Chat] Failed to update provider:', err);
-              });
-            }}
+            onChange={handleProviderChange}
             className="text-xs px-2 py-1 rounded bg-base border border-border text-textPrimary"
           >
             <option value="groq">Groq</option>
             <option value="nim">NVIDIA NIM</option>
+            <option value="openai">OpenAI</option>
             <option value="offline">Offline</option>
           </select>
           <button
@@ -183,7 +203,7 @@ export default function ChatPanel() {
               {message.role === 'user' ? (
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
               ) : message.role === 'tool' ? (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
               ) : (
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
               )}

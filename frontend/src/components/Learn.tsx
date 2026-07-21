@@ -1,8 +1,11 @@
 import { useState, useCallback } from 'react';
+import { useChatStore } from '../stores/useAppStore';
 import { api } from '../api/client';
-import type { ExplainRequest, ExplainResponse, QuizRequest, QuizResponse, QuizQuestion, ExplanationLevel, Citation } from '../types';
+import type { ExplainRequest, ExplainResponse, QuizRequest, QuizResponse, QuizQuestion, ExplanationLevel, Citation, LearningReportRequest, LearningReportResponse } from '../api/client';
 
 export default function Learn() {
+  const { sessionId, messages } = useChatStore();
+
   // Explain tab state
   const [explainQuestion, setExplainQuestion] = useState('');
   const [explainLevel, setExplainLevel] = useState<ExplanationLevel>('intermediate');
@@ -19,8 +22,13 @@ export default function Learn() {
   const [quizLoading, setQuizLoading] = useState(false);
   const [quizError, setQuizError] = useState<string | null>(null);
 
+  // Learning Report tab state
+  const [learningReport, setLearningReport] = useState<LearningReportResponse | null>(null);
+  const [reportLoading, setReportLoading] = useState(false);
+  const [reportError, setReportError] = useState<string | null>(null);
+
   // Active tab
-  const [activeTab, setActiveTab] = useState<'explain' | 'quiz'>('explain');
+  const [activeTab, setActiveTab] = useState<'explain' | 'quiz' | 'report'>('explain');
 
   // Handle explain submit
   const handleExplain = useCallback(async () => {
@@ -99,6 +107,28 @@ export default function Learn() {
 
   const totalAnswered = Object.keys(quizAnswers).length;
 
+  // Handle learning report generation
+  const handleGenerateReport = useCallback(async () => {
+    setReportLoading(true);
+    setReportError(null);
+
+    try {
+      const conversationHistory = messages.map(msg => ({ role: msg.role, content: msg.content }));
+      const request: LearningReportRequest = {
+        session_id: sessionId,
+        conversation_history: conversationHistory,
+      };
+      const response = await api.learningReport(request);
+      setLearningReport(response);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to generate learning report';
+      setReportError(message);
+      console.error('Learning report error:', err);
+    } finally {
+      setReportLoading(false);
+    }
+  }, [sessionId, messages]);
+
   return (
     <div className="flex flex-col h-full bg-base">
       {/* Header */}
@@ -116,10 +146,11 @@ export default function Learn() {
         {[
           { id: 'explain', label: 'Explain', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> },
           { id: 'quiz', label: 'Quiz', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg> },
+          { id: 'report', label: 'Learning Report', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg> },
         ].map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as 'explain' | 'quiz')}
+            onClick={() => setActiveTab(tab.id as 'explain' | 'quiz' | 'report')}
             className={`tab flex items-center gap-2 px-4 py-2.5 ${activeTab === tab.id ? 'tab-active' : ''}`}
           >
             <span>{tab.icon}</span>
@@ -477,6 +508,143 @@ export default function Learn() {
                 </div>
               </div>
             )}
+          </div>
+        )}
+
+        {/* Learning Report Tab */}
+        {activeTab === 'report' && (
+          <div className="max-w-3xl mx-auto space-y-6">
+            <div className="card p-6">
+              <h2 className="text-lg font-semibold text-textPrimary mb-4">Learning Report</h2>
+              <p className="text-sm text-textSecondary mb-4">
+                Generate a summary of your learning session including topics covered, key concepts, and quiz performance.
+              </p>
+
+              {!learningReport ? (
+                <button
+                  onClick={handleGenerateReport}
+                  disabled={reportLoading || messages.length === 0}
+                  className="btn-primary w-full py-3 text-base disabled:opacity-50"
+                >
+                  {reportLoading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                      Generating Report...
+                    </span>
+                  ) : (
+                    'Generate Learning Report'
+                  )}
+                </button>
+              ) : null}
+
+              {reportError && (
+                <div className="p-3 rounded bg-error/20 border border-error text-error text-sm">
+                  {reportError}
+                </div>
+              )}
+
+              {learningReport && (
+                <div className="space-y-6 mt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="card p-4">
+                      <div className="text-2xl font-bold text-textPrimary">{learningReport.explanations_generated}</div>
+                      <div className="text-sm text-textSecondary">Explanations Generated</div>
+                    </div>
+                    <div className="card p-4">
+                      <div className="text-2xl font-bold text-textPrimary">{learningReport.questions_asked}</div>
+                      <div className="text-sm text-textSecondary">Questions Asked</div>
+                    </div>
+                    <div className="card p-4">
+                      <div className="text-2xl font-bold text-textPrimary">{learningReport.key_concepts.length}</div>
+                      <div className="text-sm text-textSecondary">Key Concepts</div>
+                    </div>
+                  </div>
+
+                  {/* Topics Covered */}
+                  <div className="card p-4">
+                    <h3 className="font-semibold text-textPrimary mb-3">Topics Covered</h3>
+                    <ul className="space-y-2">
+                      {learningReport.topics_covered.map((topic, idx) => (
+                        <li key={idx} className="text-sm text-textSecondary flex items-center gap-2">
+                          <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          {topic}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Key Concepts */}
+                  <div className="card p-4">
+                    <h3 className="font-semibold text-textPrimary mb-3">Key Concepts</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {learningReport.key_concepts.map((concept, idx) => (
+                        <span key={idx} className="px-3 py-1 text-sm rounded bg-primary/20 text-primary border border-primary/30">
+                          {concept}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Quiz Scores */}
+                  {learningReport.quiz_scores && Object.keys(learningReport.quiz_scores).length > 0 && (
+                    <div className="card p-4">
+                      <h3 className="font-semibold text-textPrimary mb-3">Quiz Scores</h3>
+                      <div className="space-y-2">
+                        {Object.entries(learningReport.quiz_scores).map(([quiz, score], idx) => (
+                          <div key={idx} className="flex items-center justify-between">
+                            <span className="text-sm text-textSecondary">{quiz}</span>
+                            <span className="font-mono font-medium text-textPrimary">{Math.round(score * 100)}%</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Citations Used */}
+                  {learningReport.citations_used.length > 0 && (
+                    <div className="card p-4">
+                      <h3 className="font-semibold text-textPrimary mb-3">Citations Used</h3>
+                      <ul className="space-y-2">
+                        {learningReport.citations_used.map((citation, idx) => (
+                          <li key={idx} className="text-sm">
+                            <div className="font-medium text-textPrimary">{citation.title}</div>
+                            <div className="text-textMuted text-xs font-mono">{citation.source_id}</div>
+                            {citation.url_or_path && (
+                              <a href={citation.url_or_path} target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primaryHover text-xs underline">
+                                {citation.url_or_path}
+                              </a>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Markdown Report */}
+                  <div className="card p-4">
+                    <h3 className="font-semibold text-textPrimary mb-3">Full Report (Markdown)</h3>
+                    <div className="prose prose-invert max-w-none whitespace-pre-wrap text-sm bg-base border border-border p-4 rounded">
+                      {learningReport.markdown}
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setLearningReport(null)}
+                    className="btn-secondary"
+                  >
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    Generate New Report
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>

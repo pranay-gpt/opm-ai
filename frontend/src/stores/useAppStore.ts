@@ -9,14 +9,16 @@ import type { ChatMessage, JobStatus, LintResult, KPIsResponse, SimulationResult
 interface SettingsState {
   settings: Settings;
   setGroqApiKey: (key: string) => void;
+  setOpenaiApiKey: (key: string) => void;
   setNimApiKey: (key: string) => void;
   setNimBaseUrl: (url: string) => void;
-  setLLMProvider: (provider: 'groq' | 'nim' | 'offline') => void;
+  setLLMProvider: (provider: 'groq' | 'openai' | 'nim' | 'offline') => void;
   updateSettings: (settings: Partial<Settings>) => void;
 }
 
 const DEFAULT_SETTINGS: Settings = {
   groqApiKey: '',
+  openaiApiKey: '',
   nimApiKey: '',
   nimBaseUrl: 'https://integrate.api.nvidia.com/v1',
   llmProvider: 'offline',
@@ -28,6 +30,7 @@ export const useSettingsStore = create<SettingsState>()(
       settings: DEFAULT_SETTINGS,
 
       setGroqApiKey: (key) => set((state) => ({ settings: { ...state.settings, groqApiKey: key } })),
+      setOpenaiApiKey: (key) => set((state) => ({ settings: { ...state.settings, openaiApiKey: key } })),
       setNimApiKey: (key) => set((state) => ({ settings: { ...state.settings, nimApiKey: key } })),
       setNimBaseUrl: (url) => set((state) => ({ settings: { ...state.settings, nimBaseUrl: url } })),
       setLLMProvider: (provider) => set((state) => ({ settings: { ...state.settings, llmProvider: provider } })),
@@ -36,6 +39,7 @@ export const useSettingsStore = create<SettingsState>()(
     {
       name: 'opm-ai-settings',
       storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({ settings: { llmProvider: state.settings.llmProvider } }),
     }
   )
 );
@@ -85,7 +89,7 @@ export const useChatStore = create<ChatState>()(
     {
       name: 'opm-ai-chat',
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ messages: state.messages, sessionId: state.sessionId }),
+      partialize: (state) => ({ sessionId: state.sessionId }),
     }
   )
 );
@@ -190,19 +194,15 @@ export const useSimulationStore = create<SimulationState>()(
 
 interface UIState {
   sidebarOpen: boolean;
-  activePanel: 'home' | 'deck-builder' | 'deck-editor' | 'simulator' | 'results' | 'chat' | 'linter' | 'settings';
   toggleSidebar: () => void;
   setSidebarOpen: (open: boolean) => void;
-  setActivePanel: (panel: UIState['activePanel']) => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
   sidebarOpen: true,
-  activePanel: 'home',
 
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
   setSidebarOpen: (open) => set({ sidebarOpen: open }),
-  setActivePanel: (panel) => set({ activePanel: panel }),
 }));
 
 // ============================================
@@ -210,13 +210,11 @@ export const useUIStore = create<UIState>((set) => ({
 // ============================================
 
 // Settings
-export const useGroqApiKey = () => useSettingsStore((state) => state.settings.groqApiKey);
-export const useNimApiKey = () => useSettingsStore((state) => state.settings.nimApiKey);
-export const useNimBaseUrl = () => useSettingsStore((state) => state.settings.nimBaseUrl);
 export const useLLMProvider = () => useSettingsStore((state) => state.settings.llmProvider);
 export const useSettings = () => useSettingsStore((state) => state.settings);
 export const useSettingsActions = () => useSettingsStore((state) => ({
   setGroqApiKey: state.setGroqApiKey,
+  setOpenaiApiKey: state.setOpenaiApiKey,
   setNimApiKey: state.setNimApiKey,
   setNimBaseUrl: state.setNimBaseUrl,
   setLLMProvider: state.setLLMProvider,
@@ -267,9 +265,7 @@ export const useSimulationActions = () => useSimulationStore((state) => ({
 
 // UI
 export const useSidebarOpen = () => useUIStore((state) => state.sidebarOpen);
-export const useActivePanel = () => useUIStore((state) => state.activePanel);
 export const useUIActions = () => useUIStore((state) => ({
   toggleSidebar: state.toggleSidebar,
   setSidebarOpen: state.setSidebarOpen,
-  setActivePanel: state.setActivePanel,
 }));

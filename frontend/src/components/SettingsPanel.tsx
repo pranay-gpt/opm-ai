@@ -9,20 +9,22 @@ export default function SettingsPanel() {
   // Key inputs live in component state only: they are POSTed to the local
   // backend on save and never written to localStorage.
   const [groqKey, setGroqKey] = useState('');
+  const [openaiKey, setOpenaiKey] = useState('');
   const [nimKey, setNimKey] = useState('');
-  const [provider, setProvider] = useState<'groq' | 'nim' | 'offline'>('offline');
+  const [provider, setProvider] = useState<'groq' | 'openai' | 'nim' | 'offline'>('offline');
   const [keysConfigured, setKeysConfigured] = useState<SettingsResponse['keys_configured']>({
     groq: false,
     openai: false,
     nim: false,
   });
   const [showGroqKey, setShowGroqKey] = useState(false);
+  const [showOpenaiKey, setShowOpenaiKey] = useState(false);
   const [showNimKey, setShowNimKey] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const applyResponse = useCallback((response: SettingsResponse) => {
-    if (response.provider === 'groq' || response.provider === 'nim' || response.provider === 'offline') {
+    if (response.provider === 'groq' || response.provider === 'openai' || response.provider === 'nim' || response.provider === 'offline') {
       setProvider(response.provider);
       updateSettings({ llmProvider: response.provider });
     }
@@ -35,6 +37,7 @@ export default function SettingsPanel() {
     // Only send keys the user actually typed; omitted keys stay untouched
     // on the backend.
     if (groqKey) request.groq_api_key = groqKey;
+    if (openaiKey) request.openai_api_key = openaiKey;
     if (nimKey) request.nvidia_nim_api_key = nimKey;
     try {
       const response = await api.updateSettings(request);
@@ -42,15 +45,16 @@ export default function SettingsPanel() {
       // Clear key inputs after a successful save; the backend holds them
       // in memory and never returns them.
       setGroqKey('');
+      setOpenaiKey('');
       setNimKey('');
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save settings');
     }
-  }, [provider, groqKey, nimKey, applyResponse]);
+  }, [provider, groqKey, openaiKey, nimKey, applyResponse]);
 
-  const handleProviderChange = useCallback((newProvider: 'groq' | 'nim' | 'offline') => {
+  const handleProviderChange = useCallback((newProvider: 'groq' | 'openai' | 'nim' | 'offline') => {
     setProvider(newProvider);
   }, []);
 
@@ -99,6 +103,7 @@ export default function SettingsPanel() {
             <div className="space-y-3">
               {[
                 { id: 'groq', label: 'Groq', desc: 'Fast inference with Llama 3.3 70B (requires GROQ_API_KEY)', configured: keysConfigured.groq },
+                { id: 'openai', label: 'OpenAI', desc: 'OpenAI GPT models (requires OPENAI_API_KEY)', configured: keysConfigured.openai },
                 { id: 'nim', label: 'NVIDIA NIM', desc: 'NVIDIA NIM endpoints (requires NIM_API_KEY)', configured: keysConfigured.nim },
                 { id: 'offline', label: 'Offline Mode', desc: 'No LLM - use manual deck building only', configured: true },
               ].map((opt) => (
@@ -115,7 +120,7 @@ export default function SettingsPanel() {
                     name="llmProvider"
                     value={opt.id}
                     checked={provider === opt.id}
-                    onChange={() => handleProviderChange(opt.id as 'groq' | 'nim' | 'offline')}
+                    onChange={() => handleProviderChange(opt.id as 'groq' | 'openai' | 'nim' | 'offline')}
                     className="mt-1 w-4 h-4 text-primary border-border focus:ring-primary"
                   />
                   <div className="flex-1">
@@ -158,6 +163,48 @@ export default function SettingsPanel() {
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-textSecondary hover:text-textPrimary"
                 >
                   {showGroqKey ? (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+              <p className="text-xs text-textMuted mt-2">
+                Sent to the local backend on save and held in memory only. Never persisted
+                to disk, never returned by the server, never stored in the browser.
+              </p>
+            </section>
+          )}
+
+          {/* OpenAI API Key */}
+          {provider === 'openai' && (
+            <section className="card p-5">
+              <h2 className="text-lg font-semibold text-textPrimary mb-4 flex items-center gap-2">
+                <span className="text-2xl"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg></span>
+                OpenAI API Key
+              </h2>
+              <p className="text-sm text-textSecondary mb-4">
+                Get your API key from <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener" className="text-primary hover:underline">platform.openai.com</a>
+              </p>
+              <div className="relative">
+                <input
+                  type={showOpenaiKey ? 'text' : 'password'}
+                  value={openaiKey}
+                  onChange={(e) => setOpenaiKey(e.target.value)}
+                  placeholder={keysConfigured.openai ? 'Key configured (enter a new key to replace)' : 'sk-...'}
+                  className="input pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowOpenaiKey(!showOpenaiKey)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-textSecondary hover:text-textPrimary"
+                >
+                  {showOpenaiKey ? (
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                     </svg>
@@ -287,6 +334,7 @@ export default function SettingsPanel() {
               <a href="https://opm-project.org" target="_blank" rel="noopener" className="text-xs text-primary hover:underline">Documentation</a>
               <a href="https://github.com/NVIDIA" target="_blank" rel="noopener" className="text-xs text-primary hover:underline">NVIDIA NIM</a>
               <a href="https://groq.com" target="_blank" rel="noopener" className="text-xs text-primary hover:underline">Groq</a>
+              <a href="https://openai.com" target="_blank" rel="noopener" className="text-xs text-primary hover:underline">OpenAI</a>
             </div>
           </section>
         </div>

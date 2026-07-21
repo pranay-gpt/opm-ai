@@ -5,7 +5,7 @@ import type { RunRequest, JobStatus } from '../api/client';
 
 export default function SimulationRunner() {
   const { currentJob, jobHistory, setCurrentJob, addToHistory } = useSimulationStore();
-  const { lastDeckPath, lastBuildResponse } = useDeckStore();
+  const { lastDeckPath, lastBuildResponse, currentDeck } = useDeckStore();
 
   const [deckPath, setDeckPath] = useState(lastDeckPath || '');
   const [timeout, setTimeout] = useState(120);
@@ -52,13 +52,20 @@ export default function SimulationRunner() {
     }
   }, [deckPath, timeout, setCurrentJob, addToHistory]);
 
-  const handleUseLastDeck = useCallback(() => {
-    if (lastBuildResponse?.deck) {
-      // In a real app, this would save to a temp file and return the path
-      // For now, we'll use a placeholder
-      setDeckPath('/tmp/last_deck.DATA');
+  const handleUseLastDeck = useCallback(async () => {
+    // Use the deck from last build response or current deck editor content
+    const deckText = lastBuildResponse?.deck || currentDeck;
+    if (deckText) {
+      try {
+        // Save to backend and get a real path
+        const saveResponse = await api.saveDeck({ content: deckText, filename: 'DECK.DATA' });
+        setDeckPath(saveResponse.deck_path);
+      } catch (err) {
+        console.error('Save deck error:', err);
+        setError('Failed to save deck for simulation');
+      }
     }
-  }, [lastBuildResponse]);
+  }, [lastBuildResponse, currentDeck]);
 
   const handleRefresh = useCallback(async () => {
     if (currentJob) {
@@ -109,7 +116,7 @@ export default function SimulationRunner() {
                     onClick={handleUseLastDeck}
                     className="btn-secondary btn-sm whitespace-nowrap"
                   >
-                    Use Last Built
+                    Use Last Built Deck
                   </button>
                 )}
               </div>

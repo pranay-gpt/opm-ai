@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import { useUIStore, useLLMProvider } from '../stores/useAppStore';
 
 const navItems = [
@@ -11,10 +12,7 @@ const navItems = [
   { path: '/settings', label: 'Settings', icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> },
 ] as const;
 
-const getPanelFromPath = (path: string) => path.slice(1) || 'home';
-
 export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
-  const { activePanel, setActivePanel } = useUIStore();
   const llmProvider = useLLMProvider();
 
   return (
@@ -32,18 +30,20 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
 
         <div className="hidden lg:flex items-center gap-1 bg-base/50 rounded-md p-1 border border-border">
           {navItems.map((item) => (
-            <button
+            <NavLink
               key={item.path}
-              onClick={() => setActivePanel(getPanelFromPath(item.path) as any)}
-              className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                activePanel === getPanelFromPath(item.path)
-                  ? 'text-primary bg-primaryMuted border-b-2 border-primary'
-                  : 'text-textSecondary hover:text-textPrimary hover:bg-surfaceHover'
-              }`}
+              to={item.path}
+              className={({ isActive }) =>
+                `flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'text-primary bg-primaryMuted border-b-2 border-primary'
+                    : 'text-textSecondary hover:text-textPrimary hover:bg-surfaceHover'
+                }`
+              }
             >
               <span className="text-base">{item.icon}</span>
               <span className="hidden sm:inline">{item.label}</span>
-            </button>
+            </NavLink>
           ))}
         </div>
       </div>

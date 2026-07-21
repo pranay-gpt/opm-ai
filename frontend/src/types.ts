@@ -154,6 +154,26 @@ export interface Settings {
   llmProvider: 'groq' | 'nim' | 'offline';
 }
 
+// Backend runtime settings API (POST/GET /api/settings).
+// Keys are write-only: sent to the local backend, held in process memory,
+// never persisted or echoed back. GET returns booleans only.
+export interface SettingsUpdateRequest {
+  provider: 'groq' | 'openai' | 'nim' | 'offline';
+  groq_api_key?: string;
+  openai_api_key?: string;
+  nvidia_nim_api_key?: string;
+}
+
+export interface SettingsResponse {
+  provider: string;
+  active_provider: string;
+  keys_configured: {
+    groq: boolean;
+    openai: boolean;
+    nim: boolean;
+  };
+}
+
 // Explainer types
 export interface ExplainRequest {
   topic?: string | null;

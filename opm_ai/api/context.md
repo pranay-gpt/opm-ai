@@ -52,6 +52,21 @@ All route handlers in `routes/` are thin adapters that:
 | `routes/results.py` | GET `/api/results/{job_id}` - KPIs + Plotly JSON plots; `/snapshots` - ResInsight 3D PNG export (render or reuse cache); `/snapshots/{file}` - serve one PNG |
 | `routes/chat.py` | WebSocket `/api/chat` + HTTP fallback - LLM chat with tool calling |
 | `routes/explainer.py` | POST `/api/explain`, `/api/quiz`, `/api/learning-report` - Educational explainer API |
+| `routes/settings.py` | GET/POST `/api/settings` - runtime LLM provider/key overrides (Stage C) |
+
+### Runtime Settings (Stage C, 2026-07-20)
+
+- POST `/api/settings` body: `{provider: "groq"|"openai"|"nim"|"offline", groq_api_key?, openai_api_key?, nvidia_nim_api_key?}`. Omitted key = untouched; empty string = cleared.
+- Mechanism: plain attribute assignment on the module-level `opm_ai.settings.settings` singleton (pydantic-settings v2 allows this; `validate_assignment` is off). IN-MEMORY ONLY: nothing is written to .env or disk, lost on restart by design.
+- GET `/api/settings` response: `{provider, active_provider, keys_configured: {groq: bool, openai: bool, nim: bool}}`. NEVER returns key material; POST responds with the same shape.
+- `active_provider` is `settings.active_llm_client` resolution: a selected provider without a key resolves to "offline".
+- Takes effect without restart because `LLMClient()` reads settings at construction and chat.py constructs one per connection. Do not add an import-time client cache; it would break this invariant.
+
+### Per-Session Chat Lock (Stage C, 2026-07-20)
+
+- `SessionStore.get_session_lock(session_id)` returns a per-session `asyncio.Lock` from a bounded LRU dict (same `max_entries` as the session dict).
+- `routes/chat.py` wraps every session read-modify-write in `async with get_session_lock(...)`; the LLM call runs on a history snapshot taken under the lock, outside the lock itself.
+- Without the lock, two concurrent connections on one session id lose updates (verified: 25/50 messages lost in the unlocked variant). Test: `tests/integration/test_chat_session_concurrency.py`.
 
 ### Explainer Endpoints
 

@@ -12,7 +12,12 @@ from opm_ai.api.schemas import (
     GENERATE_QUIZ_TOOL,
 )
 from opm_ai.api.job_store import create_job, set_job_running, set_job_completed, set_job_failed, get_job
-from opm_ai.api.session_store import get_or_create_session, get_session, update_session
+from opm_ai.api.session_store import (
+    get_or_create_session,
+    get_session,
+    get_session_lock,
+    update_session,
+)
 from opm_ai.builder import build_deck
 from opm_ai.linter import lint_deck
 from opm_ai.runner import run_simulation
@@ -275,15 +280,21 @@ async def websocket_chat(websocket: WebSocket):
         session_id = request.session_id
         system_prompt = load_system_prompt()
 
-        # Get or create session history using bounded session store
-        _, history = get_or_create_session(session_id)
+        # Per-session lock: concurrent connections on the same session id
+        # share one history list; every read-modify-write must hold this
+        # lock so interleaved handlers cannot lose updates.
+        session_lock = get_session_lock(session_id)
 
-        # Add user messages from request
-        for msg in request.messages:
-            history.append(msg)
+        async with session_lock:
+            # Get or create session history using bounded session store
+            _, history = get_or_create_session(session_id)
 
-        # Update session store with modified history
-        update_session(session_id, history)
+            # Add user messages from request
+            for msg in request.messages:
+                history.append(msg)
+
+            # Update session store with modified history
+            update_session(session_id, history)
 
         client = LLMClient()
 
@@ -296,8 +307,10 @@ async def websocket_chat(websocket: WebSocket):
 
         # Main chat loop
         while True:
-            # Prepare messages for LLM: system + history
-            messages = [ChatMessage(role="system", content=system_prompt)] + history
+            # Prepare messages for LLM: system + snapshot of history taken
+            # under the lock (the LLM call itself runs unlocked).
+            async with session_lock:
+                messages = [ChatMessage(role="system", content=system_prompt)] + list(history)
 
             # Call LLM with tools
             response = await asyncio.get_event_loop().run_in_executor(
@@ -327,14 +340,15 @@ async def websocket_chat(websocket: WebSocket):
                     tool_result = await execute_tool(tool_name, tool_args)
 
                     # Add tool result to history
-                    history.append(ChatMessage(
-                        role="tool",
-                        content=json.dumps(tool_result),
-                        tool_call_id=tool_call_id,
-                    ))
+                    async with session_lock:
+                        history.append(ChatMessage(
+                            role="tool",
+                            content=json.dumps(tool_result),
+                            tool_call_id=tool_call_id,
+                        ))
 
-                    # Update session store
-                    update_session(session_id, history)
+                        # Update session store
+                        update_session(session_id, history)
 
                     # Send tool result to frontend
                     await websocket.send_text(json.dumps({
@@ -356,10 +370,11 @@ async def websocket_chat(websocket: WebSocket):
                 }))
 
                 # Add assistant response to history
-                history.append(ChatMessage(role="assistant", content=content))
+                async with session_lock:
+                    history.append(ChatMessage(role="assistant", content=content))
 
-                # Update session store
-                update_session(session_id, history)
+                    # Update session store
+                    update_session(session_id, history)
 
             else:
                 # Empty response

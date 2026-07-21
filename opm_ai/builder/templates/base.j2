@@ -142,6 +142,11 @@ DENSITY
 	      	53.66 64.49 0.0533 /
 
 PVDG
+{% if pvdg_rows %}
+{% for row in pvdg_rows %}
+{{ row }}
+{% endfor %} /
+{% else %}
 14.700	166.666	0.008000
 264.70	12.0930	0.009600
 514.70	6.27400	0.011200
@@ -152,6 +157,7 @@ PVDG
 4014.7	0.81100	0.026800
 5014.7	0.64900	0.030900
 9014.7	0.38600	0.047000 /
+{% endif %}
 
 PVTO
 0.0010	14.7	1.0620	1.0400 /
@@ -279,4 +285,23 @@ TSTEP
 {{ '%.0f'|format(dt) }}{{ ' ' }}
 {% endfor %}
 /
+{% for event in schedule_events %}
+{% for action in event.actions %}
+
+{{ action }}
+{% endfor %}
+{% if event.date %}
+
+DATES
+ {{ event.date }} /
+/
+{% elif event.tstep_list %}
+
+TSTEP
+{% for dt in event.tstep_list %}
+{{ '%g'|format(dt) }}{{ ' ' }}
+{% endfor %}
+/
+{% endif %}
+{% endfor %}
 END

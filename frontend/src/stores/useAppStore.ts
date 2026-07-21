@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { useShallow } from 'zustand/react/shallow';
 import type { ChatMessage, JobStatus, LintResult, KPIsResponse, SimulationResult, BuildResponse, Settings } from '../types';
 
 // ============================================
@@ -212,60 +213,60 @@ export const useUIStore = create<UIState>((set) => ({
 // Settings
 export const useLLMProvider = () => useSettingsStore((state) => state.settings.llmProvider);
 export const useSettings = () => useSettingsStore((state) => state.settings);
-export const useSettingsActions = () => useSettingsStore((state) => ({
+export const useSettingsActions = () => useSettingsStore(useShallow((state) => ({
   setGroqApiKey: state.setGroqApiKey,
   setOpenaiApiKey: state.setOpenaiApiKey,
   setNimApiKey: state.setNimApiKey,
   setNimBaseUrl: state.setNimBaseUrl,
   setLLMProvider: state.setLLMProvider,
   updateSettings: state.updateSettings,
-}));
+})));
 
 // Chat
 export const useChatMessages = () => useChatStore((state) => state.messages);
 export const useChatSessionId = () => useChatStore((state) => state.sessionId);
 export const useChatConnected = () => useChatStore((state) => state.isConnected);
 export const useChatStreaming = () => useChatStore((state) => state.isStreaming);
-export const useChatActions = () => useChatStore((state) => ({
+export const useChatActions = () => useChatStore(useShallow((state) => ({
   addMessage: state.addMessage,
   updateLastMessage: state.updateLastMessage,
   clearChat: state.clearChat,
   setConnected: state.setConnected,
   setStreaming: state.setStreaming,
   setSessionId: state.setSessionId,
-}));
+})));
 
 // Deck
 export const useCurrentDeck = () => useDeckStore((state) => state.currentDeck);
 export const useCurrentDeckPath = () => useDeckStore((state) => state.currentDeckPath);
 export const useLastBuildResponse = () => useDeckStore((state) => state.lastBuildResponse);
 export const useLastDeckPath = () => useDeckStore((state) => state.lastDeckPath);
-export const useDeckActions = () => useDeckStore((state) => ({
+export const useDeckActions = () => useDeckStore(useShallow((state) => ({
   setCurrentDeck: state.setCurrentDeck,
   setLastBuildResponse: state.setLastBuildResponse,
   setLastDeckPath: state.setLastDeckPath,
-}));
+})));
 
 // Lint
 export const useLastLintResult = () => useLintStore((state) => state.lastLintResult);
-export const useLintActions = () => useLintStore((state) => ({
+export const useLintActions = () => useLintStore(useShallow((state) => ({
   setLastLintResult: state.setLastLintResult,
-}));
+})));
 
 // Simulation
 export const useCurrentJob = () => useSimulationStore((state) => state.currentJob);
 export const useJobHistory = () => useSimulationStore((state) => state.jobHistory);
 export const useLastResults = () => useSimulationStore((state) => state.lastResults);
-export const useSimulationActions = () => useSimulationStore((state) => ({
+export const useSimulationActions = () => useSimulationStore(useShallow((state) => ({
   setCurrentJob: state.setCurrentJob,
   addToHistory: state.addToHistory,
   updateJobInHistory: state.updateJobInHistory,
   setLastResults: state.setLastResults,
-}));
+})));
 
 // UI
 export const useSidebarOpen = () => useUIStore((state) => state.sidebarOpen);
-export const useUIActions = () => useUIStore((state) => ({
+export const useUIActions = () => useUIStore(useShallow((state) => ({
   toggleSidebar: state.toggleSidebar,
   setSidebarOpen: state.setSidebarOpen,
-}));
+})));

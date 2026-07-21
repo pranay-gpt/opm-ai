@@ -5,11 +5,27 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from opm_ai.api.routes import build, lint, run, results, chat, explainer
+from opm_ai.api.routes import build, decks, lint, run, results, chat, explainer
 from opm_ai.api.routes import settings as settings_routes
 from opm_ai.api.session_store import get_session_store
 from opm_ai.settings import settings
+
+
+class SPAStaticFiles(StaticFiles):
+    """Serve index.html for unknown paths so client-side routes deep-link."""
+
+    async def get_response(self, path: str, scope):
+        try:
+            response = await super().get_response(path, scope)
+        except StarletteHTTPException as exc:
+            if exc.status_code != 404:
+                raise
+            return await super().get_response("index.html", scope)
+        if response.status_code == 404:
+            response = await super().get_response("index.html", scope)
+        return response
 
 
 @asynccontextmanager
@@ -46,6 +62,7 @@ def create_app() -> FastAPI:
 
     # Include routers with /api prefix
     app.include_router(build.router, prefix="/api")
+    app.include_router(decks.router, prefix="/api")
     app.include_router(lint.router, prefix="/api")
     app.include_router(run.router, prefix="/api")
     app.include_router(results.router, prefix="/api")
@@ -63,7 +80,7 @@ def create_app() -> FastAPI:
     repo_root = Path(__file__).resolve().parents[2]
     for candidate in (Path("/app/static"), repo_root / "frontend" / "dist"):
         if (candidate / "index.html").exists():
-            app.mount("/", StaticFiles(directory=candidate, html=True), name="frontend")
+            app.mount("/", SPAStaticFiles(directory=candidate, html=True), name="frontend")
             break
 
     return app

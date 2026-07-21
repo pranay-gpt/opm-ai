@@ -20,9 +20,23 @@ and validates with `ModelSpec.model_validate`. Any failure returns None and
 build_deck falls back to the offline regex extractor, so CI/offline behavior
 is unchanged. The extraction path taken is logged via loguru.
 
-`ModelSpec.schedule: list[ScheduleEvent]` is a Stage D placeholder
-(date / tstep_days / actions); no template consumes it yet, deck output is
-byte-identical to before.
+`ModelSpec.schedule: list[ScheduleEvent]` (Stage D): each event is a schedule
+phase - `actions` (raw keyword blocks, e.g. a full WCONINJE record) rendered
+verbatim, then a time advance: `date` emits a DATES block, else `tstep_days`
+(float or list of floats) emits a TSTEP block. Events append after the
+initial TSTEP in base.j2. An empty schedule renders byte-identical decks to
+the pre-Stage-D template (md5-verified; existing tests depend on this).
+
+Stage D also added ModelSpec initialization overrides, all optional and
+FIELD-canonical (converted at render time for METRIC):
+- `equil_datum_depth`, `equil_datum_pressure`, `equil_woc_depth`,
+  `equil_goc_depth` -> EQUIL items 1/2/3/5. NOTE the template variable names
+  are positional legacy: `equil_woc` is item 3 (WOC depth), `equil_goc` is
+  item 4 (Pcow at WOC), `equil_owc_depth` is item 5 (GOC depth). The
+  builder maps the honest ModelSpec names onto them.
+- `pvdg_rows`: replaces the default methane-like PVDG rows (list of
+  "psia  rb/Mscf  cP" strings). Used by CO2_EOR for a denser, more viscous
+  injection gas while staying in the black-oil subset.
 
 ## Pipeline
 `desc -> extract_parameters_offline -> ModelSpec -> base.j2 render -> lint_deck -> (deck, LintResult)`
@@ -57,6 +71,26 @@ Learned the hard way; each of these broke `flow` when violated:
 - Wells: depletion = producer at (nx,ny) completed k1..nz; SPE1-like
   (injector+producer) = GAS injector (1,1,1) + producer (nx,ny,nz);
   5-spot = WATER injector center + 4 corner producers.
+- Stage D scenario defaults (each renders a distinct, Flow-verified deck):
+  - WAG: injector (1,1) water for 90 days (initial WCONINJE + timesteps),
+    then 7 ScheduleEvents alternating GAS(3000 Mscf/d)/WATER at calendar
+    quarters via DATES; 4 full cycles, 731 days total.
+  - GAS_CAP: GOC placed at the base of layer 1 (top_depth + dz[0]) so layer
+    1 initializes as gas cap; EQUIL datum at the GOC at bubble point
+    (4014.7 psia, matching SPE1 PVTO Rs 1.27); producer completed k 2..nz.
+  - CO2_EOR: gas injector (1,1,1) + `pvdg_rows` swapped to a CO2-like table
+    (denser + more viscous than methane at every pressure). No
+    compositional keywords; distinctness comes from PVDG + injection stream.
+  - BUILDUP: uniform 50 md perm, single bottom-layer producer at 4000 stb/d
+    for 180 days, then one ScheduleEvent: WCONPROD STOP ORAT 0 + short
+    TSTEPs (0.25...8 d). WELOPEN 'SHUT'/'STOP' both zero the reported WBHP
+    in Flow 2026.04; WCONPROD STOP ORAT 0 keeps WBHP reported (jumps to
+    sandface pressure, then rises) - that is why buildup uses WCONPROD.
+  - MULTILAYER: PERMX/PERMY 500/50/200 md cycled over nz, PERMZ = 0.1x
+    (kv/kh 0.1), producer completed across all layers.
+- DATES works after START in these decks (verified against Flow 2026.04);
+  the OPM.md "Problem with keyword DATES" note applies to SKIPREST restart
+  decks only.
 
 ## Preprocess Integration (Fluid-Specific PVT)
 The builder now supports optional fluid-specific PVT tables via
@@ -129,11 +163,16 @@ deck, lint = build_deck("10x10x3 grid, simple depletion, one producer", fluid=fl
 ## Test Contracts
 - `tests/integration/test_builder.py`: extraction + deck structure
 - `tests/integration/test_builder_roundtrip.py`: 4 roundtrip tests (dry-run x3, full run x1)
-- `tests/integration/test_dataset_validation.py`: 9 scenario descriptions must lint clean and pass dry-run
+- `tests/integration/test_dataset_validation.py`: 14 scenario descriptions must lint clean and pass dry-run
+- `tests/unit/test_scenario_templates.py`: Stage D deck-text assertions (WAG alternation, gas-cap EQUIL, CO2 PVDG, buildup shut-in, multilayer contrast, distinctness, schedule rendering)
+- `tests/integration/test_scenario_runs.py`: Stage D Flow runs + physics sanity (buildup WBHP rise, gas-cap FGOR, WAG both-fluid injection)
 - `tests/integration/test_preprocess.py`: fluid-specific PVT block generation + builder integration + Flow dry-run/full-run
 
 ## Future / Plan
-- Stage D: consume `ModelSpec.schedule` (DATES/TSTEP events) in base.j2
-- Scenario-specific templates (WAG cycles via WCONINJE schedule changes,
-  gas-cap EQUIL variants, CO2 via GAS injector with CO2 stream) - currently
-  all scenarios render through the single SPE1-style base.j2
+- Stage D DONE (2026-07-21): schedule events consumed by base.j2; WAG /
+  GAS_CAP / CO2_EOR / BUILDUP / MULTILAYER render distinct decks, all
+  Flow-verified (dry-run + real run) with physics-sanity tests
+  (tests/unit/test_scenario_templates.py, tests/integration/
+  test_scenario_runs.py, dataset sweep extended).
+- Possible follow-ups: LLM extraction emitting schedule/EQUIL/PVDG fields
+  directly; WAG cycle count/length parsed from the description.

@@ -90,6 +90,23 @@ def _compute_template_context(spec: ModelSpec) -> dict:
         # Clamp to max table Rs
         rsvd_rs = min(rs_at_pinit, max_table_rs)
 
+    # Normalize schedule events for the template: tstep_days (float|list) ->
+    # tstep_list; keep date and actions verbatim. Empty schedule renders nothing
+    # so deck output stays byte-identical to the pre-Stage-D template.
+    schedule_events = []
+    for event in spec.schedule:
+        if isinstance(event.tstep_days, list):
+            tstep_list = list(event.tstep_days)
+        elif event.tstep_days is not None:
+            tstep_list = [event.tstep_days]
+        else:
+            tstep_list = None
+        schedule_events.append({
+            "actions": event.actions,
+            "date": event.date,
+            "tstep_list": tstep_list,
+        })
+
     # Build base context with FIELD unit values (original reservoir spec values)
     context = {
         "title": spec.title,
@@ -101,8 +118,10 @@ def _compute_template_context(spec: ModelSpec) -> dict:
         "timesteps_with_index": timesteps_with_index,
         "field_units": spec.field_units,
         "pvt_blocks": pvt_blocks,
+        "pvdg_rows": spec.pvdg_rows,
         "rsvd_rs": rsvd_rs,
         "unit_system": unit_system,  # "FIELD" or "METRIC" - used in RUNSPEC
+        "schedule_events": schedule_events,
     }
 
     # Add unit-system-aware values for the template
@@ -111,6 +130,20 @@ def _compute_template_context(spec: ModelSpec) -> dict:
     else:
         # FIELD unit system - use original reservoir values directly
         context.update(_compute_field_context(reservoir, spec.wells, rsvd_rs))
+
+    # Apply EQUIL overrides (FIELD-canonical, converted for METRIC decks).
+    # Template variable names are positional legacy: equil_woc is EQUIL item 3
+    # (WOC depth) and equil_owc_depth is item 5 (GOC depth).
+    depth_factor = 0.3048 if unit_system == "METRIC" else 1.0
+    pressure_factor = 0.0689476 if unit_system == "METRIC" else 1.0
+    if spec.equil_datum_depth is not None:
+        context["equil_datum_depth"] = spec.equil_datum_depth * depth_factor
+    if spec.equil_datum_pressure is not None:
+        context["equil_pressure_datum"] = spec.equil_datum_pressure * pressure_factor
+    if spec.equil_woc_depth is not None:
+        context["equil_woc"] = spec.equil_woc_depth * depth_factor
+    if spec.equil_goc_depth is not None:
+        context["equil_owc_depth"] = spec.equil_goc_depth * depth_factor
 
     return context
 

@@ -92,15 +92,20 @@ Scenario = ScenarioType
 
 
 class ScheduleEvent(BaseModel):
-    """A single schedule event (calendar date or timestep, plus keyword actions).
+    """A single schedule phase: keyword actions applied at the current time,
+    then a time advance (calendar DATES or one/more TSTEP steps).
 
-    Defined ahead of Stage D (DATES/scenario schedules); no template consumes
-    it yet, so existing deck output is unchanged.
+    Consumed by base.j2 (Stage D). Actions are raw deck-text blocks (e.g. a
+    full WCONINJE record) rendered verbatim before the time advance, matching
+    Eclipse semantics (change controls, then step time). When ``schedule`` is
+    empty the deck output is byte-identical to the pre-Stage-D template.
     """
 
-    date: str | None = Field(default=None, description="Calendar date, e.g. \"1 'JUL' 2015\"")
-    tstep_days: float | None = Field(default=None, description="Timestep length in days")
-    actions: list[str] = Field(default_factory=list, description="Schedule keyword actions for this event")
+    date: str | None = Field(default=None, description="Calendar date for a DATES advance, e.g. \"1 'JUL' 2015\"")
+    tstep_days: float | list[float] | None = Field(
+        default=None, description="TSTEP advance: one length or a list of substep lengths (days)"
+    )
+    actions: list[str] = Field(default_factory=list, description="Raw SCHEDULE keyword blocks applied before the advance")
 
 
 class ModelSpec(BaseModel):
@@ -118,7 +123,22 @@ class ModelSpec(BaseModel):
     fluid: FluidDescriptor | None = None
     schedule: list[ScheduleEvent] = Field(
         default_factory=list,
-        description="Optional schedule events (Stage D; unused by templates for now)",
+        description="Optional schedule phases appended after the initial TSTEP block",
+    )
+
+    # Initialization overrides (FIELD units; None keeps the SPE1-style defaults).
+    # EQUIL items: datum depth/pressure, WOC depth (item 3), GOC depth (item 5).
+    equil_datum_depth: float | None = Field(default=None, description="EQUIL datum depth (ft)")
+    equil_datum_pressure: float | None = Field(default=None, description="EQUIL pressure at datum (psia)")
+    equil_woc_depth: float | None = Field(default=None, description="EQUIL water-oil contact depth (ft)")
+    equil_goc_depth: float | None = Field(default=None, description="EQUIL gas-oil contact depth (ft); above/inside the reservoir creates an initial gas cap")
+
+    # PROPS override: replaces the default methane-like PVDG table (rows of
+    # "pressure Bg viscosity" in FIELD units). Used by CO2_EOR for a denser,
+    # more viscous injection gas while staying in the black-oil subset.
+    pvdg_rows: list[str] | None = Field(
+        default=None,
+        description="Override PVDG table rows, each 'psia rb/Mscf cP' (black-oil PVDG stays, values change)",
     )
 
     def total_cells(self) -> int:

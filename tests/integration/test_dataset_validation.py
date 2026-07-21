@@ -32,6 +32,12 @@ SCENARIO_DESCS = [
     pytest.param("10x10x3 grid, line drive water injection", id="line-drive"),
     pytest.param("10x10x5 grid, water injection, one injector and one producer", id="injector-producer"),
     pytest.param("just a simple oil reservoir", id="default-no-grid"),
+    # Stage D distinct scenario templates
+    pytest.param("wag injection on a 15x15x3 grid", id="wag"),
+    pytest.param("gas cap reservoir, 10x10x3 grid", id="gas-cap"),
+    pytest.param("co2 eor flood, 10x10x3 grid", id="co2-eor"),
+    pytest.param("pressure buildup test, 10x10x3 grid", id="buildup"),
+    pytest.param("multilayer reservoir, 12x12x4 grid", id="multilayer"),
 ]
 
 # Known-good decks: Flow 2026.04 accepts all of these (verified via dry-run).

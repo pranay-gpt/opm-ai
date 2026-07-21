@@ -18,14 +18,7 @@ services:
       retries: 5
       start_period: 10s
 
-  # Optional: ResInsight gRPC service for 3D snapshots (Phase 2 bridge).
-  # Opt-in because the image is unverified and the backend runs fine without it:
-  #   docker compose --profile resinsight up
-  resinsight:
-    profiles: ["resinsight"]
-    image: ghcr.io/opm/resinsight:2026.04
-    ports:
-      - "50051:50051"
-    command: ["--grpc-port", "50051"]
-    # Note: ResInsight GUI needs X11; headless gRPC works without display
-    # For headless operation, may need: xvfb-run -a ResInsight --grpc-port 50051
+# 3D ResInsight snapshots are host-only by design: the bridge drives the
+# ResInsight batch CLI, which needs a live X display, and the packaged
+# ResInsight build ships without gRPC (no server to containerize). Run the
+# backend on a desktop host to get snapshots; everything else works here.

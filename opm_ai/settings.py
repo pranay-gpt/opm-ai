@@ -18,8 +18,7 @@ class Settings(BaseSettings):
     # OPM Flow
     flow_path: Path = Field(default=Path("/usr/bin/flow"), validation_alias="OPM_FLOW_BINARY")
 
-    # ResInsight
-    resinsight_grpc_port: int = Field(default=50051, validation_alias="RESINSIGHT_GRPC_PORT")
+    # ResInsight (batch CLI on a live X display; no gRPC, see resinsight_bridge)
     resinsight_executable: Path = Field(default=Path("/usr/bin/ResInsight"), validation_alias="RESINSIGHT_EXECUTABLE")
 
     # LLM Providers

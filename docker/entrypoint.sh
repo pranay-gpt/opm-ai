@@ -4,19 +4,9 @@
 
 set -e
 
-# Wait for ResInsight gRPC if configured
-if [ -n "$RESINSIGHT_HOST" ] && [ -n "$RESINSIGHT_GRPC_PORT" ]; then
-    echo "Waiting for ResInsight gRPC at ${RESINSIGHT_HOST}:${RESINSIGHT_GRPC_PORT}..."
-    for i in {1..30}; do
-        if timeout 1 bash -c "</dev/tcp/${RESINSIGHT_HOST}/${RESINSIGHT_GRPC_PORT}" 2>/dev/null; then
-            echo "ResInsight gRPC is ready"
-            break
-        fi
-        echo "Waiting... ($i/30)"
-        sleep 2
-    done
-    # Don't fail if ResInsight isn't ready - backend can start without it
-fi
+# Note: the ResInsight bridge uses the batch CLI on a live X display, not gRPC,
+# so there is no gRPC port to wait for. Snapshots are unavailable in-container
+# by design (no display); the backend starts and serves everything else.
 
 # Start FastAPI with uvicorn
 echo "Starting OPM-AI API server on ${API_HOST:-0.0.0.0}:${API_PORT:-8000}"

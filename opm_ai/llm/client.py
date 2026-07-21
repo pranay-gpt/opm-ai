@@ -2,6 +2,8 @@
 
 from typing import Optional
 
+from loguru import logger
+
 from opm_ai.settings import settings
 
 
@@ -141,8 +143,9 @@ class LLMClient:
                         for tc in message.tool_calls
                     ]
                 return result
-            except Exception:
-                pass  # Fall through to OpenAI
+            except Exception as e:
+                logger.warning(f"Groq chat_with_tools failed: {e}")
+                # Fall through to OpenAI
 
         # Try OpenAI-compatible (OpenAI or NVIDIA NIM)
         if self._openai_client:
@@ -169,8 +172,8 @@ class LLMClient:
                         for tc in message.tool_calls
                     ]
                 return result
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning(f"OpenAI-compatible chat_with_tools failed: {e}")
 
         return {"content": None, "tool_calls": None}
 

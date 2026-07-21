@@ -30,8 +30,8 @@ results (plots + 3D), and explains them educationally — all via
 | Part 4 Preprocess | DONE | correlations, PROPS renderers, validators, advisor (43 tests) |
 | Part 5 Postprocess — KPIs/plots | DONE | resfo reading, KPI dict, Plotly |
 | Part 5 — ResInsight bridge | DONE (Stage 15) | batch-CLI snapshots; API + chat tool; NOTE: host-only (needs live X display; packaged binary has no gRPC — see wiki/memory) |
-| Part 6 Chat brain | DONE code-path, **UNVERIFIED live** | real tool-calling loop wired for 7 tools, but `LLM_PROVIDER` unset → offline; never exercised against live Groq |
-| Part 6 Settings panel | **DONE code (Stage C 2026-07-20), live verify pending** | POST/GET /api/settings sets in-memory provider/key overrides on the settings singleton (never persisted, never echoed); frontend panel calls it; per-connection LLMClient picks it up without restart. |
+| Part 6 Chat brain | DONE (Stage C, live-verified 2026-07-21) | 7-tool loop exercised live on Groq (build→lint→run→kpis→snapshots→explain); fixed null-field 400, missing assistant turn, history bloat 413, event-loop blocking, and done/multi-turn protocol; 5 deterministic ws tests |
+| Part 6 Settings panel | DONE (Stage C, live-verified 2026-07-21) | POST/GET /api/settings sets in-memory provider/key overrides on the settings singleton (never persisted, never echoed); frontend panel calls it; per-connection LLMClient picks it up without restart. |
 | Part 7 Explainer | DONE (BM25 deviation, documented) | explain/quiz/learning-report, offline fallbacks |
 | Part 8 Docker/CI | DONE | verified in LXD dockerhost 2026-07-20, smoke 7/7 |
 | "Useable by anyone using GitHub" | **NOT DONE** | no git remote configured; never pushed. README quickstart URL is aspirational. |
@@ -92,8 +92,8 @@ live-Groq step below remains for the orchestrator (no .env in worktree).
   from a description the regex path cannot handle; suite green offline.
 
 ### Stage C — Chat brain verified live + Settings made real
-STATUS: CODE DONE (2026-07-20); live chat verification pending (orchestrator,
-post-merge). Implemented:
+STATUS: DONE (2026-07-21). Live chat loop verified end-to-end and hardened.
+Implemented:
 - Settings made real via the recommended mechanism: POST /api/settings
   (opm_ai/api/routes/settings.py) sets in-memory attribute overrides on the
   settings singleton (plain assignment; pydantic-settings v2 permits it since
@@ -113,11 +113,37 @@ post-merge). Implemented:
   and tests/integration/test_chat_session_concurrency.py (4 tests; verified
   the unlocked variant loses 25/50 updates, so the test is a real guard).
   Suite: 214 passed, 1 skipped.
-- Live-exercise the WebSocket tool loop with LLM_PROVIDER=groq: one session doing
-  build → run → kpis → explain → export_snapshots. Fix what breaks (tool-call JSON
-  quirks, session state). [PENDING - orchestrator, post-merge]
-- Exit criteria: live chat demo transcript saved to docs/; settings change takes
-  effect without restart; concurrent-session test green.
+- Live-exercised the WebSocket tool loop (2026-07-21) and fixed what broke:
+  1. Groq rejects messages carrying explicit null tool_calls/tool_call_id
+     (400): history is now serialized with model_dump(exclude_none=True).
+  2. The assistant turn that requested tools was never appended to history
+     (providers require it before tool-role messages): now recorded.
+  3. Tool results stuffed full deck text + Plotly JSON into history and blew
+     provider TPM limits (413) on the next turn: compact_tool_result() now
+     stores a preview + lint verdict / KPIs only; the frontend still gets the
+     full payload.
+  4. tool_build_deck/tool_lint_deck/read_summary ran blocking work on the
+     event loop, stalling websocket keepalives (1011 ping timeout): moved to
+     run_in_executor.
+  5. Protocol completion: server now emits {"type": "done"} at end of turn
+     (the frontend handled 'done' but the server never sent it), supports
+     multiple turns per connection with reconnect-replay detection, error
+     events carry the 'message' field the frontend reads, and double-close
+     on disconnect is guarded.
+  Live transcript (Groq, one session: build_deck via LLM extraction ->
+  lint -> run_simulation -> get_kpis -> export_snapshots -> explain_concept,
+  all tools fired correctly) saved to docs/chat_live_transcript.json.
+  Deterministic coverage of the full event protocol (tool_call ->
+  tool_result -> token -> done, multi-turn on one connection, replay
+  ignored, offline error shape, compaction bounds) in
+  tests/integration/test_chat_ws_loop.py (5 tests) with a scripted fake
+  client, so CI proves the loop without network. Free-tier provider limits
+  (Groq 100k tokens/day, NIM 504 timeouts) are an ops constraint, not a
+  code gap; runtime provider switching via POST /api/settings was exercised
+  live during verification.
+- Exit criteria met: transcript in docs/; settings change takes effect
+  without restart (verified live: offline -> groq -> nim -> groq while the
+  server ran); concurrent-session test green.
 
 ### Stage D — Scenario templates + DATES (Builder Phase 2 remainder)
 STATUS: DONE (2026-07-21). ScheduleEvent consumed by base.j2 (actions then

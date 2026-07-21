@@ -27,7 +27,6 @@ from opm_ai.postprocess.kpi import extract_kpis
 from opm_ai.postprocess.plots import plot_production, plot_pressure
 from opm_ai.postprocess.resinsight_bridge import export_snapshots
 from opm_ai.llm.client import LLMClient
-from pathlib import Path
 import asyncio
 
 router = APIRouter()
@@ -64,7 +63,12 @@ async def tool_build_deck(args: dict) -> dict:
         output_path = validate_output_path(output_path)
     # Chat is only reachable with a live provider; LLM extraction is the
     # right default here (build_deck falls back to offline on any failure).
-    deck, lint_result = build_deck(description, output_path, use_llm=True)
+    # Executor: build_deck blocks (LLM network call + render + lint) and
+    # must not stall the websocket event loop or keepalives die.
+    loop = asyncio.get_event_loop()
+    deck, lint_result = await loop.run_in_executor(
+        None, lambda: build_deck(description, output_path, use_llm=True)
+    )
     return {
         "deck": deck,
         "lint": {
@@ -79,7 +83,8 @@ async def tool_lint_deck(args: dict) -> dict:
     """Lint a deck file."""
     deck_path = args.get("deck_path", "")
     deck_path = validate_deck_path(deck_path)
-    result = lint_deck(deck_path)
+    loop = asyncio.get_event_loop()
+    result = await loop.run_in_executor(None, lambda: lint_deck(deck_path))
     return {
         "deck_path": result.deck_path,
         "errors": [i.message for i in result.issues if i.severity == "ERROR"],
@@ -141,7 +146,8 @@ async def tool_get_kpis(args: dict) -> dict:
         return {"error": "Job not found or not completed"}
 
     output_dir = Path(job.result.output_dir)
-    df = read_summary(output_dir)
+    loop = asyncio.get_event_loop()
+    df = await loop.run_in_executor(None, lambda: read_summary(output_dir))
     if df.empty:
         return {"error": "No summary data found"}
 
@@ -166,7 +172,6 @@ async def tool_get_kpis(args: dict) -> dict:
 async def tool_explain_concept(args: dict) -> dict:
     """Explain a reservoir engineering concept."""
     from opm_ai.explainer import explain
-    import asyncio
 
     topic = args.get("topic", "")
     level = args.get("level", "intermediate")
@@ -196,7 +201,6 @@ async def tool_explain_concept(args: dict) -> dict:
 async def tool_generate_quiz(args: dict) -> dict:
     """Generate a multiple-choice quiz from a scenario."""
     from opm_ai.explainer import generate_quiz
-    import asyncio
 
     scenario = args.get("scenario_summary", "")
     n_questions = args.get("n_questions", 3)
@@ -267,13 +271,42 @@ async def execute_tool(tool_name: str, args: dict) -> dict:
         return {"error": f"Tool execution failed: {str(e)}"}
 
 
+def compact_tool_result(tool_name: str, result: dict) -> dict:
+    """Shrink a tool result for LLM history.
+
+    The frontend receives the full result; the LLM only needs enough to
+    continue the conversation. Full decks and Plotly figure JSON blow the
+    provider token-per-minute limits when re-sent with every turn.
+    """
+    if tool_name == "build_deck":
+        deck = result.get("deck", "")
+        return {
+            "deck_preview": deck[:400],
+            "deck_chars": len(deck),
+            "lint": result.get("lint"),
+            "note": "Full deck shown to the user; use the lint verdict and deck_path.",
+        }
+    if tool_name == "get_kpis":
+        return {
+            "kpis": result.get("kpis"),
+            "plots": "rendered for the user" if result.get("plots") else None,
+            "error": result.get("error"),
+        }
+    return result
+
+
 @router.websocket("/chat")
 async def websocket_chat(websocket: WebSocket):
-    """WebSocket endpoint for chat with LLM and tool calling."""
+    """WebSocket endpoint for chat with LLM and tool calling.
+
+    Accepts one or more ChatRequest frames on the same connection (the
+    frontend may also reconnect per turn; server-side session history is
+    authoritative either way). Each turn ends with a {"type": "done"} event.
+    """
     await websocket.accept()
 
     try:
-        # First message should be ChatRequest
+      while True:
         data = await websocket.receive_text()
         request = ChatRequest.model_validate_json(data)
 
@@ -289,23 +322,40 @@ async def websocket_chat(websocket: WebSocket):
             # Get or create session history using bounded session store
             _, history = get_or_create_session(session_id)
 
-            # Add user messages from request
-            for msg in request.messages:
-                history.append(msg)
+            # Merge request messages. The client sends its full message list
+            # each turn; server history already holds prior turns, so:
+            # empty history -> take everything (fresh session or server
+            # restart replay); otherwise only the trailing user message is
+            # new input. A replayed list ending in an assistant message
+            # carries nothing new.
+            appended = 0
+            if not history:
+                for msg in request.messages:
+                    history.append(msg)
+                    appended += 1
+            elif request.messages and request.messages[-1].role == "user":
+                history.append(request.messages[-1])
+                appended += 1
 
-            # Update session store with modified history
             update_session(session_id, history)
+
+        if appended == 0:
+            # Nothing new to respond to (e.g. reconnect replay); wait for
+            # the next request on this connection.
+            continue
 
         client = LLMClient()
 
         if not client.available:
+            msg = "LLM provider offline. Configure GROQ_API_KEY, NVIDIA_NIM_API_KEY, or OPENAI_API_KEY."
             await websocket.send_text(json.dumps({
                 "type": "error",
-                "content": "LLM provider offline. Configure GROQ_API_KEY, NVIDIA_NIM_API_KEY, or OPENAI_API_KEY.",
+                "message": msg,
+                "content": msg,
             }))
-            return
+            continue
 
-        # Main chat loop
+        # Main chat loop for this turn
         while True:
             # Prepare messages for LLM: system + snapshot of history taken
             # under the lock (the LLM call itself runs unlocked).
@@ -313,15 +363,27 @@ async def websocket_chat(websocket: WebSocket):
                 messages = [ChatMessage(role="system", content=system_prompt)] + list(history)
 
             # Call LLM with tools
+            # exclude_none: providers reject explicit null tool_calls /
+            # tool_call_id fields on messages that do not use them.
             response = await asyncio.get_event_loop().run_in_executor(
                 None,
                 lambda: client.chat_with_tools(
-                    [m.model_dump() for m in messages],
+                    [m.model_dump(exclude_none=True) for m in messages],
                     TOOLS,
                 )
             )
 
             if response.get("tool_calls"):
+                # Record the assistant turn that requested the tools; the
+                # provider requires tool-role messages to follow it.
+                async with session_lock:
+                    history.append(ChatMessage(
+                        role="assistant",
+                        content=response.get("content") or "",
+                        tool_calls=response["tool_calls"],
+                    ))
+                    update_session(session_id, history)
+
                 # LLM wants to call tools
                 for tool_call in response["tool_calls"]:
                     tool_name = tool_call["function"]["name"]
@@ -339,11 +401,12 @@ async def websocket_chat(websocket: WebSocket):
                     # Execute tool
                     tool_result = await execute_tool(tool_name, tool_args)
 
-                    # Add tool result to history
+                    # Add tool result to history (compacted: the LLM never
+                    # needs full deck text or Plotly JSON re-sent each turn)
                     async with session_lock:
                         history.append(ChatMessage(
                             role="tool",
-                            content=json.dumps(tool_result),
+                            content=json.dumps(compact_tool_result(tool_name, tool_result)),
                             tool_call_id=tool_call_id,
                         ))
 
@@ -362,7 +425,7 @@ async def websocket_chat(websocket: WebSocket):
                 continue
 
             elif response.get("content"):
-                # LLM responded with text - stream it
+                # LLM responded with text - stream it and end the turn
                 content = response["content"]
                 await websocket.send_text(json.dumps({
                     "type": "token",
@@ -376,22 +439,33 @@ async def websocket_chat(websocket: WebSocket):
                     # Update session store
                     update_session(session_id, history)
 
+                await websocket.send_text(json.dumps({"type": "done"}))
+                break
+
             else:
-                # Empty response
+                # Empty response (provider error or nothing to say)
+                await websocket.send_text(json.dumps({"type": "done"}))
                 break
 
     except WebSocketDisconnect:
         pass
     except Exception as e:
         try:
+            # "message" is what the frontend reads; keep "content" for
+            # older consumers.
             await websocket.send_text(json.dumps({
                 "type": "error",
+                "message": f"Chat error: {str(e)}",
                 "content": f"Chat error: {str(e)}",
             }))
         except Exception:
             pass
     finally:
-        await websocket.close()
+        try:
+            await websocket.close()
+        except RuntimeError:
+            # Already closed (client disconnect); nothing to do.
+            pass
 
 
 @router.post("/chat", response_model=ChatMessage)

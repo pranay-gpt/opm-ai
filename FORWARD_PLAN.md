@@ -26,7 +26,7 @@ results (plots + 3D), and explains them educationally — all via
 | Part 2 Linter | DONE | L001-L015, calibrated FP=0 over 133 decks |
 | Part 3 Builder — offline path | DONE | 8 scenarios, FIELD+METRIC, auto-lint |
 | Part 3 Builder — **LLM extraction** | **DONE (live-verified 2026-07-21: 3 hard descriptions extracted via Groq, unit conversion m3/day-to-bbl/day and bar-to-psia correct, all decks lint-passing)** | Stage B (2026-07-20): `LLMClient.extract_json` (JSON mode + repair retry), `extract_model_spec.j2` prompt, `extract_parameters_llm` with Pydantic validation, wired into `build_deck(use_llm=True)` with offline regex fallback; chat tool passes use_llm=True. Offline tests green; live Groq verification pending (orchestrator, post-merge). |
-| Part 3 Builder — scenario templates | PARTIAL | wag/gas_cap/co2/buildup/multilayer render as depletion-like decks; no DATES schedules |
+| Part 3 Builder — scenario templates | DONE (Stage D, 2026-07-21) | wag/gas_cap/co2/buildup/multilayer render distinct Flow-verified decks; DATES/TSTEP schedule events in ModelSpec + base.j2 |
 | Part 4 Preprocess | DONE | correlations, PROPS renderers, validators, advisor (43 tests) |
 | Part 5 Postprocess — KPIs/plots | DONE | resfo reading, KPI dict, Plotly |
 | Part 5 — ResInsight bridge | DONE (Stage 15) | batch-CLI snapshots; API + chat tool; NOTE: host-only (needs live X display; packaged binary has no gRPC — see wiki/memory) |
@@ -107,6 +107,26 @@ live-Groq step below remains for the orchestrator (no .env in worktree).
   effect without restart; concurrent-session test green.
 
 ### Stage D — Scenario templates + DATES (Builder Phase 2 remainder)
+STATUS: DONE (2026-07-21). ScheduleEvent consumed by base.j2 (actions then
+DATES/TSTEP advance; tstep_days accepts float|list); empty schedule stays
+byte-identical (md5-verified). ModelSpec grew EQUIL overrides (datum
+depth/pressure, WOC, GOC) and pvdg_rows. Scenario defaults in extract.py:
+WAG = water half-cycle then 7 alternating WCONINJE gas/water events at
+calendar quarters via DATES; GAS_CAP = GOC at base of layer 1, datum at GOC
+at bubble point (4014.7 psia), producer completed k 2..nz; CO2_EOR = gas
+injector + denser/more-viscous injection-gas PVDG (black-oil subset);
+BUILDUP = uniform 50 md, 4000 stb/d bottom-layer producer, 180 d drawdown,
+WCONPROD STOP ORAT 0 then 0.25-8 d TSTEPs; MULTILAYER = 500/50/200 md
+contrast with kv/kh 0.1. Ground truth: all 5 decks pass flow dry-run exit 0
+AND complete real runs (~0.2 s each). Physics verified in tests: buildup
+WBHP rises after shut-in (2629 -> 4344 psia), gas-cap FGOR climbs above
+solution GOR 1.27, WAG injects both fluids over 731 days. Deck-text WAG
+alternation asserted instead of the expensive recovery-bounds run. Suite:
+221 passed, 1 skipped. Prototype note: DATES works fine after START in
+these decks; the OPM.md "Problem with keyword DATES" caveat applies only to
+the SKIPREST restart deck it was observed in. WELOPEN SHUT/STOP zeroes
+reported WBHP in Flow 2026.04, so buildup uses WCONPROD STOP ORAT 0 which
+keeps WBHP reported and rising.
 - WAG: alternating WCONINJE water/gas cycles (needs DATES or TSTEP blocks per
   half-cycle). Gas-cap: EQUIL with gas-oil contact above datum + initial Sg.
   CO2: gas injector with CO2-ish PVDG and stream comment (stay in black-oil

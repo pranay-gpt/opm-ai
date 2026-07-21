@@ -6,6 +6,24 @@ import tempfile
 import shutil
 from pathlib import Path
 
+from opm_ai.settings import settings
+
+
+@pytest.fixture(autouse=True)
+def _force_offline_llm(request):
+    """Keep the suite deterministic: force LLM offline regardless of .env.
+
+    Tests marked @pytest.mark.live opt out (they gate themselves on env vars).
+    """
+    if request.node.get_closest_marker("live"):
+        yield
+        return
+    saved = settings.llm_provider
+    settings.llm_provider = "offline"
+    yield
+    settings.llm_provider = saved
+
+
 @pytest.fixture
 def temp_dir():
     """Create a temporary directory for test files."""

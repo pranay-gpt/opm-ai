@@ -13,6 +13,7 @@ _LIVE = bool(os.environ.get("GROQ_API_KEY")) and os.environ.get("LLM_PROVIDER") 
 
 @pytest.mark.integration
 @pytest.mark.slow
+@pytest.mark.live
 @pytest.mark.skipif(not _LIVE, reason="requires GROQ_API_KEY and LLM_PROVIDER=groq")
 def test_live_llm_extraction_beyond_regex():
     """A description the regex extractor cannot parse yields a valid spec

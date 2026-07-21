@@ -26,7 +26,7 @@ Plain English → Builder → Linter → OPM Flow Runner → Postprocess → Rea
 ## Quick Start (Docker)
 
 ```bash
-git clone https://github.com/<owner>/<repo>   # replace with the real repo URL
+git clone https://github.com/pranay-gpt/opm-ai.git
 cd opm-ai
 cp .env.example .env   # optional: add GROQ_API_KEY (+ LLM_PROVIDER=groq) for LLM features
 docker compose up -d --build

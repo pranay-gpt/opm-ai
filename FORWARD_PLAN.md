@@ -34,7 +34,7 @@ results (plots + 3D), and explains them educationally — all via
 | Part 6 Settings panel | DONE (Stage C, live-verified 2026-07-21) | POST/GET /api/settings sets in-memory provider/key overrides on the settings singleton (never persisted, never echoed); frontend panel calls it; per-connection LLMClient picks it up without restart. |
 | Part 7 Explainer | DONE (BM25 deviation, documented) | explain/quiz/learning-report, offline fallbacks |
 | Part 8 Docker/CI | DONE | verified in LXD dockerhost 2026-07-20, smoke 7/7 |
-| "Useable by anyone using GitHub" | **NOT DONE** | no git remote configured; never pushed. README quickstart URL is aspirational. |
+| "Useable by anyone using GitHub" | DONE (Stage F 2026-07-21) | public repo https://github.com/pranay-gpt/opm-ai (MIT, main default); CI green on GitHub-hosted runners |
 | Frontend served | BUILD-ON-DEMAND | frontend/dist is gitignored and absent on host; Docker builds it in-stage (verified); local serving requires `npm ci && npm run build` (node 18 present; NODE_OPTIONS=--max-old-space-size=4096 needed for plotly) |
 | Frontend snapshots UI | DONE (Stage E 2026-07-21) | ResultsViewer 3D Snapshots tab consumes GET /api/results/{id}/snapshots; shows bridge error string when unavailable |
 
@@ -191,6 +191,16 @@ keeps WBHP reported and rising.
 - Exit criteria: browser shows plots + snapshots + KPIs for a fresh run.
 
 ### Stage F — Ship it (the unmet "useable by anyone using GitHub" clause)
+STATUS: DONE (2026-07-21). Repo live at https://github.com/pranay-gpt/opm-ai
+(public, MIT, default branch main). master renamed to main and pushed over
+SSH (HTTPS push hit a ~3.6MB egress cap in this environment; large binary
+fixtures forced the SSH route). CI's first real run caught a latent bug:
+seven test files and the explainer KB source dirs hardcoded
+/home/parallels/opm-ai absolute paths, which only ever passed on this
+machine; fixed to repo-relative resolution (conftest fixtures + __file__),
+verified by running the exact CI commands from a foreign CWD. CI now green
+on GitHub-hosted runners (Backend Unit Tests + Frontend Build both success).
+Original Stage F checklist:
 - Create GitHub repo, add remote, reconcile master→main (CONTEXT.md notes this),
   push. Verify CI workflows actually run green on GitHub (they have never run).
 - README truth pass: real clone URL, real quickstart, troubleshooting section

@@ -5,9 +5,9 @@ from opm_ai.linter.deck import Deck
 from opm_ai.linter.linter import lint_deck
 
 
-def test_parse_spe1_deck():
+def test_parse_spe1_deck(spe1_deck):
     """Parse SPE1 fixture and check structure."""
-    deck_path = Path("/home/parallels/opm-ai/tests/fixtures/spe1/SPE1CASE1.DATA")
+    deck_path = spe1_deck
     assert deck_path.exists()
 
     deck = Deck(deck_path)
@@ -24,9 +24,9 @@ def test_parse_spe1_deck():
     assert grid is not None
 
 
-def test_lint_spe1_deck():
+def test_lint_spe1_deck(spe1_deck):
     """Lint SPE1 fixture."""
-    deck_path = Path("/home/parallels/opm-ai/tests/fixtures/spe1/SPE1CASE1.DATA")
+    deck_path = spe1_deck
 
     result = lint_deck(deck_path)
 

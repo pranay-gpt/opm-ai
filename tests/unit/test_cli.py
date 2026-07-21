@@ -13,10 +13,10 @@ def test_cli_help():
     assert "OPM-AI" in result.output
 
 
-def test_cli_lint_spe1():
+def test_cli_lint_spe1(spe1_deck):
     """Test CLI lint command on SPE1."""
     runner = CliRunner()
-    spe1_path = Path("/home/parallels/opm-ai/tests/fixtures/spe1/SPE1CASE1.DATA")
+    spe1_path = spe1_deck
     result = runner.invoke(main, ['lint', str(spe1_path)])
     assert result.exit_code == 0
     assert "Passed" in result.output

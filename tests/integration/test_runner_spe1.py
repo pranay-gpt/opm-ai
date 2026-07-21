@@ -9,9 +9,9 @@ from opm_ai.postprocess.kpi import extract_kpis
 
 @pytest.mark.integration
 @pytest.mark.slow
-def test_run_spe1_fixture(tmp_path):
+def test_run_spe1_fixture(tmp_path, spe1_deck):
     """Run SPE1CASE1.DATA and verify KPIs."""
-    fixture_path = Path("/home/parallels/opm-ai/tests/fixtures/spe1/SPE1CASE1.DATA")
+    fixture_path = spe1_deck
     assert fixture_path.exists(), "SPE1 fixture not found"
 
     job = SimulationJob(

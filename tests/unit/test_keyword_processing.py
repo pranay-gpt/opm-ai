@@ -63,9 +63,9 @@ ENDFIN
     # Check for end section markers
     assert sample_content.count("/") >= 3  # Should have at least 3 section terminators
 
-def test_fixture_file_access():
+def test_fixture_file_access(fixtures_dir):
     """Test that we can access and read fixture files."""
-    fixtures_base = Path("/home/parallels/opm-ai/tests/fixtures")
+    fixtures_base = fixtures_dir
     
     # Test accessing a few known fixtures
     test_fixtures = ["spe1", "polymer", "spe10"]

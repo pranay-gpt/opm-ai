@@ -8,6 +8,10 @@ from pathlib import Path
 
 from opm_ai.settings import settings
 
+# Repo-root-relative fixture locations, valid on any machine/CI runner.
+TESTS_DIR = Path(__file__).resolve().parent
+FIXTURES_DIR = TESTS_DIR / "fixtures"
+
 
 @pytest.fixture(autouse=True)
 def _force_offline_llm(request):
@@ -60,3 +64,15 @@ PROPS
   /
 ENDFIN
 """
+
+
+@pytest.fixture
+def fixtures_dir() -> Path:
+    """Absolute path to tests/fixtures, resolved from the repo, not the CWD."""
+    return FIXTURES_DIR
+
+
+@pytest.fixture
+def spe1_deck() -> Path:
+    """Absolute path to the SPE1CASE1 reference deck."""
+    return FIXTURES_DIR / "spe1" / "SPE1CASE1.DATA"

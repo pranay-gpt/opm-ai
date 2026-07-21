@@ -65,10 +65,9 @@ ENDFIN
         assert opm_file.exists()
         assert opm_file.read_text().strip() == opm_content.strip()
 
-def test_sample_data_structure():
+def test_sample_data_structure(fixtures_dir):
     """Test that we can work with the test fixture structure."""
     # This test verifies we can access the test fixtures
-    fixtures_dir = Path("/home/parallels/opm-ai/tests/fixtures")
     assert fixtures_dir.exists(), "Fixtures directory should exist"
     
     # Check that we have some test fixtures

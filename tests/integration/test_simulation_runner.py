@@ -47,9 +47,9 @@ class TestResultComparison:
         # This would test INIT file comparison
         pass
 
-def test_fixture_structure():
+def test_fixture_structure(fixtures_dir):
     """Test that the fixture structure is as expected."""
-    base_path = Path("/home/parallels/opm-ai/tests/fixtures")
+    base_path = fixtures_dir
     
     # Check that SPE10 fixture exists (mentioned in README)
     spe10_dir = base_path / "spe10"
@@ -67,9 +67,9 @@ def test_fixture_structure():
     polymer_data_files = list(polymer_dir.glob("POLYMER-*.DATA"))
     assert len(polymer_data_files) > 0, "Should have POLYMER data files"
 
-def test_readme_example_fixtures():
+def test_readme_example_fixtures(fixtures_dir):
     """Test that fixtures mentioned in README exist."""
-    base_path = Path("/home/parallels/opm-ai/tests/fixtures")
+    base_path = fixtures_dir
     
     # Check fixtures mentioned in README.md
     expected_fixtures = [

@@ -129,10 +129,12 @@ def _apply_level_boost(score: float, source_type: str, level: ExplanationLevel) 
 # ---- Knowledge Base Persistence ----
 
 DEFAULT_PERSIST_DIR = Path(__file__).parent / "kb"
+# Repo root is three parents up: opm_ai/explainer/retrieve.py -> repo/
+_REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SOURCE_DIRS = [
-    Path("/home/parallels/opm-ai/tests/eclipse/ecl_rm"),
-    Path("/home/parallels/opm-ai/tests/eclipse/ecl_td"),
-    Path("/home/parallels/opm-ai/tests/fixtures"),
+    _REPO_ROOT / "tests/eclipse/ecl_rm",
+    _REPO_ROOT / "tests/eclipse/ecl_td",
+    _REPO_ROOT / "tests/fixtures",
 ]
 DEFAULT_EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 

@@ -1,5 +1,6 @@
 """In-memory chat session store with bounded eviction."""
 
+import asyncio
 import uuid
 from collections import OrderedDict
 from threading import Lock
@@ -14,6 +15,7 @@ class SessionStore:
 
     def __init__(self, max_entries: Optional[int] = None):
         self._sessions: OrderedDict[str, list[ChatMessage]] = OrderedDict()
+        self._locks: OrderedDict[str, asyncio.Lock] = OrderedDict()
         self._lock = Lock()
         self._max_entries = max_entries if max_entries is not None else settings.session_store_max_entries
 
@@ -63,9 +65,27 @@ class SessionStore:
                 self._sessions.pop(session_id)
             self._sessions[session_id] = history
 
+    def get_session_lock(self, session_id: str) -> asyncio.Lock:
+        """Get the per-session asyncio.Lock, creating it if needed.
+
+        The lock dict is bounded like the session dict (same max_entries,
+        LRU eviction) so concurrent connections on one session id always
+        receive the same Lock object while it is live.
+        """
+        with self._lock:
+            if session_id in self._locks:
+                lock = self._locks.pop(session_id)
+            else:
+                lock = asyncio.Lock()
+                while len(self._locks) >= self._max_entries:
+                    self._locks.popitem(last=False)
+            self._locks[session_id] = lock
+            return lock
+
     def delete_session(self, session_id: str) -> bool:
         """Delete a session by ID."""
         with self._lock:
+            self._locks.pop(session_id, None)
             if session_id in self._sessions:
                 del self._sessions[session_id]
                 return True
@@ -75,6 +95,7 @@ class SessionStore:
         """Clear all sessions."""
         with self._lock:
             self._sessions.clear()
+            self._locks.clear()
 
     def __len__(self) -> int:
         with self._lock:
@@ -107,6 +128,11 @@ def get_session(session_id: str) -> Optional[list[ChatMessage]]:
 def update_session(session_id: str, history: list[ChatMessage]) -> None:
     """Update session history."""
     _session_store.update_session(session_id, history)
+
+
+def get_session_lock(session_id: str) -> asyncio.Lock:
+    """Get the per-session asyncio.Lock for read-modify-write sections."""
+    return _session_store.get_session_lock(session_id)
 
 
 def delete_session(session_id: str) -> bool:

@@ -11,6 +11,8 @@ import type {
   WSServerMessage,
   ToolCall,
   Settings,
+  SettingsUpdateRequest,
+  SettingsResponse,
   ExplainRequest,
   ExplainResponse,
   QuizRequest,
@@ -102,6 +104,16 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(request),
     }),
+
+  // Runtime settings (in-memory on the backend; keys never echoed back)
+  getSettings: (): Promise<SettingsResponse> =>
+    fetchJson<SettingsResponse>('/settings'),
+
+  updateSettings: (request: SettingsUpdateRequest): Promise<SettingsResponse> =>
+    fetchJson<SettingsResponse>('/settings', {
+      method: 'POST',
+      body: JSON.stringify(request),
+    }),
 };
 
 // Poll job status until completed or failed
@@ -142,6 +154,8 @@ export type {
   ChatMessage,
   ToolCall,
   Settings,
+  SettingsUpdateRequest,
+  SettingsResponse,
   ExplainRequest,
   ExplainResponse,
   QuizRequest,

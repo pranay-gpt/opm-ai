@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from opm_ai.api.routes import build, lint, run, results, chat, explainer
+from opm_ai.api.routes import settings as settings_routes
 from opm_ai.api.session_store import get_session_store
 from opm_ai.settings import settings
 
@@ -50,6 +51,7 @@ def create_app() -> FastAPI:
     app.include_router(results.router, prefix="/api")
     app.include_router(chat.router, prefix="/api")
     app.include_router(explainer.router, prefix="/api")
+    app.include_router(settings_routes.router, prefix="/api")
 
     @app.get("/health")
     async def health_check():

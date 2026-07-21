@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useChatStore, useSettingsStore } from '../stores/useAppStore';
-import { connectChat } from '../api/client';
+import { api, connectChat } from '../api/client';
 import type { ChatMessage } from '../api/client';
 
 export default function ChatPanel() {
@@ -116,7 +116,12 @@ export default function ChatPanel() {
           <select
             value={settings.llmProvider}
             onChange={(e) => {
-              useSettingsStore.getState().setLLMProvider(e.target.value as 'groq' | 'nim' | 'offline');
+              const newProvider = e.target.value as 'groq' | 'nim' | 'offline';
+              useSettingsStore.getState().setLLMProvider(newProvider);
+              // Apply to the backend too; keys are managed on the Settings page.
+              api.updateSettings({ provider: newProvider }).catch((err) => {
+                console.error('[Chat] Failed to update provider:', err);
+              });
             }}
             className="text-xs px-2 py-1 rounded bg-base border border-border text-textPrimary"
           >

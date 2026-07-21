@@ -31,7 +31,7 @@ results (plots + 3D), and explains them educationally — all via
 | Part 5 Postprocess — KPIs/plots | DONE | resfo reading, KPI dict, Plotly |
 | Part 5 — ResInsight bridge | DONE (Stage 15) | batch-CLI snapshots; API + chat tool; NOTE: host-only (needs live X display; packaged binary has no gRPC — see wiki/memory) |
 | Part 6 Chat brain | DONE code-path, **UNVERIFIED live** | real tool-calling loop wired for 7 tools, but `LLM_PROVIDER` unset → offline; never exercised against live Groq |
-| Part 6 Settings panel | **COSMETIC** | frontend stores provider+keys in localStorage but never sends them to the backend; `LLMClient()` reads only server env. Settings UI has no effect on chat. |
+| Part 6 Settings panel | **DONE code (Stage C 2026-07-20), live verify pending** | POST/GET /api/settings sets in-memory provider/key overrides on the settings singleton (never persisted, never echoed); frontend panel calls it; per-connection LLMClient picks it up without restart. |
 | Part 7 Explainer | DONE (BM25 deviation, documented) | explain/quiz/learning-report, offline fallbacks |
 | Part 8 Docker/CI | DONE | verified in LXD dockerhost 2026-07-20, smoke 7/7 |
 | "Useable by anyone using GitHub" | **NOT DONE** | no git remote configured; never pushed. README quickstart URL is aspirational. |
@@ -92,17 +92,30 @@ live-Groq step below remains for the orchestrator (no .env in worktree).
   from a description the regex path cannot handle; suite green offline.
 
 ### Stage C — Chat brain verified live + Settings made real
+STATUS: CODE DONE (2026-07-20); live chat verification pending (orchestrator,
+post-merge). Implemented:
+- Settings made real via the recommended mechanism: POST /api/settings
+  (opm_ai/api/routes/settings.py) sets in-memory attribute overrides on the
+  settings singleton (plain assignment; pydantic-settings v2 permits it since
+  validate_assignment is off). Never persisted, keys never echoed. GET returns
+  provider + active_provider + per-provider key booleans. Chat picks it up
+  without restart because LLMClient() is constructed per connection and reads
+  settings at __init__. Frontend SettingsPanel now GETs/POSTs the API; keys no
+  longer stored in localStorage (component state only, cleared after save);
+  inert NIM base-url input replaced with env-var note.
+- Chat session race hardening: per-session asyncio.Lock via
+  SessionStore.get_session_lock() (bounded LRU dict, same max_entries as the
+  session dict); routes/chat.py wraps every session read-modify-write in
+  `async with` and snapshots history for LLM calls outside the lock.
+- Tests: tests/integration/test_api_settings.py (7 tests: override, no key
+  leakage, fresh-LLMClient-targets-new-provider with monkeypatched groq SDK,
+  clear/omit key semantics, 422 on bad provider, fixture restores singleton)
+  and tests/integration/test_chat_session_concurrency.py (4 tests; verified
+  the unlocked variant loses 25/50 updates, so the test is a real guard).
+  Suite: 214 passed, 1 skipped.
 - Live-exercise the WebSocket tool loop with LLM_PROVIDER=groq: one session doing
   build → run → kpis → explain → export_snapshots. Fix what breaks (tool-call JSON
-  quirks, session state).
-- Make Settings real, pick ONE mechanism and document it: recommended = POST
-  /api/settings that sets provider/key for the process (in-memory override on
-  Settings, never persisted to disk), chat reads it; frontend Settings panel calls
-  it. Alternative if rejected: delete the cosmetic key fields and document
-  server-env-only config. Cosmetic-but-inert UI is worse than either.
-- Chat session race hardening (known gap): per-session asyncio.Lock around
-  session read-modify-write in routes/chat.py; test with two concurrent
-  connections on one session id.
+  quirks, session state). [PENDING - orchestrator, post-merge]
 - Exit criteria: live chat demo transcript saved to docs/; settings change takes
   effect without restart; concurrent-session test green.
 

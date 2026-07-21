@@ -1,40 +1,65 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useSettingsStore } from '../stores/useAppStore';
+import { api } from '../api/client';
+import type { SettingsResponse, SettingsUpdateRequest } from '../api/client';
 
 export default function SettingsPanel() {
-  const { settings, updateSettings } = useSettingsStore();
+  const { updateSettings } = useSettingsStore();
 
-  const [groqKey, setGroqKey] = useState(settings.groqApiKey);
-  const [nimKey, setNimKey] = useState(settings.nimApiKey);
-  const [nimBaseUrl, setNimBaseUrl] = useState(settings.nimBaseUrl);
-  const [provider, setProvider] = useState(settings.llmProvider);
+  // Key inputs live in component state only: they are POSTed to the local
+  // backend on save and never written to localStorage.
+  const [groqKey, setGroqKey] = useState('');
+  const [nimKey, setNimKey] = useState('');
+  const [provider, setProvider] = useState<'groq' | 'nim' | 'offline'>('offline');
+  const [keysConfigured, setKeysConfigured] = useState<SettingsResponse['keys_configured']>({
+    groq: false,
+    openai: false,
+    nim: false,
+  });
   const [showGroqKey, setShowGroqKey] = useState(false);
   const [showNimKey, setShowNimKey] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSave = useCallback(() => {
-    updateSettings({
-      groqApiKey: groqKey,
-      nimApiKey: nimKey,
-      nimBaseUrl: nimBaseUrl,
-      llmProvider: provider,
-    });
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  }, [groqKey, nimKey, nimBaseUrl, provider, updateSettings]);
+  const applyResponse = useCallback((response: SettingsResponse) => {
+    if (response.provider === 'groq' || response.provider === 'nim' || response.provider === 'offline') {
+      setProvider(response.provider);
+      updateSettings({ llmProvider: response.provider });
+    }
+    setKeysConfigured(response.keys_configured);
+  }, [updateSettings]);
+
+  const handleSave = useCallback(async () => {
+    setError(null);
+    const request: SettingsUpdateRequest = { provider };
+    // Only send keys the user actually typed; omitted keys stay untouched
+    // on the backend.
+    if (groqKey) request.groq_api_key = groqKey;
+    if (nimKey) request.nvidia_nim_api_key = nimKey;
+    try {
+      const response = await api.updateSettings(request);
+      applyResponse(response);
+      // Clear key inputs after a successful save; the backend holds them
+      // in memory and never returns them.
+      setGroqKey('');
+      setNimKey('');
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save settings');
+    }
+  }, [provider, groqKey, nimKey, applyResponse]);
 
   const handleProviderChange = useCallback((newProvider: 'groq' | 'nim' | 'offline') => {
     setProvider(newProvider);
-    updateSettings({ llmProvider: newProvider });
-  }, [updateSettings]);
+  }, []);
 
-  // Load settings from localStorage on mount (handled by persist middleware)
+  // Load current backend settings on mount.
   useEffect(() => {
-    setGroqKey(settings.groqApiKey);
-    setNimKey(settings.nimApiKey);
-    setNimBaseUrl(settings.nimBaseUrl);
-    setProvider(settings.llmProvider);
-  }, [settings]);
+    api.getSettings().then(applyResponse).catch(() => {
+      setError('Could not load settings from backend');
+    });
+  }, [applyResponse]);
 
   return (
     <div className="flex flex-col h-full bg-base">
@@ -49,6 +74,12 @@ export default function SettingsPanel() {
         </button>
       </div>
 
+      {error && (
+        <div className="px-4 py-2 text-sm text-error bg-error/10 border-b border-error/30">
+          {error}
+        </div>
+      )}
+
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-4 lg:p-6">
         <div className="max-w-2xl mx-auto space-y-8">
@@ -59,14 +90,17 @@ export default function SettingsPanel() {
               LLM Provider
             </h2>
             <p className="text-sm text-textSecondary mb-4">
-              Select which LLM provider to use for the AI chat. API keys are stored locally in your browser.
+              Select which LLM provider to use for the AI chat. Saving applies the change
+              to the local backend immediately, no restart needed. API keys are sent to the
+              local backend and held in memory only; they are never written to disk or
+              returned by the server.
             </p>
 
             <div className="space-y-3">
               {[
-                { id: 'groq', label: 'Groq', desc: 'Fast inference with Llama 3.3 70B (requires GROQ_API_KEY)' },
-                { id: 'nim', label: 'NVIDIA NIM', desc: 'NVIDIA NIM endpoints (requires NIM_API_KEY)' },
-                { id: 'offline', label: 'Offline Mode', desc: 'No LLM - use manual deck building only' },
+                { id: 'groq', label: 'Groq', desc: 'Fast inference with Llama 3.3 70B (requires GROQ_API_KEY)', configured: keysConfigured.groq },
+                { id: 'nim', label: 'NVIDIA NIM', desc: 'NVIDIA NIM endpoints (requires NIM_API_KEY)', configured: keysConfigured.nim },
+                { id: 'offline', label: 'Offline Mode', desc: 'No LLM - use manual deck building only', configured: true },
               ].map((opt) => (
                 <label
                   key={opt.id}
@@ -84,8 +118,15 @@ export default function SettingsPanel() {
                     onChange={() => handleProviderChange(opt.id as 'groq' | 'nim' | 'offline')}
                     className="mt-1 w-4 h-4 text-primary border-border focus:ring-primary"
                   />
-                  <div>
-                    <div className="font-medium text-textPrimary">{opt.label}</div>
+                  <div className="flex-1">
+                    <div className="font-medium text-textPrimary flex items-center gap-2">
+                      {opt.label}
+                      {opt.id !== 'offline' && (
+                        <span className={`badge text-xs ${opt.configured ? 'badge-primary' : 'badge-outline'}`}>
+                          {opt.configured ? 'Key configured' : 'No key'}
+                        </span>
+                      )}
+                    </div>
                     <div className="text-sm text-textSecondary">{opt.desc}</div>
                   </div>
                 </label>
@@ -108,7 +149,7 @@ export default function SettingsPanel() {
                   type={showGroqKey ? 'text' : 'password'}
                   value={groqKey}
                   onChange={(e) => setGroqKey(e.target.value)}
-                  placeholder="gsk_..."
+                  placeholder={keysConfigured.groq ? 'Key configured (enter a new key to replace)' : 'gsk_...'}
                   className="input pr-10"
                 />
                 <button
@@ -128,7 +169,10 @@ export default function SettingsPanel() {
                   )}
                 </button>
               </div>
-              <p className="text-xs text-textMuted mt-2">Key is stored in localStorage and sent via X-API-Keys header</p>
+              <p className="text-xs text-textMuted mt-2">
+                Sent to the local backend on save and held in memory only. Never persisted
+                to disk, never returned by the server, never stored in the browser.
+              </p>
             </section>
           )}
 
@@ -145,20 +189,17 @@ export default function SettingsPanel() {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-textSecondary mb-1">Base URL</label>
-                  <input
-                    type="text"
-                    value={nimBaseUrl}
-                    onChange={(e) => setNimBaseUrl(e.target.value)}
-                    placeholder="https://integrate.api.nvidia.com/v1"
-                    className="input"
-                  />
+                  <p className="text-sm text-textSecondary">
+                    Set via the NVIDIA_NIM_BASE_URL environment variable on the backend
+                    (default https://integrate.api.nvidia.com/v1).
+                  </p>
                 </div>
                 <div className="relative">
                   <input
                     type={showNimKey ? 'text' : 'password'}
                     value={nimKey}
                     onChange={(e) => setNimKey(e.target.value)}
-                    placeholder="nvapi_..."
+                    placeholder={keysConfigured.nim ? 'Key configured (enter a new key to replace)' : 'nvapi_...'}
                     className="input pr-10"
                   />
                   <button
@@ -179,7 +220,10 @@ export default function SettingsPanel() {
                   </button>
                 </div>
               </div>
-              <p className="text-xs text-textMuted mt-2">Key is stored in localStorage and sent via X-API-Keys header</p>
+              <p className="text-xs text-textMuted mt-2">
+                Sent to the local backend on save and held in memory only. Never persisted
+                to disk, never returned by the server, never stored in the browser.
+              </p>
             </section>
           )}
 

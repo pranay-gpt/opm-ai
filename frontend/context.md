@@ -19,7 +19,7 @@
 - `src/components/LinterPanel.tsx` — Deck validation UI
 - `src/components/ChatPanel.tsx` — LLM chat with tool calls
 - `src/components/Sidebar.tsx`, `Header.tsx` — Navigation with SVG icons
-- `src/components/SettingsPanel.tsx` — API keys + preferences
+- `src/components/SettingsPanel.tsx` — API keys + preferences. Stage C (2026-07-20): calls GET/POST `/api/settings` (via `api.getSettings`/`api.updateSettings`); provider + key-configured booleans come from the backend. Keys live in component state only, POSTed on save, cleared after: NOT in localStorage anymore. The zustand settings store still persists `llmProvider` for the Sidebar/Header/ChatPanel badges (synced from GET responses).
 - `src/components/Home.tsx` — Dashboard with stats + quick actions
 
 ## KPI Card Keys (must match `opm_ai/postprocess/kpi.py::extract_kpis` output exactly)

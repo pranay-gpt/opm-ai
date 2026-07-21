@@ -46,8 +46,10 @@ def test_plot_production_field_and_well():
 
     fig = plot_production(df)
     assert fig is not None
-    # Should only show field traces, not well traces (field takes priority)
-    assert len(fig.data) == 2
+    # Field totals plus per-producer traces (FOPR, FWPR, WOPR:PROD1, WWPR:PROD1)
+    assert len(fig.data) == 4
+    names = [t.name for t in fig.data]
+    assert any("PROD1" in n for n in names)
 
 
 def test_plot_pressure():

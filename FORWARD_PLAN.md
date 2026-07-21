@@ -36,7 +36,7 @@ results (plots + 3D), and explains them educationally — all via
 | Part 8 Docker/CI | DONE | verified in LXD dockerhost 2026-07-20, smoke 7/7 |
 | "Useable by anyone using GitHub" | **NOT DONE** | no git remote configured; never pushed. README quickstart URL is aspirational. |
 | Frontend served | BUILD-ON-DEMAND | frontend/dist is gitignored and absent on host; Docker builds it in-stage (verified); local serving requires `npm ci && npm run build` (node 18 present; NODE_OPTIONS=--max-old-space-size=4096 needed for plotly) |
-| Frontend snapshots UI | MISSING | new GET /results/{id}/snapshots endpoints have no UI consumer yet |
+| Frontend snapshots UI | DONE (Stage E 2026-07-21) | ResultsViewer 3D Snapshots tab consumes GET /api/results/{id}/snapshots; shows bridge error string when unavailable |
 
 Test suite: 189 passed after fixing one CWD-dependent test
 (test_path_traversal_relative_outside_rejected asserted 400 for a path that

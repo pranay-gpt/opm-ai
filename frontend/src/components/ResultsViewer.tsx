@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useLastResults, useCurrentJob, useSimulationActions } from '../stores/useAppStore';
+import { useLastResults, useCurrentJob, useSimulationActions, useResolvedTheme } from '../stores/useAppStore';
 import { api } from '../api/client';
 import type { KPIsResponse, ExplainRequest, ExplainResponse, ExplanationLevel, Citation, SnapshotsResponse } from '../api/client';
 // @ts-expect-error plotly.js-dist ships no types; @types/plotly.js covers the API
@@ -7,11 +7,20 @@ import Plotly from 'plotly.js-dist-min';
 
 function PlotCard({ plotName, plotJson }: { plotName: string; plotJson: string }) {
   const divRef = useRef<HTMLDivElement>(null);
+  const resolvedTheme = useResolvedTheme();
   useEffect(() => {
     if (divRef.current) {
       try {
         const plotData = JSON.parse(plotJson);
-        Plotly.newPlot(divRef.current, plotData.data, plotData.layout, { responsive: true, displayModeBar: true });
+        // Restyle backend-generated layout to match the active UI theme
+        const dark = resolvedTheme === 'dark';
+        const layout = {
+          ...plotData.layout,
+          paper_bgcolor: 'rgba(0,0,0,0)',
+          plot_bgcolor: 'rgba(0,0,0,0)',
+          font: { ...plotData.layout?.font, color: dark ? '#94A8C4' : '#465A82' },
+        };
+        Plotly.newPlot(divRef.current, plotData.data, layout, { responsive: true, displayModeBar: true });
       } catch (e) {
         console.error(`Failed to render ${plotName}:`, e);
       }
@@ -19,7 +28,7 @@ function PlotCard({ plotName, plotJson }: { plotName: string; plotJson: string }
     return () => {
       if (divRef.current) Plotly.purge(divRef.current);
     };
-  }, [plotName, plotJson]);
+  }, [plotName, plotJson, resolvedTheme]);
 
   return (
     <div className="card">
@@ -157,7 +166,7 @@ export default function ResultsViewer() {
 
   if (!results && !isLoading) {
     return (
-      <div className="flex flex-col h-full bg-base">
+      <div className="flex flex-col h-full bg-page">
         <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface">
           <h1 className="text-xl font-semibold text-textPrimary">Results Viewer</h1>
         </div>
@@ -184,7 +193,7 @@ export default function ResultsViewer() {
   }
 
   return (
-    <div className="flex flex-col h-full bg-base">
+    <div className="flex flex-col h-full bg-page">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface">
         <div>
@@ -281,7 +290,7 @@ export default function ResultsViewer() {
                         onClick={() => setExplainLevel(level as ExplanationLevel)}
                         className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
                           explainLevel === level
-                            ? 'bg-primary text-base'
+                            ? 'bg-primary text-page'
                             : 'bg-surface border border-border text-textSecondary hover:text-textPrimary hover:border-primary/50'
                         }`}
                         disabled={explainLoading}
@@ -435,7 +444,7 @@ export default function ResultsViewer() {
               <p className="text-lg font-medium text-textPrimary mb-1">3D Geomodel View</p>
               <p className="text-sm max-w-xs">ResInsight integration coming in Phase 2</p>
               <div className="mt-4 p-4 rounded bg-surface border border-border inline-block">
-                <div className="w-96 h-64 flex items-center justify-center bg-base border border-border rounded">
+                <div className="w-96 h-64 flex items-center justify-center bg-page border border-border rounded">
                   <span className="text-textMuted">3D Viewer Placeholder</span>
                 </div>
               </div>

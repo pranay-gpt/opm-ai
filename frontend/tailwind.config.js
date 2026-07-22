@@ -7,7 +7,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        base:          'rgb(var(--c-base) / <alpha-value>)',
+        // Named 'page' (not 'base') so text-base stays the font-size utility
+        page:          'rgb(var(--c-base) / <alpha-value>)',
         surface:       'rgb(var(--c-surface) / <alpha-value>)',
         surfaceHover:  'rgb(var(--c-surface-hover) / <alpha-value>)',
         border:        'rgb(var(--c-border) / <alpha-value>)',

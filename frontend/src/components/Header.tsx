@@ -38,7 +38,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
       </button>
 
       {/* Desktop nav */}
-      <nav className="hidden lg:flex items-center gap-0.5 bg-base/60 rounded-lg p-1 border border-border flex-1 min-w-0 overflow-x-auto">
+      <nav className="hidden lg:flex items-center gap-0.5 bg-page/60 rounded-lg p-1 border border-border flex-1 min-w-0 overflow-x-auto">
         {navItems.map((item) => (
           <NavLink
             key={item.path}
@@ -75,7 +75,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
         </div>
 
         {/* LLM provider badge */}
-        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-base border border-border">
+        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-page border border-border">
           <span className="text-xs text-textMuted">LLM</span>
           <span className={`badge text-xs ${
             llmProvider === 'groq'    ? 'badge-primary' :

@@ -44,18 +44,17 @@ async function fetchJson<T>(path: string, options: RequestInit = {}): Promise<T>
   });
 
   if (!response.ok) {
+    // Read the body once as text; a second read would fail (stream consumed)
     let errorDetail = response.statusText;
     try {
-      const errorData = await response.json();
-      errorDetail = errorData.detail || errorDetail;
-    } catch {
-      // If not JSON, try text
+      const errorText = await response.text();
       try {
-        const errorText = await response.text();
-        errorDetail = errorText || errorDetail;
+        errorDetail = JSON.parse(errorText).detail || errorText || errorDetail;
       } catch {
-        // Fall back to status text
+        errorDetail = errorText || errorDetail;
       }
+    } catch {
+      // Fall back to status text
     }
     throw new Error(errorDetail || `HTTP ${response.status}: ${response.statusText}`);
   }
@@ -220,6 +219,9 @@ export function connectChat(
 
   let ws: WebSocket | null = null;
   let reconnectAttempts = 0;
+  let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  let closedByUser = false;
+  let pendingSend: string | null = null;
   const maxReconnectAttempts = 5;
   const reconnectDelay = 1000;
 
@@ -230,13 +232,11 @@ export function connectChat(
       console.log('[Chat] WebSocket connected');
       reconnectAttempts = 0;
 
-      // Send initial message with session_id and messages
-      socket.send(
-        JSON.stringify({
-          messages,
-          session_id: sessionId,
-        })
-      );
+      // Flush a message queued while (re)connecting, else send initial history
+      const payload =
+        pendingSend ?? JSON.stringify({ messages, session_id: sessionId });
+      pendingSend = null;
+      socket.send(payload);
     };
 
     socket.onmessage = (event) => {
@@ -283,10 +283,11 @@ export function connectChat(
       console.log('[Chat] WebSocket closed');
       callbacks.onClose?.();
 
-      // Attempt reconnection
-      if (reconnectAttempts < maxReconnectAttempts) {
+      // Reconnect unless the caller closed intentionally
+      if (!closedByUser && reconnectAttempts < maxReconnectAttempts) {
         reconnectAttempts++;
-        setTimeout(() => {
+        reconnectTimer = setTimeout(() => {
+          reconnectTimer = null;
           ws = connect();
         }, reconnectDelay * reconnectAttempts);
       }
@@ -299,16 +300,23 @@ export function connectChat(
 
   return {
     send: (newMessages: ChatMessage[]) => {
+      const payload = JSON.stringify({
+        messages: newMessages,
+        session_id: sessionId,
+      });
       if (ws?.readyState === WebSocket.OPEN) {
-        ws.send(
-          JSON.stringify({
-            messages: newMessages,
-            session_id: sessionId,
-          })
-        );
+        ws.send(payload);
+      } else {
+        // Queue; onopen of the (re)connecting socket will flush it
+        pendingSend = payload;
       }
     },
     close: () => {
+      closedByUser = true;
+      if (reconnectTimer !== null) {
+        clearTimeout(reconnectTimer);
+        reconnectTimer = null;
+      }
       ws?.close();
       ws = null;
     },

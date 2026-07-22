@@ -14,16 +14,18 @@ from opm_ai.settings import settings
 
 
 class SPAStaticFiles(StaticFiles):
-    """Serve index.html for unknown paths so client-side routes deep-link."""
+    """Serve index.html for unknown extension-less paths so client-side
+    routes deep-link. Paths with a file extension (e.g. /assets/x.js) still
+    404 so broken builds fail loudly instead of parsing HTML as JS."""
 
     async def get_response(self, path: str, scope):
         try:
             response = await super().get_response(path, scope)
         except StarletteHTTPException as exc:
-            if exc.status_code != 404:
+            if exc.status_code != 404 or "." in Path(path).name:
                 raise
             return await super().get_response("index.html", scope)
-        if response.status_code == 404:
+        if response.status_code == 404 and "." not in Path(path).name:
             response = await super().get_response("index.html", scope)
         return response
 

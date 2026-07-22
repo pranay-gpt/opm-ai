@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useSimulationStore, useDeckStore } from '../stores/useAppStore';
 import { api, pollJobStatus } from '../api/client';
 import type { RunRequest, JobStatus } from '../api/client';
@@ -12,6 +12,20 @@ export default function SimulationRunner() {
   const [isRunning, setIsRunning] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [polling, setPolling] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Reconcile persisted job state with the backend on mount: the job store
+  // is in-memory server-side, so a restart orphans "running" jobs.
+  useEffect(() => {
+    if (currentJob && (currentJob.status === 'running' || currentJob.status === 'pending')) {
+      api.runStatus(currentJob.job_id)
+        .then((status) => setCurrentJob(status))
+        .catch(() => {
+          setCurrentJob({ ...currentJob, status: 'failed', error: 'Job no longer exists (server restarted)' });
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleRun = useCallback(async () => {
     if (!deckPath.trim()) {
@@ -67,6 +81,27 @@ export default function SimulationRunner() {
     }
   }, [lastBuildResponse, currentDeck]);
 
+  const handleBrowseFile = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    if (!file.name.toUpperCase().endsWith('.DATA')) {
+      setError('Please select a .DATA file');
+      return;
+    }
+    try {
+      const content = await file.text();
+      // Upload to backend temp storage; filename must end in .DATA exactly
+      const safeName = file.name.endsWith('.DATA') ? file.name : 'DECK.DATA';
+      const saveResponse = await api.saveDeck({ content, filename: safeName });
+      setDeckPath(saveResponse.deck_path);
+      setError(null);
+    } catch (err) {
+      console.error('Browse deck error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to upload deck file');
+    }
+  }, []);
+
   const handleRefresh = useCallback(async () => {
     if (currentJob) {
       try {
@@ -79,7 +114,7 @@ export default function SimulationRunner() {
   }, [currentJob, setCurrentJob]);
 
   return (
-    <div className="flex flex-col h-full bg-base">
+    <div className="flex flex-col h-full bg-page">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface">
         <div>
@@ -111,6 +146,20 @@ export default function SimulationRunner() {
                   placeholder="/path/to/deck.DATA"
                   className="input flex-1 font-mono text-sm"
                 />
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".DATA"
+                  onChange={handleBrowseFile}
+                  className="hidden"
+                />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="btn-secondary btn-sm whitespace-nowrap"
+                  title="Browse for a local .DATA file"
+                >
+                  Browse
+                </button>
                 {lastBuildResponse && (
                   <button
                     onClick={handleUseLastDeck}
@@ -121,7 +170,7 @@ export default function SimulationRunner() {
                 )}
               </div>
               <p className="text-xs text-textMuted mt-2">
-                Enter the path to your OPM Flow .DATA file, or build one in the Deck Builder.
+                Browse for a local .DATA file, enter a server path, or build one in the Deck Builder.
               </p>
             </div>
 

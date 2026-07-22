@@ -1,12 +1,12 @@
 import { useState, useCallback } from 'react';
-import { useLintActions, useLastLintResult } from '../stores/useAppStore';
-import { api, connectChat } from '../api/client';
-import type { LintResult, LintIssue, DeckSaveRequest } from '../api/client';
+import { useLintActions, useResolvedTheme } from '../stores/useAppStore';
+import { api } from '../api/client';
+import type { LintResult } from '../api/client';
 import Editor from '@monaco-editor/react';
 
 export default function LinterPanel() {
   const { setLastLintResult } = useLintActions();
-  const lastLintResult = useLastLintResult();
+  const resolvedTheme = useResolvedTheme();
 
   const [deckText, setDeckText] = useState('');
   const [isLinting, setIsLinting] = useState(false);
@@ -147,7 +147,7 @@ SCHEDULE
   const issueList = lintResult?.issues ?? [];
 
   return (
-    <div className="flex flex-col h-full bg-base">
+    <div className="flex flex-col h-full bg-page">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface">
         <div>
@@ -187,7 +187,7 @@ SCHEDULE
               language="opm"
               value={deckText}
               onChange={(value) => value !== undefined && setDeckText(value)}
-              theme="vs-dark"
+              theme={resolvedTheme === 'light' ? 'light' : 'vs-dark'}
               options={{
                 minimap: { enabled: false },
                 lineNumbers: 'on',
@@ -260,7 +260,7 @@ SCHEDULE
                     <h3 className="font-medium text-textPrimary mb-3">Errors</h3>
                     <div className="space-y-2">
                       {issueList.map((issue, i) => (
-                        <div key={i} className="p-3 rounded bg-base border border-border">
+                        <div key={i} className="p-3 rounded bg-page border border-border">
                           <div className="flex items-start gap-2">
                             <span className="flex-shrink-0 w-5 h-5 rounded-full bg-error/20 text-error flex items-center justify-center text-xs">
                               {i + 1}

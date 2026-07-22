@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { useShallow } from 'zustand/react/shallow';
@@ -90,7 +91,9 @@ export const useChatStore = create<ChatState>()(
     {
       name: 'opm-ai-chat',
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ sessionId: state.sessionId }),
+      // Persist messages with sessionId: server keeps history keyed by
+      // sessionId, so an empty UI after reload would silently diverge.
+      partialize: (state) => ({ sessionId: state.sessionId, messages: state.messages }),
     }
   )
 );
@@ -279,6 +282,24 @@ export const useSimulationActions = () => useSimulationStore(useShallow((state) 
 // UI
 export const useSidebarOpen = () => useUIStore((state) => state.sidebarOpen);
 export const useTheme = () => useUIStore((state) => state.theme);
+
+// Resolved theme ('auto' collapsed to what the system prefers). Use for
+// embedded widgets (Monaco, Plotly) that cannot read CSS variables.
+export function useResolvedTheme(): 'dark' | 'light' {
+  const theme = useTheme();
+  const [systemDark, setSystemDark] = useState(
+    () => window.matchMedia('(prefers-color-scheme: dark)').matches
+  );
+  useEffect(() => {
+    if (theme !== 'auto') return;
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const onChange = (e: MediaQueryListEvent) => setSystemDark(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, [theme]);
+  if (theme === 'auto') return systemDark ? 'dark' : 'light';
+  return theme;
+}
 export const useUIActions = () => useUIStore(useShallow((state) => ({
   toggleSidebar: state.toggleSidebar,
   setSidebarOpen: state.setSidebarOpen,

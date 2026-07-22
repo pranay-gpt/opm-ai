@@ -66,7 +66,7 @@ export default function SettingsPanel() {
   }, [applyResponse]);
 
   return (
-    <div className="flex flex-col h-full bg-base">
+    <div className="flex flex-col h-full bg-page">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface">
         <div>

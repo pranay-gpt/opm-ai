@@ -219,6 +219,28 @@ Original Stage F checklist:
 - NOECHO/ECHO template cleanup + PVTO monotonicity warning.
 - Norne/SPE9-class showcase deck in docs (GUIDE 2 test philosophy).
 
+### Planned capabilities from Instructions.txt not yet built (2026-07-22 review)
+
+Identified by a full code review against the plan; each is UI/plumbing work on
+top of finished backend pieces, none blocks the shipped v1.
+
+1. Real 3D View tab (GUIDE 1/3, ResInsight visualization): the Results page
+   3D View tab renders a placeholder. Options: embed static snapshot PNGs
+   (already served by /api/results/{id}/snapshots) as the tab content, or a
+   lightweight three.js grid viewer reading EGRID geometry. The separate
+   3D Snapshots tab already works on hosts with a display.
+2. LLM lint summary surfaced in UI (Part 2 headline): the backend returns
+   lint_summary but no component renders it; DeckEditor fabricates
+   "All checks passed" instead. Render the real field in LinterPanel and
+   DeckEditor result panes, delete the fabricated string.
+3. Correlation selection (Part 4, "Ask user option if multiple correlation
+   available"): preprocess implements the correlation family but the fluid
+   section hardcodes Standing. Add a correlation dropdown to the DeckBuilder
+   fluid card and thread it through BuildRequest.fluid.
+4. Fuzzy keyword suggestions in linter (Part 2, "WELSPCES -> did you mean
+   WELSPECS?"): add difflib.get_close_matches against the known-keyword set
+   in the unknown-keyword rule path; pure offline, no LLM needed.
+
 ## Ordering rationale
 
 B before C: chat's build_deck tool inherits LLM extraction for free once B lands.

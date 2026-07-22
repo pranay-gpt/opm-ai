@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useCurrentDeck, useCurrentDeckPath, useLastBuildResponse, useLastLintResult, useDeckActions, useLintActions } from '../stores/useAppStore';
+import { useCurrentDeck, useCurrentDeckPath, useLastBuildResponse, useLastLintResult, useDeckActions, useLintActions, useResolvedTheme } from '../stores/useAppStore';
 import { api } from '../api/client';
 import type { BuildRequest, BuildResponse, FluidDescriptorRequest } from '../api/client';
 import Editor from '@monaco-editor/react';
@@ -11,6 +11,7 @@ export default function DeckBuilder() {
   const lastLintResult = useLastLintResult();
   const { setCurrentDeck, setLastBuildResponse, setLastDeckPath } = useDeckActions();
   const { setLastLintResult } = useLintActions();
+  const resolvedTheme = useResolvedTheme();
 
   const [description, setDescription] = useState('10x10x3 grid with one producer at 5,5, depletion drive, 3000m depth, 200 bar initial pressure');
   const [isBuilding, setIsBuilding] = useState(false);
@@ -107,7 +108,7 @@ export default function DeckBuilder() {
   }, []);
 
   return (
-    <div className="flex flex-col h-full bg-base">
+    <div className="flex flex-col h-full bg-page">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface">
         <div>
@@ -415,7 +416,7 @@ export default function DeckBuilder() {
                 height="100%"
                 language="opm"
                 value={currentDeck}
-                theme="vs-dark"
+                theme={resolvedTheme === 'light' ? 'light' : 'vs-dark'}
                 options={{
                   readOnly: true,
                   minimap: { enabled: false },

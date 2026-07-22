@@ -31,7 +31,7 @@ function AppLayout() {
   const { sidebarOpen, toggleSidebar } = useUIStore();
 
   return (
-    <div className="flex h-screen bg-base overflow-hidden">
+    <div className="flex h-screen bg-page overflow-hidden">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header onMenuClick={toggleSidebar} />

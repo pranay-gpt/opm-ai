@@ -21,7 +21,7 @@ export default function Sidebar() {
     <>
       {/* Mobile overlay */}
       <div
-        className={`fixed inset-0 z-40 bg-base/80 backdrop-blur-sm lg:hidden transition-opacity duration-200 ${
+        className={`fixed inset-0 z-40 bg-page/80 backdrop-blur-sm lg:hidden transition-opacity duration-200 ${
           sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         onClick={() => setSidebarOpen(false)}

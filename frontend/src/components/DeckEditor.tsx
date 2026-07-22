@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useCurrentDeck, useCurrentDeckPath, useLastBuildResponse, useLastLintResult, useDeckActions, useLintActions } from '../stores/useAppStore';
+import { useCurrentDeck, useCurrentDeckPath, useLastBuildResponse, useLastLintResult, useDeckActions, useLintActions, useResolvedTheme } from '../stores/useAppStore';
 import { api } from '../api/client';
 import type { LintRequest, LintResult, LintIssue } from '../api/client';
 import Editor from '@monaco-editor/react';
@@ -27,6 +27,7 @@ export default function DeckEditor() {
   const { setCurrentDeck, setLastBuildResponse, setLastDeckPath } = useDeckActions();
   const { setLastLintResult } = useLintActions();
 
+  const resolvedTheme = useResolvedTheme();
   const [deck, setDeck] = useState(currentDeck || '');
   const [isDirty, setIsDirty] = useState(false);
   const [isLinting, setIsLinting] = useState(false);
@@ -263,12 +264,34 @@ SCHEDULE
           { token: 'keyword.terminator', foreground: 'FFB020' },
         ],
         colors: {
-          'editor.background': '#0A1628',
-          'editor.foreground': '#FFFFFF',
-          'editor.lineHighlightBackground': '#0F2642',
-          'editorLineNumber.foreground': '#6B7B8D',
-          'editorIndentGuide.background': '#1A3A5A',
-          'editorIndentGuide.activeBackground': '#00D9FF40',
+          'editor.background': '#081028',
+          'editor.foreground': '#F0F6FF',
+          'editor.lineHighlightBackground': '#0D1E3C',
+          'editorLineNumber.foreground': '#5A6E8C',
+          'editorIndentGuide.background': '#1A3A64',
+          'editorIndentGuide.activeBackground': '#00D2FF40',
+        },
+      });
+
+      m.editor.defineTheme('opm-light', {
+        base: 'vs',
+        inherit: true,
+        rules: [
+          { token: 'keyword.section', foreground: '0066CC', fontStyle: 'bold' },
+          { token: 'keyword', foreground: '0066CC' },
+          { token: 'number', foreground: '795E26' },
+          { token: 'string', foreground: 'A31515' },
+          { token: 'comment', foreground: '008000' },
+          { token: 'delimiter', foreground: '333333' },
+          { token: 'keyword.terminator', foreground: 'C88200' },
+        ],
+        colors: {
+          'editor.background': '#FFFFFF',
+          'editor.foreground': '#0A1432',
+          'editor.lineHighlightBackground': '#EAF0FA',
+          'editorLineNumber.foreground': '#8296B4',
+          'editorIndentGuide.background': '#D2DCEE',
+          'editorIndentGuide.activeBackground': '#0066CC40',
         },
       });
     }
@@ -279,7 +302,7 @@ SCHEDULE
   ];
 
   return (
-    <div className="flex flex-col h-full bg-base">
+    <div className="flex flex-col h-full bg-page">
       {/* Toolbar */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-surface">
         <div className="flex items-center gap-2">
@@ -367,7 +390,7 @@ SCHEDULE
               height="100%"
               language="opm"
               value={deck}
-              theme="opm-dark"
+              theme={resolvedTheme === 'light' ? 'opm-light' : 'opm-dark'}
               options={{
                 minimap: { enabled: true },
                 lineNumbers: 'on',
@@ -424,7 +447,7 @@ SCHEDULE
               {lintErrors.map((error, i) => (
                 <div
                   key={i}
-                  className="p-2 rounded bg-base border border-border text-xs"
+                  className="p-2 rounded bg-page border border-border text-xs"
                   onClick={() => scrollToSection(activeSection)}
                 >
                   <div className="flex items-center gap-1 text-error mb-1">

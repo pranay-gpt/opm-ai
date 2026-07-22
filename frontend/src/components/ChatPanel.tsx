@@ -106,25 +106,23 @@ export default function ChatPanel() {
     }
   }, [handleSend]);
 
-  // Handle provider change with revert on failure
+  // Handle provider change with revert on failure. The select is controlled
+  // by the store, so reverting the store reverts the UI.
   const handleProviderChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newProvider = e.target.value as 'groq' | 'nim' | 'offline';
+    const newProvider = e.target.value as 'groq' | 'openai' | 'nim' | 'offline';
     const prevProvider = prevProviderRef.current;
     prevProviderRef.current = newProvider;
 
     useSettingsStore.getState().setLLMProvider(newProvider);
     api.updateSettings({ provider: newProvider }).catch((err) => {
       console.error('[Chat] Failed to update provider:', err);
-      // Revert local store on failure
       prevProviderRef.current = prevProvider;
       useSettingsStore.getState().setLLMProvider(prevProvider);
-      // Force re-render by updating the select value
-      e.target.value = prevProvider;
     });
   }, []);
 
   return (
-    <div className="flex flex-col h-full bg-base">
+    <div className="flex flex-col h-full bg-page">
       {/* Connection Status Bar */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-surface">
         <div className="flex items-center gap-2">
@@ -142,7 +140,7 @@ export default function ChatPanel() {
           <select
             value={settings.llmProvider}
             onChange={handleProviderChange}
-            className="text-xs px-2 py-1 rounded bg-base border border-border text-textPrimary"
+            className="text-xs px-2 py-1 rounded bg-page border border-border text-textPrimary"
           >
             <option value="groq">Groq</option>
             <option value="nim">NVIDIA NIM</option>
@@ -238,7 +236,7 @@ export default function ChatPanel() {
 
               {/* Tool result */}
               {message.role === 'tool' && (
-                <div className="mt-2 p-2 rounded bg-base border border-border text-xs font-mono text-textSecondary max-h-32 overflow-auto">
+                <div className="mt-2 p-2 rounded bg-page border border-border text-xs font-mono text-textSecondary max-h-32 overflow-auto">
                   {message.content}
                 </div>
               )}
@@ -257,13 +255,13 @@ export default function ChatPanel() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Ask me to build a deck, run a simulation, or explain a concept..."
-            className="flex-1 min-h-[44px] max-h-32 px-4 py-2.5 rounded-lg bg-base border border-border text-textPrimary placeholder-textMuted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary resize-none font-sans text-sm"
+            className="flex-1 min-h-[44px] max-h-32 px-4 py-2.5 rounded-lg bg-page border border-border text-textPrimary placeholder-textMuted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary resize-none font-sans text-sm"
             disabled={isSending}
           />
           <button
             onClick={handleSend}
             disabled={!input.trim() || isSending || !isConnected}
-            className="px-6 py-2.5 rounded-lg bg-primary text-base font-medium text-base hover:bg-primaryHover disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+            className="px-6 py-2.5 rounded-lg bg-primary text-page font-medium hover:bg-primaryHover disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex-shrink-0"
           >
             {isSending ? 'Sending...' : 'Send'}
           </button>

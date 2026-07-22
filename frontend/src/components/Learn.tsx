@@ -130,7 +130,7 @@ export default function Learn() {
   }, [sessionId, messages]);
 
   return (
-    <div className="flex flex-col h-full bg-base">
+    <div className="flex flex-col h-full bg-page">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface">
         <div>
@@ -192,7 +192,7 @@ export default function Learn() {
                         onClick={() => setExplainLevel(level as ExplanationLevel)}
                         className={`flex-1 px-4 py-2 rounded text-sm font-medium transition-colors ${
                           explainLevel === level
-                            ? 'bg-primary text-base'
+                            ? 'bg-primary text-page'
                             : 'bg-surface border border-border text-textSecondary hover:text-textPrimary hover:border-primary/50'
                         }`}
                         disabled={explainLoading}
@@ -628,7 +628,7 @@ export default function Learn() {
                   {/* Markdown Report */}
                   <div className="card p-4">
                     <h3 className="font-semibold text-textPrimary mb-3">Full Report (Markdown)</h3>
-                    <div className="prose prose-invert max-w-none whitespace-pre-wrap text-sm bg-base border border-border p-4 rounded">
+                    <div className="prose prose-invert max-w-none whitespace-pre-wrap text-sm bg-page border border-border p-4 rounded">
                       {learningReport.markdown}
                     </div>
                   </div>

@@ -140,7 +140,7 @@ export interface WSClientMessage {
 
 export type WSServerMessage =
   | { type: 'token'; content: string }
-  | { type: 'tool_call'; tool_call: ToolCall }
+  | { type: 'tool_call'; tool_name: string; arguments: Record<string, unknown>; tool_call_id: string }
   | { type: 'tool_result'; tool_call_id: string; result: string }
   | { type: 'error'; message: string }
   | { type: 'done' };

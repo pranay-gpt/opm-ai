@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useUIStore } from './stores/useAppStore';
 import Home from './components/Home';
 import DeckBuilder from './components/DeckBuilder';
@@ -12,6 +13,19 @@ import Learn from './components/Learn';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import './index.css';
+
+function ThemeApplier() {
+  const theme = useUIStore((s) => s.theme);
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'auto') {
+      root.removeAttribute('data-theme');
+    } else {
+      root.setAttribute('data-theme', theme);
+    }
+  }, [theme]);
+  return null;
+}
 
 function AppLayout() {
   const { sidebarOpen, toggleSidebar } = useUIStore();
@@ -32,6 +46,7 @@ function AppLayout() {
 function App() {
   return (
     <BrowserRouter>
+      <ThemeApplier />
       <Routes>
         <Route path="/" element={<AppLayout />}>
           <Route index element={<Home />} />

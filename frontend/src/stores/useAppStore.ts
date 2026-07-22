@@ -184,7 +184,7 @@ export const useSimulationStore = create<SimulationState>()(
     {
       name: 'opm-ai-simulation',
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ jobHistory: state.jobHistory, lastResults: state.lastResults }),
+      partialize: (state) => ({ jobHistory: state.jobHistory, lastResults: state.lastResults, currentJob: state.currentJob }),
     }
   )
 );
@@ -195,16 +195,28 @@ export const useSimulationStore = create<SimulationState>()(
 
 interface UIState {
   sidebarOpen: boolean;
+  theme: 'dark' | 'light' | 'auto';
   toggleSidebar: () => void;
   setSidebarOpen: (open: boolean) => void;
+  setTheme: (theme: 'dark' | 'light' | 'auto') => void;
 }
 
-export const useUIStore = create<UIState>((set) => ({
-  sidebarOpen: true,
-
-  toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
-  setSidebarOpen: (open) => set({ sidebarOpen: open }),
-}));
+export const useUIStore = create<UIState>()(
+  persist(
+    (set) => ({
+      sidebarOpen: true,
+      theme: 'auto' as const,
+      toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+      setSidebarOpen: (open) => set({ sidebarOpen: open }),
+      setTheme: (theme) => set({ theme }),
+    }),
+    {
+      name: 'opm-ai-ui',
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({ theme: state.theme }),
+    }
+  )
+);
 
 // ============================================
 // Selectors for convenience
@@ -266,7 +278,9 @@ export const useSimulationActions = () => useSimulationStore(useShallow((state) 
 
 // UI
 export const useSidebarOpen = () => useUIStore((state) => state.sidebarOpen);
+export const useTheme = () => useUIStore((state) => state.theme);
 export const useUIActions = () => useUIStore(useShallow((state) => ({
   toggleSidebar: state.toggleSidebar,
   setSidebarOpen: state.setSidebarOpen,
+  setTheme: state.setTheme,
 })));

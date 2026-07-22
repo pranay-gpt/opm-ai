@@ -247,9 +247,18 @@ export function connectChat(
           case 'token':
             callbacks.onToken?.(data.content);
             break;
-          case 'tool_call':
-            callbacks.onToolCall?.(data.tool_call);
+          case 'tool_call': {
+            const toolCall: ToolCall = {
+              id: data.tool_call_id,
+              type: 'function',
+              function: {
+                name: data.tool_name,
+                arguments: JSON.stringify(data.arguments ?? {}),
+              },
+            };
+            callbacks.onToolCall?.(toolCall);
             break;
+          }
           case 'tool_result':
             callbacks.onToolResult?.(data.tool_call_id, data.result);
             break;

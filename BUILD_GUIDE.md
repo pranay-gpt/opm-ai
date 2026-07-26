@@ -1,5 +1,11 @@
 # OPM-AI Build Guide
 
+> **STATUS 2026-07-22: BUILD COMPLETE.** Everything specified here is implemented
+> and shipped (see CONTEXT.md for current state, FORWARD_PLAN.md for remaining
+> planned capabilities). This file is the original architecture spec, kept as the
+> contract reference; where it says "currently empty" or "to build", read it as
+> the historical starting point, not the present.
+
 Source-of-truth for building the project. Distilled from `Instructions.txt` (GUIDE 1-4)
 and the concrete API contract encoded in `tests/`. The package `opm_ai/` is currently
 empty; this document is the spec for what to build.

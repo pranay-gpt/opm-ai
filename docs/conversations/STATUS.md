@@ -1,7 +1,10 @@
 # OPM-AI Build Status and Resume Point
 
-Living document. Read this FIRST after any context clear, before touching code.
-Last verified: 2026-07-18 (Stage 3 complete).
+Living document, now CLOSED as the build is complete.
+Last verified: 2026-07-22 (all stages done, shipped, UI overhaul landed).
+For a fresh session read CONTEXT.md (repo root) first; forward work lives in
+FORWARD_PLAN.md "Planned capabilities". The entries below are the historical
+stage-by-stage log ending with the 2026-07-21/22 closing entries at the bottom.
 
 ## TL;DR for a fresh session
 
@@ -191,3 +194,44 @@ you paste the output.
   resinsight-2026.06-cli-options; opm-ai entity contradiction ("blocked on image")
   corrected. Docker note: the container has no display, so snapshots are host-only
   until xvfb + software GL are added to the image.
+
+## 2026-07-21: Stages A-F (FORWARD_PLAN.md) - the aim met and shipped
+
+- Stage B: LLM extraction end-to-end (extract_json JSON mode + repair retry,
+  Pydantic validation, offline regex fallback); live-verified on Groq with
+  unit-converting descriptions.
+- Stage C: chat WebSocket tool loop live-verified and hardened (exclude_none
+  serialization, assistant turn recorded, tool-result compaction vs TPM
+  limits, run_in_executor for blocking tools, done event + multi-turn);
+  runtime settings API (in-memory, keys never echoed); per-session
+  asyncio.Lock (unlocked variant provably lost 25/50 updates).
+- Stage D: WAG / gas cap / CO2 / buildup / multilayer templates with DATES
+  schedules; all pass flow dry-run AND real runs with physics assertions.
+- Stage E: snapshots UI + field KPIs. Stage F: public GitHub repo
+  (pranay-gpt/opm-ai, MIT, main), CI green after fixing hardcoded absolute
+  paths in seven test files.
+
+## 2026-07-22: UI overhaul, review hardening, docs (CLOSING ENTRY)
+
+User-reported nav bugs -> full frontend pass; commits acea8eb..b972ae0 pushed.
+- Router navigation (NavLink) + SPA deep-link fallback (SPAStaticFiles,
+  extension-less 404s only); POST /api/decks (temp save, 1h TTL sweep).
+- React error #185 fixed (useShallow on all object selectors); chat
+  white-screen fixed (flat tool_call wire shape converted in client.ts).
+- Theme system: CSS vars, dark/light/auto, pre-paint script, useResolvedTheme
+  drives Monaco (opm-light added) + Plotly; sharp/curvy design language.
+- Review fixes (max-effort /code-review): tailwind 'base'->'page' color key
+  (text-base collision), WS close/reconnect leak + queued sends, fetchJson
+  single body read, chat messages persisted, currentJob reconciliation on
+  mount, Browse .DATA upload button, dead theme.ts/App.css deleted.
+- Four planned-but-unbuilt capabilities recorded in FORWARD_PLAN.md: real 3D
+  view tab, LLM lint summary in UI, correlation selection, fuzzy keyword
+  suggestions.
+- Verification: suite 240 passed / 2 skipped; 7-agent Playwright matrix
+  all-PASS including a full 720-day run with 48 KPI cards and live-Groq chat.
+- README rewritten simplistic with 8 screenshots in docs/screenshots/.
+
+Docs refreshed this date: CONTEXT.md (current state), IMPLEMENTATION_PLAN.md +
+BUILD_GUIDE.md (marked complete/historical), FORWARD_PLAN.md (status header),
+frontend/context.md (rewritten), opm_ai/api/context.md (decks route + SPA +
+WS protocol), NEW opm_ai/postprocess/context.md and opm_ai/llm/context.md.

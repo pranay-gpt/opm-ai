@@ -1,5 +1,12 @@
 # OPM-AI Implementation Plan
 
+> **STATUS 2026-07-22: PLAN COMPLETE.** Every stage below (0 through 15) shipped,
+> plus the post-plan stages A-F in FORWARD_PLAN.md and the 2026-07-22 UI overhaul
+> (theme system, navigation fix, chat protocol fix, review-driven hardening).
+> Repo is public at https://github.com/pranay-gpt/opm-ai with green CI.
+> This file is kept as the historical build record; current state lives in
+> CONTEXT.md, forward work in FORWARD_PLAN.md ("Planned capabilities" section).
+
 Staged build plan. Companion to `BUILD_GUIDE.md` (architecture + API contract) and the
 per-part design records in `docs/conversations/` (`00-08`).
 UI is **React (Vite/TypeScript)** on a **FastAPI + Uvicorn** backend, not Streamlit.

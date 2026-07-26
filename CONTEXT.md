@@ -1,8 +1,9 @@
 # OPM-AI: Context for New Sessions
 
-Last updated: 2026-07-20  
-Status: All parts (0-8) complete through Stage 15 (ResInsight snapshot bridge via batch CLI)  
-Suite: 189 passed / 0 failed
+Last updated: 2026-07-22  
+Status: All parts (0-8) complete; Stages A-F (FORWARD_PLAN.md) complete; UI overhaul + review hardening shipped 2026-07-22  
+Suite: 240 passed / 2 skipped (excluding slow Flow-run tests)  
+Public repo: https://github.com/pranay-gpt/opm-ai (main, CI green)
 
 ## What This Is
 
@@ -274,13 +275,16 @@ specs); query with `/wiki-query "<question>"`.
 
 ## Remaining gaps
 
-- Builder Phase 2 remainder: scenario-specific templates (WAG alternation,
-  gas-cap EQUIL, CO2 stream), DATES schedules, LLM extraction end-to-end.
-- Chat session races on concurrent same-session WebSocket connections.
+- ~~Builder Phase 2 remainder~~ DONE (Stages B+D, 2026-07-21): scenario templates,
+  DATES schedules, and LLM extraction all shipped and live-verified.
+- ~~Chat session races~~ DONE (Stage C, 2026-07-21): per-session asyncio.Lock.
 - Explainer vector backend upgrade path documented in opm_ai/explainer/context.md.
 - ResInsight snapshots in Docker: the container has no display, so
   /api/results/{id}/snapshots fails there (clean error). Add xvfb + software GL
   to the image, or accept host-only snapshots.
+- Four planned-but-unbuilt capabilities from Instructions.txt (real 3D view tab,
+  LLM lint summary in UI, correlation selection, fuzzy keyword suggestions):
+  see FORWARD_PLAN.md "Planned capabilities" for implementation notes.
 
 ## Stage 15 (2026-07-20): ResInsight bridge (batch CLI, gRPC ruled out)
 
@@ -309,5 +313,77 @@ Rewrite (working path, verified end-to-end):
 - Wiki: entity `resinsight`, concept `resinsight-headless-automation`, source
   `resinsight-2026.06-cli-options` added; opm-ai entity's "blocked on image"
   claim corrected (14 pages total).
+
+## Stages A-F (2026-07-21): LLM extraction, chat brain, scenarios, ship
+
+Summarized here; full detail per stage in FORWARD_PLAN.md.
+- Stage B: LLM deck extraction end-to-end (extract_json JSON mode + repair
+  retry, Pydantic validation, offline regex fallback). Live-verified on Groq.
+- Stage C: chat WebSocket tool loop live-verified and hardened (5 protocol
+  fixes); runtime settings API (in-memory provider/key overrides, keys never
+  echoed); per-session asyncio.Lock.
+- Stage D: 5 new scenario templates (WAG, gas cap, CO2, buildup, multilayer)
+  with DATES schedules, all Flow-verified with physics sanity assertions.
+- Stage E: snapshots UI + field KPIs.
+- Stage F: shipped to GitHub (pranay-gpt/opm-ai, MIT, main), CI green after
+  fixing hardcoded absolute paths in seven test files.
+
+## UI overhaul + review hardening (2026-07-22)
+
+User-reported bugs (tabs not navigating, deep links 404) plus a design pass
+and a max-effort code review. All committed and pushed (acea8eb..b972ae0).
+
+Fixes and features:
+- Navigation: Sidebar/Header rebuilt on react-router NavLink (the old zustand
+  activePanel never changed the route). SPA deep-link fallback in server.py
+  (SPAStaticFiles): index.html only for extension-less 404s, so missing
+  /assets/*.js still 404 loudly. API 404s unaffected (mount is last).
+- POST /api/decks saves browser-only deck text to an allowlisted temp dir so
+  the UI can lint/run it by path. Stale opmai_deck_* dirs swept (1h TTL) on
+  each save. Backslash filenames rejected; UTF-8 explicit.
+- React error #185 (all pages blank): zustand v5 object-literal selectors
+  re-render infinitely; every object-returning selector now wraps in
+  useShallow.
+- Chat white-screen crash: backend sends flat tool_call events
+  (tool_name/arguments/tool_call_id, chat.py ~394) but client read
+  data.tool_call (undefined) then rendered tc.function.name. client.ts now
+  constructs the nested ToolCall; WSServerMessage type matches the wire shape.
+- Theme system: CSS custom properties (RGB triplets so Tailwind /alpha works),
+  dark default + [data-theme=light] + prefers-color-scheme auto block; toggle
+  in Header persisted via useUIStore. Pre-paint inline script in index.html
+  prevents dark flash. useResolvedTheme() hook (collapses auto via
+  matchMedia) drives Monaco (opm-dark + new opm-light) and restyles Plotly
+  layout (transparent bg + theme font color). Design language: sharp major
+  elements (cards/inputs rounded-sm), curvy minor (buttons rounded-lg,
+  badges/tabs rounded-full).
+- Tailwind color key 'base' renamed 'page': .text-base (color) was colliding
+  with Tailwind's .text-base (font-size) - color rule won and also repainted
+  button text with the page background color in the compiled CSS.
+- WebSocket lifecycle (client.ts connectChat): intentional close() no longer
+  triggers the auto-reconnect timer (orphan socket leak); a send() during
+  reconnect is queued in pendingSend and flushed on open instead of silently
+  dropped; fetchJson reads the error body once as text (stream can't be read
+  twice).
+- Persistence: chat store persists messages with sessionId (server keeps
+  history keyed by sessionId, so an empty UI after reload silently diverged);
+  simulation store persists currentJob; SimulationRunner reconciles a
+  persisted running job against the backend on mount (backend job store is
+  in-memory - a restart orphans it).
+- Deck upload: Browse button in SimulationRunner reads a local .DATA file and
+  uploads via POST /api/decks (per user: browse button, not drag-drop).
+- Deleted dead frontend/src/theme.ts and App.css. vite sourcemaps off (build
+  OOM-killed at 4GB heap on this 3GB host; 2GB heap now suffices, stop
+  uvicorn first).
+- README rewritten simplistic (intro / features / screenshots / install /
+  credits); 8 curated Playwright screenshots committed to docs/screenshots/.
+
+Verification: 240 passed / 2 skipped; 7-agent Playwright matrix all-PASS
+(home+theme, builder, linter, editor, simulator+results incl. full 720-day
+run with 48 KPI cards, settings+learn, chat on live Groq).
+
+Known post-review state: four planned capabilities from Instructions.txt are
+recorded in FORWARD_PLAN.md "Planned capabilities" (real 3D view tab, LLM
+lint summary in UI, correlation selection, fuzzy keyword suggestions). The
+5.2MB single JS bundle (Plotly+Monaco not code-split) is accepted debt.
 
 Use Sonnet for routine implementation/testing, Opus when Sonnet fails repeatedly.

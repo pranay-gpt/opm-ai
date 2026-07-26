@@ -43,16 +43,50 @@ All route handlers in `routes/` are thin adapters that:
 
 | File | Purpose |
 |------|---------|
-| `server.py` | FastAPI app factory (`create_app`), lifespan, CORS, static mount, router inclusion |
+| `server.py` | FastAPI app factory (`create_app`), lifespan, CORS, SPA static mount, router inclusion |
 | `schemas.py` | Pydantic DTOs for requests/responses and OpenAI tool schemas |
 | `job_store.py` | In-memory job store (module-global dict) for async simulation runs |
+| `paths.py` | `validate_path()` allowlist (decks/, results/, fixtures/, tempdir) |
 | `routes/build.py` | POST `/api/build` - build deck from natural language |
 | `routes/lint.py` | POST `/api/lint` - lint a deck file |
+| `routes/decks.py` | POST `/api/decks` - save browser-only deck text to a temp .DATA (2026-07-22) |
 | `routes/run.py` | POST `/api/run` (start job), GET `/api/run/{job_id}` (poll status) |
 | `routes/results.py` | GET `/api/results/{job_id}` - KPIs + Plotly JSON plots; `/snapshots` - ResInsight 3D PNG export (render or reuse cache); `/snapshots/{file}` - serve one PNG |
 | `routes/chat.py` | WebSocket `/api/chat` + HTTP fallback - LLM chat with tool calling |
 | `routes/explainer.py` | POST `/api/explain`, `/api/quiz`, `/api/learning-report` - Educational explainer API |
 | `routes/settings.py` | GET/POST `/api/settings` - runtime LLM provider/key overrides (Stage C) |
+
+### SPA Serving (2026-07-22)
+
+- `SPAStaticFiles` (server.py) subclasses Starlette StaticFiles and serves
+  index.html for 404s ONLY when the requested path's last segment has no file
+  extension. Client routes (/linter, /deck-builder) deep-link; a missing
+  /assets/x.js still 404s so broken builds fail loudly. StaticFiles RAISES
+  starlette.exceptions.HTTPException on missing files (it does not return a
+  404 response) - catch that class, not FastAPI's. Mount is last, so /api
+  routes keep their own 404s.
+
+### Deck Save Route (2026-07-22)
+
+- POST `/api/decks` body `{content, filename?}` -> `{deck_path}`. Writes to a
+  fresh `tempfile.mkdtemp(prefix="opmai_deck_")` (system tempdir is in the
+  paths.py allowlist - if that allowlist changes, this route breaks; a test in
+  test_api_decks.py guards the lint-by-saved-path flow). Rejects empty content
+  (400), >2MB (413), non-bare or non-.DATA filenames incl. backslashes (400).
+  Sweeps opmai_deck_* dirs older than 1h on each save (no janitor thread by
+  design; add one if save volume grows). UI callers: LinterPanel, DeckEditor,
+  SimulationRunner (Use Last Built Deck + the Browse upload button).
+
+### Chat WS Protocol (wire shape the frontend depends on)
+
+- Server -> client events: `{type:"token",content}`,
+  `{type:"tool_call",tool_name,arguments,tool_call_id}` (FLAT - not nested
+  OpenAI shape; frontend client.ts converts), `{type:"tool_result",
+  tool_call_id,result}`, `{type:"error",message}`, `{type:"done"}`.
+- Client -> server per turn: `{session_id, messages: full list}`; server
+  merges (empty server history takes all, else trailing user message).
+- If you change this protocol, update frontend/src/types.ts WSServerMessage
+  AND the tool_call construction in frontend/src/api/client.ts.
 
 ### Runtime Settings (Stage C, 2026-07-20)
 

@@ -1,4 +1,10 @@
-# FORWARD PLAN — Reconciliation Against the Aim (Instructions.txt)
+# FORWARD PLAN - Reconciliation Against the Aim (Instructions.txt)
+
+> **STATUS 2026-07-22: Stages A-F ALL DONE.** The aim is met: plain-English chat
+> builds, lints, runs, visualises, and explains simulations; repo is public with
+> green CI; Docker one-liner works. What remains is the "Planned capabilities"
+> list near the end of this file (4 items) plus the debt register. Read
+> CONTEXT.md for architecture and invariants before continuing work.
 
 Written 2026-07-20 after Stage 15 (ResInsight bridge). This document reconciles what
 is built against the stated aim and defines the path to "finished". It supersedes
@@ -35,8 +41,9 @@ results (plots + 3D), and explains them educationally — all via
 | Part 7 Explainer | DONE (BM25 deviation, documented) | explain/quiz/learning-report, offline fallbacks |
 | Part 8 Docker/CI | DONE | verified in LXD dockerhost 2026-07-20, smoke 7/7 |
 | "Useable by anyone using GitHub" | DONE (Stage F 2026-07-21) | public repo https://github.com/pranay-gpt/opm-ai (MIT, main default); CI green on GitHub-hosted runners |
-| Frontend served | BUILD-ON-DEMAND | frontend/dist is gitignored and absent on host; Docker builds it in-stage (verified); local serving requires `npm ci && npm run build` (node 18 present; NODE_OPTIONS=--max-old-space-size=4096 needed for plotly) |
+| Frontend served | BUILD-ON-DEMAND | frontend/dist is gitignored and absent on host; Docker builds it in-stage (verified); local serving requires `npm ci && npm run build` (node 18 present; sourcemaps disabled 2026-07-22 to halve build memory - 2GB heap now suffices; stop uvicorn first on this 3GB host) |
 | Frontend snapshots UI | DONE (Stage E 2026-07-21) | ResultsViewer 3D Snapshots tab consumes GET /api/results/{id}/snapshots; shows bridge error string when unavailable |
+| Frontend UI overhaul | DONE (2026-07-22) | Router navigation fixed (NavLink, SPA deep-link fallback), theme system (dark/light/auto, CSS vars, Monaco+Plotly follow), chat tool_call protocol fix, POST /api/decks + Browse upload, WS lifecycle + persistence fixes from max-effort review; 7-agent Playwright matrix all-PASS; screenshots in docs/screenshots/ |
 
 Test suite: 189 passed after fixing one CWD-dependent test
 (test_path_traversal_relative_outside_rejected asserted 400 for a path that

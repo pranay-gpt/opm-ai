@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from opm_ai.api.routes import build, decks, lint, run, results, chat, explainer
+from opm_ai.api.routes import build, decks, grid, lint, run, results, chat, explainer
 from opm_ai.api.routes import settings as settings_routes
 from opm_ai.api.session_store import get_session_store
 from opm_ai.settings import settings
@@ -67,6 +67,10 @@ def create_app() -> FastAPI:
     app.include_router(decks.router, prefix="/api")
     app.include_router(lint.router, prefix="/api")
     app.include_router(run.router, prefix="/api")
+    # grid before results: both hang off /results/{job_id}, and registering the
+    # literal /grid/... paths first keeps them unambiguous whatever results.py
+    # grows later.
+    app.include_router(grid.router, prefix="/api")
     app.include_router(results.router, prefix="/api")
     app.include_router(chat.router, prefix="/api")
     app.include_router(explainer.router, prefix="/api")

@@ -46,7 +46,43 @@
 - FastAPI serves `frontend/dist` at `/` via `StaticFiles`
 - Built with `npm run build` (requires 4GB Node heap)
 
+## 3D Viewer (`src/components/viewer3d/`)
+
+Native WebGL grid viewer, no ResInsight process involved. The packaged
+ResInsight build ships without gRPC and its batch mode needs a live X display,
+so the viewer reads EGRID/INIT/UNRST server-side and streams binary blobs
+instead. Binary rather than JSON: Norne is 6.2 MB of Float32 versus ~90 MB of
+decimal text, and the buffer goes straight to WebGL unparsed.
+
+| File | Role |
+|---|---|
+| `meshFormat.ts` | Parses the OPMG/OPMC/OPMP blobs. Pure, no three.js. Typed arrays are views onto the response buffer, not copies. |
+| `colormaps.ts` | 14 ResInsight palettes (`RiaColorTables.cpp`), linear/log x continuous/discrete + category, ternary blend. |
+| `engine.ts` | `Viewer3DEngine`: three.js scene, owns the canvas. Never imports React, never fetches. |
+| `Grid3DViewer.tsx` | Default export, props `{ jobId }`. Owns all fetching and panel state, drives the engine. |
+| `ControlPanel.tsx`, `LegendBar.tsx`, `HistogramBar.tsx`, `ResultInfoBox.tsx` | UI chrome. |
+
+Binary layouts and endpoint contracts: `docs/3d-viewer-contract.md`. Do not
+change a signature on one side without the other.
+
+Two invariants worth knowing before editing:
+
+- **The engine effect is keyed on `info`, not `[]`.** The component early-returns
+  a loading tree until `/grid/info` lands, so the container div does not exist on
+  first mount. An `[]`-effect bails there and never re-runs, and because every
+  call site is `engine?.setX()`, the failure is silent: full UI, no canvas.
+  Any new engine push effect must also list `engineGen` so a recreated engine
+  gets the current state.
+- **Viewer coordinates are the backend's**: origin subtracted, Z flipped up,
+  origin always averaged over ACTIVE cells so "show inactive" cannot shift the
+  model out from under the wells. Depth is `origin[2] - z`.
+
+`probe/` is a headless render harness for this component; see `probe/README.md`.
+It exists because `tsc -b`, eslint and the backend suite all passed while the
+viewer drew nothing.
+
 ## Future Work
-- **3D Viewer**: ResInsight headless gRPC bridge (Phase 2)
 - **Monaco Lint Squiggles**: Inline diagnostics from backend linter
 - **Mobile**: Responsive sidebar + touch-friendly controls
+- **3D Viewer**: intersections/section planes, contour maps, streamlines and
+  multi-view linking are the remaining ResInsight 3D features not implemented.

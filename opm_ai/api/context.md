@@ -50,9 +50,34 @@ All route handlers in `routes/` are thin adapters that:
 | `routes/lint.py` | POST `/api/lint` - lint a deck file |
 | `routes/run.py` | POST `/api/run` (start job), GET `/api/run/{job_id}` (poll status) |
 | `routes/results.py` | GET `/api/results/{job_id}` - KPIs + Plotly JSON plots; `/snapshots` - ResInsight 3D PNG export (render or reuse cache); `/snapshots/{file}` - serve one PNG |
+| `routes/grid.py` | GET `/api/results/{job_id}/grid/{info,mesh,property,property/range,wells}` - 3D viewer geometry, properties and wells |
 | `routes/chat.py` | WebSocket `/api/chat` + HTTP fallback - LLM chat with tool calling |
 | `routes/explainer.py` | POST `/api/explain`, `/api/quiz`, `/api/learning-report` - Educational explainer API |
 | `routes/settings.py` | GET/POST `/api/settings` - runtime LLM provider/key overrides (Stage C) |
+
+### 3D Grid Endpoints (`routes/grid.py`, 2026-07-26)
+
+- Registered BEFORE `results.router` in `server.py`. Both hang off
+  `/results/{job_id}`; every grid path carries a literal `grid` segment so
+  neither can shadow `/results/{job_id}/snapshots/{filename}`, and ordering
+  keeps that true if results.py grows a wildcard later.
+- Binary payloads: `/grid/mesh` returns `pack_mesh` output (magic `OPMG`),
+  `/grid/property` returns magic `OPMP` + a padded JSON header + float32 values.
+  Layouts are fixed by `docs/3d-viewer-contract.md`; the TypeScript parser in
+  `frontend/src/components/viewer3d/meshFormat.ts` depends on them byte for
+  byte, and `tests/unit/test_grid3d.py::unpack_mesh` is an independent reader
+  that fails if either side drifts.
+- Two bounded LRU caches, module-level with a `Lock`, in the spirit of
+  `job_store`: 4 packed meshes keyed by `(stem, EGRID mtime_ns,
+  include_inactive, MESH_FORMAT_VERSION)` and 32 property ranges keyed by
+  `(stem, UNRST mtime_ns, INIT mtime_ns, name)`. The mtime in the key means a
+  re-run of the same job id invalidates without an explicit purge.
+- The mesh ETag is `sha256(cache key)`, not a hash of the 6 MB body, because
+  the body is a pure function of the key. `If-None-Match` returns 304.
+- All parsing goes through `run_in_executor`; resfo reads are CPU-bound
+  (Norne: 0.06 s mesh, 0.06 s full 72 MB UNRST scan).
+- Error contract: unknown job 404, job not completed 400, no EGRID 404,
+  unparseable case 422, unknown property 404, out-of-range step 400.
 
 ### Runtime Settings (Stage C, 2026-07-20)
 

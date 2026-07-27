@@ -109,6 +109,80 @@ export interface SnapshotsResponse {
   duration_s: number;
 }
 
+// ============================================
+// 3D grid viewer (docs/3d-viewer-contract.md section 1)
+// ============================================
+
+export interface GridTimeStep {
+  index: number;
+  report: number;
+  days: number;
+  date: string;
+}
+
+export interface GridBBox {
+  min: [number, number, number];
+  max: [number, number, number];
+}
+
+export interface GridInfoResponse {
+  nx: number;
+  ny: number;
+  nz: number;
+  active_cells: number;
+  total_cells: number;
+  unit_system: string; // "METRIC" | "FIELD" | "" when unknown
+  length_unit: string; // ft | m | cm
+  origin: [number, number, number];
+  bbox: GridBBox; // viewer coords: origin subtracted, Z negated
+  static_properties: string[];
+  dynamic_properties: string[];
+  derived_properties: string[];
+  time_steps: GridTimeStep[];
+  fault_face_count: number;
+  nnc_count: number;
+  has_wells: boolean;
+}
+
+export interface GridPropertyRangeResponse {
+  name: string;
+  min: number;
+  max: number;
+  steps_scanned: number;
+}
+
+export type GridWellType =
+  | 'producer'
+  | 'oil_injector'
+  | 'gas_injector'
+  | 'water_injector'
+  | 'unknown';
+
+export interface GridWellCompletion {
+  i: number; // zero-based
+  j: number;
+  k: number;
+  cell: number;
+  center: [number, number, number];
+  open: boolean;
+}
+
+export interface GridWell {
+  name: string;
+  type: GridWellType;
+  head: [number, number, number];
+  i: number; // zero-based head cell
+  j: number;
+  k: number;
+  trajectory: [number, number, number][];
+  completions: GridWellCompletion[];
+}
+
+export interface GridWellsResponse {
+  step: number;
+  wells: GridWell[];
+}
+
 export type ChatRole = 'user' | 'assistant' | 'tool';
 
 export interface ChatMessage {

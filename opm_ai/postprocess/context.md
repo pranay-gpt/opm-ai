@@ -82,12 +82,19 @@ cell ever held.
 
 ## Future Plan
 
-1. **NNC rendering** — `nnc_pairs()` is exposed but the viewer does not draw
-   the connections yet.
-2. **LGRs** — `EclipseGrid` reads the root grid only; LGR keywords are in
+1. **LGRs** — `EclipseGrid` reads the root grid only; LGR keywords are in
    `_NON_CELL_KEYWORDS` and silently skipped.
-3. **Flow diagnostics** — TOF / drainage volumes would need the NNC
+2. **Flow diagnostics** — TOF / drainage volumes would need the NNC
    transmissibilities from `TRANNNC`, also currently skipped.
+3. **Restart-file keyword index** — `read_dynamic()` scans the UNRST for each
+   keyword, ~0.04-0.08 s per array on Norne, so a SOIL step costs two scans
+   (SWAT + SGAS). It is the whole remaining cost of a dynamic property request
+   now that the parsed grid is cached in `api/routes/grid.py::_open_grid`.
+   Building a one-time (keyword, step) -> file offset index would remove it.
+   Not done: playback is smooth without it and the index is real complexity.
 4. **Retire `resinsight_bridge.py`** — the packaged ResInsight has no gRPC and
    its snapshots need a live X display, which is why the WebGL viewer exists.
    Keep it only until the 3D viewer covers the same screenshots.
+
+NNC rendering is done: `nnc_pairs()` ships in the OPMC blob and the viewer
+draws the connections behind the "NNCs" display toggle.

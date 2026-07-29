@@ -55,10 +55,17 @@ router = APIRouter()
 _MESH_CACHE_MAX = 4
 _CELLS_CACHE_MAX = 4
 _RANGE_CACHE_MAX = 32
+# Parsed grids. Two cases held open covers the common "compare two runs" flow.
+_GRID_CACHE_MAX = 2
 _mesh_cache: OrderedDict[tuple, tuple[bytes, str]] = OrderedDict()
 # Per-cell companion blob: ~30 bytes per active cell, so 1.3 MB for Norne.
 _cells_cache: OrderedDict[tuple, tuple[bytes, str]] = OrderedDict()
 _range_cache: OrderedDict[tuple, tuple[float, float, int]] = OrderedDict()
+# Parsed EclipseGrid per (stem, EGRID mtime). The mesh and cells blobs are
+# cached too, but /grid/property is not: it must read a different array every
+# time step, and re-parsing the EGRID for each one costs ~0.17 s on Norne
+# against ~0.01 s served from here, which is the whole cost of playback.
+_grid_cache: OrderedDict[tuple, EclipseGrid] = OrderedDict()
 _cache_lock = Lock()
 
 # Best-effort display units, keyed by unit system. Anything not listed is
@@ -109,9 +116,26 @@ def _case_stem(job_id: str) -> Path:
 
 
 def _open_grid(stem: Path) -> EclipseGrid:
-    """Parse a case, mapping the expected failures onto 404/422."""
+    """Parse a case, mapping the expected failures onto 404/422.
+
+    Cached on the EGRID's mtime, so a re-run of the same job re-parses. Every
+    endpoint funnels through here, which is why the cache lives here and not in
+    each route: /grid/property alone re-parsed the case once per time step,
+    ~0.17 s on Norne against ~0.01 s once the parse is shared.
+
+    Sharing one instance across executor threads is safe because the reads are
+    idempotent: corners() memoises into self._corners, but it recomputes the
+    same array from immutable inputs, so a concurrent double-compute wastes
+    work without corrupting anything. Nothing here mutates the grid.
+    """
+    key = (str(stem), _stamp(stem.with_suffix(".EGRID")))
+    hit = _cache_get(_grid_cache, key)
+    if hit is not None:
+        return hit
     try:
-        return EclipseGrid(stem)
+        grid = EclipseGrid(stem)
+        _cache_put(_grid_cache, key, grid, _GRID_CACHE_MAX)
+        return grid
     except GridError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
     except (OSError, ValueError) as exc:

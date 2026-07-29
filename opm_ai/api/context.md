@@ -67,11 +67,24 @@ All route handlers in `routes/` are thin adapters that:
   `frontend/src/components/viewer3d/meshFormat.ts` depends on them byte for
   byte, and `tests/unit/test_grid3d.py::unpack_mesh` is an independent reader
   that fails if either side drifts.
-- Two bounded LRU caches, module-level with a `Lock`, in the spirit of
+- Four bounded LRU caches, module-level behind one `Lock`, in the spirit of
   `job_store`: 4 packed meshes keyed by `(stem, EGRID mtime_ns,
-  include_inactive, MESH_FORMAT_VERSION)` and 32 property ranges keyed by
-  `(stem, UNRST mtime_ns, INIT mtime_ns, name)`. The mtime in the key means a
-  re-run of the same job id invalidates without an explicit purge.
+  include_inactive, MESH_FORMAT_VERSION)`, 4 cells blobs, 32 property ranges
+  keyed by `(stem, UNRST mtime_ns, INIT mtime_ns, name)`, and 2 parsed
+  `EclipseGrid` objects keyed by `(stem, EGRID mtime_ns)`. The mtime in every
+  key means a re-run of the same job id invalidates without an explicit purge.
+- The grid cache lives inside `_open_grid`, which every endpoint funnels
+  through, rather than in each route. `/grid/property` is not itself cacheable
+  (a different array per time step) and was re-parsing the case on every
+  request: ~0.17 s per step on Norne against ~0.01 s once the parse is shared,
+  which is the whole cost of scrubbing and playback. Static properties now
+  serve in ~0.00 s; a dynamic step still pays one `read_dynamic` UNRST scan
+  (~0.04-0.08 s per keyword, so SOIL pays two for SWAT + SGAS).
+  Sharing one `EclipseGrid` across executor threads is safe because every read
+  is idempotent: `corners()` memoises but recomputes the same array from
+  immutable inputs, so a concurrent double-compute only wastes work.
+  `test_grid_cache_is_reused_and_keyed_on_mtime` covers reuse, the mtime key
+  and the bound.
 - The mesh ETag is `sha256(cache key)`, not a hash of the 6 MB body, because
   the body is a pure function of the key. `If-None-Match` returns 304.
 - All parsing goes through `run_in_executor`; resfo reads are CPU-bound

@@ -191,6 +191,12 @@ export default function Grid3DViewer({ jobId }: Grid3DViewerProps) {
     setInfo(null);
     setInfoError(null);
     setMeshReady(false);
+    // The component is reused across jobs (no `key` at the call site), so a
+    // readout keyed to the old grid would otherwise survive into the new one
+    // and describe a cell that is now a different cell.
+    setPicked(null);
+    setHovered(null);
+    setSelectedWell(null);
     api
       .gridInfo(jobId, ac.signal)
       .then((d) => {

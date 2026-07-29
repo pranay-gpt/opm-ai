@@ -44,7 +44,10 @@
 
 ## Prod Serving
 - FastAPI serves `frontend/dist` at `/` via `StaticFiles`
-- Built with `npm run build` (requires 4GB Node heap)
+- Built with `npm run build`. Needs ~3 GB of Node heap since `three` joined the
+  bundle: `NODE_OPTIONS=--max-old-space-size=3000 npm run build`. It OOM-kills
+  during minify on a 3 GB box with other processes resident; `--minify false`
+  builds in less memory if it comes to that.
 
 ## 3D Viewer (`src/components/viewer3d/`)
 
@@ -65,7 +68,7 @@ decimal text, and the buffer goes straight to WebGL unparsed.
 Binary layouts and endpoint contracts: `docs/3d-viewer-contract.md`. Do not
 change a signature on one side without the other.
 
-Two invariants worth knowing before editing:
+Three invariants worth knowing before editing:
 
 - **The engine effect is keyed on `info`, not `[]`.** The component early-returns
   a loading tree until `/grid/info` lands, so the container div does not exist on
@@ -76,6 +79,11 @@ Two invariants worth knowing before editing:
 - **Viewer coordinates are the backend's**: origin subtracted, Z flipped up,
   origin always averaged over ACTIVE cells so "show inactive" cannot shift the
   model out from under the wells. Depth is `origin[2] - z`.
+- **`jobId` changes reuse the component.** `ResultsViewer` mounts it without a
+  `key`, so the grid-info effect must clear every piece of state that describes
+  a specific cell or well (`picked`, `hovered`, `selectedWell`) alongside
+  `info`. Anything new that names a cell index belongs in that reset, or it
+  will survive into the next case and label the wrong cell.
 
 `probe/` is a headless render harness for this component; see `probe/README.md`.
 It exists because `tsc -b`, eslint and the backend suite all passed while the

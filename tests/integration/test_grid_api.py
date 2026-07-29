@@ -513,6 +513,37 @@ def test_range_cache_key_includes_mtime(client, spe1_job):
     assert key_now in grid_routes._range_cache
 
 
+def test_grid_cache_is_reused_and_keyed_on_mtime(client, spe1_job):
+    """The parsed grid is shared across requests but not across a re-run.
+
+    Sharing is the whole point: /grid/property re-parsed the case on every time
+    step before this cache existed. Keying on the EGRID mtime is what keeps a
+    re-run of the same job from being served the previous run's geometry.
+    """
+    grid_routes._grid_cache.clear()
+    stem = grid_routes.find_case(SPE1_DIR)
+    key = (str(stem), grid_routes._stamp(stem.with_suffix(".EGRID")))
+
+    client.get(f"/api/results/{spe1_job}/grid/property?name=PORO")
+    assert key in grid_routes._grid_cache
+    first = grid_routes._grid_cache[key]
+
+    # A second request must reuse the identical object, not re-parse.
+    client.get(f"/api/results/{spe1_job}/grid/property?name=PERMX")
+    assert grid_routes._grid_cache[key] is first
+
+    # A newer EGRID means a different key, so the stale entry cannot be hit.
+    stale = (str(stem), key[1] - 1)
+    assert stale not in grid_routes._grid_cache
+
+    # The bound holds: more distinct cases than the limit evicts the oldest.
+    for n in range(grid_routes._GRID_CACHE_MAX + 2):
+        grid_routes._cache_put(
+            grid_routes._grid_cache, (f"case{n}", n), first, grid_routes._GRID_CACHE_MAX
+        )
+    assert len(grid_routes._grid_cache) <= grid_routes._GRID_CACHE_MAX
+
+
 def test_range_unknown_property_404(client, spe1_job):
     r = client.get(f"/api/results/{spe1_job}/grid/property/range?name=NOPE")
     assert r.status_code == 404

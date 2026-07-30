@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from opm_ai.api.routes import build, decks, grid, lint, run, results, chat, explainer
+from opm_ai.api.routes import build, decks, files, grid, lint, run, results, chat, explainer
 from opm_ai.api.routes import settings as settings_routes
 from opm_ai.api.session_store import get_session_store
 from opm_ai.settings import settings
@@ -65,6 +65,7 @@ def create_app() -> FastAPI:
     # Include routers with /api prefix
     app.include_router(build.router, prefix="/api")
     app.include_router(decks.router, prefix="/api")
+    app.include_router(files.router, prefix="/api")
     app.include_router(lint.router, prefix="/api")
     app.include_router(run.router, prefix="/api")
     # grid before results: both hang off /results/{job_id}, and registering the

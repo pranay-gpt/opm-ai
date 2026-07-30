@@ -1,7 +1,8 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useSimulationStore, useDeckStore } from '../stores/useAppStore';
 import { api, pollJobStatus } from '../api/client';
 import type { RunRequest, JobStatus } from '../api/client';
+import DeckPicker from './DeckPicker';
 
 export default function SimulationRunner() {
   const { currentJob, jobHistory, setCurrentJob, addToHistory } = useSimulationStore();
@@ -12,7 +13,7 @@ export default function SimulationRunner() {
   const [isRunning, setIsRunning] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [polling, setPolling] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [picking, setPicking] = useState(false);
 
   // Reconcile persisted job state with the backend on mount: the job store
   // is in-memory server-side, so a restart orphans "running" jobs.
@@ -81,25 +82,13 @@ export default function SimulationRunner() {
     }
   }, [lastBuildResponse, currentDeck]);
 
-  const handleBrowseFile = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    e.target.value = '';
-    if (!file) return;
-    if (!file.name.toUpperCase().endsWith('.DATA')) {
-      setError('Please select a .DATA file');
-      return;
-    }
-    try {
-      const content = await file.text();
-      // Upload to backend temp storage; filename must end in .DATA exactly
-      const safeName = file.name.endsWith('.DATA') ? file.name : 'DECK.DATA';
-      const saveResponse = await api.saveDeck({ content, filename: safeName });
-      setDeckPath(saveResponse.deck_path);
-      setError(null);
-    } catch (err) {
-      console.error('Browse deck error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to upload deck file');
-    }
+  // Browse picks a path on the server rather than uploading file bytes. A
+  // browser file input can only hand over the one file selected, so a deck
+  // with INCLUDE arrived without its include/ tree and Flow aborted on the
+  // first missing .grdecl. Selecting in place keeps those siblings reachable.
+  const handlePicked = useCallback((path: string) => {
+    setDeckPath(path);
+    setError(null);
   }, []);
 
   const handleRefresh = useCallback(async () => {
@@ -115,6 +104,10 @@ export default function SimulationRunner() {
 
   return (
     <div className="flex flex-col h-full bg-page">
+      {picking && (
+        <DeckPicker onSelect={handlePicked} onClose={() => setPicking(false)} />
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface">
         <div>
@@ -146,17 +139,10 @@ export default function SimulationRunner() {
                   placeholder="/path/to/deck.DATA"
                   className="input flex-1 font-mono text-sm"
                 />
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".DATA"
-                  onChange={handleBrowseFile}
-                  className="hidden"
-                />
                 <button
-                  onClick={() => fileInputRef.current?.click()}
+                  onClick={() => setPicking(true)}
                   className="btn-secondary btn-sm whitespace-nowrap"
-                  title="Browse for a local .DATA file"
+                  title="Browse .DATA decks on the server"
                 >
                   Browse
                 </button>
@@ -170,7 +156,8 @@ export default function SimulationRunner() {
                 )}
               </div>
               <p className="text-xs text-textMuted mt-2">
-                Browse for a local .DATA file, enter a server path, or build one in the Deck Builder.
+                Browse decks on the server, enter a path, or build one in the Deck Builder.
+                Decks run in their own folder, so INCLUDE files resolve.
               </p>
             </div>
 

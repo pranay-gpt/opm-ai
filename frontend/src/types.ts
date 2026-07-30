@@ -11,6 +11,23 @@ export interface DeckSaveResponse {
   deck_path: string;
 }
 
+/** One .DATA deck on the server, from GET /api/files. */
+export interface DeckEntry {
+  name: string;
+  path: string;
+  size: number;
+  has_includes: boolean;
+}
+
+export interface DeckListResponse {
+  root: string;
+  parent: string | null;
+  roots: string[];
+  dirs: string[];
+  decks: DeckEntry[];
+  truncated: boolean;
+}
+
 export interface BuildRequest {
   description: string;
   output_path?: string;

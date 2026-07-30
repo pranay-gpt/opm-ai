@@ -47,6 +47,8 @@ All route handlers in `routes/` are thin adapters that:
 | `schemas.py` | Pydantic DTOs for requests/responses and OpenAI tool schemas |
 | `job_store.py` | In-memory job store (module-global dict) for async simulation runs |
 | `routes/build.py` | POST `/api/build` - build deck from natural language |
+| `routes/decks.py` | POST `/api/decks` - write deck TEXT to a temp .DATA (browser-only decks: built or hand-edited) |
+| `routes/files.py` | GET `/api/files` - list .DATA decks on the server so a path can be picked without copying |
 | `routes/lint.py` | POST `/api/lint` - lint a deck file |
 | `routes/run.py` | POST `/api/run` (start job), GET `/api/run/{job_id}` (poll status) |
 | `routes/results.py` | GET `/api/results/{job_id}` - KPIs + Plotly JSON plots; `/snapshots` - ResInsight 3D PNG export (render or reuse cache); `/snapshots/{file}` - serve one PNG |
@@ -91,6 +93,44 @@ All route handlers in `routes/` are thin adapters that:
   (Norne: 0.06 s mesh, 0.06 s full 72 MB UNRST scan).
 - Error contract: unknown job 404, job not completed 400, no EGRID 404,
   unparseable case 422, unknown property 404, out-of-range step 400.
+
+### Deck Selection: Two Distinct Paths (2026-07-30)
+
+There are two ways a deck reaches `/api/run`, and picking the wrong one is how
+INCLUDE support broke:
+
+| Path | Endpoint | Deck lives | INCLUDE works |
+|---|---|---|---|
+| Browser-only text (built, or edited in Monaco) | POST `/api/decks` | fresh `mkdtemp` | No - nothing to include |
+| A deck already on the server | GET `/api/files` then run the returned path | where it already is | Yes |
+
+- `POST /api/decks` writes **one file** into a fresh temp dir. That is correct
+  for deck text that only exists in the browser, and wrong for anything with an
+  INCLUDE: the `include/*.grdecl` siblings stay on the user's disk and Flow
+  aborts with "File '...' included via INCLUDE directive does not exist".
+- The old Browse button used that endpoint, reading a `.DATA` through an
+  `<input type="file">`. A file input can only ever hand over the bytes of the
+  one file chosen - the browser sandbox forbids reading siblings and forbids
+  disclosing a real path - so INCLUDE decks could not work that way at all.
+  `GET /api/files` replaces it: the user picks a server path, nothing is copied,
+  and a 73 MB include tree costs nothing to select.
+- **Flow resolves INCLUDE relative to the deck's own directory, not the cwd**
+  (verified: `flow` run from `/` with an absolute deck path resolves
+  `include/...` correctly). So `runner.py`'s `cwd=deck_path.parent` is not what
+  makes this work; leaving the deck in place is. Do not "fix" a future INCLUDE
+  bug by changing cwd.
+- `/api/files` validates `path` through the same `validate_path` allowlist as
+  `/api/run`, so it cannot list outside the configured roots via `..` or a
+  symlink, and "up" is only offered while the parent stays inside a root.
+- Roots are reordered for presentation (deck dirs before the system temp dir)
+  so the picker lands somewhere with decks rather than in the mkdtemp scratch
+  area. Membership is unchanged, so this cannot widen what is accepted.
+- `OPM_DECKS_ROOT` (optional, unset by default) appends one more allowlisted
+  root for a deck library kept outside `tests/fixtures` and `/app/decks`. It
+  widens both what `/api/files` lists and what `/api/run` accepts, hence opt-in.
+- Output still lands in `deck_path.parent/output_<job>`, so results sit beside
+  the case and the 3D viewer's EGRID lookup is unchanged. This requires the
+  deck directory to be writable.
 
 ### Runtime Settings (Stage C, 2026-07-20)
 

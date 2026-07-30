@@ -26,6 +26,8 @@ import type {
   LintIssue,
   DeckSaveRequest,
   DeckSaveResponse,
+  DeckEntry,
+  DeckListResponse,
   GridInfoResponse,
   GridTimeStep,
   GridBBox,
@@ -100,6 +102,13 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(request),
     }),
+
+  // Browse decks on the server. Returns real paths, so a deck keeps its
+  // include/ siblings and its relative INCLUDE paths still resolve.
+  listDecks: (path?: string): Promise<DeckListResponse> =>
+    fetchJson<DeckListResponse>(
+      path ? `/files?path=${encodeURIComponent(path)}` : '/files'
+    ),
 
   // Build
   build: (request: BuildRequest): Promise<BuildResponse> =>
@@ -255,6 +264,8 @@ export type {
   QuizQuestion,
   DeckSaveRequest,
   DeckSaveResponse,
+  DeckEntry,
+  DeckListResponse,
   GridInfoResponse,
   GridTimeStep,
   GridBBox,

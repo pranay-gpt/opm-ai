@@ -62,7 +62,7 @@ decimal text, and the buffer goes straight to WebGL unparsed.
 | `meshFormat.ts` | Parses the OPMG/OPMC/OPMP blobs. Pure, no three.js. Typed arrays are views onto the response buffer, not copies. |
 | `colormaps.ts` | 14 ResInsight palettes (`RiaColorTables.cpp`), linear/log x continuous/discrete + category, ternary blend. |
 | `engine.ts` | `Viewer3DEngine`: three.js scene, owns the canvas. Never imports React, never fetches. |
-| `Grid3DViewer.tsx` | Default export, props `{ jobId }`. Owns all fetching and panel state, drives the engine. |
+| `Grid3DViewer.tsx` | Default export, props `{ jobId, compact? }`. Owns all fetching and panel state, drives the engine. `compact` drops the control panel for the Home hero; everything else stays live. |
 | `ControlPanel.tsx`, `LegendBar.tsx`, `HistogramBar.tsx`, `ResultInfoBox.tsx` | UI chrome. |
 
 Binary layouts and endpoint contracts: `docs/3d-viewer-contract.md`. Do not
@@ -88,6 +88,21 @@ Three invariants worth knowing before editing:
 `probe/` is a headless render harness for this component; see `probe/README.md`.
 It exists because `tsc -b`, eslint and the backend suite all passed while the
 viewer drew nothing.
+
+Mounted in two places, both requiring a **completed** job (the grid endpoints
+read the `.EGRID` that OPM Flow writes, so a `.DATA` deck has no geometry to
+show until it has run):
+
+- `ResultsViewer.tsx` "3D View" tab, full panel, mounted only while that tab is
+  active so the WebGL context and its fetches go away on tab switch.
+- `Home.tsx` hero, `compact`, showing the latest completed run from
+  `jobHistory` (newest-first; the active job wins while it is still running).
+  Fixed height, not `aspect-video`: the viewer sizes from its parent, and
+  `zoomAll` frames the model's bounding SPHERE against the vertical FOV, so a
+  wide flat grid like Norne reads small in a short letterbox.
+  `jobHistory` is persisted to localStorage while the job store is in-memory,
+  so a stale id after a backend restart falls through to the viewer's own
+  "3D grid unavailable" panel.
 
 ## Future Work
 - **Monaco Lint Squiggles**: Inline diagnostics from backend linter

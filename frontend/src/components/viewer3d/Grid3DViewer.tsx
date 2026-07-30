@@ -15,6 +15,10 @@ import ResultInfoBox from './ResultInfoBox';
 
 interface Grid3DViewerProps {
   jobId: string;
+  /** Hide the control panel, for the Home dashboard hero where the full
+   *  property/legend/filter stack is taller than the space it gets. The view
+   *  stays live and orbitable; the panel is the only thing dropped. */
+  compact?: boolean;
 }
 
 /** Fetch debounce, ms. Below the fastest playback interval so play never stalls. */
@@ -60,7 +64,7 @@ function initialProperty(info: GridInfoResponse): string {
   return all.find((p) => p === 'SOIL') ?? all.find((p) => p === 'PRESSURE') ?? all[0] ?? '';
 }
 
-export default function Grid3DViewer({ jobId }: Grid3DViewerProps) {
+export default function Grid3DViewer({ jobId, compact = false }: Grid3DViewerProps) {
   const theme = useResolvedTheme();
   const dark = theme === 'dark';
 
@@ -654,7 +658,7 @@ export default function Grid3DViewer({ jobId }: Grid3DViewerProps) {
         </div>
       </div>
 
-      <ControlPanel
+      {!compact && <ControlPanel
         info={info}
         property={property}
         onProperty={setProperty}
@@ -678,7 +682,7 @@ export default function Grid3DViewer({ jobId }: Grid3DViewerProps) {
         wellsError={wellsError}
         selectedWell={selectedWell}
         onSelectWell={onSelectWell}
-      />
+      />}
     </div>
   );
 }

@@ -204,6 +204,10 @@ JSON because Norne is 6.2 MB of Float32 against ~90 MB of decimal text.
   read `containerRef.current` under `[]` deps and never re-ran). `frontend/probe/`
   is the headless harness that catches that class of bug; drive it with
   Playwright's chromium under `--use-gl=swiftshader`.
+- Mounted in the `ResultsViewer` "3D View" tab (full panel) and as the `Home`
+  dashboard hero (`compact`, latest completed run). Both need a completed run:
+  the endpoints read the EGRID that Flow writes, so a loaded `.DATA` deck has
+  no geometry until it has been simulated.
 - **STATUS: COMPLETE (2026-07-29).** Suite 325 passed, 2 skipped; production
   build green; rendered against SPE1 (10x10x3, FIELD) and Norne (46x112x22,
   44431 active cells, METRIC). Post-build review fixed: stale cell/well readout

@@ -45,6 +45,26 @@ That's it. The frontend is built inside the image, so you don't need Node locall
 The app runs fully offline by default; to enable the LLM chat and extraction features,
 copy `.env.example` to `.env` and add an API key (e.g. `GROQ_API_KEY` with `LLM_PROVIDER=groq`).
 
+### Running without Docker
+
+Needs OPM Flow on `PATH`, a virtualenv with `pip install -e .`, and Node for the
+frontend build.
+
+```bash
+./scripts/run.sh build    # build the frontend bundle, then serve
+./scripts/run.sh          # serve  -> http://localhost:8000
+./scripts/run.sh dev      # serve + Vite hot reload -> http://localhost:5173
+```
+
+Ctrl-C stops everything. `build` is only needed the first time and after
+frontend changes; `dev` skips it and serves from Vite instead.
+
+Browsing decks: the Simulator's **Browse** button lists `.DATA` files on the
+server rather than uploading them, so a deck keeps its `include/` folder and its
+INCLUDE keywords resolve. It lists `tests/fixtures` and the system temp dir by
+default; point it at your own deck library with `OPM_DECKS_ROOT=/path/to/decks`
+in `.env`.
+
 ## License and Credits
 
 Released under the [MIT License](LICENSE).

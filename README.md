@@ -68,7 +68,7 @@
   <img src="docs/screenshots/results-plot.png" alt="Results Plot" width="800">
 </p>
 
-### Results — 3D snapshots via ResInsight
+### Results — 3D
 
 <p align="center">
   <img src="docs/screenshots/results-3D.png" alt="Results 3D" width="800">

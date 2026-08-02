@@ -68,7 +68,7 @@ Last updated: 2026-07-22 (theme system + navigation + review-hardening overhaul)
   reconciles a persisted running job against GET /api/run/{id} (backend job
   store is in-memory; a server restart orphans jobs -> marked failed).
 - `src/components/ResultsViewer.tsx` - KPI cards, Plotly (theme-aware),
-  3D View tab (placeholder - see FORWARD_PLAN), 3D Snapshots tab (real PNGs).
+  3D View tab (see 3D Viewer below), 3D Snapshots tab (real PNGs).
 - `src/components/ChatPanel.tsx` - connects once per sessionId (connection in
   a ref, callbacks read latest state via useChatStore.getState()); provider
   select is store-controlled (revert on API failure = revert the store, no DOM
@@ -98,6 +98,10 @@ Last updated: 2026-07-22 (theme system + navigation + review-hardening overhaul)
 - Vite dev server (5173) proxies `/api` -> `http://localhost:8000` (vite.config.ts).
 - Prod: FastAPI serves `frontend/dist` at `/` via SPAStaticFiles; dist is
   gitignored, Docker builds it in-stage.
+- The build needs ~3 GB of Node heap since `three` joined the bundle:
+  `NODE_OPTIONS=--max-old-space-size=3000 npm run build`. It OOM-kills during
+  minify on a 3 GB box with other processes resident; `--minify false` builds
+  in less memory if it comes to that.
 
 ## Testing
 - Playwright (python sync_api, headless chromium 1400x900) against
@@ -106,9 +110,65 @@ Last updated: 2026-07-22 (theme system + navigation + review-hardening overhaul)
   a blank body usually means the useShallow rule was violated.
 - Curated screenshots for the README live in `docs/screenshots/` (repo root).
 
+## 3D Viewer (`src/components/viewer3d/`)
+
+Native WebGL grid viewer, no ResInsight process involved. The packaged
+ResInsight build ships without gRPC and its batch mode needs a live X display,
+so the viewer reads EGRID/INIT/UNRST server-side and streams binary blobs
+instead. Binary rather than JSON: Norne is 6.2 MB of Float32 versus ~90 MB of
+decimal text, and the buffer goes straight to WebGL unparsed.
+
+| File | Role |
+|---|---|
+| `meshFormat.ts` | Parses the OPMG/OPMC/OPMP blobs. Pure, no three.js. Typed arrays are views onto the response buffer, not copies. |
+| `colormaps.ts` | 14 ResInsight palettes (`RiaColorTables.cpp`), linear/log x continuous/discrete + category, ternary blend. |
+| `engine.ts` | `Viewer3DEngine`: three.js scene, owns the canvas. Never imports React, never fetches. |
+| `Grid3DViewer.tsx` | Default export, props `{ jobId, compact? }`. Owns all fetching and panel state, drives the engine. `compact` drops the control panel for the Home hero; everything else stays live. |
+| `ControlPanel.tsx`, `LegendBar.tsx`, `HistogramBar.tsx`, `ResultInfoBox.tsx` | UI chrome. |
+
+Binary layouts and endpoint contracts: `docs/3d-viewer-contract.md`. Do not
+change a signature on one side without the other.
+
+Three invariants worth knowing before editing:
+
+- **The engine effect is keyed on `info`, not `[]`.** The component early-returns
+  a loading tree until `/grid/info` lands, so the container div does not exist on
+  first mount. An `[]`-effect bails there and never re-runs, and because every
+  call site is `engine?.setX()`, the failure is silent: full UI, no canvas.
+  Any new engine push effect must also list `engineGen` so a recreated engine
+  gets the current state.
+- **Viewer coordinates are the backend's**: origin subtracted, Z flipped up,
+  origin always averaged over ACTIVE cells so "show inactive" cannot shift the
+  model out from under the wells. Depth is `origin[2] - z`.
+- **`jobId` changes reuse the component.** `ResultsViewer` mounts it without a
+  `key`, so the grid-info effect must clear every piece of state that describes
+  a specific cell or well (`picked`, `hovered`, `selectedWell`) alongside
+  `info`. Anything new that names a cell index belongs in that reset, or it
+  will survive into the next case and label the wrong cell.
+
+`probe/` is a headless render harness for this component; see `probe/README.md`.
+It exists because `tsc -b`, eslint and the backend suite all passed while the
+viewer drew nothing.
+
+Mounted in two places, both requiring a **completed** job (the grid endpoints
+read the `.EGRID` that OPM Flow writes, so a `.DATA` deck has no geometry to
+show until it has run):
+
+- `ResultsViewer.tsx` "3D View" tab, full panel, mounted only while that tab is
+  active so the WebGL context and its fetches go away on tab switch.
+- `Home.tsx` hero, `compact`, showing the latest completed run from
+  `jobHistory` (newest-first; the active job wins while it is still running).
+  Fixed height, not `aspect-video`: the viewer sizes from its parent, and
+  `zoomAll` frames the model's bounding SPHERE against the vertical FOV, so a
+  wide flat grid like Norne reads small in a short letterbox.
+  `jobHistory` is persisted to localStorage while the job store is in-memory,
+  so a stale id after a backend restart falls through to the viewer's own
+  "3D grid unavailable" panel.
+
 ## Future Work (see FORWARD_PLAN.md "Planned capabilities" for details)
-- Real 3D View tab content (currently placeholder; snapshots tab already works)
 - Render backend `lint_summary` (LLM plain-English lint) in Linter/DeckEditor
 - Correlation selection dropdown in the fluid card
 - Code-split Plotly/Monaco (5.2MB single bundle is accepted debt)
 - Monaco inline lint squiggles; mobile polish
+- **3D Viewer**: intersections/section planes, contour maps, streamlines and
+  multi-view linking are the remaining ResInsight 3D features not implemented.

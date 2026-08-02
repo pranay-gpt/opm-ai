@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLastResults, useCurrentJob, useSimulationActions, useResolvedTheme } from '../stores/useAppStore';
 import { api } from '../api/client';
 import type { KPIsResponse, ExplainRequest, ExplainResponse, ExplanationLevel, Citation, SnapshotsResponse } from '../api/client';
+import Grid3DViewer from './viewer3d/Grid3DViewer';
 // @ts-expect-error plotly.js-dist ships no types; @types/plotly.js covers the API
 import Plotly from 'plotly.js-dist-min';
 
@@ -434,21 +435,29 @@ export default function ResultsViewer() {
           </div>
         )}
 
-        {/* 3D View Tab */}
+        {/* 3D View Tab. Mounted only while active so the WebGL context and
+            its fetches go away when the user switches tabs. */}
         {activeTab === '3d' && (
-          <div className="h-[calc(100%-50px)] flex items-center justify-center">
-            <div className="text-center p-8 text-textSecondary">
-              <svg className="w-16 h-16 mx-auto mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-              </svg>
-              <p className="text-lg font-medium text-textPrimary mb-1">3D Geomodel View</p>
-              <p className="text-sm max-w-xs">ResInsight integration coming in Phase 2</p>
-              <div className="mt-4 p-4 rounded bg-surface border border-border inline-block">
-                <div className="w-96 h-64 flex items-center justify-center bg-page border border-border rounded">
-                  <span className="text-textMuted">3D Viewer Placeholder</span>
+          <div className="h-[calc(100%-50px)] min-h-[32rem]">
+            {currentJob?.status === 'completed' && currentJob.job_id ? (
+              <Grid3DViewer jobId={currentJob.job_id} />
+            ) : (
+              <div className="flex h-full items-center justify-center">
+                <div className="p-8 text-center text-textSecondary">
+                  <svg className="w-16 h-16 mx-auto mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                  </svg>
+                  <p className="mb-1 text-lg font-medium text-textPrimary">3D Geomodel View</p>
+                  <p className="max-w-sm text-sm">
+                    {currentJob?.status === 'failed'
+                      ? 'The last simulation failed, so there is no grid to display.'
+                      : currentJob
+                        ? 'Waiting for the simulation to finish. The grid appears once the run completes.'
+                        : 'Run a simulation to explore its grid in 3D.'}
+                  </p>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         )}
 

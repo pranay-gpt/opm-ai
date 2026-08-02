@@ -35,6 +35,9 @@ def get_allowed_roots() -> list[Path]:
         roots.append(Path(settings.results_path).resolve())
     if hasattr(settings, 'fixtures_path') and settings.fixtures_path:
         roots.append(Path(settings.fixtures_path).resolve())
+    # Opt-in deck library (OPM_DECKS_ROOT), for cases kept outside the above.
+    if getattr(settings, 'opm_decks_root', None):
+        roots.append(Path(settings.opm_decks_root).resolve())
 
     # Deduplicate while preserving order
     seen = set()

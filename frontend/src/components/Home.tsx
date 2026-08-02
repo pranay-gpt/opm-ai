@@ -1,11 +1,20 @@
 import { Link } from 'react-router-dom';
 import { useCurrentJob, useJobHistory, useLastResults, useLastBuildResponse } from '../stores/useAppStore';
+import Grid3DViewer from './viewer3d/Grid3DViewer';
 
 export default function Home() {
   const currentJob = useCurrentJob();
   const jobHistory = useJobHistory();
   const lastResults = useLastResults();
   const lastBuildResponse = useLastBuildResponse();
+
+  // Newest-first history, so the first completed entry is the latest run. The
+  // active job wins while it is still running so the hero follows the work in
+  // progress rather than jumping back to an older case once it completes.
+  const gridJob =
+    currentJob?.status === 'completed'
+      ? currentJob
+      : jobHistory.find((j) => j.status === 'completed');
 
   const stats = [
     { label: 'Decks Built', value: jobHistory.length, icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg> },
@@ -33,20 +42,35 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 3D Illustration Placeholder */}
-        <div className="aspect-video rounded-lg bg-surface border border-border flex items-center justify-center relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-warning/5" />
-          <div className="relative z-10 text-center p-8">
-            <div className="w-32 h-32 mx-auto mb-4 rounded-xl bg-page border border-border flex items-center justify-center relative">
-              <svg className="w-16 h-16 text-primary/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
+        {/* Live 3D of the latest completed run, or the illustration until one
+            exists. The grid endpoints need a finished run to read an EGRID
+            from, so there is nothing to draw before then. */}
+        {/* Fixed height, not aspect-video: the viewer sizes from its parent, so
+            it needs a resolved height rather than one derived from width.
+            zoomAll frames the model's bounding SPHERE against the vertical FOV,
+            so a wide flat grid like Norne reads small in a short letterbox.
+            Height is set generously rather than reworking the camera maths. */}
+        <div className="h-[34rem] overflow-hidden rounded-lg border border-border bg-surface">
+          {gridJob?.job_id ? (
+            <Grid3DViewer jobId={gridJob.job_id} compact />
+          ) : (
+            <div className="relative flex h-full items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-warning/5" />
+              <div className="relative z-10 p-8 text-center">
+                <div className="relative mx-auto mb-4 flex h-32 w-32 items-center justify-center rounded-xl border border-border bg-page">
+                  <svg className="w-16 h-16 text-primary/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                <h2 className="mb-2 text-xl font-semibold text-textPrimary">3D Geomodel Visualization</h2>
+                <p className="mx-auto max-w-md text-textSecondary">
+                  {currentJob
+                    ? 'The grid appears here once the current run completes.'
+                    : 'Run a simulation to explore its reservoir grid, properties and wells in 3D.'}
+                </p>
+              </div>
             </div>
-            <h2 className="text-xl font-semibold text-textPrimary mb-2">3D Geomodel Visualization</h2>
-            <p className="text-textSecondary max-w-md mx-auto">
-              Interactive reservoir grid with property mapping, well trajectories, and simulation results
-            </p>
-          </div>
+          )}
         </div>
       </section>
 

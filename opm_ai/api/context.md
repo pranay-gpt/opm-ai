@@ -48,10 +48,12 @@ All route handlers in `routes/` are thin adapters that:
 | `job_store.py` | In-memory job store (module-global dict) for async simulation runs |
 | `paths.py` | `validate_path()` allowlist (decks/, results/, fixtures/, tempdir) |
 | `routes/build.py` | POST `/api/build` - build deck from natural language |
+| `routes/decks.py` | POST `/api/decks` - write deck TEXT to a temp .DATA (browser-only decks: built or hand-edited, 2026-07-22) |
+| `routes/files.py` | GET `/api/files` - list .DATA decks on the server so a path can be picked without copying |
 | `routes/lint.py` | POST `/api/lint` - lint a deck file |
-| `routes/decks.py` | POST `/api/decks` - save browser-only deck text to a temp .DATA (2026-07-22) |
 | `routes/run.py` | POST `/api/run` (start job), GET `/api/run/{job_id}` (poll status) |
 | `routes/results.py` | GET `/api/results/{job_id}` - KPIs + Plotly JSON plots; `/snapshots` - ResInsight 3D PNG export (render or reuse cache); `/snapshots/{file}` - serve one PNG |
+| `routes/grid.py` | GET `/api/results/{job_id}/grid/{info,mesh,property,property/range,wells}` - 3D viewer geometry, properties and wells |
 | `routes/chat.py` | WebSocket `/api/chat` + HTTP fallback - LLM chat with tool calling |
 | `routes/explainer.py` | POST `/api/explain`, `/api/quiz`, `/api/learning-report` - Educational explainer API |
 | `routes/settings.py` | GET/POST `/api/settings` - runtime LLM provider/key overrides (Stage C) |
@@ -75,7 +77,8 @@ All route handlers in `routes/` are thin adapters that:
   (400), >2MB (413), non-bare or non-.DATA filenames incl. backslashes (400).
   Sweeps opmai_deck_* dirs older than 1h on each save (no janitor thread by
   design; add one if save volume grows). UI callers: LinterPanel, DeckEditor,
-  SimulationRunner (Use Last Built Deck + the Browse upload button).
+  SimulationRunner (Use Last Built Deck). Decks that already live on the server
+  go through `/api/files` instead - see Deck Selection below.
 
 ### Chat WS Protocol (wire shape the frontend depends on)
 
@@ -87,6 +90,81 @@ All route handlers in `routes/` are thin adapters that:
   merges (empty server history takes all, else trailing user message).
 - If you change this protocol, update frontend/src/types.ts WSServerMessage
   AND the tool_call construction in frontend/src/api/client.ts.
+
+### 3D Grid Endpoints (`routes/grid.py`, 2026-07-26)
+
+- Registered BEFORE `results.router` in `server.py`. Both hang off
+  `/results/{job_id}`; every grid path carries a literal `grid` segment so
+  neither can shadow `/results/{job_id}/snapshots/{filename}`, and ordering
+  keeps that true if results.py grows a wildcard later.
+- Binary payloads: `/grid/mesh` returns `pack_mesh` output (magic `OPMG`),
+  `/grid/property` returns magic `OPMP` + a padded JSON header + float32 values.
+  Layouts are fixed by `docs/3d-viewer-contract.md`; the TypeScript parser in
+  `frontend/src/components/viewer3d/meshFormat.ts` depends on them byte for
+  byte, and `tests/unit/test_grid3d.py::unpack_mesh` is an independent reader
+  that fails if either side drifts.
+- Four bounded LRU caches, module-level behind one `Lock`, in the spirit of
+  `job_store`: 4 packed meshes keyed by `(stem, EGRID mtime_ns,
+  include_inactive, MESH_FORMAT_VERSION)`, 4 cells blobs, 32 property ranges
+  keyed by `(stem, UNRST mtime_ns, INIT mtime_ns, name)`, and 2 parsed
+  `EclipseGrid` objects keyed by `(stem, EGRID mtime_ns)`. The mtime in every
+  key means a re-run of the same job id invalidates without an explicit purge.
+- The grid cache lives inside `_open_grid`, which every endpoint funnels
+  through, rather than in each route. `/grid/property` is not itself cacheable
+  (a different array per time step) and was re-parsing the case on every
+  request: ~0.17 s per step on Norne against ~0.01 s once the parse is shared,
+  which is the whole cost of scrubbing and playback. Static properties now
+  serve in ~0.00 s; a dynamic step still pays one `read_dynamic` UNRST scan
+  (~0.04-0.08 s per keyword, so SOIL pays two for SWAT + SGAS).
+  Sharing one `EclipseGrid` across executor threads is safe because every read
+  is idempotent: `corners()` memoises but recomputes the same array from
+  immutable inputs, so a concurrent double-compute only wastes work.
+  `test_grid_cache_is_reused_and_keyed_on_mtime` covers reuse, the mtime key
+  and the bound.
+- The mesh ETag is `sha256(cache key)`, not a hash of the 6 MB body, because
+  the body is a pure function of the key. `If-None-Match` returns 304.
+- All parsing goes through `run_in_executor`; resfo reads are CPU-bound
+  (Norne: 0.06 s mesh, 0.06 s full 72 MB UNRST scan).
+- Error contract: unknown job 404, job not completed 400, no EGRID 404,
+  unparseable case 422, unknown property 404, out-of-range step 400.
+
+### Deck Selection: Two Distinct Paths (2026-07-30)
+
+There are two ways a deck reaches `/api/run`, and picking the wrong one is how
+INCLUDE support broke:
+
+| Path | Endpoint | Deck lives | INCLUDE works |
+|---|---|---|---|
+| Browser-only text (built, or edited in Monaco) | POST `/api/decks` | fresh `mkdtemp` | No - nothing to include |
+| A deck already on the server | GET `/api/files` then run the returned path | where it already is | Yes |
+
+- `POST /api/decks` writes **one file** into a fresh temp dir. That is correct
+  for deck text that only exists in the browser, and wrong for anything with an
+  INCLUDE: the `include/*.grdecl` siblings stay on the user's disk and Flow
+  aborts with "File '...' included via INCLUDE directive does not exist".
+- The old Browse button used that endpoint, reading a `.DATA` through an
+  `<input type="file">`. A file input can only ever hand over the bytes of the
+  one file chosen - the browser sandbox forbids reading siblings and forbids
+  disclosing a real path - so INCLUDE decks could not work that way at all.
+  `GET /api/files` replaces it: the user picks a server path, nothing is copied,
+  and a 73 MB include tree costs nothing to select.
+- **Flow resolves INCLUDE relative to the deck's own directory, not the cwd**
+  (verified: `flow` run from `/` with an absolute deck path resolves
+  `include/...` correctly). So `runner.py`'s `cwd=deck_path.parent` is not what
+  makes this work; leaving the deck in place is. Do not "fix" a future INCLUDE
+  bug by changing cwd.
+- `/api/files` validates `path` through the same `validate_path` allowlist as
+  `/api/run`, so it cannot list outside the configured roots via `..` or a
+  symlink, and "up" is only offered while the parent stays inside a root.
+- Roots are reordered for presentation (deck dirs before the system temp dir)
+  so the picker lands somewhere with decks rather than in the mkdtemp scratch
+  area. Membership is unchanged, so this cannot widen what is accepted.
+- `OPM_DECKS_ROOT` (optional, unset by default) appends one more allowlisted
+  root for a deck library kept outside `tests/fixtures` and `/app/decks`. It
+  widens both what `/api/files` lists and what `/api/run` accepts, hence opt-in.
+- Output still lands in `deck_path.parent/output_<job>`, so results sit beside
+  the case and the 3D viewer's EGRID lookup is unchanged. This requires the
+  deck directory to be writable.
 
 ### Runtime Settings (Stage C, 2026-07-20)
 

@@ -26,6 +26,16 @@ import type {
   LintIssue,
   DeckSaveRequest,
   DeckSaveResponse,
+  DeckEntry,
+  DeckListResponse,
+  GridInfoResponse,
+  GridTimeStep,
+  GridBBox,
+  GridPropertyRangeResponse,
+  GridWell,
+  GridWellType,
+  GridWellCompletion,
+  GridWellsResponse,
 } from '../types';
 
 // ============================================
@@ -33,6 +43,22 @@ import type {
 // ============================================
 
 const API_BASE = '/api';
+
+// Read the body once as text; a second read would fail (stream consumed)
+async function errorFromResponse(response: Response): Promise<Error> {
+  let errorDetail = response.statusText;
+  try {
+    const errorText = await response.text();
+    try {
+      errorDetail = JSON.parse(errorText).detail || errorText || errorDetail;
+    } catch {
+      errorDetail = errorText || errorDetail;
+    }
+  } catch {
+    // Fall back to status text
+  }
+  return new Error(errorDetail || `HTTP ${response.status}: ${response.statusText}`);
+}
 
 async function fetchJson<T>(path: string, options: RequestInit = {}): Promise<T> {
   const response = await fetch(`${API_BASE}${path}`, {
@@ -44,19 +70,7 @@ async function fetchJson<T>(path: string, options: RequestInit = {}): Promise<T>
   });
 
   if (!response.ok) {
-    // Read the body once as text; a second read would fail (stream consumed)
-    let errorDetail = response.statusText;
-    try {
-      const errorText = await response.text();
-      try {
-        errorDetail = JSON.parse(errorText).detail || errorText || errorDetail;
-      } catch {
-        errorDetail = errorText || errorDetail;
-      }
-    } catch {
-      // Fall back to status text
-    }
-    throw new Error(errorDetail || `HTTP ${response.status}: ${response.statusText}`);
+    throw await errorFromResponse(response);
   }
 
   if (response.status === 204) {
@@ -66,6 +80,21 @@ async function fetchJson<T>(path: string, options: RequestInit = {}): Promise<T>
   return response.json();
 }
 
+// Sibling of fetchJson for the 3D viewer's binary mesh/property payloads.
+// Sends no JSON Content-Type and returns the raw bytes.
+async function fetchBinary(path: string, options: RequestInit = {}): Promise<ArrayBuffer> {
+  const response = await fetch(`${API_BASE}${path}`, {
+    ...options,
+    headers: { Accept: 'application/octet-stream', ...options.headers },
+  });
+
+  if (!response.ok) {
+    throw await errorFromResponse(response);
+  }
+
+  return response.arrayBuffer();
+}
+
 export const api = {
   // Deck saving
   saveDeck: (request: DeckSaveRequest): Promise<DeckSaveResponse> =>
@@ -73,6 +102,13 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(request),
     }),
+
+  // Browse decks on the server. Returns real paths, so a deck keeps its
+  // include/ siblings and its relative INCLUDE paths still resolve.
+  listDecks: (path?: string): Promise<DeckListResponse> =>
+    fetchJson<DeckListResponse>(
+      path ? `/files?path=${encodeURIComponent(path)}` : '/files'
+    ),
 
   // Build
   build: (request: BuildRequest): Promise<BuildResponse> =>
@@ -105,6 +141,46 @@ export const api = {
   // Snapshots
   snapshots: (jobId: string): Promise<SnapshotsResponse> =>
     fetchJson<SnapshotsResponse>(`/results/${jobId}/snapshots`),
+
+  // 3D grid viewer. Binary endpoints accept a signal so the UI can abort
+  // in-flight requests while the user scrubs the time-step slider.
+  gridInfo: (jobId: string, signal?: AbortSignal): Promise<GridInfoResponse> =>
+    fetchJson<GridInfoResponse>(`/results/${jobId}/grid/info`, { signal }),
+
+  gridMesh: (jobId: string, includeInactive = false, signal?: AbortSignal): Promise<ArrayBuffer> =>
+    fetchBinary(
+      `/results/${jobId}/grid/mesh?include_inactive=${includeInactive ? 'true' : 'false'}`,
+      { signal }
+    ),
+
+  // Per-active-cell companion to the mesh: i/j/k, centres, fault faces, NNCs.
+  // Independent of include_inactive, so it is fetched once per job.
+  gridCells: (jobId: string, signal?: AbortSignal): Promise<ArrayBuffer> =>
+    fetchBinary(`/results/${jobId}/grid/cells`, { signal }),
+
+  gridProperty: (
+    jobId: string,
+    name: string,
+    step: number,
+    signal?: AbortSignal
+  ): Promise<ArrayBuffer> =>
+    fetchBinary(
+      `/results/${jobId}/grid/property?name=${encodeURIComponent(name)}&step=${step}`,
+      { signal }
+    ),
+
+  gridPropertyRange: (
+    jobId: string,
+    name: string,
+    signal?: AbortSignal
+  ): Promise<GridPropertyRangeResponse> =>
+    fetchJson<GridPropertyRangeResponse>(
+      `/results/${jobId}/grid/property/range?name=${encodeURIComponent(name)}`,
+      { signal }
+    ),
+
+  gridWells: (jobId: string, step = 0, signal?: AbortSignal): Promise<GridWellsResponse> =>
+    fetchJson<GridWellsResponse>(`/results/${jobId}/grid/wells?step=${step}`, { signal }),
 
   // Explainer
   explainConcept: (request: ExplainRequest): Promise<ExplainResponse> =>
@@ -188,6 +264,16 @@ export type {
   QuizQuestion,
   DeckSaveRequest,
   DeckSaveResponse,
+  DeckEntry,
+  DeckListResponse,
+  GridInfoResponse,
+  GridTimeStep,
+  GridBBox,
+  GridPropertyRangeResponse,
+  GridWell,
+  GridWellType,
+  GridWellCompletion,
+  GridWellsResponse,
 };
 
 // ============================================

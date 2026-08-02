@@ -158,6 +158,90 @@ class SnapshotsResponse(BaseModel):
     duration_s: float
 
 
+class GridTimeStep(BaseModel):
+    """One restart report step of a 3D case."""
+    model_config = ConfigDict(from_attributes=True)
+
+    index: int
+    report: int
+    days: float
+    date: str  # ISO yyyy-mm-dd, "" when the restart header had no valid date
+
+
+class GridBBox(BaseModel):
+    """Axis-aligned bounds of the drawn cells, in viewer coordinates."""
+    model_config = ConfigDict(from_attributes=True)
+
+    min: list[float]  # [x, y, z]
+    max: list[float]
+
+
+class GridInfoResponse(BaseModel):
+    """Dimensions, available properties and time steps of a case's grid."""
+    model_config = ConfigDict(from_attributes=True)
+
+    nx: int
+    ny: int
+    nz: int
+    active_cells: int
+    total_cells: int
+    unit_system: str  # METRIC | FIELD | LAB | PVT-M, "" when unknown
+    length_unit: str  # m | ft | cm
+    origin: list[float]  # subtracted from every exported coordinate
+    bbox: GridBBox
+    static_properties: list[str]
+    dynamic_properties: list[str]
+    derived_properties: list[str]  # subset of dynamic_properties we compute
+    time_steps: list[GridTimeStep]
+    fault_face_count: int
+    nnc_count: int
+    has_wells: bool
+
+
+class GridRangeResponse(BaseModel):
+    """Global value range of one property over all time steps."""
+    model_config = ConfigDict(from_attributes=True)
+
+    name: str
+    min: float
+    max: float
+    steps_scanned: int
+
+
+class WellCompletion(BaseModel):
+    """One well connection to a grid cell."""
+    model_config = ConfigDict(from_attributes=True)
+
+    i: int
+    j: int
+    k: int
+    cell: int  # active cell index, -1 when the cell is inactive
+    center: list[float]  # viewer coordinates
+    open: bool
+
+
+class WellDTO(BaseModel):
+    """A well at one restart step, in viewer coordinates."""
+    model_config = ConfigDict(from_attributes=True)
+
+    name: str
+    type: Literal["producer", "oil_injector", "gas_injector", "water_injector", "unknown"]
+    head: list[float]
+    i: int
+    j: int
+    k: int
+    trajectory: list[list[float]]  # ordered head -> toe, empty when unavailable
+    completions: list[WellCompletion]
+
+
+class WellsResponse(BaseModel):
+    """Wells present at one restart step."""
+    model_config = ConfigDict(from_attributes=True)
+
+    step: int
+    wells: list[WellDTO]
+
+
 class ChatMessage(BaseModel):
     """Chat message with optional tool calls."""
     model_config = ConfigDict(from_attributes=True)

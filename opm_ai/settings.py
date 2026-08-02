@@ -63,6 +63,11 @@ class Settings(BaseSettings):
     decks_path: Path = Field(default=Path("/app/decks"), validation_alias="DECKS_PATH")
     results_path: Path = Field(default=Path("/app/results"), validation_alias="RESULTS_PATH")
 
+    # Extra browsable deck library, for decks kept outside the paths above.
+    # Unset by default: this widens what /api/files can list and /api/run will
+    # accept, so it is opt-in.
+    opm_decks_root: Optional[Path] = Field(default=None, validation_alias="OPM_DECKS_ROOT")
+
     # API store caps for bounded in-memory stores
     job_store_max_entries: int = Field(default=200, validation_alias="JOB_STORE_MAX_ENTRIES")
     session_store_max_entries: int = Field(default=100, validation_alias="SESSION_STORE_MAX_ENTRIES")

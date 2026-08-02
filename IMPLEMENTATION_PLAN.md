@@ -179,8 +179,50 @@ RAG (LlamaIndex/LangChain + chromadb) over the Eclipse keyword references and
   saturated, bounded session store 100).
 - **STATUS: COMPLETE (2026-07-20).** Suite 180 passed; master at 2bbec6f.
 - Remaining backlog (no stage assigned): scenario-specific templates (WAG,
-  gas-cap EQUIL, CO2 stream), DATES schedules, LLM extraction e2e, ResInsight
-  bridge (blocked on image availability), chat session race hardening.
+  gas-cap EQUIL, CO2 stream), DATES schedules, LLM extraction e2e, chat session
+  race hardening.
+
+## Stage 15 - Native 3D grid viewer (2026-07-29)
+
+Replaces the "3D View" placeholder with an interactive WebGL reservoir view at
+ResInsight feature parity. Supersedes the ResInsight bridge backlog item: the
+packaged ResInsight ships **without gRPC** and its batch mode needs a live X
+display, so no in-process bridge is possible. See `resinsight-no-grpc` notes.
+
+Architecture: read EGRID/INIT/UNRST server-side with `resfo`, cull to the
+visible skin, ship little-endian binary blobs straight into WebGL. Binary not
+JSON because Norne is 6.2 MB of Float32 against ~90 MB of decimal text.
+
+- **Contract first**: `docs/3d-viewer-contract.md` is authoritative for all six
+  endpoints, the OPMG/OPMC/OPMP byte layouts and the TS module signatures.
+  Backend and frontend were built in parallel against it; do not change a
+  signature on one side alone.
+- Backend: `opm_ai/postprocess/grid3d.py` (corner-point geometry, faults, NNCs,
+  wells, statistics), `grid_mesh.py` (face culling, packing),
+  `opm_ai/api/routes/grid.py` (six endpoints, four bounded LRU caches, ETag/304).
+- Frontend: `frontend/src/components/viewer3d/` (`meshFormat.ts`,
+  `colormaps.ts`, `engine.ts`, `Grid3DViewer.tsx` + panels).
+- Features: 14 ResInsight palettes, linear/log x continuous/discrete +
+  category, ternary saturation, derived SOIL, I/J/K + property cell filters,
+  fault and NNC display, wells with labels and trajectories, time-step
+  playback, z-scale, ortho/perspective, cell picking, snapshot.
+- **Verification is a render, not a typecheck.** `tsc -b`, eslint and the whole
+  backend suite passed while the viewer drew nothing at all (the engine effect
+  read `containerRef.current` under `[]` deps and never re-ran). `frontend/probe/`
+  is the headless harness that catches that class of bug; drive it with
+  Playwright's chromium under `--use-gl=swiftshader`.
+- Mounted in the `ResultsViewer` "3D View" tab (full panel) and as the `Home`
+  dashboard hero (`compact`, latest completed run). Both need a completed run:
+  the endpoints read the EGRID that Flow writes, so a loaded `.DATA` deck has
+  no geometry until it has been simulated.
+- **STATUS: COMPLETE (2026-07-29).** Suite 325 passed, 2 skipped; production
+  build green; rendered against SPE1 (10x10x3, FIELD) and Norne (46x112x22,
+  44431 active cells, METRIC). Post-build review fixed: stale cell/well readout
+  surviving a `jobId` change, and `/grid/property` re-parsing the case on every
+  time step (~0.17 s -> ~0.01 s via the shared grid cache). WebGL contexts
+  verified released across 21 mount cycles.
+- Not implemented (remaining ResInsight 3D features): intersections and section
+  planes, contour maps, streamlines, multi-view linking, LGRs.
 
 ## Claude Code Tooling (per-stage)
 

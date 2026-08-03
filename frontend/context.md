@@ -190,7 +190,7 @@ show until it has run):
   so a stale id after a backend restart falls through to the viewer's own
   "3D grid unavailable" panel.
 
-## Future Work (see FORWARD_PLAN.md "Planned capabilities" for details)
+## Future Work
 - Render backend `lint_summary` (LLM plain-English lint) in Linter/DeckEditor
 - Correlation selection dropdown in the fluid card
 - Code-split Plotly/Monaco (5.2MB single bundle is accepted debt)

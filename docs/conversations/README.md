@@ -2,6 +2,15 @@
 
 This directory contains the design records for all 9 parts of the OPM-AI workbench. Each document is a planning artifact (not code) that fixes decisions so a future coding session can implement without re-litigating architecture.
 
+> **Note on cross-references.** These records cite `BUILD_GUIDE.md`,
+> `IMPLEMENTATION_PLAN.md`, `FORWARD_PLAN.md`, `CONTEXT.md`, `OPM.md` and
+> `Instructions.txt` at the repo root. Those are the author's personal notes and
+> are not published. The information that matters to a reader of the code lives
+> in `README.md`, this directory, and the per-folder `context.md` files. Nothing
+> here depends on the private files to be understood; where a record says
+> "specified in BUILD_GUIDE section 4", the actual contract is asserted by the
+> tests in `tests/`.
+
 ---
 
 ## **START HERE (after any context clear)**

@@ -52,7 +52,7 @@ All route handlers in `routes/` are thin adapters that:
 | `routes/files.py` | GET `/api/files` - list .DATA decks on the server so a path can be picked without copying |
 | `routes/lint.py` | POST `/api/lint` - lint a deck file |
 | `routes/run.py` | POST `/api/run` (start job), GET `/api/run/{job_id}` (poll status) |
-| `routes/results.py` | GET `/api/results/{job_id}` - KPIs + Plotly JSON plots; `/snapshots` - ResInsight 3D PNG export (render or reuse cache); `/snapshots/{file}` - serve one PNG |
+| `routes/results.py` | GET `/api/results/{job_id}` - KPIs + Plotly JSON plots; `/snapshots` - ResInsight 3D PNG export (render or reuse cache); `/snapshots/{file}` - serve one PNG. **No UI calls the snapshot routes since bfa0acd** - the tab was removed because the export returns success while producing a 329x127 crop of the ResInsight window with no grid in it, and cannot run headless. Routes and tests kept; treat as unused surface, not as a working feature. |
 | `routes/grid.py` | GET `/api/results/{job_id}/grid/{info,mesh,property,property/range,wells}` - 3D viewer geometry, properties and wells |
 | `routes/chat.py` | WebSocket `/api/chat` + HTTP fallback - LLM chat with tool calling |
 | `routes/explainer.py` | POST `/api/explain`, `/api/quiz`, `/api/learning-report` - Educational explainer API |

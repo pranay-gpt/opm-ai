@@ -216,6 +216,7 @@ was never possible and the viewer was written from the file formats up.
 | `pip install -e .[dev]` | Local Python dev environment (installs pytest) |
 | `pytest` | Run the test suite (334 tests) |
 | `cd frontend && npm run build` | Production bundle |
+| `cd frontend && npm test` | Frontend self-check (binary mesh parsers, colour maps) |
 | `cd frontend && npm run lint` | Lint the frontend |
 
 ## Roadmap

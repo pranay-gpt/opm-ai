@@ -1,6 +1,7 @@
 # Frontend Context
 
-Last updated: 2026-07-22 (theme system + navigation + review-hardening overhaul).
+Last updated: 2026-08-03 (server-side deck picker, snapshots tab removed,
+vendor chunk split, dead deps dropped).
 
 ## Stack
 - **Framework**: React 18 + Vite 5 + TypeScript 5, react-router-dom v6 (BrowserRouter)
@@ -9,8 +10,19 @@ Last updated: 2026-07-22 (theme system + navigation + review-hardening overhaul)
 - **API Client**: Typed client in `src/api/client.ts` matching `opm_ai/api/schemas.py` DTOs
 - **Editor**: Monaco (@monaco-editor/react), custom OPM language, `opm-dark`/`opm-light` themes
 - **Charts**: Plotly via plotly.js-dist-min (layout restyled client-side per theme)
-- **Build**: `NODE_OPTIONS=--max-old-space-size=2048 npx vite build` (sourcemaps OFF;
+- **Build**: `NODE_OPTIONS=--max-old-space-size=3000 npm run build` (sourcemaps OFF;
   on this 3GB host stop uvicorn first or the build gets OOM-killed)
+- **Chunks** (`vite.config.ts` manualChunks, 2026-08-03): the bundle was one
+  5.8 MB file, so any app-code edit invalidated the whole thing in every
+  browser cache. Now four: app ~385 kB, three ~537 kB, plotly ~4.84 MB,
+  monaco ~22 kB. Note plotly, not three.js, is the elephant. This is output
+  grouping only, not lazy loading; every chunk is still modulepreloaded on
+  first paint. Real lazy loading would need React.lazy + Suspense, which
+  changes mount timing and was deliberately left alone.
+- **Tests**: `npm test` runs `src/components/viewer3d/meshFormat.test.ts`, a
+  plain assert script bundled with the esbuild that ships inside vite. There is
+  no vitest/jest here on purpose: the script already covers the binary parsers
+  and passes 19 checks, and Node on this host is 18.x.
 
 ## Theme System (2026-07-22)
 - Palette lives as RGB-triplet CSS vars in `src/index.css` (`--c-base: 8 16 40` style),
@@ -63,12 +75,25 @@ Last updated: 2026-07-22 (theme system + navigation + review-hardening overhaul)
 - `src/types.ts` - `WSServerMessage` mirrors the actual wire shape (flat
   tool_call). If the backend protocol changes, change it here AND in client.ts.
 - `src/components/SimulationRunner.tsx` - deck path input + **Browse button**
-  (hidden file input, .DATA only, uploads via POST /api/decks, fills the path);
-  "Use Last Built Deck" saves current deck text the same way. On mount it
-  reconciles a persisted running job against GET /api/run/{id} (backend job
+  (opens `DeckPicker`, which lists decks server-side via GET /api/files and
+  hands back a path). It deliberately does NOT upload: a browser file input
+  gives one file's bytes with no real path and no siblings, so a deck with
+  INCLUDE keywords loses its include/ folder and Flow cannot resolve them.
+  Flow resolves INCLUDE against the deck's own directory, so the deck has to
+  stay where it lives. "Use Last Built Deck" still saves deck text via POST
+  /api/decks, which is fine because generated text has no includes. On mount
+  it reconciles a persisted running job against GET /api/run/{id} (backend job
   store is in-memory; a server restart orphans jobs -> marked failed).
-- `src/components/ResultsViewer.tsx` - KPI cards, Plotly (theme-aware),
-  3D View tab (see 3D Viewer below), 3D Snapshots tab (real PNGs).
+- `src/components/DeckPicker.tsx` - modal browser over GET /api/files: root
+  chips, `..` navigation, INCLUDE badges, sizes, Escape to close.
+- `src/components/ResultsViewer.tsx` - KPI cards, Plotly (theme-aware) and the
+  3D View tab (see 3D Viewer below). There is no snapshots tab; it was removed
+  in bfa0acd. It shelled out to ResInsight batch mode, which on a host with a
+  live X display reports success while writing a 329x127 crop of the ResInsight
+  window with no grid in it, and cannot run headless at all (the packaged
+  2026.06 build has no gRPC and segfaults under QT_QPA_PLATFORM=offscreen).
+  The backend route, the api client method and the chat tool still exist and
+  are still tested; only the UI entry point is gone.
 - `src/components/ChatPanel.tsx` - connects once per sessionId (connection in
   a ref, callbacks read latest state via useChatStore.getState()); provider
   select is store-controlled (revert on API failure = revert the store, no DOM

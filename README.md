@@ -56,7 +56,7 @@ else works immediately.
 - **Build decks from plain English** — describe a model and get a valid OPM Flow deck, with an offline generator and optional LLM extraction
 - **Lint decks offline** — a rule engine catches errors and inconsistencies before you run, no simulator needed
 - **Run OPM Flow** — launch simulations and get structured results, with readable crash reports when a run fails
-- **See the results** — field and per-well KPIs, interactive Plotly charts, and 3D snapshots via ResInsight
+- **See the results** — field and per-well KPIs, interactive Plotly charts, and a live 3D grid viewer
 - **Chat with tools** — one conversation that builds, lints, runs, plots, and explains
 - **Learn as you go** — concept explanations and auto-generated quizzes for reservoir topics
 - **Dark, light, and auto themes** — sharp panels, rounded controls, follows your system setting

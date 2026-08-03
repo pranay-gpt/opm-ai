@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLastResults, useCurrentJob, useSimulationActions, useResolvedTheme } from '../stores/useAppStore';
 import { api } from '../api/client';
-import type { KPIsResponse, ExplainRequest, ExplainResponse, ExplanationLevel, Citation, SnapshotsResponse } from '../api/client';
+import type { KPIsResponse, ExplainRequest, ExplainResponse, ExplanationLevel, Citation } from '../api/client';
 import Grid3DViewer from './viewer3d/Grid3DViewer';
 // @ts-expect-error plotly.js-dist ships no types; @types/plotly.js covers the API
 import Plotly from 'plotly.js-dist-min';
@@ -69,18 +69,13 @@ export default function ResultsViewer() {
   const [results, setResults] = useState<KPIsResponse | null>(lastResults);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'kpis' | 'plots' | '3d' | 'snapshots'>('kpis');
+  const [activeTab, setActiveTab] = useState<'kpis' | 'plots' | '3d'>('kpis');
 
   // Explain results state
   const [explainResponse, setExplainResponse] = useState<ExplainResponse | null>(null);
   const [explainLoading, setExplainLoading] = useState(false);
   const [explainError, setExplainError] = useState<string | null>(null);
   const [explainLevel, setExplainLevel] = useState<ExplanationLevel>('intermediate');
-
-  // Snapshots state
-  const [snapshots, setSnapshots] = useState<SnapshotsResponse | null>(null);
-  const [snapshotsLoading, setSnapshotsLoading] = useState(false);
-  const [snapshotsError, setSnapshotsError] = useState<string | null>(null);
 
   // Load results when job completes
   useEffect(() => {
@@ -136,25 +131,6 @@ export default function ResultsViewer() {
       setExplainLoading(false);
     }
   }, [results?.kpis, explainLevel]);
-
-  // Handle snapshots loading
-  const loadSnapshots = useCallback(async (jobId: string) => {
-    setSnapshotsLoading(true);
-    setSnapshotsError(null);
-    try {
-      const data = await api.snapshots(jobId);
-      setSnapshots(data);
-      if (!data.success && data.error) {
-        setSnapshotsError(data.error);
-      }
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to load snapshots';
-      setSnapshotsError(message);
-      console.error('Snapshots error:', err);
-    } finally {
-      setSnapshotsLoading(false);
-    }
-  }, []);
 
   // KPI value getter
   const getKpiValue = (kpi: KPICard) => {
@@ -225,7 +201,6 @@ export default function ResultsViewer() {
           { id: 'kpis', label: 'KPIs', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg> },
           { id: 'plots', label: 'Plots', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg> },
           { id: '3d', label: '3D View', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg> },
-          { id: 'snapshots', label: '3D Snapshots', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg> },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -456,100 +431,6 @@ export default function ResultsViewer() {
                         : 'Run a simulation to explore its grid in 3D.'}
                   </p>
                 </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* 3D Snapshots Tab */}
-        {activeTab === 'snapshots' && (
-          <div className="p-4 lg:p-6">
-            {snapshotsError && !snapshots?.success && (
-              <div className="mb-4 p-3 rounded bg-error/20 border border-error text-error text-sm">
-                {snapshotsError}
-              </div>
-            )}
-
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-textPrimary">3D Snapshots</h2>
-              <button
-                onClick={() => currentJob?.job_id && loadSnapshots(currentJob.job_id)}
-                disabled={snapshotsLoading || !currentJob?.job_id}
-                className="btn-primary"
-              >
-                {snapshotsLoading ? (
-                  <span className="flex items-center gap-2">
-                    <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                    Loading...
-                  </span>
-                ) : snapshots ? (
-                  'Refresh'
-                ) : (
-                  'Load Snapshots'
-                )}
-              </button>
-            </div>
-
-            {snapshots?.success && snapshots.snapshots.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {snapshots.snapshots.map((snapshot, idx) => (
-                  <div key={idx} className="card">
-                    <div className="p-4">
-                      <img
-                        src={`/api/results/${currentJob?.job_id}/snapshots/${snapshot}`}
-                        alt={`Snapshot ${idx + 1}`}
-                        className="w-full h-auto rounded border border-border"
-                        loading="lazy"
-                      />
-                    </div>
-                    <div className="p-4 border-t border-border bg-surface">
-                      <p className="text-sm font-medium text-textPrimary truncate">{snapshot}</p>
-                      <p className="text-xs text-textMuted">ResInsight snapshot</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {snapshots?.success && snapshots.snapshots.length === 0 && (
-              <div className="flex flex-col items-center justify-center h-96 text-textSecondary">
-                <svg className="w-16 h-16 mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <p className="text-lg font-medium text-textPrimary mb-1">No Snapshots Available</p>
-                <p className="text-sm text-center">ResInsight produced no snapshots (may need re-render)</p>
-              </div>
-            )}
-
-            {!snapshots && !snapshotsLoading && !snapshotsError && (
-              <div className="flex flex-col items-center justify-center h-96 text-textSecondary">
-                <svg className="w-16 h-16 mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <p className="text-lg font-medium text-textPrimary mb-1">3D Snapshots</p>
-                <p className="text-sm text-center max-w-xs mb-4">Click "Load Snapshots" to render 3D views via ResInsight batch mode</p>
-                {currentJob?.job_id && (
-                  <button
-                    onClick={() => loadSnapshots(currentJob.job_id)}
-                    className="btn-primary"
-                    disabled={snapshotsLoading}
-                  >
-                    {snapshotsLoading ? 'Loading...' : 'Load Snapshots'}
-                  </button>
-                )}
-              </div>
-            )}
-
-            {snapshots?.error && (
-              <div className="mt-4 p-4 rounded bg-surface border border-border">
-                <p className="text-sm text-textMuted">
-                  <strong>Backend error (normal in Docker):</strong> {snapshots.error}
-                </p>
               </div>
             )}
           </div>

@@ -1,7 +1,27 @@
 # Cleanup and performance pass
 
 Date: 2026-08-03
-Status: awaiting review
+Status: partially implemented (66fd7db). Remainder deferred by instruction:
+only changes provable safe were to land, anything that could disturb
+functionality waits.
+
+## What landed, and what did not
+
+Landed in 66fd7db: the three dead dependencies, the vendor chunk split, and
+the `npm test` script. Each verified (332 tests green, build green, all nine
+routes rendering in a browser with no console errors).
+
+Deferred, with the reason each failed the confidence bar:
+
+| Item | Why it did not land |
+|---|---|
+| Merge `_get_keyword_values` | Not a duplicate. `schedule.py` has no multiplier expansion, so merging it with `grid.py`/`props.py` would silently start expanding `500*100` in SCHEDULE. A behaviour change wearing a refactor's clothes. |
+| Extract `_has_keyword` | Genuinely byte-identical in four files (the fifth differs only by a stray function-level `import re`). Safe, but it touches linting logic that gates the builder, and the gain is five lines. Not worth any risk today. |
+| `GZipMiddleware` | Measured before adding: gzip on a 6 MB mesh blob costs 173 ms of CPU for a 10% size saving, because Float32 coordinates are already high-entropy. That is a direct regression on the 3D viewer's hot path. Would need a JSON-only content-type filter, which is more care than a one-line change implies. |
+| `React.lazy` on routes | `manualChunks` is pure output grouping and was safe. `lazy` adds Suspense boundaries and changes mount timing, which is a real behaviour change. |
+| Delete `cell_volumes()` | Correct, tested geometry code on a library class. Only its own test calls it, but deleting working tested code is a judgement call, not a certainty. |
+| Fix WS `tool_result` type | Confirmed a real latent bug, not a type nit: `execute_tool` returns a `dict` (`chat.py:263`), which reaches `<pre>{message.content}</pre>` in ChatPanel. Fixing it means choosing how a tool result should render, which is a functional decision, not a cleanup. Deserves its own change. |
+| Spinner / ErrorBanner components | Safe but purely cosmetic, and touching five components to save ~90 lines is churn against a working UI. |
 
 ## Goal
 

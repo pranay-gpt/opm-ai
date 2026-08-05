@@ -457,3 +457,103 @@ def test_lint_deck_only_comments():
         assert len(result.errors) > 0, "Comment-only deck should produce errors"
     finally:
         deck_path.unlink()
+
+
+def _make_deck_with_pvt_tables(pvt_block: str) -> str:
+    """Build a minimal deck that declares OIL/GAS/DISGAS + DIMENS + GRID
+    and includes a customizable PVT block in PROPS. Used to test L002
+    phase-mismatch against alternative PVT keywords."""
+    return f"""
+RUNSPEC
+DIMENS
+  10 10 5 /
+OIL
+GAS
+DISGAS
+
+METRIC
+
+GRID
+DX
+  500*100 /
+DY
+  500*100 /
+DZ
+  500*10 /
+TOPS
+  500*3000 /
+PORO
+  500*0.2 /
+PERMX
+  500*100 /
+
+PROPS
+{pvt_block}
+SGOF
+0  0  1  0
+1  0  0  0 /
+
+SCHEDULE
+"""
+
+
+@pytest.mark.unit
+def test_lint_l002_accepts_pvto_for_oil():
+    """L002: OIL -> PVTO is satisfied (with SWOF). GAS/DISGAS also
+    need PVTG/PVDG + SGOF."""
+    deck = _make_deck_with_pvt_tables(
+        "PVTO\n  500*3000 500*1*1.0 /\nSWOF\n  500*0.2 500*1*0 /\n"
+        "PVDG\n  14.7 166.0 0.008 /\n"
+    )
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.DATA', delete=False) as f:
+        f.write(deck)
+        deck_path = Path(f.name)
+    try:
+        result = lint_deck(deck_path)
+        l002_errors = [e for e in result.errors if e.rule_id == "L002"]
+        assert l002_errors == [], f"PVTO+SWOF+PVDG should satisfy L002, got {l002_errors}"
+    finally:
+        deck_path.unlink()
+
+
+@pytest.mark.unit
+def test_lint_l002_accepts_pvdg_as_dry_gas_alternative():
+    """L002: GAS/DISGAS -> PVTG OR PVDG is satisfied (with SGOF).
+    The builder's default depletion deck emits PVDG, not PVTG, so the
+    rule must accept the dry-gas alternative."""
+    deck = _make_deck_with_pvt_tables(
+        "PVTO\n  500*3000 500*1*1.0 /\nSWOF\n  500*0.2 500*1*0 /\n"
+        "PVDG\n  14.7 166.0 0.008 /\n"
+    )
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.DATA', delete=False) as f:
+        f.write(deck)
+        deck_path = Path(f.name)
+    try:
+        result = lint_deck(deck_path)
+        l002_errors = [e for e in result.errors if e.rule_id == "L002"]
+        assert l002_errors == [], f"PVDG should satisfy L002 for GAS, got {l002_errors}"
+    finally:
+        deck_path.unlink()
+
+
+@pytest.mark.unit
+def test_lint_l002_errors_when_neither_pvtg_nor_pvdg():
+    """L002: GAS/DISGAS declared but neither PVTG nor PVTG/PVDG present."""
+    deck = _make_deck_with_pvt_tables(
+        "PVTO\n  500*3000 500*1*1.0 /\nSWOF\n  500*0.2 500*1*0 /\n"
+    )
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.DATA', delete=False) as f:
+        f.write(deck)
+        deck_path = Path(f.name)
+    try:
+        result = lint_deck(deck_path)
+        # `.errors` is the wire-format list of error messages; the
+        # rich issue list (with .rule_id / .section) lives on
+        # `.error_issues` after the dataclass-to-Pydantic unification
+        # in F4.1.
+        l002_errors = [e for e in result.error_issues if e.rule_id == "L002"]
+        assert len(l002_errors) > 0, "missing PVTG+PVDG should fire L002"
+        assert any("GAS" in e.message for e in l002_errors)
+        assert any("DISGAS" in e.message for e in l002_errors)
+    finally:
+        deck_path.unlink()

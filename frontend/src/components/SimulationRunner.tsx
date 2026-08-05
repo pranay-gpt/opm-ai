@@ -1,8 +1,10 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useSimulationStore, useDeckStore } from '../stores/useAppStore';
 import { api, pollJobStatus } from '../api/client';
 import type { RunRequest, JobStatus } from '../api/client';
+import type { UploadResponse } from '../types';
 import DeckPicker from './DeckPicker';
+import DeckUploader from './DeckUploader';
 
 export default function SimulationRunner() {
   const { currentJob, jobHistory, setCurrentJob, addToHistory } = useSimulationStore();
@@ -14,6 +16,29 @@ export default function SimulationRunner() {
   const [error, setError] = useState<string | null>(null);
   const [polling, setPolling] = useState(false);
   const [picking, setPicking] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  // Holds the controller for the currently-running poll so cleanup can
+  // cancel it on unmount. A bare Promise from pollJobStatus would keep
+  // the setTimeout chain alive past the component's lifetime.
+  const pollControllerRef = useRef<AbortController | null>(null);
+
+  // inFlightRef guards handleRun against double-firing before React
+  // commits disabled={isRunning || polling} on the button (F8.8 audit
+  // fix). A ref is used instead of reading isRunning from the
+  // useCallback closure so we don't have to add isRunning/polling to
+  // the deps array (which would re-create handleRun every render and
+  // thrash children that depend on it).
+  const inFlightRef = useRef(false);
+
+  // Abort any in-flight poll when the component unmounts (e.g. user
+  // navigates away mid-run). The job itself keeps running on the server
+  // — only the client-side polling and the onUpdate callbacks stop.
+  useEffect(() => {
+    return () => {
+      pollControllerRef.current?.abort();
+    };
+  }, []);
 
   // Reconcile persisted job state with the backend on mount: the job store
   // is in-memory server-side, so a restart orphans "running" jobs.
@@ -35,6 +60,7 @@ export default function SimulationRunner() {
     }
 
     setIsRunning(true);
+    inFlightRef.current = true;
     setError(null);
 
     try {
@@ -45,13 +71,19 @@ export default function SimulationRunner() {
       addToHistory(job);
       setPolling(true);
 
-      // Poll for completion
+      // Poll for completion. The AbortController is owned by the
+      // component (ref + unmount cleanup) so the loop and onUpdate
+      // stop when the user navigates away.
+      const controller = new AbortController();
+      pollControllerRef.current = controller;
       const finalJob = await pollJobStatus(
         job.job_id,
         (status) => setCurrentJob(status),
         2000,
-        300
+        300,
+        controller.signal
       );
+      pollControllerRef.current = null;
 
       setPolling(false);
       if (finalJob.status === 'failed') {
@@ -59,13 +91,28 @@ export default function SimulationRunner() {
       }
     } catch (err) {
       setPolling(false);
+      // Polling aborted on unmount is not a user-facing error — the job
+      // is still running on the server, the client just stopped watching.
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        return;
+      }
       const message = err instanceof Error ? err.message : 'Failed to start simulation';
       setError(message);
       console.error('Run error:', err);
     } finally {
       setIsRunning(false);
+      inFlightRef.current = false;
     }
   }, [deckPath, timeout, setCurrentJob, addToHistory]);
+
+  // Wraps handleRun with the in-flight guard so it stays referentially
+  // stable across renders but always reads the latest ref value (F8.8).
+  // The button's onClick uses handleRunGuarded; the disabled check still
+  // reads isRunning/polling for visual feedback.
+  const handleRunGuarded = useCallback(() => {
+    if (inFlightRef.current) return;
+    return handleRun();
+  }, [handleRun]);
 
   const handleUseLastDeck = useCallback(async () => {
     // Use the deck from last build response or current deck editor content
@@ -91,6 +138,16 @@ export default function SimulationRunner() {
     setError(null);
   }, []);
 
+  // Upload is the laptop-local-files counterpart to Browse. The
+  // user picks the .DATA and an optional include/ folder; the
+  // backend writes them to a fresh mkdtemp and returns the .DATA's
+  // server-side path so the existing run flow works unchanged.
+  const handleUploaded = useCallback((result: UploadResponse) => {
+    setDeckPath(result.deck_path);
+    setError(null);
+    setUploading(false);
+  }, []);
+
   const handleRefresh = useCallback(async () => {
     if (currentJob) {
       try {
@@ -106,6 +163,9 @@ export default function SimulationRunner() {
     <div className="flex flex-col h-full bg-page">
       {picking && (
         <DeckPicker onSelect={handlePicked} onClose={() => setPicking(false)} />
+      )}
+      {uploading && (
+        <DeckUploader onUpload={handleUploaded} onClose={() => setUploading(false)} />
       )}
 
       {/* Header */}
@@ -146,6 +206,13 @@ export default function SimulationRunner() {
                 >
                   Browse
                 </button>
+                <button
+                  onClick={() => setUploading(true)}
+                  className="btn-secondary btn-sm whitespace-nowrap"
+                  title="Upload a .DATA file and its include/ folder from your laptop"
+                >
+                  Upload
+                </button>
                 {lastBuildResponse && (
                   <button
                     onClick={handleUseLastDeck}
@@ -156,8 +223,9 @@ export default function SimulationRunner() {
                 )}
               </div>
               <p className="text-xs text-textMuted mt-2">
-                Browse decks on the server, enter a path, or build one in the Deck Builder.
-                Decks run in their own folder, so INCLUDE files resolve.
+                Browse decks on the server, Upload from your laptop, enter a path, or
+                build one in the Deck Builder. Decks run in their own folder, so
+                INCLUDE files resolve.
               </p>
             </div>
 
@@ -182,7 +250,7 @@ export default function SimulationRunner() {
             {/* Run Button */}
             <div className="flex gap-3">
               <button
-                onClick={handleRun}
+                onClick={handleRunGuarded}
                 disabled={isRunning || polling || !deckPath.trim()}
                 className="btn-primary flex-1 py-3 text-base"
               >

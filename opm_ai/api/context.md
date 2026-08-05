@@ -228,3 +228,13 @@ INCLUDE support broke:
 - Session store: max 100 entries (configurable), LRU eviction ✓
 - 429 response when all slots occupied by running jobs ✓
 - Thread-safe with proper locking ✓
+
+### 6. Keyword Catalogue Endpoint (DONE - Stage 3.4, 2026-08-04)
+- `GET /api/keywords` returns the merged catalogue (fixture ∪ ERM) for the
+  Monaco editor's autocomplete + hover provider. Per-process cache in
+  `_CACHE` global; restart server to pick up catalogue updates.
+- Pydantic models: `KeywordRecord(name, sections, sections_observed,
+  deck_count, parameter_count, description, source)` and
+  `KeywordCatalogue(keyword_count, keywords)`.
+- Source field records `"fixture"`, `"erm"`, or `"fixture+erm"` so
+  consumers can tell which side of the union a record came from.

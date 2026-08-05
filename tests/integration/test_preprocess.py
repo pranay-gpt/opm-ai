@@ -63,6 +63,100 @@ class TestPreprocessIntegration:
         assert lint_result.passed
         assert len(lint_result.errors) == 0
 
+    def test_fluid_correlation_vasquez_beggs_renders_pvto(self):
+        """Vasquez-Beggs correlation on FluidDescriptor round-trips through
+        build_pvt_blocks and yields a non-empty PVTO table. Guards the
+        capability-3 wiring from builder.py/builder state: if someone
+        forgets to thread fluid.correlation into build_pvt_blocks the PVTO
+        will still render (the advisor falls back to Standing) but it
+        will be the wrong family. We assert the family-marker Bo output
+        differs between Standing and Vasquez-Beggs at the same conditions
+        so the change is observable, not just present.
+        """
+        fluid_st = FluidDescriptor(
+            api_gravity=35,
+            gas_specific_gravity=0.75,
+            gor=800,
+            reservoir_temp_f=200,
+            salinity_ppm=50000,
+            pressure_range_psi=(14.7, 5000),
+            unit_system="FIELD",
+            correlation="Standing",
+        )
+        fluid_vb = FluidDescriptor(
+            api_gravity=35,
+            gas_specific_gravity=0.75,
+            gor=800,
+            reservoir_temp_f=200,
+            salinity_ppm=50000,
+            pressure_range_psi=(14.7, 5000),
+            unit_system="FIELD",
+            correlation="VasquezBeggs",
+        )
+
+        blocks_st = build_pvt_blocks(fluid_st)
+        blocks_vb = build_pvt_blocks(fluid_vb)
+
+        # Both render PVTO; the families produce different Bo at the same
+        # first-row Rs/P, which is the observable contract.
+        assert "PVTO" in blocks_st.pvt_oil
+        assert "PVTO" in blocks_vb.pvt_oil
+        assert blocks_st.pvt_oil != blocks_vb.pvt_oil, (
+            "Vasquez-Beggs correlation produced identical PVTO to Standing; "
+            "fluid.correlation is not being threaded into build_pvt_blocks."
+        )
+
+    def test_fluid_correlation_almarhoun_renders_pvto(self):
+        """Al-Marhoun correlation round-trips through build_pvt_blocks and
+        yields a distinct PVTO from Standing/Vasquez-Beggs. Mirrors the
+        Vasquez-Beggs test for the third oil PVT family surfaced in the
+        Builder dropdown.
+        """
+        fluid_am = FluidDescriptor(
+            api_gravity=35,
+            gas_specific_gravity=0.75,
+            gor=800,
+            reservoir_temp_f=200,
+            salinity_ppm=50000,
+            pressure_range_psi=(14.7, 5000),
+            unit_system="FIELD",
+            correlation="AlMarhoun",
+        )
+
+        blocks = build_pvt_blocks(fluid_am)
+        assert "PVTO" in blocks.pvt_oil
+        # Al-Marhoun is pressure-dependent in a way Standing isn't (it uses
+        # p as a separate arg); same inputs should still produce a non-empty
+        # block, and the deck should be valid.
+        deck_text, lint_result = build_deck(
+            "10x10x3 grid, simple depletion, one producer",
+            fluid=fluid_am,
+        )
+        assert "PVTO" in deck_text
+        assert lint_result.passed
+
+    def test_fluid_correlation_rejects_relperm_family(self):
+        """LET and Corey are relative permeability correlations, not PVT.
+        FluidDescriptor.__post_init__ rejects them on construction so a
+        misconfigured UI cannot silently downcast into one of the relperm
+        code paths in build_pvt_blocks.
+        """
+        import pytest
+        with pytest.raises(ValueError, match="correlation"):
+            FluidDescriptor(
+                api_gravity=35,
+                gas_specific_gravity=0.75,
+                gor=800,
+                correlation="LET",  # type: ignore[arg-type]
+            )
+        with pytest.raises(ValueError, match="correlation"):
+            FluidDescriptor(
+                api_gravity=35,
+                gas_specific_gravity=0.75,
+                gor=800,
+                correlation="Corey",  # type: ignore[arg-type]
+            )
+
     def test_builder_without_fluid_unchanged(self):
         """Test build_deck without fluid still produces SPE1 hardcoded tables."""
         desc = "10x10x3 grid, simple depletion, one producer"

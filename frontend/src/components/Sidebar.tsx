@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { useUIStore, useLLMProvider } from '../stores/useAppStore';
+import { useUIStore, useLLMProvider, useSidebarCollapsed, useUIActions } from '../stores/useAppStore';
 
 const navItems = [
   { path: '/', label: 'Home', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg> },
@@ -9,12 +9,14 @@ const navItems = [
   { path: '/results', label: 'Results', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg> },
   { path: '/learn', label: 'Learn', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg> },
   { path: '/chat', label: 'AI Chat', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg> },
-  { path: '/linter', label: 'Linter', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> },
+  { path: '/linter', label: 'Deck Checker', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> },
   { path: '/settings', label: 'Settings', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> },
 ] as const;
 
 export default function Sidebar() {
-  const { sidebarOpen, setSidebarOpen } = useUIStore();
+  const sidebarOpen = useUIStore((s) => s.sidebarOpen);
+  const sidebarCollapsed = useSidebarCollapsed();
+  const { setSidebarOpen, toggleSidebarCollapsed } = useUIActions();
   const llmProvider = useLLMProvider();
 
   return (
@@ -28,16 +30,17 @@ export default function Sidebar() {
         aria-hidden="true"
       />
 
-      {/* Sidebar */}
+      {/* Sidebar - w-56 expanded, w-16 collapsed on desktop; mobile is always w-56
+       and slides in/out via translate-x. */}
       <aside
-        className={`fixed lg:relative z-50 h-full w-56 border-r border-border flex flex-col transition-transform duration-200 ease-out bg-depth-gradient ${
+        className={`fixed lg:relative z-50 h-full border-r border-border flex flex-col transition-all duration-200 ease-out bg-depth-gradient ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-        }`}
+        } ${sidebarCollapsed ? 'lg:w-16' : 'lg:w-56'} w-56`}
         aria-label="Navigation"
       >
-        {/* Brand */}
-        <div className="flex items-center justify-between h-14 px-4 border-b border-border flex-shrink-0">
-          <div className="flex items-center gap-2.5">
+        {/* Brand + collapse toggle */}
+        <div className={`flex items-center h-14 border-b border-border flex-shrink-0 ${sidebarCollapsed ? 'lg:justify-center lg:px-0 px-4 justify-between' : 'justify-between px-4'}`}>
+          <div className={`flex items-center gap-2.5 ${sidebarCollapsed ? 'lg:hidden' : ''}`}>
             {/* Well-log track marker as logo */}
             <div className="w-7 h-7 rounded-sm bg-primary/15 border border-primary/40 flex items-center justify-center relative overflow-hidden">
               <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-primary" />
@@ -46,6 +49,13 @@ export default function Sidebar() {
             <div>
               <div className="text-sm font-semibold text-textPrimary leading-none">OPM-AI</div>
               <div className="text-xs text-textMuted leading-none mt-0.5">Reservoir Workbench</div>
+            </div>
+          </div>
+          {/* Collapsed-only logo glyph so the brand is still recognisable */}
+          <div className={`hidden ${sidebarCollapsed ? 'lg:flex' : ''} items-center justify-center`}>
+            <div className="w-7 h-7 rounded-sm bg-primary/15 border border-primary/40 flex items-center justify-center relative overflow-hidden">
+              <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-primary" />
+              <span className="text-xs font-bold text-primary ml-0.5">O</span>
             </div>
           </div>
           <button
@@ -60,27 +70,29 @@ export default function Sidebar() {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 px-2 py-3 space-y-0.5 overflow-y-auto scrollbar-thin" role="navigation">
+        <nav className={`flex-1 py-3 space-y-0.5 overflow-y-auto scrollbar-thin ${sidebarCollapsed ? 'lg:px-2 px-2' : 'px-2'}`} role="navigation">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
               end={item.path === '/'}
               onClick={() => setSidebarOpen(false)}
-              className={({ isActive }) =>
-                isActive
-                  ? 'flex items-center gap-2.5 px-3 py-2 text-sm font-medium transition-all duration-150 relative text-primary bg-primary/10 border-l-2 border-primary rounded-r-sm'
-                  : 'flex items-center gap-2.5 px-3 py-2 text-sm font-medium transition-all duration-150 relative text-textSecondary hover:text-textPrimary hover:bg-surfaceHover rounded-sm border-l-2 border-transparent'
-              }
+              title={sidebarCollapsed ? item.label : undefined}
+              className={({ isActive }) => {
+                const base = `${sidebarCollapsed ? 'lg:justify-center' : ''} flex items-center gap-2.5 px-3 py-2 text-sm font-medium transition-all duration-150 relative rounded-sm border-l-2`;
+                return isActive
+                  ? `${base} text-primary bg-primary/10 border-primary rounded-r-sm`
+                  : `${base} text-textSecondary hover:text-textPrimary hover:bg-surfaceHover border-transparent`;
+              }}
             >
               {({ isActive }) => (
                 <>
                   <span className={`flex-shrink-0 transition-colors ${isActive ? 'text-primary' : ''}`}>
                     {item.icon}
                   </span>
-                  <span className="truncate">{item.label}</span>
+                  <span className={`truncate ${sidebarCollapsed ? 'lg:hidden' : ''}`}>{item.label}</span>
                   {isActive && (
-                    <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
+                    <span className={`ml-auto w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 ${sidebarCollapsed ? 'lg:hidden' : ''}`} />
                   )}
                 </>
               )}
@@ -90,12 +102,12 @@ export default function Sidebar() {
 
         {/* Footer */}
         <div className="p-3 border-t border-border flex-shrink-0 space-y-2">
-          <div className="flex items-center gap-2 text-xs text-textSecondary">
+          <div className={`flex items-center gap-2 text-xs text-textSecondary ${sidebarCollapsed ? 'lg:justify-center' : ''}`}>
             <span className="w-1.5 h-1.5 rounded-full bg-success flex-shrink-0" />
-            <span>API Connected</span>
+            <span className={sidebarCollapsed ? 'lg:hidden' : ''}>API Connected</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-textMuted">LLM</span>
+          <div className={`flex items-center gap-2 ${sidebarCollapsed ? 'lg:justify-center' : ''}`}>
+            <span className={`text-xs text-textMuted ${sidebarCollapsed ? 'lg:hidden' : ''}`}>LLM</span>
             <span className={`badge text-xs ${
               llmProvider === 'groq'   ? 'badge-primary' :
               llmProvider === 'nim'    ? 'badge-success' :
@@ -105,6 +117,19 @@ export default function Sidebar() {
               {llmProvider.toUpperCase()}
             </span>
           </div>
+          {/* Desktop collapse toggle. Hidden on mobile - the slide-in drawer is
+              closed via the X in the brand row above. */}
+          <button
+            onClick={toggleSidebarCollapsed}
+            className="hidden lg:flex w-full items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-textSecondary hover:text-textPrimary hover:bg-surfaceHover transition-colors"
+            aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            <svg className={`w-4 h-4 transition-transform duration-200 ${sidebarCollapsed ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+            </svg>
+            <span className={sidebarCollapsed ? 'lg:hidden' : ''}>Collapse</span>
+          </button>
         </div>
       </aside>
     </>

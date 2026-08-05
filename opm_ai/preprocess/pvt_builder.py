@@ -58,10 +58,23 @@ def _select_oil_correlation(
     correlations: dict[str, CorrelationName] | None,
     region: str | None,
 ) -> tuple[CorrelationName, str]:
-    """Select oil PVT correlation, using advisor if not specified."""
+    """Select oil PVT correlation, using advisor if not specified.
+
+    Precedence (highest first):
+    1. Explicit `correlations["pvt_oil"]` if the dict carries it.
+    2. `fluid.correlation` when no `correlations` dict was supplied at
+       all. The Builder UI relies on this to drive the rendered PVTO
+       family from the dropdown - without it, the dropdown only affects
+       the max-Rs clamp in builder.py and the PVTO itself stays on the
+       advisor's pick.
+    3. Otherwise fall back to `recommend_correlation`.
+    """
     if correlations and "pvt_oil" in correlations:
         return correlations["pvt_oil"], "user specified"
-
+    if correlations is None:
+        # No correlations dict - the user picked one (or left the default)
+        # directly on the FluidDescriptor.
+        return fluid.correlation, f"fluid.correlation={fluid.correlation}"
     corr, explanation = recommend_correlation(fluid, region)
     return corr, explanation
 

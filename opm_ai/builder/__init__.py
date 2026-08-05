@@ -5,7 +5,10 @@ from typing import Optional
 
 from opm_ai.builder.builder import build_deck as _build_deck
 from opm_ai.builder.models import ModelSpec, ReservoirSpec, WellSpec, WellType
-from opm_ai.builder.extract import extract_parameters_offline
+from opm_ai.builder.extract import (
+    extract_parameters_offline,
+    extract_parameters_offline_with_provenance,
+)
 from opm_ai.linter import lint_deck, LintResult
 from opm_ai.preprocess import FluidDescriptor
 
@@ -31,4 +34,18 @@ def build_deck(
     return _build_deck(description, output_path, use_llm, fluid)
 
 
-__all__ = ["build_deck", "FluidDescriptor", "ModelSpec", "ReservoirSpec", "WellSpec", "WellType"]
+# F6.4/F6.7/F6.8 audit fix: __all__ documents and enforces the public
+# surface of the builder package. Routes and tests should import from
+# `opm_ai.builder` only what is listed here. Internal helpers live in
+# `opm_ai.builder.extract` and are not part of the stable API.
+__all__ = [
+    "build_deck",
+    "extract_parameters_offline",
+    "extract_parameters_offline_with_provenance",
+    "FluidDescriptor",
+    "LintResult",
+    "ModelSpec",
+    "ReservoirSpec",
+    "WellSpec",
+    "WellType",
+]

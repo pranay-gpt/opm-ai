@@ -7,6 +7,7 @@ import type {
   JobStatus,
   KPIsResponse,
   SnapshotsResponse,
+  ResinsightLaunchResponse,
   ChatMessage,
   WSServerMessage,
   ToolCall,
@@ -28,6 +29,7 @@ import type {
   DeckSaveResponse,
   DeckEntry,
   DeckListResponse,
+  UploadResponse,
   GridInfoResponse,
   GridTimeStep,
   GridBBox,
@@ -95,6 +97,25 @@ async function fetchBinary(path: string, options: RequestInit = {}): Promise<Arr
   return response.arrayBuffer();
 }
 
+// Multipart POST for /api/upload_deck. The browser sets the
+// Content-Type with the correct `boundary=` parameter itself when
+// the body is a FormData; setting it manually would either lose
+// the boundary (parser rejects the body) or send a wrong one
+// (server-side parser refuses). So this helper explicitly does
+// NOT set Content-Type.
+async function fetchMultipart<T>(path: string, form: FormData): Promise<T> {
+  const response = await fetch(`${API_BASE}${path}`, {
+    method: 'POST',
+    body: form,
+  });
+
+  if (!response.ok) {
+    throw await errorFromResponse(response);
+  }
+
+  return response.json();
+}
+
 export const api = {
   // Deck saving
   saveDeck: (request: DeckSaveRequest): Promise<DeckSaveResponse> =>
@@ -109,6 +130,13 @@ export const api = {
     fetchJson<DeckListResponse>(
       path ? `/files?path=${encodeURIComponent(path)}` : '/files'
     ),
+
+  // Upload a deck (.DATA) plus an optional include/ folder from
+  // the user's laptop. The backend writes them to a fresh mkdtemp
+  // and returns the deck's server-side path, which the caller
+  // feeds into run() unchanged.
+  uploadDeck: (form: FormData): Promise<UploadResponse> =>
+    fetchMultipart<UploadResponse>('/upload_deck', form),
 
   // Build
   build: (request: BuildRequest): Promise<BuildResponse> =>
@@ -131,8 +159,8 @@ export const api = {
       body: JSON.stringify(request),
     }),
 
-  runStatus: (jobId: string): Promise<JobStatus> =>
-    fetchJson<JobStatus>(`/run/${jobId}`),
+  runStatus: (jobId: string, signal?: AbortSignal): Promise<JobStatus> =>
+    fetchJson<JobStatus>(`/run/${jobId}`, { signal }),
 
   // Results
   results: (jobId: string): Promise<KPIsResponse> =>
@@ -141,6 +169,10 @@ export const api = {
   // Snapshots
   snapshots: (jobId: string): Promise<SnapshotsResponse> =>
     fetchJson<SnapshotsResponse>(`/results/${jobId}/snapshots`),
+
+  // ResInsight GUI launch (localhost-gated). Returns {launched, pid, reason, error}.
+  launchResinsight: (jobId: string): Promise<ResinsightLaunchResponse> =>
+    fetchJson<ResinsightLaunchResponse>(`/results/${jobId}/resinsight`, { method: 'POST' }),
 
   // 3D grid viewer. Binary endpoints accept a signal so the UI can abort
   // in-flight requests while the user scrubs the time-step slider.
@@ -212,24 +244,44 @@ export const api = {
     }),
 };
 
-// Poll job status until completed or failed
+// Poll job status until completed or failed. The optional AbortSignal
+// lets the caller cancel in-flight polls on unmount; without it, a
+// pending poll leaks setTimeout handles and re-renders `onUpdate` against
+// a dead store.
 export async function pollJobStatus(
   jobId: string,
   onUpdate?: (status: JobStatus) => void,
   intervalMs = 2000,
-  maxAttempts = 300
+  maxAttempts = 300,
+  signal?: AbortSignal
 ): Promise<JobStatus> {
   let attempts = 0;
 
   while (attempts < maxAttempts) {
-    const status = await api.runStatus(jobId);
+    if (signal?.aborted) {
+      throw new DOMException('Polling aborted', 'AbortError');
+    }
+
+    const status = await api.runStatus(jobId, signal);
     onUpdate?.(status);
 
     if (status.status === 'completed' || status.status === 'failed') {
       return status;
     }
 
-    await new Promise((resolve) => setTimeout(resolve, intervalMs));
+    await new Promise((resolve, reject) => {
+      const timer = setTimeout(resolve, intervalMs);
+      // Abort the sleep so a cancelled poll does not block the next
+      // attempt check.
+      signal?.addEventListener(
+        'abort',
+        () => {
+          clearTimeout(timer);
+          reject(new DOMException('Polling aborted', 'AbortError'));
+        },
+        { once: true }
+      );
+    });
     attempts++;
   }
 
@@ -283,7 +335,7 @@ export type {
 export interface ChatCallbacks {
   onToken?: (content: string) => void;
   onToolCall?: (toolCall: ToolCall) => void;
-  onToolResult?: (toolCallId: string, result: string) => void;
+  onToolResult?: (toolCallId: string, result: Record<string, unknown> | string) => void;
   onError?: (error: string) => void;
   onDone?: () => void;
   onClose?: () => void;

@@ -142,7 +142,7 @@ DENSITY
 	      	53.66 64.49 0.0533 /
 
 PVDG
-{% if pvdg_rows %}
+{% block pvdg %}{% if pvdg_rows %}
 {% for row in pvdg_rows %}
 {{ row }}
 {% endfor %} /
@@ -157,7 +157,7 @@ PVDG
 4014.7	0.81100	0.026800
 5014.7	0.64900	0.030900
 9014.7	0.38600	0.047000 /
-{% endif %}
+{% endif %}{% endblock %}
 
 PVTO
 0.0010	14.7	1.0620	1.0400 /
@@ -177,7 +177,8 @@ PVTO
 SOLUTION
 
 EQUIL
-	{{ equil_datum_depth }} {{ equil_pressure_datum }} {{ equil_woc }} {{ equil_goc }} {{ equil_owc_depth }} 0 1 0 0 /
+{% block equil %}	{{ equil_datum_depth }} {{ equil_pressure_datum }} {{ equil_woc }} {{ equil_goc }} {{ equil_owc_depth }} 0 1 0 0 /
+{% endblock %}
 
 RSVD
 {{ rsvd_depth1 }} {{ rsvd_rs }}
@@ -281,7 +282,7 @@ WCONINJE
 {% endif %}
 
 TSTEP
-{% for dt in timesteps %}
+{% block schedule_tail %}{% for dt in timesteps %}
 {{ '%.0f'|format(dt) }}{{ ' ' }}
 {% endfor %}
 /
@@ -304,4 +305,4 @@ TSTEP
 /
 {% endif %}
 {% endfor %}
-END
+END{% endblock %}

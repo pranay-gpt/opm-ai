@@ -101,14 +101,23 @@ correlations instead of using hard-coded SPE1 tables.
 Integration flow:
 1. If `spec.fluid` is set, `_compute_template_context()` calls
    `build_pvt_blocks(fluid)` to generate all 7 PROPS blocks.
+   `build_pvt_blocks` honors `fluid.correlation` (default "Standing";
+   Standing/VasquezBeggs/AlMarhoun) via `_select_oil_correlation`.
 2. Validates via `validate_pvt_blocks(blocks, "FIELD"|"METRIC")` - errors raise `ValueError`.
 3. Computes `rsvd_rs` (Rs at EQUIL datum pressure 4800 psia) using Standing
    correlation, clamped to the max Rs in the generated PVTO table so RSVD
-   stays within the table range.
-4. Injects `pvt_blocks` and `rsvd_rs` into Jinja2 context.
-5. Template `base.j2` uses `{% if pvt_blocks %}` to emit fluid tables,
+   stays within the table range. The RSVD clamp call also uses
+   `fluid.correlation` (line 110 area) so the user's correlation choice
+   is reflected in the Rs clamp value.
+4. NOTE: the `standing_rs_bubble` call near the rsvd block uses Standing
+   unconditionally - that is by design. Standing has a closed-form
+   Pb(Rs) inversion; VasquezBeggs and AlMarhoun do not, and a numerical
+   root-find is out of scope. So Standing stays on for the rsvd
+   inversion even when the user picks a different oil correlation.
+5. Injects `pvt_blocks` and `rsvd_rs` into Jinja2 context.
+6. Template `base.j2` uses `{% if pvt_blocks %}` to emit fluid tables,
    otherwise falls back to hard-coded SPE1 tables.
-6. RSVD lines use `{{ rsvd_rs }}` (defaults to 1.270 when no fluid).
+7. RSVD lines use `{{ rsvd_rs }}` (defaults to 1.270 when no fluid).
 
 Guard: if `fluid.pressure_range` max < 4800 psia, raises `ValueError` because
 the default EQUIL datum (4800 psia) must lie within the PVTO/PVDG pressure range.

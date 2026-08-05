@@ -7,7 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from opm_ai.api.routes import build, decks, files, grid, lint, run, results, chat, explainer
+from opm_ai.api.routes import build, decks, files, grid, lint, run, results, chat, explainer, upload
+from opm_ai.api.routes import keywords as keywords_routes
 from opm_ai.api.routes import settings as settings_routes
 from opm_ai.api.session_store import get_session_store
 from opm_ai.settings import settings
@@ -56,7 +57,7 @@ def create_app() -> FastAPI:
     # CORS for Vite dev server
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["http://localhost:5173"],
+        allow_origins=[settings.frontend_url],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -68,6 +69,7 @@ def create_app() -> FastAPI:
     app.include_router(files.router, prefix="/api")
     app.include_router(lint.router, prefix="/api")
     app.include_router(run.router, prefix="/api")
+    app.include_router(upload.router, prefix="/api")
     # grid before results: both hang off /results/{job_id}, and registering the
     # literal /grid/... paths first keeps them unambiguous whatever results.py
     # grows later.
@@ -76,6 +78,7 @@ def create_app() -> FastAPI:
     app.include_router(chat.router, prefix="/api")
     app.include_router(explainer.router, prefix="/api")
     app.include_router(settings_routes.router, prefix="/api")
+    app.include_router(keywords_routes.router, prefix="/api")
 
     @app.get("/health")
     async def health_check():

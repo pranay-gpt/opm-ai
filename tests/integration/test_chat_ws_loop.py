@@ -192,6 +192,69 @@ def test_ws_offline_provider_sends_error(monkeypatch):
 
 
 @pytest.mark.integration
+def test_ws_rejects_oversized_frame(monkeypatch):
+    """A frame larger than WS_MAX_FRAME_BYTES is rejected with a
+    payload_too_large error and the connection stays open for the next
+    valid turn."""
+    fake = ScriptedLLM([{"content": "ok", "tool_calls": None}])
+    monkeypatch.setattr(chat_routes, "LLMClient", lambda: fake)
+
+    # Build a frame above the 64 KB limit by padding a long user message.
+    huge = "A" * (chat_routes.WS_MAX_FRAME_BYTES + 1024)
+    bad_frame = json.dumps({
+        "session_id": "ws-loop-big",
+        "messages": [{"role": "user", "content": huge}],
+    })
+    assert len(bad_frame.encode("utf-8")) > chat_routes.WS_MAX_FRAME_BYTES
+
+    client = TestClient(create_app())
+    with client.websocket_connect("/api/chat") as ws:
+        ws.send_text(bad_frame)
+        err = json.loads(ws.receive_text())
+        assert err["type"] == "error"
+        assert err["code"] == "payload_too_large"
+
+        # Connection still alive: a real, small request now gets a normal
+        # reply.
+        ws.send_text(json.dumps({
+            "session_id": "ws-loop-big",
+            "messages": [{"role": "user", "content": "now what"}],
+        }))
+        events = _ws_events(ws)
+    assert [e["type"] for e in events] == ["token", "done"]
+
+
+@pytest.mark.integration
+def test_ws_rejects_malformed_payload(monkeypatch):
+    """Garbage JSON and schema-invalid frames yield invalid_payload
+    errors; the connection is preserved for the next turn."""
+    fake = ScriptedLLM([{"content": "ok", "tool_calls": None}])
+    monkeypatch.setattr(chat_routes, "LLMClient", lambda: fake)
+
+    client = TestClient(create_app())
+    with client.websocket_connect("/api/chat") as ws:
+        # 1) Not JSON at all
+        ws.send_text("this is not json {{{")
+        err = json.loads(ws.receive_text())
+        assert err["type"] == "error"
+        assert err["code"] == "invalid_payload"
+
+        # 2) JSON but wrong shape (missing session_id)
+        ws.send_text(json.dumps({"messages": []}))
+        err = json.loads(ws.receive_text())
+        assert err["type"] == "error"
+        assert err["code"] == "invalid_payload"
+
+        # 3) Real request after the errors still works
+        ws.send_text(json.dumps({
+            "session_id": "ws-loop-malformed",
+            "messages": [{"role": "user", "content": "hi"}],
+        }))
+        events = _ws_events(ws)
+    assert [e["type"] for e in events] == ["token", "done"]
+
+
+@pytest.mark.integration
 def test_compact_tool_result_shrinks_large_payloads():
     """build_deck and get_kpis results are compacted for LLM history."""
     big_deck = {"deck": "X" * 50000, "lint": {"passed": True, "errors": []}}

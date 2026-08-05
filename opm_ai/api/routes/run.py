@@ -7,7 +7,7 @@ from uuid import uuid4
 
 from opm_ai.api.paths import validate_deck_path
 from opm_ai.api.schemas import (
-    RunRequest, JobStatus, SimulationResultDTO, CrashReportDTO
+    RunRequest, JobStatus, SimulationResultDTO
 )
 from opm_ai.runner import run_simulation
 from opm_ai.runner.models import SimulationJob
@@ -72,38 +72,13 @@ async def run_job_background(
         result = await loop.run_in_executor(None, run_simulation, job)
 
         if result.success:
-            result_dto = SimulationResultDTO(
-                success=result.success,
-                output_dir=str(result.output_dir),
-                crash_report=None,
-                returncode=result.returncode,
-                duration_s=result.duration_s,
-                stdout=result.stdout,
-                stderr=result.stderr,
-                warnings=result.warnings,
-                summary_files={k: str(v) for k, v in result.summary_files.items()},
-                prt_path=str(result.prt_path) if result.prt_path else None,
-            )
-            set_job_completed(job_id, result_dto)
+            # F4.2 audit fix: classmethod on the DTO collapses the 12-line
+            # inline conversion that used to live here. The runner model
+            # is the source of truth; the DTO is a stringified view of it
+            # for JSON serialization and job-store storage.
+            set_job_completed(job_id, SimulationResultDTO.from_runner(result))
         else:
-            crash_dto = CrashReportDTO(
-                keyword=result.crash_report.keyword if result.crash_report else None,
-                line=result.crash_report.line if result.crash_report else None,
-                message=result.crash_report.message if result.crash_report else "Unknown error",
-            )
-            result_dto = SimulationResultDTO(
-                success=result.success,
-                output_dir=str(result.output_dir),
-                crash_report=crash_dto,
-                returncode=result.returncode,
-                duration_s=result.duration_s,
-                stdout=result.stdout,
-                stderr=result.stderr,
-                warnings=result.warnings,
-                summary_files={k: str(v) for k, v in result.summary_files.items()},
-                prt_path=str(result.prt_path) if result.prt_path else None,
-            )
-            set_job_completed(job_id, result_dto)
+            set_job_completed(job_id, SimulationResultDTO.from_runner(result))
 
     except Exception as e:
         set_job_failed(job_id, str(e))

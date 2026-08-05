@@ -162,3 +162,69 @@ def test_schedule_event_defaults():
     assert event.actions == []
     spec = ModelSpec(schedule=[ScheduleEvent(tstep_days=30.0, actions=["WELOPEN"])])
     assert spec.schedule[0].tstep_days == 30.0
+
+
+def test_llm_extraction_emits_buildup_schedule():
+    """LLM-extracted buildup description carries the shut-in + short tstep schedule."""
+    fake = FakeClient({
+        "scenario": "buildup",
+        "reservoir": {"nx": 9, "ny": 9, "nz": 1},
+        "wells": [
+            {"name": "PROD1", "well_type": "PROD", "i": 5, "j": 5, "k1": 1, "k2": 1,
+             "target_rate": 1000.0},
+        ],
+        "schedule": [
+            {"actions": ["WCONPROD\n  'PROD1'  'STOP' /"],
+             "tstep_days": [0.25, 0.25, 0.5, 1.0, 2.0, 4.0, 4.0, 8.0]},
+        ],
+    })
+    spec = extract_parameters_llm(
+        "pressure buildup on PROD1: produce 30 days, shut in, "
+        "then 8 short timesteps from 0.25 to 8 days for buildup analysis",
+        client=fake,
+    )
+    assert isinstance(spec, ModelSpec)
+    assert len(spec.schedule) == 1
+    event = spec.schedule[0]
+    assert event.tstep_days == [0.25, 0.25, 0.5, 1.0, 2.0, 4.0, 4.0, 8.0]
+    assert len(event.actions) == 1
+    assert "WCONPROD" in event.actions[0]
+    assert "PROD1" in event.actions[0]
+    assert "STOP" in event.actions[0]
+    # The system prompt must teach schedule events; a real LLM (not the
+    # canned client) uses these cues to emit a buildup schedule.
+    system_prompt, _ = fake.calls[0]
+    assert "Schedule events" in system_prompt
+    assert "tstep_days" in system_prompt
+    assert "0.25, 0.25, 0.5, 1.0, 2.0, 4.0, 4.0, 8.0" in system_prompt
+
+
+def test_llm_extraction_emits_wag_schedule():
+    """LLM-extracted WAG description carries alternating water/gas half-cycles."""
+    fake = FakeClient({
+        "scenario": "wag",
+        "reservoir": {"nx": 15, "ny": 15, "nz": 3},
+        "wells": [
+            {"name": "INJ", "well_type": "INJ", "i": 8, "j": 8, "k1": 1, "k2": 3,
+             "inject_fluid": "WATER", "inject_rate": 5000.0},
+        ],
+        "schedule": [
+            {"actions": ["WCONINJE\n  'INJ'  'WATER'  5000 /"], "tstep_days": 90.0},
+            {"actions": ["WCONINJE\n  'INJ'  'GAS'  5000 /"], "tstep_days": 90.0},
+        ],
+    })
+    spec = extract_parameters_llm(
+        "wag injection on a 15x15x3 grid, alternate water 90 days then gas 90 days",
+        client=fake,
+    )
+    assert isinstance(spec, ModelSpec)
+    assert len(spec.schedule) == 2
+    assert "WATER" in spec.schedule[0].actions[0]
+    assert "GAS" in spec.schedule[1].actions[0]
+    assert spec.schedule[0].tstep_days == 90.0
+    assert spec.schedule[1].tstep_days == 90.0
+    # WAG must appear in the prompt as a worked few-shot example so the LLM
+    # pattern-matches the WCONINJE half-cycle shape.
+    system_prompt, _ = fake.calls[0]
+    assert "alternate water 90 days then gas 90 days" in system_prompt
+    assert "WCONINJE" in system_prompt

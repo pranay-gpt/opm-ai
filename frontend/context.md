@@ -1,7 +1,8 @@
 # Frontend Context
 
-Last updated: 2026-08-03 (server-side deck picker, snapshots tab removed,
-vendor chunk split, dead deps dropped).
+Last updated: 2026-08-04 (audit pass; substantive module content unchanged
+since 2026-08-03 — server-side deck picker, snapshots tab removed,
+vendor chunk split, dead deps dropped remain the shipped state).
 
 ## Stack
 - **Framework**: React 18 + Vite 5 + TypeScript 5, react-router-dom v6 (BrowserRouter)
@@ -101,6 +102,15 @@ vendor chunk split, dead deps dropped).
 - `src/components/DeckBuilder.tsx` / `DeckEditor.tsx` / `LinterPanel.tsx` -
   Monaco with theme switching; lint = save text via POST /api/decks then POST
   /api/lint with the returned path.
+- `src/components/opmCompletions.ts` (Stage 3.4, 2026-08-04) - Monaco
+  keyword completion provider extracted as a pure module so it can be
+  unit-tested without React/Monaco. Trigger chars A-Z + 0-9 + `_`.
+  `sectionLabel(entry)` rules: "SCHEDULE · 18 args" > "601 decks observed"
+  > "Keyword". Falls back to bundled OPM_KEYWORDS list when /api/keywords
+  unreachable.
+- `src/components/opmCompletions.test.ts` (Stage 3.4) - 9 self-check tests
+  via esbuild/node pattern; bundled into `node_modules/.cache/oc.cjs` by
+  the `test` script.
 - `src/components/SettingsPanel.tsx` - GET/POST /api/settings; keys live in
   component state only, POSTed on save, cleared after.
 - Deleted 2026-07-22: `src/theme.ts` (dead duplicate palette), `src/App.css`.

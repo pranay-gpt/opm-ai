@@ -247,6 +247,53 @@ class TestRecommendCorrelation:
         assert isinstance(explanation, str)
         assert len(explanation) > 0
 
+    @pytest.mark.parametrize(
+        "label,fluid",
+        [
+            # Reaches line 119 with rs_max > rs_min and pb < p_max; must not
+            # produce inf/nan MUO. The pb > 0 guard in the undersaturated
+            # branch is the regression net.
+            (
+                "zero_gor_zero_pmin",
+                FluidDescriptor(
+                    api_gravity=35.0,
+                    gas_specific_gravity=0.75,
+                    gor=0.0,
+                    reservoir_temp_f=200.0,
+                    salinity_ppm=50000.0,
+                    pressure_range_psi=(0.0, 5000.0),
+                    unit_system="FIELD",
+                ),
+            ),
+            (
+                "small_gor_small_pmin",
+                FluidDescriptor(
+                    api_gravity=35.0,
+                    gas_specific_gravity=0.75,
+                    gor=10.0,
+                    reservoir_temp_f=200.0,
+                    salinity_ppm=50000.0,
+                    pressure_range_psi=(0.0, 5000.0),
+                    unit_system="FIELD",
+                ),
+            ),
+        ],
+    )
+    def test_build_pvt_oil_table_no_inf_nan_pathological(self, label, fluid):
+        """build_pvt_oil_table must never produce inf/nan MUO even when
+        bubble point is non-positive or zero-GOR. Regression for F2.2:
+        the undersaturated-viscosity formula `muo_pb * (p / pb) ** 0.2`
+        would raise ZeroDivisionError if pb == 0 reached the loop.
+        """
+        from opm_ai.preprocess.tables import build_pvt_oil_table
+        rows = build_pvt_oil_table(fluid, "Standing", endpoints={})
+        assert len(rows) > 0, f"{label}: expected at least one row"
+        for row in rows:
+            muo = row["MUO"]
+            assert muo == muo, f"{label}: NaN MUO at {row}"
+            assert muo != float("inf"), f"{label}: inf MUO at {row}"
+            assert muo > 0.0, f"{label}: non-positive MUO {muo} at {row}"
+
 
 class TestPVTBlockFormatting:
     """Tests for specific formatting requirements in rendered blocks."""

@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react';
-import { useCurrentDeck, useCurrentDeckPath, useLastBuildResponse, useLastLintResult, useDeckActions, useLintActions, useResolvedTheme } from '../stores/useAppStore';
+import { useCurrentDeck, useCurrentDeckPath, useLastBuildResponse, useLastLintResult, useDeckActions, useLintActions, useResolvedTheme, useBuilderDescription, useBuilderShowEditor, useBuilderUseLlmExtraction, useBuilderFluidProps, useBuilderUseCustomFluid, useBuilderShowFluidSection, useBuilderActions, useRockBasicsOverrides, useResolvedRockBasics, useRockBasicsProvenance, useShowRockBasicsSection, type ResolvedRockBasics } from '../stores/useAppStore';
 import { api } from '../api/client';
 import type { BuildRequest, BuildResponse, FluidDescriptorRequest } from '../api/client';
+import RockBasicsSection from './RockBasicsSection';
 import Editor from '@monaco-editor/react';
 
 export default function DeckBuilder() {
@@ -13,24 +14,33 @@ export default function DeckBuilder() {
   const { setLastLintResult } = useLintActions();
   const resolvedTheme = useResolvedTheme();
 
-  const [description, setDescription] = useState('10x10x3 grid with one producer at 5,5, depletion drive, 3000m depth, 200 bar initial pressure');
+  // Persisted builder form state - survives route navigation and reload.
+  const description = useBuilderDescription();
+  const showEditor = useBuilderShowEditor();
+  const useLlmExtraction = useBuilderUseLlmExtraction();
+  const fluidProps = useBuilderFluidProps();
+  const useCustomFluid = useBuilderUseCustomFluid();
+  const showFluidSection = useBuilderShowFluidSection();
+  const rockBasicsOverrides = useRockBasicsOverrides();
+  const resolvedRockBasics = useResolvedRockBasics();
+  const rockBasicsProvenance = useRockBasicsProvenance();
+  const showRockBasicsSection = useShowRockBasicsSection();
+  const {
+    setDescription,
+    setShowEditor,
+    setUseLlmExtraction,
+    setUseCustomFluid,
+    setFluidProps,
+    setShowFluidSection,
+    setRockBasicsOverride,
+    resetRockBasicsOverrides,
+    setResolvedRockBasics,
+    setShowRockBasicsSection,
+  } = useBuilderActions();
+
+  // Transient: lives only in this component, never persisted.
   const [isBuilding, setIsBuilding] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showEditor, setShowEditor] = useState(false);
-  const [useLlmExtraction, setUseLlmExtraction] = useState(false);
-
-  // Fluid properties state
-  const [useCustomFluid, setUseCustomFluid] = useState(false);
-  const [fluidProps, setFluidProps] = useState<FluidDescriptorRequest>({
-    api_gravity: 35,
-    gas_specific_gravity: 0.75,
-    gor: 800,
-    reservoir_temp_f: 200,
-    salinity_ppm: 0,
-    pressure_range_psi: [14.7, 5000],
-    unit_system: 'FIELD',
-  });
-  const [showFluidSection, setShowFluidSection] = useState(false);
 
   const handleBuild = useCallback(async () => {
     if (!description.trim()) {
@@ -42,16 +52,37 @@ export default function DeckBuilder() {
     setError(null);
 
     try {
+      // Stage 3.2: forward any user overrides on the rock-basics fields to
+      // the backend. The backend tags the deck's provenance accordingly;
+      // we then hydrate the store with the resolved values so the section
+      // can show what was actually generated.
       const request: BuildRequest = {
         description,
         fluid: useCustomFluid ? fluidProps : null,
         use_llm: useLlmExtraction,
+        porosity: rockBasicsOverrides.porosity,
+        top_depth: rockBasicsOverrides.top_depth,
+        initial_pressure: rockBasicsOverrides.initial_pressure,
+        dz: rockBasicsOverrides.dz,
+        permx: rockBasicsOverrides.permx,
+        permy: rockBasicsOverrides.permy,
+        permz: rockBasicsOverrides.permz,
       };
       const response: BuildResponse = await api.build(request);
 
       setCurrentDeck(response.deck);
       setLastBuildResponse(response);
       setLastLintResult(response.lint);
+
+      // Hydrate the rock-basics store with whatever the backend resolved.
+      // Type guard: the resolver dict from the backend matches the
+      // ResolvedRockBasics shape by construction; cast is safe here.
+      if (response.resolved && response.provenance) {
+        setResolvedRockBasics(
+          response.resolved as unknown as ResolvedRockBasics,
+          response.provenance,
+        );
+      }
 
       if (!response.lint.passed) {
         setError(`Build succeeded but lint found issues: ${response.lint.errors.join('; ')}`);
@@ -65,7 +96,11 @@ export default function DeckBuilder() {
     } finally {
       setIsBuilding(false);
     }
-  }, [description, useCustomFluid, fluidProps, useLlmExtraction, setCurrentDeck, setLastBuildResponse, setLastLintResult]);
+  }, [
+    description, useCustomFluid, fluidProps, useLlmExtraction,
+    rockBasicsOverrides, setCurrentDeck, setLastBuildResponse,
+    setLastLintResult, setResolvedRockBasics, setShowEditor,
+  ]);
 
   const handleUseDeck = useCallback(() => {
     if (lastBuildResponse?.deck) {
@@ -102,6 +137,12 @@ export default function DeckBuilder() {
     setFluidProps((prev: FluidDescriptorRequest) => {
       if (field === 'pressure_range_psi' && Array.isArray(value)) {
         return { ...prev, [field]: value };
+      }
+      // correlation is a string-enum field; pass through untouched so
+      // the user picks one of the three valid options rather than letting
+      // the numeric coercion path turn it into NaN.
+      if (field === 'correlation') {
+        return { ...prev, correlation: value as FluidDescriptorRequest['correlation'] };
       }
       return { ...prev, [field]: typeof value === 'string' ? num(value, 0) : value };
     });
@@ -207,7 +248,7 @@ export default function DeckBuilder() {
                   {useCustomFluid && (
                     <>
                       <p className="text-xs text-textMuted italic ml-7">
-                        Tables generated via Standing correlation family
+                        Tables generated via {fluidProps.correlation ?? 'Standing'} correlation family
                       </p>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 ml-7">
@@ -281,6 +322,20 @@ export default function DeckBuilder() {
                             max="500000"
                           />
                         </div>
+                        <div>
+                          <label className="block text-xs font-medium text-textSecondary mb-1">
+                            Correlation
+                          </label>
+                          <select
+                            value={fluidProps.correlation ?? 'Standing'}
+                            onChange={(e) => handleFluidChange('correlation', e.target.value)}
+                            className="input w-full text-sm"
+                          >
+                            <option value="Standing">Standing (default)</option>
+                            <option value="VasquezBeggs">Vasquez-Beggs</option>
+                            <option value="AlMarhoun">Al-Marhoun</option>
+                          </select>
+                        </div>
                         <div className="sm:col-span-2">
                           <label className="block text-xs font-medium text-textSecondary mb-1">
                             Pressure Range (psia)
@@ -312,6 +367,22 @@ export default function DeckBuilder() {
                 </div>
               )}
             </div>
+
+            {/* Rock Basics Section (Stage 3.2). Collapsed by default; the
+                user can expand it to confirm/edit porosity, top depth,
+                initial pressure, and per-layer permeability before the
+                build runs. Provenance badges on each field show whether
+                the value was extracted from the description, defaulted
+                by the parser, or replaced by the user. */}
+            <RockBasicsSection
+              overrides={rockBasicsOverrides}
+              resolved={resolvedRockBasics}
+              provenance={rockBasicsProvenance}
+              isOpen={showRockBasicsSection}
+              onToggle={() => setShowRockBasicsSection(!showRockBasicsSection)}
+              onChange={setRockBasicsOverride}
+              onReset={resetRockBasicsOverrides}
+            />
 
             <div className="flex gap-3">
               <button
@@ -358,6 +429,11 @@ export default function DeckBuilder() {
                     {lastBuildResponse.lint.passed ? 'Lint Passed' : 'Lint Issues Found'}
                   </span>
                 </div>
+                {lastBuildResponse.lint.lint_summary && (
+                  <div className="mt-2 pt-2 border-t border-border/40 text-xs text-textSecondary whitespace-pre-wrap">
+                    {lastBuildResponse.lint.lint_summary}
+                  </div>
+                )}
                 {!lastBuildResponse.lint.passed && lastBuildResponse.lint.errors.length > 0 && (
                   <ul className="mt-2 ml-4 space-y-1 text-xs text-textSecondary">
                     {lastBuildResponse.lint.errors.slice(0, 5).map((err, i) => (

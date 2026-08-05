@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useLintActions, useResolvedTheme } from '../stores/useAppStore';
 import { api } from '../api/client';
 import type { LintResult } from '../api/client';
@@ -13,6 +13,12 @@ export default function LinterPanel() {
   const [lintResult, setLintResult] = useState<LintResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // inFlightRef guards handleLint against double-firing before React
+  // commits disabled={isLinting} on the button (F8.4 audit fix). Using
+  // a ref instead of reading isLinting from the callback closure
+  // avoids re-creating handleLint on every render.
+  const inFlightRef = useRef(false);
+
   const handleLint = useCallback(async () => {
     if (!deckText.trim()) {
       setError('Please enter a deck to lint');
@@ -20,6 +26,7 @@ export default function LinterPanel() {
     }
 
     setIsLinting(true);
+    inFlightRef.current = true;
     setError(null);
 
     try {
@@ -38,8 +45,14 @@ export default function LinterPanel() {
       console.error('Lint error:', err);
     } finally {
       setIsLinting(false);
+      inFlightRef.current = false;
     }
   }, [deckText, setLastLintResult]);
+
+  const handleLintGuarded = useCallback(() => {
+    if (inFlightRef.current) return;
+    return handleLint();
+  }, [handleLint]);
 
   const handlePaste = useCallback(() => {
     navigator.clipboard.readText().then((text) => {
@@ -151,7 +164,7 @@ SCHEDULE
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface">
         <div>
-          <h1 className="text-xl font-semibold text-textPrimary">Data Linter</h1>
+          <h1 className="text-xl font-semibold text-textPrimary">Simulation Deck Checker (.DATA)</h1>
           <p className="text-sm text-textSecondary">Validate OPM Flow decks for syntax and consistency</p>
         </div>
         <div className="flex items-center gap-2">
@@ -167,8 +180,8 @@ SCHEDULE
           <button onClick={handleClear} className="btn-secondary btn-sm" disabled={isLinting}>
             Clear
           </button>
-          <button onClick={handleLint} disabled={isLinting || !deckText.trim()} className="btn-primary btn-sm">
-            {isLinting ? 'Linting...' : 'Lint Deck'}
+          <button onClick={handleLintGuarded} disabled={isLinting || !deckText.trim()} className="btn-primary btn-sm">
+            {isLinting ? 'Checking...' : 'Check Deck'}
           </button>
         </div>
       </div>
@@ -224,8 +237,8 @@ SCHEDULE
                 <svg className="w-16 h-16 mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
-                <p className="text-lg font-medium text-textPrimary mb-1">No Lint Results</p>
-                <p className="text-sm max-w-xs text-center">Enter a deck and click "Lint Deck" to validate</p>
+                <p className="text-lg font-medium text-textPrimary mb-1">No Check Results</p>
+                <p className="text-sm max-w-xs text-center">Enter a deck and click "Check Deck" to validate</p>
               </div>
             ) : isLinting ? (
               <div className="flex flex-col items-center justify-center h-full text-primary">
@@ -245,13 +258,18 @@ SCHEDULE
                     </span>
                     <div>
                       <div className="font-semibold text-textPrimary">
-                        {isPassed ? 'Lint Passed' : 'Lint Failed'}
+                        {isPassed ? 'Deck Passed' : 'Deck Failed'}
                       </div>
                       <div className="text-sm text-textSecondary">
                         {errorCount} error(s) found in deck
                       </div>
                     </div>
                   </div>
+                  {lintResult?.lint_summary && (
+                    <div className="mt-3 pt-3 border-t border-border/40 text-sm text-textPrimary whitespace-pre-wrap">
+                      {lintResult.lint_summary}
+                    </div>
+                  )}
                 </div>
 
                 {/* Errors List */}

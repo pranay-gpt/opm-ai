@@ -9,34 +9,78 @@ import Plotly from 'plotly.js-dist-min';
 function PlotCard({ plotName, plotJson }: { plotName: string; plotJson: string }) {
   const divRef = useRef<HTMLDivElement>(null);
   const resolvedTheme = useResolvedTheme();
+  const [renderError, setRenderError] = useState<string | null>(null);
+  // Tracks whether THIS effect run actually mounted a Plotly chart on
+  // divRef.current. The cleanup function should only call Plotly.purge
+  // when a chart is mounted, otherwise the call is wasted and (worse)
+  // can race with a fresh mount if the effect re-runs in quick
+  // succession (F8.9 audit fix: previously the cleanup ran on every
+  // effect cycle including the early-return path for empty plotJson).
+  const chartMountedRef = useRef(false);
+
   useEffect(() => {
-    if (divRef.current) {
-      try {
-        const plotData = JSON.parse(plotJson);
-        // Restyle backend-generated layout to match the active UI theme
-        const dark = resolvedTheme === 'dark';
-        const layout = {
-          ...plotData.layout,
-          paper_bgcolor: 'rgba(0,0,0,0)',
-          plot_bgcolor: 'rgba(0,0,0,0)',
-          font: { ...plotData.layout?.font, color: dark ? '#94A8C4' : '#465A82' },
-        };
-        Plotly.newPlot(divRef.current, plotData.data, layout, { responsive: true, displayModeBar: true });
-      } catch (e) {
-        console.error(`Failed to render ${plotName}:`, e);
-      }
+    setRenderError(null);
+    chartMountedRef.current = false;
+    if (!divRef.current || !plotJson) {
+      // Empty plotJson means the backend's plot generation failed
+      // (opm_ai/api/routes/results.py logs the trace). Render an empty
+      // card with a hint instead of trying to Plotly.newPlot an empty
+      // string (F1.5 audit fix - client side).
+      return;
+    }
+    try {
+      const plotData = JSON.parse(plotJson);
+      // Restyle backend-generated layout to match the active UI theme
+      const dark = resolvedTheme === 'dark';
+      const layout = {
+        ...plotData.layout,
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        font: { ...plotData.layout?.font, color: dark ? '#94A8C4' : '#465A82' },
+      };
+      Plotly.newPlot(divRef.current, plotData.data, layout, { responsive: true, displayModeBar: true });
+      chartMountedRef.current = true;
+    } catch (e) {
+      const message = e instanceof Error ? e.message : String(e);
+      setRenderError(message);
+      console.error(`Failed to render ${plotName}:`, e);
     }
     return () => {
-      if (divRef.current) Plotly.purge(divRef.current);
+      // Only purge if we actually mounted a chart on this run. Avoids
+      // spurious Plotly.purge calls on early-return effects (empty
+      // plotJson) and avoids racing a fresh mount with a stale purge.
+      if (chartMountedRef.current && divRef.current) {
+        Plotly.purge(divRef.current);
+        chartMountedRef.current = false;
+      }
     };
   }, [plotName, plotJson, resolvedTheme]);
+
+  if (!plotJson) {
+    return (
+      <div className="card">
+        <div className="panel-header">
+          <h3 className="panel-title capitalize">{plotName.replace(/_/g, ' ')}</h3>
+        </div>
+        <div className="p-4 h-[500px] flex items-center justify-center text-textSecondary text-sm">
+          Plot unavailable. The backend could not generate this chart from the
+          run output (see server log for the trace).
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="card">
       <div className="panel-header">
         <h3 className="panel-title capitalize">{plotName.replace(/_/g, ' ')}</h3>
       </div>
-      <div className="p-4 h-[500px]">
+      <div className="p-4 h-[500px] relative">
+        {renderError && (
+          <div className="absolute inset-0 flex items-center justify-center text-danger text-sm bg-bgPrimary/80 z-10">
+            Failed to render: {renderError}
+          </div>
+        )}
         <div ref={divRef} className="plotly-chart" />
       </div>
     </div>
@@ -71,13 +115,24 @@ export default function ResultsViewer() {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'kpis' | 'plots' | '3d'>('kpis');
 
+  // ResInsight launch state. The route is localhost-gated (403 from a remote
+  // client); the button is disabled when viewer_available is false so we never
+  // claim a launch we cannot deliver.
+  const [resinsightLaunching, setResinsightLaunching] = useState(false);
+  const [resinsightPid, setResinsightPid] = useState<number | null>(null);
+  const [resinsightError, setResinsightError] = useState<string | null>(null);
+
   // Explain results state
   const [explainResponse, setExplainResponse] = useState<ExplainResponse | null>(null);
   const [explainLoading, setExplainLoading] = useState(false);
   const [explainError, setExplainError] = useState<string | null>(null);
   const [explainLevel, setExplainLevel] = useState<ExplanationLevel>('intermediate');
 
-  // Load results when job completes
+  // Load results when job completes. The `!results` guard is the
+  // load-once invariant (F8.3 audit: previously flagged as a
+  // re-trigger risk, but the only writer of `results` is loadResults
+  // itself which always sets a non-null payload; the `!results` check
+  // is therefore sufficient and `loadedJobIdRef` is unnecessary).
   useEffect(() => {
     if (currentJob?.status === 'completed' && currentJob.job_id && !results) {
       loadResults(currentJob.job_id);
@@ -102,6 +157,28 @@ export default function ResultsViewer() {
       setIsLoading(false);
     }
   }, [setLastResults]);
+
+  const handleLaunchResinsight = useCallback(async () => {
+    if (!currentJob?.job_id) return;
+    setResinsightLaunching(true);
+    setResinsightError(null);
+    try {
+      const res = await api.launchResinsight(currentJob.job_id);
+      setResinsightPid(res.pid);
+      if (!res.launched && res.reason === 'already running') {
+        // Not an error - just no-op with the existing PID. UI shows it.
+      } else if (res.error) {
+        setResinsightError(res.error);
+      }
+    } catch (err) {
+      // 403 from non-loopback and 503 from unavailable come through here.
+      const message = err instanceof Error ? err.message : 'Failed to launch ResInsight';
+      setResinsightError(message);
+      console.error('ResInsight launch error:', err);
+    } finally {
+      setResinsightLaunching(false);
+    }
+  }, [currentJob?.job_id]);
 
   // Handle explain results
   const handleExplainResults = useCallback(async () => {
@@ -191,6 +268,32 @@ export default function ResultsViewer() {
           )}
           {error && (
             <span className="badge badge-error text-xs">{error}</span>
+          )}
+          {currentJob?.status === 'completed' && currentJob.job_id && (
+            <button
+              onClick={handleLaunchResinsight}
+              disabled={!results?.viewer_available || resinsightLaunching}
+              className="btn-secondary btn-sm"
+              title={
+                !results?.viewer_available
+                  ? 'ResInsight is not available on the server (no binary or no DISPLAY)'
+                  : resinsightPid
+                    ? `ResInsight is running on the server (pid ${resinsightPid})`
+                    : 'Open this case in ResInsight on the server\'s display'
+              }
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              </svg>
+              {resinsightLaunching
+                ? 'Launching...'
+                : resinsightPid
+                  ? 'ResInsight open'
+                  : 'Open in ResInsight'}
+            </button>
+          )}
+          {resinsightError && (
+            <span className="badge badge-error text-xs">{resinsightError}</span>
           )}
         </div>
       </div>
@@ -389,22 +492,28 @@ export default function ResultsViewer() {
           </div>
         )}
 
-        {/* Plots Tab */}
-        {activeTab === 'plots' && results?.plots && (
+        {/* Plots Tab. The plots field is `dict[str, str]` in the contract but
+            a malformed payload (null/missing/object) would otherwise throw
+            inside Object.keys. The `plots &&` guard and the `Object.keys`
+            check below both treat missing/empty as the same "no plots" state
+            so the user gets a clear empty-state instead of a silent blank
+            tab (F1.6 audit fix - the previous `results?.plots &&` short-
+            circuit hid the whole tab with no fallback). */}
+        {activeTab === 'plots' && results && (
           <div className="p-4 lg:p-6">
-            {Object.keys(results.plots).length === 0 ? (
+            {results.plots && Object.keys(results.plots).length > 0 ? (
+              <div className="space-y-6">
+                {Object.entries(results.plots).map(([plotName, plotJson]) => (
+                  <PlotCard key={plotName} plotName={plotName} plotJson={plotJson} />
+                ))}
+              </div>
+            ) : (
               <div className="flex flex-col items-center justify-center h-96 text-textSecondary">
                 <svg className="w-16 h-16 mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
                 <p className="text-lg font-medium text-textPrimary mb-1">No Plots Available</p>
                 <p className="text-sm">Run a simulation with plotting enabled to see charts here</p>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {Object.entries(results.plots).map(([plotName, plotJson]) => (
-                  <PlotCard key={plotName} plotName={plotName} plotJson={plotJson} />
-                ))}
               </div>
             )}
           </div>

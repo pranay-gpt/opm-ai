@@ -65,7 +65,7 @@ def test_scenario_deck_lints_and_validates(tmp_path, desc):
     """Every supported scenario builds a deck that lints clean and Flow accepts."""
     deck_string, lint_result = build_deck(desc)
     assert lint_result.passed, (
-        f"lint failed for {desc!r}: {[e.message for e in lint_result.errors]}"
+        f"lint failed for {desc!r}: {list(lint_result.errors)}"
     )
 
     deck_path = tmp_path / "CASE.DATA"
@@ -96,5 +96,5 @@ def test_linter_accepts_known_good_fixture(rel_path):
     result = lint_deck(deck_path)
     assert result.passed, (
         f"linter false-positive on known-good {rel_path}: "
-        f"{[(e.rule_id, e.message) for e in result.errors]}"
+        f"{[(e.rule_id, e.message) for e in result.error_issues]}"
     )

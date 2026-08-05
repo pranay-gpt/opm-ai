@@ -174,6 +174,28 @@ class TestLintEndpoint:
         assert data["deck_path"] == spe1_deck_path
 
     @pytest.mark.integration
+    def test_lint_response_includes_lint_summary_field(self, client, spe1_deck_path):
+        """Lint response always carries the lint_summary field.
+
+        The frontend reads this field on every lint pass to render an LLM
+        summary card (LinterPanel, DeckBuilder). When no LLM provider is
+        online, the field is present and null. The contract is presence,
+        not non-null - the UI guards with `lint_summary &&` and renders
+        nothing otherwise.
+        """
+        response = client.post("/api/lint", json={
+            "deck_path": spe1_deck_path
+        })
+
+        assert response.status_code == 200, f"Lint failed: {response.text}"
+        data = response.json()
+        assert "lint_summary" in data, (
+            f"Missing lint_summary field in response: {list(data.keys())}"
+        )
+        # Either a populated summary (LLM online) or null (offline default).
+        assert data["lint_summary"] is None or isinstance(data["lint_summary"], str)
+
+    @pytest.mark.integration
     def test_lint_nonexistent_path_returns_error(self, client):
         """POST /api/lint with nonexistent path -> 4xx or error response (graceful handling)."""
         response = client.post("/api/lint", json={
@@ -415,3 +437,79 @@ class TestBuildFluidValidation:
         data = response.json()
         # FastAPI validation error format
         assert "detail" in data
+
+    @pytest.mark.integration
+    def test_build_with_vasquez_beggs_correlation(self, client):
+        """POST /api/build with fluid.correlation = 'VasquezBeggs' -> 200,
+        lint passes, deck contains PVTO. Mirrors the same shape with
+        correlation omitted (the default Standing path) so a divergence
+        between the two PVTOs proves the dropdown is wired through.
+        """
+        def build_with_correlation(correlation):
+            fluid_payload = {
+                "api_gravity": 35.0,
+                "gas_specific_gravity": 0.75,
+                "gor": 800,
+                "reservoir_temp_f": 200,
+                "salinity_ppm": 50000,
+                "pressure_range_psi": [14.7, 5000],
+                "unit_system": "FIELD",
+            }
+            if correlation is not None:
+                fluid_payload["correlation"] = correlation
+            return client.post("/api/build", json={
+                "description": "10x10x3 grid, one producer, 2 year depletion",
+                "fluid": fluid_payload,
+            })
+
+        # Default path (no correlation specified) - the API schema defaults
+        # to Standing via the route fallback. Lint must pass on both.
+        resp_default = build_with_correlation(None)
+        assert resp_default.status_code == 200, (
+            f"Default build failed: {resp_default.text}"
+        )
+        deck_default = resp_default.json()["deck"]
+        assert resp_default.json()["lint"]["passed"] is True
+        assert "PVTO" in deck_default
+
+        # Explicit Vasquez-Beggs. The dropdown selection must round-trip
+        # through FluidDescriptor without 4xx and produce a different
+        # PVTO body (Standing != VasquezBeggs at api=35, gas_grav=0.75,
+        # T=200F, gor=800).
+        resp_vb = build_with_correlation("VasquezBeggs")
+        assert resp_vb.status_code == 200, (
+            f"Vasquez-Beggs build failed: {resp_vb.text}"
+        )
+        body_vb = resp_vb.json()
+        assert body_vb["lint"]["passed"] is True, (
+            f"Lint rejected Vasquez-Beggs deck: {body_vb['lint'].get('errors')}"
+        )
+        deck_vb = body_vb["deck"]
+        assert "PVTO" in deck_vb
+        assert deck_vb != deck_default, (
+            "Vasquez-Beggs correlation produced identical deck to default; "
+            "the dropdown selection is not flowing through build_pvt_blocks."
+        )
+
+    @pytest.mark.integration
+    def test_build_with_invalid_correlation_422(self, client):
+        """POST /api/build with correlation='LET' (a relperm correlation,
+        not an oil PVT correlation) is rejected by FluidDescriptorRequest
+        with 422. Keeps the API surface aligned with the dataclass guard.
+        """
+        response = client.post("/api/build", json={
+            "description": "10x10x3 grid, one producer, 2 year depletion",
+            "fluid": {
+                "api_gravity": 35.0,
+                "gas_specific_gravity": 0.75,
+                "gor": 800,
+                "reservoir_temp_f": 200,
+                "salinity_ppm": 0,
+                "pressure_range_psi": [14.7, 5000],
+                "unit_system": "FIELD",
+                "correlation": "LET",
+            }
+        })
+        assert response.status_code == 422, (
+            f"Expected 422 for relperm correlation as oil PVT, got {response.status_code}: {response.text}"
+        )

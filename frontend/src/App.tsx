@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useUIStore } from './stores/useAppStore';
 import Home from './components/Home';
@@ -12,6 +12,7 @@ import SettingsPanel from './components/SettingsPanel';
 import Learn from './components/Learn';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
+import ErrorBoundary from './components/ErrorBoundary';
 import './index.css';
 
 function ThemeApplier() {
@@ -29,6 +30,7 @@ function ThemeApplier() {
 
 function AppLayout() {
   const { sidebarOpen, toggleSidebar } = useUIStore();
+  const { pathname } = useLocation();
 
   return (
     <div className="flex h-screen bg-page overflow-hidden">
@@ -36,7 +38,10 @@ function AppLayout() {
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header onMenuClick={toggleSidebar} />
         <main className="flex-1 overflow-auto p-4 lg:p-6">
-          <Outlet />
+          {/* Keyed by route so navigating away clears a crashed page */}
+          <ErrorBoundary key={pathname}>
+            <Outlet />
+          </ErrorBoundary>
         </main>
       </div>
     </div>

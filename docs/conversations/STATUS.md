@@ -235,3 +235,334 @@ Docs refreshed this date: CONTEXT.md (current state), IMPLEMENTATION_PLAN.md +
 BUILD_GUIDE.md (marked complete/historical), FORWARD_PLAN.md (status header),
 frontend/context.md (rewritten), opm_ai/api/context.md (decks route + SPA +
 WS protocol), NEW opm_ai/postprocess/context.md and opm_ai/llm/context.md.
+
+## 2026-07-26..08-04: Stages G-H + Phase 2 capabilities
+
+(Original STATUS.md closed here. The entries below are audit-log entries for
+the 2026-08-04 audit campaign, not part of the original closing.)
+
+- **2026-07-26..08-01**: Native WebGL 3D viewer (capability 1) shipped. Replaces
+  the abandoned ResInsight snapshot embed. Binary EGRID/INIT/UNRST buffers,
+  ResInsight colour palettes, ternary saturation, cell filters, faults, wells,
+  time-step playback.
+- **2026-07-30**: Server-side deck picker (INCLUDE support). Browse + select
+  .DATA from the server's decks directory; full INCLUDE resolution chain works.
+- **2026-08-03**: Cleanup/perf pass. Pyproject uv migration, gitignore refactor
+  (personal docs gitignored), performance pass.
+- **2026-08-03/04**: Phase 2 Stages 3.1 (ResInsight launch), 3.2 (rock basics),
+  3.4 (keyword catalogue), 3.5 (per-keyword parameter extraction) shipped.
+- **2026-08-04**: Capabilities 2 (lint_summary in UI, commit 8694a0f) and 3
+  (PVT correlation selection, commit 5954d02) shipped.
+- **2026-08-04**: LLM extraction prompt taught to emit schedule events.
+- **2026-08-04**: Audit run (Sonnet + Opus agents). 9 backlog items, 2 categories:
+  - 4 verified bugs: F2.2 (PVTO div/0), F6.1 (L002 unwired), F6.2/F6.3
+    (L014/L015 rule_id collision), F9.1 (silent template errors).
+  - 5 cross-agent signals: F1.1 (chat WS), F8.7 (AbortSignal), F10.1
+    (ScheduleIndex O(M) lint), F10.2 (memoize Deck parsing), F4.1
+    (unify LintIssue/LintResult Pydantic).
+
+## 2026-08-05: Audit backlog cleared
+
+- All 9 audit items fixed + tested + committed:
+  - 1171a05 F2.2, F6.1, F6.2/F6.3, F9.1 (verified bugs, main agent).
+  - bbfef5a F1.1, F8.7, F10.1, F10.2, F4.1 (cross-agent signals, Opus
+    subagent + main agent calibration).
+- L002 calibration follow-up: rule tightened to accept SGFN/SWFN (family II),
+  PVDG (dry-gas), PVTG-for-VAPOIL (SPE3-style) alternatives. Zero false
+  positives across 730 fixtures verified.
+- Suite: 470/470 pass (242 unit + 23 dataset integration + 7 chat WS + others),
+  2 skipped, 0 failures. Frontend TypeScript build clean; vitest AbortSignal
+  tests pass.
+- Docs: CONTEXT.md last-updated header + audit section + L001-L018 taxonomy +
+  debt register additions; FORWARD_PLAN.md status header + "Audit backlog
+  (closed 2026-08-05)" section; opm_ai/linter/context.md L002/L017/L018
+  registration notes; this entry appended.
+
+## 2026-08-05..08-05: Audit backlog #10 (5 LOW/MED findings)
+
+Second audit pass (max-effort Opus), 5 new items addressed across three
+focus areas (PlotCard silent failure, FluidDescriptor NaN/Inf propagation,
+component-event-listener memory safety) plus 5 refactor/debt items
+(SimulationResult duplication, builder package surface, route -> builder
+internals leak). All fixed + tested + committed in two commits.
+
+- 0682b4d fix(audit): F1.5, F2.5, F8.1, F8.2, F8.4, F8.5, F8.8.
+  - F1.5: results.py plot-generation failure now logs the trace and
+    sets `plots[name]=""` instead of returning a stringified
+    `{"error": ...}`. Old shape slipped past client JSON.parse and
+    left the PlotCard silently empty. New shape fails parse cleanly.
+  - F2.5: FluidDescriptor now rejects NaN/Inf on every float field
+    via a `_require_finite` helper that runs before the range checks
+    (so the diagnostic the user sees is "must be finite", not a
+    misleading range error).
+  - F8.1/F8.2: ChatPanel WS callbacks (onToken/onToolCall/
+    onToolResult/onError/onDone/onClose) now guard against
+    setState-after-unmount via a per-effect mountedRef.
+  - F8.4/F8.5/F8.8: LinterPanel/DeckEditor/SimulationRunner
+    click handlers have an inFlightRef double-firing guard (refs
+    not state — closure stability preserved, no extra renders).
+- 57be154 refactor(audit): F4.2, F4.7, F6.4, F6.7, F6.8.
+  - F4.2/F4.7: SimulationResultDTO + CrashReportDTO gained a
+    `from_runner()` classmethod owning the Path->str / list-copy /
+    None-passthrough conversion. Routes collapse to
+    `set_job_completed(jid, SimulationResultDTO.from_runner(result))`.
+  - F6.4: routes/build.py imports
+    `extract_parameters_offline_with_provenance` from `opm_ai.builder`
+    (public surface), not `opm_ai.builder.extract` (internal module).
+  - F6.7: builder/__init__.py gains a proper `__all__` listing every
+    public symbol. Internal helpers in `builder.extract` stay out of
+    the stable API surface.
+  - F6.8: `extract_parameters_offline_with_provenance` is now exported
+    from `opm_ai.builder` (was only reachable via the internal path).
+- Tests added (23 new, all passing):
+  - tests/unit/test_fluid_descriptor.py: 14 tests (NaN/Inf on every
+    field, optional-temp rejection, range regression, finite-before-
+    range precedence).
+  - tests/integration/test_results_plot_failure.py: 3 tests (plot
+    failure returns "", "" fails JSON.loads regression guard, happy
+    path returns valid Plotly JSON).
+  - tests/unit/test_simulation_result_dto.py: 9 tests (round-trip,
+    Path->str contract, None crash_report passthrough, list-copy-not-
+    reference so DTO mutations don't bleed back into runner model,
+    JSON serializability).
+- Suite: 470 in-scope tests pass (242 unit + 23 dataset + 7 chat WS +
+  others), 3 skipped (frontend/dist not built, GROQ_API_KEY missing,
+  ResInsight unavailable in CI), 0 failures. The 5 pre-existing
+  failures in test_api_files.py + test_api.py are filesystem-state and
+  missing-fixture issues unrelated to this commit (verified by stash).
+- Frontend tsc clean (--noEmit, exit 0); eslint problem count
+  unchanged at 30 errors (all pre-existing in code I didn't touch).
+- Full results captured in conversation log under "Audit backlog
+  #10 (5 LOW/MED findings)".
+
+Deferred (recorded for the next pass):
+- F1.6: Frontend tries to JSON.parse undefined plots[name] when the
+  job has no summary output (simulator never started). Need to add
+  a top-level guard before the JSON.parse in ResultsViewer.
+- F2.6: api/routes/lint.py raises HTTPException(500) on linter bugs
+  instead of returning a structured 200-with-lint-error so the UI
+  still renders the issues list.
+- F6.5/F6.6: routes/chat.py and routes/results.py have inline
+  Path(job.result.output_dir) wrappers that could move into a
+  helper; not pressing — duplicates are local to two lines each.
+- F8.3/F8.6/F8.9: Remaining mount/cleanup risks in ChatPanel
+  message-list refs, useEffect cleanup patterns in ResultsViewer.
+  Deferred to a focused audit pass on lifecycle hygiene once the
+  closure-counter pattern stabilizes (the inFlightRef pattern from
+  this commit is a good template to reuse).
+
+## 2026-08-05: Audit backlog #11 (4 deferred items closed)
+
+All 4 items deferred from audit backlog #10 (above) closed in
+3 commits. Suite: 502/502 pass (up from 470 - the previously-
+conditional test_api.py + test_api_files.py run cleanly in this
+env now), 3 skipped, 0 failures. Frontend: 6 tests pass (5
+pre-existing + 2 new source-grep guards), tsc clean.
+
+- c680d85 refactor(audit): F6.5/F6.6 - centralize
+  `Path(job.result.output_dir)` unwrap.
+  - New `opm_ai/api/job_helpers.py::job_output_dir(job) -> Path`
+    owns the str-to-Path conversion the routes used to repeat.
+  - 5 callsites refactored: results.py (3: _completed_job_output_dir,
+    get_results, launch_resinsight_route) and chat.py (2:
+    tool_get_kpis, tool_export_snapshots).
+  - chat.py line 108 is an *output_dir creation* (deck_path.parent /
+    f"output_{job_id[:8]}") and was NOT part of this refactor.
+  - Tests (4 new): tests/unit/test_job_helpers.py covers str->Path,
+    relative path round-trip, ValueError on no-result, failed-job
+    case.
+- 2b453bf fix(audit): F2.6 - lint route returns 200 with structured
+  error on crash.
+  - `opm_ai/api/routes/lint.py` previously raised HTTP 500 on any
+    linter exception, leaving the frontend with a generic toast.
+    Now catches all `Exception`, logs the trace, and returns a
+    200 LintResult with a synthetic `LINT-000` issue carrying the
+    exception class+message. The frontend's existing lint-error
+    UI renders it through the same code path as any other finding.
+  - The 400 path (ValueError on input validation) is unchanged.
+  - Tests (3 new): tests/integration/test_api_lint_route.py covers
+    crash, ValueError, and successful-lint regression.
+- da20014 fix(audit): F1.6 + F8.6 + F8.9 - frontend lifecycle and
+  empty-state hygiene.
+  - F1.6: ResultsViewer Plots tab guard was
+    `activeTab === 'plots' && results?.plots &&` which short-
+    circuited the whole tab to nothing on missing/empty plots.
+    Changed to `results &&` so the inner "No Plots Available"
+    placeholder is reachable.
+  - F8.6: ChatPanel inner `const messages = useChatStore.getState
+    ().messages` shadowed the outer `messages` from
+    useChatMessages() in two places (WS-connect effect AND
+    handleSend). Renamed both to `initialMessages` and
+    `latestMessages` respectively.
+  - F8.9: PlotCard's `Plotly.purge` cleanup ran even on the
+    early-return path (empty plotJson). Added a `chartMountedRef`
+    that flips true only after `Plotly.newPlot` succeeds; cleanup
+    only purges when the ref is set. Avoids wasted purge and
+    potential race with a fresh mount.
+  - F8.3: loadResults re-trigger risk was a false alarm. The
+    `!results` guard in the load-on-completion effect is correct
+    - the only writer of `results` is loadResults itself, which
+    always sets a non-null payload. No code change; a
+    `setResults()` call-count regression test pins the invariant
+    (1 callsite) so a future `setResults(null)` would force the
+    developer to add a loadedJobIdRef.
+  - Tests (2 new source-grep regression guards, matching the
+    project's existing test style - no React test framework
+    installed): ResultsViewer.test.ts covers F1.6 + F8.3 + F8.9;
+    ChatPanel.test.ts covers F8.6.
+- Frontend test script (`npm test`) extended to invoke both new
+  source-grep tests; tsc --noEmit exit 0.
+
+Nothing further deferred from this pass. The next audit pass (if
+any) can pick fresh signal from production telemetry, the remaining
+sections of the codebase that this pass did not touch (e.g. the
+3D viewer, the explainer routes), or the LLM client retry logic.
+
+## 2026-08-05: Deck upload feature (Browse + Upload, both workflows)
+
+User asked for the ability to upload a `.DATA` file from the laptop
+along with its sibling `include/` folder, in a single click. The
+existing Browse button (a server-side path picker via DeckPicker)
+was the right tool when the deck was already on the server; the
+new Upload button is the right tool when the deck is on the user's
+laptop. Both buttons sit on the Simulator page; both flows
+converge on the same wire contract (a real path on the server that
+`/api/run` accepts).
+
+Two commits (4d2dba1 backend, 7b1c63e frontend — adjust if log
+shows different hashes):
+
+- 4d2dba1 feat(api): POST /api/upload_deck
+  - New multipart route accepting a required `deck` part and
+    zero or more `include` parts. Writes everything to a fresh
+    `tempfile.mkdtemp` and returns the .DATA's server-side path.
+  - Starlette multipart limits bumped to 256 MB / part, 5000
+    files (defaults of 1 MB / 1000 would reject any non-trivial
+    deck — some .grdecl include files are 30-50 MB and model2's
+    include/ tree is 73 MB across 1000+ files).
+  - `_safe_relpath` sanitises include paths (regex on
+    `[A-Za-z0-9_./-]`, no absolute, no `..`, no backslash).
+    Defence-in-depth `resolve()` check inside include/ dir.
+  - `pyproject.toml` gets `python-multipart>=0.0.9` — was a
+    transitive of FastAPI but missing from our declared deps.
+  - Tests (11 new): tests/integration/test_api_upload_deck.py
+    covers happy paths (deck-only, deck+include with nested
+    layout, leading "include/" prefix stripped) and rejection
+    paths (missing deck, bad filename, empty deck, traversal,
+    absolute, duplicate, non-multipart → 415). Plus a regression
+    guard that the returned path passes `validate_deck_path` —
+    pins the contract that `/api/run` consumes.
+- 7b1c63e feat(ui): Upload button on Simulator
+  - `frontend/src/components/DeckUploader.tsx` (new) — modal
+    matching DeckPicker's visual style. Two file inputs: one for
+    the `.DATA`, one with `webkitdirectory directory multiple`
+    for the include/ folder.
+  - `frontend/src/api/client.ts` — new `fetchMultipart<T>` helper
+    (does NOT set Content-Type; the browser does with the correct
+    boundary= parameter). `api.uploadDeck(form: FormData)`.
+  - `frontend/src/components/SimulationRunner.tsx` — new
+    `uploading` state, `handleUploaded` callback, the Upload
+    button next to Browse, and the modal mount.
+  - `frontend/src/types.ts` — `UploadResponse` interface.
+  - Tests (1 new source-grep regression guard):
+    `frontend/src/components/DeckUploader.test.ts` pins (1) the
+    Browse + Upload buttons coexist, (2) DeckUploader has both
+    inputs with the right attributes, and (3) `api.uploadDeck`
+    does NOT set Content-Type.
+  - Caveat: `webkitdirectory` is non-standard (Chromium-only).
+    Firefox/Safari users get a plain multi-file picker that
+    doesn't preserve the include/ layout; the deck upload alone
+    still works on any browser. A polyfill could come later.
+
+Plan: docs/conversations/PLAN-upload-deck.md
+
+Suite: 513/513 backend pass (was 502 — 11 new upload tests, no
+regressions). Frontend: 7 tests pass (was 6), `tsc --noEmit`
+exit 0.
+
+### 2026-08-05 (later same day): build pipeline fix + production smoke
+
+After committing the upload feature, the production `npm run
+build` started failing — turns out two pre-existing fragilities
+were being papered over by an `tsBuildInfo` cache:
+
+- `src/**/*.test.ts` files reference `node:fs`, `node:path`,
+  `node:assert/strict`, `process` but `@types/node` wasn't in
+  `devDependencies`. The old cache made `tsc -b` skip them.
+  Adding `DeckUploader.tsx` invalidated the cache and surfaced
+  the errors.
+- `DeckUploader.tsx` and `SimulationRunner.tsx` imported
+  `UploadResponse` from `src/api/client.ts`; the type actually
+  lives in `src/types.ts`. `tsc --noEmit` missed this because
+  `noUnusedLocals: false` and `api/client.ts` re-exports types
+  via `import type`; `tsc -b` did not.
+
+Three small fixes (241702e): correct import paths in the two
+components, exclude `src/**/*.test.ts{,x,-helpers.ts}` from
+`tsconfig.app.json` (test files have their own esbuild pipeline
+via `npm test`), and add `@types/node` to devDependencies.
+
+Then extended `scripts/smoke.sh` with a `[5b/8]` end-to-end check
+that POSTs a multipart/form-data with a deck + include/ folder to
+`/api/upload_deck` and asserts the response writes both at a
+returned server-side path. Step counters updated from /7 to /8
+throughout. Run it over the local network (commit 9b7b70d).
+
+**Production-suite pass (8/8) at `http://10.211.55.5:8000`** —
+uvicorn restarted from the worktree bound to `--host 0.0.0.0`:
+
+```
+[1/8] Health check                       OK
+[2/8] Frontend load                      OK
+[3/8] Build + Lint API                   OK
+[4/8] Full pipeline: run -> poll -> results   OK
+[5/8] Results KPI check                  OK (KPIs.days = 720.0)
+[5b/8] Deck upload API                   OK (writes to /tmp/opm_ai_upload_*/)
+[6/8] CLI lint check                     OK
+[7/8] Frontend production build          OK (local)
+All smoke tests PASSED
+```
+
+The new check [5b/8] is the wire contract the frontend
+DeckUploader modal relies on; the curl call here proves it works
+over the network, not just against `TestClient`.
+
+**Operational note logged in PROGRESS_REPORT.md**: the previously
+running server (`pid 676060`) was from the main checkout's older
+code, bound to `127.0.0.1` only. It has been replaced with a
+uvicorn from the worktree bound to `0.0.0.0:8000` so the LAN IP
+is reachable. The running server is now under task id `b6jbkdcn2`
+in the worktree's process group.
+
+### 2026-08-05 (later same day, second commit pair): make 0.0.0.0 the default
+
+The fix above was a workaround — the real asymmetry was that
+`scripts/run.sh` was hardcoded to `--host 127.0.0.1` while
+`docker/entrypoint.sh` already used `--host 0.0.0.0` (with an
+`API_HOST` override). Closing the gap so the local dev server
+matches production by default:
+
+- `scripts/run.sh` now binds `0.0.0.0` (the same `HOST` env var
+  pattern, named `OPM_HOST` for the local script to mirror the
+  `API_HOST` used by Docker). Override with
+  `OPM_HOST=127.0.0.1 ./scripts/run.sh` for loopback-only mode
+  (matches the prior behaviour).
+- `08-deployment.md` design-decisions table gets row 3b explaining
+  the choice and its tradeoff (anything on `0.0.0.0` is reachable
+  to anyone on the LAN; flip the env var when that's a problem).
+- Section 6 implementation-step 10 (smoke script) updated to
+  reflect the `/7 -> /8` count and the LAN-reachable `BASE_URL`
+  pattern.
+
+Verified both modes:
+- `OPM_VENV=/home/parallels/opm-ai/.venv ./scripts/run.sh` →
+  binds `0.0.0.0:8000`; `localhost` and `10.211.55.5` both 200.
+- `OPM_VENV=... OPM_HOST=127.0.0.1 ./scripts/run.sh` →
+  binds `127.0.0.1:8000`; LAN unreachable as designed.
+
+Server is left running under task id `bvx44lx7g` with the new
+default, so the user can `BASE_URL=http://10.211.55.5:8000
+./scripts/smoke.sh` (or hit it from a phone/tablet on the LAN)
+without re-binding anything.
+
+Nothing further deferred.

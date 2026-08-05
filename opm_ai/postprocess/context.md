@@ -1,7 +1,8 @@
 # opm_ai/postprocess - Results Processing
 
-Last updated: 2026-07-26. Status: complete (Stage 4 + Stage E field KPIs +
-Stage 15 bridge + 3D viewer geometry).
+Last updated: 2026-08-04 (audit pass; substantive module content unchanged
+since 2026-07-26 — Stage 4 + Stage E field KPIs + Stage 15 bridge + 3D
+viewer geometry remain the shipped state).
 
 ## Module Purpose
 

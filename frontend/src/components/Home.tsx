@@ -27,11 +27,12 @@ export default function Home() {
 
   return (
     <div className="h-full overflow-y-auto space-y-6">
-      {/* Hero Section */}
-      <section className="space-y-4">
+      {/* Page heading - moved out of the hero so it can stay at the top when the
+          hero/3D viewer is reordered below. */}
+      <header>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-textPrimary">End-to-End Geo Workflow</h1>
+            <h1 className="text-3xl font-bold text-textPrimary">AI Integrated Reservoir Simulation Tool</h1>
             <p className="text-textSecondary mt-1">
               Build, validate, simulate, and analyze OPM Flow decks with AI assistance
             </p>
@@ -41,40 +42,9 @@ export default function Home() {
             <span className="text-sm font-medium text-primary">Operational</span>
           </div>
         </div>
+      </header>
 
-        {/* Live 3D of the latest completed run, or the illustration until one
-            exists. The grid endpoints need a finished run to read an EGRID
-            from, so there is nothing to draw before then. */}
-        {/* Fixed height, not aspect-video: the viewer sizes from its parent, so
-            it needs a resolved height rather than one derived from width.
-            zoomAll frames the model's bounding SPHERE against the vertical FOV,
-            so a wide flat grid like Norne reads small in a short letterbox.
-            Height is set generously rather than reworking the camera maths. */}
-        <div className="h-[34rem] overflow-hidden rounded-lg border border-border bg-surface">
-          {gridJob?.job_id ? (
-            <Grid3DViewer jobId={gridJob.job_id} compact />
-          ) : (
-            <div className="relative flex h-full items-center justify-center">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-warning/5" />
-              <div className="relative z-10 p-8 text-center">
-                <div className="relative mx-auto mb-4 flex h-32 w-32 items-center justify-center rounded-xl border border-border bg-page">
-                  <svg className="w-16 h-16 text-primary/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                </div>
-                <h2 className="mb-2 text-xl font-semibold text-textPrimary">3D Geomodel Visualization</h2>
-                <p className="mx-auto max-w-md text-textSecondary">
-                  {currentJob
-                    ? 'The grid appears here once the current run completes.'
-                    : 'Run a simulation to explore its reservoir grid, properties and wells in 3D.'}
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Stats Grid */}
+      {/* Workflow Status */}
       <section>
         <h2 className="text-lg font-semibold text-textPrimary mb-4">Workflow Status</h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -197,6 +167,38 @@ export default function Home() {
           </div>
         </section>
       )}
+
+      {/* Live 3D of the latest completed run, or the illustration until one
+          exists. Fixed height, not aspect-video: the viewer sizes from its
+          parent, so it needs a resolved height rather than one derived from
+          width. zoomAll frames the model's bounding SPHERE against the
+          vertical FOV, so a wide flat grid like Norne reads small in a short
+          letterbox. Height is set generously rather than reworking the
+          camera maths. */}
+      <section>
+        <div className="h-[34rem] overflow-hidden rounded-lg border border-border bg-surface">
+          {gridJob?.job_id ? (
+            <Grid3DViewer jobId={gridJob.job_id} compact />
+          ) : (
+            <div className="relative flex h-full items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-warning/5" />
+              <div className="relative z-10 p-8 text-center">
+                <div className="relative mx-auto mb-4 flex h-32 w-32 items-center justify-center rounded-xl border border-border bg-page">
+                  <svg className="w-16 h-16 text-primary/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                <h2 className="mb-2 text-xl font-semibold text-textPrimary">3D Geomodel Visualization</h2>
+                <p className="mx-auto max-w-md text-textSecondary">
+                  {currentJob
+                    ? 'The grid appears here once the current run completes.'
+                    : 'Run a simulation to explore its reservoir grid, properties and wells in 3D.'}
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* Quick Actions */}
       <section>

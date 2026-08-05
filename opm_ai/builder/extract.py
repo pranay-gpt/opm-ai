@@ -54,8 +54,34 @@ def extract_parameters_offline(desc: str) -> ModelSpec:
     Returns:
         ModelSpec with parsed parameters
     """
+    spec, _provenance = extract_parameters_offline_with_provenance(desc)
+    return spec
+
+
+def extract_parameters_offline_with_provenance(desc: str) -> tuple[ModelSpec, dict[str, str]]:
+    """Same as extract_parameters_offline, but also returns a provenance dict.
+
+    The provenance dict covers the rock-basics fields surfaced in the UI:
+    porosity, top_depth, initial_pressure, dz, permx, permy, permz. For each
+    field the value is one of:
+      - "extracted"  the regex parser picked the value from the description
+      - "defaulted"  the description did not name the field; ModelSpec default used
+
+    No field is "required_missing" today - every rock-basics field has a
+    safe default and the deck is always buildable. The slot is reserved in
+    the schema for future fields that might be required.
+
+    Args:
+        desc: Natural language description.
+
+    Returns:
+        Tuple of (ModelSpec, provenance dict keyed by field name).
+    """
+    from opm_ai.api.schemas import PROVENANCE_DEFAULTED, PROVENANCE_EXTRACTED, ROCK_BASICS_FIELDS
+
     spec = ModelSpec()
     desc_lower = desc.lower()
+    provenance: dict[str, str] = {}
 
     # Parse grid dimensions: "10x10x5" or "10 x 10 x 5"
     grid_match = re.search(r"(\d+)\s*[xX]\s*(\d+)\s*[xX]\s*(\d+)", desc)
@@ -66,13 +92,118 @@ def extract_parameters_offline(desc: str) -> ModelSpec:
         # Expand dz to match nz layers (repeat SPE1 pattern: 20, 30, 50)
         default_dz = [20.0, 30.0, 50.0]
         spec.reservoir.dz = [default_dz[i % len(default_dz)] for i in range(spec.reservoir.nz)]
+        provenance["dz"] = PROVENANCE_DEFAULTED  # dz always comes from the grid-expansion default; user describing "10x10x5" does not name dz.
         # Expand permx, permy, permz to match nz layers (repeat SPE1 pattern: 500, 50, 200)
         default_permx = [500.0, 50.0, 200.0]
         spec.reservoir.permx = [default_permx[i % len(default_permx)] for i in range(spec.reservoir.nz)]
-        default_permy = [500.0, 50.0, 200.0]
-        spec.reservoir.permy = [default_permy[i % len(default_permy)] for i in range(spec.reservoir.nz)]
-        default_permz = [500.0, 50.0, 200.0]
-        spec.reservoir.permz = [default_permz[i % len(default_permz)] for i in range(spec.reservoir.nz)]
+        spec.reservoir.permy = [default_permx[i % len(default_permx)] for i in range(spec.reservoir.nz)]
+        spec.reservoir.permz = [default_permx[i % len(default_permx)] for i in range(spec.reservoir.nz)]
+        provenance["permx"] = PROVENANCE_DEFAULTED
+        provenance["permy"] = PROVENANCE_DEFAULTED
+        provenance["permz"] = PROVENANCE_DEFAULTED
+    else:
+        provenance["dz"] = PROVENANCE_DEFAULTED
+        provenance["permx"] = PROVENANCE_DEFAULTED
+        provenance["permy"] = PROVENANCE_DEFAULTED
+        provenance["permz"] = PROVENANCE_DEFAULTED
+
+    # --- porosity ----------------------------------------------------------
+    # "porosity 0.25", "phi 0.2", "25% porosity", "phi=0.18". Fraction in
+    # [0,1] and percent in (0,100] both supported. Keyword may come before
+    # OR after the number.
+    porosity_match = re.search(
+        r"(?:porosity|phi)\s*(?:of|=|is|:)?\s*(\d+(?:\.\d+)?)\s*%?"
+        r"|(\d+(?:\.\d+)?)\s*%\s*(?:porosity|phi)",
+        desc_lower,
+    )
+    if porosity_match:
+        raw = porosity_match.group(1) or porosity_match.group(2)
+        val = float(raw)
+        # Heuristic: > 1.0 means percent (e.g. "25% porosity" -> 0.25).
+        if val > 1.0 and val <= 100.0:
+            val /= 100.0
+        if 0.01 <= val <= 0.5:
+            spec.reservoir.porosity = val
+            provenance["porosity"] = PROVENANCE_EXTRACTED
+        else:
+            provenance["porosity"] = PROVENANCE_DEFAULTED
+    else:
+        provenance["porosity"] = PROVENANCE_DEFAULTED
+
+    # --- top depth --------------------------------------------------------
+    # "8325 ft", "8500' depth", "8500 ft deep", "depth 9000 ft", "9000 ft
+    # deep". Returns ft.
+    depth_match = re.search(
+        r"(?:top[_\s]*depth|depth|deep)\s*(?:of|=|is|:)?\s*(\d{2,5}(?:\.\d+)?)\s*(?:ft|feet|'|\")?"
+        r"|(\d{2,5}(?:\.\d+)?)\s*(?:ft|feet|'|\")?\s*(?:top[_\s]*depth|depth|deep)",
+        desc_lower,
+    )
+    if depth_match:
+        raw = depth_match.group(1) or depth_match.group(2)
+        val = float(raw)
+        if 100.0 <= val <= 30000.0:
+            spec.reservoir.top_depth = val
+            provenance["top_depth"] = PROVENANCE_EXTRACTED
+        else:
+            provenance["top_depth"] = PROVENANCE_DEFAULTED
+    else:
+        provenance["top_depth"] = PROVENANCE_DEFAULTED
+
+    # --- initial pressure --------------------------------------------------
+    # "4800 psia", "initial pressure 5000 psi", "p_init 4800 psia",
+    # "5000 psi initial pressure".
+    pressure_match = re.search(
+        r"(?:initial[_\s]*pressure|p_init|pdatum|pressure\s*at\s*datum|reservoir\s*pressure)"
+        r"\s*(?:of|=|is|:)?\s*(\d{2,5}(?:\.\d+)?)\s*(?:psia|psi|bar|atm|kpa)?"
+        r"|(\d{2,5}(?:\.\d+)?)\s*(?:psia|psi|bar|atm|kpa)\s*(?:initial\s*)?"
+        r"(?:initial[_\s]*pressure|pdatum|reservoir\s*pressure)",
+        desc_lower,
+    )
+    if pressure_match:
+        raw = pressure_match.group(1) or pressure_match.group(2)
+        val = float(raw)
+        # Look back at the matched substring for unit hints.
+        match_text = pressure_match.group(0).lower()
+        if "bar" in match_text:
+            val = val / 0.0689476  # bar -> psia
+        elif "kpa" in match_text:
+            val = val * 0.145038  # kPa -> psia
+        elif "atm" in match_text:
+            val = val * 14.696  # atm -> psia
+        if 14.7 <= val <= 20000.0:
+            spec.reservoir.initial_pressure = val
+            provenance["initial_pressure"] = PROVENANCE_EXTRACTED
+        else:
+            provenance["initial_pressure"] = PROVENANCE_DEFAULTED
+    else:
+        provenance["initial_pressure"] = PROVENANCE_DEFAULTED
+
+    # --- per-layer permeability overrides (when user names perm) -----------
+    # "perm 500, 50, 200 mD", "permeability 500 50 200", "kx = 500 mD
+    # ky=50 kz=200". Captures a sequence of 1+ numeric values separated
+    # by commas, whitespace, or the keyword 'and'.
+    perm_match = re.search(
+        r"(?:perm(?:eability)?|kx|ky|kz|permx|permy|permz)"
+        r"\s*(?:of|=|is|:)?\s*"
+        r"(\d+(?:\.\d+)?(?:\s*[,and\s]+\s*\d+(?:\.\d+)?)*)"
+        r"\s*(?:mD|md|millidarcy)?\b",
+        desc_lower,
+    )
+    if perm_match:
+        nums = [float(x) for x in re.findall(r"\d+(?:\.\d+)?", perm_match.group(1))]
+        if nums:
+            # Replicate across nz if the user named fewer than nz values.
+            spec.reservoir.permx = [nums[i % len(nums)] for i in range(spec.reservoir.nz)]
+            provenance["permx"] = PROVENANCE_EXTRACTED
+            # Plain "perm" with one value treats all three axes as isotropic.
+            # Multiple named axes (permx/permy/permz) require more context
+            # than the offline parser can reliably extract, so leave y/z as
+            # defaulted unless the user gave a single isotropic value.
+            if len(nums) >= 1 and "permx" not in desc_lower and "ky" not in desc_lower:
+                spec.reservoir.permy = list(spec.reservoir.permx)
+                spec.reservoir.permz = list(spec.reservoir.permx)
+                provenance["permy"] = PROVENANCE_EXTRACTED
+                provenance["permz"] = PROVENANCE_EXTRACTED
 
     # Parse scenario keywords
     if "depletion" in desc_lower:
@@ -406,7 +537,14 @@ def extract_parameters_offline(desc: str) -> ModelSpec:
         )]
 
     spec.wells = wells
-    return spec
+
+    # Fill any rock-basics field that the parser did not touch with a
+    # "defaulted" provenance tag. Belt-and-braces: every field in
+    # ROCK_BASICS_FIELDS must end up in the dict.
+    for f in ROCK_BASICS_FIELDS:
+        provenance.setdefault(f, PROVENANCE_DEFAULTED)
+
+    return spec, provenance
 
 
 def extract_parameters_llm(desc: str, client=None) -> ModelSpec | None:

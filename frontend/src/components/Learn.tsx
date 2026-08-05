@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { useChatStore } from '../stores/useAppStore';
 import { api } from '../api/client';
 import type { ExplainRequest, ExplainResponse, QuizRequest, QuizResponse, QuizQuestion, ExplanationLevel, Citation, LearningReportRequest, LearningReportResponse } from '../api/client';
+import Markdown from './ui/Markdown';
 
 export default function Learn() {
   const { sessionId, messages } = useChatStore();
@@ -240,9 +241,9 @@ export default function Learn() {
                     </svg>
                     Explanation ({explainResponse.level})
                   </h3>
-                  <div className="prose prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed">
+                  <Markdown className="text-sm leading-relaxed">
                     {explainResponse.text}
-                  </div>
+                  </Markdown>
                 </div>
 
                 {/* Citations */}
@@ -628,9 +629,9 @@ export default function Learn() {
                   {/* Markdown Report */}
                   <div className="card p-4">
                     <h3 className="font-semibold text-textPrimary mb-3">Full Report (Markdown)</h3>
-                    <div className="prose prose-invert max-w-none whitespace-pre-wrap text-sm bg-page border border-border p-4 rounded">
+                    <Markdown className="text-sm bg-page border border-border p-4 rounded">
                       {learningReport.markdown}
-                    </div>
+                    </Markdown>
                   </div>
 
                   <button

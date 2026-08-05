@@ -1,8 +1,16 @@
 """Test deck parser and linter."""
+import time
 import pytest
 from pathlib import Path
 from opm_ai.linter.deck import Deck
 from opm_ai.linter.linter import lint_deck
+from opm_ai.linter.rules.schedule import (
+    get_schedule_index,
+    _extract_well_names,
+    _has_keyword,
+    _is_producer,
+    _is_injector,
+)
 
 
 def test_parse_spe1_deck(spe1_deck):
@@ -25,14 +33,21 @@ def test_parse_spe1_deck(spe1_deck):
 
 
 def test_lint_spe1_deck(spe1_deck):
-    """Lint SPE1 fixture."""
+    """Lint SPE1 fixture.
+
+    SPE1 is a reference deck for keyword completeness. After L002 was
+    registered in the rule list (F6.1) and calibrated to accept PVDG as
+    a dry-gas alternative to PVTG, SPE1 produces no errors: it has PVTG
+    for GAS and DISGAS plus SWOF for OIL.
+    """
     deck_path = spe1_deck
 
     result = lint_deck(deck_path)
 
     assert result is not None
     assert result.deck_path == str(deck_path)
-    # SPE1 should have no errors (it's a valid reference deck)
+    # SPE1 declares OIL/GAS/WATER/DISGAS and includes PVTG + SWOF, so
+    # the L002 phase-mismatch rule has nothing to complain about.
     assert len(result.errors) == 0
 
 
@@ -77,3 +92,233 @@ SCHEDULE
 
     assert result.passed
     assert len(result.errors) == 0
+
+
+# --- ScheduleIndex (F10.1) -------------------------------------------------
+
+def test_schedule_index_parses_spe1(spe1_deck):
+    """ScheduleIndex builds once and exposes the keyword/record view the
+    SCHEDULE rules need.
+
+    Note: SPE1's WELSPECS block starts with a column-header comment
+    (`-- Item #: ...`). The original regex-based parser stopped at
+    that comment and produced an empty body, so the L007/L017/L018
+    rules effectively became no-ops on real decks. The structured
+    index preserves that quirk to keep the rule semantics intact
+    (audit F10.1: "do not change rule semantics"). We assert that
+    behaviour here so a future refactor that "fixes" it knows it is
+    changing test contract, not just code."""
+    deck = Deck(spe1_deck)
+    idx = get_schedule_index(deck)
+    assert idx is not None
+    # The keyword is detected as present, but its body is empty
+    # because of the column-comment quirk.
+    assert "WELSPECS" in idx.present_keywords
+    assert idx.keyword_records.get("WELSPECS") == []
+    assert _extract_well_names(idx, "WELSPECS") == []
+
+    # WCONPROD has the same property: header present, body empty.
+    assert "WCONPROD" in idx.present_keywords
+    assert idx.keyword_records.get("WCONPROD") == []
+
+
+def test_schedule_index_cached_on_deck(spe1_deck):
+    """The index is built once and reused for every rule call, so the
+    second call returns the exact same object (the audit's whole point:
+    avoid O(N*M) regex rescans)."""
+    deck = Deck(spe1_deck)
+    first = get_schedule_index(deck)
+    second = get_schedule_index(deck)
+    assert first is second
+
+
+def test_schedule_index_phase_helpers_preserve_semantics(spe1_deck):
+    """_is_producer / _is_injector preserve the original regex behaviour
+    on the section text directly: the patterns look for `'NAME'.*?'OIL'`
+    or `'NAME'.*?'GAS|WATER'` anywhere in SCHEDULE. This is the same
+    behaviour the old code had; the helpers are not responsible for
+    scoping to WELSPECS records — the L017/L018 rules do that by
+    intersecting with the (now empty for decks with column comments)
+    WELSPECS well list."""
+    deck = Deck(spe1_deck)
+    idx = get_schedule_index(deck)
+    assert _has_keyword(idx, "WELSPECS")
+    # PROD has OIL in the same WELSPECS record; the regex finds it.
+    assert _is_producer(idx, "PROD") is True
+    assert _is_injector(idx, "PROD") is False
+    # INJ has GAS; the regex finds it.
+    assert _is_producer(idx, "INJ") is False
+    assert _is_injector(idx, "INJ") is True
+
+
+def test_schedule_index_handles_simple_block_without_comments(tmp_path):
+    """A WELSPECS block with no column comments parses into a record
+    list — i.e. the parser is functional, the SPE1 case is just the
+    quirk. The linter test deck in test_linter_negative.py is shaped
+    this way and exercises the L017/L018 rules end-to-end."""
+    deck = (
+        "RUNSPEC\nDIMENS\n  10 10 3 /\nGRID\nDX\n  1000*1 /\n"
+        "SCHEDULE\nWELSPECS\n  'PROD1' 1 1 1* 'OIL' 1* 1* 'STD' /\n/\n"
+        "TSTEP\n  30.0 /\n"
+    )
+    p = tmp_path / "simple.DATA"
+    p.write_text(deck)
+
+    deck_obj = Deck(p)
+    idx = get_schedule_index(deck_obj)
+    assert idx is not None
+    assert _extract_well_names(idx, "WELSPECS") == ["PROD1"]
+    assert _is_producer(idx, "PROD1") is True
+    assert _is_injector(idx, "PROD1") is False
+
+
+@pytest.mark.slow
+def test_schedule_index_handles_large_synthetic_deck(tmp_path):
+    """A deck with thousands of schedule lines must still lint quickly
+    because every rule queries the pre-built index rather than
+    re-scanning the text. Skip-marked so it does not slow down the
+    default unit run; CI on a quiet machine is the right home for it."""
+    n_wells = 500
+    body = ["WELSPECS", "-- header"]
+    for i in range(n_wells):
+        body.append(f"  'W{i:04d}' 1 1 1* 'OIL' 1* 1* 'STD' /")
+    body.append("/")
+    body.append("COMPDAT")
+    for i in range(n_wells):
+        body.append(f"  'W{i:04d}' 1 1 1 1 1* 1* 0.2 1* 0.0 1* 'Z' /")
+    body.append("/")
+    body.append("WCONPROD")
+    for i in range(n_wells):
+        body.append(f"  'W{i:04d}' 'OPEN' 'ORAT' 2000.0 1* 1* 1* 50.0 1* 1* /")
+    body.append("/")
+    body.append("TSTEP\n  30.0 /")
+    schedule = "\n".join(body)
+
+    deck = (
+        "RUNSPEC\nDIMENS\n  10 10 3 /\nGRID\nDX\n  1000*1 /\n"
+        "SCHEDULE\n" + schedule + "\n"
+    )
+    p = tmp_path / "big.DATA"
+    p.write_text(deck)
+
+    t0 = time.perf_counter()
+    result = lint_deck(p)
+    elapsed = time.perf_counter() - t0
+
+    # The exact threshold is loose; the goal is regression detection,
+    # not a tight SLA. If a refactor accidentally re-introduces a
+    # quadratic loop, this test will go from ~1s to many seconds.
+    assert elapsed < 10.0, f"lint of 500-well deck took {elapsed:.2f}s"
+    assert result is not None
+
+
+# --- Deck parse memoization (F10.2) ----------------------------------------
+
+def test_lint_deck_caches_deck_parse(tmp_path, monkeypatch):
+    """lint_deck must only construct one Deck per (path, mtime). The
+    second call hits the cache; the third (after the file is rewritten)
+    triggers a fresh parse because mtime changed."""
+    import time
+    from opm_ai.linter import linter as linter_mod
+
+    deck = (
+        "RUNSPEC\nDIMENS\n  10 10 3 /\nGRID\nDX\n  1000*1 /\n"
+        "SCHEDULE\nTSTEP\n  30.0 /\n"
+    )
+    p = tmp_path / "cache_test.DATA"
+    p.write_text(deck)
+
+    linter_mod.clear_deck_cache()
+
+    parse_count = {"n": 0}
+    original_init = linter_mod.Deck.__init__
+
+    def counting_init(self, path):
+        parse_count["n"] += 1
+        original_init(self, path)
+
+    monkeypatch.setattr(linter_mod.Deck, "__init__", counting_init)
+
+    # Two lint calls on the same file: only the first parses.
+    lint_deck(p)
+    lint_deck(p)
+    assert parse_count["n"] == 1, (
+        f"expected exactly 1 parse for repeated lint, got {parse_count['n']}"
+    )
+
+    # Rewriting the file bumps mtime, so the next lint must re-parse.
+    # The tmp filesystem on most CI runners has ~50ms mtime
+    # resolution, so a brief sleep guarantees the new mtime_ns.
+    time.sleep(0.1)
+    p.write_text(deck + "TSTEP\n  60.0 /\n")
+    lint_deck(p)
+    assert parse_count["n"] == 2, (
+        f"expected a fresh parse after mtime change, got {parse_count['n']}"
+    )
+
+
+def test_lint_deck_cache_returns_same_instance(tmp_path):
+    """The cache must return the *same* Deck object across calls, not
+    just an equal one. The ScheduleIndex is memoised on the Deck
+    instance, so handing out a fresh parse would silently double the
+    index build cost."""
+    from opm_ai.linter import linter as linter_mod
+
+    p = tmp_path / "identity.DATA"
+    p.write_text("RUNSPEC\nDIMENS\n  10 10 3 /\nGRID\nDX\n  1000*1 /\n")
+
+    linter_mod.clear_deck_cache()
+    a = linter_mod._get_deck(p)
+    b = linter_mod._get_deck(p)
+    assert a is b
+
+
+# --- Model unification (F4.1) ---------------------------------------------
+
+def test_lint_models_unified_with_api_schemas():
+    """`opm_ai.api.schemas.LintIssue` and `LintResult` are the SAME
+    classes as the ones in `opm_ai.linter.models`. Two definitions
+    would re-introduce the conversion boilerplate the audit F4.1 set
+    out to remove, and a divergence would silently re-introduce
+    wire-format drift."""
+    from opm_ai.api.schemas import LintIssue as ApiLintIssue
+    from opm_ai.api.schemas import LintResult as ApiLintResult
+    from opm_ai.linter.models import LintIssue as LinterLintIssue
+    from opm_ai.linter.models import LintResult as LinterLintResult
+
+    assert ApiLintIssue is LinterLintIssue, (
+        "api.schemas.LintIssue must be the same class as "
+        "linter.models.LintIssue (F4.1)"
+    )
+    assert ApiLintResult is LinterLintResult, (
+        "api.schemas.LintResult must be the same class as "
+        "linter.models.LintResult (F4.1)"
+    )
+
+
+def test_lint_result_errors_and_passed_are_derived():
+    """`errors` and `passed` are auto-computed from `issues`, so a
+    linter can build a LintResult with just the issues and the
+    wire-format fields appear without a separate compute_fields()
+    pass. This is the whole point of the Pydantic unification."""
+    from opm_ai.linter.models import LintIssue, LintResult
+
+    result = LintResult(
+        deck_path="/tmp/x.DATA",
+        issues=[
+            LintIssue(severity="ERROR", section="SCHEDULE", keyword="WCONPROD",
+                      line=10, message="Missing WCONPROD", rule_id="L017"),
+            LintIssue(severity="WARNING", section="SCHEDULE", keyword="COMPDAT",
+                      line=20, message="Minor issue"),
+        ],
+    )
+    assert result.errors == ["Missing WCONPROD"]
+    assert result.passed is False
+    # error_issues gives the rich LintIssue list for consumers that
+    # need rule_id / line / section.
+    assert len(result.error_issues) == 1
+    assert result.error_issues[0].rule_id == "L017"
+
+    empty = LintResult(deck_path="/tmp/y.DATA", issues=[])
+    assert empty.passed is True
+    assert empty.errors == []

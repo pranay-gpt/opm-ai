@@ -88,18 +88,45 @@ class ChatRequest(BaseModel):
 | run status | GET | `/api/run/{job_id}` | in-memory job store | `JobStatus` |
 | results | GET | `/api/results/{job_id}` | `postprocess.summary.read_summary` + `kpi.extract_kpis` + `plots.plot_production/pressure` | `KPIsResponse` |
 | chat | WS | `/api/chat` | `llm.client.LLMClient` + tool router | streaming tokens + tool calls |
+| files (browse) | GET | `/api/files?path=` | `validate_path` allowlist + dir scan | `DeckListResponse` (real server paths, INCLUDEs resolve) |
+| upload_deck | POST | `/api/upload_deck` | `tempfile.mkdtemp` + multipart write | `UploadResponse` (deck_path for /api/run) |
+
+The Browse vs Upload split exists because each tool is the right answer for a different user:
+
+- **Browse** (`/api/files`): the deck is already on the server. Pick a
+  path; the deck stays among its own siblings; relative INCLUDE paths
+  resolve exactly as they do when Flow is run by hand.
+- **Upload** (`/api/upload_deck`): the deck is on the user's laptop.
+  The user picks the `.DATA` plus an optional `include/` folder in a
+  single multipart POST; the backend writes them to a fresh
+  `tempfile.mkdtemp(prefix="opm_ai_upload_")` under the system temp
+  dir (inside `get_allowed_roots()`), returns the `.DATA`'s
+  server-side path. Both flows converge on the same wire contract:
+  `/api/run` only cares about a real path on the server.
+
+The previous Browse button uploaded the `.DATA` bytes alone via a
+plain `<input type="file">`, which orphaned any `include/` tree on
+the user's laptop — Flow aborted on the first missing `.grdecl`.
+That bug is what motivated the Browse → server-side path picker in
+the first place; Upload is the symmetric tool for the laptop case.
 
 **Frontend - `src/api/client.ts` (typed wrappers)**
 
 ```typescript
 export const api = {
   build: (req: BuildRequest) => fetchJson<BuildResponse>("/api/build", req),
-  lint: (req: LintRequest) => fetchJson<LintResult>("/api/lint", req),
+  lint: (req: LintResult) => fetchJson<LintResult>("/api/lint", req),
   run: (req: RunRequest) => fetchJson<JobStatus>("/api/run", req),
   runStatus: (jobId: string) => fetchJson<JobStatus>(`/api/run/${jobId}`),
   results: (jobId: string) => fetchJson<KPIsResponse>(`/api/results/${jobId}`),
-  chat: (messages: ChatMessage[], sessionId: string) => 
+  chat: (messages: ChatMessage[], sessionId: string) =>
     websocket("/api/chat", { messages, session_id: sessionId }),
+  listDecks: (path?: string) => fetchJson<DeckListResponse>(
+    path ? `/files?path=${encodeURIComponent(path)}` : "/files"
+  ),
+  // form is a multipart/form-data FormData; the helper does NOT
+  // set Content-Type (browser sets it with the correct boundary=).
+  uploadDeck: (form: FormData) => fetchMultipart<UploadResponse>("/upload_deck", form),
 };
 ```
 
@@ -109,6 +136,9 @@ export const api = {
 - `POST /api/run` -> returns job_id, `GET /api/run/{id}` eventually `status="completed"`
 - `GET /api/results/{id}` -> `kpis.days > 0`, `plots.production` is valid Plotly JSON
 - `WS /api/chat` -> streams tokens, emits tool_call for `build_deck` when user asks "build a depletion deck"
+- `POST /api/upload_deck` (deck-only) -> 200, deck_path returned, file exists, passes `validate_deck_path` (regression guard for the `/api/run` contract).
+- `POST /api/upload_deck` (deck + include/) -> 200, nested layout preserved, leading `include/` prefix stripped from `webkitRelativePath`.
+- `POST /api/upload_deck` -> 400 on missing deck / non-`.DATA` filename / empty file / `..` traversal / absolute path / duplicate include; 415 on non-multipart.
 
 ## 4. Key design decisions
 
@@ -211,6 +241,8 @@ export const api = {
 | **ResInsight bridge not yet implemented (Part 5)** | `open_resinsight_plot` tool returns placeholder `{status: "not_implemented"}`; wire real `rips` call in Phase 2 tail. |
 | **CORS / credentials in production** | Dev: `allow_origins=["http://localhost:5173"]`. Prod: `allow_origins=[settings.FRONTEND_ORIGIN]`, `allow_credentials=True`. |
 | **API key management** | Frontend stores keys in `localStorage`; sends via header. Backend validates per-request. No server-side persistence in v1. |
+| **Upload size & filesystem pressure** | `/api/upload_deck` allows up to 256 MB / part and 5000 parts. A user uploading a 73 MB include/ tree plus the deck briefly holds ~150 MB on disk under `/tmp`. Acceptable on a workstation; production should mount `/tmp` with sufficient inode/size headroom. |
+| **Upload dir cleanup** | There is no reaper for partial upload dirs (interrupted mid-write). A periodic task keyed on `opm_ai_upload_*` mtime should clean anything older than 24 h. Out of scope for v1. |
 
 ## 8. Verification and done-criteria
 
@@ -247,10 +279,16 @@ See `docs/conversations/UI_DESIGN_SPEC.md` for the complete extracted design sys
 - **Auth / multi-user**: Add FastAPI `Depends(get_current_user)`, per-user job store (Redis/SQLite), WebSocket auth handshake.
 - **Persistent sessions**: Migrate `app.state.sessions` to Redis with TTL; survive backend restarts.
 - **Server-sent events (SSE) fallback**: For environments blocking WebSocket (corporate proxies).
-- **File upload endpoint**: `POST /api/upload` -> store deck in workspace, return `deck_path` for run/lint.
 - **ResInsight live embed**: `rips` can export interactive HTML (WebGL); serve via `/api/resinsight/{job_id}` iframe.
 - **Streaming run logs**: WebSocket `/api/run/{job_id}/logs` tailing `CASE.PRT` in real time.
 - **RAG-enhanced chat (Phase 3)**: Inject retrieved textbook chunks into system prompt per user question.
+
+## Upload endpoint caveats (not bugs, just operational notes)
+
+- **Starlette multipart limits**: `max_part_size` is overridden to 256 MB and `max_files` to 5000 on the route, via `await request.form(max_part_size=..., max_files=...)`. Starlette defaults (1 MB / 1000) would reject any non-trivial deck — some `.grdecl` include files in `model2` are 30-50 MB and the include/ tree is 73 MB across 1000+ files.
+- **Upload dir lifecycle**: `/api/upload_deck` writes to a fresh `tempfile.mkdtemp(prefix="opm_ai_upload_")` under the system temp dir. There is no reaper; partial uploads on interrupt are left behind. The next upload picks a fresh `mkdtemp`. Production should add a periodic cleanup task keyed on `opm_ai_upload_*`.
+- **webkitdirectory is Chromium-only**: The `<input type="file" webkitdirectory directory multiple>` attribute set that the `DeckUploader` uses for the include/ folder picker is non-standard (Chromium-only). Firefox/Safari users get a plain multi-file picker that doesn't preserve the include/ layout; the deck upload alone still works on any browser. A polyfill could come later if needed.
+- **Returned `deck_path` passes `validate_deck_path`**: This is the contract that lets the upload endpoint slot into the existing `/api/run` flow unchanged. Pinned by `test_upload_returned_path_passes_validate` in `tests/integration/test_api_upload_deck.py`.
 
 ---
 *Cross-refs: 00-overview-and-architecture.md (stack), 01-runner.md (run_simulation contract), 02-linter.md (lint_deck contract), 03-builder.md (build_deck contract), 05-postprocess.md (read_summary/extract_kpis/plots), 08-deployment.md (Dockerfile, compose, README quick-start).*

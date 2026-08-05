@@ -28,11 +28,27 @@ export interface DeckListResponse {
   truncated: boolean;
 }
 
+export interface UploadResponse {
+  deck_path: string;
+  include_dir: string | null;
+  byte_count: number;
+}
+
 export interface BuildRequest {
   description: string;
   output_path?: string;
   use_llm?: boolean;
   fluid?: FluidDescriptorRequest | null;
+  // Stage 3.2: optional rock-basics overrides. null/undefined means
+  // "use whatever the offline extractor produced"; a number/list means
+  // "the user has confirmed or replaced this value before generating".
+  porosity?: number | null;
+  top_depth?: number | null;
+  initial_pressure?: number | null;
+  dz?: number[] | null;
+  permx?: number[] | null;
+  permy?: number[] | null;
+  permz?: number[] | null;
 }
 
 export interface FluidDescriptorRequest {
@@ -44,6 +60,9 @@ export interface FluidDescriptorRequest {
   salinity_ppm?: number;
   pressure_range_psi: [number, number];
   unit_system?: 'FIELD' | 'METRIC';
+  // User-selected oil PVT correlation family. Null/undefined means
+  // "use the default" (currently Standing on the backend).
+  correlation?: 'Standing' | 'VasquezBeggs' | 'AlMarhoun' | null;
 }
 
 export interface LintIssue {
@@ -66,6 +85,11 @@ export interface LintResult {
 export interface BuildResponse {
   deck: string;
   lint: LintResult;
+  // Provenance per rock-basics field: where the resolved value came from.
+  // Values: "extracted" | "defaulted" | "user_override" | "required_missing".
+  provenance: Record<string, string>;
+  // Final resolved values the UI can show next to the provenance tag.
+  resolved: Record<string, number | number[]>;
 }
 
 export interface LintRequest {
@@ -116,6 +140,7 @@ export interface SimulationResult {
 export interface KPIsResponse {
   kpis: Record<string, any>;
   plots: Record<string, string>; // plot_name -> Plotly JSON (fig.to_json())
+  viewer_available?: boolean; // True if /api/results/{id}/resinsight can launch a GUI
 }
 
 // Snapshots types
@@ -124,6 +149,14 @@ export interface SnapshotsResponse {
   snapshots: string[]; // PNG filenames, served at /results/{job_id}/snapshots/{name}
   error: string | null;
   duration_s: number;
+}
+
+// ResInsight GUI launch (localhost-gated; non-loopback returns 403)
+export interface ResinsightLaunchResponse {
+  launched: boolean;
+  pid: number | null;
+  reason: string | null; // e.g. "already running" when launched=false
+  error: string | null;
 }
 
 // ============================================
@@ -232,7 +265,8 @@ export interface WSClientMessage {
 export type WSServerMessage =
   | { type: 'token'; content: string }
   | { type: 'tool_call'; tool_name: string; arguments: Record<string, unknown>; tool_call_id: string }
-  | { type: 'tool_result'; tool_call_id: string; result: string }
+  // result is the raw dict returned by execute_tool, not a string
+  | { type: 'tool_result'; tool_name: string; tool_call_id: string; result: Record<string, unknown> }
   | { type: 'error'; message: string }
   | { type: 'done' };
 

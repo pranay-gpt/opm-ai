@@ -115,8 +115,14 @@ def build_pvt_oil_table(
         })
 
     # Undersaturated extension at max Rs for p > pb up to ~1.8 * p_max
-    # Only emit if we have meaningful Rs (> rs_min) AND pb < p_max
-    if rs_max > rs_min and pb < p_max:
+    # Skip the ramp when there is no meaningful Rs (dead oil) or when the
+    # bubble point is non-positive (e.g. an inverted Standing gives 0 when
+    # gor is below the smallest-rs invert threshold). The pb > 0 guard is
+    # belt-and-braces: the earlier floor at line ~79 (`pb = p_min` when
+    # pb <= p_min) catches the common path, but a future refactor that
+    # removes the floor would re-introduce the ZeroDivisionError at the
+    # `(p / pb) ** 0.2` line below.
+    if rs_max > rs_min and pb > 0 and pb < p_max:
         p_unsat = np.linspace(pb, min(p_max * 1.8, 1.5 * p_max), 4)[1:]  # skip pb duplicate
         co = 1e-5  # oil compressibility 1/psi
         bo_pb = rows[-1]["BO"]

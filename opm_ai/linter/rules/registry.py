@@ -19,15 +19,20 @@ def run_all(deck: Deck) -> list[LintIssue]:
 
 
 # Import all rule modules to register their rules
-from opm_ai.linter.rules import general, grid, props, runspec, schedule, solution_summary
+from opm_ai.linter.rules import general, grid, keywords, props, runspec, schedule, solution_summary
 
-# Rule registry - all seed rules L001-L015
+# Rule registry - all seed rules L001-L018
+# L014/L015 are claimed by general/runspec; L016 by keywords; L017/L018 by
+# schedule (the historical L014/L015 schedule rules were renamed to clear
+# the collision - see opm_ai/linter/context.md for the audit trail).
 RULES: list[RuleFunc] = [
     # General rules
     general.rule_L001_missing_terminator,
     general.rule_L013_keyword_order,
     general.rule_L014_include_depth,
+    keywords.rule_L016_unknown_keyword,
     # RUNSPEC rules
+    runspec.rule_L002_phase_mismatch,
     runspec.rule_L015_missing_dimens,
     # GRID rules
     grid.rule_L003_dimens_grid_match,
@@ -41,8 +46,8 @@ RULES: list[RuleFunc] = [
     schedule.rule_L006_wellspecs_no_compdat,
     schedule.rule_L007_well_not_in_wellspecs,
     schedule.rule_L008_wellspecs_auto_no_gruptree,
-    schedule.rule_L014_producer_no_wconprod,
-    schedule.rule_L015_injector_no_wconinje,
+    schedule.rule_L017_producer_no_wconprod,
+    schedule.rule_L018_injector_no_wconinje,
     # SOLUTION/SUMMARY rules
     solution_summary.rule_L009_missing_solution,
     solution_summary.rule_L010_missing_summary,

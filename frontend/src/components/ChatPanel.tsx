@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useChatStore, useSettingsStore, useChatMessages } from '../stores/useAppStore';
 import { api, connectChat } from '../api/client';
 import type { ChatMessage } from '../api/client';
+import Markdown from './ui/Markdown';
 
 export default function ChatPanel() {
   const {
@@ -38,14 +39,24 @@ export default function ChatPanel() {
       console.warn('[Chat] No API keys configured, using offline mode');
     }
 
-    // Read current messages at connect time
-    const messages = useChatStore.getState().messages;
+    // mountedRef guards the WS callbacks against firing setState after
+    // the component unmounts (F8.1/F8.2 audit fix). React 18 will warn
+    // ("Can't perform a state update on an unmounted component") and
+    // React 19 will drop the update silently either way.
+    const mountedRef = { current: true };
+
+    // Snapshot the messages at connect time. The inner `messages` was
+    // previously shadowed (F8.6 audit fix: the outer `messages` is the
+    // live store, the inner one is the connect-time snapshot — the
+    // shadow made the diff hard to read). Renamed to `initialMessages`.
+    const initialMessages = useChatStore.getState().messages;
 
     connectionRef.current = connectChat(
       sessionId,
-      messages,
+      initialMessages,
       {
         onToken: (content) => {
+          if (!mountedRef.current) return;
           // Use getState to read latest messages
           const currentMessages = useChatStore.getState().messages;
           if (currentMessages.length === 0 || currentMessages[currentMessages.length - 1].role !== 'assistant') {
@@ -56,23 +67,30 @@ export default function ChatPanel() {
           }
         },
         onToolCall: (toolCall) => {
+          if (!mountedRef.current) return;
           const currentMessages = useChatStore.getState().messages;
           updateLastMessage({
             tool_calls: [...(currentMessages[currentMessages.length - 1]?.tool_calls || []), toolCall],
           });
         },
         onToolResult: (toolCallId, result) => {
-          addMessage({ role: 'tool', content: result, tool_call_id: toolCallId });
+          if (!mountedRef.current) return;
+          // result is a dict on the wire; React cannot render an object child
+          const content = typeof result === 'string' ? result : JSON.stringify(result, null, 2);
+          addMessage({ role: 'tool', content, tool_call_id: toolCallId });
         },
         onError: (error) => {
+          if (!mountedRef.current) return;
           console.error('[Chat] Error:', error);
           addMessage({ role: 'assistant', content: `Error: ${error}` });
           setStreaming(false);
         },
         onDone: () => {
+          if (!mountedRef.current) return;
           setStreaming(false);
         },
         onClose: () => {
+          if (!mountedRef.current) return;
           setConnected(false);
         },
       }
@@ -81,6 +99,7 @@ export default function ChatPanel() {
     setConnected(true);
 
     return () => {
+      mountedRef.current = false;
       connectionRef.current?.close();
     };
   }, [sessionId, addMessage, updateLastMessage, setConnected, setStreaming]);
@@ -94,8 +113,8 @@ export default function ChatPanel() {
     setIsSending(true);
 
     // Read latest messages from store to send full history
-    const messages = useChatStore.getState().messages;
-    connectionRef.current?.send(messages);
+    const latestMessages = useChatStore.getState().messages;
+    connectionRef.current?.send(latestMessages);
     setIsSending(false);
   }, [input, isSending, addMessage]);
 
@@ -208,11 +227,18 @@ export default function ChatPanel() {
             </div>
 
             <div className={`flex-1 min-w-0 ${message.role === 'user' ? 'text-right' : ''}`}>
-              <div
-                className={`prose prose-invert max-w-none ${message.role === 'user' ? 'text-right' : ''}`}
-              >
-                <pre className="whitespace-pre-wrap text-sm leading-relaxed">{message.content}</pre>
-              </div>
+              {/* Only assistant text is markdown; tool results are JSON and stay verbatim */}
+              {message.role === 'assistant' ? (
+                <Markdown className="text-sm leading-relaxed">{message.content}</Markdown>
+              ) : (
+                <pre
+                  className={`whitespace-pre-wrap text-sm leading-relaxed ${
+                    message.role === 'user' ? 'text-right' : ''
+                  }`}
+                >
+                  {message.content}
+                </pre>
+              )}
 
               {/* Tool calls */}
               {message.tool_calls && message.tool_calls.length > 0 && (

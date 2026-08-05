@@ -133,3 +133,60 @@ def export_snapshots(
         return result(False, [], f"ResInsight produced no snapshots ({detail})")
 
     return result(True, [str(p) for p in pngs], None)
+
+
+def launch_resinsight(case_file: str | Path) -> dict:
+    """Spawn ResInsight with --case, detached from this process.
+
+    Different from export_snapshots in three ways:
+    - No --savesnapshots / --size / --timeout flags: ResInsight opens its
+      GUI and stays open until the user closes it. The window appears on
+      the server's display.
+    - start_new_session=True: the child becomes its own session leader, so
+      closing the parent API process does not kill the GUI.
+    - stdin/stdout/stderr all routed to DEVNULL: the API request must
+      return immediately, so we cannot pipe anything.
+
+    Args:
+        case_file: Path to a .EGRID or .DATA file ResInsight can load.
+
+    Returns:
+        Dict with keys: success (bool), pid (int or None), error (str or
+        None). Never raises; Popen failures are reported in the dict.
+    """
+    if not Path(settings.resinsight_executable).is_file():
+        return {"success": False, "pid": None, "error": f"ResInsight executable not found: {settings.resinsight_executable}"}
+    if _display() is None:
+        return {"success": False, "pid": None, "error": "No X display available (DISPLAY unset)"}
+
+    case_file = Path(case_file)
+    if not case_file.is_file():
+        return {"success": False, "pid": None, "error": f"Case file not found: {case_file}"}
+
+    cmd = [
+        str(settings.resinsight_executable),
+        "--case", str(case_file),
+    ]
+    env = {**os.environ, "QT_QPA_PLATFORM": "xcb"}
+
+    try:
+        proc = subprocess.Popen(
+            cmd,
+            env=env,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True,
+        )
+    except OSError as e:
+        return {"success": False, "pid": None, "error": f"Failed to launch ResInsight: {e}"}
+
+    # Popen returns immediately. The process either started or it didn't.
+    # poll() catches the case where it dies between Popen and now (rare
+    # but possible - bad EGRID, missing libs). If poll() returns None, the
+    # process is alive; that's success.
+    time.sleep(0.05)
+    if proc.poll() is not None:
+        return {"success": False, "pid": None, "error": f"ResInsight exited immediately (code {proc.returncode})"}
+
+    return {"success": True, "pid": proc.pid, "error": None}

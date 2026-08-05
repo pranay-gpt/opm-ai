@@ -38,6 +38,7 @@ These are verified by the **smoke script** `scripts/smoke.sh` (created in this p
 | 1 | **Base image: `ubuntu:24.04` + OPM PPA** | OPM Flow 2026.04 + ResInsight 2026.04 are in the OPM PPA for noble; avoids building from source (hours) | `ubuntu:22.04` + manual compile; `opm/flow` Docker Hub image (unofficial, stale) | PPA packages are **UNVERIFIED** exact names - must confirm at build time (`apt-cache policy opm-simulators`). |
 | 2 | **Multi-stage Dockerfile**: `builder` (Node) -> `runtime` (Python + Flow + ResInsight) | Keeps final image ~2 GB instead of 4 GB+; frontend bundle copied as static files into FastAPI `/static` mount | Single-stage with both Node + Python; separate `backend` + `frontend` services in compose | Adds build complexity; need `COPY --from=builder` for `frontend/dist`. |
 | 3 | **Single `backend` service in compose** (serves API + static frontend) | Simpler for students: one port (`:8000`), no CORS / proxy config; `uvicorn --host 0.0.0.0` serves React `index.html` at `/` | Two services (`backend:8000`, `frontend:5173` via nginx) | Dev mode still uses `npm run dev` (Vite proxy) locally; production uses the baked static mount. |
+| 3b | **`scripts/run.sh` binds `0.0.0.0` (matches production)** | Local dev server is reachable from the LAN, so `BASE_URL=http://<lan-ip>:8000 ./scripts/smoke.sh` works without rebinding and a phone/tablet on the same network can hit the app. Override with `OPM_HOST=127.0.0.1` for loopback-only. | Bind `127.0.0.1` by default (matches an older version of `run.sh`) | Anything binding to all interfaces on a workstation is reachable to anyone on the LAN; behind a corporate network or when running an unrelated workload on the same host, set `OPM_HOST=127.0.0.1` (or use the Docker stack with its own network). |
 | 4 | **Exposed port = 8000** (not 8555) | BUILD_GUIDE section 2 and IMPLEMENTATION_PLAN Stage 5 both specify FastAPI on 8000; Vite dev proxy targets 8000. GUIDE 1's "8555" was a Streamlit legacy port. | Keep 8555 for backward compatibility | Update README quick-start and `vite.config.ts` proxy target. |
 | 5 | **Pre-baked chromadb vector store** (Phase 3) | Avoids first-run download / index build (~5 min, 500 MB); cross-ref 07-explainer.md section 4 | Download at runtime | Image grows ~600 MB; only baked at Phase 3, not Phase 2. |
 | 6 | **`.env` sourced into compose via `env_file`** | Keeps API keys out of image and git; `docker compose --env-file .env up` | Bake keys into image (insecure) | Must document `.env.example` -> `.env` copy step in README. |
@@ -211,7 +212,8 @@ pyproject.toml                 # Drop streamlit; add fastapi, uvicorn[standard],
      | `LLMClient.available == False` | No API key in `.env` | Add `GROQ_API_KEY` or `OPENAI_API_KEY` |
 
 10. **Smoke script (`scripts/smoke.sh`)**
-    - Runs the 7 checks from section 3; used locally and in CI-integration.
+    - Runs the 8 checks from section 3 (1 health, 1 frontend load, 1 build+lint, 1 full pipeline, 1 KPI, 1 deck upload, 1 CLI lint, 1 frontend build artifact); used locally and in CI-integration.
+    - `BASE_URL=http://<lan-ip>:8000 ./scripts/smoke.sh` exercises the same checks against the LAN-reachable URL, matching what `scripts/run.sh` now exposes by default.
 
 11. **Phase 3: bake chromadb vector store**
     - Add `COPY --from=explainer-builder /chroma /app/chroma` in Dockerfile (new stage).

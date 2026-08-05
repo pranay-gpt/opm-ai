@@ -2,7 +2,7 @@
 
 from pathlib import Path
 from typing import Optional
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 from loguru import logger
 
 from opm_ai.builder.models import ModelSpec, Scenario, ReservoirSpec, WellSpec, WellType
@@ -22,6 +22,28 @@ def _get_template_env() -> Environment:
         trim_blocks=True,
         lstrip_blocks=True,
     )
+
+
+def _load_scenario_template(env: Environment, scenario: str):
+    """Try `scenarios/<scenario>.j2` first; fall back to `base.j2`.
+
+    The dispatch contract: every existing scenario produces byte-identical
+    output today via `base.j2`. Future per-scenario layout overrides land
+    in `opm_ai/builder/templates/scenarios/<name>.j2` as
+    `{% extends "base.j2" %}` + `{% block %}` overrides. An unmapped
+    scenario (or a missing `scenarios/` directory in a fresh checkout)
+    resolves to `base.j2` via `jinja2.TemplateNotFound`.
+
+    Only `TemplateNotFound` falls back: a syntax error in a child template
+    is a bug and must surface as a build failure, not silently degrade to
+    the base template (which would produce a wrong deck with no warning).
+    The byte-identical golden test (tests/unit/test_golden_decks.py) is
+    the regression guard for the base-template path.
+    """
+    try:
+        return env.get_template(f"scenarios/{scenario}.j2")
+    except TemplateNotFound:
+        return env.get_template("base.j2")
 
 
 def _compute_template_context(spec: ModelSpec) -> dict:
@@ -46,43 +68,58 @@ def _compute_template_context(spec: ModelSpec) -> dict:
         fluid = spec.fluid
         unit_system = fluid.unit_system  # Use fluid's unit_system for deck and PVT
 
-        # Validate pressure range - EQUIL uses 4800 psia default
-        # fluid.pressure_range returns bar for METRIC, psia for FIELD
-        # We need to compare in psia for the EQUIL check
+        # Validate pressure range - the EQUIL datum pressure comes from
+        # ReservoirSpec.initial_pressure (default 4800 psia). fluid.
+        # pressure_range returns bar for METRIC, psia for FIELD.
+        # We need to compare in psia for the EQUIL check.
         p_min, p_max = fluid.pressure_range
         if fluid.unit_system == "METRIC":
             p_max_psi = p_max / 0.0689476  # Convert bar to psia
         else:
             p_max_psi = p_max
-        if p_max_psi < 4800:
+        equil_psi = max(4800.0, spec.reservoir.initial_pressure)
+        if p_max_psi < equil_psi:
             raise ValueError(
-                f"Fluid pressure range max ({p_max_psi:.1f} psia) must be >= 4800 psia "
-                f"(EQUIL datum pressure). Extend pressure_range_psi to at least 4800."
+                f"Fluid pressure range max ({p_max_psi:.1f} psia) must be >= {equil_psi:.1f} psia "
+                f"(EQUIL datum pressure). Extend pressure_range_psi to at least {equil_psi:.1f}."
             )
 
-        # Build PVT blocks
-        pvt_blocks = build_pvt_blocks(fluid)
+        # Build PVT blocks. Thread the user's chosen oil PVT correlation
+        # through the correlation-selection layer so the dropdown choice
+        # in the Builder UI drives the rendered PVTO family (Standing,
+        # Vasquez-Beggs, or Al-Marhoun). LET/Corey are relperm selections
+        # in build_pvt_blocks and are unaffected here.
+        pvt_blocks = build_pvt_blocks(fluid, correlations={"pvt_oil": fluid.correlation})
 
         # Validate using fluid's unit_system
         validation_errors = validate_pvt_blocks(pvt_blocks, unit_system)
         if validation_errors:
             raise ValueError(f"PVT block validation failed: {validation_errors}")
 
-        # Compute RSVD RS value at initial pressure (4800 psia default EQUIL pressure)
-        # Using Standing correlation to get Rs at 4800 psia, then clamp to max Rs in PVTO table
-        p_init = 4800.0
+        # Compute RSVD RS value at initial pressure (default 4800 psia, or whatever
+        # ReservoirSpec.initial_pressure the user set). Using Standing
+        # correlation at the datum pressure, then clamp to the max Rs in
+        # the PVTO table.
+        # Note: we deliberately call standing_rs_bubble here rather than
+        # threading fluid.correlation. Vasquez-Beggs and Al-Marhoun have no
+        # closed-form Pb(Rs) inversion comparable to Standing's; switching
+        # this call would require a numerical root-find that is out of scope.
+        # The PVTO table itself does honour fluid.correlation (see below).
+        p_init = max(4800.0, spec.reservoir.initial_pressure)
         if fluid.pressure_range_psi:
-            # Use the max pressure from the fluid descriptor if it's different
+            # Use the max pressure from the fluid descriptor if it's higher
+            # - we need the PVTO table to bracket the initial pressure.
             p_init = max(p_init, fluid.pressure_range_psi[1])
 
         rs_at_pinit, _ = standing_rs_bubble(
             fluid.api_gravity, fluid.gas_specific_gravity, fluid.temp_f, p_init
         )
 
-        # Get max Rs from the PVTO table
+        # Get max Rs from the PVTO table (using the user-selected oil
+        # correlation so the clamp matches the table that gets rendered).
         pvt_oil_table = build_pvt_oil_table(
             fluid,
-            "Standing",  # Use Standing for consistency with standing_rs_bubble
+            fluid.correlation,
             {"swc": 0.12, "sorw": 0.20, "krw_max": 0.50, "kro_max": 1.0, "nw": 2.0, "no": 2.0}
         )
         max_table_rs = max(row["RS"] for row in pvt_oil_table) if pvt_oil_table else rs_at_pinit
@@ -138,8 +175,17 @@ def _compute_template_context(spec: ModelSpec) -> dict:
     pressure_factor = 0.0689476 if unit_system == "METRIC" else 1.0
     if spec.equil_datum_depth is not None:
         context["equil_datum_depth"] = spec.equil_datum_depth * depth_factor
+    else:
+        # Default datum sits one layer below the top, matching the
+        # legacy FIELD context below.
+        context["equil_datum_depth"] = context.get("equil_datum_depth", spec.reservoir.top_depth + 50.0)
     if spec.equil_datum_pressure is not None:
         context["equil_pressure_datum"] = spec.equil_datum_pressure * pressure_factor
+    else:
+        # Drive EQUIL pressure from ReservoirSpec.initial_pressure when no
+        # explicit equil override was set. This is the "initial pressure"
+        # control surface the user describes.
+        context["equil_pressure_datum"] = spec.reservoir.initial_pressure * pressure_factor
     if spec.equil_woc_depth is not None:
         context["equil_woc"] = spec.equil_woc_depth * depth_factor
     if spec.equil_goc_depth is not None:
@@ -158,7 +204,9 @@ def _compute_field_context(reservoir, wells, rsvd_rs) -> dict:
     # FIELD EQUIL defaults from base.j2: 8400 4800 8450 0 8300 0 1 0 0
     # EQUIL format: datum_depth pressure_datum WOC GOC OWC ...
     equil_datum_depth = 8400.0
-    equil_pressure_datum = 4800.0
+    # Honour ReservoirSpec.initial_pressure so FIELD decks also pick up
+    # the user's initial pressure setting (was hardcoded 4800 in v1).
+    equil_pressure_datum = max(4800.0, reservoir.initial_pressure)
     equil_woc = 8450.0      # Water-oil contact depth
     equil_goc = 0.0         # Gas-oil contact depth (0 = not set)
     equil_owc_depth = 8300.0  # Reference depth for oil-water contact pressure
@@ -227,7 +275,9 @@ def _compute_metric_context(reservoir, wells, rsvd_rs) -> dict:
     # Default EQUIL in base.j2: 8400 4800 8450 0 8300 0 1 0 0
     # Format: datum_depth pressure_datum WOC GOC OWC
     equil_datum_depth = 8400.0 * FT_TO_M
-    equil_pressure_datum = 4800.0 * PSIA_TO_BAR
+    # Honour ReservoirSpec.initial_pressure so METRIC decks also pick up
+    # the user's initial pressure setting (was hardcoded 4800 in v1).
+    equil_pressure_datum = max(4800.0, reservoir.initial_pressure) * PSIA_TO_BAR
     equil_woc = 8450.0 * FT_TO_M      # Water-oil contact depth
     equil_goc = 0.0                   # Gas-oil contact depth (0 = not set)
     equil_owc_depth = 8300.0 * FT_TO_M  # Reference depth for oil-water contact pressure
@@ -327,7 +377,7 @@ def build_deck(
 
     # Render deck
     env = _get_template_env()
-    template = env.get_template("base.j2")
+    template = _load_scenario_template(env, spec.scenario.value)
     deck_string = template.render(**context)
 
     # Lint the generated deck
@@ -365,7 +415,7 @@ def build_deck_from_spec(
     context = _compute_template_context(spec)
 
     env = _get_template_env()
-    template = env.get_template("base.j2")
+    template = _load_scenario_template(env, spec.scenario.value)
     deck_string = template.render(**context)
 
     if output_path:

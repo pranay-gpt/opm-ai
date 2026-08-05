@@ -105,3 +105,82 @@ def test_export_real_snapshot(tmp_path):
     for p in res["snapshots"]:
         assert Path(p).is_file()
         assert Path(p).stat().st_size > 1000
+
+
+# ---------------------------------------------------------------------------
+# launch_resinsight: detach a real GUI without waiting on it.
+# ---------------------------------------------------------------------------
+
+
+def test_launch_missing_case_file(tmp_path, monkeypatch):
+    monkeypatch.setattr(settings, "resinsight_executable", tmp_path / "no_such_binary")
+    monkeypatch.setenv("DISPLAY", ":0")
+    res = rib.launch_resinsight(tmp_path / "no_case.EGRID")
+    # Binary check fires before case-file check - both fail, but the error
+    # message should mention the binary (the earlier guard).
+    assert res["success"] is False
+    assert "not found" in res["error"].lower()
+
+
+def test_launch_missing_binary(tmp_path, monkeypatch):
+    (tmp_path / "M.EGRID").write_bytes(b"\x00")
+    monkeypatch.setattr(settings, "resinsight_executable", tmp_path / "no_such_binary")
+    monkeypatch.setenv("DISPLAY", ":0")
+    res = rib.launch_resinsight(tmp_path / "M.EGRID")
+    assert res["success"] is False
+    assert res["pid"] is None
+    assert "not found" in res["error"]
+
+
+def test_launch_no_display(tmp_path, monkeypatch):
+    (tmp_path / "M.EGRID").write_bytes(b"\x00")
+    monkeypatch.setattr(settings, "resinsight_executable", tmp_path / "M.EGRID")
+    monkeypatch.delenv("DISPLAY", raising=False)
+    res = rib.launch_resinsight(tmp_path / "M.EGRID")
+    assert res["success"] is False
+    assert "DISPLAY" in res["error"]
+
+
+def test_launch_case_file_does_not_exist(tmp_path, monkeypatch):
+    # Binary exists so we get past that check; case file does not.
+    (tmp_path / "fakebinary").write_bytes(b"")
+    monkeypatch.setattr(settings, "resinsight_executable", tmp_path / "fakebinary")
+    monkeypatch.setenv("DISPLAY", ":0")
+    res = rib.launch_resinsight(tmp_path / "no_such.EGRID")
+    assert res["success"] is False
+    assert "not found" in res["error"]
+
+
+def test_launch_spawns_detached(tmp_path, monkeypatch):
+    """Spawn succeeds, PID is captured, and start_new_session was used.
+
+    We use a tiny script that detaches itself - the equivalent of
+    `subprocess.Popen` here is the OS, not Python, so we verify
+    start_new_session via the resulting PGID being different from ours.
+    """
+    script = tmp_path / "hold.sh"
+    script.write_text("#!/bin/sh\nsleep 30 &\nwait\n")
+    script.chmod(0o755)
+    (tmp_path / "case.EGRID").write_bytes(b"\x00")  # bridge checks the file exists
+    monkeypatch.setattr(settings, "resinsight_executable", script)
+    monkeypatch.setenv("DISPLAY", ":0")
+
+    res = rib.launch_resinsight(tmp_path / "case.EGRID")
+    assert res["success"] is True, res["error"]
+    assert res["pid"] is not None
+    pid = res["pid"]
+
+    try:
+        # start_new_session=True makes the child its own session leader;
+        # PGID == PID. The parent test process's PGID is its PID.
+        parent_pgid = os.getpgrp()
+        os.kill(pid, 0)  # raises if dead
+        child_pgid = os.getpgid(pid)
+        assert child_pgid == pid, "child should be its own session leader"
+        assert child_pgid != parent_pgid, "child should not share our session"
+    finally:
+        # Clean up the sleep we left behind.
+        try:
+            os.kill(pid, 9)
+        except ProcessLookupError:
+            pass

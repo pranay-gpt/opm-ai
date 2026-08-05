@@ -1,6 +1,7 @@
 # opm_ai/llm - Provider-Abstracted LLM Client
 
-Last updated: 2026-07-22. Status: complete (Stage 3 client + Stage B extract_json).
+Last updated: 2026-08-04. Status: complete (Stage 3 client + Stage B
+extract_json + schedule-event guidance added to extraction prompt).
 
 ## Purpose
 One client for Groq / OpenAI / NVIDIA NIM / offline, used by the builder
@@ -10,7 +11,7 @@ One client for Groq / OpenAI / NVIDIA NIM / offline, used by the builder
 | File | Purpose |
 |------|---------|
 | `client.py` | `LLMClient`: `.chat(messages) -> str\|None`, `.chat_with_tools(...)`, `.extract_json(prompt, schema) -> dict\|None`, `.available: bool` |
-| `prompts/extract_model_spec.j2` | ModelSpec JSON-schema extraction prompt with few-shot examples (Stage B) |
+| `prompts/extract_model_spec.j2` | ModelSpec JSON-schema extraction prompt with few-shot examples. The `{{ schema }}` reference already includes ScheduleEvent because ModelSpec.schedule renders into the JSON schema. Few-shot examples explicitly demonstrate WAG and BUILDUP schedule emission so the LLM knows to populate `schedule` for shut-in / alternating-injection descriptions. (Added 2026-08-04, commit 7d0ff96.) |
 
 ## Invariants
 - **Opt-in networking**: default `LLM_PROVIDER=offline`; only `.env` or the
@@ -32,4 +33,7 @@ One client for Groq / OpenAI / NVIDIA NIM / offline, used by the builder
 
 ## Tests
 `tests/unit/test_llm.py` (mocked providers: valid, invalid-schema, garbage
-responses); live-Groq paths are verified manually, not in CI.
+responses); `tests/unit/test_llm_extraction.py` (FakeClient returns canned
+JSON, validates the rendered system_prompt contains schedule guidance
+and WAG/BUILDUP few-shot examples - 2026-08-04); live-Groq paths are
+verified manually, not in CI.

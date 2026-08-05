@@ -13,6 +13,22 @@ Rules:
   of the units mentioned in the description; convert if needed
   (1 m = 3.28084 ft, 1 bar = 14.5038 psia, 1 m3/day = 6.2898 bbl/day).
 - Do NOT invent wells or grid sizes that the description does not imply.
+- Schedule events describe time-based actions (well control changes, shut-ins,
+  alternating injectors) that occur AFTER the initial TSTEP block. Emit a
+  schedule entry whenever the description mentions shutting in a well, taking
+  short timesteps for analysis (buildup / drawdown / falloff), alternating
+  injection fluids (WAG), or any explicit time advance. Each event is an
+  object with optional fields:
+    actions: list of raw SCHEDULE keyword blocks (e.g. a WCONPROD STOP or a
+      full WCONINJE record) emitted verbatim before the time advance.
+    date: a calendar date string (e.g. "1 'APR' 2016") for a DATES advance.
+    tstep_days: a single number or list of numbers (days) for one or more
+      TSTEP substeps. Use a LIST when the description gives several distinct
+      step sizes (e.g. "0.25, 0.25, 0.5, 1, 2, 4, 4, 8 days for buildup").
+  An event with only actions and no date/tstep_days is allowed; a calendar
+  date and tstep_days on the same event are mutually exclusive (date wins).
+  When the description does not mention any temporal control changes, omit
+  the schedule field entirely.
 
 JSON schema (ModelSpec):
 {{ schema }}
@@ -38,3 +54,11 @@ Output:
 Description: "pressure buildup test, single producer in the middle of a 9x9x1 grid"
 Output:
 {"scenario": "buildup", "reservoir": {"nx": 9, "ny": 9, "nz": 1}, "wells": [{"name": "PROD1", "well_type": "PROD", "i": 5, "j": 5, "k1": 1, "k2": 1}]}
+
+Description: "pressure buildup on PROD1: produce for 30 days, shut in, then take 8 short timesteps from 0.25 to 8 days for buildup analysis"
+Output:
+{"scenario": "buildup", "reservoir": {"nx": 9, "ny": 9, "nz": 1}, "wells": [{"name": "PROD1", "well_type": "PROD", "i": 5, "j": 5, "k1": 1, "k2": 1, "target_rate": 1000.0}], "schedule": [{"actions": ["WCONPROD\n  'PROD1'  'STOP' /"], "tstep_days": [0.25, 0.25, 0.5, 1.0, 2.0, 4.0, 4.0, 8.0]}]}
+
+Description: "wag injection on a 15x15x3 grid, alternate water 90 days then gas 90 days"
+Output:
+{"scenario": "wag", "reservoir": {"nx": 15, "ny": 15, "nz": 3}, "wells": [{"name": "INJ", "well_type": "INJ", "i": 8, "j": 8, "k1": 1, "k2": 3, "inject_fluid": "WATER", "inject_rate": 5000.0}], "schedule": [{"actions": ["WCONINJE\n  'INJ'  'WATER'  5000 /"], "tstep_days": 90.0}, {"actions": ["WCONINJE\n  'INJ'  'GAS'  5000 /"], "tstep_days": 90.0}]}

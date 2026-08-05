@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Launch OPM-AI locally (without Docker).
 #
-#   ./scripts/run.sh          serve the built frontend from FastAPI on :8000
+#   ./scripts/run.sh          serve on :8000; auto-builds frontend/dist if missing
 #   ./scripts/run.sh dev      same, plus the Vite dev server on :5173 (hot reload)
-#   ./scripts/run.sh build    rebuild the frontend bundle, then serve
+#   ./scripts/run.sh build    force-rebuild frontend, then serve on :8000
 #
 # Stop with Ctrl-C; both processes are killed together.
 
@@ -44,9 +44,12 @@ if [ "$MODE" = "build" ]; then
   (cd frontend && NODE_OPTIONS=--max-old-space-size=3000 npm run build)
 fi
 
-if [ ! -f frontend/dist/index.html ] && [ "$MODE" != "dev" ]; then
-  echo "frontend/dist is missing. Run './scripts/run.sh build' first." >&2
-  exit 1
+# `serve` auto-builds if dist is missing so a fresh checkout just works.
+# `dev` doesn't need dist (vite serves sources directly).
+# `build` already produced dist above.
+if [ ! -f frontend/dist/index.html ] && [ "$MODE" = "serve" ]; then
+  echo "== building frontend (dist missing) =="
+  (cd frontend && NODE_OPTIONS=--max-old-space-size=3000 npm run build)
 fi
 
 # Re-exec in a session of our own so cleanup can kill the whole process group
@@ -65,9 +68,19 @@ cleanup() {
 }
 trap cleanup INT TERM EXIT
 
-echo "== backend  http://localhost:8000 =="
+# Default host: 0.0.0.0 so the server is reachable from the LAN
+# (e.g. http://10.211.55.5:8000 from another machine, or from a
+# phone/tablet on the same network). This matches production
+# (`uvicorn --host 0.0.0.0` in `docker/entrypoint.sh`) and lets
+# `scripts/smoke.sh BASE_URL=http://<lan-ip>:8000` work without
+# rebinding. Override with `OPM_HOST=127.0.0.1 ./scripts/run.sh`
+# if you specifically want loopback-only (e.g. behind a reverse
+# proxy you're developing).
+HOST="${OPM_HOST:-0.0.0.0}"
+
+echo "== backend  http://${HOST}:8000  (set OPM_HOST=127.0.0.1 for loopback-only) =="
 "$PY" -m uvicorn opm_ai.api.server:create_app --factory \
-  --host 127.0.0.1 --port 8000 &
+  --host "$HOST" --port 8000 &
 
 if [ "$MODE" = "dev" ]; then
   echo "== frontend http://localhost:5173  (hot reload; proxies /api to :8000) =="

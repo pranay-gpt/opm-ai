@@ -1,8 +1,11 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useCurrentDeck, useCurrentDeckPath, useLastBuildResponse, useLastLintResult, useDeckActions, useLintActions, useResolvedTheme } from '../stores/useAppStore';
 import { api } from '../api/client';
-import type { LintRequest, LintResult, LintIssue } from '../api/client';
+import type { LintResult } from '../api/client';
+import { findSections } from './deckSections';
+import type { SectionEntry } from './deckSections';
 import Editor from '@monaco-editor/react';
+import { registerOpmCompletions, type OpmKeywordEntry } from './opmCompletions';
 
 // Declare monaco for TypeScript
 declare const monaco: any;
@@ -34,6 +37,29 @@ export default function DeckEditor() {
   const [lintErrors, setLintErrors] = useState<{ line: number; message: string }[]>([]);
   const [activeSection, setActiveSection] = useState<string>('RUNSPEC');
 
+  // inFlightRef guards handleLint against double-firing before React
+  // commits disabled={isLinting} on the button (F8.5 audit fix). A ref
+  // is used instead of reading isLinting from the callback closure so
+  // we don't have to add isLinting to the deps array.
+  const lintInFlightRef = useRef(false);
+
+  // Memoise the section scan on deck content so it is recomputed only when
+  // the editor text changes, not on every render.
+  const sectionEntries = useMemo<SectionEntry[]>(
+    () => (deck ? findSections(deck) : []),
+    [deck],
+  );
+  const sectionByName = useMemo(
+    () => new Map<string, number>(sectionEntries.map((s) => [s.section, s.lineNumber])),
+    [sectionEntries],
+  );
+  // Preserve declared order (RUNSPEC, GRID, EDIT, ...) but only render those
+  // actually present in the deck - the rest render disabled below.
+  const KNOWN_SECTIONS = useMemo(
+    () => sectionEntries.map((s) => s.section),
+    [sectionEntries],
+  );
+
   // Sync with store
   useEffect(() => {
     if (currentDeck && currentDeck !== deck) {
@@ -53,6 +79,7 @@ export default function DeckEditor() {
     if (!deck.trim()) return;
 
     setIsLinting(true);
+    lintInFlightRef.current = true;
     try {
       // Save deck to backend temp file first
       const saveResponse = await api.saveDeck({ content: deck, filename: 'DECK.DATA' });
@@ -71,20 +98,36 @@ export default function DeckEditor() {
       console.error('Lint error:', err);
     } finally {
       setIsLinting(false);
+      lintInFlightRef.current = false;
     }
   }, [deck, setLastLintResult]);
 
+  const handleLintGuarded = useCallback(() => {
+    if (lintInFlightRef.current) return;
+    return handleLint();
+  }, [handleLint]);
+
   const handleSave = useCallback(() => {
     setCurrentDeck(deck);
+    // Synthesize a minimal LintResult only when the user has never run the
+    // checker. When lastLintResult exists, pass it through verbatim so the
+    // real backend lint_summary (LLM-generated when a provider is online,
+    // null otherwise) reaches the consumer instead of a fabricated string.
+    const fallbackLint: LintResult = {
+      deck_path: 'memory://deck.DATA',
+      issues: [],
+      lint_summary: null,
+      errors: [],
+      passed: true,
+    };
     setLastBuildResponse({
       deck,
-      lint: lastLintResult || {
-        deck_path: 'memory://deck.DATA',
-        issues: [],
-        lint_summary: 'All checks passed',
-        errors: [],
-        passed: true,
-      },
+      lint: lastLintResult || fallbackLint,
+      // User-edited deck: provenance/resolved are empty because the rock-
+      // basics store is the source of truth at this point. The next /api/build
+      // call repopulates them.
+      provenance: {},
+      resolved: {},
     });
     setIsDirty(false);
   }, [deck, lastLintResult, setCurrentDeck, setLastBuildResponse]);
@@ -190,15 +233,21 @@ SCHEDULE
     URL.revokeObjectURL(url);
   }, [deck]);
 
+  // Memoise the editor instance AND keep the existing window.monaco assignment
+  // (Playwright sets deck content via window.monaco.editor.getModels()[0].setValue
+  // per frontend/context.md, so do not remove it).
+  const editorRef = useRef<any>(null);
+
   const scrollToSection = useCallback((section: string) => {
-    const m = (window as any).monaco;
-    if (m && m.editor) {
-      // We need access to the editor instance
-      // This is a limitation - we can't easily scroll without the editor ref
-      // For now, just store the active section
-      setActiveSection(section);
-    }
-  }, []);
+    setActiveSection(section);
+    const line = sectionByName.get(section);
+    if (line === undefined) return; // section absent from deck - no-op
+    const editor = editorRef.current;
+    if (!editor) return;
+    editor.revealLineInCenter(line);
+    editor.setPosition({ lineNumber: line, column: 1 });
+    editor.focus();
+  }, [sectionByName]);
 
   // Register OPM language on mount
   useEffect(() => {
@@ -251,6 +300,31 @@ SCHEDULE
         },
       });
 
+      // Fetch the merged keyword catalogue (fixture + ERM union) and
+      // register a Monaco completion provider for the 'opm' language.
+      // The backend serves this from GET /api/keywords; we cache it
+      // for the lifetime of the editor mount. A network failure falls
+      // back to OPM_KEYWORDS so the editor still functions offline.
+      fetch('/api/keywords')
+        .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
+        .then((data: { keywords: Array<{ name: string; sections: string[]; parameter_count: number; description: string; deck_count: number }> }) => {
+          const catalogue = Array.isArray(data.keywords) ? data.keywords : [];
+          if (!catalogue.length) return;
+          registerOpmCompletions(m, catalogue);
+        })
+        .catch(() => {
+          // Offline / endpoint missing — use the bundled OPM_KEYWORDS list
+          // so the editor still offers completions.
+          const fallback = OPM_KEYWORDS.map((name) => ({
+            name,
+            sections: [],
+            parameter_count: 0,
+            description: '',
+            deck_count: 0,
+          }));
+          registerOpmCompletions(m, fallback);
+        });
+
       m.editor.defineTheme('opm-dark', {
         base: 'vs-dark',
         inherit: true,
@@ -297,10 +371,6 @@ SCHEDULE
     }
   }, []);
 
-  const sections = [
-    'RUNSPEC', 'GRID', 'EDIT', 'PROPS', 'REGIONS', 'SOLUTION', 'SUMMARY', 'SCHEDULE',
-  ];
-
   return (
     <div className="flex flex-col h-full bg-page">
       {/* Toolbar */}
@@ -336,11 +406,11 @@ SCHEDULE
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
           </button>
-          <button onClick={handleLint} disabled={isLinting} className="btn-secondary btn-sm" title="Lint">
+          <button onClick={handleLintGuarded} disabled={isLinting} className="btn-secondary btn-sm" title="Check Deck">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
-            {isLinting ? 'Linting...' : 'Lint'}
+            {isLinting ? 'Checking...' : 'Check'}
           </button>
         </div>
       </div>
@@ -353,7 +423,7 @@ SCHEDULE
             <h3 className="text-xs font-semibold text-textSecondary uppercase tracking-wider">Sections</h3>
           </div>
           <nav className="flex-1 overflow-y-auto p-2 space-y-1">
-            {sections.map((section) => (
+            {KNOWN_SECTIONS.map((section) => (
               <button
                 key={section}
                 onClick={() => scrollToSection(section)}
@@ -366,6 +436,11 @@ SCHEDULE
                 {section}
               </button>
             ))}
+            {KNOWN_SECTIONS.length === 0 && (
+              <p className="text-xs text-textMuted px-3 py-2">
+                No sections detected. Section markers must be alone on a line.
+              </p>
+            )}
           </nav>
         </aside>
 
@@ -409,6 +484,7 @@ SCHEDULE
               }}
               onChange={handleEditorChange}
               onMount={(editor, m) => {
+                editorRef.current = editor;
                 (window as any).monaco = m;
               }}
             />

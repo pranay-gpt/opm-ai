@@ -5,6 +5,7 @@ from opm_ai.postprocess.plots import plot_production, plot_pressure, plot_cumula
 from opm_ai.postprocess.resinsight_bridge import (
     is_resinsight_available,
     export_snapshots,
+    launch_resinsight,
 )
 from opm_ai.postprocess.summary import read_summary
 
@@ -17,4 +18,5 @@ __all__ = [
     "plot_watercut",
     "is_resinsight_available",
     "export_snapshots",
+    "launch_resinsight",
 ]

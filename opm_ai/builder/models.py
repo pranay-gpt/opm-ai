@@ -42,6 +42,15 @@ class ReservoirSpec(BaseModel):
     top_depth: float = Field(default=8325.0, description="Top depth of layer 1 (ft)")
     porosity: float = Field(default=0.3, ge=0.01, le=0.5, description="Porosity (fraction)")
 
+    # Initial reservoir pressure at datum depth (psia). The deck's EQUIL
+    # block needs this for the initialization step. Default 4800 psia is
+    # the SPE1 reference value; users describing deeper or shallower
+    # reservoirs routinely override it (see builder.extract).
+    initial_pressure: float = Field(
+        default=4800.0, ge=14.7, le=20000.0,
+        description="Initial reservoir pressure at datum depth (psia)",
+    )
+
     # Permeability (mD)
     permx: float | list[float] = Field(default_factory=lambda: [500.0, 50.0, 200.0])
     permy: float | list[float] = Field(default_factory=lambda: [500.0, 50.0, 200.0])

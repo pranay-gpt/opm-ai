@@ -3,8 +3,15 @@
 import json
 from pathlib import Path
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, HTTPException
+from pydantic import ValidationError
 from typing import Any
 
+# Max bytes for a single ChatRequest frame. Anything larger is rejected
+# before pydantic parses it; the LLM has no use for a multi-MB history
+# and an oversized frame usually means a runaway client loop.
+WS_MAX_FRAME_BYTES = 64 * 1024
+
+from opm_ai.api.job_helpers import job_output_dir
 from opm_ai.api.paths import validate_deck_path, validate_output_path
 from opm_ai.api.schemas import (
     ChatMessage, ChatRequest, TOOLS,
@@ -111,20 +118,12 @@ async def tool_run_simulation(args: dict) -> dict:
                 )
                 result = await asyncio.get_event_loop().run_in_executor(None, run_simulation, job)
 
+                # F4.2 audit fix: from_runner classmethod on the DTO
+                # replaces the inline 12-line copy. Pydantic model_dump
+                # is no longer used for crash_report because the DTO
+                # field is now a CrashReportDTO, not a dict.
                 from opm_ai.api.schemas import SimulationResultDTO
-                result_dto = SimulationResultDTO(
-                    success=result.success,
-                    output_dir=str(result.output_dir),
-                    crash_report=result.crash_report.model_dump() if result.crash_report else None,
-                    returncode=result.returncode,
-                    duration_s=result.duration_s,
-                    stdout=result.stdout,
-                    stderr=result.stderr,
-                    warnings=result.warnings,
-                    summary_files={k: str(v) for k, v in result.summary_files.items()},
-                    prt_path=str(result.prt_path) if result.prt_path else None,
-                )
-                set_job_completed(job_id, result_dto)
+                set_job_completed(job_id, SimulationResultDTO.from_runner(result))
             except Exception as e:
                 set_job_failed(job_id, str(e))
 
@@ -145,7 +144,7 @@ async def tool_get_kpis(args: dict) -> dict:
     if not job or job.status != "completed" or not job.result:
         return {"error": "Job not found or not completed"}
 
-    output_dir = Path(job.result.output_dir)
+    output_dir = job_output_dir(job)
     loop = asyncio.get_event_loop()
     df = await loop.run_in_executor(None, lambda: read_summary(output_dir))
     if df.empty:
@@ -237,7 +236,7 @@ async def tool_export_snapshots(args: dict) -> dict:
     if not job or job.status != "completed" or not job.result:
         return {"error": "Job not found or not completed"}
 
-    output_dir = Path(job.result.output_dir)
+    output_dir = job_output_dir(job)
     loop = asyncio.get_event_loop()
     result = await loop.run_in_executor(None, lambda: export_snapshots(output_dir))
 
@@ -308,7 +307,27 @@ async def websocket_chat(websocket: WebSocket):
     try:
       while True:
         data = await websocket.receive_text()
-        request = ChatRequest.model_validate_json(data)
+        if len(data.encode("utf-8")) > WS_MAX_FRAME_BYTES:
+            # Send a structured error frame and keep the connection open:
+            # the next turn may be a legitimate, small request.
+            await websocket.send_text(json.dumps({
+                "type": "error",
+                "code": "payload_too_large",
+                "message": f"Frame exceeds {WS_MAX_FRAME_BYTES} bytes",
+            }))
+            continue
+        try:
+            request = ChatRequest.model_validate_json(data)
+        except (ValidationError, json.JSONDecodeError) as e:
+            # Malformed frame must not kill the connection. The frontend
+            # is the only legit client and it never sends garbage, so this
+            # is a defensive path.
+            await websocket.send_text(json.dumps({
+                "type": "error",
+                "code": "invalid_payload",
+                "message": str(e)[:500],
+            }))
+            continue
 
         session_id = request.session_id
         system_prompt = load_system_prompt()

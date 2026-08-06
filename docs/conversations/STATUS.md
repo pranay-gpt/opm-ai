@@ -565,4 +565,63 @@ default, so the user can `BASE_URL=http://10.211.55.5:8000
 ./scripts/smoke.sh` (or hit it from a phone/tablet on the LAN)
 without re-binding anything.
 
+### 2026-08-05 (later same day, third commit pair): branch squash + cleanup
+
+The branch landscape had drifted to **11 local branches and 3
+remote branches** (see `git branch -a` before this commit). The
+substantive dev work since "Spec: cleanup and performance pass"
+(`0402f67`) was sitting on `worktree-3d-viewer` — 50 commits
+ahead of `main`, never merged. `main` was at `b233d85`, lagging
+behind the actual project state by 50 commits.
+
+After discussion with the user, three actions:
+
+1. **Squash-merge `worktree-3d-viewer` -> `main`** (commit
+   `ff13487` on main, "feat: deck upload, audit backlog #1-#11,
+   build/run hardening"). 119 files, +76409 / -795 lines
+   collapsed into one shippable unit. The full 50-commit
+   forensic history is preserved on the
+   `worktree-3d-viewer` branch (now also pushed to origin as
+   a backup). Smoke 8/8 pass on `main` post-merge; push to
+   `origin/main` was a clean fast-forward.
+
+2. **Delete the 8 stale local branches and their worktrees**:
+   - 4 `worktree-agent-*` branches (their content was already
+     merged into `worktree-3d-viewer` via `Merge Stage B` /
+     `Merge Stage E` commits — keeping them around was noise).
+   - 4 stale local-only branches (`worktree-brag-composition-fix`,
+     `worktree-readme-fix-3d`, `worktree-readme-update`,
+     `worktree-stage3-builder-linter`) all 5 commits behind
+     `main` with no in-flight WIP.
+
+3. **Delete the 2 remote branches** that pointed at commits
+   already on `main` (`origin/worktree-readme-fix-3d`,
+   `origin/worktree-readme-update`). API check confirmed no
+   open or closed PRs ever referenced these branches — they
+   were orphan pushes.
+
+Final repo state: **2 local branches** (`main`,
+`worktree-3d-viewer`), **2 remote branches**
+(`origin/main`, `origin/worktree-3d-viewer`), **2 worktrees**
+(`/home/parallels/opm-ai` and
+`/home/parallels/opm-ai/.claude/worktrees/3d-viewer`).
+
+Long-term pattern: feature work happens on
+`worktree-3d-viewer` (or a freshly-spawned
+`worktree-<feature>` for parallel work); when a batch is
+shippable, squash-merge into `main`, push, and keep the dev
+branch around as the working home. This is documented as the
+project convention in this STATUS entry (no CLAUDE.md change
+needed; the convention is enforced by `scripts/run.sh` which
+expects to run from inside a worktree).
+
+Reversibility notes:
+- Branch refs recoverable from reflog for ~90 days if any
+  of the deleted work turns out to be needed.
+- The squash commit is a single object on `main` — could be
+  reverted with `git revert ff13487` if needed (would not
+  un-squash; just produce a counter-commit).
+- `origin/main` push is the only irreversible step. Push
+  succeeded; `main` now reads as the project's actual state.
+
 Nothing further deferred.

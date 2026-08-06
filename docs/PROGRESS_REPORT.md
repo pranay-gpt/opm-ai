@@ -303,3 +303,69 @@ Server is left running under task id `bvx44lx7g` with the new default.
 
 - No reaper for `opm_ai_upload_*` mkdtemp dirs on partial upload. Acceptable
   for v1; periodic cleanup task would be a small follow-up.
+
+## Status: 2026-08-05 (later same day, third commit pair) — branch squash + cleanup
+
+Before this commit the repo had drifted to **11 local branches and 3 remote
+branches**. The substantive dev work since `0402f67` ("Spec: cleanup and
+performance pass") was sitting on `worktree-3d-viewer` — 50 commits ahead
+of `main`, never merged. `main` was at `b233d85`, lagging by 50 commits.
+
+Three actions, in order, with reversibility notes:
+
+### 1. Squash-merge `worktree-3d-viewer` -> `main`
+
+Commit `ff13487` on main: "feat: deck upload, audit backlog #1-#11, build/run
+hardening". 119 files, +76409 / -795 lines collapsed to one shippable unit.
+The full 50-commit forensic history is preserved on the `worktree-3d-viewer`
+branch (now also pushed to origin as a backup).
+
+The squash commit message organises the 50 underlying commits into named
+groups (audit backlogs #1-#11, deck upload feature, frontend test infra,
+build/run hardening, docs refresh, Stage B/C/D/E features). Anyone reading
+`git log main` gets the project's actual story; anyone wanting the
+session-by-session diary reads `git log worktree-3d-viewer`.
+
+Smoke 8/8 pass on `main` post-merge. `git push origin main` was a clean
+fast-forward (`b233d85 -> ff13487`).
+
+### 2. Delete the 8 stale local branches + worktrees
+
+- 4 `worktree-agent-*` branches (their content was already merged into
+  `worktree-3d-viewer` via `Merge Stage B` / `Merge Stage E` commits — keeping
+  them around was noise).
+- 4 stale local-only branches (`worktree-brag-composition-fix`,
+  `worktree-readme-fix-3d`, `worktree-readme-update`,
+  `worktree-stage3-builder-linter`) all 5 commits behind `main` with no
+  in-flight WIP.
+
+### 3. Delete the 2 remote branches with no PR history
+
+GitHub API check (`/repos/pranay-gpt/opm-ai/pulls?state=all&head=...`)
+returned `[]` for both — no open or closed PRs ever referenced
+`origin/worktree-readme-fix-3d` or `origin/worktree-readme-update`. Both
+branches pointed at commits already on `main` (`48ecf2c` and `8544760`,
+respectively). Deleted via `git push origin --delete`.
+
+### Final state
+
+- 2 local branches: `main`, `worktree-3d-viewer`
+- 2 remote branches: `origin/main`, `origin/worktree-3d-viewer`
+- 2 worktrees: `/home/parallels/opm-ai` (main), `/home/parallels/opm-ai/.claude/worktrees/3d-viewer` (3d-viewer)
+
+### Convention going forward
+
+Feature work happens on `worktree-3d-viewer` (or a freshly-spawned
+`worktree-<feature>` for parallel work); when a batch is shippable,
+squash-merge into `main`, push, and keep the dev branch around as the
+working home. `scripts/run.sh` expects to run from inside a worktree,
+which enforces the convention operationally.
+
+### Reversibility
+
+- Branch refs recoverable from reflog for ~90 days if any deleted work
+  turns out to be needed.
+- The squash commit `ff13487` is a single object on `main`; revert with
+  `git revert ff13487` if needed (counter-commit, doesn't un-squash).
+- The `origin/main` push is the only step that's irreversible on the
+  remote side. It succeeded; `main` now reflects the project's actual state.

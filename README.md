@@ -2,81 +2,84 @@
 
 # OPM-AI
 
-**An AI-assisted workbench for reservoir simulation, built on the open-source [OPM Flow](https://opm-project.org/) simulator.**
+### An AI-assisted workbench for reservoir simulation, built on the open-source [OPM Flow](https://opm-project.org/) simulator.
 
-Describe a reservoir in plain English. Get back a valid deck, a lint report, a
-3D view of the grid, and a chat that explains what the numbers mean.
+*Describe a reservoir in plain English. Get back a valid deck, a lint report, a 3D view of the grid, and a chat that explains what the numbers mean.*
+
+<br>
 
 [![Python](https://img.shields.io/badge/Python-3.12+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](./LICENSE)
-[![Tests](https://img.shields.io/badge/tests-454_passing-22c55e?style=for-the-badge&logo=githubactions&logoColor=white)](#development)
+[![Tests](https://img.shields.io/badge/tests-513_passing-22c55e?style=for-the-badge&logo=githubactions&logoColor=white)](#development)
 [![Powered by](https://img.shields.io/badge/powered_by-OPM_Flow-f97316?style=for-the-badge&logoColor=white)](https://opm-project.org/)
 [![Frontend](https://img.shields.io/badge/frontend-React_18-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Backend](https://img.shields.io/badge/backend-FastAPI-009485?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 
 </div>
 
+<br>
+
 <div align="center">
 
-### Quick Start
+### Get started
 
-[![Docker](https://img.shields.io/badge/▶_Quick_Start-Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](#quick-start-with-docker)
-[![Ubuntu/Linux](https://img.shields.io/badge/▶_Install-Ubuntu%2FLinux-22c55e?style=for-the-badge&logo=linux&logoColor=white)](#install-on-ubuntu--linux)
-
----
-
-**Made for students, researchers, and faculty who want to learn and teach
-reservoir engineering without fighting the tooling.**
+[![Docker](https://img.shields.io/badge/▶_Run_with_Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](#quick-start-with-docker)
+[![Ubuntu](https://img.shields.io/badge/▶_Install_on_Ubuntu-22c55e?style=for-the-badge&logo=ubuntu&logoColor=white)](#install-on-ubuntu--linux)
+[![macOS](https://img.shields.io/badge/▶_Install_on_macOS-000000?style=for-the-badge&logo=apple&logoColor=white)](#install-on-macos-preview)
+[![Windows](https://img.shields.io/badge/▶_Install_on_Windows_(WSL2)-0078D4?style=for-the-badge&logo=windows&logoColor=white)](#install-on-windows-via-wsl2)
 
 </div>
 
+---
+
 ## Why this exists
 
-Reservoir simulation has a tooling problem, not a physics problem. The physics
-is open: [OPM Flow](https://opm-project.org/) is a production-grade, fully
-implicit three-phase black-oil simulator, free to anyone, and it will happily
-solve a field model on a laptop. What stops people is everything around it.
-The input deck is an unforgiving fixed-format language where a missing slash
-400 lines down produces an error message about something else entirely.
-Reading the results means another tool. Understanding them means someone
-senior with time to spare.
+Reservoir simulation has a tooling problem, not a physics problem. The physics is
+open: [OPM Flow](https://opm-project.org/) is a production-grade, fully implicit
+three-phase black-oil simulator, free to anyone, and it will happily solve a field
+model on a laptop. What stops people is everything around it. The input deck is an
+unforgiving fixed-format language where a missing slash 400 lines down produces an
+error message about something else entirely. Reading the results means another
+tool. Understanding them means someone senior with time to spare.
 
-So the simulator is free and the knowledge is not. Students learn the theory
-from a textbook and meet a real deck for the first time in industry.
+So the simulator is free and the knowledge is not. Students learn the theory from
+a textbook and meet a real deck for the first time in industry.
 
-OPM-AI is an attempt to close that gap. Describe a reservoir in plain English
-and it writes the deck, checks it before you burn an hour on a run that was
-never going to converge, executes it on OPM Flow, draws the grid in 3D, and
-explains what came back. Every layer is inspectable: the generated deck is a
-normal `.DATA` file you can read, edit, and run by hand with `flow`. Nothing
-is hidden behind a binary format or a licence server.
+**OPM-AI is an attempt to close that gap.** Describe a reservoir in plain English
+and it writes the deck, checks it before you burn an hour on a run that was never
+going to converge, executes it on OPM Flow, draws the grid in 3D, and explains
+what came back. Every layer is inspectable: the generated deck is a normal
+`.DATA` file you can read, edit, and run by hand with `flow`. Nothing is hidden
+behind a binary format or a licence server.
 
-It runs fully offline by default. No API key, no account, no telemetry, and
-no network call unless you opt in to the LLM features.
+It runs fully offline by default. No API key, no account, no telemetry, and no
+network call unless you opt in to the LLM features.
 
-One caveat worth stating up front: the binary grid fixtures (`.EGRID`,
-`.UNRST`, `.INIT`) are gitignored to keep the clone small, so the tests that
-read them are skipped on a fresh checkout until you run a simulation of your
-own. Everything else works immediately.
+One caveat worth stating up front: the binary grid fixtures (`.EGRID`, `.UNRST`,
+`.INIT`) are gitignored to keep the clone small, so the tests that read them are
+skipped on a fresh checkout until you run a simulation of your own. Everything
+else works immediately.
 
 ## Features
 
-- **Build decks from plain English** — describe a model and get a valid OPM
-  Flow deck, with an offline generator and optional LLM extraction
+- **Build decks from plain English** — describe a model and get a valid OPM Flow
+  deck, with an offline generator and optional LLM extraction
 - **Lint decks offline** — a calibrated rule engine catches errors and
   inconsistencies before you run, no simulator needed
-- **Run OPM Flow** — launch simulations and get structured results, with
-  readable crash reports when a run fails
-- **See the results** — field and per-well KPIs, interactive Plotly charts,
-  and a native WebGL 3D grid viewer (cell filters, ternary saturation, faults,
+- **Run OPM Flow** — launch simulations and get structured results, with crash
+  report parsing when something goes wrong
+- **See the results** — field and per-well KPIs, interactive Plotly charts, and
+  a native WebGL 3D grid viewer (cell filters, ternary saturation, faults,
   wells, time-step playback)
 - **Chat with tools** — one conversation that builds, lints, runs, plots, and
   explains
 - **Learn as you go** — concept explanations and auto-generated quizzes for
   reservoir topics
-- **Live keyword assistance** — Monaco editor with autocomplete from the
-  merged ERM + fixture keyword catalogue (1916+ keywords), with per-keyword
-  parameter documentation on hover
+- **Live keyword assistance** — Monaco editor with autocomplete from the merged
+  ERM + fixture keyword catalogue (1916+ keywords), with per-keyword parameter
+  documentation on hover
+- **Upload your own decks** — pick a `.DATA` file plus its `include/` folder
+  from the Simulator page and run it as-is
 - **Pick your PVT correlation** — Standing, Vasquez-Beggs, or Al-Marhoun for
   the fluid section, with one dropdown
 - **Dark, light, and auto themes** — sharp panels, rounded controls, follows
@@ -84,59 +87,26 @@ own. Everything else works immediately.
 
 ## Screenshots
 
-### Home — dark theme (default)
+<table>
+  <tr>
+    <td align="center" width="280"><img src="docs/screenshots/home-dark.png" width="280" alt="Home — dark theme"><br><b>Home (dark)</b></td>
+    <td align="center" width="280"><img src="docs/screenshots/home-light.png" width="280" alt="Home — light theme"><br><b>Home (light)</b></td>
+    <td align="center" width="280"><img src="docs/screenshots/builder-deck.png" width="280" alt="Deck Builder"><br><b>Deck Builder</b></td>
+    <td align="center" width="280"><img src="docs/screenshots/linter.png" width="280" alt="Linter"><br><b>Linter</b></td>
+  </tr>
+  <tr>
+    <td align="center" width="280"><img src="docs/screenshots/simulator-page.png" width="280" alt="Simulator"><br><b>Simulator</b></td>
+    <td align="center" width="280"><img src="docs/screenshots/results.png" width="280" alt="Results — KPIs and tables"><br><b>Results — KPIs</b></td>
+    <td align="center" width="280"><img src="docs/screenshots/results-plot.png" width="280" alt="Results — Interactive Plotly charts"><br><b>Results — Charts</b></td>
+    <td align="center" width="280"><img src="docs/screenshots/results-3D.png" width="280" alt="Results — 3D viewer"><br><b>Results — 3D</b></td>
+  </tr>
+  <tr>
+    <td align="center" width="280" colspan="2"><img src="docs/screenshots/learn.png" width="280" alt="Learn"><br><b>Learn</b></td>
+    <td align="center" width="280" colspan="2"><img src="docs/screenshots/chat.png" width="280" alt="Chat"><br><b>Chat</b></td>
+  </tr>
+</table>
 
-<p align="center">
-  <img src="docs/screenshots/home-dark.png" alt="Home dark theme" width="800">
-</p>
-
-### Deck Builder
-
-<p align="center">
-  <img src="docs/screenshots/builder-deck.png" alt="Deck Builder" width="800">
-</p>
-
-### Linter
-
-<p align="center">
-  <img src="docs/screenshots/linter.png" alt="Linter" width="800">
-</p>
-
-### Simulator
-
-<p align="center">
-  <img src="docs/screenshots/simulator-page.png" alt="Simulator" width="800">
-</p>
-
-### Results — KPIs and tables
-
-<p align="center">
-  <img src="docs/screenshots/results.png" alt="Results" width="800">
-</p>
-
-### Results — Interactive Plotly charts
-
-<p align="center">
-  <img src="docs/screenshots/results-plot.png" alt="Results Plot" width="800">
-</p>
-
-### Results — 3D
-
-<p align="center">
-  <img src="docs/screenshots/results-3D.png" alt="Results 3D" width="800">
-</p>
-
-### Learn & Chat
-
-| Learn | Chat |
-|---|---|
-| ![Learn](docs/screenshots/learn.png) | ![Chat](docs/screenshots/chat.png) |
-
-### Light theme
-
-<p align="center">
-  <img src="docs/screenshots/home-light.png" alt="Home light theme" width="800">
-</p>
+---
 
 ## Quick Start
 
@@ -152,10 +122,10 @@ docker compose up -d --build
 # open http://localhost:8000
 ```
 
-The frontend is built inside the image, so you don't need Node locally. The
-app runs fully offline by default; to enable the LLM chat and extraction
-features, copy `.env.example` to `.env` and add an API key (e.g.
-`GROQ_API_KEY` with `LLM_PROVIDER=groq`).
+The frontend is built inside the image, so you don't need Node locally. The app
+runs fully offline by default; to enable the LLM chat and extraction features,
+copy `.env.example` to `.env` and add an API key (e.g. `GROQ_API_KEY` with
+`LLM_PROVIDER=groq`).
 
 ### Quick Start with one script (Ubuntu/Linux/macOS)
 
@@ -170,18 +140,18 @@ cd opm-ai
 ```
 
 `./scripts/run.sh dev` serves the backend on `:8000` plus the Vite dev server
-on `:5173` with hot reload. Ctrl-C stops both processes. `build` is only
-needed the first time and after frontend changes; `dev` skips it and serves
-from Vite instead.
+on `:5173` with hot reload. Ctrl-C stops both processes. `build` is only needed
+the first time and after frontend changes; `dev` skips it and serves from Vite
+instead.
 
-The script needs OPM Flow on `PATH` (see the install guide below), Node 18+,
-and Python 3.12+. It looks for the virtualenv at `.venv/` and
-`~/opm-ai/.venv/`; set `OPM_VENV=/path/to/.venv` to override.
+The script needs OPM Flow on `PATH` (see the install guide below), Node 18+, and
+Python 3.12+. It looks for the virtualenv at `.venv/` and `~/opm-ai/.venv/`;
+set `OPM_VENV=/path/to/.venv` to override.
 
 ## Install on Ubuntu / Linux
 
-This is the path if you want to run OPM-AI natively without Docker. Tested
-on **Ubuntu 24.04 Noble** (the same base the Docker image uses). Other Debian-
+This is the path if you want to run OPM-AI natively without Docker. Tested on
+**Ubuntu 24.04 Noble** (the same base the Docker image uses). Other Debian-
 based distros work the same; RHEL/Fedora need the package names adjusted.
 
 ### 1. System packages
@@ -238,21 +208,21 @@ Open `.env` and set anything you want non-default:
 | `LLM_PROVIDER` | `offline` | `offline`, `groq`, `openai`, `nim`, or `auto` |
 | `GROQ_API_KEY` | empty | Enables the Groq provider (default model `llama-3.3-70b-versatile`) |
 | `OPENAI_API_KEY` | empty | Enables the OpenAI provider |
-| `NVIDIA_NIM_API` | empty | Enables NVIDIA NIM via OpenAI-compatible endpoint |
+| `NVIDIA_NIM_API` | empty | Enables the NVIDIA NIM provider (any OpenAI-compatible endpoint) |
 | `OPM_FLOW_BINARY` | `/usr/bin/flow` | Path to the Flow binary |
 | `OPM_DECKS_ROOT` | unset | Extra directory for the deck browser (see Usage) |
 | `API_HOST` / `API_PORT` | `0.0.0.0` / `8000` | Backend bind address |
 | `FRONTEND_URL` | `http://localhost:5173` | CORS origin for the Vite dev server |
 
 Leave `LLM_PROVIDER=offline` to never make network calls. Set one of the
-`GROQ_API_KEY` / `OPENAI_API_KEY` / `NVIDIA_NIM_API` keys and switch
+`GROQ_API_KEY` / `OPENAI_KEY` / `NVIDIA_NIM_API` keys and switch
 `LLM_PROVIDER=groq` (or the matching value) to enable chat, deck extraction
 from natural language, and the LLM-generated lint summary.
 
 ### 4. Build the frontend (first run only)
 
-The frontend is a React SPA. The image builds it for you; on a native
-install you build it once and the FastAPI app serves the resulting bundle.
+The frontend is a React SPA. The image builds it for you; on a native install
+you build it once and the FastAPI app serves the resulting bundle.
 
 ```bash
 cd frontend
@@ -279,7 +249,7 @@ instantly.
 ### 6. Verify
 
 ```bash
-pytest                   # 454 tests, ~60s on a 4-core laptop
+pytest                   # 513 tests, ~60s on a 4-core laptop
 cd frontend && npm test  # frontend self-checks (Monaco completions, deck sections)
 ```
 
@@ -333,6 +303,8 @@ wsl --install -d Ubuntu-24.04
 Point your Windows browser at `http://localhost:8000` — WSL2 forwards the
 port automatically.
 
+---
+
 ## Usage
 
 ### Build a deck from a description
@@ -368,6 +340,14 @@ library by setting `OPM_DECKS_ROOT=/path/to/decks` in `.env`. This is
 deliberately an opt-in: an unset `OPM_DECKS_ROOT` keeps the API surface
 narrow.
 
+### Upload your own deck
+
+The **Upload** button on the Simulator page takes a `.DATA` file plus an
+optional `include/` folder (preserves the layout Flow expects) and submits
+the whole thing as a single runnable job. The folder picker is
+Chromium-only (`webkitdirectory`); on Firefox/Safari it falls back to a
+plain multi-file picker.
+
 ### Use the chat
 
 The chat is a WebSocket conversation that can call the build / lint / run /
@@ -391,6 +371,8 @@ job store survives restarts; the in-memory LLM cache does not.
 The backend uses `loguru`. Set `LOG_LEVEL=DEBUG` in `.env` for verbose
 output. LLM client failures log at WARNING — they fall back to offline
 behaviour, so a working app never requires the LLM to be online.
+
+---
 
 ## Architecture
 
@@ -440,10 +422,8 @@ opm-ai/
 │   ├── postprocess/         Summary vectors, KPIs, plots, 3D grid
 │   ├── explainer/           Retrieval-backed explanations and quizzes
 │   ├── preprocess/          PVT and relative permeability table builders
-│   ├── llm/                 Provider client (optional, offline by default)
-│   └── cli.py               Click CLI entry point
-├── tests/                   pytest suite (454 tests)
-├── docker/                  Dockerfile, compose
+│   ├── llm/                 Provider abstraction + offline fallback
+│   └── deployment/          Docker stack, CI helpers
 ├── docs/                    Screenshots, design records, viewer contract
 └── scripts/                 run.sh, smoke.sh
 ```
@@ -459,6 +439,8 @@ There is no ResInsight process behind it. The packaged ResInsight build ships
 without gRPC and its batch mode needs a live X display, so an in-process
 bridge was never possible and the viewer was written from the file formats up.
 
+---
+
 ## Development
 
 | Command | Purpose |
@@ -466,7 +448,7 @@ bridge was never possible and the viewer was written from the file formats up.
 | `docker compose up -d --build` | Full stack in containers |
 | `./scripts/run.sh dev` | Backend plus Vite hot reload |
 | `pip install -e ".[dev]"` | Local Python dev environment (installs pytest) |
-| `pytest` | Run the test suite (454 tests) |
+| `pytest` | Run the test suite (513 tests) |
 | `cd frontend && npm run build` | Production frontend bundle |
 | `cd frontend && npm test` | Frontend self-check (Monaco completions, deck sections) |
 | `cd frontend && npm run lint` | Lint the frontend |
@@ -478,6 +460,8 @@ be a real Flow error, with zero false positives across 133+ fixture decks.
 The fixture suite is the regression gate for the linter; when changing rules,
 run the full dataset and verify the false-positive count stays at zero.
 
+---
+
 ## Roadmap
 
 - Mobile-first layouts for the Simulator form and the 3D control panel
@@ -487,6 +471,8 @@ run the full dataset and verify the false-positive count stays at zero.
 - Inline linter diagnostics in the deck editor
 - Audit backlog from the 2026-08-04 review (linter rule ID collisions,
   silent exception clauses, duplicate save-deck-and-lint workflow)
+
+---
 
 ## Credits
 

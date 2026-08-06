@@ -106,24 +106,16 @@ everyone.
 
 ## Screenshots
 
-<table>
-  <tr>
-    <td align="center" width="280"><img src="docs/screenshots/home-dark.png" width="280" alt="Home — dark theme"><br><b>Home (dark)</b></td>
-    <td align="center" width="280"><img src="docs/screenshots/home-light.png" width="280" alt="Home — light theme"><br><b>Home (light)</b></td>
-    <td align="center" width="280"><img src="docs/screenshots/builder-deck.png" width="280" alt="Deck Builder"><br><b>Deck Builder</b></td>
-    <td align="center" width="280"><img src="docs/screenshots/linter.png" width="280" alt="Linter"><br><b>Linter</b></td>
-  </tr>
-  <tr>
-    <td align="center" width="280"><img src="docs/screenshots/simulator-page.png" width="280" alt="Simulator"><br><b>Simulator</b></td>
-    <td align="center" width="280"><img src="docs/screenshots/results.png" width="280" alt="Results — KPIs and tables"><br><b>Results — KPIs</b></td>
-    <td align="center" width="280"><img src="docs/screenshots/results-plot.png" width="280" alt="Results — Interactive Plotly charts"><br><b>Results — Charts</b></td>
-    <td align="center" width="280"><img src="docs/screenshots/results-3D.png" width="280" alt="Results — 3D viewer"><br><b>Results — 3D</b></td>
-  </tr>
-  <tr>
-    <td align="center" width="280" colspan="2"><img src="docs/screenshots/learn.png" width="280" alt="Learn"><br><b>Learn</b></td>
-    <td align="center" width="280" colspan="2"><img src="docs/screenshots/chat.png" width="280" alt="Chat"><br><b>Chat</b></td>
-  </tr>
-</table>
+<p align="center"><img src="docs/screenshots/home-dark.png" width="640" alt="Home — dark theme"><br><b>Home (dark)</b></p>
+<p align="center"><img src="docs/screenshots/home-light.png" width="640" alt="Home — light theme"><br><b>Home (light)</b></p>
+<p align="center"><img src="docs/screenshots/builder-deck.png" width="640" alt="Deck Builder"><br><b>Deck Builder</b></p>
+<p align="center"><img src="docs/screenshots/linter.png" width="640" alt="Linter"><br><b>Linter</b></p>
+<p align="center"><img src="docs/screenshots/simulator-page.png" width="640" alt="Simulator"><br><b>Simulator</b></p>
+<p align="center"><img src="docs/screenshots/results.png" width="640" alt="Results — KPIs and tables"><br><b>Results — KPIs</b></p>
+<p align="center"><img src="docs/screenshots/results-plot.png" width="640" alt="Results — Interactive Plotly charts"><br><b>Results — Charts</b></p>
+<p align="center"><img src="docs/screenshots/results-3D.png" width="640" alt="Results — 3D viewer"><br><b>Results — 3D</b></p>
+<p align="center"><img src="docs/screenshots/learn.png" width="640" alt="Learn"><br><b>Learn</b></p>
+<p align="center"><img src="docs/screenshots/chat.png" width="640" alt="Chat"><br><b>Chat</b></p>
 
 ---
 

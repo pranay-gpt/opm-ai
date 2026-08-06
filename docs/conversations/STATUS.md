@@ -701,3 +701,50 @@ LinkedIn analytics show high mobile-bounce.
   convention.
 
 Nothing further deferred.
+
+## 2026-08-05 — v0.1.0 release tag
+
+**Trigger:** User confirmed "least destructive" merge path —
+no new merge commits, no worktree deletion, no version-string
+edits. Just tag the current `main` HEAD as the first
+public release.
+
+**Action:**
+
+- Annotated tag `v0.1.0` created at `main` HEAD (`24c327b`).
+  Tagger: Pranay Gupta. Tag message enumerates the shipped
+  feature set (deck builder, linter, runner, 3D viewer, chat,
+  learn, keyword autocomplete, deck upload, themes,
+  install paths).
+- Tag pushed to `origin`.
+- Verified visible: `https://github.com/pranay-gpt/opm-ai/tree/v0.1.0`
+  returns 200, shows the tag badge on the repo tree.
+
+**What was deliberately NOT done:**
+
+- No merge commit from `worktree-3d-viewer` into `main`.
+  File trees are already identical; a merge commit would
+  add zero new content and just pollute history.
+- No worktree deletion. `/home/parallels/opm-ai/.claude/worktrees/3d-viewer`
+  remains as the detailed-history working home.
+- No `pyproject.toml` edit (already `0.1.0`, matches tag).
+- No `frontend/package.json` edit (says `"0.0.0"` — a known
+  mismatch with `pyproject.toml`. Leaving for a future
+  audit so version bumps land alongside any frontend
+  release-process changes.)
+- No README badge or "Current release" line addition
+  (would require a new commit + re-squash on both branches,
+  contradicting the "least destructive" instruction).
+- No CHANGELOG.md (never maintained; starting one
+  retroactively at v0.1 is busywork).
+
+**GitHub Releases page note:** Pushing a plain annotated
+tag does NOT auto-populate the GitHub Releases page.
+`https://github.com/pranay-gpt/opm-ai/releases` still shows
+"There aren't any releases here." The tag page itself
+(`/releases/tag/v0.1.0`) is reachable and shows the tag
+message. If a proper Releases entry is needed for the
+LinkedIn post, it requires the GitHub Releases API or
+manual UI publish — both out of scope here.
+
+Nothing further deferred.

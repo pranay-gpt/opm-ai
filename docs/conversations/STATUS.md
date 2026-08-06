@@ -748,3 +748,50 @@ LinkedIn post, it requires the GitHub Releases API or
 manual UI publish — both out of scope here.
 
 Nothing further deferred.
+
+## 2026-08-06 — Personal docs consolidated into docs/personal/
+
+**Trigger:** User requested moving all author-local
+planning notes into a `docs/` subfolder and gitignoring
+that subfolder.
+
+**Before:** 10 untracked author-local files split across
+two locations (repo root and `docs/`). `.gitignore` had
+7 root-level filename patterns from `b233d85`. The `docs/`
+folder was tracked and contained both public content
+(`conversations/`, `screenshots/`, `PROGRESS_REPORT.md`)
+and untracked personal files — confusing state.
+
+**Action:**
+
+- Created `docs/personal/` subfolder.
+- Moved all 10 personal files into it:
+  - From repo root: `OPM_AI_LINTER_BUILDER_KNOWLEDGE_GRAPH.md`,
+    `OPM_AI_RULES_CHAIN.md`, `OPM_AI_RULES_GRAPH.json`,
+    `CLAUDE.md` (remnant).
+  - From `docs/`: `BUILD_GUIDE.md`, `CONTEXT.md`,
+    `FORWARD_PLAN.md`, `IMPLEMENTATION_PLAN.md`,
+    `Instructions.txt`, `OPM.md`,
+    `OPM_AI_EXECUTIVE_SUMMARY.md`.
+- Updated `.gitignore`: replaced 7 root-level filename
+  patterns with `/docs/personal/` folder pattern, plus
+  safety-net `/OPM_AI_*.md` and `/OPM_AI_*.json` root
+  patterns.
+- Verified `git check-ignore` matches the folder, `git
+  status --ignored` lists `docs/personal/` under Ignored.
+
+**Worktree asymmetry complication:** The worktree and
+main checkout have independent untracked-file state.
+Moves in one didn't affect the other. Files were moved
+in both checkouts to keep `docs/personal/` consistent.
+
+**Commit:** `eae9cc8` on `worktree-3d-viewer`,
+`fe38a4d` on `main` (squash). Both pushed. Smoke 8/8
+passes. `v0.1.0` tag unaffected (still at `24c327b`).
+File diff between branches: empty.
+
+**Remaining untracked file:** `uv.lock` (197 KB) in
+worktree only. Pre-existing decision deferred — commit
+for reproducibility or gitignore to match pip workflow.
+
+Nothing further deferred.

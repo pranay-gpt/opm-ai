@@ -21,6 +21,16 @@
 
 <div align="center">
 
+### Developer and Author: **Pranay Gupta**
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Pranay_Gupta-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/pranay-ism/)
+
+</div>
+
+<br>
+
+<div align="center">
+
 ### Get started
 
 [![Docker](https://img.shields.io/badge/▶_Run_with_Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](#quick-start-with-docker)
@@ -44,8 +54,7 @@ steep operational learning curves, leaving academics and junior engineers
 stranded between textbook theory and applied field development.
 
 > [!IMPORTANT]
-> **OPM-AI is the first AI-assisted simulation platform built to modernize this
-> workflow.**
+> **First OPENSOURCE AI Assistive Reservoir Simulation Community Platform.**
 
 By positioning an **intelligent layer** between the user and the millions of
 coupled equations being solved, OPM-AI translates **plain-English** reservoir

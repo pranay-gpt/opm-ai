@@ -34,31 +34,41 @@
 
 ## Why this exists
 
-Reservoir simulation has a tooling problem, not a physics problem. The physics is
-open: [OPM Flow](https://opm-project.org/) is a production-grade, fully implicit
-three-phase black-oil simulator, free to anyone, and it will happily solve a field
-model on a laptop. What stops people is everything around it. The input deck is an
-unforgiving fixed-format language where a missing slash 400 lines down produces an
-error message about something else entirely. Reading the results means another
-tool. Understanding them means someone senior with time to spare.
+Reservoir simulation is **bottlenecked by legacy workflows**, not governing
+equations. While [OPM Flow](https://opm-project.org/) delivers an
+**industry-grade, three-phase black-oil solver for free**, the barrier to entry
+remains the **unforgiving Eclipse-style `.DATA` deck** — where a single
+misplaced slash cascades into **non-convergence** or obscure
+**matrix solver failures**. This locks practical reservoir engineering behind
+steep operational learning curves, leaving academics and junior engineers
+stranded between textbook theory and applied field development.
 
-So the simulator is free and the knowledge is not. Students learn the theory from
-a textbook and meet a real deck for the first time in industry.
+> [!IMPORTANT]
+> **OPM-AI is the first AI-assisted simulation platform built to modernize this
+> workflow.**
 
-**OPM-AI is an attempt to close that gap.** Describe a reservoir in plain English
-and it writes the deck, checks it before you burn an hour on a run that was never
-going to converge, executes it on OPM Flow, draws the grid in 3D, and explains
-what came back. Every layer is inspectable: the generated deck is a normal
-`.DATA` file you can read, edit, and run by hand with `flow`. Nothing is hidden
-behind a binary format or a licence server.
+By positioning an **intelligent layer** between the user and the millions of
+coupled equations being solved, OPM-AI translates **plain-English** reservoir
+descriptions into clean, ready-to-run decks. It performs **automated QA/QC**
+before you burn CPU time on ill-posed models, executes the run, renders the 3D
+grid, and diagnoses the dynamic fluid response. You maintain full control: the
+generated output is a **standard `.DATA` file**, completely transparent and
+unhidden by proprietary binaries.
 
-It runs fully offline by default. No API key, no account, no telemetry, and no
-network call unless you opt in to the LLM features.
+This radically accelerates the learning curve, making it a massive asset for
+university faculties teaching applied simulation and researchers running
+high-volume sensitivity experiments. It is **100% open-source** and free from
+licensing constraints, running **offline by default** without needing an API
+key. Actively developed and maintained by a **solo petroleum engineer**, this
+project exists to ensure that full-fledged, production-grade reservoir
+simulation is finally accessible, understandable, and completely free for
+everyone.
 
-One caveat worth stating up front: the binary grid fixtures (`.EGRID`, `.UNRST`,
-`.INIT`) are gitignored to keep the clone small, so the tests that read them are
-skipped on a fresh checkout until you run a simulation of your own. Everything
-else works immediately.
+> [!NOTE]
+> **Setup note —** Binary grid fixtures like `.EGRID`, `.UNRST`, and `.INIT`
+> are gitignored to keep the clone lightweight, so tests reading them will skip
+> until your first successful simulation run. Everything else works out of the
+> box.
 
 ## Features
 

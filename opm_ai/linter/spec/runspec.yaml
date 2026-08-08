@@ -235,26 +235,48 @@ VAPOIL:
 
 
 # Hand-curated: ENDSCALE
-# Two or three integer flags controlling endpoint scaling.
+# Four items: 2 string scaling-direction keywords + 2 integer
+# thresholds. Real fixture records look like:
+#   ENDSCALE 'NODIR' 'REVERS' 1 20 /
+# or just bare `ENDSCALE /` (all defaults).
+#
+# Phase 2 originally wrote 3 int items; Phase 2.5 fixture mining
+# (71 fixtures scanned, see scripts/calibration/scan_endscale.py)
+# exposed that the schema is wrong. Fixed in Phase 3.5 with
+# string + allowed_values for items 1-2 and int ranges for 3-4.
 ENDSCALE:
   section: RUNSPEC
   required: false
   repeated: false
+  min_items: 0
+  max_items: 4
   items:
-    - name: scaling_option
+    - name: scaling_direction_kr
+      type: string
+      default: NODIR
+      allowed_values: [NODIR, DIR, REVERS, IRREV, PREV]
+      notes:
+        - "Scaling direction for relative-perm endpoints."
+        - "NODIR (default) = no directional scaling."
+        - "REVERS = reversible endpoint shifting."
+    - name: scaling_direction_pcow
+      type: string
+      default: NODIR
+      allowed_values: [NODIR, DIR, REVERS, IRREV, PREV]
+      notes:
+        - "Scaling direction for capillary-pressure endpoints."
+    - name: ntendp
       type: int
       default: 1
-      range: [0, 4]
+      range: [1, 100]
       notes:
-        - "0 = no scaling; 1 = manual perm scaling; 2 = full directional; 3 = directional; 4 = reversible."
-    - name: relative_perm_threshold
+        - "Number of saturation end-point tables (1 = one table)."
+    - name: nsendp
       type: int
-      default: 0
-      range: [0, 1]
-    - name: pcow_threshold
-      type: int
-      default: 0
-      range: [0, 1]
+      default: 20
+      range: [1, 1000]
+      notes:
+        - "Number of saturation end-points per table."
 
 
 # Hand-curated: ECHO (verbosity flag, no items)

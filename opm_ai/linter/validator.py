@@ -72,6 +72,7 @@ def validate(deck: Deck, specs: dict[str, KeywordSpec]) -> list[LintIssue]:
         issues.extend(_check_required(deck, spec))
         issues.extend(_check_item_count(deck, spec))
         issues.extend(_check_item_ranges(deck, spec))
+        issues.extend(_check_mutex(deck, spec, specs))
     return issues
 
 
@@ -120,6 +121,64 @@ def _check_required(deck: Deck, spec: KeywordSpec) -> list[LintIssue]:
 
 
 # ---------------------------------------------------------------------- #
+# Check: mutex (mutually_exclusive_with)                                 #
+# ---------------------------------------------------------------------- #
+
+def _check_mutex(
+    deck: Deck,
+    spec: KeywordSpec,
+    specs: dict[str, KeywordSpec],
+) -> list[LintIssue]:
+    """ERROR if `spec.keyword` co-occurs with any of its mutex partners.
+
+    Phase 3.5: enforces `mutually_exclusive_with: list[str]` declared
+    in the YAML spec. Concrete pairs:
+    - COORD ↔ DX (corner-point vs rectangular grid).
+    - DZ + TOPS ↔ ZCORN (legacy vs corner-point Z).
+    - PVTO ↔ PVDO (live-oil vs dead-oil).
+    - PVTG ↔ PVDG (wet-gas vs dry-gas).
+    - SWOF ↔ SGFN (rel-perm with vs without pcow).
+    - SWOF ↔ SGOF (OPM allows either, but they're conceptually
+      alternative ways to specify the same Kr tables; in practice
+      decks use one or the other, not both. Marked as a soft
+      mutex, not enforced unless both have items.)
+
+    Each pair fires once per deck with rule_id `L2.<KEYWORD>.mutex`.
+    """
+    if not spec.mutually_exclusive_with:
+        return []
+    section_text = deck.get_section(spec.section)
+    if section_text is None or _section_includes(section_text):
+        return []
+    if not _has_keyword(section_text, spec.name):
+        return []
+    section_lines = deck.get_section_lines(spec.section)
+    line_num = section_lines[0] if section_lines else None
+    issues: list[LintIssue] = []
+    for partner_name in spec.mutually_exclusive_with:
+        partner_spec = specs.get(partner_name)
+        if partner_spec is None:
+            continue  # partner not in catalogue; skip silently.
+        partner_section = deck.get_section(partner_spec.section)
+        if partner_section is None or _section_includes(partner_section):
+            continue
+        if not _has_keyword(partner_section, partner_name):
+            continue
+        issues.append(LintIssue(
+            severity="WARNING",
+            section=spec.section,
+            keyword=spec.name,
+            line=line_num,
+            message=(
+                f"{spec.name} is mutually exclusive with {partner_name}: "
+                f"deck uses both. Choose one."
+            ),
+            rule_id=f"L2.{spec.name}.mutex",
+        ))
+    return issues
+
+
+# ---------------------------------------------------------------------- #
 # Check: item_count                                                      #
 # ---------------------------------------------------------------------- #
 
@@ -135,6 +194,32 @@ def _find_first_record_lines(deck: Deck, spec: KeywordSpec) -> list[tuple[int, s
 
     Multi-record keywords (repeated: true) are out of scope for Phase 3.
     """
+    records = _find_all_records(deck, spec)
+    return records[0] if records else []
+
+
+def _find_all_records(deck: Deck, spec: KeywordSpec) -> list[list[tuple[int, str]]]:
+    """Return all records of `spec.keyword` in its section.
+
+    Each record is a list of `(deck_line, line_text)` tuples for the
+    header line (with data glued if same-line layout) and any
+    following data lines.
+
+    A record ends when EITHER:
+      - A `/` terminator appears in a data line (record terminator).
+      - A new keyword header (raw line, no leading whitespace) is
+        encountered (next keyword's section).
+
+    Recognises three layouts:
+    1. Header on its own line, data on subsequent lines until a
+       record terminator or new keyword header.
+    2. Header + data on the same line (whole record on one line).
+    3. Header alone with no data (bare `KEYWORD /`) — recorded as
+       a single empty record so per-record checks can decide how
+       to handle it.
+
+    Returns [] if the keyword is absent from the section.
+    """
     section_text = deck.get_section(spec.section)
     if not section_text:
         return []
@@ -142,43 +227,79 @@ def _find_first_record_lines(deck: Deck, spec: KeywordSpec) -> list[tuple[int, s
     if not section_lines:
         return []
     start, end = section_lines
-    out: list[tuple[int, str]] = []
+    records: list[list[tuple[int, str]]] = []
+    current: list[tuple[int, str]] = []
     found_header = False
-    for deck_line, line in enumerate(section_text.split("\n"), start):
+    for deck_line, line in enumerate(section_text.split("\n"), start=start):
         if deck_line > end:
             break
         stripped = line.strip()
         if not stripped or stripped.startswith("--"):
+            # Blank/comment lines: include blank to preserve line
+            # numbering in records, but skip comments.
+            if found_header and current and stripped:
+                # Blank lines inside a record are ambiguous; treat as
+                # a soft break for safety.
+                records.append(current)
+                current = []
             continue
         # Match the keyword header (case-insensitive).
         m = re.match(rf"(?i)^\s*{re.escape(spec.name)}\b(.*)$", stripped)
-        if m and not found_header:
-            found_header = True
+        if m:
             tail = m.group(1).strip()
-            # Layout 2: header + data on the same line.
+            # Found a new record header. Close the previous record
+            # (if any) before starting the next.
+            if found_header and current:
+                records.append(current)
+                current = []
+            found_header = True
             if tail and tail != "/":
-                # The single line is `KEYWORD <data>`. The data may
-                # still contain `/` for the terminator.
+                # Layout 2: header + data on the same line.
                 if tail.endswith("/"):
                     tail = tail[:-1].strip()
-                out.append((deck_line, f"{spec.name} {tail}"))
-                return out
-            # Layout 3: header is alone on its line, but next line is
-            # a bare terminator (degenerate, all defaults).
-            # Continue iterating to confirm.
+                current.append((deck_line, f"{spec.name} {tail}"))
+                records.append(current)
+                current = []
+                continue
+            # Header on its own line. The terminator may be the very
+            # next line (`KEYWORD /`) or data may follow.
             continue
         if not found_header:
             continue
-        # Layout 1: data follows on subsequent lines. The current
-        # line is the first data line OR a terminator OR a new
-        # keyword (record done).
+        # We are inside a record's data lines.
+        # Distinguish "data + record terminator" from "data line
+        # followed by next record's data" — Eclipse allows multiple
+        # `/`-terminated records back-to-back.
         if stripped == "/" or stripped.startswith("/"):
-            return out
-        if re.match(r"^[A-Z][A-Z0-9_]*\b", stripped):
-            # New keyword header reached; the current record is done.
-            return out
-        out.append((deck_line, stripped))
-    return out
+            # A bare `/` line (no data on this line) is the section
+            # terminator. We already saw a record terminator on the
+            # previous data line; this just closes the section.
+            if current:
+                records.append(current)
+                current = []
+            break
+        if "/" in stripped:
+            # Record terminator on this line. Append the line,
+            # close the record.
+            current.append((deck_line, stripped))
+            records.append(current)
+            current = []
+            continue
+        # New keyword header (raw line, no leading whitespace).
+        if (
+            not line.startswith((" ", "\t"))
+            and re.match(r"^[A-Z][A-Z0-9_]*\b", stripped)
+        ):
+            # Records of *any* other keyword after our target are not
+            # part of our spec — stop iterating.
+            if current:
+                records.append(current)
+                current = []
+            break
+        current.append((deck_line, stripped))
+    if current:
+        records.append(current)
+    return records
 
 
 def _tokenize_record(line: str) -> list[str]:
@@ -222,10 +343,11 @@ def _tokenize_record(line: str) -> list[str]:
 
 
 def _check_item_count(deck: Deck, spec: KeywordSpec) -> list[LintIssue]:
-    """ERROR if the keyword's first record has fewer or more items than spec.
+    """ERROR if any record of the keyword has fewer or more items than spec.
 
-    Multi-record keywords (repeated: true) are out of scope; we only
-    check the first record. Phase 3.5 will introduce per-record checks.
+    Phase 3.5: iterates over every record. For multi-record keywords
+    (repeated: true) like PVTO, SWOF, FUNVAR, this catches errors
+    in record 2, row 5, etc. — not just the first one.
 
     Item-count bounds come from `spec.effective_min_items` and
     `spec.effective_max_items` (default: 1 and len(items)). For
@@ -242,41 +364,43 @@ def _check_item_count(deck: Deck, spec: KeywordSpec) -> list[LintIssue]:
         return []
     expected_min = spec.effective_min_items
     expected_max = spec.effective_max_items
-    record_lines = _find_first_record_lines(deck, spec)
-    if not record_lines:
+    records = _find_all_records(deck, spec)
+    if not records:
         # Keyword absent or has no data; _check_required catches that.
         return []
-    first_line_num, first_line_text = record_lines[0]
-    try:
-        tokens = _tokenize_record(first_line_text)
-    except Exception as exc:  # pragma: no cover - defensive
-        log.warning("could not tokenize %s record: %s", spec.name, exc)
-        return [_record_unparseable(spec, first_line_num, exc)]
-    actual = len(tokens)
-    if expected_min <= actual <= expected_max:
-        return []
-    if actual > expected_max:
-        hint = "more items than declared in spec"
-    else:
-        hint = "fewer items than declared in spec"
-    # Phase 3 default: item_count issues are INFO on uncalibrated
-    # specs (because the min/max bounds may not match real decks yet).
-    # Once a spec sets `calibrated: true`, item_count becomes WARNING.
-    # Required-keyword absence stays ERROR unconditionally.
-    severity = "INFO"
-    if _is_calibrated(spec):
-        severity = "WARNING"
-    return [LintIssue(
-        severity=severity,
-        section=spec.section,
-        keyword=spec.name,
-        line=first_line_num,
-        message=(
-            f"{spec.name} record has {actual} items, spec accepts "
-            f"{expected_min}-{expected_max} ({hint})"
-        ),
-        rule_id=f"L2.{spec.name}.item_count",
-    )]
+    issues: list[LintIssue] = []
+    severity = "WARNING" if _is_calibrated(spec) else "INFO"
+    for record_idx, record_lines in enumerate(records):
+        if not record_lines:
+            # Bare `KEYWORD /` — no items, treat as all defaults.
+            continue
+        first_line_num, first_line_text = record_lines[0]
+        try:
+            tokens = _tokenize_record(first_line_text)
+        except Exception as exc:  # pragma: no cover - defensive
+            log.warning("could not tokenize %s record %d: %s", spec.name, record_idx, exc)
+            issues.append(_record_unparseable(spec, first_line_num, exc))
+            continue
+        actual = len(tokens)
+        if expected_min <= actual <= expected_max:
+            continue
+        if actual > expected_max:
+            hint = "more items than declared in spec"
+        else:
+            hint = "fewer items than declared in spec"
+        which = "" if len(records) == 1 else f" (record {record_idx + 1})"
+        issues.append(LintIssue(
+            severity=severity,
+            section=spec.section,
+            keyword=spec.name,
+            line=first_line_num,
+            message=(
+                f"{spec.name} record has {actual} items, spec accepts "
+                f"{expected_min}-{expected_max}{which} ({hint})"
+            ),
+            rule_id=f"L2.{spec.name}.item_count",
+        ))
+    return issues
 
 
 # ---------------------------------------------------------------------- #
@@ -284,7 +408,10 @@ def _check_item_count(deck: Deck, spec: KeywordSpec) -> list[LintIssue]:
 # ---------------------------------------------------------------------- #
 
 def _check_item_ranges(deck: Deck, spec: KeywordSpec) -> list[LintIssue]:
-    """ERROR if any item value is outside the spec's range.
+    """WARNING/INFO if any item value is outside the spec's range.
+
+    Phase 3.5: iterates over every record. For multi-record keywords
+    like PVTO, this catches out-of-range values in record 2, 3, ...
 
     Skips non-numeric items (string, keyword, flag) and items with
     no range constraint. Honours `strict_min` / `strict_max` from
@@ -292,73 +419,97 @@ def _check_item_ranges(deck: Deck, spec: KeywordSpec) -> list[LintIssue]:
     """
     if not spec.items:
         return []
-    record_lines = _find_first_record_lines(deck, spec)
-    if not record_lines:
+    records = _find_all_records(deck, spec)
+    if not records:
         return []
-    first_line_num, first_line_text = record_lines[0]
-    try:
-        tokens = _tokenize_record(first_line_text)
-    except Exception as exc:  # pragma: no cover - defensive
-        return [_record_unparseable(spec, first_line_num, exc)]
-
     issues: list[LintIssue] = []
-    for idx, item in enumerate(spec.items):
-        if item.range is None:
+    severity = "WARNING" if _is_calibrated(spec) else "INFO"
+    for record_idx, record_lines in enumerate(records):
+        if not record_lines:
             continue
-        if item.type not in ("int", "float"):
-            continue
-        if idx >= len(tokens):
-            break  # _check_item_count will fire on the count mismatch.
-        raw = tokens[idx]
-        # `1*` means "use default"; cannot range-check.
-        if raw.endswith("*"):
-            continue
+        first_line_num, first_line_text = record_lines[0]
         try:
-            value = float(raw) if item.type == "float" else int(raw)
-        except ValueError:
-            # Token isn't a number; flag as range violation with the raw text.
-            # Phase 3 default: INFO on uncalibrated specs.
-            issues.append(LintIssue(
-                severity="WARNING" if _is_calibrated(spec) else "INFO",
-                section=spec.section,
-                keyword=spec.name,
-                line=first_line_num,
-                message=(
-                    f"{spec.name} item {idx + 1} ({item.name}) is {raw!r}; "
-                    f"expected a number in range {item.range}"
-                ),
-                rule_id=f"L2.{spec.name}.range",
-            ))
+            tokens = _tokenize_record(first_line_text)
+        except Exception as exc:  # pragma: no cover - defensive
+            issues.append(_record_unparseable(spec, first_line_num, exc))
             continue
-        lo, hi = item.range
-        # Optional int-as-float coercion for ranges whose bounds happen
-        # to be whole numbers but the type says int.
-        if item.type == "int":
-            lo_n: float | int = int(lo)
-            hi_n: float | int = int(hi)
-        else:
-            lo_n, hi_n = lo, hi
-        if item.strict_min:
-            too_low = value <= lo_n
-        else:
-            too_low = value < lo_n
-        if item.strict_max:
-            too_high = value >= hi_n
-        else:
-            too_high = value > hi_n
-        if too_low or too_high:
-            where = "below" if too_low else "above"
-            issues.append(LintIssue(
-                severity="WARNING" if _is_calibrated(spec) else "INFO",
-                section=spec.section,
-                keyword=spec.name,
-                line=first_line_num,
-                message=(
-                    f"{spec.name} item {idx + 1} ({item.name}) is {value} "
-                    f"({where} spec range {item.range})"
-                ),
-                rule_id=f"L2.{spec.name}.range",
-            ))
+        which = "" if len(records) == 1 else f" (record {record_idx + 1})"
+        for idx, item in enumerate(spec.items):
+            # Phase 3.5: string items with `allowed_values` use that
+            # list as the validity check instead of `range`.
+            if item.type == "string" and item.allowed_values:
+                if idx >= len(tokens):
+                    break  # _check_item_count will fire on count.
+                raw = tokens[idx]
+                if raw.endswith("*"):
+                    continue
+                if raw.upper() in {v.upper() for v in item.allowed_values}:
+                    continue
+                issues.append(LintIssue(
+                    severity=severity,
+                    section=spec.section,
+                    keyword=spec.name,
+                    line=first_line_num,
+                    message=(
+                        f"{spec.name}{which} item {idx + 1} ({item.name}) is "
+                        f"{raw!r}; allowed: {item.allowed_values}"
+                    ),
+                    rule_id=f"L2.{spec.name}.range",
+                ))
+                continue
+            if item.range is None:
+                continue
+            if item.type not in ("int", "float"):
+                continue
+            if idx >= len(tokens):
+                break  # _check_item_count will fire on the count mismatch.
+            raw = tokens[idx]
+            # `1*` means "use default"; cannot range-check.
+            if raw.endswith("*"):
+                continue
+            try:
+                value = float(raw) if item.type == "float" else int(raw)
+            except ValueError:
+                # Token isn't a number; flag as range violation with the raw text.
+                issues.append(LintIssue(
+                    severity=severity,
+                    section=spec.section,
+                    keyword=spec.name,
+                    line=first_line_num,
+                    message=(
+                        f"{spec.name}{which} item {idx + 1} ({item.name}) is "
+                        f"{raw!r}; expected a number in range {item.range}"
+                    ),
+                    rule_id=f"L2.{spec.name}.range",
+                ))
+                continue
+            lo, hi = item.range
+            if item.type == "int":
+                lo_n: float | int = int(lo)
+                hi_n: float | int = int(hi)
+            else:
+                lo_n, hi_n = lo, hi
+            if item.strict_min:
+                too_low = value <= lo_n
+            else:
+                too_low = value < lo_n
+            if item.strict_max:
+                too_high = value >= hi_n
+            else:
+                too_high = value > hi_n
+            if too_low or too_high:
+                where = "below" if too_low else "above"
+                issues.append(LintIssue(
+                    severity=severity,
+                    section=spec.section,
+                    keyword=spec.name,
+                    line=first_line_num,
+                    message=(
+                        f"{spec.name}{which} item {idx + 1} ({item.name}) is "
+                        f"{value} ({where} spec range {item.range})"
+                    ),
+                    rule_id=f"L2.{spec.name}.range",
+                ))
     return issues
 
 

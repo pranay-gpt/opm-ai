@@ -67,7 +67,7 @@ def runspec_specs():
     ("DIMENS", 3),
     ("TABDIMS", 24),
     ("WELLDIMS", 12),
-    ("ENDSCALE", 3),
+    ("ENDSCALE", 4),   # Phase 3.5 fix: 4 items, not 3 (string kr/pcow + int ntendp/nsendp)
     ("FUNVAR", 1),
 ])
 def test_runspec_keyword_item_count(runspec_specs, keyword, expected_items):
@@ -104,11 +104,24 @@ def test_fu_nvar_repeatable(runspec_specs):
 
 @pytest.mark.unit
 def test_endscale_item_ranges_inclusive(runspec_specs):
-    """ENDSCALE items have inclusive ranges (range[i] <= range[i+1])."""
+    """ENDSCALE: items 1-2 are string allowed_values, items 3-4 are int ranges.
+
+    Phase 3.5 fix: items 1-2 are scaling-direction keywords
+    (NODIR/DIR/REVERS/IRREV/PREV); items 3-4 are int thresholds
+    (ntendp ∈ [1, 100], nsendp ∈ [1, 1000]).
+    """
     spec = runspec_specs["ENDSCALE"]
-    assert spec.items[0].range == (0, 4)
-    assert spec.items[1].range == (0, 1)
-    assert spec.items[2].range == (0, 1)
+    # Items 1-2: string with allowed_values (no range).
+    assert spec.items[0].type == "string"
+    assert spec.items[0].allowed_values is not None
+    assert "NODIR" in spec.items[0].allowed_values
+    assert spec.items[1].type == "string"
+    assert spec.items[1].allowed_values is not None
+    # Items 3-4: int ranges.
+    assert spec.items[2].type == "int"
+    assert spec.items[2].range == (1, 100)
+    assert spec.items[3].type == "int"
+    assert spec.items[3].range == (1, 1000)
 
 
 @pytest.mark.unit

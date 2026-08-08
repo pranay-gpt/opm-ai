@@ -10,6 +10,10 @@ PVTO:
   repeated: true
   skip_item_count: true
   min_items: 4
+  # PVTO ↔ PVDO: live-oil (Rs/Bo/P) vs dead-oil (Bo/P) tables.
+  mutually_exclusive_with: [PVDO]
+  # PVTO ↔ PVDO: live-oil (Rs/Bo/P) vs dead-oil (Bo/P) tables.
+  mutually_exclusive_with: [PVDO]
   items:
     - name: rs
       type: float
@@ -36,6 +40,8 @@ PVDO:
   required: false
   repeated: true
   skip_item_count: true
+  # PVDO ↔ PVTO: dead-oil vs live-oil tables.
+  mutually_exclusive_with: [PVTO]
   min_items: 3
   items:
     - name: pressure
@@ -59,6 +65,8 @@ PVTG:
   required: false
   repeated: true
   skip_item_count: true
+  # PVTG ↔ PVDG: wet-gas (Rv/Bg/P) vs dry-gas (Bg/P) tables.
+  mutually_exclusive_with: [PVDG]
   min_items: 4
   items:
     - name: pressure
@@ -86,6 +94,8 @@ PVDG:
   required: false
   repeated: true
   skip_item_count: true
+  # PVDG ↔ PVTG: dry-gas vs wet-gas tables.
+  mutually_exclusive_with: [PVTG]
   min_items: 3
   items:
     - name: pressure
@@ -135,6 +145,10 @@ SWOF:
   required: false
   repeated: true
   skip_item_count: true
+  # SWOF and SGOF are alternative rel-perm tables; some decks
+  # include both for cross-validation, but a single-source deck
+  # typically has only one. Soft mutex.
+  mutually_exclusive_with: [SGOF]
   min_items: 4
   items:
     - name: sw
@@ -166,6 +180,8 @@ SGOF:
   required: false
   repeated: true
   skip_item_count: true
+  # SGOF and SWOF are alternative rel-perm tables. See SWOF.
+  mutually_exclusive_with: [SWOF]
   min_items: 4
   items:
     - name: sg

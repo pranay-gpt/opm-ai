@@ -261,3 +261,338 @@ WELLDIMS
     ]
     assert welldims_l2 == [], f"unexpected L2.WELLDIMS issues: {welldims_l2}"
     assert dimens_l2 == [], f"unexpected L2.DIMENS issues: {dimens_l2}"
+
+
+# ---------------------------------------------------------------------- #
+# Phase 3.5: per-record validation                                       #
+# ---------------------------------------------------------------------- #
+
+@pytest.mark.unit
+def test_l2_per_record_item_count_validates_every_record(tmp_path):
+    """FUNVAR record 2 has 2 items → triggers L2.FUNVAR.item_count.
+
+    Phase 3.5: previously only the first record was checked. Now every
+    record gets validated. FUNVAR's spec has 1 item, so record 2 with
+    2 items must fire. Record 1 with 1 item is OK.
+
+    Per the OPM Flow manual, FUNVAR has 1 item (the variable name).
+    The value of the FUNVAR (e.g. 1.0) is set via UDQ ASSIGN, not
+    via FUNVAR itself.
+    """
+    deck = tmp_path / "TESTCASE.DATA"
+    deck.write_text("""\\
+RUNSPEC
+DIMENS
+  10 10 5 /
+WELLDIMS
+  1 1 1 1 0 0 0 0 0 0 0 0 /
+FUNVAR
+  FU_GOR  /
+  FU_WBHP  FU_EXTRA  /
+/
+""")
+    issues = lint_deck(deck).issues
+    matches = [
+        i for i in issues
+        if i.rule_id == "L2.FUNVAR.item_count"
+    ]
+    # Only record 2 (FU_WBHP) has 2 items; record 1 has 1 (correct).
+    assert len(matches) == 1, f"expected 1 record 2 mismatch, got {matches}"
+    assert "record 2" in matches[0].message
+
+
+@pytest.mark.unit
+def test_l2_per_record_item_range_validates_every_record(tmp_path):
+    """PVTO with bad Bo in record 2 triggers L2.PVTO.range.
+
+    Phase 3.5: range check iterates over every record. PVTO's Bo
+    range is [1.0, 5.0] strict_min=True. Record 1 has Bo=1.1 (OK),
+    record 2 has Bo=0.5 (below strict_min).
+    """
+    deck = tmp_path / "TESTCASE.DATA"
+    deck.write_text("""\\
+RUNSPEC
+DIMENS
+  5 5 3 /
+WELLDIMS
+  1 1 1 1 0 0 0 0 0 0 0 0 /
+OIL
+/
+
+PROPS
+PVTO
+  1000 14.7 1.1 1.0 /
+  2000 19.7 0.5 1.0 /
+/
+""")
+    issues = lint_deck(deck).issues
+    matches = [
+        i for i in issues
+        if i.rule_id == "L2.PVTO.range"
+    ]
+    assert len(matches) == 1, f"expected 1 record-2 range mismatch, got {matches}"
+    assert "record 2" in matches[0].message
+    assert "below" in matches[0].message
+
+
+# ---------------------------------------------------------------------- #
+# Phase 3.5: mutex enforcement                                           #
+# ---------------------------------------------------------------------- #
+
+@pytest.mark.unit
+def test_l2_mutex_coord_with_dx_fires(tmp_path):
+    """Both COORD and DX in the GRID section fire L2.COORD.mutex."""
+    deck = tmp_path / "TESTCASE.DATA"
+    deck.write_text("""\\
+RUNSPEC
+DIMENS
+  5 5 3 /
+WELLDIMS
+  1 1 1 1 0 0 0 0 0 0 0 0 /
+
+GRID
+DX
+  75*1.0 /
+COORD
+  1 0 0
+  1 1 0
+  1 1 1 /
+/
+""")
+    issues = lint_deck(deck).issues
+    matches = [
+        i for i in issues
+        if i.rule_id == "L2.COORD.mutex"
+    ]
+    assert len(matches) >= 1, f"expected L2.COORD.mutex, got {[i.rule_id for i in issues]}"
+
+
+@pytest.mark.unit
+def test_l2_mutex_pvto_pvdo_fires(tmp_path):
+    """Both PVTO and PVDO in PROPS fire L2.PVTO.mutex."""
+    deck = tmp_path / "TESTCASE.DATA"
+    deck.write_text("""\\
+RUNSPEC
+DIMENS
+  5 5 3 /
+WELLDIMS
+  1 1 1 1 0 0 0 0 0 0 0 0 /
+OIL
+/
+
+PROPS
+PVTO
+  1000 14.7 1.1 1.0 /
+PVDO
+  14.7 1.1 1.0
+  19.7 1.2 1.1 /
+/
+""")
+    issues = lint_deck(deck).issues
+    matches = [
+        i for i in issues
+        if i.rule_id == "L2.PVTO.mutex"
+    ]
+    assert len(matches) >= 1, f"expected L2.PVTO.mutex, got {[i.rule_id for i in issues]}"
+
+
+@pytest.mark.unit
+def test_l2_mutex_swof_sgof_soft_warning(tmp_path):
+    """SWOF and SGOF co-occurring fires L2.SWOF.mutex as a soft warning."""
+    deck = tmp_path / "TESTCASE.DATA"
+    deck.write_text("""\\
+RUNSPEC
+DIMENS
+  5 5 3 /
+WELLDIMS
+  1 1 1 1 0 0 0 0 0 0 0 0 /
+OIL
+WATER
+GAS
+/
+
+PROPS
+SWOF
+  0.0 0.0 1.0 0.0
+  0.2 0.0 0.8 0.0
+  1.0 1.0 0.0 0.0 /
+SGOF
+  0.0 0.0 1.0 0.0
+  0.2 0.0 0.8 0.0
+  1.0 1.0 0.0 0.0 /
+/
+""")
+    issues = lint_deck(deck).issues
+    mutex = [
+        i for i in issues
+        if i.rule_id and i.rule_id.endswith(".mutex")
+    ]
+    # Both SWOF and SGOF fire (one each direction).
+    swoff_mutex = [i for i in mutex if i.rule_id == "L2.SWOF.mutex"]
+    sgof_mutex = [i for i in mutex if i.rule_id == "L2.SGOF.mutex"]
+    assert len(swoff_mutex) == 1, f"expected 1 SWOF.mutex, got {swoff_mutex}"
+    assert len(sgof_mutex) == 1, f"expected 1 SGOF.mutex, got {sgof_mutex}"
+
+
+@pytest.mark.unit
+def test_l2_mutex_no_false_positive_when_only_one_present(tmp_path):
+    """Plain SWOF (no SGOF) does NOT fire L2.SWOF.mutex."""
+    deck = tmp_path / "TESTCASE.DATA"
+    deck.write_text("""\\
+RUNSPEC
+DIMENS
+  5 5 3 /
+WELLDIMS
+  1 1 1 1 0 0 0 0 0 0 0 0 /
+OIL
+WATER
+/
+
+PROPS
+SWOF
+  0.0 0.0 1.0 0.0
+  0.2 0.0 0.8 0.0
+  1.0 1.0 0.0 0.0 /
+/
+""")
+    issues = lint_deck(deck).issues
+    mutex = [
+        i for i in issues
+        if i.rule_id and i.rule_id.endswith(".mutex")
+    ]
+    assert mutex == [], f"unexpected mutex issues: {mutex}"
+
+
+# ---------------------------------------------------------------------- #
+# Phase 3.5: ENDSCALE schema fix                                         #
+# ---------------------------------------------------------------------- #
+
+@pytest.mark.unit
+def test_l2_endscale_with_strings_passes(tmp_path):
+    """ENDSCALE with quoted string tokens does NOT fire range issues.
+
+    Phase 3.5: the ENDSCALE spec was rewritten to use string
+    allowed_values for items 1-2. The OLD spec wrongly rejected
+    NODIR/REVERS as out-of-range integers.
+    """
+    deck = tmp_path / "TESTCASE.DATA"
+    deck.write_text("""\\
+RUNSPEC
+DIMENS
+  5 5 3 /
+WELLDIMS
+  1 1 1 1 0 0 0 0 0 0 0 0 /
+ENDSCALE
+  'NODIR'  'REVERS'  1  20  /
+/
+""")
+    issues = lint_deck(deck).issues
+    endscale_l2 = [
+        i for i in issues
+        if i.rule_id and i.rule_id.startswith("L2.ENDSCALE")
+    ]
+    assert endscale_l2 == [], (
+        f"ENDSCALE with valid string tokens should pass, got: {endscale_l2}"
+    )
+
+
+@pytest.mark.unit
+def test_l2_endscale_bad_string_fires(tmp_path):
+    """ENDSCALE with an unknown scaling keyword fires L2.ENDSCALE.range."""
+    deck = tmp_path / "TESTCASE.DATA"
+    deck.write_text("""\\
+RUNSPEC
+DIMENS
+  5 5 3 /
+WELLDIMS
+  1 1 1 1 0 0 0 0 0 0 0 0 /
+ENDSCALE
+  'WIBBLE'  'NODIR'  1  20  /
+/
+""")
+    issues = lint_deck(deck).issues
+    matches = [
+        i for i in issues
+        if i.rule_id == "L2.ENDSCALE.range"
+    ]
+    assert len(matches) >= 1, f"expected L2.ENDSCALE.range, got {[i.rule_id for i in issues]}"
+    assert "WIBBLE" in matches[0].message
+
+
+# ---------------------------------------------------------------------- #
+# Phase 3.5: L019 SUMMARY FU_* cross-check                               #
+# ---------------------------------------------------------------------- #
+
+@pytest.mark.unit
+def test_l019_summary_funvar_missing_fires(tmp_path):
+    """SUMMARY section references FU_* not in FUNVAR fires L019 WARNING."""
+    deck = tmp_path / "TESTCASE.DATA"
+    deck.write_text("""\\
+RUNSPEC
+DIMENS
+  5 5 3 /
+WELLDIMS
+  1 1 1 1 0 0 0 0 0 0 0 0 /
+
+SUMMARY
+FU_GOR
+FU_WBHP
+/
+""")
+    issues = lint_deck(deck).issues
+    matches = [i for i in issues if i.rule_id == "L019"]
+    assert len(matches) == 1, f"expected 1 L019, got {matches}"
+    assert "FU_GOR" in matches[0].message
+    assert "FU_WBHP" in matches[0].message
+
+
+@pytest.mark.unit
+def test_l019_no_false_positive_when_funvar_declares(tmp_path):
+    """SUMMARY FU_* tokens that ARE in FUNVAR do NOT fire L019."""
+    deck = tmp_path / "TESTCASE.DATA"
+    deck.write_text("""\\
+RUNSPEC
+DIMENS
+  5 5 3 /
+WELLDIMS
+  1 1 1 1 0 0 0 0 0 0 0 0 /
+FUNVAR
+  FU_GOR  1.0  /
+  FU_WBHP  1.0  /
+/
+
+SUMMARY
+FU_GOR
+FU_WBHP
+/
+""")
+    issues = lint_deck(deck).issues
+    matches = [i for i in issues if i.rule_id == "L019"]
+    assert matches == [], f"unexpected L019: {matches}"
+
+
+@pytest.mark.unit
+def test_l019_ignores_udq_inline_fu_tokens(tmp_path):
+    """FU_* tokens used in UDQ (SCHEDULE) do NOT need FUNVAR; L019 ignores them."""
+    deck = tmp_path / "TESTCASE.DATA"
+    deck.write_text("""\\
+RUNSPEC
+DIMENS
+  5 5 3 /
+WELLDIMS
+  1 1 1 1 0 0 0 0 0 0 0 0 /
+
+SUMMARY
+-- No FU_* tokens here, so L019 should not fire.
+FOPR
+/
+
+SCHEDULE
+-- UDQ defines FU_GOR inline; no FUNVAR needed.
+UDQ
+ASSIGN FU_GOR 1.0 /
+/
+""")
+    issues = lint_deck(deck).issues
+    matches = [i for i in issues if i.rule_id == "L019"]
+    assert matches == [], f"L019 should ignore UDQ-inline tokens, got: {matches}"

@@ -39,6 +39,10 @@ class SpecItem(BaseModel):
     # Strict bounds for half-open intervals. Default None means inclusive.
     strict_min: Optional[bool] = None
     strict_max: Optional[bool] = None
+    # For type: string, an optional list of allowed literal values.
+    # If set, range checks are skipped (no numeric range for strings)
+    # and `_check_item_ranges` instead checks token in `allowed_values`.
+    allowed_values: Optional[list[str]] = None
     notes: list[str] = Field(default_factory=list)
 
     @field_validator("range")

@@ -19,12 +19,22 @@ def run_all(deck: Deck) -> list[LintIssue]:
 
 
 # Import all rule modules to register their rules
-from opm_ai.linter.rules import general, grid, keywords, props, runspec, schedule, solution_summary
+from opm_ai.linter.rules import (
+    funvar_summary,
+    general,
+    grid,
+    keywords,
+    props,
+    runspec,
+    schedule,
+    solution_summary,
+)
 
-# Rule registry - all seed rules L001-L018
+# Rule registry - all seed rules L001-L019
 # L014/L015 are claimed by general/runspec; L016 by keywords; L017/L018 by
 # schedule (the historical L014/L015 schedule rules were renamed to clear
 # the collision - see opm_ai/linter/context.md for the audit trail).
+# L019 added in Phase 3.5 (funvar_summary).
 RULES: list[RuleFunc] = [
     # General rules
     general.rule_L001_missing_terminator,
@@ -51,4 +61,6 @@ RULES: list[RuleFunc] = [
     # SOLUTION/SUMMARY rules
     solution_summary.rule_L009_missing_solution,
     solution_summary.rule_L010_missing_summary,
+    # FU_* declaration cross-checks (Phase 3.5)
+    funvar_summary.rule_L019_summary_funvar_missing,
 ]

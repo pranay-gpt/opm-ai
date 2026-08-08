@@ -75,6 +75,18 @@ def validate(deck: Deck, specs: dict[str, KeywordSpec]) -> list[LintIssue]:
     return issues
 
 
+def _is_calibrated(spec: KeywordSpec) -> bool:
+    """True if the spec has been validated against real fixtures.
+
+    Phase 3 default: item_count and range issues on uncalibrated
+    specs are INFO (advisory). When a spec author sets
+    `calibrated: true` in the YAML after proving the bounds against
+    fixtures, the linter promotes these to WARNING. Required-keyword
+    absence stays ERROR unconditionally.
+    """
+    return bool(getattr(spec, "calibrated", False))
+
+
 # ---------------------------------------------------------------------- #
 # Check: required                                                        #
 # ---------------------------------------------------------------------- #
@@ -143,19 +155,23 @@ def _find_first_record_lines(deck: Deck, spec: KeywordSpec) -> list[tuple[int, s
         if m and not found_header:
             found_header = True
             tail = m.group(1).strip()
-            # If the header line has no tail data, the keyword record
-            # is degenerate (no items; rely on defaults).
-            if not tail or tail == "/":
-                return []  # degenerate: skip count/range checks.
-            # If the header line has trailing data, that's the record.
-            if tail:
-                out.append((deck_line, stripped))
+            # Layout 2: header + data on the same line.
+            if tail and tail != "/":
+                # The single line is `KEYWORD <data>`. The data may
+                # still contain `/` for the terminator.
+                if tail.endswith("/"):
+                    tail = tail[:-1].strip()
+                out.append((deck_line, f"{spec.name} {tail}"))
                 return out
-            # Header line is empty; data follows on next lines.
+            # Layout 3: header is alone on its line, but next line is
+            # a bare terminator (degenerate, all defaults).
+            # Continue iterating to confirm.
             continue
         if not found_header:
             continue
-        # Subsequent lines: data lines until terminator or new keyword.
+        # Layout 1: data follows on subsequent lines. The current
+        # line is the first data line OR a terminator OR a new
+        # keyword (record done).
         if stripped == "/" or stripped.startswith("/"):
             return out
         if re.match(r"^[A-Z][A-Z0-9_]*\b", stripped):
@@ -215,7 +231,13 @@ def _check_item_count(deck: Deck, spec: KeywordSpec) -> list[LintIssue]:
     `spec.effective_max_items` (default: 1 and len(items)). For
     keywords like WELLDIMS where items 5-12 default to 0, set
     `min_items: 1` in the YAML so a 4-item record is accepted.
+
+    Keywords with `skip_item_count: true` opt out entirely. Used for
+    data-list keywords like DX/DY/DZ/PORO/PERMX whose item count is
+    data-dependent (must equal nx*ny*nz per the L003 cross-rule).
     """
+    if spec.skip_item_count:
+        return []
     if not spec.items:
         return []
     expected_min = spec.effective_min_items
@@ -237,8 +259,15 @@ def _check_item_count(deck: Deck, spec: KeywordSpec) -> list[LintIssue]:
         hint = "more items than declared in spec"
     else:
         hint = "fewer items than declared in spec"
+    # Phase 3 default: item_count issues are INFO on uncalibrated
+    # specs (because the min/max bounds may not match real decks yet).
+    # Once a spec sets `calibrated: true`, item_count becomes WARNING.
+    # Required-keyword absence stays ERROR unconditionally.
+    severity = "INFO"
+    if _is_calibrated(spec):
+        severity = "WARNING"
     return [LintIssue(
-        severity="ERROR",
+        severity=severity,
         section=spec.section,
         keyword=spec.name,
         line=first_line_num,
@@ -288,8 +317,9 @@ def _check_item_ranges(deck: Deck, spec: KeywordSpec) -> list[LintIssue]:
             value = float(raw) if item.type == "float" else int(raw)
         except ValueError:
             # Token isn't a number; flag as range violation with the raw text.
+            # Phase 3 default: INFO on uncalibrated specs.
             issues.append(LintIssue(
-                severity="ERROR",
+                severity="WARNING" if _is_calibrated(spec) else "INFO",
                 section=spec.section,
                 keyword=spec.name,
                 line=first_line_num,
@@ -308,11 +338,6 @@ def _check_item_ranges(deck: Deck, spec: KeywordSpec) -> list[LintIssue]:
             hi_n: float | int = int(hi)
         else:
             lo_n, hi_n = lo, hi
-        out_of_range = (
-            (value < lo_n and item.strict_min) or (value <= lo_n - 1 and not item.strict_min)
-            or (value > hi_n and item.strict_max) or (value >= hi_n + 1 and not item.strict_max)
-        )
-        # Cleaner logic: re-derive
         if item.strict_min:
             too_low = value <= lo_n
         else:
@@ -324,7 +349,7 @@ def _check_item_ranges(deck: Deck, spec: KeywordSpec) -> list[LintIssue]:
         if too_low or too_high:
             where = "below" if too_low else "above"
             issues.append(LintIssue(
-                severity="ERROR",
+                severity="WARNING" if _is_calibrated(spec) else "INFO",
                 section=spec.section,
                 keyword=spec.name,
                 line=first_line_num,

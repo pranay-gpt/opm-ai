@@ -1,0 +1,184 @@
+# Hand-curated: SCHEDULE section specs.
+
+# WELSPECS — well specification. Per-well, 7 fields per record.
+WELSPECS:
+  section: SCHEDULE
+  required: false
+  repeated: true
+  skip_item_count: true
+  min_items: 7
+  items:
+    - name: well_name
+      type: keyword
+      default: null
+      range: null
+    - name: group
+      type: string
+      default: "FIELD"
+      range: null
+    - name: i
+      type: int
+      default: null
+      range: [1, 1000]
+    - name: j
+      type: int
+      default: null
+      range: [1, 1000]
+    - name: depth_ref
+      type: string
+      default: null
+      range: null
+      notes:
+        - "Usually 'DEFAULT' or a numeric depth."
+    - name: phase
+      type: string
+      default: null
+      range: null
+      notes:
+        - "One of 'OIL', 'GAS', 'WATER', or empty (multi-phase)."
+    - name: radius_drain
+      type: float
+      default: 0.0
+      range: [0.0, 100.0]   # ft; 0 means use default
+
+# COMPDAT — completion data. Per-completion, varies but typically 9.
+COMPDAT:
+  section: SCHEDULE
+  required: false
+  repeated: true
+  skip_item_count: true
+  min_items: 4
+  items:
+    - name: well_name
+      type: keyword
+      default: null
+    - name: i
+      type: int
+      default: null
+      range: [1, 1000]
+    - name: j
+      type: int
+      default: null
+      range: [1, 1000]
+    - name: k1
+      type: int
+      default: null
+      range: [1, 1000]
+    - name: k2
+      type: int
+      default: null
+      range: [1, 1000]
+
+# WCONPROD — producer controls. Per-well, varies but typically 9-11.
+WCONPROD:
+  section: SCHEDULE
+  required: false
+  repeated: true
+  skip_item_count: true
+  min_items: 4
+  items:
+    - name: well_name
+      type: keyword
+      default: null
+    - name: status
+      type: string
+      default: "OPEN"
+      range: null
+    - name: control_mode
+      type: string
+      default: "ORAT"
+      range: null
+    - name: orat_target
+      type: float
+      default: 0.0
+      range: [0.0, 1000000.0]
+
+# WCONINJE — injector controls. Per-well.
+WCONINJE:
+  section: SCHEDULE
+  required: false
+  repeated: true
+  skip_item_count: true
+  min_items: 4
+  items:
+    - name: well_name
+      type: keyword
+      default: null
+    - name: fluid_type
+      type: string
+      default: null
+      range: null
+      notes:
+        - "One of 'WATER', 'GAS', 'OIL'."
+    - name: status
+      type: string
+      default: "OPEN"
+    - name: control_mode
+      type: string
+      default: "RATE"
+      range: null
+
+# TSTEP — time step sizes (days). Multiple values per record.
+TSTEP:
+  section: SCHEDULE
+  required: false
+  repeated: true
+  skip_item_count: true
+  min_items: 1
+  items:
+    - name: dt_days
+      type: float
+      default: null
+      range: [0.001, 1000.0]   # days; > 1000 is unusual
+
+# DATES — start dates for subsequent records.
+DATES:
+  section: SCHEDULE
+  required: false
+  repeated: true
+  skip_item_count: true
+  min_items: 1
+  items:
+    - name: day
+      type: int
+      default: null
+      range: [1, 31]
+    - name: month
+      type: string
+      default: null
+      range: null
+    - name: year
+      type: int
+      default: null
+      range: [1900, 2100]
+
+# GRUPTREE — group hierarchy.
+GRUPTREE:
+  section: SCHEDULE
+  required: false
+  repeated: true
+  skip_item_count: true
+  min_items: 2
+  items:
+    - name: child
+      type: string
+      default: null
+    - name: parent
+      type: string
+      default: null
+
+# WELOPEN — open/shut a well or completion.
+WELOPEN:
+  section: SCHEDULE
+  required: false
+  repeated: true
+  skip_item_count: true
+  min_items: 2
+  items:
+    - name: well_name
+      type: keyword
+      default: null
+    - name: status
+      type: string
+      default: "OPEN"
+      range: null

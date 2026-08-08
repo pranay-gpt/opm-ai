@@ -1,0 +1,199 @@
+# Hand-curated: GRID section specs.
+# Source: keywords_rm.json for item counts/defaults; OPM Flow Reference
+# Manual for parameter names. Hand-curated.
+
+# DX, DY, DZ — one value per active grid block (nx*ny*nz).
+# Item count is data-dependent; L3 (L003) compares to DIMENS.
+# We mark these as required: true; item-count validation is L3's job.
+DX:
+  section: GRID
+  required: true
+  repeated: false
+  skip_item_count: true
+  min_items: 1
+  items:
+    - name: dx_values
+      type: float
+      default: null
+      range: null
+      notes:
+        - "Must have exactly nx*ny*nz values per L003 cross-rule."
+
+DY:
+  section: GRID
+  required: true
+  repeated: false
+  skip_item_count: true
+  min_items: 1
+  items:
+    - name: dy_values
+      type: float
+      default: null
+      range: null
+
+DZ:
+  section: GRID
+  required: true
+  repeated: false
+  skip_item_count: true
+  min_items: 1
+  items:
+    - name: dz_values
+      type: float
+      default: null
+      range: null
+      notes:
+        - "Often has nz layered values; L3 cross-checks against DIMENS."
+
+TOPS:
+  section: GRID
+  required: false   # Corner-point geometry skips TOPS in favour of ZCORN.
+  repeated: false
+  skip_item_count: true
+  min_items: 1
+  items:
+    - name: tops_values
+      type: float
+      default: null
+      range: null
+
+PORO:
+  section: GRID
+  required: true
+  repeated: false
+  skip_item_count: true
+  min_items: 1
+  items:
+    - name: porosity
+      type: float
+      default: null
+      range: [0.0, 1.0]
+      strict_min: true   # porosity > 0 (0.0 is unphysical)
+      notes:
+        - "L011 (existing L3 rule) checks (0, 1]; L2 layer enforces the same via range + strict_min."
+
+PERMX:
+  section: GRID
+  required: true
+  repeated: false
+  skip_item_count: true
+  min_items: 1
+  items:
+    - name: permx_value
+      type: float
+      default: null
+      range: [0.0, 100000.0]   # md; upper bound is loose
+      strict_min: true   # negative PERMX is non-physical (L004)
+
+PERMY:
+  section: GRID
+  required: false
+  repeated: false
+  skip_item_count: true
+  min_items: 1
+  items:
+    - name: permy_value
+      type: float
+      default: null
+      range: [0.0, 100000.0]
+      strict_min: true
+
+PERMZ:
+  section: GRID
+  required: false
+  repeated: false
+  skip_item_count: true
+  min_items: 1
+  items:
+    - name: permz_value
+      type: float
+      default: null
+      range: [0.0, 100000.0]
+      strict_min: true
+
+# GRIDFILE — record format flag (1 item).
+GRIDFILE:
+  section: GRID
+  required: false
+  repeated: false
+  items:
+    - name: grid_file_flag
+      type: int
+      default: 0
+      range: [0, 3]
+      notes:
+        - "0 = both GRID and EGRID; 1 = EGRID only; 2 = unformatted only; 3 = both."
+
+# COORD — corner-point coordinates (6*nx*ny values, but L3 cross-checks).
+COORD:
+  section: GRID
+  required: false
+  repeated: false
+  skip_item_count: true
+  min_items: 1
+  items:
+    - name: coord_values
+      type: float
+      default: null
+      range: null
+      notes:
+        - "Corner-point geometry: 6*nx*ny values per OPM Flow Manual."
+        - "Mutually exclusive with DX (the legacy rectangular grid)."
+
+# ZCORN — corner depths (8*nx*ny*nz values).
+ZCORN:
+  section: GRID
+  required: false
+  repeated: false
+  skip_item_count: true
+  min_items: 1
+  items:
+    - name: zcorn_values
+      type: float
+      default: null
+      range: null
+      notes:
+        - "Corner-point geometry: 8*nx*ny*nz values."
+        - "Mutually exclusive with DZ + TOPS."
+
+# EQLNUM — equilibration region number per cell.
+EQLNUM:
+  section: GRID
+  required: false
+  repeated: false
+  skip_item_count: true
+  min_items: 1
+  items:
+    - name: region_id
+      type: int
+      default: 1   # default is region 1 if absent
+      range: [1, 100]
+      notes:
+        - "If absent, OPM Flow treats the whole grid as one equilibration region."
+
+# NTG — net-to-gross per cell (PROPS-section equivalent is usually preferred).
+NTG:
+  section: GRID
+  required: false
+  repeated: false
+  skip_item_count: true
+  min_items: 1
+  items:
+    - name: net_to_gross
+      type: float
+      default: 1.0
+      range: [0.0, 1.0]
+      strict_min: false   # 0.0 is valid (no-pay zone)
+
+# MULTX, MULTY, MULTZ — transmissibility multipliers (default 1.0).
+MULTX:
+  section: GRID
+  required: false
+  repeated: false
+  skip_item_count: true
+  min_items: 1
+  items:
+    - name: mult_value
+      type: float
+      default: 1.0
+      range: [0.0, 10.0]   # >1 is rare; >10 almost certainly a typo

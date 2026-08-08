@@ -1,0 +1,77 @@
+# Hand-curated: SOLUTION section specs.
+
+# PRESSURE — one value per active cell.
+PRESSURE:
+  section: SOLUTION
+  required: false
+  repeated: false
+  min_items: 1
+  items:
+    - name: pressure_value
+      type: float
+      default: null
+      range: [0.0, 30000.0]   # psia
+
+# RSVD — dissolved GOR vs depth (for Rs initialization).
+RSVD:
+  section: SOLUTION
+  required: false
+  repeated: true
+  min_items: 2
+  items:
+    - name: depth
+      type: float
+      default: null
+      range: [0.0, 30000.0]   # ft
+    - name: rs
+      type: float
+      default: null
+      range: [0.0, 10000.0]   # scf/stb
+
+# PBVD — bubble-point pressure vs depth.
+PBVD:
+  section: SOLUTION
+  required: false
+  repeated: true
+  min_items: 2
+  items:
+    - name: depth
+      type: float
+      default: null
+      range: [0.0, 30000.0]
+    - name: pb
+      type: float
+      default: null
+      range: [0.0, 10000.0]   # psia
+
+# EQUIL — equilibration initialization. 6 items: datum_depth,
+# datum_pressure, owc_depth, pcow_owc, goc_depth, pcog_goc.
+EQUIL:
+  section: SOLUTION
+  required: false
+  repeated: false
+  items:
+    - name: datum_depth
+      type: float
+      default: null
+      range: [0.0, 30000.0]
+    - name: datum_pressure
+      type: float
+      default: null
+      range: [0.0, 30000.0]
+    - name: owc_depth
+      type: float
+      default: null
+      range: [0.0, 30000.0]
+    - name: pcow_at_owc
+      type: float
+      default: null
+      range: [-1000.0, 1000.0]
+    - name: goc_depth
+      type: float
+      default: null
+      range: [0.0, 30000.0]
+    - name: pcog_at_goc
+      type: float
+      default: null
+      range: [-1000.0, 1000.0]

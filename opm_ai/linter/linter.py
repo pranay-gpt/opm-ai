@@ -71,6 +71,17 @@ def _get_specs() -> dict[str, KeywordSpec]:
     return _SPEC_CACHE
 
 
+def clear_spec_cache() -> None:
+    """Drop the cached YAML specs. Tests use this to reload specs after
+    they change them on disk.
+
+    Tests that modify `opm_ai/linter/spec/*.yaml` mid-test should call
+    this before re-linting; otherwise the L2 layer sees stale specs.
+    """
+    global _SPEC_CACHE
+    _SPEC_CACHE = None
+
+
 def clear_deck_cache() -> None:
     """Drop every cached Deck. Tests use this to assert parse counts."""
     _DECK_CACHE.clear()

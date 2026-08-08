@@ -11,6 +11,11 @@ WELLDIMS:
   section: RUNSPEC
   required: true
   repeated: false
+  # Phase 3: bounds proven against fixtures; L2.item_count and
+  # L2.range fire as WARNING (not INFO) for this spec.
+  calibrated: true
+  min_items: 1
+  max_items: 12
   items:
     - name: max_wells
       type: int
@@ -148,11 +153,14 @@ TABDIMS:
 
 
 # Hand-curated: DIMENS
-# Defines the simulation grid size. Three positive integers.
+# Defines the simulation grid size. Three positive integers; no
+# defaults; the count is strict (must be exactly 3).
 DIMENS:
   section: RUNSPEC
   required: true
   repeated: false
+  min_items: 3
+  max_items: 3
   items:
     - name: nx
       type: int

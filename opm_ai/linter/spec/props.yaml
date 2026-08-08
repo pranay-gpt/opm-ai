@@ -1,0 +1,257 @@
+# Hand-curated: PROPS section specs.
+# Source: keywords_rm.json for item counts; OPM Flow Reference Manual for
+# parameter names.
+
+# PVTO — oil PVT table. First item is Rs (dissolved gas-oil ratio),
+# followed by pressure, Bo (oil FVF), viscosity. Multi-record keyword.
+PVTO:
+  section: PROPS
+  required: false
+  repeated: true
+  skip_item_count: true
+  min_items: 4
+  items:
+    - name: rs
+      type: float
+      default: null
+      range: [0.0, 10000.0]   # scf/stb
+    - name: pressure
+      type: float
+      default: null
+      range: [0.0, 20000.0]   # psia
+    - name: bo
+      type: float
+      default: null
+      range: [1.0, 5.0]       # rb/stb
+      strict_min: true
+    - name: viscosity
+      type: float
+      default: null
+      range: [0.1, 10.0]      # cp
+      strict_min: true
+
+# PVDO — dead-oil PVT (no dissolved gas). Same shape as PVTO minus Rs.
+PVDO:
+  section: PROPS
+  required: false
+  repeated: true
+  skip_item_count: true
+  min_items: 3
+  items:
+    - name: pressure
+      type: float
+      default: null
+      range: [0.0, 20000.0]
+    - name: bo
+      type: float
+      default: null
+      range: [1.0, 5.0]
+      strict_min: true
+    - name: viscosity
+      type: float
+      default: null
+      range: [0.1, 10.0]
+      strict_min: true
+
+# PVTG — gas PVT table with vaporized oil (wet gas). 4 items per record.
+PVTG:
+  section: PROPS
+  required: false
+  repeated: true
+  skip_item_count: true
+  min_items: 4
+  items:
+    - name: pressure
+      type: float
+      default: null
+      range: [0.0, 20000.0]
+    - name: bg
+      type: float
+      default: null
+      range: [0.001, 1.0]    # rb/scf (rarely > 0.1)
+      strict_min: true
+    - name: viscosity
+      type: float
+      default: null
+      range: [0.01, 0.1]     # cp
+      strict_min: true
+    - name: rv
+      type: float
+      default: null
+      range: [0.0, 1000.0]   # stb/scf
+
+# PVDG — dry gas PVT (no vaporized oil). 3 items per record.
+PVDG:
+  section: PROPS
+  required: false
+  repeated: true
+  skip_item_count: true
+  min_items: 3
+  items:
+    - name: pressure
+      type: float
+      default: null
+      range: [0.0, 20000.0]
+    - name: bg
+      type: float
+      default: null
+      range: [0.001, 1.0]
+      strict_min: true
+    - name: viscosity
+      type: float
+      default: null
+      range: [0.01, 0.1]
+      strict_min: true
+
+# PVTW — water PVT. 4 items: pressure reference, Bw reference, compressibility, viscosity reference.
+PVTW:
+  section: PROPS
+  required: false
+  repeated: false
+  skip_item_count: true
+  items:
+    - name: pressure_ref
+      type: float
+      default: null
+      range: [0.0, 20000.0]
+    - name: bw_ref
+      type: float
+      default: null
+      range: [1.0, 2.0]
+      strict_min: true
+    - name: compressibility
+      type: float
+      default: null
+      range: [0.0, 1e-3]    # 1/psia
+    - name: viscosity
+      type: float
+      default: null
+      range: [0.1, 5.0]      # cp
+      strict_min: true
+
+# SWOF — water-oil relative permeability. 4 items per record.
+SWOF:
+  section: PROPS
+  required: false
+  repeated: true
+  skip_item_count: true
+  min_items: 4
+  items:
+    - name: sw
+      type: float
+      default: null
+      range: [0.0, 1.0]
+      strict_min: false   # 0.0 is connate water
+      strict_max: false   # 1.0 is residual oil
+    - name: krw
+      type: float
+      default: null
+      range: [0.0, 1.0]
+      strict_min: false
+      strict_max: false
+    - name: krow
+      type: float
+      default: null
+      range: [0.0, 1.0]
+      strict_min: false
+      strict_max: false
+    - name: pcow
+      type: float
+      default: null
+      range: [-1000.0, 1000.0]   # psia, can be negative or positive
+
+# SGOF — gas-oil relative permeability. 4 items per record.
+SGOF:
+  section: PROPS
+  required: false
+  repeated: true
+  skip_item_count: true
+  min_items: 4
+  items:
+    - name: sg
+      type: float
+      default: null
+      range: [0.0, 1.0]
+    - name: krg
+      type: float
+      default: null
+      range: [0.0, 1.0]
+    - name: krog
+      type: float
+      default: null
+      range: [0.0, 1.0]
+    - name: pcog
+      type: float
+      default: null
+      range: [-1000.0, 1000.0]
+
+# SGFN — gas relative permeability (no krog or pcog). 2 items.
+SGFN:
+  section: PROPS
+  required: false
+  repeated: true
+  skip_item_count: true
+  min_items: 2
+  items:
+    - name: sg
+      type: float
+      default: null
+      range: [0.0, 1.0]
+    - name: krg
+      type: float
+      default: null
+      range: [0.0, 1.0]
+
+# SOF2 — oil relative permeability at Sw=0. 2 items.
+SOF2:
+  section: PROPS
+  required: false
+  repeated: true
+  skip_item_count: true
+  min_items: 2
+  items:
+    - name: so
+      type: float
+      default: null
+      range: [0.0, 1.0]
+    - name: kro
+      type: float
+      default: null
+      range: [0.0, 1.0]
+
+# ROCK — rock compressibility. 2 items.
+ROCK:
+  section: PROPS
+  required: false
+  repeated: false
+  skip_item_count: true
+  items:
+    - name: pressure_ref
+      type: float
+      default: null
+      range: [0.0, 20000.0]
+    - name: compressibility
+      type: float
+      default: null
+      range: [0.0, 1e-4]    # 1/psia
+
+# DENSITY — surface densities. 3 items: oil, water, gas (lb/ft^3 or kg/m^3).
+DENSITY:
+  section: PROPS
+  required: false
+  repeated: false
+  skip_item_count: true
+  items:
+    - name: oil_density
+      type: float
+      default: null
+      range: [30.0, 100.0]   # lb/ft^3
+    - name: water_density
+      type: float
+      default: null
+      range: [60.0, 70.0]
+    - name: gas_density
+      type: float
+      default: null
+      range: [0.01, 0.1]
+      strict_min: true

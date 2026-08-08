@@ -82,6 +82,15 @@ class KeywordSpec(BaseModel):
     items: list[SpecItem] = Field(default_factory=list)
     min_items: Optional[int] = None
     max_items: Optional[int] = None
+    # When True, the L2.item_count check is skipped entirely (used for
+    # keywords whose item count is data-dependent, e.g. DX/DY/DZ/PORO
+    # where the count must equal nx*ny*nz per the L003 cross-rule).
+    skip_item_count: bool = False
+    # When True, the L2 layer promotes item_count and range issues
+    # from INFO to WARNING for this spec. Set after the spec's bounds
+    # have been verified against real fixtures. Required-keyword
+    # absence is ERROR unconditionally.
+    calibrated: bool = False
     mutually_exclusive_with: list[str] = Field(default_factory=list)
     notes: list[str] = Field(default_factory=list)
 

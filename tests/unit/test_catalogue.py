@@ -65,12 +65,20 @@ def test_catalogue_deck_count():
 
 @pytest.mark.unit
 def test_catalogue_keyword_count_floor():
-    """Catalogue has at least 1000 distinct keywords (loose floor)."""
+    """Catalogue has at least 900 distinct keywords (loose floor).
+
+    Phase 1 (linter-redesign): the floor was lowered from 1000 to 900
+    because the catalogue scrape now excludes FU_*/WU_* user variables
+    (~120 entries). 730 fixtures still produce 959+ real keywords.
+    If the count drops below 900, the fixture tree has lost diversity
+    or the catalogue scrape script is broken.
+    """
     with CATALOGUE_PATH.open(encoding="utf-8") as fh:
         data = json.load(fh)
-    assert data["keyword_count"] >= 1000, (
-        f"keyword_count={data['keyword_count']} below 1000; "
-        f"the tree may have lost fixture diversity."
+    assert data["keyword_count"] >= 900, (
+        f"keyword_count={data['keyword_count']} below 900; "
+        f"the tree may have lost fixture diversity or the catalogue "
+        f"scrape has a regression."
     )
 
 

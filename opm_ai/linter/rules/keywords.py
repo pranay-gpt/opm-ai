@@ -26,6 +26,13 @@ Honest limitation: a valid ECLIPSE keyword neither the manual nor any
 fixture documents is flagged. To extend coverage, regenerate either
 catalogue: add fixtures, run `scripts/build_keyword_catalogue.py`;
 update the manual source, run `scripts/build_keyword_rm_catalogue.py`.
+
+Phase 1 (linter-redesign branch): user-defined UDQ variables
+(`FU_*`, `WU_*`) are recognised by `Deck._classify_token` as
+`TokenType.USER_VARIABLE` and skipped here. They are NOT in the
+catalogue and never produce L016 issues. The catalogue scrape
+also filters them out so the catalogue size is bounded by real
+keywords, not by user-variable vocabulary.
 """
 from __future__ import annotations
 
@@ -35,7 +42,7 @@ import re
 from pathlib import Path
 from typing import Optional
 
-from opm_ai.linter.deck import Deck
+from opm_ai.linter.deck import Deck, TokenType
 from opm_ai.linter.models import LintIssue
 
 # Same regex the L001 rule uses for per-line keyword detection. Tokenising
@@ -161,6 +168,12 @@ def rule_L016_unknown_keyword(deck: Deck) -> list[LintIssue]:
                 continue
             token_upper = match.group(1).upper()
             if token_upper in _SECTION_HEADERS or token_upper in _SKIP_TOKENS:
+                continue
+            # Phase 1: user-defined variables (FU_*, WU_*) are valid by
+            # definition; skip them rather than consulting the catalogue.
+            # This stops L016 from firing on arbitrary UDQ mnemonics the
+            # user defines at runtime (see docs/personal/LINTER_REDESIGN_PLAN.md).
+            if Deck._classify_token(token_upper) is TokenType.USER_VARIABLE:
                 continue
             if token_upper in catalogue:
                 continue

@@ -33,7 +33,7 @@ _REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
-from opm_ai.linter.deck import Deck  # noqa: E402
+from opm_ai.linter.deck import Deck, TokenType  # noqa: E402
 
 
 # Same regex the linter uses for per-line keyword detection (rules/general.py:98).
@@ -57,6 +57,11 @@ def _iter_keyword_lines(section_text: str) -> Iterable[tuple[str, int]]:
 
     Skips blank lines, comments, and lines that are not a single keyword.
     Does NOT skip section headers - the caller is responsible for filtering.
+
+    Phase 1 (linter-redesign): user-defined UDQ variables (FU_*, WU_*)
+    are skipped here so they never enter the catalogue. They are valid
+    by definition and recognised at lex time by `Deck._classify_token`;
+    the catalogue should only contain real OPM Flow keywords.
     """
     for i, line in enumerate(section_text.split("\n"), 1):
         stripped = line.strip()
@@ -67,6 +72,10 @@ def _iter_keyword_lines(section_text: str) -> Iterable[tuple[str, int]]:
             continue
         token = match.group(1).upper()
         if token in _SKIP_TOKENS:
+            continue
+        # Phase 1: filter user variables so catalogue size is bounded by
+        # real keywords, not by user-variable vocabulary.
+        if Deck._classify_token(token) is TokenType.USER_VARIABLE:
             continue
         yield token, i
 

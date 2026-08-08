@@ -3,7 +3,7 @@
 import re
 from typing import Optional
 
-from opm_ai.linter.deck import Deck
+from opm_ai.linter.deck import Deck, TokenType
 from opm_ai.linter.models import LintIssue
 
 # Section headers that should NOT be flagged as missing terminators
@@ -97,6 +97,13 @@ def rule_L001_missing_terminator(deck: Deck) -> list[LintIssue]:
             # RPTRST) as keywords and falsely flag the enclosing keyword.
             kw_match = re.match(r"^([A-Z][A-Z0-9_]*)\s*(?:--.*)?$", stripped)
             if kw_match:
+                kw_token = kw_match.group(1)
+                # Phase 1: user-defined variables (FU_*, WU_*) are not
+                # real keywords and should neither be treated as the
+                # `current_keyword` nor trigger a terminator check on
+                # the previous keyword.
+                if Deck._classify_token(kw_token) is TokenType.USER_VARIABLE:
+                    continue
                 # If we had a previous keyword without terminator, flag it
                 if current_keyword and current_keyword not in NO_TERMINATOR_KEYWORDS:
                     # Also skip section headers
@@ -114,7 +121,7 @@ def rule_L001_missing_terminator(deck: Deck) -> list[LintIssue]:
                                 message=f"Keyword '{current_keyword}' is missing terminating '/'",
                                 rule_id="L001"
                             ))
-                current_keyword = kw_match.group(1)
+                current_keyword = kw_token
                 keyword_start_line = i
 
         # Check last keyword in section

@@ -2,7 +2,7 @@
 import time
 import pytest
 from pathlib import Path
-from opm_ai.linter.deck import Deck
+from opm_ai.linter.deck import Deck, TokenType
 from opm_ai.linter.linter import lint_deck
 from opm_ai.linter.rules.schedule import (
     get_schedule_index,
@@ -322,3 +322,156 @@ def test_lint_result_errors_and_passed_are_derived():
     empty = LintResult(deck_path="/tmp/y.DATA", issues=[])
     assert empty.passed is True
     assert empty.errors == []
+
+
+
+# ---------------------------------------------------------------------- #
+# Phase 1 — Token classification (FU_*, WU_* user variables)             #
+# See docs/personal/LINTER_REDESIGN_PLAN.md.                              #
+# ---------------------------------------------------------------------- #
+
+@pytest.mark.unit
+@pytest.mark.parametrize("token,expected", [
+    # User-defined variables (FU_*, WU_*) — OPM Flow UDQ convention.
+    ("FU_WBHP", TokenType.USER_VARIABLE),
+    ("FU_PAR14", TokenType.USER_VARIABLE),
+    ("FU_NEWVEC", TokenType.USER_VARIABLE),
+    ("WU_TEST", TokenType.USER_VARIABLE),
+    ("WU_WBHP0", TokenType.USER_VARIABLE),
+    # Lowercase input still classified (lex is case-insensitive).
+    ("fu_wbhp", TokenType.USER_VARIABLE),
+    ("wu_test", TokenType.USER_VARIABLE),
+    # Real OPM keywords stay KEYWORD.
+    ("WELLDIMS", TokenType.KEYWORD),
+    ("WELSPECS", TokenType.KEYWORD),
+    ("DIMENS", TokenType.KEYWORD),
+    ("TABDIMS", TokenType.KEYWORD),
+    ("TITLE", TokenType.KEYWORD),
+    # Single letter still KEYWORD (matches regex; OPM doesn't have single-
+    # letter keywords in practice but the lexer's job is structural).
+    ("A", TokenType.KEYWORD),
+    # Numeric / terminator / non-alpha → OTHER.
+    ("123", TokenType.OTHER),
+    ("+", TokenType.OTHER),
+    ("/", TokenType.OTHER),
+    ("", TokenType.OTHER),
+    # Non-alphabetic first char is OTHER.
+    ("1ABC", TokenType.OTHER),
+])
+def test_classify_token(token, expected):
+    """Pure-function classification of deck tokens.
+
+    Critical invariant for Phase 1: FU_/WU_ must be classified as
+    USER_VARIABLE so L016 ignores them, but real keywords like WELLDIMS
+    stay KEYWORD. Real typos (FU_ lowercase, etc.) still classify
+    correctly because the function uppercases defensively.
+    """
+    assert Deck._classify_token(token) is expected
+
+
+@pytest.mark.unit
+def test_user_variable_prefixes_are_narrow():
+    """Guard against pre-emptive prefix expansion.
+
+    The user-variable prefix list must stay narrow: only prefixes
+    actually observed in fixtures belong here. Pre-emptive expansion
+    (TU_*, GI_*, WI_*, GU_*, AU_*) is exactly the brute-force pattern
+    the LinkedIn critique named. If you find yourself wanting to add
+    one, add a fixture demonstrating the need first.
+    """
+    from opm_ai.linter.deck import _USER_VARIABLE_PREFIXES
+    assert _USER_VARIABLE_PREFIXES == ("FU_", "WU_"), (
+        f"Unexpected prefixes: {_USER_VARIABLE_PREFIXES}. "
+        "Phase 1 forbids pre-emptive expansion; add only when a "
+        "real fixture demonstrates the need."
+    )
+
+
+@pytest.mark.unit
+def test_fu_variable_not_flagged(tmp_path):
+    """FU_*/WU_* tokens in any section never produce L016 issues.
+
+    This is the headline Phase 1 fix. A deck containing FU_NEWVEC
+    anywhere must lint clean of L016 issues for those tokens. We use
+    a minimal but valid RUNSPEC/SUMMARY/SCHEDULE skeleton so the
+    other rules' required-keyword fires don't drown out the test.
+    """
+    from opm_ai.linter.linter import lint_deck
+    deck = tmp_path / "TESTCASE.DATA"
+    deck.write_text("""\
+RUNSPEC
+DIMENS
+  10 10 3 /
+TITLE
+  FU_TEST_VAR /
+FUNVAR
+  FU_NEWVEC /
+WELLDIMS
+  1 1 1 1 /
+SUMMARY
+FU_NEWVEC
+WU_USER_THING
+ALL
+/
+""")
+    issues = lint_deck(deck).issues
+    l016 = [i for i in issues if i.rule_id == "L016"]
+    fu_wu = [
+        i for i in l016
+        if i.keyword and i.keyword.startswith(("FU_", "WU_"))
+    ]
+    assert fu_wu == [], (
+        f"FU_/WU_ tokens were flagged by L016: "
+        f"{[(i.section, i.keyword, i.line) for i in fu_wu]}"
+    )
+
+
+@pytest.mark.unit
+def test_typo_still_flagged(tmp_path):
+    """WELSPECS typo WELSECS still produces L016 WARNING.
+
+    Regression guard: Phase 1 must not widen acceptance. Real typos
+    still produce a 'did you mean X?' suggestion.
+    """
+    from opm_ai.linter.linter import lint_deck
+    deck = tmp_path / "TESTCASE.DATA"
+    deck.write_text("RUNSPEC\nWELSECS\n/\n")
+    issues = lint_deck(deck).issues
+    l016 = [i for i in issues if i.rule_id == "L016"]
+    assert len(l016) >= 1
+    assert l016[0].severity == "WARNING"
+    assert "WELSPECS" in l016[0].message, (
+        f"L016 message should suggest WELSPECS, got: {l016[0].message!r}"
+    )
+
+
+@pytest.mark.unit
+def test_fu_variable_not_flagged_for_missing_terminator(tmp_path):
+    """FU_* lines don't need a terminating '/' (Phase 1 fallout fix).
+
+    L001 (terminator detection) used to flag FU_TEST_VAR\n as
+    'missing terminating /' because it looks like a keyword. Phase 1
+    classifies FU_* as USER_VARIABLE so L001 treats it as not-a-keyword.
+    """
+    from opm_ai.linter.linter import lint_deck
+    deck = tmp_path / "TESTCASE.DATA"
+    deck.write_text("""\
+RUNSPEC
+DIMENS
+  10 10 3 /
+TITLE
+  test /
+FU_FREE_LINE_NO_SLASH
+WELLDIMS
+  1 1 1 1 /
+""")
+    issues = lint_deck(deck).issues
+    # No L001 issue should be for FU_FREE_LINE_NO_SLASH.
+    bad = [
+        i for i in issues
+        if i.rule_id == "L001"
+        and i.keyword == "FU_FREE_LINE_NO_SLASH"
+    ]
+    assert bad == [], (
+        f"FU_ token falsely flagged as missing terminator: {bad}"
+    )

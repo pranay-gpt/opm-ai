@@ -54,7 +54,23 @@ class SpecItem(BaseModel):
 
 
 class KeywordSpec(BaseModel):
-    """Spec for one keyword in one section."""
+    """Spec for one keyword in one section.
+
+    The `min_items` and `max_items` fields are computed from the
+    `items` list when not specified explicitly:
+
+    - `min_items` defaults to 1 (the keyword must have at least one
+      record).
+    - `max_items` defaults to `len(items)` (the full schema).
+
+    For keywords like WELLDIMS where some items have a default and
+    can be omitted, set `min_items` lower than `len(items)` (e.g.
+    `min_items: 1`) so a deck that supplies only 4 of the 12 items
+    is accepted; items 5-12 default to 0.
+
+    `min_items == max_items == len(items)` enforces the strict count
+    (e.g. DIMENS, which must have exactly 3 items).
+    """
 
     name: str
     section: Literal[
@@ -64,8 +80,29 @@ class KeywordSpec(BaseModel):
     required: bool = False
     repeated: bool = False
     items: list[SpecItem] = Field(default_factory=list)
+    min_items: Optional[int] = None
+    max_items: Optional[int] = None
     mutually_exclusive_with: list[str] = Field(default_factory=list)
     notes: list[str] = Field(default_factory=list)
+
+    @property
+    def effective_min_items(self) -> int:
+        """Minimum number of items this keyword accepts."""
+        if self.min_items is not None:
+            return self.min_items
+        return 1  # at least one item; the keyword record exists.
+
+    @property
+    def effective_max_items(self) -> int:
+        """Maximum number of items this keyword accepts.
+
+        Defaults to len(items); spec authors can lower this for
+        keywords that accept a prefix (e.g. WELLDIMS: max_items: 12
+        but min_items: 1 because items 5-12 default to 0).
+        """
+        if self.max_items is not None:
+            return self.max_items
+        return len(self.items)
 
     @field_validator("name")
     @classmethod

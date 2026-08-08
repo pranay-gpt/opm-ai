@@ -510,7 +510,7 @@ def test_lint_l002_accepts_pvto_for_oil():
         deck_path = Path(f.name)
     try:
         result = lint_deck(deck_path)
-        l002_errors = [e for e in result.errors if e.rule_id == "L002"]
+        l002_errors = [e for e in result.error_issues if e.rule_id == "L002"]
         assert l002_errors == [], f"PVTO+SWOF+PVDG should satisfy L002, got {l002_errors}"
     finally:
         deck_path.unlink()
@@ -530,7 +530,7 @@ def test_lint_l002_accepts_pvdg_as_dry_gas_alternative():
         deck_path = Path(f.name)
     try:
         result = lint_deck(deck_path)
-        l002_errors = [e for e in result.errors if e.rule_id == "L002"]
+        l002_errors = [e for e in result.error_issues if e.rule_id == "L002"]
         assert l002_errors == [], f"PVDG should satisfy L002 for GAS, got {l002_errors}"
     finally:
         deck_path.unlink()

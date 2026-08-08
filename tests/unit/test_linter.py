@@ -53,11 +53,19 @@ def test_lint_spe1_deck(spe1_deck):
 
 def test_lint_sample_deck(tmp_path):
     """Lint a minimal sample deck."""
+    # Phase 3 (linter-redesign): the L2 layer now flags missing
+    # WELLDIMS as an ERROR (WELLDIMS is required per the spec). This
+    # test exercises the bare-minimum-deck lint path, so we include
+    # a valid WELLDIMS record. The L3 layer has always required
+    # DIMENS (L015), so that stays.
     deck_content = """
 RUNSPEC
 
 DIMENS
   10 10 5 /
+
+WELLDIMS
+  5  2  1  9  0  0  0  0  0  0  0  0 /
 
 METRIC
 

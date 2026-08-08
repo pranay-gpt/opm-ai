@@ -7,6 +7,8 @@ from typing import Optional
 from opm_ai.linter.deck import Deck
 from opm_ai.linter.models import LintIssue, LintResult
 from opm_ai.linter.rules.registry import run_all
+from opm_ai.linter.spec import KeywordSpec, load_spec
+from opm_ai.linter.validator import validate
 
 
 # Process-local cache of parsed Decks, keyed by (path, mtime). Repeated
@@ -16,6 +18,15 @@ from opm_ai.linter.rules.registry import run_all
 # the rules consume, so the cached object can be returned directly.
 _DECK_CACHE: dict[tuple[str, float], Deck] = {}
 _DECK_CACHE_MAX = 8
+
+# Process-local cache for the loaded YAML specs. Same lifecycle as
+# _DECK_CACHE: load once, reuse. The spec_dir is shipped with the
+# package so we resolve relative to the linter module, not the
+# working directory. If a YAML file is malformed, load_spec raises
+# at first call; we swallow it and return {} so the linter degrades
+# gracefully (the L1/L3 rules still fire; only L2 is silently off).
+_SPEC_DIR = Path(__file__).parent / "spec"
+_SPEC_CACHE: dict[str, KeywordSpec] | None = None
 
 
 def _get_deck(deck_path: Path) -> Deck:
@@ -38,6 +49,28 @@ def _get_deck(deck_path: Path) -> Deck:
     return deck
 
 
+def _get_specs() -> dict[str, KeywordSpec]:
+    """Lazy-load and cache the YAML specs.
+
+    On a malformed spec, return {} and log the error so the L2 layer
+    silently disables. The L1/L3 rules continue to fire; the user sees
+    a warning in logs rather than a 500 from the API.
+    """
+    global _SPEC_CACHE
+    if _SPEC_CACHE is not None:
+        return _SPEC_CACHE
+    try:
+        _SPEC_CACHE = load_spec(_SPEC_DIR)
+    except Exception as exc:
+        import logging
+        logging.getLogger(__name__).warning(
+            "spec load failed (%s: %s); L2 layer disabled",
+            type(exc).__name__, exc,
+        )
+        return {}
+    return _SPEC_CACHE
+
+
 def clear_deck_cache() -> None:
     """Drop every cached Deck. Tests use this to assert parse counts."""
     _DECK_CACHE.clear()
@@ -54,8 +87,12 @@ def lint_deck(deck_path: Path) -> LintResult:
     """
     deck = _get_deck(deck_path)
 
-    # Run all rules
+    # Run L1/L3 rules (existing 18 rules)
     issues = run_all(deck)
+    # Run L2 schema-driven checks (Phase 3 of the linter-redesign plan).
+    # The validator consumes the hand-curated YAML specs in
+    # opm_ai/linter/spec/ and emits `L2.<KEYWORD>.<CHECK>` issues.
+    issues.extend(validate(deck, _get_specs()))
 
     # Add missing required sections as ERRORs. Decks that INCLUDE other files
     # may receive whole sections from them (e.g. SPE5CASE1 pulls GRID/SCHEDULE

@@ -72,6 +72,15 @@ TABDIMS:
   section: RUNSPEC
   required: false   # OPM Flow accepts decks with no TABDIMS (defaults apply)
   repeated: false
+  # Calibrated against 720 fixtures (Phase 2.5): all 720 parse
+  # cleanly with skip-default syntax (`n*` = use default n times).
+  # Range checks promoted from INFO to WARNING.
+  calibrated: true
+  # Tabdims accepts a variable-length record (the user specifies
+  # only the trailing items they want to override; earlier items
+  # default to 0 or 1). The `n*` skip-default syntax is common
+  # (603/720 fixtures use it). Disable the strict item_count check.
+  skip_item_count: true
   items:
     - name: max_eos_res_tables
       type: int
@@ -159,6 +168,10 @@ DIMENS:
   section: RUNSPEC
   required: true
   repeated: false
+  # Calibrated against 720 fixtures (Phase 2.5): max observed
+  # nx=150, ny=220, nz=200; spec range [1, 1000] comfortably wide.
+  # 0 fixtures out of range, 0 fixtures with wrong count.
+  calibrated: true
   min_items: 3
   max_items: 3
   items:

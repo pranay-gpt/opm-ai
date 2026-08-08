@@ -162,7 +162,7 @@ WELLDIMS
         if i.rule_id == "L2.DIMENS.item_count"
     ]
     assert len(matches) == 1, f"expected 1 DIMENS item_count, got {matches}"
-    assert matches[0].severity == "INFO"  # DIMENS not yet calibrated
+    assert matches[0].severity == "WARNING"  # DIMENS calibrated in Phase 2.5
 
 
 # ---------------------------------------------------------------------- #

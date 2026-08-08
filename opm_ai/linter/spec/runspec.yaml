@@ -1,0 +1,61 @@
+# Hand-curated specs for the RUNSPEC section.
+#
+# Source: keywords_rm.json (parameter_count_authoritative + parameters[].brief
+# for defaults); OPM Flow Reference Manual (descriptions of each item).
+# Cross-checked against flow --enable-dry-run=true acceptance.
+#
+# Phase 0 ships only WELLDIMS as the example. Phase 2 will fill in the
+# rest (TABDIMS, DIMENS, OIL, GAS, WATER, DISGAS, VAPOIL, ENDSCALE, ECHO).
+
+WELLDIMS:
+  section: RUNSPEC
+  required: true
+  repeated: false
+  items:
+    - name: max_wells
+      type: int
+      default: 0
+      range: [0, 100000]
+    - name: max_conns_per_well
+      type: int
+      default: 0
+      range: [0, 100]
+    - name: max_groups
+      type: int
+      default: 0
+      range: [0, 1000]
+    - name: max_wells_per_group
+      type: int
+      default: 0
+      range: [0, 1000]
+    # Items 5-12 are accepted (and counted) by OPM Flow but not strictly
+    # required for a teaching case. Defaults are 0 per the Reference
+    # Manual; we list them so the count validator knows the keyword has
+    # 12 items total.
+    - name: max_separator_stages
+      type: int
+      default: 0
+    - name: max_well_streams
+      type: int
+      default: 0
+    - name: max_mixtures
+      type: int
+      default: 0
+    - name: max_separators
+      type: int
+      default: 0
+    - name: max_mixture_items
+      type: int
+      default: 0
+    - name: max_cross_domain_completions
+      type: int
+      default: 0
+    - name: max_well_lists
+      type: int
+      default: 0
+    - name: max_dynamic_well_lists
+      type: int
+      default: 0
+  notes:
+    - "All items are integers with default 0 if omitted (per OPM Flow Reference Manual)."
+    - "Items 5-12 are rarely needed for teaching cases; if a student omits them, that's fine — the validator counts up to N items and accepts any prefix."

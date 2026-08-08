@@ -46,3 +46,91 @@ def test_welldims_first_four_items_have_ranges():
         assert spec.items[i].range is not None, f"item {i} ({spec.items[i].name}) missing range"
         lo, hi = spec.items[i].range
         assert lo <= hi, f"item {i}: invalid range ({lo}, {hi})"
+
+
+# ---------------------------------------------------------------------- #
+# Phase 2 — RUNSPEC keyword coverage tests                                #
+# Each test confirms one keyword's spec loaded with the expected shape.  #
+# When Phase 3 wires the validator in, these tests get +ve/-ve pairs.    #
+# ---------------------------------------------------------------------- #
+
+
+@pytest.fixture(scope="module")
+def runspec_specs():
+    """All RUNSPEC specs loaded once per module."""
+    from opm_ai.linter.spec import load_spec
+    return load_spec(SPEC_DIR)
+
+
+@pytest.mark.unit
+@pytest.mark.parametrize("keyword,expected_items", [
+    ("DIMENS", 3),
+    ("TABDIMS", 24),
+    ("WELLDIMS", 12),
+    ("ENDSCALE", 3),
+    ("FUNVAR", 1),
+])
+def test_runspec_keyword_item_count(runspec_specs, keyword, expected_items):
+    """Each RUNSPEC keyword has the documented number of items."""
+    assert keyword in runspec_specs, f"{keyword} missing from runspec.yaml"
+    assert len(runspec_specs[keyword].items) == expected_items, (
+        f"{keyword}: expected {expected_items} items, got "
+        f"{len(runspec_specs[keyword].items)}"
+    )
+
+
+@pytest.mark.unit
+@pytest.mark.parametrize("keyword", ["OIL", "GAS", "WATER", "DISGAS", "VAPOIL", "ECHO", "NOINSPEC"])
+def test_runspec_phase_flags_have_no_items(runspec_specs, keyword):
+    """Phase-presence flags (OIL/GAS/WATER/DISGAS/VAPOIL/ECHO/NOINSPEC) are bare."""
+    assert keyword in runspec_specs
+    assert runspec_specs[keyword].items == []
+
+
+@pytest.mark.unit
+def test_dimens_required(runspec_specs):
+    """DIMENS is the only RUNSPEC keyword marked required=True (besides WELLDIMS)."""
+    assert runspec_specs["DIMENS"].required is True
+    assert runspec_specs["WELLDIMS"].required is True
+
+
+@pytest.mark.unit
+def test_fu_nvar_repeatable(runspec_specs):
+    """FUNVAR is the only repeatable RUNSPEC keyword (one record per FU_* declaration)."""
+    assert runspec_specs["FUNVAR"].repeated is True
+    for kw in ("OIL", "GAS", "WATER", "DIMENS", "TABDIMS", "WELLDIMS"):
+        assert runspec_specs[kw].repeated is False, f"{kw} should not be repeatable"
+
+
+@pytest.mark.unit
+def test_endscale_item_ranges_inclusive(runspec_specs):
+    """ENDSCALE items have inclusive ranges (range[i] <= range[i+1])."""
+    spec = runspec_specs["ENDSCALE"]
+    assert spec.items[0].range == (0, 4)
+    assert spec.items[1].range == (0, 1)
+    assert spec.items[2].range == (0, 1)
+
+
+@pytest.mark.unit
+def test_dimens_range_is_positive(runspec_specs):
+    """DIMENS nx/ny/nz must all be positive (lower bound is 1, not 0)."""
+    spec = runspec_specs["DIMENS"]
+    for item in spec.items:
+        assert item.range[0] >= 1, f"{item.name}: nx/ny/nz must be >= 1"
+
+
+@pytest.mark.unit
+def test_tabdims_defaults(runspec_specs):
+    """TABDIMS items default to 0 or 1 depending on whether OPM Flow assumes a region.
+
+    Items 3, 4, 5 (max_pvt_regions, max_saturation_regions, max_equil_regions)
+    default to 1 because OPM Flow assumes at least 1 region by default. All
+    other items default to 0 per the manual.
+    """
+    spec = runspec_specs["TABDIMS"]
+    one_defaults = {"max_pvt_regions", "max_saturation_regions", "max_equil_regions"}
+    for item in spec.items:
+        if item.name in one_defaults:
+            assert item.default == 1, f"{item.name}: expected default 1, got {item.default}"
+        else:
+            assert item.default == 0, f"{item.name}: expected default 0, got {item.default}"

@@ -59,3 +59,208 @@ WELLDIMS:
   notes:
     - "All items are integers with default 0 if omitted (per OPM Flow Reference Manual)."
     - "Items 5-12 are rarely needed for teaching cases; if a student omits them, that's fine — the validator counts up to N items and accepts any prefix."
+
+# Hand-curated: TABDIMS
+# Source: keywords_rm.json (24 items, all defaults 0).
+# Reference: OPM Flow Manual §RUNSPEC — table dimensions.
+TABDIMS:
+  section: RUNSPEC
+  required: false   # OPM Flow accepts decks with no TABDIMS (defaults apply)
+  repeated: false
+  items:
+    - name: max_eos_res_tables
+      type: int
+      default: 0
+    - name: max_pvt_regions
+      type: int
+      default: 1
+      notes:
+        - "OPM Flow default is 1 region; manual lists 0 as parameter-count default but the simulator assumes at least 1."
+    - name: max_saturation_regions
+      type: int
+      default: 1
+    - name: max_equil_regions
+      type: int
+      default: 1
+    - name: max_table_entries_pvto
+      type: int
+      default: 0
+    - name: max_table_entries_pvtg
+      type: int
+      default: 0
+    - name: max_table_entries_pvtw
+      type: int
+      default: 0
+    - name: max_table_entries_rock
+      type: int
+      default: 0
+    - name: max_table_entries_zo_tab
+      type: int
+      default: 0
+    - name: max_pressure_nodes_salt
+      type: int
+      default: 0
+    - name: max_rs_nodes
+      type: int
+      default: 0
+    - name: max_rv_nodes
+      type: int
+      default: 0
+    - name: max_pbub_nodes
+      type: int
+      default: 0
+    - name: max_pdew_nodes
+      type: int
+      default: 0
+    - name: max_ppcw_nodes
+      type: int
+      default: 0
+    - name: max_compositions
+      type: int
+      default: 0
+    - name: max_co2_pressure_nodes
+      type: int
+      default: 0
+    - name: max_co2_mass_fraction_nodes
+      type: int
+      default: 0
+    - name: max_brine_mass_fraction_nodes
+      type: int
+      default: 0
+    - name: max_salt_concentration_nodes
+      type: int
+      default: 0
+    - name: max_so2_solubility_nodes
+      type: int
+      default: 0
+    - name: max_polymer_nodes
+      type: int
+      default: 0
+    - name: max_foam_nodes
+      type: int
+      default: 0
+    - name: max_temp_nodes
+      type: int
+      default: 0
+  notes:
+    - "All 24 items are integers; OPM Flow accepts a prefix of the 24."
+    - "Required: false. OPM Flow picks sane defaults if the keyword is omitted."
+
+
+# Hand-curated: DIMENS
+# Defines the simulation grid size. Three positive integers.
+DIMENS:
+  section: RUNSPEC
+  required: true
+  repeated: false
+  items:
+    - name: nx
+      type: int
+      default: null
+      range: [1, 1000]
+    - name: ny
+      type: int
+      default: null
+      range: [1, 1000]
+    - name: nz
+      type: int
+      default: null
+      range: [1, 1000]
+  notes:
+    - "Required: true. Without DIMENS, OPM Flow rejects the deck."
+    - "L015 (existing L3 rule) already enforces required-ness; Phase 3's L2 will additionally enforce the int type and range."
+
+
+# Hand-curated: OIL / GAS / WATER
+# Phase-presence flags. Each keyword appears with no items (or with one
+# integer for OIL/GAS that specifies the number of PVT tables — but
+# in practice a flag with no items is sufficient).
+OIL:
+  section: RUNSPEC
+  required: false
+  repeated: false
+  items: []   # bare flag; optional PVT-table-count arg is rare in teaching decks
+  mutually_exclusive_with: []
+
+GAS:
+  section: RUNSPEC
+  required: false
+  repeated: false
+  items: []
+
+WATER:
+  section: RUNSPEC
+  required: false
+  repeated: false
+  items: []
+
+
+# Hand-curated: DISGAS (dissolved gas in oil phase)
+DISGAS:
+  section: RUNSPEC
+  required: false
+  repeated: false
+  items: []
+  notes:
+    - "If absent, oil is dead. If present, OPM Flow expects RS values in PVTO or PVDO."
+
+
+# Hand-curated: VAPOIL (vaporized oil in gas phase)
+VAPOIL:
+  section: RUNSPEC
+  required: false
+  repeated: false
+  items: []
+
+
+# Hand-curated: ENDSCALE
+# Two or three integer flags controlling endpoint scaling.
+ENDSCALE:
+  section: RUNSPEC
+  required: false
+  repeated: false
+  items:
+    - name: scaling_option
+      type: int
+      default: 1
+      range: [0, 4]
+      notes:
+        - "0 = no scaling; 1 = manual perm scaling; 2 = full directional; 3 = directional; 4 = reversible."
+    - name: relative_perm_threshold
+      type: int
+      default: 0
+      range: [0, 1]
+    - name: pcow_threshold
+      type: int
+      default: 0
+      range: [0, 1]
+
+
+# Hand-curated: ECHO (verbosity flag, no items)
+ECHO:
+  section: RUNSPEC
+  required: false
+  repeated: false
+  items: []
+
+
+# Hand-curated: FUNVAR (declares user-defined FU_* variables used in SUMMARY)
+FUNVAR:
+  section: RUNSPEC
+  required: false
+  repeated: true   # FUNVAR can appear multiple times to declare several variables
+  items:
+    - name: variable_name
+      type: keyword   # the FU_<NAME> token the user defines
+      default: null
+      range: null
+  notes:
+    - "Phase 1 lex already recognises FU_<NAME> tokens; Phase 3 L2 will cross-check SUMMARY FU_* tokens against FUNVAR declarations."
+
+
+# Hand-curated: WELLDIMS-adjacent: NOINSPEC (no inspection keywords)
+NOINSPEC:
+  section: RUNSPEC
+  required: false
+  repeated: false
+  items: []

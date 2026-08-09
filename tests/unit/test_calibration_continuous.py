@@ -7,12 +7,23 @@ small in-memory fixture set.
 """
 from __future__ import annotations
 
+import importlib.util
+import sys
 import tempfile
 from pathlib import Path
 
 import pytest
 
-from scripts.calibration import continuous_scan
+# pytest's rootdir doesn't include the project root on sys.path; load
+# the continuous_scan script by absolute path instead.
+_SCRIPT_PATH = (
+    Path(__file__).resolve().parent.parent.parent
+    / "scripts" / "calibration" / "continuous_scan.py"
+)
+_spec = importlib.util.spec_from_file_location("_continuous_scan", _SCRIPT_PATH)
+continuous_scan = importlib.util.module_from_spec(_spec)
+sys.modules["_continuous_scan"] = continuous_scan
+_spec.loader.exec_module(continuous_scan)
 
 
 @pytest.mark.unit

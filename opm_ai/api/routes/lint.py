@@ -29,6 +29,12 @@ async def lint_deck_endpoint(request: LintRequest) -> LintResult:
       the same panel as any other lint error instead of bailing on
       a generic 500. The original trace is logged for diagnosis.
     - 200 with passed=True/False on normal linter output (unchanged).
+
+    Phase 5: each LintIssue carries an `explanation` field with
+    Markdown describing what the issue means and how to fix it.
+    The frontend renders it in a collapsible "Why this matters?"
+    panel. The field is auto-populated by lint_deck; no separate
+    round trip to /lint/<id>/explain/<issue_id> is needed.
     """
     try:
         deck_path = validate_deck_path(request.deck_path)

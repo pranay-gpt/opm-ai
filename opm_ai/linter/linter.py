@@ -136,6 +136,19 @@ def lint_deck(deck_path: Path) -> LintResult:
         issues=issues
     )
 
+    # Phase 5: populate `explanation` on every issue. The frontend
+    # then renders the Markdown next to each lint error. The
+    # explainer is opt-out friendly — failures degrade to None
+    # rather than raising, so a malformed explanation never blocks
+    # the lint verdict.
+    try:
+        from opm_ai.linter.explainer import explain_issue
+        explained = [explain_issue(i) for i in result.issues]
+        result = result.model_copy(update={"issues": explained})
+    except Exception:
+        # Explainer failure must not change the verdict; ignore.
+        pass
+
     # Optional LLM enhancement - graceful degradation.
     # Never flips `passed`; only fills lint_summary when a provider is available.
     try:

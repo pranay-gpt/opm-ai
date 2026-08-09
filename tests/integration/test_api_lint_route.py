@@ -104,3 +104,39 @@ def test_lint_route_returns_200_on_success(client, spe1_deck_path):
     assert not any(iss.get("rule_id") == "LINT-000" for iss in issues), (
         f"Successful lint must not contain LINT-000 synthetic issue, got: {issues}"
     )
+
+
+def test_lint_route_attaches_explanations(client, spe1_deck_path):
+    """Phase 5: each issue in the response carries an `explanation` field.
+
+    The explainer is wired into lint_deck; every rule_id that has a
+    registered explainer (L2.* and the modern L-prefix) gets a
+    non-empty Markdown explanation. Rule-ids without a registered
+    explainer (legacy L-prefix) gracefully fall back to None — the
+    test only asserts that *known* issues have explanations.
+    """
+    # Trigger a deliberate failure to get a known L2 issue. Use a
+    # minimal deck in tmp_path that has a missing WELLDIMS.
+    import tempfile, json as _json
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".DATA", delete=False) as f:
+        f.write("""\\
+RUNSPEC
+DIMENS
+  5 5 3 /
+""")
+        tmp_deck = f.name
+
+    response = client.post("/api/lint", json={"deck_path": tmp_deck})
+    assert response.status_code == 200
+    data = response.json()
+
+    # Find the WELLDIMS.required issue.
+    welldims_issues = [
+        i for i in data.get("issues", [])
+        if i.get("rule_id") == "L2.WELLDIMS.required"
+    ]
+    assert len(welldims_issues) == 1
+    exp = welldims_issues[0].get("explanation")
+    assert exp, f"L2.WELLDIMS.required must have a non-empty explanation, got: {welldims_issues[0]}"
+    assert "WELLDIMS" in exp
+    assert "**Fix**" in exp

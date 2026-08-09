@@ -27,6 +27,11 @@ class LintIssue(BaseModel):
     line: Optional[int] = None
     message: str
     rule_id: Optional[str] = None
+    # Phase 5: human-readable Markdown explanation, populated by
+    # `opm_ai.linter.explainer.explain_issue`. Optional because not
+    # every consumer wants the overhead; the API auto-populates it
+    # via `lint_deck`.
+    explanation: Optional[str] = None
 
     def __str__(self) -> str:
         parts = []

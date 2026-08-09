@@ -1,0 +1,34 @@
+---
+# Guard: prevent any PR from merging into an archive/* branch.
+#
+# Branches prefixed with `archive/` are kept on origin for historical
+# reference but must never receive new commits or merges. This workflow
+# fails fast on any PR opened against such a branch.
+#
+# See docs/personal/LINTER_FAILED_DESIGN_LESSON.md for why the
+# linter-redesign branch was archived.
+
+name: archive-branch-guard
+
+on:
+  pull_request:
+    branches-ignore:
+      - main
+      - master
+
+jobs:
+  block-archive-merge:
+    name: Block PR targeting archive/* branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check base branch
+        env:
+          BASE: ${{ github.base_ref }}
+        run: |
+          if [[ "$BASE" == archive/* ]]; then
+            echo "::error::PRs targeting archive/* branches are not allowed."
+            echo "::error::Branch '$BASE' is archived for historical reference only."
+            echo "::error::See docs/personal/LINTER_FAILED_DESIGN_LESSON.md."
+            exit 1
+          fi
+          echo "Base branch '$BASE' is not archived — OK."

@@ -126,16 +126,18 @@ class Resolver:
             return self.composite
 
         self.visited.add(Path(self.deck.source_file).resolve())
-        self._resolve_deck(self.deck, depth=1)
+        # Pass `root_deck=self.deck` so that included files' keywords
+        # always merge into the root deck (not into a sub-deck).
+        self._resolve_deck(self.deck, root_deck=self.deck, depth=1)
         return self.composite
 
-    def _resolve_deck(self, deck: Deck, depth: int) -> None:
+    def _resolve_deck(self, deck: Deck, root_deck: Deck, depth: int) -> None:
         """Walk all keywords in all sections of `deck`.
 
         For INCLUDE: read the file, parse it, and (a) record the
         keywords on a ResolvedInclude and (b) merge them into the
-        parent deck's section so the section-level AST includes
-        the included content.
+        root deck's same-named section (so the section-level AST
+        always reflects the full merged deck).
         """
         # Collect PATHS first (so subsequent INCLUDEs can use them).
         all_keywords = deck.all_keywords()
@@ -149,11 +151,11 @@ class Resolver:
         # Walk keywords; resolve INCLUDE / IMPORT as we find them.
         for kw in all_keywords:
             if kw.name == "INCLUDE":
-                self._resolve_include(kw, deck, depth)
+                self._resolve_include(kw, deck, root_deck, depth)
             elif kw.name == "IMPORT":
                 self._resolve_import(kw, depth)
 
-    def _resolve_include(self, kw: Keyword, parent_deck: Deck, depth: int) -> None:
+    def _resolve_include(self, kw: Keyword, parent_deck: Deck, root_deck: Deck, depth: int) -> None:
         """Resolve a single INCLUDE statement."""
         if not kw.records:
             return
@@ -226,7 +228,7 @@ class Resolver:
             parent_section = self._find_section_for_keyword(parent_deck, kw)
             if parent_section is None:
                 parent_section = self._get_or_create_section(
-                    parent_deck, SectionName.GRID
+                    root_deck, SectionName.GRID
                 )
 
             for sub_section_name, sub_section in sub_deck.sections.items():
@@ -236,8 +238,10 @@ class Resolver:
                     # PRELUDE keywords join the parent's INCLUDE-section.
                     target_section = parent_section
                 else:
+                    # Non-PRELUDE sections merge into the root deck's
+                    # same-named section (creating it if absent).
                     target_section = self._get_or_create_section(
-                        parent_deck, sub_section_name
+                        root_deck, sub_section_name
                     )
                 for sub_kw in sub_section.keywords:
                     if sub_kw.name == "INCLUDE":
@@ -255,7 +259,7 @@ class Resolver:
             self.composite.includes.append(resolved)
 
             # Recursively resolve INCLUDE statements in the included file.
-            self._resolve_deck(sub_deck, depth + 1)
+            self._resolve_deck(sub_deck, root_deck=root_deck, depth=depth + 1)
 
     def _find_section_for_keyword(self, deck: Deck, kw: Keyword) -> Section | None:
         """Find the Section object that contains the given keyword."""

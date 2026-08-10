@@ -70,6 +70,7 @@ class Keyword:
     records: list[Record] = field(default_factory=list)
     spec: Optional[object] = None  # KeywordSpec, but avoid circular import
     unknown_reason: Optional[str] = None
+    section: Optional["Section"] = field(default=None, repr=False)
 
     def line(self) -> int:
         return self.header_token.line

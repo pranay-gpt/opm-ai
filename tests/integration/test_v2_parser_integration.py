@@ -103,8 +103,9 @@ def test_stress_fixture_parses_with_unknown_keywords():
             break
     assert actionx is not None
     assert actionx.spec is not None
-    assert actionx.spec.size_kind.value == "fixed"
-    assert len(actionx.records) == 1
+    # ACTIONX is LIST-kind: each record is a separate action block.
+    assert actionx.spec.size_kind.value == "list"
+    assert len(actionx.records) >= 1
     assert [t.text for t in actionx.records[0].items[:2]] == ["ACT-01", "1000"]
     assert actionx.records[0].items[1].kind.name == "INT"
 

@@ -118,9 +118,36 @@ class _ParserState:
             pass
         elif token.kind == TokenKind.TERMINATOR:
             self._on_terminator(token)
+        elif token.kind == TokenKind.UNKNOWN:
+            # UNKNOWN tokens like "WOPR:W1" can appear in the SUMMARY
+            # section as per-target summary variables. If we are in a
+            # SUMMARY section (and no keyword is currently being built),
+            # treat them as a new keyword whose name is the full token.
+            if (
+                ":" in token.text
+                and self._current_section is not None
+                and self._current_section.name == SectionName.SUMMARY
+                and self._current_keyword is None
+            ):
+                self._on_unknown_keyword(token)
+                return
+            # Otherwise fall through to value handling.
+            self._on_value(token)
         else:
             # Value token: append to current record.
             self._on_value(token)
+
+    def _on_unknown_keyword(self, token: Token) -> None:
+        """Treat an UNKNOWN token as a new keyword (used for SUMMARY)."""
+        name = token.text
+        self._close_record(force=True)
+        self._close_keyword(force=True)
+        kw = Keyword(name=name, header_token=token, spec=None)
+        kw.unknown_reason = f"unknown keyword '{name}' (treated as synthetic)"
+        if self._current_section is not None:
+            kw.section = self._current_section
+            self._current_section.keywords.append(kw)
+        self._current_keyword = kw
 
     # -- Section handling ---------------------------------------------------
 
@@ -196,6 +223,7 @@ class _ParserState:
                 )
 
         if self._current_section is not None:
+            kw.section = self._current_section
             self._current_section.keywords.append(kw)
 
         self._current_keyword = kw

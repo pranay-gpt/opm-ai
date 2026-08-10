@@ -92,8 +92,7 @@ PHASES = {
 TITLE = KeywordSpec(
     name="TITLE",
     sections=[SectionName.RUNSPEC],
-    size_kind=SizeKind.LIST,
-    items=[STRING],
+    size_kind=SizeKind.NONE,
 )
 
 START = KeywordSpec(
@@ -320,17 +319,15 @@ PVTW = KeywordSpec(
 ROCK = KeywordSpec(
     name="ROCK",
     sections=[SectionName.PROPS],
-    size_kind=SizeKind.FIXED,
+    size_kind=SizeKind.LIST,
     items=[DOUBLE, DOUBLE],
-    record_count=1,
 )
 
 DENSITY = KeywordSpec(
     name="DENSITY",
     sections=[SectionName.PROPS],
-    size_kind=SizeKind.FIXED,
+    size_kind=SizeKind.LIST,
     items=[DOUBLE, DOUBLE, DOUBLE, DOUBLE],
-    record_count=1,
 )
 
 # ---------------------------------------------------------------------------
@@ -339,6 +336,34 @@ DENSITY = KeywordSpec(
 
 FIPNUM = KeywordSpec(
     name="FIPNUM",
+    sections=[SectionName.REGIONS],
+    size_kind=SizeKind.ARRAY,
+    items=[INT],
+)
+
+EQLNUM = KeywordSpec(
+    name="EQLNUM",
+    sections=[SectionName.REGIONS],
+    size_kind=SizeKind.ARRAY,
+    items=[INT],
+)
+
+SATNUM = KeywordSpec(
+    name="SATNUM",
+    sections=[SectionName.REGIONS],
+    size_kind=SizeKind.ARRAY,
+    items=[INT],
+)
+
+PVTNUM = KeywordSpec(
+    name="PVTNUM",
+    sections=[SectionName.REGIONS],
+    size_kind=SizeKind.ARRAY,
+    items=[INT],
+)
+
+ROCKNUM = KeywordSpec(
+    name="ROCKNUM",
     sections=[SectionName.REGIONS],
     size_kind=SizeKind.ARRAY,
     items=[INT],
@@ -358,9 +383,8 @@ FIPSEP = KeywordSpec(
 EQUIL = KeywordSpec(
     name="EQUIL",
     sections=[SectionName.SOLUTION],
-    size_kind=SizeKind.FIXED,
+    size_kind=SizeKind.LIST,
     items=[DOUBLE] * 10,
-    record_count=1,
 )
 
 RSVD = KeywordSpec(
@@ -533,9 +557,8 @@ TSTEP = KeywordSpec(
 TUNING = KeywordSpec(
     name="TUNING",
     sections=[SectionName.SCHEDULE],
-    size_kind=SizeKind.FIXED,
-    items=[UDA] * 10,
-    record_count=1,
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
 )
 
 VFP = {
@@ -551,9 +574,8 @@ VFP = {
 ACTIONX = KeywordSpec(
     name="ACTIONX",
     sections=[SectionName.SCHEDULE],
-    size_kind=SizeKind.FIXED,
+    size_kind=SizeKind.LIST,
     items=[STRING, DOUBLE],
-    record_count=1,
 )
 
 ENDACTIO = KeywordSpec(
@@ -565,9 +587,8 @@ ENDACTIO = KeywordSpec(
 PYACTION = KeywordSpec(
     name="PYACTION",
     sections=[SectionName.SCHEDULE],
-    size_kind=SizeKind.FIXED,
+    size_kind=SizeKind.LIST,
     items=[STRING, DOUBLE],
-    record_count=1,
 )
 
 UDQ = KeywordSpec(
@@ -609,10 +630,25 @@ FU_DECL = KeywordSpec(
     size_kind=SizeKind.NONE,
 )
 
+FUNVAR = KeywordSpec(
+    name="FUNVAR",
+    sections=[SectionName.SUMMARY],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 50,
+)
+
 # Schedule terminator.
 END = KeywordSpec(
     name="END",
     sections=[SectionName.SCHEDULE, SectionName.RUNSPEC],
+    size_kind=SizeKind.NONE,
+)
+
+# Section markers (zero-item keywords whose sole role is to introduce
+# a section of the deck).
+SUMMARY = KeywordSpec(
+    name="SUMMARY",
+    sections=[SectionName.SUMMARY],
     size_kind=SizeKind.NONE,
 )
 
@@ -623,9 +659,8 @@ END = KeywordSpec(
 DATES = KeywordSpec(
     name="DATES",
     sections=[SectionName.SCHEDULE],
-    size_kind=SizeKind.FIXED,
+    size_kind=SizeKind.LIST,
     items=[INT, INT, INT],
-    record_count=1,
 )
 
 WELOPEN = KeywordSpec(
@@ -698,14 +733,22 @@ RPTRST = KeywordSpec(
     name="RPTRST",
     sections=[SectionName.SCHEDULE],
     size_kind=SizeKind.LIST,
-    items=[RAW_STRING],
+    items=[UDA] * 20,
 )
 
 RPTSCHED = KeywordSpec(
     name="RPTSCHED",
     sections=[SectionName.SCHEDULE],
     size_kind=SizeKind.LIST,
-    items=[RAW_STRING],
+    items=[UDA] * 20,
+)
+
+# TSTEP — list of timesteps (each item is a delta). NTSOPL records max.
+TSTEP = KeywordSpec(
+    name="TSTEP",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 1000,  # up to ~1000 timesteps per TSTEP block
 )
 
 UNIFOUT = KeywordSpec(
@@ -772,9 +815,8 @@ TRACERS = KeywordSpec(
 AQUCT = KeywordSpec(
     name="AQUCT",
     sections=[SectionName.SOLUTION],
-    size_kind=SizeKind.FIXED,
+    size_kind=SizeKind.LIST,
     items=[DOUBLE, DOUBLE, DOUBLE, INT],
-    record_count=1,
 )
 
 AQUANCON = KeywordSpec(
@@ -817,12 +859,12 @@ _register(
     DX, DY, DZ, PORO, PERMX, PERMY, PERMZ, TOPS, COORD, ZCORN, GRIDFILE,
     EQUALS, COPY, MULTIPLY, OPERATE, ADDREG, MULTIREG, EQUALREG,
     SWOF, SGOF, SGFN, SWFN, PVDO, PVTO, PVTG, PVTW, ROCK, DENSITY,
-    FIPNUM, FIPSEP,
+    FIPNUM, FIPSEP, EQLNUM, SATNUM, PVTNUM, ROCKNUM,
     EQUIL, RSVD, PRESSURE, SGAS, SWAT, AQUCHG, AQUFET, AQUCT, AQUANCON, AQUDIMS,
     WELSPECS, COMPDAT, WCONPROD, WCONINJE, WCONHIST, TSTEP, TUNING,
     DATES, WELOPEN, WCONINJH, NEWTRAN, GRUPTREE, GCONPROD, GCONINJE,
     WPIMULT, WTEMP, DRSDT, INIT, VFPPDIMS,
-    ACTIONX, ENDACTIO, PYACTION, UDQ, FU_DECL, END,
+    ACTIONX, ENDACTIO, PYACTION, UDQ, FU_DECL, FUNVAR, END, SUMMARY,
     RPTRST, RPTSCHED, UNIFOUT, UNIFIN, NOECHO, ECHO, GRIDOPTS, TRACERS,
     INCLUDE, IMPORT, PATHS,
 )

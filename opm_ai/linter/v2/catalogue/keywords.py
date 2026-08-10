@@ -577,6 +577,31 @@ UDQ = KeywordSpec(
     items=[UDA] * 10,
 )
 
+# INCLUDE / IMPORT — file inclusion directives.
+# Valid in any section; the resolver handles them at composite-deck time.
+INCLUDE = KeywordSpec(
+    name="INCLUDE",
+    sections=list(SectionName),
+    size_kind=SizeKind.LIST,
+    items=[STRING],
+)
+
+IMPORT = KeywordSpec(
+    name="IMPORT",
+    sections=list(SectionName),
+    size_kind=SizeKind.LIST,
+    items=[STRING],
+)
+
+# PATHS alias directive — also valid in any section, defines $DATA,
+# $GRID, etc. substitutions used by INCLUDE/IMPORT.
+PATHS = KeywordSpec(
+    name="PATHS",
+    sections=list(SectionName),
+    size_kind=SizeKind.LIST,
+    items=[STRING, STRING],
+)
+
 # FU_VAR and similar (used in SUMMARY and UDQ context).
 FU_DECL = KeywordSpec(
     name="FU_VAR_DECL",
@@ -799,6 +824,7 @@ _register(
     WPIMULT, WTEMP, DRSDT, INIT, VFPPDIMS,
     ACTIONX, ENDACTIO, PYACTION, UDQ, FU_DECL, END,
     RPTRST, RPTSCHED, UNIFOUT, UNIFIN, NOECHO, ECHO, GRIDOPTS, TRACERS,
+    INCLUDE, IMPORT, PATHS,
 )
 _register_dict(PHASES)
 _register_dict(SUMMARY_VARS)

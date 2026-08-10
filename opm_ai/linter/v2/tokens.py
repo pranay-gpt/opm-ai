@@ -25,8 +25,10 @@ text consumed from the source (after quote-trimming for STRING/DQUOTED).
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
+from pathlib import Path
+from typing import Optional
 
 
 class TokenKind(str, Enum):
@@ -92,6 +94,10 @@ class TokenKind(str, Enum):
     # PYACTION_<name> label. Identifies a Python action block.
     PYACTION_VAR = "PYACTION_VAR"
 
+    # `$ALIAS` paths-alias reference (used by PATHS, INCLUDE, IMPORT).
+    # Shape: `$[A-Z_][A-Z0-9_]*` (uppercase alias prefixed with `$`).
+    PATHS_VAR = "PATHS_VAR"
+
     # `--` to end of line. Trailing content is consumed as part of the
     # COMMENT token.
     COMMENT = "COMMENT"
@@ -129,6 +135,9 @@ class Token:
         column_count: Number of parameter columns the token occupies.
             Always 1 except for DEFAULT_N_STAR and REPEAT_N_VALUE,
             where it's the `n` from `n*` or `n*value`.
+        source_file: Path of the file this token came from. None for
+            ad-hoc in-memory text; populated by the tokenizer for
+            multi-file resolutions.
     """
 
     kind: TokenKind
@@ -138,6 +147,7 @@ class Token:
     col: int
     end_col: int
     column_count: int = 1
+    source_file: Optional[Path] = field(default=None)
 
     def __repr__(self) -> str:
         return (

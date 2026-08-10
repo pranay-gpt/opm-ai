@@ -31,8 +31,14 @@ class SectionName(str, Enum):
     and PROPS; `REGIONS` is optional and only between PROPS and
     SOLUTION; `SUMMARY` is optional and only between SOLUTION and
     SCHEDULE.
+
+    `PRELUDE` is a virtual section for keywords that appear before
+    any explicit section header (typical in INCLUDEd fragment files).
+    The resolver merges PRELUDE keywords into the INCLUDE-statement's
+    parent section.
     """
 
+    PRELUDE = "PRELUDE"
     RUNSPEC = "RUNSPEC"
     GRID = "GRID"
     EDIT = "EDIT"
@@ -43,8 +49,18 @@ class SectionName(str, Enum):
     SCHEDULE = "SCHEDULE"
 
 
-# All 8 sections in canonical order
-ALL_SECTIONS = tuple(s.value for s in SectionName)
+# The 8 real sections in canonical order (PRELUDE is virtual).
+ALL_SECTIONS = tuple(s.value for s in SectionName if s != SectionName.PRELUDE)
+CANONICAL_SECTIONS = (
+    SectionName.RUNSPEC,
+    SectionName.GRID,
+    SectionName.EDIT,
+    SectionName.PROPS,
+    SectionName.REGIONS,
+    SectionName.SOLUTION,
+    SectionName.SUMMARY,
+    SectionName.SCHEDULE,
+)
 
 
 class SizeKind(str, Enum):

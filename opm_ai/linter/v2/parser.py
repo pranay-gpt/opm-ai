@@ -35,7 +35,7 @@ from typing import Iterator
 
 from .ast import Deck, Keyword, Record, Section
 from .catalogue import get_keyword
-from .spec import KeywordSpec, SectionName, SizeKind
+from .spec import CANONICAL_SECTIONS, KeywordSpec, SectionName, SizeKind
 from .tokens import Token, TokenKind
 
 
@@ -67,7 +67,11 @@ def parse_file(text: str, source_file=None) -> Deck:
     tokens = tokenize_file(text, source_file=source_file)
     deck = parse(tokens)
     if source_file is not None:
-        deck.source_file = source_file if not isinstance(source_file, str) else None
+        # Coerce strings to Path so downstream code can compare
+        # source_file paths consistently.
+        deck.source_file = (
+            Path(source_file) if isinstance(source_file, str) else source_file
+        )
     return deck
 
 
@@ -122,28 +126,26 @@ class _ParserState:
 
     def _on_section_header(self, token: Token) -> None:
         name = token.text
-        if name not in SectionName.__members__:
+        if name not in SectionName.__members__ or name == "PRELUDE":
             self.deck.parse_errors.append(
                 f"{token.location_str()}: unknown section header '{name}'"
             )
             return
         section_name = SectionName(name)
 
-        # Validate section order
-        if self._current_section is not None:
-            order = list(SectionName)
-            current_idx = order.index(self._current_section.name)
-            new_idx = order.index(section_name)
-            if new_idx < current_idx:
-                self.deck.parse_errors.append(
-                    f"{token.location_str()}: section '{name}' appears "
-                    f"after '{self._current_section.name.value}' "
-                    f"(must be in canonical order)"
-                )
-                # Still allow re-entry (don't lose keywords)
-            elif new_idx == current_idx:
-                # Repeated section header (e.g. RUNSPEC RUNSPEC) — allow
-                # but note. Some decks use this for visual separation.
+        # Validate section order (PRELUDE can transition to any real section).
+        if self._current_section is not None and self._current_section.name != SectionName.PRELUDE:
+            order = list(CANONICAL_SECTIONS)
+            try:
+                current_idx = order.index(self._current_section.name)
+                new_idx = order.index(section_name)
+                if new_idx < current_idx:
+                    self.deck.parse_errors.append(
+                        f"{token.location_str()}: section '{name}' appears "
+                        f"after '{self._current_section.name.value}' "
+                        f"(must be in canonical order)"
+                    )
+            except ValueError:
                 pass
 
         # Close any open keyword
@@ -173,9 +175,18 @@ class _ParserState:
         else:
             # Section validity check
             if self._current_section is None:
-                kw.unknown_reason = (
-                    f"keyword '{name}' appears before any section header"
+                # No section yet — create a PRELUDE pseudo-section.
+                from .tokens import TokenKind
+                prelude_header = Token(
+                    TokenKind.SECTION_HEADER, "PRELUDE", "PRELUDE",
+                    token.line, 0, 7,
+                    source_file=token.source_file,
                 )
+                prelude = Section(
+                    name=SectionName.PRELUDE, header_token=prelude_header,
+                )
+                self.deck.sections[SectionName.PRELUDE] = prelude
+                self._current_section = prelude
             elif not spec.is_valid_in(self._current_section.name):
                 kw.unknown_reason = (
                     f"keyword '{name}' is not valid in section "

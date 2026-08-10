@@ -71,6 +71,10 @@ _ACTIONX_VAR_RE = re.compile(r"ACTIONX_[A-Z0-9_]+\Z")
 # PYACTION_<name> label.
 _PYACTION_VAR_RE = re.compile(r"PYACTION_[A-Z0-9_]+\Z")
 
+# $ALIAS paths-alias reference. Must start with $ followed by an
+# uppercase letter or underscore.
+_PATHS_VAR_RE = re.compile(r"\$[A-Z_][A-Z0-9_]*\Z")
+
 # Plain keyword/identifier: uppercase letters/digits/+/-/_/starting with letter.
 # Length 1-15 matches the OPM extension's KEYWORD pattern.
 _KEYWORD_RE = re.compile(r"[A-Z][A-Z0-9_+\-]{0,15}\Z")
@@ -93,9 +97,13 @@ _REAL_RE = re.compile(r"[-+]?[0-9]*\.[0-9]+(?:[eE][-+]?[0-9]+)?\Z")
 def _classify_word(word: str, at_column_zero: bool) -> TokenKind:
     """Classify a whitespace-delimited non-numeric word.
 
-    Order matters: FU_VAR is checked first (most specific), then UDQ_VAR,
-    ACTIONX_VAR, PYACTION_VAR, then KEYWORD/VALUE (the catch-all).
+    Order matters: PATHS_VAR is checked first (most specific, has
+    `$` prefix that wouldn't match any other rule), then FU_VAR,
+    UDQ_VAR, ACTIONX_VAR, PYACTION_VAR, then KEYWORD/VALUE (the
+    catch-all).
     """
+    if _PATHS_VAR_RE.match(word):
+        return TokenKind.PATHS_VAR
     if _FU_VAR_RE.match(word):
         return TokenKind.FU_VAR
     if _UDQ_VAR_RE.match(word):
@@ -109,12 +117,16 @@ def _classify_word(word: str, at_column_zero: bool) -> TokenKind:
     return TokenKind.UNKNOWN
 
 
-def tokenize_line(line: str, line_no: int = 1) -> list[Token]:
+def tokenize_line(
+    line: str, line_no: int = 1, source_file: Path | None = None
+) -> list[Token]:
     """Tokenize a single line of deck text.
 
     Args:
         line: The line text (without trailing newline).
         line_no: 1-indexed line number for location tracking.
+        source_file: Optional path attached to each token for source
+            attribution (used by the resolver).
 
     Returns:
         List of tokens. Always ends with an EOL token, even for empty
@@ -124,19 +136,23 @@ def tokenize_line(line: str, line_no: int = 1) -> list[Token]:
     i = 0
     n = len(line)
 
+    # Helper to construct a Token with the source_file attached.
+    def T(kind, text, raw, ln, c, ec, cc=1):
+        return Token(kind, text, raw, ln, c, ec, cc, source_file=source_file)
+
     # Skip leading whitespace; remember starting column.
     while i < n and line[i] in " \t":
         i += 1
 
     if i >= n:
         # Empty or whitespace-only line.
-        tokens.append(Token(TokenKind.EOL, "", "", line_no, i, i))
+        tokens.append(T(TokenKind.EOL, "", "", line_no, i, i))
         return tokens
 
     # Comment-only line.
     if line[i] == "-" and i + 1 < n and line[i + 1] == "-":
-        tokens.append(Token(TokenKind.COMMENT, "", line[i:], line_no, i, n))
-        tokens.append(Token(TokenKind.EOL, "", "", line_no, n, n))
+        tokens.append(T(TokenKind.COMMENT, "", line[i:], line_no, i, n))
+        tokens.append(T(TokenKind.EOL, "", "", line_no, n, n))
         return tokens
 
     # Section header — only valid at column 0 and only if the line
@@ -146,17 +162,8 @@ def tokenize_line(line: str, line_no: int = 1) -> list[Token]:
         m = _SECTION_HEADER_RE.match(line)
         if m is not None:
             section_name = m.group(1)
-            tokens.append(
-                Token(
-                    TokenKind.SECTION_HEADER,
-                    section_name,
-                    line,
-                    line_no,
-                    0,
-                    n,
-                )
-            )
-            tokens.append(Token(TokenKind.EOL, "", "", line_no, n, n))
+            tokens.append(T(TokenKind.SECTION_HEADER, section_name, line, line_no, 0, n))
+            tokens.append(T(TokenKind.EOL, "", "", line_no, n, n))
             return tokens
 
     # Token scan loop.
@@ -174,16 +181,12 @@ def tokenize_line(line: str, line_no: int = 1) -> list[Token]:
             comment_start = i
             while comment_start > 0 and line[comment_start - 1] in " \t":
                 comment_start -= 1
-            tokens.append(
-                Token(TokenKind.COMMENT, "", line[comment_start:], line_no, comment_start, n)
-            )
+            tokens.append(T(TokenKind.COMMENT, "", line[comment_start:], line_no, comment_start, n))
             break
 
-        # Terminator.
-        if line[i] == "/":
-            tokens.append(Token(TokenKind.TERMINATOR, "/", "/", line_no, i, i + 1))
-            i += 1
-            continue
+        # Terminator — handled inline in the word-scanning loop
+        # above; bare `/` is a terminator, `/path/...` is a path value.
+        # (No separate check needed here.)
 
         # Single-quoted string.
         if line[i] == "'":
@@ -191,22 +194,11 @@ def tokenize_line(line: str, line_no: int = 1) -> list[Token]:
             if end == -1:
                 # Unterminated quote — emit as UNKNOWN with whatever
                 # we have up to end of line.
-                tokens.append(
-                    Token(TokenKind.UNKNOWN, line[i:], line[i:], line_no, i, n)
-                )
+                tokens.append(T(TokenKind.UNKNOWN, line[i:], line[i:], line_no, i, n))
                 i = n
                 continue
             content = _unescape(line[i + 1 : end])
-            tokens.append(
-                Token(
-                    TokenKind.STRING,
-                    content,
-                    line[i : end + 1],
-                    line_no,
-                    i,
-                    end + 1,
-                )
-            )
+            tokens.append(T(TokenKind.STRING, content, line[i : end + 1], line_no, i, end + 1))
             i = end + 1
             continue
 
@@ -214,27 +206,39 @@ def tokenize_line(line: str, line_no: int = 1) -> list[Token]:
         if line[i] == '"':
             end = _find_quote(line, i, '"')
             if end == -1:
-                tokens.append(
-                    Token(TokenKind.UNKNOWN, line[i:], line[i:], line_no, i, n)
-                )
+                tokens.append(T(TokenKind.UNKNOWN, line[i:], line[i:], line_no, i, n))
                 i = n
                 continue
             content = _unescape(line[i + 1 : end])
-            tokens.append(
-                Token(
-                    TokenKind.DQUOTED,
-                    content,
-                    line[i : end + 1],
-                    line_no,
-                    i,
-                    end + 1,
-                )
-            )
+            tokens.append(T(TokenKind.DQUOTED, content, line[i : end + 1], line_no, i, end + 1))
             i = end + 1
             continue
 
         start = i
         # Consume one whitespace-delimited chunk.
+        # `/` handling: if the chunk starts with `/`, it's likely a
+        # path (PATHS alias value, INCLUDE path, etc.) — consume the
+        # whole thing including embedded `/`. The trailing `/` (if
+        # the chunk ends with `/`) is left for the next pass as a
+        # TERMINATOR.
+        if line[i] == "/":
+            # Check: if the chunk is exactly `/` followed by EOL/comment/
+            # whitespace, it's a TERMINATOR, not a path.
+            j = i + 1
+            while j < n and line[j] not in " \t":
+                j += 1
+            chunk = line[i:j]
+            if len(chunk) == 1:
+                # Bare `/` → TERMINATOR
+                tokens.append(T(TokenKind.TERMINATOR, "/", "/", line_no, i, i + 1))
+                i += 1
+                continue
+            # Path-like value: consume including internal `/`.
+            tokens.append(
+                T(TokenKind.VALUE, chunk, chunk, line_no, start, j)
+            )
+            i = j
+            continue
         while i < n and line[i] not in " \t":
             if line[i] == "/" and i > start:
                 # `/` mid-word is division operator — but in Eclipse
@@ -261,36 +265,26 @@ def tokenize_line(line: str, line_no: int = 1) -> list[Token]:
             else:
                 kind = TokenKind.REPEAT_N_VALUE
                 text = value
-            tokens.append(
-                Token(
-                    kind,
-                    text,
-                    word,
-                    line_no,
-                    start,
-                    i,
-                    column_count=n_count,
-                )
-            )
+            tokens.append(T(kind, text, word, line_no, start, i, cc=n_count))
             continue
 
         # Integer literal.
         if _INT_RE.match(word):
-            tokens.append(Token(TokenKind.INT, word, word, line_no, start, i))
+            tokens.append(T(TokenKind.INT, word, word, line_no, start, i))
             continue
 
         # Real literal.
         if _REAL_RE.match(word):
-            tokens.append(Token(TokenKind.REAL, word, word, line_no, start, i))
+            tokens.append(T(TokenKind.REAL, word, word, line_no, start, i))
             continue
 
         # Word: classify as FU_VAR / UDQ_VAR / ACTIONX_VAR / PYACTION_VAR /
         # KEYWORD (col 0) / VALUE (col > 0) / UNKNOWN.
         at_col0 = start == 0
         kind = _classify_word(word, at_col0)
-        tokens.append(Token(kind, word, word, line_no, start, i))
+        tokens.append(T(kind, word, word, line_no, start, i))
 
-    tokens.append(Token(TokenKind.EOL, "", "", line_no, n, n))
+    tokens.append(T(TokenKind.EOL, "", "", line_no, n, n))
     return tokens
 
 
@@ -351,18 +345,27 @@ def tokenize_file(
 
     Args:
         text: The full deck text (may contain newlines).
-        source_file: Optional path for diagnostic messages; not used
-            for location tracking (location is line-relative).
+        source_file: Path to attach to each token for source attribution.
+            If a string is passed, it's coerced to Path. None leaves
+            tokens unattributed (used for ad-hoc text).
 
     Returns:
         Flat list of tokens. Line numbers are 1-indexed.
     """
+    src: Path | None
+    if source_file is None:
+        src = None
+    elif isinstance(source_file, Path):
+        src = source_file
+    else:
+        src = Path(source_file)
+
     tokens: list[Token] = []
     # splitlines() handles \n, \r\n, and \r uniformly and does not
     # include the line separator in the output — which is what we want
     # because each line is processed independently.
     for line_no, line in enumerate(text.splitlines(), start=1):
-        tokens.extend(tokenize_line(line, line_no))
+        tokens.extend(tokenize_line(line, line_no, source_file=src))
     return tokens
 
 

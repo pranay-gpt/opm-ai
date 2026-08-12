@@ -469,6 +469,7 @@ WELSPECS = KeywordSpec(
         DOUBLE,  # ref_depth
         RAW_STRING,  # phase (LIQ/OIL/GAS/WAT)
     ],
+    requires=["WELLDIMS"],
 )
 
 COMPDAT = KeywordSpec(
@@ -489,6 +490,7 @@ COMPDAT = KeywordSpec(
         DOUBLE,  # skin
         RAW_STRING,  # direction
     ],
+    requires=["WELSPECS"],
 )
 
 WCONPROD = KeywordSpec(
@@ -510,6 +512,7 @@ WCONPROD = KeywordSpec(
         DOUBLE,  # alq
         DOUBLE,  # history
     ],
+    requires=["WELSPECS"],
 )
 
 WCONINJE = KeywordSpec(
@@ -530,6 +533,7 @@ WCONINJE = KeywordSpec(
         DOUBLE,
         DOUBLE,
     ],
+    requires=["WELSPECS"],
 )
 
 WCONHIST = KeywordSpec(
@@ -545,6 +549,7 @@ WCONHIST = KeywordSpec(
         DOUBLE,
         DOUBLE,
     ],
+    requires=["WELSPECS"],
 )
 
 TSTEP = KeywordSpec(
@@ -668,6 +673,7 @@ WELOPEN = KeywordSpec(
     sections=[SectionName.SCHEDULE],
     size_kind=SizeKind.LIST,
     items=[UDA] * 10,
+    requires=["WELSPECS"],
 )
 
 WCONINJH = KeywordSpec(
@@ -711,6 +717,7 @@ WPIMULT = KeywordSpec(
     sections=[SectionName.SCHEDULE],
     size_kind=SizeKind.LIST,
     items=[STRING, DOUBLE],
+    requires=["WELSPECS"],
 )
 
 WTEMP = KeywordSpec(
@@ -718,6 +725,7 @@ WTEMP = KeywordSpec(
     sections=[SectionName.SCHEDULE],
     size_kind=SizeKind.LIST,
     items=[STRING, DOUBLE],
+    requires=["WELSPECS"],
 )
 
 DRSDT = KeywordSpec(

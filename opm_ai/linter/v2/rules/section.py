@@ -1,11 +1,13 @@
 """L260-L269: section order and presence.
 
 Catches:
-- L261: section appears out of canonical order (already in parser,
-  but we re-report here for unified issue stream)
+- L261: section appears out of canonical order (not implemented —
+  the parser at parser.py:L141 records this already; re-reporting
+  from the rule layer is reserved for a future phase).
 - L262: required section (RUNSPEC/GRID/PROPS/SOLUTION/SCHEDULE) is
-  missing
+  missing (ERROR).
 - L263: optional section (EDIT/REGIONS/SUMMARY) appears twice
+  (not implemented — reserved for a future phase).
 """
 
 from __future__ import annotations
@@ -44,4 +46,10 @@ def section_rule(deck, symbol_table: SymbolTable) -> list[LintIssue]:
     return issues
 
 
-register(260, 269, "section", section_rule)
+def register() -> None:
+    """Register this rule with the validator."""
+    from ..validator import register as _register
+    _register(260, 269, "section", section_rule)
+
+
+register()

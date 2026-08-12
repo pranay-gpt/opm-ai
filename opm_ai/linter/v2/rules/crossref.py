@@ -2,7 +2,10 @@
 
 Catches:
 - L221: COMPDAT/WCONPROD/WCONINJE references well not declared via
-  WELSPECS (ERROR).
+  WELSPECS (WARNING). Many fixtures have wells declared in INCLUDEd
+  files that the symbol table doesn't pick up, so ERROR would
+  produce many false positives. The corpus gate (Phase 4) confirmed
+  that WARNING captures the intent without false-flagging.
 - L222: GCONPROD/GCONINJE references group not declared (WARNING).
 - L223: GRUPTREE child not in groups (WARNING).
 - L224: FU_* referenced in SUMMARY but not declared (WARNING).
@@ -69,6 +72,11 @@ def crossref_rule(deck, symbol_table: SymbolTable) -> list[LintIssue]:
                 if not well or not well[0].isalpha():
                     continue
                 if well not in symbol_table.wells:
+                    # Skip if it looks like a wildcard ('*' suffix or
+                    # '?' glob). Real wells are alphanumeric strings;
+                    # patterns include OP*, PROD*, I*, etc.
+                    if "*" in well or "?" in well:
+                        continue
                     src = Path(kw.header_token.source_file) if kw.header_token.source_file else None
                     issues.append(
                         LintIssue(
@@ -112,7 +120,7 @@ def crossref_rule(deck, symbol_table: SymbolTable) -> list[LintIssue]:
                             )
                 continue
             for group in _keyword_references_group(kw):
-                if kw.name == "GCONPROD":
+                if kw.name in ("GCONPROD", "GCONINJE"):
                     if group not in symbol_table.groups:
                         src = Path(kw.header_token.source_file) if kw.header_token.source_file else None
                         issues.append(
@@ -132,4 +140,10 @@ def crossref_rule(deck, symbol_table: SymbolTable) -> list[LintIssue]:
     return issues
 
 
-register(220, 229, "crossref", crossref_rule)
+def register() -> None:
+    """Register this rule with the validator."""
+    from ..validator import register as _register
+    _register(220, 229, "crossref", crossref_rule)
+
+
+register()

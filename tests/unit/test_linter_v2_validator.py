@@ -93,6 +93,9 @@ def test_register_and_list_rules():
     register(200, 209, "test-rule", my_rule)
     rules = list_rules()
     assert any(name == "test-rule" for _, _, name in rules)
+    # Restore the registry so subsequent tests still have all rules.
+    from opm_ai.linter.v2.validator import reset_rules
+    reset_rules()
 
 
 def test_validator_end_to_end_on_spe1():
@@ -204,6 +207,7 @@ def test_validator_requires_l241_compdat_needs_welspecs():
     """L241: COMPDAT without WELSPECS emits ERROR."""
     text = (
         "RUNSPEC\nDIMENS 3 3 3 /\n\n"
+        "WELLDIMS\n 5 5 1 1 /\n\n"
         "GRID\nDX\n 27*100 /\n\n"
         "SCHEDULE\n"
         "COMPDAT 'W1' 1 1 1 1 'OPEN' 0 /\n"
@@ -212,8 +216,10 @@ def test_validator_requires_l241_compdat_needs_welspecs():
     deck = parse_file(text)
     result = validate(deck)
     l241 = [i for i in result.issues if i.code == 241]
+    # COMPDAT requires WELSPECS — that is the only L241 here.
+    # (WELLDIMS is present so WELSPECS isn't required by anything else.)
+    assert any("WELSPECS" in i.message for i in l241)
     assert len(l241) == 1
-    assert "WELSPECS" in l241[0].message
 
 
 def test_validator_requires_l241_satisfied_when_present():

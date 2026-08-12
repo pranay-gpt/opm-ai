@@ -7,7 +7,8 @@ Phase 4 covers the most common offenders from the v1 documentation:
 - CONFLICTING_KEYWORD (FULLIMP, GUIDE*, RUNSUM, SUMTHIN, SUREA, SURF*)
 - "Unsupported in OPM Flow" cases
 
-We surface these as ERROR / WARNING to match the v1 behaviour.
+Note: POLYMER, FOAM, and the SURFACT/SURFACTW family are supported
+by OPM Flow 2024+ and are deliberately NOT in this list.
 """
 
 from __future__ import annotations
@@ -20,6 +21,8 @@ from ..validator import LintIssue, Severity, register
 
 
 # Keywords that OPM Flow does not support (per Pyrus documentation).
+# POLYMER, FOAM, and the SURFACT/SURFACTW family are supported in
+# OPM Flow 2024+ and are NOT in this list.
 UNSUPPORTED_OPM_KEYWORDS = frozenset({
     "FULLIMP",
     "GUIDE_RATE",
@@ -28,16 +31,12 @@ UNSUPPORTED_OPM_KEYWORDS = frozenset({
     "SUMTHIN",
     "SUREA",
     "SURF",
-    "SURFACT",
-    "SURFACTW",
+    "SURFACE",
     "NSUBS",
     "PETRO",
     "PARTTRAC",
     "TRACER",
-    "TRACERS",  # sometimes supported — TODO check
-    "POLYMER",
-    "FOAM",
-    "SURFACE",
+    "TRACERS",
 })
 
 
@@ -64,4 +63,10 @@ def opm_rule(deck, symbol_table: SymbolTable) -> list[LintIssue]:
     return issues
 
 
-register(270, 279, "opm", opm_rule)
+def register() -> None:
+    """Register this rule with the validator."""
+    from ..validator import register as _register
+    _register(270, 279, "opm", opm_rule)
+
+
+register()

@@ -121,4 +121,10 @@ def _find_keyword(deck, name: str) -> Keyword | None:
     return None
 
 
-register(230, 239, "dims", dims_rule)
+def register() -> None:
+    """Register this rule with the validator."""
+    from ..validator import register as _register
+    _register(230, 239, "dims", dims_rule)
+
+
+register()

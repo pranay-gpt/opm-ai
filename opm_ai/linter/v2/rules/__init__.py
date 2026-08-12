@@ -5,13 +5,15 @@ Each module below registers one or more rules via
 range:
 
 - shape.py       L200-L209 (record/item-shape checks)
-- range.py       L210-L219 (value-range checks)
 - crossref.py    L220-L229 (well/group/region cross-references)
 - dims.py        L230-L239 (dimension consistency)
 - requires.py    L240-L249 (requires/prohibits)
-- udq.py         L250-L259 (UDQ-specific)
-- section.py     L260-L269 (section order / presence)
+- section.py     L260-L269 (section presence)
 - opm.py         L270-L279 (OPM Flow specific)
+
+L210-L219 (value-range), L250-L259 (UDQ-specific), and L261
+(section order) are reserved ranges for future rules. Adding a new
+family means creating a module here and adding it to the imports.
 """
 
 from . import crossref  # noqa: F401

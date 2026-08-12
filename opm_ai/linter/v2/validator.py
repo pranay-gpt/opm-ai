@@ -121,6 +121,28 @@ def _register_builtin_rules() -> None:
 _register_builtin_rules()
 
 
+def reset_rules() -> None:
+    """Drop and re-register all built-in rules.
+
+    Tests use this for isolation after calling clear_rules().
+    Idempotent — re-registering a rule that already exists replaces
+    its entry rather than duplicating.
+
+    Note: we explicitly invoke each module's register() function
+    rather than relying on import side effects, because Python
+    caches modules and won't re-execute `register()` calls on a
+    second import.
+    """
+    clear_rules()
+    from .rules import crossref, dims, opm, requires, section, shape
+    crossref.register()
+    dims.register()
+    opm.register()
+    requires.register()
+    section.register()
+    shape.register()
+
+
 def validate(deck: Deck, symbol_table: Optional[SymbolTable] = None) -> LintResult:
     """Run all registered rules against a deck.
 

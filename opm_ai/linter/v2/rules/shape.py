@@ -107,4 +107,10 @@ def shape_rule(deck, symbol_table: SymbolTable) -> list[LintIssue]:
     return issues
 
 
-register(200, 209, "shape", shape_rule)
+def register() -> None:
+    """Register this rule with the validator."""
+    from ..validator import register as _register
+    _register(200, 209, "shape", shape_rule)
+
+
+register()

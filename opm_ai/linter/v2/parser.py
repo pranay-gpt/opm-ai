@@ -137,10 +137,26 @@ class _ParserState:
             # Smart dispatch: if the current keyword is a list/array
             # keyword whose first column is a free-form identifier
             # (well name, group, etc.) — marked by `first_column_is_name`
-            # on the spec — and the next word is unknown, treat it as
-            # the first item of the next record rather than a new
-            # keyword. This handles WELSPECS/COMPDAT/etc., where every
-            # record starts with an identifier at column 0.
+            # on the spec — treat the next KEYWORD token as the first
+            # item of the next record rather than a new keyword. This
+            # handles WELSPECS/COMPDAT/GCONPROD/GCONINJE/etc., where
+            # every record starts with an identifier at column 0.
+            #
+            # Guards: for a *known* keyword (one with a catalogue
+            # spec), only absorb into the current record if that spec
+            # is NOT valid in the current section. This prevents
+            # absorbing `WELSPECS` (valid in SCHEDULE) into a previous
+            # `WELSPECS` record while still absorbing `FIELD` (valid
+            # in RUNSPEC only) into a GCONPROD record in SCHEDULE.
+            # Unknown tokens (well/group names) are always absorbed.
+            #
+            # Note: the dispatch fires regardless of `_last_was_terminator`
+            # because some decks place records at column 0 without a
+            # prior `/` terminator on the keyword header line (e.g.
+            # GCONPROD immediately followed by `FIELD ORAT ... /` on
+            # the next line). The section-validity guard alone is
+            # sufficient to distinguish "new keyword block" from
+            # "continuation record".
             if (
                 token.text not in self.deck.sections
                 and self._current_keyword is not None
@@ -148,10 +164,17 @@ class _ParserState:
                 and self._current_keyword.spec.size_kind in
                     (SizeKind.LIST, SizeKind.ARRAY)
                 and self._current_keyword.spec.first_column_is_name
-                and get_keyword(token.text) is None
             ):
-                self._on_value(token)
-                return
+                kw_spec = get_keyword(token.text)
+                if (
+                    kw_spec is None
+                    or (
+                        self._current_section is not None
+                        and not kw_spec.is_valid_in(self._current_section.name)
+                    )
+                ):
+                    self._on_value(token)
+                    return
             self._on_keyword(token)
         elif token.kind == TokenKind.EOL:
             self._on_eol(token)

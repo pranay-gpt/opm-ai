@@ -173,6 +173,169 @@ def test_validator_crossref_l223_gruptree_child_missing():
     assert len(crossref_issues) >= 1
 
 
+def test_validator_crossref_l224_fu_var_not_declared():
+    """L224: SUMMARY references FU_* that is not declared via FUNVAR or
+    UDQ DEFINE/ASSIGN/UNITS/UPDATE. INFO severity (per Phase 5.5)."""
+    text = (
+        "RUNSPEC\nDIMENS 3 3 3 /\n\n"
+        "GRID\nDX\n 27*100 /\n\n"
+        "SUMMARY\n"
+        "FU_MYVAR\n"
+        "END\n"
+    )
+    deck = parse_file(text)
+    result = validate(deck)
+    l224 = [i for i in result.issues if i.code == 224]
+    assert len(l224) == 1
+    assert "FU_MYVAR" in l224[0].message
+    assert l224[0].severity == Severity.INFO
+
+
+def test_validator_crossref_l224_fu_var_declared_via_funvar():
+    """L224: SUMMARY references FU_MYVAR which IS declared via FUNVAR."""
+    text = (
+        "RUNSPEC\nDIMENS 3 3 3 /\nFUNVAR FU_MYVAR /\n\n"
+        "GRID\nDX\n 27*100 /\n\n"
+        "SUMMARY\n"
+        "FU_MYVAR\n"
+        "END\n"
+    )
+    deck = parse_file(text)
+    result = validate(deck)
+    l224 = [i for i in result.issues if i.code == 224]
+    assert l224 == []
+
+
+def test_validator_section_validity_l170_wrong_section_info():
+    """L170: section-mismatch keywords emit INFO (not WARNING).
+
+    Phase 5.5 demoted L170 to INFO because the parser is overly
+    eager (sets unknown_reason for any keyword in a section not
+    listed in its catalogue spec), and OPM Flow tolerates
+    misplaced keywords (e.g. WCONPROD after RUNSPEC).
+    """
+    text = (
+        "RUNSPEC\nDIMENS 3 3 3 /\n\n"
+        "GRID\nDX\n 27*100 /\n\n"
+        "PROPS\n"
+        "WELSPECS 'W1' 'G1' 1 1 1.0 'OIL' /\n"
+        "END\n"
+    )
+    deck = parse_file(text)
+    result = validate(deck)
+    l170 = [i for i in result.issues if i.code == 170]
+    assert len(l170) >= 1
+    assert l170[0].severity == Severity.INFO
+    assert "WELSPECS" in l170[0].message
+    assert "PROPS" in l170[0].message
+
+
+def test_validator_section_validity_l171_unknown_keyword_info():
+    """L171: unknown keyword emits INFO (not WARNING).
+
+    Phase 5.5 demoted L171 to INFO because the v2 catalogue is
+    intentionally a strict subset of the full OPM-Flow-supported
+    keyword set; many real OPM keywords (WGOR, FGOR, BPR, etc.)
+    are not yet catalogued.
+    """
+    text = (
+        "RUNSPEC\nDIMENS 3 3 3 /\n\n"
+        "GRID\nDX\n 27*100 /\n\n"
+        "SCHEDULE\n"
+        "NOSUCHKEYWORD 1 2 3 /\n"
+        "END\n"
+    )
+    deck = parse_file(text)
+    result = validate(deck)
+    l171 = [i for i in result.issues if i.code == 171]
+    assert len(l171) == 1
+    assert l171[0].severity == Severity.INFO
+    assert "NOSUCHKEYWORD" in l171[0].message
+
+
+def test_validator_section_validity_l171_summary_mnemonic_suppressed():
+    """L171 does NOT fire for SUMMARY section keywords.
+
+    SUMMARY mnemonics (WGOR, FGOR, BPR, RPR, ROIP, etc.) are bare
+    column-0 variable declarations, not catalogued keywords. The
+    symbol table harvests them into summary_vars; L171 firing
+    would produce thousands of false positives on every fixture.
+    """
+    text = (
+        "RUNSPEC\nDIMENS 3 3 3 /\n\n"
+        "GRID\nDX\n 27*100 /\n\n"
+        "SUMMARY\n"
+        "WGOR\n"   # known OPM summary mnemonic, not in catalogue
+        "FGOR\n"   # ditto
+        "END\n"
+    )
+    deck = parse_file(text)
+    result = validate(deck)
+    l171 = [i for i in result.issues if i.code == 171]
+    assert l171 == []
+
+
+def test_validator_section_validity_no_fire_on_clean_deck():
+    """L170/L171 don't fire on a known-clean mini deck."""
+    text = (
+        "RUNSPEC\nDIMENS 3 3 3 /\n\n"
+        "GRID\nDX\n 27*100 /\n\n"
+        "SCHEDULE\n"
+        "WELSPECS 'W1' 'G1' 1 1 1.0 'OIL' /\n"
+        "END\n"
+    )
+    deck = parse_file(text)
+    result = validate(deck)
+    l170_l171 = [i for i in result.issues if i.code in (170, 171)]
+    assert l170_l171 == []
+
+
+def test_validator_dims_l231_tabdims_nssfun_too_small():
+    """L231: TABDIMS NSSFUN=1 but SWOF tables exist for 3 regions.
+
+    The +1 convention (NSSFUN+1 = max regions) means 3 regions
+    with NSSFUN=1 fires L231.
+    """
+    text = (
+        "RUNSPEC\nDIMENS 3 3 3 /\nTABDIMS\n 1 1 1 /\n\n"
+        "GRID\nDX\n 27*100 /\n\n"
+        "PROPS\n"
+        "SWOF\n"
+        " 1 0 1 0\n 0.1 0.09 0.81 0 /\n"
+        " 1 0 0 0\n /\n"
+        "SWOF\n"
+        " 2 0 1 0\n 0.1 0.09 0.81 0 /\n"
+        " 2 0 0 0\n /\n"
+        "SWOF\n"
+        " 3 0 1 0\n 0.1 0.09 0.81 0 /\n"
+        " 3 0 0 0\n /\n"
+        "END\n"
+    )
+    deck = parse_file(text)
+    result = validate(deck)
+    l231 = [i for i in result.issues if i.code == 231]
+    assert len(l231) == 1
+    assert "NSSFUN" in l231[0].message
+    assert l231[0].severity in (Severity.WARNING, Severity.INFO)
+
+
+def test_validator_dims_l231_no_fire_when_within_budget():
+    """L231: TABDIMS NSSFUN=2 with only 1 region of SWOF: no fire."""
+    text = (
+        "RUNSPEC\nDIMENS 3 3 3 /\nTABDIMS\n 1 1 2 /\n\n"
+        "GRID\nDX\n 27*100 /\n\n"
+        "PROPS\n"
+        "SWOF\n"
+        " 0 0 1 0\n 0.1 0.09 0.81 0 /\n"
+        " 1 0 0 0\n /\n"
+        "END\n"
+    )
+    deck = parse_file(text)
+    result = validate(deck)
+    l231 = [i for i in result.issues if i.code == 231]
+    assert l231 == []
+
+
 def test_validator_dims_l232_welldims_exceeded():
     """L232: WELLDIMS MAXWELLS=1 with 2 wells emits ERROR."""
     text = (

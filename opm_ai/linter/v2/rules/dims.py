@@ -1,14 +1,15 @@
 """L230-L239: dimension consistency.
 
 Catches:
-- L231: TABDIMS NSSFUN=N vs count of distinct SWOF/SGOF records.
+- L231: TABDIMS NSSFUN=N vs count of distinct SATNUM regions with
+  SWOF/SGOF/SLGOF/SWFN/SGFN/SOF2/SOF3 tables.
 - L232: WELLDIMS MAXWELLS=N vs count of WELSPECS records (must not exceed).
 - L233: EQLDIMS NTEQUL=N vs count of EQUIL records.
 - L234: REGDIMS NTFIP=N vs count of distinct FIPNUM regions.
 - L235: ACTDIMS NMAXACTIONS=N vs count of ACTIONX blocks.
 
-Phase 4 implements L232 (WELLDIMS vs WELSPECS) and L234 (REGDIMS vs FIPNUM)
-which are the most commonly violated.
+Phase 5.5 implements L231, L232, L233, L234 which are the most
+commonly violated.
 """
 
 from __future__ import annotations
@@ -116,6 +117,41 @@ def dims_rule(deck, symbol_table: SymbolTable) -> list[LintIssue]:
                         source_file=src,
                         source_line=eqldims.header_token.line,
                         keyword=eqldims,
+                    )
+                )
+
+    # L231: TABDIMS NSSFUN vs count of distinct SATNUM regions with
+    # SWOF/SGOF/SLGOF/SWFN/SGFN tables.
+    # NSSFUN is a capacity (TABDIMS items[2] in OPM spec — item[0] is
+    # NTSFUN, item[1] is NPPVF, item[2] is NSSFUN). NSSFUN allows up to
+    # NSSFUN+1 saturation tables per PVT region per the OPM convention.
+    tabdims = _find_keyword(deck, "TABDIMS")
+    if tabdims and tabdims.records and tabdims.records[0].items:
+        ints = _tokens_ints(tabdims.records[0].items)
+        if len(ints) >= 3:
+            nssfun = ints[2]
+            # Count distinct SATNUM regions that have a sat-table.
+            sat_regions_with_table: set[int] = set()
+            for ft in symbol_table.fluid_tables:
+                if ft.table_type in (
+                    "SWOF", "SGOF", "SLGOF", "SWFN", "SGFN", "SOF2", "SOF3",
+                ) and ft.region is not None:
+                    sat_regions_with_table.add(ft.region)
+            if len(sat_regions_with_table) > nssfun + 1:
+                src = Path(tabdims.header_token.source_file) if tabdims.header_token.source_file else None
+                issues.append(
+                    LintIssue(
+                        code=231,
+                        severity=Severity.WARNING,
+                        message=(
+                            f"TABDIMS NSSFUN={nssfun} allows up to "
+                            f"{nssfun + 1} distinct SATNUM regions with "
+                            f"saturation tables, but "
+                            f"{len(sat_regions_with_table)} found"
+                        ),
+                        source_file=src,
+                        source_line=tabdims.header_token.line,
+                        keyword=tabdims,
                     )
                 )
 

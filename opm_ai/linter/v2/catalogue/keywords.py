@@ -117,7 +117,7 @@ FIELD = KeywordSpec(
 
 UNITS = KeywordSpec(
     name="UNITS",
-    sections=[SectionName.RUNSPEC],
+    sections=[SectionName.RUNSPEC, SectionName.SCHEDULE],  # observed in SCHEDULE too
     size_kind=SizeKind.NONE,
 )
 
@@ -131,7 +131,7 @@ ACTDIMS = KeywordSpec(
 )
 AQUDIMS = KeywordSpec(
     name="AQUDIMS",
-    sections=[SectionName.RUNSPEC],
+    sections=[SectionName.RUNSPEC, SectionName.SOLUTION],  # duplicate def removed below
     size_kind=SizeKind.FIXED,
     items=[INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT],
     record_count=1,
@@ -150,14 +150,14 @@ GRIDUNIT = KeywordSpec(
 )
 MESSAGES = KeywordSpec(
     name="MESSAGES",
-    sections=[SectionName.RUNSPEC],
+    sections=[SectionName.RUNSPEC, SectionName.GRID, SectionName.SCHEDULE],
     size_kind=SizeKind.FIXED,
     items=[INT, INT, INT, INT, INT, INT, INT, INT, INT],
     record_count=1,
 )
 NUPCOL = KeywordSpec(
     name="NUPCOL",
-    sections=[SectionName.RUNSPEC],
+    sections=[SectionName.RUNSPEC, SectionName.SCHEDULE],  # observed in SCHEDULE too
     size_kind=SizeKind.FIXED,
     items=[INT],
     record_count=1,
@@ -228,7 +228,7 @@ DZ = KeywordSpec(
 
 PORO = KeywordSpec(
     name="PORO",
-    sections=[SectionName.GRID],
+    sections=[SectionName.GRID, SectionName.EDIT],  # EDIT for multiplier scoping
     size_kind=SizeKind.ARRAY,
     items=[DOUBLE],
 )
@@ -292,7 +292,7 @@ FAULTS = KeywordSpec(
 )
 MULTFLT = KeywordSpec(
     name="MULTFLT",
-    sections=[SectionName.GRID],
+    sections=[SectionName.GRID, SectionName.EDIT],
     size_kind=SizeKind.LIST,
     items=[STRING] + [UDA] * 8,
 )
@@ -316,7 +316,7 @@ TRANY = KeywordSpec(
 )
 TRANZ = KeywordSpec(
     name="TRANZ",
-    sections=[SectionName.GRID],
+    sections=[SectionName.GRID, SectionName.EDIT],  # EDIT for multiplier scoping
     size_kind=SizeKind.ARRAY,
     items=[DOUBLE],
 )
@@ -458,7 +458,7 @@ PVDG = KeywordSpec(
 )
 BGSAT = KeywordSpec(
     name="BGSAT",
-    sections=[SectionName.PROPS],
+    sections=[SectionName.PROPS, SectionName.SUMMARY],
     size_kind=SizeKind.NONE,
 )
 SWL = KeywordSpec(
@@ -831,7 +831,8 @@ UDQ = KeywordSpec(
     name="UDQ",
     sections=[SectionName.SCHEDULE, SectionName.SUMMARY],
     size_kind=SizeKind.LIST,
-    items=[UDA] * 10,
+    items=[UDA] * 20,  # UDQ expressions can be long; observed up to 13 items
+    first_column_is_name=True,  # records start with action (DEFINE/ASSIGN/UNITS/UPDATE)
 )
 
 # INCLUDE / IMPORT — file inclusion directives.
@@ -913,14 +914,14 @@ MINPVV = KeywordSpec(
 )
 PINCH = KeywordSpec(
     name="PINCH",
-    sections=[SectionName.SCHEDULE],
+    sections=[SectionName.SCHEDULE, SectionName.GRID],
     size_kind=SizeKind.FIXED,
     items=[DOUBLE, DOUBLE, DOUBLE, DOUBLE, INT, INT, DOUBLE],
     record_count=1,
 )
 SEPARATE = KeywordSpec(
     name="SEPARATE",
-    sections=[SectionName.SCHEDULE],
+    sections=[SectionName.SCHEDULE, SectionName.SUMMARY],
     size_kind=SizeKind.NONE,
 )
 WSEGAQD = KeywordSpec(
@@ -977,7 +978,7 @@ WCONINJH = KeywordSpec(
 
 NEWTRAN = KeywordSpec(
     name="NEWTRAN",
-    sections=[SectionName.SCHEDULE],
+    sections=[SectionName.SCHEDULE, SectionName.GRID],
     size_kind=SizeKind.FIXED,
     items=[INT, INT, INT],
     record_count=1,
@@ -1040,7 +1041,7 @@ DRSDT = KeywordSpec(
 # Report flags (zero-item or simple flags)
 RPTRST = KeywordSpec(
     name="RPTRST",
-    sections=[SectionName.SCHEDULE],
+    sections=[SectionName.SCHEDULE, SectionName.SOLUTION, SectionName.EDIT],
     size_kind=SizeKind.LIST,
     items=[UDA] * 30,
 )
@@ -1076,13 +1077,13 @@ UNIFIN = KeywordSpec(
 
 NOECHO = KeywordSpec(
     name="NOECHO",
-    sections=[SectionName.RUNSPEC, SectionName.SCHEDULE],
+    sections=[SectionName.RUNSPEC, SectionName.GRID, SectionName.PROPS, SectionName.SCHEDULE],
     size_kind=SizeKind.NONE,
 )
 
 ECHO = KeywordSpec(
     name="ECHO",
-    sections=[SectionName.RUNSPEC, SectionName.SCHEDULE],
+    sections=[SectionName.RUNSPEC, SectionName.GRID, SectionName.PROPS, SectionName.SCHEDULE],
     size_kind=SizeKind.NONE,
 )
 
@@ -1114,7 +1115,7 @@ VFPPDIMS = KeywordSpec(
 # Tracer-related
 TRACERS = KeywordSpec(
     name="TRACERS",
-    sections=[SectionName.PROPS],
+    sections=[SectionName.RUNSPEC, SectionName.PROPS],  # RM: RUNSPEC primarily
     size_kind=SizeKind.FIXED,
     items=[INT] * 10,
     record_count=1,
@@ -1123,14 +1124,14 @@ TRACERS = KeywordSpec(
 # Aquifer connectivity
 AQUCT = KeywordSpec(
     name="AQUCT",
-    sections=[SectionName.SOLUTION],
+    sections=[SectionName.GRID, SectionName.SOLUTION],  # observed in GRID too
     size_kind=SizeKind.LIST,
     items=[INT, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, INT, INT],
 )
 
 AQUANCON = KeywordSpec(
     name="AQUANCON",
-    sections=[SectionName.SOLUTION],
+    sections=[SectionName.GRID, SectionName.SOLUTION],  # observed in GRID too
     size_kind=SizeKind.LIST,
     items=[INT, INT, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE],
 )
@@ -1150,26 +1151,26 @@ THPRES = KeywordSpec(
 )
 EHYSTR = KeywordSpec(
     name="EHYSTR",
-    sections=[SectionName.SOLUTION],
+    sections=[SectionName.SOLUTION, SectionName.PROPS],
     size_kind=SizeKind.FIXED,
     items=[INT, DOUBLE, DOUBLE, DOUBLE, DOUBLE],
     record_count=1,
 )
 FILLEPS = KeywordSpec(
     name="FILLEPS",
-    sections=[SectionName.SOLUTION],
+    sections=[SectionName.SOLUTION, SectionName.PROPS],
     size_kind=SizeKind.NONE,
 )
 RES = KeywordSpec(
     name="RES",
-    sections=[SectionName.SOLUTION],
+    sections=[SectionName.SOLUTION, SectionName.SCHEDULE],
     size_kind=SizeKind.NONE,
 )
 
 # Aquifer properties
 AQUDIMS = KeywordSpec(
     name="AQUDIMS",
-    sections=[SectionName.SOLUTION],
+    sections=[SectionName.RUNSPEC, SectionName.SOLUTION],  # observed in both
     size_kind=SizeKind.FIXED,
     items=[INT] * 5,
     record_count=1,

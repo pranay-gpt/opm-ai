@@ -8,7 +8,12 @@ Catches:
   that WARNING captures the intent without false-flagging.
 - L222: GCONPROD/GCONINJE references group not declared (WARNING).
 - L223: GRUPTREE child not in groups (WARNING).
-- L224: FU_* referenced in SUMMARY but not declared (WARNING).
+- L224: FU_/WU_/GU_/CU_/AU_/RU_ summary var referenced in SUMMARY
+  but not declared via FUNVAR or UDQ DEFINE/ASSIGN/UNITS/UPDATE
+  (INFO). The UDQ action-verb records (DEFINE/ASSIGN/UNITS/UPDATE)
+  are sometimes parsed as separate keywords because the parser
+  doesn't fully absorb UDQ-internal records yet; L224 is therefore
+  demoted to INFO until UDQ record extraction is improved.
 """
 
 from __future__ import annotations
@@ -136,6 +141,35 @@ def crossref_rule(deck, symbol_table: SymbolTable) -> list[LintIssue]:
                                 keyword=kw,
                             )
                         )
+
+    # L224: FU_* referenced in SUMMARY but not declared.
+    # Walk summary_vars; for each whose name starts with FU/WU/GU/CU/AU,
+    # emit WARNING if not in st.fu_vars.
+    for sv in symbol_table.summary_vars:
+        if not sv.name or not sv.name[0].isalpha():
+            continue
+        if sv.name[0] not in "FWGCAR":
+            continue
+        base = sv.name.split(":", 1)[0]  # strip :target suffix
+        # Only flag user-defined vars (FU_/WU_/GU_/CU_/AU_/RU_)
+        if not (
+            base.startswith("FU_") or base.startswith("WU_")
+            or base.startswith("GU_") or base.startswith("CU_")
+            or base.startswith("AU_") or base.startswith("RU_")
+        ):
+            continue
+        if base in symbol_table.fu_vars:
+            continue
+        issues.append(LintIssue(
+            code=224,
+            severity=Severity.INFO,
+            message=(
+                f"SUMMARY references '{sv.name}' which is not declared "
+                f"via FUNVAR or UDQ DEFINE/ASSIGN/UNITS/UPDATE"
+            ),
+            source_file=sv.source_file,
+            source_line=sv.source_line,
+        ))
 
     return issues
 

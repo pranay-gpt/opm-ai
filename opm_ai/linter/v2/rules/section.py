@@ -8,6 +8,9 @@ Catches:
   missing (ERROR).
 - L263: optional section (EDIT/REGIONS/SUMMARY) appears twice
   (not implemented — reserved for a future phase).
+
+Note: L170 (keyword used in a section not in its catalogue section
+list) and L171 (unknown keyword) live in `rules/section_validity.py`.
 """
 
 from __future__ import annotations

@@ -223,7 +223,9 @@ def tokenize_line(
         # TERMINATOR.
         if line[i] == "/":
             # Check: if the chunk is exactly `/` followed by EOL/comment/
-            # whitespace, it's a TERMINATOR, not a path.
+            # whitespace, it's a TERMINATOR, not a path. Also treat
+            # `/EOD` (end-of-data marker) as a TERMINATOR — OPM Flow
+            # decks use it interchangeably with bare `/`.
             j = i + 1
             while j < n and line[j] not in " \t":
                 j += 1
@@ -243,6 +245,13 @@ def tokenize_line(
                         comment_start -= 1
                     tokens.append(T(TokenKind.COMMENT, "", line[comment_start:], line_no, comment_start, n))
                 i = n
+                continue
+            if chunk.upper() == "/EOD":
+                # End-of-data marker — same semantics as bare `/`.
+                tokens.append(
+                    T(TokenKind.TERMINATOR, "/EOD", "/EOD", line_no, i, j)
+                )
+                i = j
                 continue
             # Path-like value: consume including internal `/`.
             tokens.append(

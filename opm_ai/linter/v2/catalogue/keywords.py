@@ -747,12 +747,10 @@ WCONPROD = KeywordSpec(
         DOUBLE,  # BHP limit
         DOUBLE,  # THP limit
         DOUBLE,  # VFP table
-        DOUBLE,  # alq
-        DOUBLE,  # history
     ],
+    precise_items=True,  # 11 documented columns per OPM Flow ref manual
     requires=["WELSPECS"],
     first_column_is_name=True,
-    precise_items=True,
 )
 
 WCONINJE = KeywordSpec(

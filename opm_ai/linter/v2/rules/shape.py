@@ -97,6 +97,13 @@ def _check_keyword_shape(kw: Keyword) -> list[LintIssue]:
             max_items = len(spec.items)
             severity = Severity.ERROR if spec.precise_items else Severity.WARNING
             for i, rec in enumerate(kw.records):
+                # Use column_count_total() so N* defaults count correctly:
+                # a record with `4*1*` has 1 token but represents 4 columns.
+                # However, OPM convention allows trailing columns to
+                # default (e.g. WELSPECS can stop at column 6). We
+                # only flag "too many" (extra columns beyond spec),
+                # never "too few" — the latter is too ambiguous given
+                # OPM's default-column behaviour.
                 if len(rec.items) > max_items:
                     issues.append(
                         LintIssue(

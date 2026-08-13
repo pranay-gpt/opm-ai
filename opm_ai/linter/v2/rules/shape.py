@@ -82,24 +82,36 @@ def _check_keyword_shape(kw: Keyword) -> list[LintIssue]:
     # otherwise (the catalogue's item counts are best-effort and may
     # be incomplete for unusual decks).
     if spec.size_kind == SizeKind.LIST and spec.items:
-        max_items = len(spec.items)
-        severity = Severity.ERROR if spec.precise_items else Severity.WARNING
-        for i, rec in enumerate(kw.records):
-            if len(rec.items) > max_items:
-                issues.append(
-                    LintIssue(
-                        code=202,
-                        severity=severity,
-                        message=(
-                            f"{kw.name} record {i + 1}: has "
-                            f"{len(rec.items)} items, expected at most "
-                            f"{max_items}"
-                        ),
-                        source_file=src,
-                        source_line=rec.line,
-                        keyword=kw,
+        # Skip the "too many items" check entirely if all items are
+        # repeatable (e.g. TITLE's free-form text, SUMMARY variables'
+        # well-list). Repeatable items allow 0..N occurrences; the
+        # record's actual count is bounded only by the `/` terminator.
+        #
+        # Items may be either ValueType enums (legacy) or ItemSpec
+        # instances. Only ItemSpec has a `repeatable` flag.
+        def _is_repeatable(item) -> bool:
+            return getattr(item, "repeatable", False)
+
+        all_repeatable = all(_is_repeatable(item) for item in spec.items)
+        if not all_repeatable:
+            max_items = len(spec.items)
+            severity = Severity.ERROR if spec.precise_items else Severity.WARNING
+            for i, rec in enumerate(kw.records):
+                if len(rec.items) > max_items:
+                    issues.append(
+                        LintIssue(
+                            code=202,
+                            severity=severity,
+                            message=(
+                                f"{kw.name} record {i + 1}: has "
+                                f"{len(rec.items)} items, expected at most "
+                                f"{max_items}"
+                            ),
+                            source_file=src,
+                            source_line=rec.line,
+                            keyword=kw,
+                        )
                     )
-                )
 
     return issues
 

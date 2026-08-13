@@ -34,6 +34,15 @@ from ..spec import (
 )
 
 
+# Repeatable item shorthands. Use these for LIST keywords whose
+# records are "0..N copies of a single item type, terminated by `/`":
+# - TITLE (free-form text)
+# - SUMMARY variables like WOPR/WBHP (well-list)
+# - Generic well/group name lists.
+STRING_REP = ItemSpec(value_type=STRING, repeatable=True)
+INT_REP = ItemSpec(value_type=INT, repeatable=True)
+
+
 # ---------------------------------------------------------------------------
 # RUNSPEC
 # ---------------------------------------------------------------------------
@@ -92,7 +101,12 @@ PHASES = {
 TITLE = KeywordSpec(
     name="TITLE",
     sections=[SectionName.RUNSPEC],
-    size_kind=SizeKind.NONE,
+    # Free-form text. The Eclipse reference manual allows the title
+    # to span multiple words/lines until a `/` or section break.
+    # Use LIST with a repeatable STRING item so the parser attaches
+    # the title text to this keyword instead of treating it as loose.
+    size_kind=SizeKind.LIST,
+    items=[STRING_REP],
 )
 
 START = KeywordSpec(
@@ -459,7 +473,12 @@ PVDG = KeywordSpec(
 BGSAT = KeywordSpec(
     name="BGSAT",
     sections=[SectionName.PROPS, SectionName.SUMMARY],
-    size_kind=SizeKind.NONE,
+    # In PROPS: array of (i, j, k, value) per record.
+    # In SUMMARY: free-form summary-variable usage. Use ARRAY of INT
+    # so the data values attach to this keyword instead of being
+    # flagged as L160 noise.
+    size_kind=SizeKind.ARRAY,
+    items=[INT],
 )
 SWL = KeywordSpec(
     name="SWL",
@@ -645,7 +664,12 @@ SUMMARY_VARS = {
     name: KeywordSpec(
         name=name,
         sections=[SectionName.SUMMARY],
-        size_kind=SizeKind.NONE,
+        # Each summary variable takes a list of well/group names
+        # (e.g. `WBHP\n  'INJ' 'PROD' /`). Use LIST with a repeatable
+        # STRING item so subsequent value tokens are attached to this
+        # keyword instead of being flagged as L160 noise.
+        size_kind=SizeKind.LIST,
+        items=[STRING_REP],
     )
     for name in SUMMARY_KEYWORDS
 }

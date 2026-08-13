@@ -115,6 +115,11 @@ class ItemSpec:
             None means "no default declared".
         min: Inclusive minimum (for numeric types).
         max: Inclusive maximum (for numeric types).
+        repeatable: If True, this item may appear 0..N times in a
+            record. Use for free-form text like TITLE (`TITLE\nfoo bar baz /`)
+            or list-of-names keywords like SUMMARY variables
+            (`WBHP\n  'INJ' 'PROD' /`). When True, the L202 rule's
+            "too many items" check is skipped for this column.
     """
 
     name: Optional[str] = None
@@ -123,6 +128,7 @@ class ItemSpec:
     default: Optional[str] = None
     min: Optional[float] = None
     max: Optional[float] = None
+    repeatable: bool = False
 
 
 @dataclass

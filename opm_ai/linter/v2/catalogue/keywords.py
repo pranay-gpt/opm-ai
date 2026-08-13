@@ -145,7 +145,7 @@ FAULTDIM = KeywordSpec(
 )
 GRIDUNIT = KeywordSpec(
     name="GRIDUNIT",
-    sections=[SectionName.RUNSPEC],
+    sections=[SectionName.RUNSPEC, SectionName.GRID],  # RM: GRID; RUNSPEC is also valid (OPM)
     size_kind=SizeKind.NONE,
 )
 MESSAGES = KeywordSpec(
@@ -176,7 +176,7 @@ SATOPTS = KeywordSpec(
 )
 SPECGRID = KeywordSpec(
     name="SPECGRID",
-    sections=[SectionName.RUNSPEC],
+    sections=[SectionName.GRID],  # RM: GRID only; RUNSPEC would flag for modern decks
     size_kind=SizeKind.FIXED,
     items=[INT, INT, INT, DOUBLE, RAW_STRING, INT],
     record_count=1,
@@ -1062,14 +1062,14 @@ TSTEP = KeywordSpec(
 
 UNIFOUT = KeywordSpec(
     name="UNIFOUT",
-    sections=[SectionName.SCHEDULE],
+    sections=[SectionName.RUNSPEC],  # RM: RUNSPEC only
     size_kind=SizeKind.LIST,
     items=[INT],
 )
 
 UNIFIN = KeywordSpec(
     name="UNIFIN",
-    sections=[SectionName.SCHEDULE],
+    sections=[SectionName.RUNSPEC],  # RM: RUNSPEC only
     size_kind=SizeKind.LIST,
     items=[INT],
 )
@@ -1089,7 +1089,7 @@ ECHO = KeywordSpec(
 # GRID options
 GRIDOPTS = KeywordSpec(
     name="GRIDOPTS",
-    sections=[SectionName.GRID],
+    sections=[SectionName.RUNSPEC],  # RM: RUNSPEC only
     size_kind=SizeKind.FIXED,
     items=[INT, INT, INT],
     record_count=1,
@@ -1097,7 +1097,7 @@ GRIDOPTS = KeywordSpec(
 
 INIT = KeywordSpec(
     name="INIT",
-    sections=[SectionName.SCHEDULE],
+    sections=[SectionName.GRID],  # RM: GRID only
     size_kind=SizeKind.FIXED,
     items=[INT],
     record_count=1,
@@ -1105,7 +1105,7 @@ INIT = KeywordSpec(
 
 VFPPDIMS = KeywordSpec(
     name="VFPPDIMS",
-    sections=[SectionName.SCHEDULE],
+    sections=[SectionName.RUNSPEC],  # RM: RUNSPEC only
     size_kind=SizeKind.FIXED,
     items=[INT] * 10,
     record_count=1,

@@ -111,7 +111,7 @@ WATER
     deck = parse(tokens)
 
     # RUNSPEC re-entry should generate a parse error
-    assert any("canonical order" in e for e in deck.parse_errors), (
+    assert any("canonical order" in e.message for e in deck.parse_errors), (
         f"expected canonical-order error; got {deck.parse_errors}"
     )
 
@@ -358,7 +358,7 @@ DIMENS
     # The 100 200 300 are value tokens before any keyword is opened
     # (DIMENS appears after them). At least one parse error should fire.
     assert any(
-        "outside any keyword" in e for e in deck.parse_errors
+        "outside any keyword" in e.message for e in deck.parse_errors
     ), f"expected parse error; got {deck.parse_errors}"
 
 

@@ -32,9 +32,9 @@ schema).
 from __future__ import annotations
 
 import re
-from typing import Iterator
+from typing import Iterator, Optional
 
-from .ast import Deck, Keyword, Record, Section
+from .ast import Deck, Keyword, ParseError, Record, Section
 from .catalogue import get_keyword
 from .spec import CANONICAL_SECTIONS, KeywordSpec, SectionName, SizeKind
 from .tokens import Token, TokenKind
@@ -45,17 +45,21 @@ from .tokens import Token, TokenKind
 # ---------------------------------------------------------------------------
 
 
-def parse(tokens: list[Token]) -> Deck:
+def parse(tokens: list[Token], deck: Optional[Deck] = None) -> Deck:
     """Parse a token stream into a Deck.
 
     Args:
         tokens: A list of tokens from the tokenizer (in order).
+        deck: Optional pre-constructed Deck to mutate. If None, a fresh
+            Deck is created. Use `parse_file(..., source_file=...)`
+            for the common case where you want source_file propagation.
 
     Returns:
         A Deck AST with all sections, keywords, and records populated.
         Parse errors are accumulated in `Deck.parse_errors`.
     """
-    deck = Deck()
+    if deck is None:
+        deck = Deck()
     parser = _ParserState(deck, iter(tokens))
     parser.run()
     return parser.deck
@@ -66,14 +70,17 @@ def parse_file(text: str, source_file=None) -> Deck:
     from .tokenizer import tokenize_file
 
     tokens = tokenize_file(text, source_file=source_file)
-    deck = parse(tokens)
-    if source_file is not None:
-        # Coerce strings to Path so downstream code can compare
-        # source_file paths consistently.
-        deck.source_file = (
+    # Set source_file on a pre-constructed deck so the parser can attach
+    # it to ParseErrors emitted during parsing. Without this, L160
+    # issues would have source_file=None even though we know it.
+    deck = Deck(
+        source_file=(
             Path(source_file) if isinstance(source_file, str) else source_file
         )
-    return deck
+    )
+    parsed = parse(tokens, deck=deck)
+    # parse(tokens, deck=deck) mutates `deck` in place and returns it.
+    return parsed
 
 
 # ---------------------------------------------------------------------------
@@ -264,7 +271,12 @@ class _ParserState:
         name = token.text
         if name not in SectionName.__members__ or name == "PRELUDE":
             self.deck.parse_errors.append(
-                f"{token.location_str()}: unknown section header '{name}'"
+                ParseError(
+                    source_file=self.deck.source_file,
+                    line=token.line,
+                    col=token.col + 1,
+                    message=f"unknown section header '{name}'",
+                )
             )
             return
         section_name = SectionName(name)
@@ -277,9 +289,16 @@ class _ParserState:
                 new_idx = order.index(section_name)
                 if new_idx < current_idx:
                     self.deck.parse_errors.append(
-                        f"{token.location_str()}: section '{name}' appears "
-                        f"after '{self._current_section.name.value}' "
-                        f"(must be in canonical order)"
+                        ParseError(
+                            source_file=self.deck.source_file,
+                            line=token.line,
+                            col=token.col + 1,
+                            message=(
+                                f"section '{name}' appears after "
+                                f"'{self._current_section.name.value}' "
+                                f"(must be in canonical order)"
+                            ),
+                        )
                     )
             except ValueError:
                 pass
@@ -380,8 +399,15 @@ class _ParserState:
             # Value before any keyword — likely a parse error, but we
             # don't have a section to attach it to. Track in parse_errors.
             self.deck.parse_errors.append(
-                f"{token.location_str()}: value token '{token.text}' "
-                f"appears outside any keyword"
+                ParseError(
+                    source_file=self.deck.source_file,
+                    line=token.line,
+                    col=token.col + 1,
+                    message=(
+                        f"value token '{token.text}' "
+                        f"appears outside any keyword"
+                    ),
+                )
             )
             return
         if self._current_record is None:

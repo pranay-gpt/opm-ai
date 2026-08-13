@@ -101,6 +101,42 @@ class Section:
 
 
 @dataclass
+class ParseError:
+    """A structured top-level parse error.
+
+    Attributes:
+        source_file: The deck path (None for ad-hoc text). This is
+            distinct from line/col — the line/col are relative to
+            the source file.
+        line: 1-indexed line number.
+        col: 1-indexed column.
+        message: Human-readable description.
+        severity_hint: Optional severity override (e.g. INFO). Most
+            parse errors are INFO (diagnostic noise) but some are
+            WARNING (e.g. unknown section header).
+    """
+
+    source_file: Optional[Path] = None
+    line: int = 0
+    col: int = 0
+    message: str = ""
+    severity_hint: Optional["Severity"] = None
+
+    def location_str(self) -> str:
+        """Human-readable location string.
+
+        If `source_file` is set, returns `file:line:col`. Otherwise
+        returns `line:col`. NEVER returns `Path(line_number)` —
+        callers can rely on the file part being a real file path
+        or absent.
+        """
+        prefix = str(self.source_file) if self.source_file else ""
+        if prefix:
+            return f"{prefix}:{self.line}:{self.col}"
+        return f"{self.line}:{self.col}"
+
+
+@dataclass
 class Deck:
     """The root AST node for a parsed deck.
 
@@ -117,7 +153,7 @@ class Deck:
     source_file: Optional[Path] = None
     sections: dict[SectionName, Section] = field(default_factory=dict)
     include_depth: int = 0
-    parse_errors: list[str] = field(default_factory=list)
+    parse_errors: list[ParseError] = field(default_factory=list)
 
     def section(self, name: SectionName) -> Optional[Section]:
         return self.sections.get(name)

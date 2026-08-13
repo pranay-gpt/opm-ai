@@ -866,9 +866,13 @@ FU_DECL = KeywordSpec(
     size_kind=SizeKind.NONE,
 )
 
+# FUNVAR declares FU_/WU_/GU_ names. Per OPM Flow Reference Manual,
+# FUNVAR appears in RUNSPEC (to register the FU/WU/GU names) and may
+# also appear in SUMMARY. The actual FU_* bare declarations are
+# SUMMARY-only via FU_DECL.
 FUNVAR = KeywordSpec(
     name="FUNVAR",
-    sections=[SectionName.SUMMARY],
+    sections=[SectionName.RUNSPEC, SectionName.SUMMARY],
     size_kind=SizeKind.LIST,
     items=[UDA] * 50,
 )

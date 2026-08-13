@@ -99,7 +99,12 @@ def test_register_and_list_rules():
 
 
 def test_validator_end_to_end_on_spe1():
-    """SPE1 produces zero issues end-to-end (after catalogue fixes)."""
+    """SPE1 produces zero ERRORs and zero WARNINGs end-to-end.
+
+    INFO-level issues are tolerated — L160 (parse-time loose tokens
+    before the first section header) is INFO by default since it
+    fires on benign header decoration.
+    """
     text = Path("tests/fixtures/spe1/SPE1CASE1.DATA").read_text()
     deck = parse_file(text, source_file=Path("tests/fixtures/spe1/SPE1CASE1.DATA"))
     result = validate(deck)
@@ -410,4 +415,64 @@ def test_validator_returns_lintresult():
     deck = parse_file(text, source_file=Path("tests/fixtures/spe1/SPE1CASE1.DATA"))
     result = validate(deck)
     assert isinstance(result, LintResult)
-    assert result.deck is deck
+
+
+# -----------------------------------------------------------------------------
+# QC-3 follow-up: L160 (parse_errors surfaced as INFO)
+# -----------------------------------------------------------------------------
+
+
+def test_validator_l160_surfaces_loose_tokens():
+    """L160 INFO: value tokens before any keyword produce INFO issues.
+
+    Regression for QC-3 finding C.1: previously `deck.parse_errors`
+    was silently dropped. Now they surface as L160 INFO so the
+    user knows the parser couldn't structure them.
+    """
+    text = """\
+RUNSPEC
+100 200 300 /
+DIMENS
+  3 3 3 /
+"""
+    deck = parse_file(text)
+    result = validate(deck)
+    l160s = [i for i in result.issues if i.code == 160]
+    assert len(l160s) >= 3
+    # All L160 should be INFO, not WARNING — they are diagnostic
+    # not actionable deck defects.
+    for i in l160s:
+        assert i.severity == Severity.INFO
+    msgs = " ".join(i.message for i in l160s)
+    assert "outside any keyword" in msgs
+
+
+def test_validator_l160_no_fire_on_clean_deck():
+    """L160 INFO: a clean deck has no L160 issues."""
+    text = """\
+RUNSPEC
+DIMENS 3 3 3 /
+
+GRID
+DX
+ 27*100 /
+
+END
+"""
+    deck = parse_file(text)
+    result = validate(deck)
+    l160s = [i for i in result.issues if i.code == 160]
+    assert l160s == []
+
+
+def test_catalogue_funvar_accepts_runspec():
+    """QC-3 D.5: FUNVAR is valid in RUNSPEC (and SUMMARY).
+
+    Previously the catalogue restricted FUNVAR to SUMMARY only,
+    tripping `unknown_reason` whenever a deck placed FUNVAR in
+    RUNSPEC as the OPM Flow manual requires.
+    """
+    from opm_ai.linter.v2.catalogue.keywords import FUNVAR
+    from opm_ai.linter.v2.spec import SectionName
+    assert SectionName.RUNSPEC in FUNVAR.sections
+    assert SectionName.SUMMARY in FUNVAR.sections

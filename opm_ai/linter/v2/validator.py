@@ -115,7 +115,7 @@ def list_rules() -> list[tuple[int, int, str]]:
 # Auto-import the rule modules so they register themselves.
 # (Defer the import to avoid circular dependencies at module load.)
 def _register_builtin_rules() -> None:
-    from .rules import crossref, dims, opm, requires, section, shape  # noqa: F401
+    from .rules import crossref, dims, opm, parse, requires, section, shape  # noqa: F401
 
 
 _register_builtin_rules()
@@ -134,10 +134,11 @@ def reset_rules() -> None:
     second import.
     """
     clear_rules()
-    from .rules import crossref, dims, opm, requires, section, shape
+    from .rules import crossref, dims, opm, parse, requires, section, shape
     crossref.register()
     dims.register()
     opm.register()
+    parse.register()
     requires.register()
     section.register()
     shape.register()

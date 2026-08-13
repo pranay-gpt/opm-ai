@@ -561,6 +561,19 @@ def calibrate(
             entry["success_rate"] = round(
                 entry["proposals_successful"] / entry["proposals_attempted"], 3
             )
+            # Coverage = fraction of seen issues for which a proposal
+            # was actually attempted (vs. skipped). Distinguishes
+            # "tried and failed" (low coverage, low success_rate) from
+            # "untried" (zero attempts, success_rate=None).
+            entry["coverage"] = round(
+                entry["proposals_attempted"] / max(1, entry["issues_seen"]),
+                3,
+            )
+        else:
+            # 0 attempts → success_rate is undefined; emit None so the
+            # report doesn't conflate "untried" with "tried and failed".
+            entry["success_rate"] = None
+            entry["coverage"] = 0.0
 
     summary = {
         "total_fixtures": len(fixture_results),

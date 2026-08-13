@@ -75,10 +75,16 @@ def dims_rule(deck, symbol_table: SymbolTable) -> list[LintIssue]:
                 issues.append(
                     LintIssue(
                         code=234,
-                        severity=Severity.WARNING,
+                        # INFO: OPM Flow dynamically allocates more PVT
+                        # regions when NTFIP is under-allocated, so this
+                        # is not a deck defect. Downgraded from WARNING
+                        # per QC-2 real-dry-run evidence: WTMULT-01/02/03
+                        # all exit 0 in Flow despite under-allocation.
+                        severity=Severity.INFO,
                         message=(
                             f"REGDIMS NTFIP={ntfip} but max FIPNUM region "
-                            f"is {max_region} (Flow may allocate more)"
+                            f"is {max_region} (OPM Flow dynamically "
+                            f"allocates more PVT regions)"
                         ),
                         source_file=src,
                         source_line=regdims.header_token.line,

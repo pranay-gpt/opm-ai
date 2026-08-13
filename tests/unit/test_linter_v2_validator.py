@@ -192,7 +192,12 @@ def test_validator_dims_l232_welldims_exceeded():
 
 
 def test_validator_dims_l234_regdims_too_small():
-    """L234: REGDIMS NTFIP=1 but max FIPNUM region is 2 emits WARNING."""
+    """L234: REGDIMS NTFIP=1 but max FIPNUM region is 2 emits INFO.
+
+    Downgraded from WARNING per QC-2 evidence: OPM Flow dynamically
+    allocates more PVT regions when NTFIP is under-allocated, so
+    this is not a deck defect.
+    """
     text = (
         "RUNSPEC\nDIMENS 2 2 2 /\n"
         "REGDIMS\n 1 /\n\n"
@@ -205,7 +210,8 @@ def test_validator_dims_l234_regdims_too_small():
     result = validate(deck)
     l234 = [i for i in result.issues if i.code == 234]
     assert len(l234) == 1
-    assert l234[0].severity == Severity.WARNING
+    assert l234[0].severity == Severity.INFO
+    assert "dynamically allocates" in l234[0].message
 
 
 def test_validator_dims_l234_ignores_satnum():

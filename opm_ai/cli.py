@@ -4,7 +4,7 @@ import click
 from pathlib import Path
 
 from opm_ai.builder import build_deck
-from opm_ai.linter import lint_deck
+from opm_ai.linter import lint_deck_combined
 from opm_ai.runner import run_simulation, SimulationJob
 
 
@@ -18,8 +18,11 @@ def main() -> None:
 @main.command()
 @click.argument("deck_path", type=click.Path(exists=True, path_type=Path))
 def lint(deck_path: Path) -> None:
-    """Lint an OPM Flow deck file."""
-    result = lint_deck(deck_path)
+    """Lint an OPM Flow deck file (L1 + v2 combined)."""
+    # Run L1 + v2 combined so users see all issues. Pure L1 is
+    # available programmatically as `lint_deck` for callers that
+    # specifically need it.
+    result = lint_deck_combined(deck_path)
 
     if result.passed:
         click.echo("Passed")

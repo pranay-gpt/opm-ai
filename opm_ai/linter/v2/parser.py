@@ -216,6 +216,18 @@ class _ParserState:
                     and self._current_keyword.spec.size_kind == SizeKind.NONE
                 )
             )
+            # multi_record keywords (e.g. TUNING) accept a fresh record
+            # after the closing `/` of the previous record; the value
+            # at column 0 is a continuation item, not a new keyword.
+            multi_record_open = (
+                self._current_keyword is not None
+                and self._current_keyword.spec is not None
+                and self._current_keyword.spec.multi_record
+                and self._current_record is None
+            )
+            if multi_record_open and not in_summary:
+                self._on_value(token)
+                return
             if in_summary and starts_new_keyword:
                 self._on_unknown_keyword(token)
                 return
@@ -385,9 +397,32 @@ class _ParserState:
             self._current_record.terminator = token
             self._current_record.column_count = self._current_record.column_count_total()
             self._close_record(force=True)
+            # If the current keyword is multi_record (TUNING, etc.),
+            # keep it open across record boundaries so subsequent
+            # value tokens attach to a fresh record under the same
+            # keyword. The keyword is closed by EOF or a new
+            # KEYWORD/SECTION_HEADER token.
+            if (
+                self._current_keyword is not None
+                and self._current_keyword.spec is not None
+                and self._current_keyword.spec.multi_record
+            ):
+                # _current_record is now None; the next value will
+                # create a fresh record under the same keyword.
+                return
         else:
             # Terminator without an open record: it's a block terminator
-            # for an array-style keyword. Close the current keyword.
+            # for an array-style keyword — but for multi_record LIST
+            # keywords, a bare `/` between records keeps the keyword
+            # open and waits for the next record.
+            if (
+                self._current_keyword is not None
+                and self._current_keyword.spec is not None
+                and self._current_keyword.spec.multi_record
+            ):
+                # Stay open across the bare `/`. The next value will
+                # start a new record under the same keyword.
+                return
             self._close_keyword(force=True)
 
     def _on_value(self, token: Token) -> None:

@@ -811,6 +811,8 @@ TUNING = KeywordSpec(
     sections=[SectionName.SCHEDULE],
     size_kind=SizeKind.LIST,
     items=[UDA] * 20,
+    # TUNING takes 2 records of N values each, separated by `/`.
+    multi_record=True,
 )
 
 VFP = {

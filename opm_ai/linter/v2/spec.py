@@ -164,6 +164,11 @@ class KeywordSpec:
     prohibits: list[str] = field(default_factory=list)
     opm_only: bool = False
     opm_unsupported: bool = False
+    # If True, this LIST/ARRAY keyword accepts multiple records
+    # separated by `/`. Each `/` closes the current record but the
+    # keyword stays open until EOF or a different keyword appears.
+    # Use for TUNING (2 records of N values each), etc.
+    multi_record: bool = False
     record_schemas: Optional[list[list[ItemSpec]]] = None
     # When True, the first column of each record is a free-form
     # identifier (well name, group name, region name, etc.) that

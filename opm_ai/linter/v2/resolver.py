@@ -222,6 +222,16 @@ class Resolver:
             sub_deck.include_depth = depth
             self.composite.source_files[target] = sub_deck
 
+            # Merge parse errors from the included deck into the root
+            # deck so the L160 rule surfaces them. Each error's
+            # source_file is rewritten to the included file path so
+            # the line/col remain meaningful (they're relative to
+            # the included file's text).
+            for err in sub_deck.parse_errors:
+                if err.source_file is None:
+                    err.source_file = target
+                root_deck.parse_errors.append(err)
+
             # Merge included keywords into the parent deck's AST.
             # Find the section that contains the INCLUDE keyword — that
             # is where PRELUDE keywords from the included file should land.

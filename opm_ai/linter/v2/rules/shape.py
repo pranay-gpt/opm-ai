@@ -76,14 +76,20 @@ def _check_keyword_shape(kw: Keyword) -> list[LintIssue]:
 
     # L202: LIST-kind: each record should have <= len(items) tokens.
     # Items spec lists the maximum item shape.
+    #
+    # Severity is ERROR for keywords flagged `precise_items=True` on
+    # their spec (the OPM spec is unambiguous for these), WARNING
+    # otherwise (the catalogue's item counts are best-effort and may
+    # be incomplete for unusual decks).
     if spec.size_kind == SizeKind.LIST and spec.items:
         max_items = len(spec.items)
+        severity = Severity.ERROR if spec.precise_items else Severity.WARNING
         for i, rec in enumerate(kw.records):
             if len(rec.items) > max_items:
                 issues.append(
                     LintIssue(
                         code=202,
-                        severity=Severity.WARNING,
+                        severity=severity,
                         message=(
                             f"{kw.name} record {i + 1}: has "
                             f"{len(rec.items)} items, expected at most "

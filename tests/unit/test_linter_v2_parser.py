@@ -263,6 +263,74 @@ DIMENS
     assert "unknown" in kw.unknown_reason.lower()
 
 
+def test_fu_var_at_column0_becomes_fu_var_decl():
+    """FU_* tokens at column 0 in SUMMARY become FU_VAR_DECL keywords.
+
+    Regression: previously these were absorbed into the previous
+    keyword's record (L202). Each FU_* declaration is now its own
+    keyword with the FU_DECL spec (size_kind=NONE).
+    """
+    text = """\
+RUNSPEC
+DIMENS 2 2 2 /
+
+SUMMARY
+INCLUDE
+ 'include/foo' /
+FU_GAS
+FU_GAS_P
+FUGASMX
+END
+"""
+    tokens = tokenize_file(text)
+    deck = parse(tokens)
+    summary = deck.sections[SectionName.SUMMARY]
+    names = [k.name for k in summary.keywords]
+    assert "INCLUDE" in names
+    assert "FU_GAS" in names
+    assert "FU_GAS_P" in names
+    assert "FUGASMX" in names
+    # FU_GAS and FU_GAS_P are FU_VAR_DECL — spec is FU_DECL.
+    fu_gas = [k for k in summary.keywords if k.name == "FU_GAS"][0]
+    fu_gas_p = [k for k in summary.keywords if k.name == "FU_GAS_P"][0]
+    assert fu_gas.spec is not None
+    assert fu_gas.spec.name == "FU_VAR_DECL"
+    assert fu_gas_p.spec is not None
+    assert fu_gas_p.spec.name == "FU_VAR_DECL"
+    # And they have no records (size_kind=NONE).
+    assert fu_gas.records == []
+    assert fu_gas_p.records == []
+    # FUGASMX is still unknown (not an FU_VAR_DECL pattern).
+    fugasmx = [k for k in summary.keywords if k.name == "FUGASMX"][0]
+    assert fugasmx.spec is None
+
+
+def test_funvar_records_contain_fu_var_names_as_values():
+    """FUNVAR's record items (FU_*, WU_*, GU_*) are values, not keywords.
+
+    Regression: a previous fix made column-0 FU_* tokens always
+    new keywords, which broke FUNVAR parsing (each FU_* name
+    should be a record item, not a separate keyword).
+    """
+    text = """\
+RUNSPEC
+DIMENS 2 2 2 /
+
+SUMMARY
+FUNVAR
+FU_OIL_RATE WU_OIL_RATE GU_OIL_RATE /
+
+END
+"""
+    tokens = tokenize_file(text)
+    deck = parse(tokens)
+    funvar = _kw(deck, SectionName.SUMMARY, "FUNVAR")
+    assert funvar is not None
+    assert len(funvar.records) == 1
+    items = [t.text for t in funvar.records[0].items]
+    assert items == ["FU_OIL_RATE", "WU_OIL_RATE", "GU_OIL_RATE"]
+
+
 def test_wrong_section_records_unknown_reason():
     """A keyword in the wrong section is flagged, but parsing continues."""
     text = """\

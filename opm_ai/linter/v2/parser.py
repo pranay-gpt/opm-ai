@@ -31,6 +31,7 @@ schema).
 
 from __future__ import annotations
 
+import re
 from typing import Iterator
 
 from .ast import Deck, Keyword, Record, Section
@@ -79,6 +80,22 @@ def parse_file(text: str, source_file=None) -> Deck:
 # Parser state machine
 # ---------------------------------------------------------------------------
 
+_FU_VAR_NAME_RE = re.compile(r"[FWGCRSU]U[_.0-9][A-Z0-9_.]*\Z")
+
+
+def _classify_synthetic(name: str) -> "KeywordSpec | None":
+    """Return the KeywordSpec for synthetic (unknown-token-as-keyword)
+    constructs created on the fly. Returns None if the name doesn't
+    match any known synthetic pattern.
+
+    - FU_VAR_DECL covers FU_/WU_/GU_/CU_/RU_/SU_ flow-unit variable
+      declarations at column 0 in SUMMARY.
+    """
+    if _FU_VAR_NAME_RE.match(name):
+        from .catalogue.keywords import FU_DECL
+        return FU_DECL
+    return None
+
 
 class _ParserState:
     """Mutable parser state.
@@ -94,6 +111,13 @@ class _ParserState:
         self._current_section: Section | None = None
         self._current_keyword: Keyword | None = None
         self._current_record: Record | None = None
+        # True once a TERMINATOR has been seen since the last
+        # new-keyword header. Used to disambiguate "FU_* at column
+        # 0 in SUMMARY starts a new keyword" from "FU_* is a
+        # FUNVAR record item on the same line". When the previous
+        # record was closed by `/`, the next column-0 word opens a
+        # new keyword; otherwise it's a continuation item.
+        self._last_was_terminator: bool = False
 
     def run(self) -> None:
         """Drive the state machine to completion."""
@@ -110,6 +134,24 @@ class _ParserState:
         if token.kind == TokenKind.SECTION_HEADER:
             self._on_section_header(token)
         elif token.kind == TokenKind.KEYWORD:
+            # Smart dispatch: if the current keyword is a list/array
+            # keyword whose first column is a free-form identifier
+            # (well name, group, etc.) — marked by `first_column_is_name`
+            # on the spec — and the next word is unknown, treat it as
+            # the first item of the next record rather than a new
+            # keyword. This handles WELSPECS/COMPDAT/etc., where every
+            # record starts with an identifier at column 0.
+            if (
+                token.text not in self.deck.sections
+                and self._current_keyword is not None
+                and self._current_keyword.spec is not None
+                and self._current_keyword.spec.size_kind in
+                    (SizeKind.LIST, SizeKind.ARRAY)
+                and self._current_keyword.spec.first_column_is_name
+                and get_keyword(token.text) is None
+            ):
+                self._on_value(token)
+                return
             self._on_keyword(token)
         elif token.kind == TokenKind.EOL:
             self._on_eol(token)
@@ -118,6 +160,36 @@ class _ParserState:
             pass
         elif token.kind == TokenKind.TERMINATOR:
             self._on_terminator(token)
+        elif token.kind == TokenKind.FU_VAR:
+            # FU_* tokens at column 0 in the SUMMARY section are
+            # flow-unit variable declarations (FU_VAR_DECL) — bare
+            # markers with no record — when they appear either
+            # between keywords (after a record-closing terminator) or
+            # as the very first tokens in the section. The two cases
+            # that distinguish them from values are:
+            #   1. The current keyword has spec.size_kind==NONE (already
+            #      closed) so any value would be a parse error.
+            #   2. The last token was a terminator (new keyword starts).
+            # In other contexts (FUNVAR record items, UDQ expression
+            # variables, or as a continuation value after non-terminator
+            # tokens), they are values.
+            in_summary = (
+                self._current_section is not None
+                and self._current_section.name == SectionName.SUMMARY
+                and token.col == 0
+            )
+            starts_new_keyword = (
+                self._last_was_terminator
+                or self._current_keyword is None
+                or (
+                    self._current_keyword.spec is not None
+                    and self._current_keyword.spec.size_kind == SizeKind.NONE
+                )
+            )
+            if in_summary and starts_new_keyword:
+                self._on_unknown_keyword(token)
+                return
+            self._on_value(token)
         elif token.kind == TokenKind.UNKNOWN:
             # UNKNOWN tokens like "WOPR:W1" can appear in the SUMMARY
             # section as per-target summary variables. If we are in a
@@ -137,19 +209,33 @@ class _ParserState:
             # Value token: append to current record.
             self._on_value(token)
 
+    # -- Section handling ---------------------------------------------------
+
     def _on_unknown_keyword(self, token: Token) -> None:
-        """Treat an UNKNOWN token as a new keyword (used for SUMMARY)."""
+        """Treat an UNKNOWN token as a new keyword (used for SUMMARY).
+
+        FU_VAR_DECL keywords (FU_*, WU_*, GU_*, etc.) at column 0 are
+        bare flow-unit declarations with no record. We attach the
+        FU_VAR_DECL spec so the keyword is properly registered and
+        the parser closes it immediately (size_kind=NONE).
+        """
         name = token.text
         self._close_record(force=True)
         self._close_keyword(force=True)
-        kw = Keyword(name=name, header_token=token, spec=None)
-        kw.unknown_reason = f"unknown keyword '{name}' (treated as synthetic)"
+        # Try to find a matching spec by name, or by synthetic pattern.
+        spec = get_keyword(name) or _classify_synthetic(name)
+        kw = Keyword(name=name, header_token=token, spec=spec)
+        if spec is None:
+            kw.unknown_reason = f"unknown keyword '{name}' (treated as synthetic)"
         if self._current_section is not None:
             kw.section = self._current_section
             self._current_section.keywords.append(kw)
         self._current_keyword = kw
-
-    # -- Section handling ---------------------------------------------------
+        self._last_was_terminator = False
+        # Apply NONE-size semantics: close immediately, so the next
+        # bare column-0 token starts a new keyword.
+        if spec is not None and spec.size_kind == SizeKind.NONE:
+            self._close_keyword(force=True)
 
     def _on_section_header(self, token: Token) -> None:
         name = token.text
@@ -178,6 +264,7 @@ class _ParserState:
         # Close any open keyword
         self._close_record(force=True)
         self._close_keyword(force=True)
+        self._last_was_terminator = False
 
         section = self.deck.sections.get(section_name)
         if section is None:
@@ -195,6 +282,7 @@ class _ParserState:
         # Close any open keyword
         self._close_record(force=True)
         self._close_keyword(force=True)
+        self._last_was_terminator = False
 
         kw = Keyword(name=name, header_token=token, spec=spec)
         if spec is None:
@@ -236,6 +324,11 @@ class _ParserState:
         # EOL closes a record only if the keyword is list/array.
         # For `fixed`, the record is closed by a terminator or by
         # reaching the item count.
+        # The terminator flag is NOT reset on EOL — it persists
+        # until a non-EOL, non-terminator token arrives. This lets
+        # us recognize column-0 words at the start of the *next*
+        # line as new keywords when the previous line ended with
+        # `/`. (EOLs are not "interesting" tokens in this respect.)
         if self._current_keyword is None:
             return
         spec = self._current_keyword.spec
@@ -245,6 +338,7 @@ class _ParserState:
             self._close_record(force=False)
 
     def _on_terminator(self, token: Token) -> None:
+        self._last_was_terminator = True
         if self._current_record is not None:
             self._current_record.terminator = token
             self._current_record.column_count = self._current_record.column_count_total()
@@ -256,6 +350,9 @@ class _ParserState:
 
     def _on_value(self, token: Token) -> None:
         """A value token: append to the current record."""
+        # Any value clears the "last was terminator" state — the
+        # record is now actively accumulating items.
+        self._last_was_terminator = False
         if self._current_keyword is None:
             # Value before any keyword — likely a parse error, but we
             # don't have a section to attach it to. Track in parse_errors.

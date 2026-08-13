@@ -121,6 +121,86 @@ UNITS = KeywordSpec(
     size_kind=SizeKind.NONE,
 )
 
+# RUNSPEC additions (commonly-seen capacity / option keywords)
+ACTDIMS = KeywordSpec(
+    name="ACTDIMS",
+    sections=[SectionName.RUNSPEC],
+    size_kind=SizeKind.FIXED,
+    items=[INT, INT, INT, INT, INT, INT],
+    record_count=1,
+)
+AQUDIMS = KeywordSpec(
+    name="AQUDIMS",
+    sections=[SectionName.RUNSPEC],
+    size_kind=SizeKind.FIXED,
+    items=[INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT],
+    record_count=1,
+)
+FAULTDIM = KeywordSpec(
+    name="FAULTDIM",
+    sections=[SectionName.RUNSPEC],
+    size_kind=SizeKind.FIXED,
+    items=[INT],
+    record_count=1,
+)
+GRIDUNIT = KeywordSpec(
+    name="GRIDUNIT",
+    sections=[SectionName.RUNSPEC],
+    size_kind=SizeKind.NONE,
+)
+MESSAGES = KeywordSpec(
+    name="MESSAGES",
+    sections=[SectionName.RUNSPEC],
+    size_kind=SizeKind.FIXED,
+    items=[INT, INT, INT, INT, INT, INT, INT, INT, INT],
+    record_count=1,
+)
+NUPCOL = KeywordSpec(
+    name="NUPCOL",
+    sections=[SectionName.RUNSPEC],
+    size_kind=SizeKind.FIXED,
+    items=[INT],
+    record_count=1,
+)
+NSTACK = KeywordSpec(
+    name="NSTACK",
+    sections=[SectionName.RUNSPEC],
+    size_kind=SizeKind.FIXED,
+    items=[INT],
+    record_count=1,
+)
+SATOPTS = KeywordSpec(
+    name="SATOPTS",
+    sections=[SectionName.RUNSPEC],
+    size_kind=SizeKind.NONE,
+)
+SPECGRID = KeywordSpec(
+    name="SPECGRID",
+    sections=[SectionName.RUNSPEC],
+    size_kind=SizeKind.FIXED,
+    items=[INT, INT, INT, DOUBLE, RAW_STRING, INT],
+    record_count=1,
+)
+SUMMARY = KeywordSpec(
+    name="SUMMARY",
+    sections=[SectionName.SUMMARY],
+    size_kind=SizeKind.NONE,
+)
+VFPIDIMS = KeywordSpec(
+    name="VFPIDIMS",
+    sections=[SectionName.RUNSPEC],
+    size_kind=SizeKind.FIXED,
+    items=[INT, INT, INT, INT],
+    record_count=1,
+)
+WSEGDIMS = KeywordSpec(
+    name="WSEGDIMS",
+    sections=[SectionName.RUNSPEC],
+    size_kind=SizeKind.FIXED,
+    items=[INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT, INT],
+    record_count=1,
+)
+
 # ---------------------------------------------------------------------------
 # GRID
 # ---------------------------------------------------------------------------
@@ -203,6 +283,44 @@ GRIDFILE = KeywordSpec(
     record_count=1,
 )
 
+# GRID additions
+FAULTS = KeywordSpec(
+    name="FAULTS",
+    sections=[SectionName.GRID],
+    size_kind=SizeKind.LIST,
+    items=[STRING, INT, INT, INT, INT, INT, INT, INT, INT, INT],
+)
+MULTFLT = KeywordSpec(
+    name="MULTFLT",
+    sections=[SectionName.GRID],
+    size_kind=SizeKind.LIST,
+    items=[STRING] + [UDA] * 8,
+)
+NTG = KeywordSpec(
+    name="NTG",
+    sections=[SectionName.GRID],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE],
+)
+TRANX = KeywordSpec(
+    name="TRANX",
+    sections=[SectionName.GRID],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE],
+)
+TRANY = KeywordSpec(
+    name="TRANY",
+    sections=[SectionName.GRID],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE],
+)
+TRANZ = KeywordSpec(
+    name="TRANZ",
+    sections=[SectionName.GRID],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE],
+)
+
 # ---------------------------------------------------------------------------
 # EDIT (operands)
 # ---------------------------------------------------------------------------
@@ -232,7 +350,7 @@ OPERATE = KeywordSpec(
     name="OPERATE",
     sections=[SectionName.EDIT],
     size_kind=SizeKind.LIST,
-    items=[UDA] * 10,
+    items=[UDA] * 12,
 )
 
 ADDREG = KeywordSpec(
@@ -247,6 +365,7 @@ MULTIREG = KeywordSpec(
     sections=[SectionName.EDIT],
     size_kind=SizeKind.LIST,
     items=[UDA] * 10,
+    precise_items=True,
 )
 
 EQUALREG = KeywordSpec(
@@ -320,7 +439,7 @@ ROCK = KeywordSpec(
     name="ROCK",
     sections=[SectionName.PROPS],
     size_kind=SizeKind.LIST,
-    items=[DOUBLE, DOUBLE],
+    items=[DOUBLE, DOUBLE, UDA],
 )
 
 DENSITY = KeywordSpec(
@@ -328,6 +447,84 @@ DENSITY = KeywordSpec(
     sections=[SectionName.PROPS],
     size_kind=SizeKind.LIST,
     items=[DOUBLE, DOUBLE, DOUBLE, DOUBLE],
+)
+
+# PROPS additions
+PVDG = KeywordSpec(
+    name="PVDG",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE, DOUBLE, DOUBLE],
+)
+BGSAT = KeywordSpec(
+    name="BGSAT",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.NONE,
+)
+SWL = KeywordSpec(
+    name="SWL",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE],
+)
+SWCR = KeywordSpec(
+    name="SWCR",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE],
+)
+SOWCR = KeywordSpec(
+    name="SOWCR",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE],
+)
+SGCR = KeywordSpec(
+    name="SGCR",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE],
+)
+SGU = KeywordSpec(
+    name="SGU",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE],
+)
+KRW = KeywordSpec(
+    name="KRW",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE, DOUBLE],
+)
+KRO = KeywordSpec(
+    name="KRO",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE, DOUBLE],
+)
+KRG = KeywordSpec(
+    name="KRG",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE, DOUBLE],
+)
+PLYVISC = KeywordSpec(
+    name="PLYVISC",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE, DOUBLE],
+)
+PLYROCK = KeywordSpec(
+    name="PLYROCK",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.LIST,
+    items=[DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE],
+)
+PLYSHEAR = KeywordSpec(
+    name="PLYSHEAR",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.NONE,
 )
 
 # ---------------------------------------------------------------------------
@@ -384,7 +581,7 @@ EQUIL = KeywordSpec(
     name="EQUIL",
     sections=[SectionName.SOLUTION],
     size_kind=SizeKind.LIST,
-    items=[DOUBLE] * 10,
+    items=[DOUBLE] * 12,
 )
 
 RSVD = KeywordSpec(
@@ -462,14 +659,24 @@ WELSPECS = KeywordSpec(
     sections=[SectionName.SCHEDULE],
     size_kind=SizeKind.LIST,
     items=[
-        STRING,  # well name
-        STRING,  # group
-        INT,     # head_i
-        INT,     # head_j
-        DOUBLE,  # ref_depth
+        STRING,    # well name
+        STRING,    # group
+        INT,       # head_i
+        INT,       # head_j
+        DOUBLE,    # ref_depth
         RAW_STRING,  # phase (LIQ/OIL/GAS/WAT)
+        DOUBLE,    # drainage radius
+        RAW_STRING,  # shut-in / STD
+        RAW_STRING,  # crossflow / SHUT
+        STRING,    # pressure table
+        DOUBLE,    # density
+        INT,       # friction
+        INT,       # segment
+        DOUBLE,    # pressure
     ],
     requires=["WELLDIMS"],
+    first_column_is_name=True,
+    precise_items=True,
 )
 
 COMPDAT = KeywordSpec(
@@ -477,20 +684,27 @@ COMPDAT = KeywordSpec(
     sections=[SectionName.SCHEDULE],
     size_kind=SizeKind.LIST,
     items=[
-        STRING,  # well
-        INT,     # I
-        INT,     # J
-        INT,     # K1
-        INT,     # K2
-        INT,     # sat_table
-        INT,     # connect_trans
-        RAW_STRING,  # status (OPEN/SHUT)
-        DOUBLE,  # well_diameter
-        DOUBLE,  # Kh
-        DOUBLE,  # skin
-        RAW_STRING,  # direction
+        STRING,        # well
+        INT,           # I
+        INT,           # J
+        INT,           # K1
+        INT,           # K2
+        INT,           # sat_table
+        INT,           # connect_trans
+        RAW_STRING,    # status (OPEN/SHUT)
+        DOUBLE,        # well_diameter
+        DOUBLE,        # Kh
+        DOUBLE,        # skin
+        DOUBLE,        # D-factor
+        RAW_STRING,    # direction
+        DOUBLE,        # gas/oil
+        DOUBLE,        # pressure
+        INT,           # segments
+        INT,           # wellbore
     ],
     requires=["WELSPECS"],
+    first_column_is_name=True,
+    precise_items=True,
 )
 
 WCONPROD = KeywordSpec(
@@ -513,6 +727,8 @@ WCONPROD = KeywordSpec(
         DOUBLE,  # history
     ],
     requires=["WELSPECS"],
+    first_column_is_name=True,
+    precise_items=True,
 )
 
 WCONINJE = KeywordSpec(
@@ -534,6 +750,8 @@ WCONINJE = KeywordSpec(
         DOUBLE,
     ],
     requires=["WELSPECS"],
+    first_column_is_name=True,
+    precise_items=True,
 )
 
 WCONHIST = KeywordSpec(
@@ -541,15 +759,20 @@ WCONHIST = KeywordSpec(
     sections=[SectionName.SCHEDULE],
     size_kind=SizeKind.LIST,
     items=[
-        STRING,
-        RAW_STRING,
-        DOUBLE,
-        DOUBLE,
-        DOUBLE,
-        DOUBLE,
-        DOUBLE,
+        STRING,      # well
+        RAW_STRING,  # status (OPEN/SHUT)
+        RAW_STRING,  # control mode (ORAT/GRAT/etc.)
+        DOUBLE,      # orat
+        DOUBLE,      # wrat
+        DOUBLE,      # grat
+        DOUBLE,      # lrat
+        DOUBLE,      # resv
+        DOUBLE,      # bhp
+        DOUBLE,      # thp
     ],
     requires=["WELSPECS"],
+    first_column_is_name=True,
+    precise_items=True,
 )
 
 TSTEP = KeywordSpec(
@@ -580,7 +803,15 @@ ACTIONX = KeywordSpec(
     name="ACTIONX",
     sections=[SectionName.SCHEDULE],
     size_kind=SizeKind.LIST,
-    items=[STRING, DOUBLE],
+    # Per OPM Flow spec: record 1 is NAME (STRING) + NUM (INT,
+    # default 1) + MIN_WAIT (DOUBLE, default 0); records 2+ are
+    # free-form CONDITION lines (variadic). The v2 linter uses a
+    # single maximum item count per keyword; 6 covers the empirical
+    # max across the 610 known-good fixtures (e.g. WTMULT-03
+    # records with embedded condition expressions).
+    items=[STRING, INT, DOUBLE, UDA, UDA, UDA],
+    first_column_is_name=True,
+    precise_items=True,
 )
 
 ENDACTIO = KeywordSpec(
@@ -628,7 +859,7 @@ PATHS = KeywordSpec(
     items=[STRING, STRING],
 )
 
-# FU_VAR and similar (used in SUMMARY and UDQ context).
+# FU_VAR declarations: bare flow-unit name at column 0, no items.
 FU_DECL = KeywordSpec(
     name="FU_VAR_DECL",
     sections=[SectionName.SUMMARY],
@@ -649,12 +880,69 @@ END = KeywordSpec(
     size_kind=SizeKind.NONE,
 )
 
-# Section markers (zero-item keywords whose sole role is to introduce
-# a section of the deck).
-SUMMARY = KeywordSpec(
-    name="SUMMARY",
-    sections=[SectionName.SUMMARY],
+# SCHEDULE additions
+WELTARG = KeywordSpec(
+    name="WELTARG",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[STRING, RAW_STRING, DOUBLE],
+)
+WEFAC = KeywordSpec(
+    name="WEFAC",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[STRING, DOUBLE, RAW_STRING],
+)
+MINPV = KeywordSpec(
+    name="MINPV",
+    sections=[SectionName.GRID, SectionName.EDIT],
+    size_kind=SizeKind.FIXED,
+    items=[DOUBLE],
+    record_count=1,
+)
+MINPVV = KeywordSpec(
+    name="MINPVV",
+    sections=[SectionName.GRID],
+    size_kind=SizeKind.FIXED,
+    items=[DOUBLE],
+    record_count=1,
+)
+PINCH = KeywordSpec(
+    name="PINCH",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.FIXED,
+    items=[DOUBLE, DOUBLE, DOUBLE, DOUBLE, INT, INT, DOUBLE],
+    record_count=1,
+)
+SEPARATE = KeywordSpec(
+    name="SEPARATE",
+    sections=[SectionName.SCHEDULE],
     size_kind=SizeKind.NONE,
+)
+WSEGAQD = KeywordSpec(
+    name="WSEGAQD",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[STRING, INT, INT, DOUBLE, DOUBLE, DOUBLE, INT],
+)
+WSEGDEFV = KeywordSpec(
+    name="WSEGDEFV",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[STRING, INT, DOUBLE, DOUBLE],
+)
+WSEGITER = KeywordSpec(
+    name="WSEGITER",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.FIXED,
+    items=[INT, DOUBLE, DOUBLE, INT],
+    record_count=1,
+)
+COMPSEGS = KeywordSpec(
+    name="COMPSEGS",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[STRING] + [UDA] * 10,
 )
 
 # ---------------------------------------------------------------------------
@@ -665,7 +953,7 @@ DATES = KeywordSpec(
     name="DATES",
     sections=[SectionName.SCHEDULE],
     size_kind=SizeKind.LIST,
-    items=[INT, INT, INT],
+    items=[INT, STRING, INT, STRING],
 )
 
 WELOPEN = KeywordSpec(
@@ -696,28 +984,35 @@ GRUPTREE = KeywordSpec(
     sections=[SectionName.SCHEDULE],
     size_kind=SizeKind.LIST,
     items=[STRING, STRING],
+    precise_items=True,
 )
 
 GCONPROD = KeywordSpec(
     name="GCONPROD",
     sections=[SectionName.SCHEDULE],
     size_kind=SizeKind.LIST,
-    items=[STRING] + [UDA] * 10,
+    items=[STRING] + [UDA] * 14,
+    first_column_is_name=True,
+    precise_items=True,
 )
 
 GCONINJE = KeywordSpec(
     name="GCONINJE",
     sections=[SectionName.SCHEDULE],
     size_kind=SizeKind.LIST,
-    items=[STRING] + [UDA] * 10,
+    items=[STRING] + [UDA] * 14,
+    first_column_is_name=True,
+    precise_items=True,
 )
 
 WPIMULT = KeywordSpec(
     name="WPIMULT",
     sections=[SectionName.SCHEDULE],
     size_kind=SizeKind.LIST,
-    items=[STRING, DOUBLE],
+    items=[STRING, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE],
     requires=["WELSPECS"],
+    first_column_is_name=True,
+    precise_items=True,
 )
 
 WTEMP = KeywordSpec(
@@ -726,6 +1021,8 @@ WTEMP = KeywordSpec(
     size_kind=SizeKind.LIST,
     items=[STRING, DOUBLE],
     requires=["WELSPECS"],
+    first_column_is_name=True,
+    precise_items=True,
 )
 
 DRSDT = KeywordSpec(
@@ -741,14 +1038,14 @@ RPTRST = KeywordSpec(
     name="RPTRST",
     sections=[SectionName.SCHEDULE],
     size_kind=SizeKind.LIST,
-    items=[UDA] * 20,
+    items=[UDA] * 30,
 )
 
 RPTSCHED = KeywordSpec(
     name="RPTSCHED",
     sections=[SectionName.SCHEDULE],
     size_kind=SizeKind.LIST,
-    items=[UDA] * 20,
+    items=[UDA] * 100,
 )
 
 # TSTEP — list of timesteps (each item is a delta). NTSOPL records max.
@@ -824,14 +1121,45 @@ AQUCT = KeywordSpec(
     name="AQUCT",
     sections=[SectionName.SOLUTION],
     size_kind=SizeKind.LIST,
-    items=[DOUBLE, DOUBLE, DOUBLE, INT],
+    items=[INT, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, INT, INT],
 )
 
 AQUANCON = KeywordSpec(
     name="AQUANCON",
     sections=[SectionName.SOLUTION],
     size_kind=SizeKind.LIST,
-    items=[INT, INT, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE],
+    items=[INT, INT, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE],
+)
+
+# SOLUTION additions
+PBVD = KeywordSpec(
+    name="PBVD",
+    sections=[SectionName.SOLUTION],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE, DOUBLE],
+)
+THPRES = KeywordSpec(
+    name="THPRES",
+    sections=[SectionName.SOLUTION],
+    size_kind=SizeKind.LIST,
+    items=[INT, INT, INT, DOUBLE, RAW_STRING, DOUBLE, DOUBLE, DOUBLE],
+)
+EHYSTR = KeywordSpec(
+    name="EHYSTR",
+    sections=[SectionName.SOLUTION],
+    size_kind=SizeKind.FIXED,
+    items=[INT, DOUBLE, DOUBLE, DOUBLE, DOUBLE],
+    record_count=1,
+)
+FILLEPS = KeywordSpec(
+    name="FILLEPS",
+    sections=[SectionName.SOLUTION],
+    size_kind=SizeKind.NONE,
+)
+RES = KeywordSpec(
+    name="RES",
+    sections=[SectionName.SOLUTION],
+    size_kind=SizeKind.NONE,
 )
 
 # Aquifer properties
@@ -864,14 +1192,22 @@ def _register_dict(d: dict[str, KeywordSpec]) -> None:
 _register(
     DIMENS, TABDIMS, WELLDIMS, EQLDIMS, REGDIMS,
     TITLE, START, METRIC, FIELD, UNITS,
+    ACTDIMS, AQUDIMS, FAULTDIM, GRIDUNIT, MESSAGES,
+    NUPCOL, NSTACK, SATOPTS, SPECGRID, VFPIDIMS, WSEGDIMS,
     DX, DY, DZ, PORO, PERMX, PERMY, PERMZ, TOPS, COORD, ZCORN, GRIDFILE,
+    NTG, FAULTS, MULTFLT, TRANX, TRANY, TRANZ,
     EQUALS, COPY, MULTIPLY, OPERATE, ADDREG, MULTIREG, EQUALREG,
-    SWOF, SGOF, SGFN, SWFN, PVDO, PVTO, PVTG, PVTW, ROCK, DENSITY,
+    SWOF, SGOF, SGFN, SWFN, PVDO, PVTO, PVTG, PVTW, PVDG, ROCK, DENSITY,
+    BGSAT, SWL, SWCR, SOWCR, SGCR, SGU,
+    KRW, KRO, KRG, PLYVISC, PLYROCK, PLYSHEAR,
     FIPNUM, FIPSEP, EQLNUM, SATNUM, PVTNUM, ROCKNUM,
-    EQUIL, RSVD, PRESSURE, SGAS, SWAT, AQUCHG, AQUFET, AQUCT, AQUANCON, AQUDIMS,
+    EQUIL, RSVD, PRESSURE, SGAS, SWAT, PBVD, THPRES, EHYSTR, FILLEPS, RES,
+    AQUCHG, AQUFET, AQUCT, AQUANCON,
     WELSPECS, COMPDAT, WCONPROD, WCONINJE, WCONHIST, TSTEP, TUNING,
     DATES, WELOPEN, WCONINJH, NEWTRAN, GRUPTREE, GCONPROD, GCONINJE,
     WPIMULT, WTEMP, DRSDT, INIT, VFPPDIMS,
+    WELTARG, WEFAC, MINPV, MINPVV, PINCH, SEPARATE,
+    WSEGAQD, WSEGDEFV, WSEGITER, COMPSEGS,
     ACTIONX, ENDACTIO, PYACTION, UDQ, FU_DECL, FUNVAR, END, SUMMARY,
     RPTRST, RPTSCHED, UNIFOUT, UNIFIN, NOECHO, ECHO, GRIDOPTS, TRACERS,
     INCLUDE, IMPORT, PATHS,

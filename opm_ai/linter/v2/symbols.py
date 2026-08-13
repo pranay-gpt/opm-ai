@@ -152,6 +152,7 @@ _PVT_TABLES = frozenset({"PVDO", "PVTO", "PVTG", "PVTW", "PVDG"})
 def build_symbol_table(deck: Deck) -> "SymbolTable":
     """Walk the deck and build a SymbolTable from all known entities."""
     st = SymbolTable()
+    # FIELD is auto-registered by SymbolTable's default_factory.
 
     # Pass 1: declare wells, groups, regions, tables, summary vars, FU vars
     for section in deck.sections.values():
@@ -181,15 +182,33 @@ class SymbolTable:
     Attributes:
         wells: Map of well name → WellInfo.
         groups: Map of group name → GroupInfo.
-        regions: Set of region numbers seen (FIPNUM/EQLNUM/SATNUM/PVTNUM).
+        regions: Set of region numbers seen (union of FIPNUM/EQLNUM/
+            SATNUM/PVTNUM/ROCKNUM). Kept as a single set for backwards
+            compatibility but rules that target a specific array
+            dimension should use the per-keyword maps below.
+        fipnum_regions: Set of region numbers from FIPNUM arrays only.
+            Used by L234 (REGDIMS NTFIP) — the other arrays have
+            their own dimension keys.
+        regions_by_kind: Map of keyword name → set of region numbers.
+            e.g. {'SATNUM': {1,2,3}, 'PVTNUM': {1,2}}. Allows rules
+            to target a specific dimension (FIPNUM, EQLNUM, SATNUM,
+            PVTNUM) without conflating them.
         fluid_tables: List of FluidTableInfo (in order).
         summary_vars: List of SummaryVarInfo (in order).
         fu_vars: Map of FU/WU/GU/etc. name → FuVarInfo.
     """
 
     wells: dict[str, WellInfo] = field(default_factory=dict)
-    groups: dict[str, GroupInfo] = field(default_factory=dict)
+    # Eclipse always creates a 'FIELD' top-level group implicitly;
+    # register it here so GCONINJE/GCONPROD referencing it don't trip
+    # the L222 "group not declared" check. Builders must not need to
+    # do this manually — empty SymbolTable() must already know FIELD.
+    groups: dict[str, GroupInfo] = field(
+        default_factory=lambda: {"FIELD": GroupInfo(name="FIELD")}
+    )
     regions: set[int] = field(default_factory=set)
+    fipnum_regions: set[int] = field(default_factory=set)
+    regions_by_kind: dict[str, set[int]] = field(default_factory=dict)
     fluid_tables: list[FluidTableInfo] = field(default_factory=list)
     summary_vars: list[SummaryVarInfo] = field(default_factory=list)
     fu_vars: dict[str, FuVarInfo] = field(default_factory=dict)
@@ -248,6 +267,26 @@ def _tokens_to_ints(items: list[Token]) -> list[int]:
     return out
 
 
+def _safe_int(tok) -> int | None:
+    """Parse token as int; return None for `1*`, `n*`, etc."""
+    if tok.kind.name in ("DEFAULT_N_STAR", "REPEAT_N_VALUE"):
+        return None
+    try:
+        return int(tok.text)
+    except (ValueError, TypeError):
+        return None
+
+
+def _safe_float(tok) -> float | None:
+    """Parse token as float; return None for `1*`, `n*`, etc."""
+    if tok.kind.name in ("DEFAULT_N_STAR", "REPEAT_N_VALUE"):
+        return None
+    try:
+        return float(tok.text)
+    except (ValueError, TypeError):
+        return None
+
+
 def _extract_wellspecs(kw: Keyword):
     """Build an add-wells-to-table function from WELSPECS records."""
     if not kw.records:
@@ -261,17 +300,18 @@ def _extract_wellspecs(kw: Keyword):
                 continue
             name = _token_to_str(rec.items[0])
             group = _token_to_str(rec.items[1])
-            try:
-                head_i = int(rec.items[2].text)
-                head_j = int(rec.items[3].text)
-                ref_depth_tok = rec.items[4]
-                # DEFAULT_N_STAR / REPEAT_N_VALUE → use 0 as default
-                if ref_depth_tok.kind.name in ("DEFAULT_N_STAR", "REPEAT_N_VALUE"):
-                    ref_depth = float(ref_depth_tok.text) if ref_depth_tok.text else 0.0
-                else:
-                    ref_depth = float(ref_depth_tok.text)
-            except (ValueError, IndexError):
-                continue
+            # HEAD_I/HEAD_J defaults: `1*` is the documented Eclipse
+            # default for the first grid cell. Use (1, 1) when defaulted
+            # rather than skipping the well entirely — we still want the
+            # name registered so downstream references (WCONPROD etc.)
+            # resolve. ref_depth defaults to 0.0 if `1*` is given.
+            head_i = _safe_int(rec.items[2])
+            head_j = _safe_int(rec.items[3])
+            if head_i is None:
+                head_i = 1
+            if head_j is None:
+                head_j = 1
+            ref_depth = _safe_float(rec.items[4]) or 0.0
             if name in st.wells:
                 continue  # first WELSPECS wins
             st.wells[name] = WellInfo(
@@ -350,13 +390,26 @@ def _extract_regions(kw: Keyword, kind: str):
     def add(st: SymbolTable) -> None:
         # FIPNUM can be either list-kind (one record per cell) or array-kind.
         # For dimension tracking we just collect the unique region numbers.
+        # NOTE: regions_by_kind buckets must be populated *independently*
+        # of st.regions. Earlier code deduped against the union set here,
+        # which meant if SATNUM was processed first and saw {1}, then
+        # FIPNUM arrived with {1,2}, FIPNUM's bucket would only get {2}
+        # because {1} was already in st.regions. Per-keyword dimensions
+        # must reflect what THIS array declared, not what earlier arrays
+        # declared.
         regions_seen: set[int] = set()
         for rec in kw.records:
             ints = _tokens_to_ints(rec.items)
-            for n in ints:
-                if n not in st.regions:
-                    regions_seen.add(n)
+            regions_seen.update(ints)
+        # Per-keyword bucket so rules can target FIPNUM only without
+        # contamination from SATNUM/EQLNUM/PVTNUM. REGDIMS NTFIP
+        # governs only FIPNUM; the other arrays have their own
+        # dimension keys (TABDIMS NSSFUN, EQLDIMS NTEQUL, etc.).
         st.regions.update(regions_seen)
+        bucket = st.regions_by_kind.setdefault(kind, set())
+        bucket.update(regions_seen)
+        if kind == "FIPNUM":
+            st.fipnum_regions.update(regions_seen)
 
     return add
 

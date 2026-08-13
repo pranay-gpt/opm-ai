@@ -203,6 +203,31 @@ def test_validator_dims_l234_regdims_too_small():
     assert l234[0].severity == Severity.WARNING
 
 
+def test_validator_dims_l234_ignores_satnum():
+    """L234: SATNUM-only regions must NOT trigger L234.
+
+    Regression: previously all region arrays (FIPNUM, EQLNUM, SATNUM,
+    PVTNUM, ROCKNUM) shared one set, so a SATNUM array with values
+    up to 7 would falsely trip the REGDIMS NTFIP check (which
+    governs only FIPNUM).
+    """
+    text = (
+        "RUNSPEC\nDIMENS 2 2 2 /\n"
+        "REGDIMS\n 1 /\n"
+        "TABDIMS\n 1* 7 /\n\n"  # NSSFUN=7 for SATNUM
+        "GRID\n"
+        "FIPNUM\n"
+        " 1 1 1 1\n 1 1 1 1 /\n"  # FIPNUM only has region 1
+        "SATNUM\n"
+        " 1 1 2 2\n 3 3 5 5 /\n"  # SATNUM up to 5
+        "END\n"
+    )
+    deck = parse_file(text)
+    result = validate(deck)
+    l234 = [i for i in result.issues if i.code == 234]
+    assert l234 == [], f"Expected no L234 (SATNUM should not trigger), got {[i.message for i in l234]}"
+
+
 def test_validator_requires_l241_compdat_needs_welspecs():
     """L241: COMPDAT without WELSPECS emits ERROR."""
     text = (
@@ -256,10 +281,10 @@ def test_validator_section_l262_missing_required_section():
 
 
 def test_validator_opm_l270_unsupported_keyword():
-    """L270: FULLIMP (unsupported) emits WARNING."""
+    """L270: PARTTRAC (catalog-only, no handler) emits WARNING."""
     text = (
         "RUNSPEC\nDIMENS 3 3 3 /\n\n"
-        "RUNSPEC\nFULLIMP\n/\n\n"
+        "RUNSPEC\nPARTTRAC\n 1 1 1 /\n\n"
         "GRID\nDX\n 27*100 /\n\n"
         "END\n"
     )
@@ -267,7 +292,28 @@ def test_validator_opm_l270_unsupported_keyword():
     result = validate(deck)
     l270 = [i for i in result.issues if i.code == 270]
     assert len(l270) == 1
-    assert "FULLIMP" in l270[0].message
+    assert "PARTTRAC" in l270[0].message
+    assert "no handler" in l270[0].message.lower()
+
+
+def test_validator_opm_l270_no_warning_for_supported_keywords():
+    """L270: RUNSUM/GUIDERAT/TRACER/TRACERS are supported by OPM Flow
+    2024+ and should NOT trigger L270.
+
+    Regression: the previous list included these (per stale Pyrus
+    docs) but they have handlers in opm-common.
+    """
+    text = (
+        "RUNSPEC\nDIMENS 3 3 3 /\n\n"
+        "RUNSPEC\nTRACERS\n 1* 2 1* 1* /\n\n"
+        "SUMMARY\nRUNSUM\n/\n\n"
+        "SCHEDULE\nGUIDERAT\n 30.0 'OIL' 1.0 1.0 0.0 0.0 1.0 1.25 1* 0.5 /\n/\n\n"
+        "END\n"
+    )
+    deck = parse_file(text)
+    result = validate(deck)
+    l270 = [i for i in result.issues if i.code == 270]
+    assert l270 == [], f"Got unexpected L270: {[i.message for i in l270]}"
 
 
 def test_validator_shape_l201_record_count_mismatch():
@@ -285,6 +331,68 @@ def test_validator_shape_l201_record_count_mismatch():
     l201 = [i for i in result.issues if i.code == 201]
     # START is FIXED record_count=1; 2 records → L201.
     assert any("START" in i.message for i in l201)
+
+
+def test_validator_shape_l202_imprecise_keyword_emits_warning():
+    """L202 with imprecise catalogue: emits WARNING (default)."""
+    # FAULTS is LIST-kind with 10 documented items but the catalogue
+    # has imprecise_items=False, so a too-long record is WARNING.
+    text = (
+        "RUNSPEC\nDIMENS 1 1 1 /\n\n"
+        "GRID\n"
+        "FAULTS\n"
+        # 12 items — exceeds FAULTS spec of 10.
+        "  FLT1 1 1 1 1 1 1 1 1 1 EXTRA1 EXTRA2 /\n"
+        "DX\n 1*100 /\n\n"
+        "SCHEDULE\n/\n\nEND\n"
+    )
+    deck = parse_file(text)
+    result = validate(deck)
+    l202 = [i for i in result.issues if i.code == 202]
+    # The 12-item FAULTS record should produce an L202.
+    assert any("FAULTS" in i.message for i in l202), (
+        f"Expected FAULTS in L202 messages; got {[i.message for i in l202]}"
+    )
+    # Since FAULTS is NOT marked precise, severity is WARNING.
+    faults_l202 = [i for i in l202 if "FAULTS" in i.message]
+    assert all(i.severity == Severity.WARNING for i in faults_l202), (
+        f"Expected WARNING for imprecise keyword, got "
+        f"{[i.severity for i in faults_l202]}"
+    )
+
+
+def test_validator_shape_l202_precise_keyword_emits_error():
+    """L202 with precise catalogue: emits ERROR for documented keywords.
+
+    WELSPECS has 14 documented items per the OPM Flow Reference
+    Manual and is marked precise_items=True in the catalogue. A
+    WELSPECS record with too many items should be ERROR, not
+    WARNING.
+    """
+    text = (
+        "RUNSPEC\nDIMENS 1 1 1 /\n"
+        "WELLDIMS\n 1 1 1 1 1 1 1 1 /\n\n"
+        "GRID\nDX\n 1*100 /\n\n"
+        "SCHEDULE\n"
+        "WELSPECS\n"
+        # 16 items — exceeds WELSPECS spec of 14.
+        "  W1 G1 1 1 1000.0 OIL 0.5 STD SHUT PTBL 1000.0 0 1 1000.0 EXTRA1 EXTRA2 /\n"
+        "\n/\n"
+        "\nEND\n"
+    )
+    deck = parse_file(text)
+    result = validate(deck)
+    l202 = [i for i in result.issues if i.code == 202]
+    # The 16-item WELSPECS record should produce an L202.
+    assert any("WELSPECS" in i.message for i in l202), (
+        f"Expected WELSPECS in L202 messages; got {[i.message for i in l202]}"
+    )
+    # Since WELSPECS is precise, severity is ERROR.
+    welspecs_l202 = [i for i in l202 if "WELSPECS" in i.message]
+    assert all(i.severity == Severity.ERROR for i in welspecs_l202), (
+        f"Expected ERROR for precise keyword, got "
+        f"{[i.severity for i in welspecs_l202]}"
+    )
 
 
 def test_validator_runs_with_explicit_symbol_table():

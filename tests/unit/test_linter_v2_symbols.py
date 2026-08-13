@@ -30,17 +30,35 @@ from opm_ai.linter.v2.symbols import (
 
 
 def test_symbol_table_empty_default():
-    """SymbolTable() with no args has empty maps."""
+    """SymbolTable() with no args has empty maps except FIELD group.
+
+    Eclipse always creates a 'FIELD' top-level group implicitly, so
+    a freshly-constructed SymbolTable must already know about it —
+    otherwise GCONPROD/GCONINJE references to FIELD would trip the
+    L222 "group not declared" check.
+    """
     st = SymbolTable()
     assert st.wells == {}
-    assert st.groups == {}
+    assert st.groups == {"FIELD": GroupInfo(name="FIELD")}
+    assert "FIELD" in st.groups
     assert st.regions == set()
     assert st.fluid_tables == []
     assert st.summary_vars == []
     assert st.fu_vars == {}
     assert st.well_count() == 0
-    assert st.group_count() == 0
+    assert st.group_count() == 1  # FIELD is implicit
     assert st.fluid_table_count() == 0
+
+
+def test_symbol_table_default_has_field():
+    """F3.3 regression: SymbolTable() auto-registers FIELD.
+
+    QC-1 finding F3.3 — SymbolTable() must contain FIELD even before
+    build_symbol_table runs.
+    """
+    st = SymbolTable()
+    assert "FIELD" in st.groups
+    assert st.groups["FIELD"].name == "FIELD"
 
 
 def test_symbol_table_wellspecs_extracts_well():
@@ -300,3 +318,90 @@ def test_symbol_table_dataclass_types():
     assert FluidTableInfo.__dataclass_fields__  # type: ignore
     assert SummaryVarInfo.__dataclass_fields__  # type: ignore
     assert FuVarInfo.__dataclass_fields__  # type: ignore
+
+
+# -----------------------------------------------------------------------------
+# QC-1 F4.4 regression tests: regions_by_kind must isolate per-keyword buckets
+# -----------------------------------------------------------------------------
+
+
+def test_regions_by_kind_isolates_overlap_fipnum_subset_of_satnum():
+    """F4.4: when FIPNUM is a subset of SATNUM, both buckets are correct.
+
+    Earlier code deduped against st.regions (the union set), which meant
+    if SATNUM was processed first and saw {1}, then FIPNUM arrived with
+    {1,2}, FIPNUM's bucket would only get {2}. Both buckets must
+    reflect what THIS array declared.
+    """
+    text = (
+        "RUNSPEC\nDIMENS 3 3 3 /\n\n"
+        "GRID\n"
+        "SATNUM\n 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 /\n"
+        "FIPNUM\n 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 /\n"
+        "END\n"
+    )
+    deck = parse_file(text)
+    st = build_symbol_table(deck)
+    # Both arrays only declared region 1; both buckets should be {1}.
+    assert st.regions_by_kind["SATNUM"] == {1}
+    assert st.regions_by_kind["FIPNUM"] == {1}
+    assert st.fipnum_regions == {1}
+
+
+def test_regions_by_kind_isolates_overlap_fipnum_subset_with_extra():
+    """F4.4: FIPNUM with extra region not in SATNUM must populate FIPNUM's
+    bucket correctly regardless of processing order.
+
+    SATNUM={1}, FIPNUM={1,2}. Pre-fix: FIPNUM bucket = {2} (missing 1).
+    Post-fix: FIPNUM bucket = {1,2}, SATNUM bucket = {1}.
+    """
+    text = (
+        "RUNSPEC\nDIMENS 3 3 3 /\n\n"
+        "GRID\n"
+        "SATNUM\n 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 /\n"
+        "FIPNUM\n 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 /\n"
+        "END\n"
+    )
+    deck = parse_file(text)
+    st = build_symbol_table(deck)
+    assert st.regions_by_kind["SATNUM"] == {1}
+    assert st.regions_by_kind["FIPNUM"] == {1, 2}
+    assert st.fipnum_regions == {1, 2}
+
+
+def test_regions_by_kind_isolates_overlap_reversed_order():
+    """F4.4: order-independent — FIPNUM before SATNUM still works.
+
+    FIPNUM={1,2}, SATNUM={1}. Pre-fix: SATNUM bucket = {} (skipped).
+    Post-fix: SATNUM bucket = {1}, FIPNUM bucket = {1,2}.
+    """
+    text = (
+        "RUNSPEC\nDIMENS 3 3 3 /\n\n"
+        "GRID\n"
+        "FIPNUM\n 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 /\n"
+        "SATNUM\n 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 /\n"
+        "END\n"
+    )
+    deck = parse_file(text)
+    st = build_symbol_table(deck)
+    assert st.regions_by_kind["FIPNUM"] == {1, 2}
+    assert st.regions_by_kind["SATNUM"] == {1}
+
+
+def test_regions_by_kind_isolates_disjoint():
+    """F4.4: disjoint region sets stay isolated.
+
+    FIPNUM={1,2}, SATNUM={3,4}. Each bucket only its own values.
+    """
+    text = (
+        "RUNSPEC\nDIMENS 3 3 3 /\n\n"
+        "GRID\n"
+        "FIPNUM\n 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 /\n"
+        "SATNUM\n 3 4 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 /\n"
+        "END\n"
+    )
+    deck = parse_file(text)
+    st = build_symbol_table(deck)
+    assert st.regions_by_kind["FIPNUM"] == {1, 2}
+    assert st.regions_by_kind["SATNUM"] == {3, 4}
+    assert st.regions == {1, 2, 3, 4}

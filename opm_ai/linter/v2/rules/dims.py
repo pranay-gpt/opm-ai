@@ -61,12 +61,15 @@ def dims_rule(deck, symbol_table: SymbolTable) -> list[LintIssue]:
     # Eclipse convention: NTFIP is a capacity, not a strict max.
     # OPM Flow accepts decks with regions > NTFIP (it allocates
     # more dynamically), so flag this as WARNING rather than ERROR.
+    # Use fipnum_regions specifically — SATNUM/PVTNUM/EQLNUM have
+    # their own dimension keys (TABDIMS NSSFUN, REGDIMS NTPVT,
+    # EQLDIMS NTEQUL) and must not contaminate the FIPNUM check.
     regdims = _find_keyword(deck, "REGDIMS")
     if regdims and regdims.records and regdims.records[0].items:
         ints = _tokens_ints(regdims.records[0].items)
         if ints:
             ntfip = ints[0]
-            max_region = max(symbol_table.regions) if symbol_table.regions else 0
+            max_region = max(symbol_table.fipnum_regions) if symbol_table.fipnum_regions else 0
             if max_region > ntfip:
                 src = Path(regdims.header_token.source_file) if regdims.header_token.source_file else None
                 issues.append(

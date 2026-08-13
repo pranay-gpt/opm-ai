@@ -229,9 +229,20 @@ def tokenize_line(
                 j += 1
             chunk = line[i:j]
             if len(chunk) == 1:
-                # Bare `/` → TERMINATOR
+                # Bare `/` → TERMINATOR. In Eclipse, any text after the
+                # terminator on the same line is a comment (e.g.,
+                # `120 / max faults`). Scan for `--` and emit a COMMENT
+                # if present; otherwise consume to EOL.
                 tokens.append(T(TokenKind.TERMINATOR, "/", "/", line_no, i, i + 1))
-                i += 1
+                k = i + 1
+                while k < n and line[k] in " \t":
+                    k += 1
+                if k < n - 1 and line[k] == "-" and line[k + 1] == "-":
+                    comment_start = k
+                    while comment_start > i + 1 and line[comment_start - 1] in " \t":
+                        comment_start -= 1
+                    tokens.append(T(TokenKind.COMMENT, "", line[comment_start:], line_no, comment_start, n))
+                i = n
                 continue
             # Path-like value: consume including internal `/`.
             tokens.append(

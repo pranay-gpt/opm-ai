@@ -159,6 +159,26 @@ class KeywordSpec:
     opm_only: bool = False
     opm_unsupported: bool = False
     record_schemas: Optional[list[list[ItemSpec]]] = None
+    # When True, the first column of each record is a free-form
+    # identifier (well name, group name, region name, etc.) that
+    # typically appears at column 0 of its own line. The parser
+    # uses this flag to apply "smart dispatch": unknown column-0
+    # words inside this keyword's record stream are treated as
+    # record items rather than new keywords. False (the default)
+    # disables smart dispatch — INCLUDE, for example, has only a
+    # file path in its first column, so the column-0 next-word
+    # heuristic would mis-classify adjacent keywords.
+    first_column_is_name: bool = False
+    # When True, the per-record item count is documented in the
+    # OPM Flow Reference Manual (or opm-common's keyword handler
+    # source), so a record with too many/few items is an ERROR
+    # rather than a WARNING. False (the default) keeps L202 as
+    # WARNING because the v2 catalogue's per-record item counts
+    # are best-effort and may be incomplete for unusual decks.
+    # Promote to True for keywords where the OPM spec is
+    # unambiguous (DIMENS, TABDIMS, REGDIMS, EQLDIMS, WELLDIMS,
+    # WELSPECS, COMPDAT, WCONPROD, WCONINJE, WCONHIST, etc.).
+    precise_items: bool = False
 
     def is_valid_in(self, section: SectionName) -> bool:
         return section in self.sections

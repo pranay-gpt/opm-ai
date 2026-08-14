@@ -2,11 +2,18 @@
 
 import uuid
 from collections import OrderedDict
+from enum import Enum
+from pathlib import Path
 from threading import Lock
 from typing import Any, Optional
 
 from opm_ai.api.schemas import JobStatus, SimulationResultDTO
 from opm_ai.settings import settings
+
+
+class JobKind(str, Enum):
+    REAL = "real"
+    IMPORTED = "imported"
 
 
 class JobStore:
@@ -137,3 +144,33 @@ def set_job_failed(job_id: str, error: str) -> Optional[JobStatus]:
 def get_all_jobs() -> dict[str, JobStatus]:
     """Get all jobs (for debugging)."""
     return _job_store.get_all_jobs()
+
+
+def register_virtual_job(output_dir: Path) -> str:
+    """Register an in-memory job pointing at an external output_dir.
+
+    The job is marked completed and kind='imported'. Used by
+    /api/imported-results to surface an uploaded directory through
+    the existing Results API surface.
+    """
+    job_id = uuid.uuid4().hex
+    with _job_store._lock:
+        job = JobStatus(
+            job_id=job_id,
+            status="completed",
+            result=SimulationResultDTO(
+                success=True,
+                output_dir=str(output_dir),
+                crash_report=None,
+                returncode=0,
+                duration_s=0.0,
+                stdout="",
+                stderr="",
+                warnings=[],
+                summary_files={},
+                prt_path=None,
+            ),
+            kind=JobKind.IMPORTED,
+        )
+        _job_store._jobs[job_id] = job
+    return job_id

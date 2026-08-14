@@ -156,6 +156,7 @@ class JobStatus(BaseModel):
     status: Literal["pending", "running", "completed", "failed"]
     result: "SimulationResultDTO | None" = None
     error: str | None = None
+    kind: str = "real"  # "real" or "imported"
 
 
 class SimulationResultDTO(BaseModel):
@@ -597,3 +598,12 @@ class UploadResponse(BaseModel):
     deck_path: str
     include_dir: str | None = None
     byte_count: int
+
+
+class ImportedResultResponse(BaseModel):
+    """Response from POST /api/imported-results."""
+    model_config = ConfigDict(from_attributes=True)
+
+    job_id: str
+    files_received: list[str]
+    warnings: list[str]

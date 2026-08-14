@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import type { CategorizedVectors, VectorGroup } from '../../types';
+import type { ReactNode } from 'react';
 
 const ALL_GROUPS: VectorGroup[] = [
   'field_rates',
@@ -18,6 +19,63 @@ interface ResultsControlRailProps {
   onVectors: (g: VectorGroup, s: Set<string>) => void;
   logScale: boolean;
   onLogScale: (v: boolean) => void;
+}
+
+// ── Small local primitives (matching viewer3d/ControlPanel.tsx pattern) ──
+
+function Section({
+  title,
+  children,
+  defaultOpen = true,
+}: {
+  title: string;
+  children: ReactNode;
+  defaultOpen?: boolean;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="border-b border-border">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between px-3 py-2 text-xs font-semibold uppercase tracking-wide text-textSecondary hover:bg-surfaceHover"
+      >
+        {title}
+        <span className="text-textMuted">{open ? '−' : '+'}</span>
+      </button>
+      {open && <div className="space-y-2 px-3 pb-3">{children}</div>}
+    </div>
+  );
+}
+
+function Field({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <label className="flex items-center justify-between gap-2 text-xs text-textSecondary">
+      <span className="shrink-0">{label}</span>
+      {children}
+    </label>
+  );
+}
+
+function Check({
+  label,
+  checked,
+  onChange,
+}: {
+  label: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
+}) {
+  return (
+    <label className="flex cursor-pointer items-center gap-2 text-xs text-textSecondary">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+        className="h-3.5 w-3.5 accent-[rgb(var(--c-primary))]"
+      />
+      {label}
+    </label>
+  );
 }
 
 export default function ResultsControlRail({
@@ -58,89 +116,70 @@ export default function ResultsControlRail({
 
   return (
     <aside
-      className="w-72 shrink-0 border-r overflow-y-auto p-3 space-y-4 bg-gray-50 dark:bg-gray-900"
+      className="w-72 shrink-0 border-r overflow-y-auto bg-surface"
       data-testid="results-control-rail"
     >
-      <section>
-        <h4 className="text-xs font-semibold uppercase text-gray-500 mb-2">Producers</h4>
-        {producerWells.length === 0 ? (
-          <p className="text-xs text-gray-400 italic">none</p>
-        ) : (
-          <div className="space-y-1">
-            {producerWells.map((w) => (
-              <label key={w} className="flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
-                  checked={selectedWells.has(w)}
-                  onChange={() => toggleWell(w)}
-                  className="rounded"
-                />
-                <span>{w}</span>
-              </label>
-            ))}
-          </div>
-        )}
-      </section>
+      <div className="p-3 space-y-4">
+        <Section title="Producers" defaultOpen={producerWells.length > 0}>
+          {producerWells.length === 0 ? (
+            <p className="text-xs text-textMuted italic px-3">none</p>
+          ) : (
+            producerWells.map((w) => (
+              <Check
+                key={w}
+                label={w}
+                checked={selectedWells.has(w)}
+                onChange={() => toggleWell(w)}
+              />
+            ))
+          )}
+        </Section>
 
-      <section>
-        <h4 className="text-xs font-semibold uppercase text-gray-500 mb-2">Injectors</h4>
-        {injectorWells.length === 0 ? (
-          <p className="text-xs text-gray-400 italic">none</p>
-        ) : (
-          <div className="space-y-1">
-            {injectorWells.map((w) => (
-              <label key={w} className="flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
-                  checked={selectedWells.has(w)}
-                  onChange={() => toggleWell(w)}
-                  className="rounded"
-                />
-                <span>{w}</span>
-              </label>
-            ))}
-          </div>
-        )}
-      </section>
+        <Section title="Injectors" defaultOpen={injectorWells.length > 0}>
+          {injectorWells.length === 0 ? (
+            <p className="text-xs text-textMuted italic px-3">none</p>
+          ) : (
+            injectorWells.map((w) => (
+              <Check
+                key={w}
+                label={w}
+                checked={selectedWells.has(w)}
+                onChange={() => toggleWell(w)}
+              />
+            ))
+          )}
+        </Section>
 
-      <section>
-        <h4 className="text-xs font-semibold uppercase text-gray-500 mb-2">Vector Groups</h4>
-        {ALL_GROUPS.map((group) => {
-          const vecs = collectGroupVectors(group, categorized);
-          if (vecs.length === 0) return null;
-          return (
-            <details key={group} className="mb-2" open>
-              <summary className="text-xs font-medium cursor-pointer">{group.replace('_', ' ')}</summary>
-              <div className="ml-2 mt-1 space-y-1">
+        <Section title="Vector Groups" defaultOpen={true}>
+          {ALL_GROUPS.map((group) => {
+            const vecs = collectGroupVectors(group, categorized);
+            if (vecs.length === 0) return null;
+            return (
+              <div key={group} className="ml-2 mt-1 space-y-1">
+                <p className="text-xs font-medium text-textSecondary mb-1">
+                  {group.replace('_', ' ')}
+                </p>
                 {vecs.map((vec) => (
-                  <label key={vec} className="flex items-center gap-2 text-xs">
-                    <input
-                      type="checkbox"
-                      checked={selectedVectors[group]?.has(vec) ?? false}
-                      onChange={() => toggleVector(group, vec)}
-                      className="rounded"
-                    />
-                    <span>{vec}</span>
-                  </label>
+                  <Check
+                    key={vec}
+                    label={vec}
+                    checked={selectedVectors[group]?.has(vec) ?? false}
+                    onChange={() => toggleVector(group, vec)}
+                  />
                 ))}
               </div>
-            </details>
-          );
-        })}
-      </section>
+            );
+          })}
+        </Section>
 
-      <section>
-        <h4 className="text-xs font-semibold uppercase text-gray-500 mb-2">Display</h4>
-        <label className="flex items-center gap-2 text-sm">
-          <input
-            type="checkbox"
+        <Section title="Display" defaultOpen={true}>
+          <Check
+            label="Log scale (Y)"
             checked={logScale}
-            onChange={(e) => onLogScale(e.target.checked)}
-            className="rounded"
+            onChange={onLogScale}
           />
-          <span>Log scale (Y)</span>
-        </label>
-      </section>
+        </Section>
+      </div>
     </aside>
   );
 }

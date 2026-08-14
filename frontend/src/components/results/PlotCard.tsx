@@ -4,12 +4,12 @@ import { useResolvedTheme } from '../../stores/useAppStore';
 import Plotly from 'plotly.js-dist-min';
 
 interface PlotCardProps {
-  jobId: string;
+  jobId: string; // reserved for Task 10 export wiring
   plotName: string;
   plotJson: string;
 }
 
-export default function PlotCard({ jobId, plotName, plotJson }: PlotCardProps) {
+export default function PlotCard({ jobId: _jobId, plotName, plotJson }: PlotCardProps) {
   const divRef = useRef<HTMLDivElement>(null);
   const resolvedTheme = useResolvedTheme();
   const [renderError, setRenderError] = useState<string | null>(null);

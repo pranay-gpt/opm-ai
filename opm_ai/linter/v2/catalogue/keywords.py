@@ -1116,10 +1116,16 @@ WELSEGS = KeywordSpec(
     multi_record=True,
 )
 
-# EQLOPTS — equilibration options. UDA list.
+# EQLOPTS — equilibration options. UDA list. Valid in RUNSPEC
+# (option declaration), GRID, SOLUTION, and PROPS.
 EQLOPTS = KeywordSpec(
     name="EQLOPTS",
-    sections=[SectionName.SOLUTION, SectionName.PROPS],
+    sections=[
+        SectionName.RUNSPEC,
+        SectionName.GRID,
+        SectionName.PROPS,
+        SectionName.SOLUTION,
+    ],
     size_kind=SizeKind.LIST,
     items=[UDA] * 10,
 )
@@ -1156,13 +1162,21 @@ UNIFIN = KeywordSpec(
 
 NOECHO = KeywordSpec(
     name="NOECHO",
-    sections=[SectionName.RUNSPEC, SectionName.GRID, SectionName.PROPS, SectionName.SCHEDULE],
+    sections=list(SectionName),
     size_kind=SizeKind.NONE,
 )
 
 ECHO = KeywordSpec(
     name="ECHO",
-    sections=[SectionName.RUNSPEC, SectionName.GRID, SectionName.PROPS, SectionName.SCHEDULE],
+    # ECHO is a runtime flag valid in any section (including
+    # PRELUDE — Echo before any section header is fine).
+    sections=list(SectionName),
+    size_kind=SizeKind.NONE,
+)
+
+NOECHO = KeywordSpec(
+    name="NOECHO",
+    sections=list(SectionName),
     size_kind=SizeKind.NONE,
 )
 

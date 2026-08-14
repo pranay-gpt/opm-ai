@@ -1134,37 +1134,61 @@ EQLOPTS = KeywordSpec(
 # corpus review — each fires >40 L171 across the test fixtures.
 
 # Multipliers for grid array properties (RM: GRID section).
+# Also valid in EDIT (edit-data operations) and SCHEDULE
+# (some fixtures use them for restart).
 MULTX = KeywordSpec(
     name="MULTX",
-    sections=[SectionName.GRID, SectionName.EDIT],
+    sections=[
+        SectionName.GRID,
+        SectionName.EDIT,
+        SectionName.SCHEDULE,
+    ],
     size_kind=SizeKind.ARRAY,
     items=[DOUBLE],
 )
 MULTY = KeywordSpec(
     name="MULTY",
-    sections=[SectionName.GRID, SectionName.EDIT],
+    sections=[
+        SectionName.GRID,
+        SectionName.EDIT,
+        SectionName.SCHEDULE,
+    ],
     size_kind=SizeKind.ARRAY,
     items=[DOUBLE],
 )
 MULTZ = KeywordSpec(
     name="MULTZ",
-    sections=[SectionName.GRID, SectionName.EDIT],
+    sections=[
+        SectionName.GRID,
+        SectionName.EDIT,
+        SectionName.SCHEDULE,
+    ],
     size_kind=SizeKind.ARRAY,
     items=[DOUBLE],
 )
 
-# ENDSCALE — endpoint scaling (RM: PROPS).
+# ENDSCALE — endpoint scaling (RM: PROPS). Also accepted in
+# RUNSPEC (declaration) and GRID (early declaration).
 ENDSCALE = KeywordSpec(
     name="ENDSCALE",
-    sections=[SectionName.PROPS],
+    sections=[
+        SectionName.PROPS,
+        SectionName.RUNSPEC,
+        SectionName.GRID,
+    ],
     size_kind=SizeKind.LIST,
     items=[UDA] * 10,
 )
 
-# MAPAXES — map axes (RM: RUNSPEC).
+# MAPAXES — map axes (RM: RUNSPEC). Also accepted before the
+# first section header (PRELUDE) and in GRID.
 MAPAXES = KeywordSpec(
     name="MAPAXES",
-    sections=[SectionName.RUNSPEC],
+    sections=[
+        SectionName.RUNSPEC,
+        SectionName.GRID,
+        SectionName.PRELUDE,
+    ],
     size_kind=SizeKind.FIXED,
     items=[DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, INT],
     record_count=1,
@@ -1254,10 +1278,15 @@ PDVD = KeywordSpec(
 # WRFTPLT — well RFT plot data (RM: SUMMARY). Records are 4
 # items (well name + 3 plot flags), one record per well,
 # separated by `/`. multi_record=True to stay open across
-# record boundaries.
+# record boundaries. Also valid in SCHEDULE (restart) and
+# PRELUDE (declared before SUMMARY header).
 WRFTPLT = KeywordSpec(
     name="WRFTPLT",
-    sections=[SectionName.SUMMARY],
+    sections=[
+        SectionName.SUMMARY,
+        SectionName.SCHEDULE,
+        SectionName.PRELUDE,
+    ],
     size_kind=SizeKind.LIST,
     items=[UDA] * 4,
     multi_record=True,

@@ -29,7 +29,6 @@ from pathlib import Path
 from fastapi import APIRouter, HTTPException, Request
 from loguru import logger
 
-from opm_ai.api.job_helpers import job_output_dir
 from opm_ai.api.job_store import register_virtual_job
 from opm_ai.api.schemas import ImportedResultResponse
 

@@ -476,14 +476,50 @@ export default function ResultsViewer() {
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {results.plots && Object.keys(results.plots).length > 0 ? (
                 <>
-                  <PlotCard jobId={currentJob?.job_id ?? ''} plotName="Field Rates" plotJson={results.plots['field_rates'] ?? ''} />
-                  <PlotCard jobId={currentJob?.job_id ?? ''} plotName="Field Cumulative" plotJson={results.plots['field_cumulative'] ?? ''} />
-                  <PlotCard jobId={currentJob?.job_id ?? ''} plotName="Field Derived" plotJson={results.plots['field_derived'] ?? ''} />
+                  <PlotCard
+                    jobId={currentJob?.job_id ?? ''}
+                    plotName="Field Rates"
+                    plotJson={results.plots['field_rates'] ?? ''}
+                    exportGroup="field_rates"
+                    exportVectors={Array.from(selectedVectors.field_rates)}
+                  />
+                  <PlotCard
+                    jobId={currentJob?.job_id ?? ''}
+                    plotName="Field Cumulative"
+                    plotJson={results.plots['field_cumulative'] ?? ''}
+                    exportGroup="field_cumulative"
+                    exportVectors={Array.from(selectedVectors.field_cumulative)}
+                  />
+                  <PlotCard
+                    jobId={currentJob?.job_id ?? ''}
+                    plotName="Field Derived"
+                    plotJson={results.plots['field_derived'] ?? ''}
+                    exportGroup="field_derived"
+                    exportVectors={Array.from(selectedVectors.field_derived)}
+                  />
                   {selectedWells.size > 0 && (
                     <>
-                      <PlotCard jobId={currentJob?.job_id ?? ''} plotName="Well Rates" plotJson={results.plots['well_rates'] ?? ''} />
-                      <PlotCard jobId={currentJob?.job_id ?? ''} plotName="Well Cumulative" plotJson={results.plots['well_cumulative'] ?? ''} />
-                      <PlotCard jobId={currentJob?.job_id ?? ''} plotName="Well Injection" plotJson={results.plots['well_injection'] ?? ''} />
+                      <PlotCard
+                        jobId={currentJob?.job_id ?? ''}
+                        plotName="Well Rates"
+                        plotJson={results.plots['well_rates'] ?? ''}
+                        exportGroup="well_rates"
+                        exportVectors={Array.from(selectedVectors.well_rates)}
+                      />
+                      <PlotCard
+                        jobId={currentJob?.job_id ?? ''}
+                        plotName="Well Cumulative"
+                        plotJson={results.plots['well_cumulative'] ?? ''}
+                        exportGroup="well_cumulative"
+                        exportVectors={Array.from(selectedVectors.well_cumulative)}
+                      />
+                      <PlotCard
+                        jobId={currentJob?.job_id ?? ''}
+                        plotName="Well Injection"
+                        plotJson={results.plots['well_injection'] ?? ''}
+                        exportGroup="well_injection"
+                        exportVectors={Array.from(selectedVectors.well_injection)}
+                      />
                     </>
                   )}
                 </>

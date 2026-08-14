@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useChatStore, useSettingsStore, useChatMessages } from '../stores/useAppStore';
+import { useChatStore, useSettingsStore, useChatMessages, useCurrentJob } from '../stores/useAppStore';
 import { api, connectChat } from '../api/client';
 import type { ChatMessage } from '../api/client';
 import Markdown from './ui/Markdown';
+import PlotCard from './results/PlotCard';
 
 export default function ChatPanel() {
   const {
@@ -17,6 +18,8 @@ export default function ChatPanel() {
   } = useChatStore();
   const { settings } = useSettingsStore();
   const messages = useChatMessages();
+  const currentJob = useCurrentJob();
+  const currentJobId = currentJob?.job_id ?? '';
 
   const [input, setInput] = useState('');
   const [isSending, setIsSending] = useState(false);
@@ -261,11 +264,28 @@ export default function ChatPanel() {
               )}
 
               {/* Tool result */}
-              {message.role === 'tool' && (
-                <div className="mt-2 p-2 rounded bg-page border border-border text-xs font-mono text-textSecondary max-h-32 overflow-auto">
-                  {message.content}
-                </div>
-              )}
+              {message.role === 'tool' && (() => {
+                let toolResult: { tool_name?: string; content?: { wells?: string[]; figure_json?: string } } | null = null;
+                try {
+                  toolResult = JSON.parse(message.content);
+                } catch {
+                  // Not JSON, render as-is
+                }
+                if (toolResult && (toolResult.tool_name === 'plot_well_vectors' || toolResult.tool_name === 'compare_wells')) {
+                  return (
+                    <PlotCard
+                      jobId={currentJobId}
+                      plotName={`${toolResult.tool_name === 'compare_wells' ? 'Compare' : 'Plot'}: ${toolResult.content?.wells?.join(', ') ?? ''}`}
+                      plotJson={toolResult.content?.figure_json ?? ''}
+                    />
+                  );
+                }
+                return (
+                  <div className="mt-2 p-2 rounded bg-page border border-border text-xs font-mono text-textSecondary max-h-32 overflow-auto">
+                    {message.content}
+                  </div>
+                );
+              })()}
             </div>
           </div>
         ))}

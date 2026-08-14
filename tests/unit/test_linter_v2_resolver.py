@@ -356,3 +356,114 @@ def test_synthetic_paths_fixture(paths_main):
     assert "$DATA" in cd.paths_table.entries
     assert "$GRID" in cd.paths_table.entries
     assert len(cd.includes) == 1
+
+
+# ---------------------------------------------------------------------------
+# Resolver: post-INCLUDE retag (L170 false-positive fix)
+# ---------------------------------------------------------------------------
+
+
+def test_retag_post_include_moves_keywords_to_includes_section(tmp_path):
+    """Parent deck has RUNSPEC, then INCLUDE 'SCHED.INC', then
+    SCHEDULE-only keywords. The parser tags them to RUNSPEC
+    because no section header follows INCLUDE. The resolver's
+    `_retag_post_include_keywords` moves them to SCHEDULE.
+
+    Pattern from SPE5CASE1 (44 L170 false-positives before fix).
+    """
+    main = tmp_path / "MAIN.DATA"
+    main.write_text(
+        "RUNSPEC\nDIMENS 3 3 3 /\n\n"
+        "INCLUDE\n  'SCHED.INC' /\n\n"
+        "WCONPROD\n  'P1' 'OPEN' 'ORAT' 12000 4* 1000 /\n"
+        "END\n"
+    )
+    (tmp_path / "SCHED.INC").write_text(
+        "SCHEDULE\nWELSPECS 'P1' 'G' 1 1 1.0 'OIL' /\n"
+    )
+    deck = parse_file(main.read_text(), source_file=main)
+    cd = resolve_deck(deck)
+    assert cd.error_count() == 0
+    # WCONPROD should now be in SCHEDULE, not RUNSPEC.
+    schedule = deck.section("SCHEDULE")
+    sched_names = [k.name for k in schedule.keywords]
+    assert "WCONPROD" in sched_names
+    runspec = deck.section("RUNSPEC")
+    runspec_names = [k.name for k in runspec.keywords]
+    assert "WCONPROD" not in runspec_names
+
+
+def test_retag_does_not_move_preexisting_keywords(tmp_path):
+    """Keywords before the INCLUDE stay in their original section."""
+    main = tmp_path / "MAIN.DATA"
+    main.write_text(
+        "RUNSPEC\nDIMENS 3 3 3 /\n\n"
+        "PROPS\nROCK 1.0e-5 0.3 /\n\n"
+        "INCLUDE\n  'SCHED.INC' /\n\n"
+        "END\n"
+    )
+    (tmp_path / "SCHED.INC").write_text("SCHEDULE\n/\n")
+    deck = parse_file(main.read_text(), source_file=main)
+    cd = resolve_deck(deck)
+    assert cd.error_count() == 0
+    props = deck.section("PROPS")
+    props_names = [k.name for k in props.keywords]
+    # DIMENS stays in RUNSPEC, ROCK stays in PROPS.
+    assert "ROCK" in props_names
+    assert "DIMENS" in [k.name for k in deck.section("RUNSPEC").keywords]
+
+
+def test_retag_handles_multiple_includes(tmp_path):
+    """Two INCLUDEs in RUNSPEC, each followed by post-INCLUDE keywords.
+    Each should be retagged to its include's first section.
+    """
+    main = tmp_path / "MAIN.DATA"
+    main.write_text(
+        "RUNSPEC\nDIMENS 3 3 3 /\n\n"
+        "INCLUDE 'SCHED1.INC' /\nWCONPROD 'P1' 'OPEN' 'ORAT' 12000 4* 1000 /\n\n"
+        "INCLUDE 'SCHED2.INC' /\nWCONINJE 'I1' 'WAT' 'RATE' 1000 4* /\n\n"
+        "END\n"
+    )
+    (tmp_path / "SCHED1.INC").write_text("SCHEDULE\n/\n")
+    (tmp_path / "SCHED2.INC").write_text("SCHEDULE\n/\n")
+    deck = parse_file(main.read_text(), source_file=main)
+    cd = resolve_deck(deck)
+    assert cd.error_count() == 0
+    # Both WCONPROD and WCONINJE should now be in SCHEDULE.
+    all_kws_by_section: dict[str, list[str]] = {}
+    for sec_name, sec in deck.sections.items():
+        all_kws_by_section[sec_name.value] = [k.name for k in sec.keywords]
+    sched_names = all_kws_by_section.get("SCHEDULE", [])
+    assert "WCONPROD" in sched_names
+    assert "WCONINJE" in sched_names
+    # And not in RUNSPEC anymore.
+    assert "WCONPROD" not in all_kws_by_section.get("RUNSPEC", [])
+    assert "WCONINJE" not in all_kws_by_section.get("RUNSPEC", [])
+
+
+def test_retag_does_not_move_into_earlier_section(tmp_path):
+    """An INCLUDE that introduces an EARLIER section (shouldn't happen
+    in well-formed decks, but) must not move post-INCLUDE keywords
+    backwards. Verifies the cur_idx < target_idx guard.
+    """
+    main = tmp_path / "MAIN.DATA"
+    main.write_text(
+        "SOLUTION\nPRESSURE 1 100 1 1 1 /\n\n"
+        "INCLUDE 'RUN.INC' /\nWCONPROD 'P1' 'OPEN' 'ORAT' 12000 4* 1000 /\n\n"
+        "END\n"
+    )
+    # Include introduces RUNSPEC (earlier than SOLUTION).
+    (tmp_path / "RUN.INC").write_text("RUNSPEC\n/\n")
+    deck = parse_file(main.read_text(), source_file=main)
+    cd = resolve_deck(deck)
+    # WCONPROD should stay in SOLUTION because we never demote.
+    all_kws_by_section = {
+        sec_name.value: [k.name for k in sec.keywords]
+        for sec_name, sec in deck.sections.items()
+    }
+    sched_names = all_kws_by_section.get("SCHEDULE", [])
+    sol_names = all_kws_by_section.get("SOLUTION", [])
+    assert "WCONPROD" not in sched_names
+    # WCONPROD stays in SOLUTION (where the parser put it; we don't
+    # move it backwards into the include's earlier section).
+    assert "WCONPROD" in sol_names

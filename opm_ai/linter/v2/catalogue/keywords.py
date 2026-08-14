@@ -433,6 +433,13 @@ PVTO = KeywordSpec(
     sections=[SectionName.PROPS],
     size_kind=SizeKind.ARRAY,
     items=[DOUBLE, DOUBLE, DOUBLE, DOUBLE],
+    # PVTO records vary in width: the first record of each
+    # undersaturated-oil row has 4 items (Rs, P, Bo, Vis), subsequent
+    # rows have 3 items (P, Bo, Vis — Rs implicit). Stay open across
+    # `/` so the parser doesn't emit "loose token" parse errors for
+    # the 3-item rows. The first column of a 3-item row is a value
+    # continuation, not a new keyword.
+    multi_record=True,
 )
 
 PVTG = KeywordSpec(
@@ -440,6 +447,11 @@ PVTG = KeywordSpec(
     sections=[SectionName.PROPS],
     size_kind=SizeKind.ARRAY,
     items=[DOUBLE, DOUBLE, DOUBLE, DOUBLE],
+    # PVTG records vary in width: first row of each dry-gas
+    # entry has 4 items (Pg, BG, MG, ?), subsequent rows have 3
+    # items (P, BG, MG). Stay open across `/` for the same
+    # reason as PVTO — see that comment.
+    multi_record=True,
 )
 
 PVTW = KeywordSpec(

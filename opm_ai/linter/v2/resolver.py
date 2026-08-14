@@ -373,13 +373,19 @@ class Resolver:
                 )
                 if cur_idx < target_idx:
                     # Move sub_kw from its current section to
-                    # the include's target section.
-                    cur_section.keywords.remove(sub_kw)
+                    # the include's target section. Create the
+                    # target section in the parent if it doesn't
+                    # exist yet (parent deck had no explicit
+                    # SCHEDULE header — the include introduced it).
                     target = parent.sections.get(target_section)
-                    if target is not None:
-                        sub_kw.section = target
-                        target.keywords.append(sub_kw)
-                        sub_kw.unknown_reason = None
+                    if target is None:
+                        target = self._get_or_create_section(
+                            parent, target_section
+                        )
+                    cur_section.keywords.remove(sub_kw)
+                    sub_kw.section = target
+                    target.keywords.append(sub_kw)
+                    sub_kw.unknown_reason = None
 
     def _section_introduced_by_include(
         self, include_kw: Keyword
@@ -399,7 +405,10 @@ class Resolver:
                 if sub is None:
                     continue
                 for sec_name, sec in sub.sections.items():
-                    if sec.keywords and sec_name != SectionName.PRELUDE:
+                    # Section-introduced: any non-PRELUDE section
+                    # the include declares, even if it has no
+                    # non-section-header keywords yet.
+                    if sec_name != SectionName.PRELUDE:
                         return sec_name
         return None
 

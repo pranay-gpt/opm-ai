@@ -336,6 +336,13 @@ export interface SettingsResponse {
   };
 }
 
+// Results Page enrichment (Task 8) - Import Results
+export interface ImportedResultResponse {
+  job_id: string;
+  files_received: string[];
+  warnings: string[];
+}
+
 // Explainer types
 export interface ExplainRequest {
   topic?: string | null;

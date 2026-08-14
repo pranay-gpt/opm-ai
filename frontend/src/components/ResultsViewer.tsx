@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLastResults, useCurrentJob, useSimulationActions, useResolvedTheme, useCategoriesForJob } from '../stores/useAppStore';
 import { api } from '../api/client';
-import type { KPIsResponse, ExplainRequest, ExplainResponse, ExplanationLevel, Citation, CategorizedVectors, VectorGroup } from '../types';
+import type { KPIsResponse, ExplainRequest, ExplainResponse, ExplanationLevel, Citation, CategorizedVectors, VectorGroup, JobStatus } from '../types';
 import Grid3DViewer from './viewer3d/Grid3DViewer';
 import PlotCard from './results/PlotCard';
 import ResultsControlRail from './results/ResultsControlRail';
+import ImportResultsButton from './results/ImportResultsButton';
 // @ts-expect-error plotly.js-dist ships no types; @types/plotly.js covers the API
 import Plotly from 'plotly.js-dist-min';
 
@@ -29,7 +30,7 @@ const KPI_CARDS: KPICard[] = [
 export default function ResultsViewer() {
   const lastResults = useLastResults();
   const currentJob = useCurrentJob();
-  const { setLastResults } = useSimulationActions();
+  const { setLastResults, setCurrentJob } = useSimulationActions();
 
   const [results, setResults] = useState<KPIsResponse | null>(lastResults);
   const [isLoading, setIsLoading] = useState(false);
@@ -221,6 +222,14 @@ export default function ResultsViewer() {
           {error && (
             <span className="badge badge-error text-xs">{error}</span>
           )}
+          <ImportResultsButton
+            onImported={(resp) => {
+              // Trigger a results reload for the new job
+              const newJob: JobStatus = { job_id: resp.job_id, status: 'completed', result: null, error: null };
+              setCurrentJob(newJob as any);
+              loadResults(resp.job_id);
+            }}
+          />
           {currentJob?.status === 'completed' && currentJob.job_id && (
             <button
               onClick={handleLaunchResinsight}

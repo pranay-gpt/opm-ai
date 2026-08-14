@@ -42,6 +42,7 @@ import type {
   PlotGroupResponse,
   CsvFrequency,
   VectorGroup,
+  ImportedResultResponse,
 } from '../types';
 
 // ============================================
@@ -252,6 +253,19 @@ export const api = {
     return response.text();
   },
 
+  // Results page enrichment (Task 8) - Import Results
+  importResults: async (formData: FormData): Promise<ImportedResultResponse> => {
+    const response = await fetch(`${API_BASE}/imported-results`, {
+      method: 'POST',
+      body: formData,
+      // No Content-Type — browser sets multipart boundary automatically
+    });
+    if (!response.ok) {
+      throw await errorFromResponse(response);
+    }
+    return response.json() as Promise<ImportedResultResponse>;
+  },
+
   // Explainer
   explainConcept: (request: ExplainRequest): Promise<ExplainResponse> =>
     fetchJson<ExplainResponse>('/explain', {
@@ -368,6 +382,7 @@ export type {
   PlotGroupResponse,
   CsvFrequency,
   VectorGroup,
+  ImportedResultResponse,
 };
 
 // ============================================

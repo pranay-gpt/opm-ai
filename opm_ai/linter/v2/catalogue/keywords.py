@@ -143,12 +143,14 @@ UNITS = KeywordSpec(
 
 # ASSIGN — assigns a value to a UDQ. Format:
 #   ASSIGN <udq_name> <value> /
-# Each record is 2 items.
+# ASSIGN — assigns a value to a UDQ. Format:
+#   ASSIGN <udq_name> <value>... /
+# Each record is 2+ items (variable name + 1+ values).
 ASSIGN = KeywordSpec(
     name="ASSIGN",
     sections=[SectionName.RUNSPEC, SectionName.SCHEDULE],
     size_kind=SizeKind.LIST,
-    items=[UDA] * 2,
+    items=[UDA] * 20,
     multi_record=True,
 )
 
@@ -191,9 +193,12 @@ GRIDUNIT = KeywordSpec(
     # GRIDUNIT takes 1-3 unit strings (METRES, FEET, LAB, RES,
     # etc.) per record. Use UDA list with multi_record=True so the
     # parser stays open across `/` and accepts any unit-name token.
+    # first_column_is_name=True: METRES/FEET/etc. at column 0 are
+    # continuation items of the GRIDUNIT record, not new keywords.
     size_kind=SizeKind.LIST,
     items=[UDA] * 3,
     multi_record=True,
+    first_column_is_name=True,
 )
 MESSAGES = KeywordSpec(
     name="MESSAGES",
@@ -351,13 +356,13 @@ NTG = KeywordSpec(
 )
 TRANX = KeywordSpec(
     name="TRANX",
-    sections=[SectionName.GRID],
+    sections=[SectionName.GRID, SectionName.EDIT],
     size_kind=SizeKind.ARRAY,
     items=[DOUBLE],
 )
 TRANY = KeywordSpec(
     name="TRANY",
-    sections=[SectionName.GRID],
+    sections=[SectionName.GRID, SectionName.EDIT],
     size_kind=SizeKind.ARRAY,
     items=[DOUBLE],
 )
@@ -1202,6 +1207,11 @@ MULTZ = KeywordSpec(
 
 # ENDSCALE — endpoint scaling (RM: PROPS). Also accepted in
 # RUNSPEC (declaration) and GRID (early declaration).
+# ENDSCALE records frequently put direction tokens (NODIR,
+# REVERS) on the next line at column 0. Set
+# first_column_is_name=True so the parser absorbs them into
+# the ENDSCALE record instead of treating them as new
+# keywords.
 ENDSCALE = KeywordSpec(
     name="ENDSCALE",
     sections=[
@@ -1211,6 +1221,7 @@ ENDSCALE = KeywordSpec(
     ],
     size_kind=SizeKind.LIST,
     items=[UDA] * 10,
+    first_column_is_name=True,
 )
 
 # MAPAXES — map axes (RM: RUNSPEC). Also accepted before the
@@ -1235,13 +1246,18 @@ FLUXNUM = KeywordSpec(
     items=[INT],
 )
 
-# SCALECRS — scale crossover (RM: PROPS).
+# SCALECRS — scale crossover. Format:
+#   SCALECRS
+#     YES /        -- enable (scalar rel-perm direction)
+#   or
+#     NO  /        -- disable
+# Take YES/NO as the first item, no fixed record length.
 SCALECRS = KeywordSpec(
     name="SCALECRS",
     sections=[SectionName.PROPS],
-    size_kind=SizeKind.FIXED,
-    items=[DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE],
-    record_count=1,
+    size_kind=SizeKind.LIST,
+    items=[UDA],
+    multi_record=False,
 )
 
 # MULTREGT — multi-region transmissibility (RM: GRID).
@@ -1382,6 +1398,7 @@ BOX = KeywordSpec(
     sections=[
         SectionName.GRID,
         SectionName.SCHEDULE,
+        SectionName.EDIT,
     ],
     size_kind=SizeKind.LIST,
     items=[INT, INT, INT, INT, INT, INT],
@@ -1479,6 +1496,268 @@ SGL = KeywordSpec(
 )
 
 # VFPPROD and VFPPROD<n> family — see VFP dict above.
+
+# DEBUG — debug print control (RM: RUNSPEC, SOLUTION).
+DEBUG = KeywordSpec(
+    name="DEBUG",
+    sections=[SectionName.RUNSPEC, SectionName.SOLUTION],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+)
+
+# PIMTDIMS — PI multiplier dimensions (RM: RUNSPEC).
+PIMTDIMS = KeywordSpec(
+    name="PIMTDIMS",
+    sections=[SectionName.RUNSPEC],
+    size_kind=SizeKind.FIXED,
+    items=[INT] * 3,
+    record_count=1,
+)
+
+# RPTPROPS — props report flags (RM: PROPS). Specifies which
+# property arrays to print. Record is a list of UDA flags.
+RPTPROPS = KeywordSpec(
+    name="RPTPROPS",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 30,
+    multi_record=True,
+)
+
+# SOGCR — critical oil-gas saturation (RM: PROPS).
+SOGCR = KeywordSpec(
+    name="SOGCR",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE],
+)
+
+# ISGCR — injection critical gas saturation (RM: PROPS).
+ISGCR = KeywordSpec(
+    name="ISGCR",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE],
+)
+
+# PVCDO — dead-oil PVT table (RM: PROPS). Pairs of (pressure,
+# oil formation volume factor).
+PVCDO = KeywordSpec(
+    name="PVCDO",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE, DOUBLE],
+)
+
+# ACTIONW — "action when" block (RM: SCHEDULE). Sister to
+# ACTIONX; same syntax (record list of UDA items).
+ACTIONW = KeywordSpec(
+    name="ACTIONW",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 50,
+    multi_record=True,
+)
+
+# WELPI — well PI override (RM: SCHEDULE). Each record is one
+# well plus its PI multiplier.
+WELPI = KeywordSpec(
+    name="WELPI",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 10,
+    multi_record=True,
+)
+
+# FIPABC — FIP region array ABC (RM: REGIONS). 3 arrays
+# stacked: one int per (region, phase) combination.
+FIPABC = KeywordSpec(
+    name="FIPABC",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.ARRAY,
+    items=[INT],
+)
+
+# ADD — REGIONS array addition (RM: REGIONS). One record per
+# box-style region; values are region numbers.
+ADD = KeywordSpec(
+    name="ADD",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.LIST,
+    items=[INT] * 10,
+    multi_record=True,
+)
+
+# UDADIMS — UDA (user-defined analysis) dimensions (RM: RUNSPEC).
+UDADIMS = KeywordSpec(
+    name="UDADIMS",
+    sections=[SectionName.RUNSPEC],
+    size_kind=SizeKind.FIXED,
+    items=[INT] * 5,
+    record_count=1,
+)
+
+# COORDSYS — coordinate system definition (RM: GRID).
+COORDSYS = KeywordSpec(
+    name="COORDSYS",
+    sections=[SectionName.GRID, SectionName.PRELUDE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+)
+
+# SMRYDIMS — summary dimensions (RM: RUNSPEC).
+SMRYDIMS = KeywordSpec(
+    name="SMRYDIMS",
+    sections=[SectionName.RUNSPEC],
+    size_kind=SizeKind.FIXED,
+    items=[INT] * 4,
+    record_count=1,
+)
+
+# NETWORK / NODEPROP / BRANPROP — multisegment well network
+# topology. NETWORK is the header (valid in RUNSPEC option
+# declaration), NODEPROP defines nodes, BRANPROP defines
+# branches. Also valid in SCHEDULE for restart.
+NETWORK = KeywordSpec(
+    name="NETWORK",
+    sections=[SectionName.GRID, SectionName.RUNSPEC],
+    size_kind=SizeKind.NONE,
+)
+NODEPROP = KeywordSpec(
+    name="NODEPROP",
+    sections=[SectionName.GRID, SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 10,
+    multi_record=True,
+)
+BRANPROP = KeywordSpec(
+    name="BRANPROP",
+    sections=[SectionName.GRID, SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 10,
+    multi_record=True,
+)
+
+# LIFTOPT — well lift optimization (RM: SCHEDULE).
+LIFTOPT = KeywordSpec(
+    name="LIFTOPT",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+)
+
+# RTEMPVD — reservoir temperature vs depth (RM: SOLUTION).
+RTEMPVD = KeywordSpec(
+    name="RTEMPVD",
+    sections=[SectionName.SOLUTION],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+)
+
+# GPMAINT — group maintenance (RM: SCHEDULE).
+GPMAINT = KeywordSpec(
+    name="GPMAINT",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+)
+
+# MAXVALUE — maximum value for constraint (RM: SCHEDULE). Also
+# valid in EDIT (max-value array for property edit).
+MAXVALUE = KeywordSpec(
+    name="MAXVALUE",
+    sections=[SectionName.SCHEDULE, SectionName.EDIT],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+)
+
+# STONE1 — Stone's relative-permeability model #1 (RM: PROPS).
+STONE1 = KeywordSpec(
+    name="STONE1",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.NONE,
+)
+
+# STONE2 — Stone's relative-permeability model #2 (RM: PROPS).
+STONE2 = KeywordSpec(
+    name="STONE2",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.NONE,
+)
+
+# SKIPREST — skip rest of section (RM: any).
+SKIPREST = KeywordSpec(
+    name="SKIPREST",
+    sections=[
+        SectionName.RUNSPEC, SectionName.GRID, SectionName.EDIT,
+        SectionName.PROPS, SectionName.REGIONS, SectionName.SOLUTION,
+        SectionName.SUMMARY, SectionName.SCHEDULE, SectionName.PRELUDE,
+    ],
+    size_kind=SizeKind.NONE,
+)
+
+# WPOLYMER — well polymer concentration (RM: SCHEDULE).
+WPOLYMER = KeywordSpec(
+    name="WPOLYMER",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+    multi_record=True,
+)
+
+# WSURFACE — well surface rates (RM: SCHEDULE).
+WSURFACE = KeywordSpec(
+    name="WSURFACE",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 10,
+    multi_record=True,
+)
+
+# DZV — cell dz array (RM: GRID, EDIT).
+DZV = KeywordSpec(
+    name="DZV",
+    sections=[SectionName.GRID, SectionName.EDIT],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE],
+)
+
+# MAPUNITS — map units declaration (RM: RUNSPEC). Also valid
+# in PRELUDE (declared before section header).
+MAPUNITS = KeywordSpec(
+    name="MAPUNITS",
+    sections=[SectionName.RUNSPEC, SectionName.PRELUDE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 5,
+)
+
+# INRAD — wellbore internal radius (RM: SCHEDULE). Also valid
+# in GRID for early definition.
+INRAD = KeywordSpec(
+    name="INRAD",
+    sections=[SectionName.SCHEDULE, SectionName.GRID],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 10,
+    multi_record=True,
+)
+
+# PORV — pore-volume array (RM: GRID, EDIT).
+PORV = KeywordSpec(
+    name="PORV",
+    sections=[SectionName.GRID, SectionName.EDIT],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE],
+)
+
+# GCONSUMP — group consumption (RM: SCHEDULE). Records are 1
+# well-level consumption rate + flag.
+GCONSUMP = KeywordSpec(
+    name="GCONSUMP",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 10,
+    multi_record=True,
+)
 
 # ACTNUM — active cell array (per-cell integer flag).
 ACTNUM = KeywordSpec(
@@ -1667,6 +1946,12 @@ _register(
     BOX, ENDBOX, ENDFIN, UDQDIMS, EDITNNC, GUIDERAT, TRACER,
     IMBNUM, WLIFTOPT, SOF3, SGL,
     ASSIGN, DEFINE,
+    DEBUG, PIMTDIMS, RPTPROPS, SOGCR, ISGCR, PVCDO, ACTIONW,
+    WELPI, FIPABC, ADD,
+    UDADIMS, COORDSYS, SMRYDIMS, NETWORK, NODEPROP, BRANPROP,
+    LIFTOPT, RTEMPVD, GPMAINT, MAXVALUE, STONE1, STONE2,
+    SKIPREST, WPOLYMER, WSURFACE, DZV, MAPUNITS, INRAD, PORV,
+    GCONSUMP,
 )
 _register_dict(PHASES)
 _register_dict(SUMMARY_VARS)

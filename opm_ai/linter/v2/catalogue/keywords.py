@@ -1251,11 +1251,16 @@ PDVD = KeywordSpec(
     items=[DOUBLE, DOUBLE],
 )
 
-# WRFTPLT — well RFT plot data (RM: SUMMARY).
+# WRFTPLT — well RFT plot data (RM: SUMMARY). Records are 4
+# items (well name + 3 plot flags), one record per well,
+# separated by `/`. multi_record=True to stay open across
+# record boundaries.
 WRFTPLT = KeywordSpec(
     name="WRFTPLT",
     sections=[SectionName.SUMMARY],
-    size_kind=SizeKind.NONE,
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 4,
+    multi_record=True,
 )
 
 # VFPPROD and VFPPROD<n> family — see VFP dict above.

@@ -6,6 +6,8 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect, HTTPException
 from pydantic import ValidationError
 from typing import Any
 
+from loguru import logger
+
 # Max bytes for a single ChatRequest frame. Anything larger is rejected
 # before pydantic parses it; the LLM has no use for a multi-MB history
 # and an oversized frame usually means a runaway client loop.
@@ -324,6 +326,9 @@ async def tool_compare_wells(args: dict) -> dict:
     """Single vector across multiple wells — the common comparison shape."""
     if "vector" not in args:
         return {"error": "missing 'vector' (single string required)"}
+    vector = args["vector"]
+    if not isinstance(vector, str):
+        return {"error": "'vector' must be a single string, not a list"}
     wells = args.get("wells") or []
     if not wells:
         return {"error": "missing 'wells' (non-empty list required)"}
@@ -332,7 +337,7 @@ async def tool_compare_wells(args: dict) -> dict:
     return await tool_plot_well_vectors({
         **args,
         "group": args.get("group", "well_rates"),
-        "vectors": [args["vector"]],
+        "vectors": [vector],
     })
 
 

@@ -27,7 +27,18 @@ from .ast import Deck, Keyword, Section
 from .catalogue import get_keyword
 from .paths_aliases import PathsTable, path_token_to_string, paths_table_from_keywords
 from .parser import parse
-from .spec import SectionName
+from .spec import CANONICAL_SECTIONS, SectionName
+
+
+def _section_canonical_order() -> list[SectionName]:
+    """Canonical section ordering used for re-tag decisions.
+
+    Wraps `CANONICAL_SECTIONS` (imported from .spec) as a list so we
+    can use `.index()` in `_retag_post_include_keywords`.
+    """
+    return list(CANONICAL_SECTIONS)
+
+
 from .tokenizer import tokenize_file
 from .tokens import Token, TokenKind
 
@@ -129,6 +140,11 @@ class Resolver:
         # Pass `root_deck=self.deck` so that included files' keywords
         # always merge into the root deck (not into a sub-deck).
         self._resolve_deck(self.deck, root_deck=self.deck, depth=1)
+        # Post-resolve: re-tag parent-deck keywords that landed in a
+        # wrong section because the parent had no explicit section
+        # header between INCLUDE and the keyword. OPM Flow accepts
+        # this: the keywords "belong" to the include's first section.
+        self._retag_post_include_keywords()
         return self.composite
 
     def _resolve_deck(self, deck: Deck, root_deck: Deck, depth: int) -> None:
@@ -256,6 +272,12 @@ class Resolver:
                 for sub_kw in sub_section.keywords:
                     if sub_kw.name == "INCLUDE":
                         continue
+                    # Re-tag the keyword to its actual section so
+                    # rules like L170 (section validity) report
+                    # correctly. Without this, a WELSPECS declared
+                    # in an INCLUDE file would carry its parse-time
+                    # section (PRELUDE) and be flagged as misplaced.
+                    sub_kw.section = target_section
                     target_section.keywords.append(sub_kw)
 
             resolved = ResolvedInclude(
@@ -270,6 +292,116 @@ class Resolver:
 
             # Recursively resolve INCLUDE statements in the included file.
             self._resolve_deck(sub_deck, root_deck=root_deck, depth=depth + 1)
+
+    def _retag_post_include_keywords(self) -> None:
+        """Re-tag parent-deck keywords that landed in the wrong section.
+
+        Pattern: a parent deck declares section X, then `INCLUDE 'file' /`,
+        then more keywords follow before the next section header in
+        the parent. The parser tags those keywords to section X, but
+        the include file may have started with section Y (where Y is
+        later in canonical order). OPM Flow accepts this: the
+        post-INCLUDE keywords are part of section Y.
+
+        Walk the parent deck, find each INCLUDE, look at the include's
+        first non-PRELUDE section in `composite.source_files`, and
+        re-tag parent keywords after the INCLUDE (before the next
+        parent section header) to that section.
+
+        This eliminates false-positive L170 issues like SPE5CASE1
+        where WCONPROD/WCONINJE/TSTEP/WELOPEN appear after INCLUDE
+        but are tagged RUNSPEC by the parser.
+        """
+        parent = self.deck
+        # Collect line numbers of section headers in the parent.
+        parent_section_headers: list[tuple[int, SectionName]] = []
+        for sec in parent.sections.values():
+            for kw in sec.keywords:
+                if kw.header_token.kind.value == "SECTION_HEADER":
+                    parent_section_headers.append(
+                        (kw.header_token.line, sec.name)
+                    )
+        parent_section_headers.sort()
+        # Collect INCLUDE keywords in the parent deck. Snapshot
+        # (sec_name, idx, kw) first because retagging removes the
+        # keyword from `section.keywords` while we iterate.
+        include_specs: list[tuple[str, int, Keyword]] = []
+        for sec_name, section in parent.sections.items():
+            for idx, kw in enumerate(section.keywords):
+                if kw.name != "INCLUDE" and kw.name != "IMPORT":
+                    continue
+                include_specs.append((sec_name, idx, kw))
+        for sec_name, idx, kw in include_specs:
+            include_line = kw.header_token.line
+            # Find the include target via ResolvedInclude records.
+            target_section = self._section_introduced_by_include(
+                kw
+            )
+            if target_section is None:
+                continue
+            # Re-tag every keyword in this section after the
+            # INCLUDE (until the next parent section header) to
+            # the target_section. Only retag if the keyword's
+            # current section is earlier in canonical order.
+            target_idx = _section_canonical_order().index(
+                target_section
+            )
+            next_header_line = None
+            for hl, _ in parent_section_headers:
+                if hl > include_line:
+                    next_header_line = hl
+                    break
+            section = parent.sections[sec_name]
+            # Snapshot the post-INCLUDE keywords so mutation
+            # (removing from `section.keywords`) doesn't corrupt
+            # the range iteration.
+            post_keywords = list(section.keywords[idx + 1 :])
+            for sub_kw in post_keywords:
+                if (
+                    next_header_line is not None
+                    and sub_kw.header_token.line >= next_header_line
+                ):
+                    break
+                # Don't retag SECTION_HEADER keywords themselves.
+                if sub_kw.header_token.kind.value == "SECTION_HEADER":
+                    break
+                cur_section = sub_kw.section
+                if cur_section is None:
+                    continue
+                cur_idx = _section_canonical_order().index(
+                    cur_section.name
+                )
+                if cur_idx < target_idx:
+                    # Move sub_kw from its current section to
+                    # the include's target section.
+                    cur_section.keywords.remove(sub_kw)
+                    target = parent.sections.get(target_section)
+                    if target is not None:
+                        sub_kw.section = target
+                        target.keywords.append(sub_kw)
+                        sub_kw.unknown_reason = None
+
+    def _section_introduced_by_include(
+        self, include_kw: Keyword
+    ) -> Optional[SectionName]:
+        """Return the first non-PRELUDE section that the INCLUDE introduces.
+
+        Reads the resolved include's actual deck from
+        `composite.source_files`. Returns None if the include
+        resolved to no real file or only contained PRELUDE keywords.
+        """
+        for resolved in self.composite.includes:
+            if (
+                resolved.source_line == include_kw.header_token.line
+                and resolved.actual_file is not None
+            ):
+                sub = self.composite.source_files.get(resolved.actual_file)
+                if sub is None:
+                    continue
+                for sec_name, sec in sub.sections.items():
+                    if sec.keywords and sec_name != SectionName.PRELUDE:
+                        return sec_name
+        return None
 
     def _find_section_for_keyword(self, deck: Deck, kw: Keyword) -> Section | None:
         """Find the Section object that contains the given keyword."""

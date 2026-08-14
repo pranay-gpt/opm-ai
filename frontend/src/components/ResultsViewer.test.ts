@@ -97,9 +97,11 @@ assert.equal(
 // --- F8.9 regression guard ----------------------------------------------
 // PlotCard must guard Plotly.purge behind a chartMountedRef so the
 // early-return path (empty plotJson) doesn't issue a spurious purge.
+const plotCardSrcPath = join(process.cwd(), 'src', 'components', 'results', 'PlotCard.tsx');
+const plotCardSource = readFileSync(plotCardSrcPath, 'utf8');
 assert.ok(
-  /chartMountedRef/.test(source),
-  'ResultsViewer PlotCard is missing the chartMountedRef guard (F8.9). ' +
+  /chartMountedRef/.test(plotCardSource),
+  'PlotCard is missing the chartMountedRef guard (F8.9). ' +
     'The cleanup function must only call Plotly.purge if a chart was actually mounted ' +
     'on this effect run, otherwise the early-return path (empty plotJson) issues a ' +
     'spurious purge that can race a fresh mount.'

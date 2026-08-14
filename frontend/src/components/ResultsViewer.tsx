@@ -1,91 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useLastResults, useCurrentJob, useSimulationActions, useResolvedTheme } from '../stores/useAppStore';
+import { useLastResults, useCurrentJob, useSimulationActions, useResolvedTheme, useCategoriesForJob } from '../stores/useAppStore';
 import { api } from '../api/client';
-import type { KPIsResponse, ExplainRequest, ExplainResponse, ExplanationLevel, Citation } from '../api/client';
+import type { KPIsResponse, ExplainRequest, ExplainResponse, ExplanationLevel, Citation, CategorizedVectors, VectorGroup } from '../types';
 import Grid3DViewer from './viewer3d/Grid3DViewer';
+import PlotCard from './results/PlotCard';
+import ResultsControlRail from './results/ResultsControlRail';
 // @ts-expect-error plotly.js-dist ships no types; @types/plotly.js covers the API
 import Plotly from 'plotly.js-dist-min';
-
-function PlotCard({ plotName, plotJson }: { plotName: string; plotJson: string }) {
-  const divRef = useRef<HTMLDivElement>(null);
-  const resolvedTheme = useResolvedTheme();
-  const [renderError, setRenderError] = useState<string | null>(null);
-  // Tracks whether THIS effect run actually mounted a Plotly chart on
-  // divRef.current. The cleanup function should only call Plotly.purge
-  // when a chart is mounted, otherwise the call is wasted and (worse)
-  // can race with a fresh mount if the effect re-runs in quick
-  // succession (F8.9 audit fix: previously the cleanup ran on every
-  // effect cycle including the early-return path for empty plotJson).
-  const chartMountedRef = useRef(false);
-
-  useEffect(() => {
-    setRenderError(null);
-    chartMountedRef.current = false;
-    if (!divRef.current || !plotJson) {
-      // Empty plotJson means the backend's plot generation failed
-      // (opm_ai/api/routes/results.py logs the trace). Render an empty
-      // card with a hint instead of trying to Plotly.newPlot an empty
-      // string (F1.5 audit fix - client side).
-      return;
-    }
-    try {
-      const plotData = JSON.parse(plotJson);
-      // Restyle backend-generated layout to match the active UI theme
-      const dark = resolvedTheme === 'dark';
-      const layout = {
-        ...plotData.layout,
-        paper_bgcolor: 'rgba(0,0,0,0)',
-        plot_bgcolor: 'rgba(0,0,0,0)',
-        font: { ...plotData.layout?.font, color: dark ? '#94A8C4' : '#465A82' },
-      };
-      Plotly.newPlot(divRef.current, plotData.data, layout, { responsive: true, displayModeBar: true });
-      chartMountedRef.current = true;
-    } catch (e) {
-      const message = e instanceof Error ? e.message : String(e);
-      setRenderError(message);
-      console.error(`Failed to render ${plotName}:`, e);
-    }
-    return () => {
-      // Only purge if we actually mounted a chart on this run. Avoids
-      // spurious Plotly.purge calls on early-return effects (empty
-      // plotJson) and avoids racing a fresh mount with a stale purge.
-      if (chartMountedRef.current && divRef.current) {
-        Plotly.purge(divRef.current);
-        chartMountedRef.current = false;
-      }
-    };
-  }, [plotName, plotJson, resolvedTheme]);
-
-  if (!plotJson) {
-    return (
-      <div className="card">
-        <div className="panel-header">
-          <h3 className="panel-title capitalize">{plotName.replace(/_/g, ' ')}</h3>
-        </div>
-        <div className="p-4 h-[500px] flex items-center justify-center text-textSecondary text-sm">
-          Plot unavailable. The backend could not generate this chart from the
-          run output (see server log for the trace).
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="card">
-      <div className="panel-header">
-        <h3 className="panel-title capitalize">{plotName.replace(/_/g, ' ')}</h3>
-      </div>
-      <div className="p-4 h-[500px] relative">
-        {renderError && (
-          <div className="absolute inset-0 flex items-center justify-center text-danger text-sm bg-bgPrimary/80 z-10">
-            Failed to render: {renderError}
-          </div>
-        )}
-        <div ref={divRef} className="plotly-chart" />
-      </div>
-    </div>
-  );
-}
 
 interface KPICard {
   key: string;
@@ -127,6 +48,37 @@ export default function ResultsViewer() {
   const [explainLoading, setExplainLoading] = useState(false);
   const [explainError, setExplainError] = useState<string | null>(null);
   const [explainLevel, setExplainLevel] = useState<ExplanationLevel>('intermediate');
+
+  // Plots tab state
+  const [categorized, setCategorizedState] = useState<CategorizedVectors | null>(null);
+  const [selectedWells, setSelectedWells] = useState<Set<string>>(new Set());
+  const [selectedVectors, setSelectedVectors] = useState<Record<VectorGroup, Set<string>>>({
+    field_rates: new Set(), field_cumulative: new Set(), field_derived: new Set(),
+    well_rates: new Set(), well_cumulative: new Set(), well_injection: new Set(),
+  });
+  const [logScale, setLogScale] = useState(false);
+  const { setCategories } = useSimulationActions();
+  const cachedCategories = useCategoriesForJob(currentJob?.job_id);
+
+  // Wrapper to match ResultsControlRail's expected signature
+  const handleSetVectors = useCallback((group: VectorGroup, vecs: Set<string>) => {
+    setSelectedVectors((prev) => ({ ...prev, [group]: vecs }));
+  }, []);
+
+  // Load categories when results become available
+  useEffect(() => {
+    if (!currentJob?.job_id || !results) return;
+    if (cachedCategories) {
+      setCategorizedState(cachedCategories);
+      return;
+    }
+    api.categories(currentJob.job_id).then((cats) => {
+      setCategorizedState(cats);
+      setCategories(currentJob.job_id, cats);
+    }).catch((err) => {
+      console.error('categories fetch failed', err);
+    });
+  }, [currentJob?.job_id, results, cachedCategories, setCategories]);
 
   // Load results when job completes. The `!results` guard is the
   // load-once invariant (F8.3 audit: previously flagged as a
@@ -500,22 +452,42 @@ export default function ResultsViewer() {
             tab (F1.6 audit fix - the previous `results?.plots &&` short-
             circuit hid the whole tab with no fallback). */}
         {activeTab === 'plots' && results && (
-          <div className="p-4 lg:p-6">
-            {results.plots && Object.keys(results.plots).length > 0 ? (
-              <div className="space-y-6">
-                {Object.entries(results.plots).map(([plotName, plotJson]) => (
-                  <PlotCard key={plotName} plotName={plotName} plotJson={plotJson} />
-                ))}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center h-96 text-textSecondary">
-                <svg className="w-16 h-16 mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-                <p className="text-lg font-medium text-textPrimary mb-1">No Plots Available</p>
-                <p className="text-sm">Run a simulation with plotting enabled to see charts here</p>
-              </div>
+          <div className="flex h-full">
+            {categorized && (
+              <ResultsControlRail
+                categorized={categorized}
+                selectedWells={selectedWells}
+                onWells={setSelectedWells}
+                selectedVectors={selectedVectors}
+                onVectors={handleSetVectors}
+                logScale={logScale}
+                onLogScale={setLogScale}
+              />
             )}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              {results.plots && Object.keys(results.plots).length > 0 ? (
+                <>
+                  <PlotCard jobId={currentJob?.job_id ?? ''} plotName="Field Rates" plotJson={results.plots['field_rates'] ?? ''} />
+                  <PlotCard jobId={currentJob?.job_id ?? ''} plotName="Field Cumulative" plotJson={results.plots['field_cumulative'] ?? ''} />
+                  <PlotCard jobId={currentJob?.job_id ?? ''} plotName="Field Derived" plotJson={results.plots['field_derived'] ?? ''} />
+                  {selectedWells.size > 0 && (
+                    <>
+                      <PlotCard jobId={currentJob?.job_id ?? ''} plotName="Well Rates" plotJson={results.plots['well_rates'] ?? ''} />
+                      <PlotCard jobId={currentJob?.job_id ?? ''} plotName="Well Cumulative" plotJson={results.plots['well_cumulative'] ?? ''} />
+                      <PlotCard jobId={currentJob?.job_id ?? ''} plotName="Well Injection" plotJson={results.plots['well_injection'] ?? ''} />
+                    </>
+                  )}
+                </>
+              ) : (
+                <div className="flex flex-col items-center justify-center h-96 text-textSecondary">
+                  <svg className="w-16 h-16 mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                  <p className="text-lg font-medium text-textPrimary mb-1">No Plots Available</p>
+                  <p className="text-sm">Run a simulation with plotting enabled to see charts here</p>
+                </div>
+              )}
+            </div>
           </div>
         )}
 

@@ -17,17 +17,12 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 
+from opm_ai.postprocess.plots import _sanitize_water_rate
+
 
 _COLORS = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b"]
 
-
-def _sanitize_water_rate(series: pd.Series) -> pd.Series:
-    """Sanitize water rate: clip negative values to 0 (handles -0.0)."""
-    return series.clip(lower=0)
-
-
-def _well_cols(df: pd.DataFrame, well: str, keywords: tuple[str, ...]) -> list[str]:
-    return [f"{kw}:{well}" for kw in keywords if f"{kw}:{well}" in df.columns]
+_WATER_KEYWORDS = ("WWPR", "WWPT", "WWIR", "WWIT", "WWCT", "FWPR", "FWPT")
 
 
 def _time(df: pd.DataFrame) -> pd.Series:
@@ -134,9 +129,16 @@ def plot_field_derived(
         return _apply_log(fig, log_scale)
     requested = vectors or ["FWCT", "FGOR", "FPR"]
 
-    # Field Water Cut - compute from rates if column missing
-    if "FWCT" in requested and "FWCT" not in df.columns:
-        if "FOPR" in df.columns and "FWPR" in df.columns:
+    # Field Water Cut - use column if present, otherwise compute from rates
+    if "FWCT" in requested:
+        if "FWCT" in df.columns:
+            fig.add_trace(go.Scatter(
+                x=_time(df), y=df["FWCT"], mode="lines",
+                name="FWCT - Field Water Cut (%)",
+                line=dict(color="#ff7f0e", width=2),
+                hovertemplate="Water Cut: %{y:.1f}%<br>Time: %{x:.1f} days<extra></extra>",
+            ))
+        elif "FOPR" in df.columns and "FWPR" in df.columns:
             fwpr = _sanitize_water_rate(df["FWPR"])
             liq = df["FOPR"] + fwpr
             wc_pct = (fwpr / liq.replace(0, np.nan)) * 100
@@ -198,8 +200,8 @@ def _well_figure(
             col = f"{kw}:{well}"
             if col not in df.columns:
                 continue
-            # Sanitize water rates (WWPR, WWPT, etc.)
-            y = _sanitize_water_rate(df[col]) if kw.startswith("W") and "WPR" in kw else df[col]
+            # Sanitize water rates (WWPR, WWPT, WWIR, WWIT, WWCT, FWPR, FWPT)
+            y = _sanitize_water_rate(df[col]) if kw in _WATER_KEYWORDS else df[col]
             # Dashed for rates, solid for BHP and cumulative
             is_rate = kw in ("WOPR", "WWPR", "WGPR", "WGIR", "WWIR", "WOIR")
             is_bhp = kw == "WBHP"

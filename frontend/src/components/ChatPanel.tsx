@@ -26,6 +26,8 @@ export default function ChatPanel() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const connectionRef = useRef<ReturnType<typeof connectChat> | null>(null);
   const prevProviderRef = useRef(settings.llmProvider);
+  // Track tool names by toolCallId to include in tool results
+  const toolNamesRef = useRef<Map<string, string>>(new Map());
 
   // Auto-scroll to bottom
   const scrollToBottom = useCallback(() => {
@@ -71,6 +73,8 @@ export default function ChatPanel() {
         },
         onToolCall: (toolCall) => {
           if (!mountedRef.current) return;
+          // Store tool name by toolCallId for later use in onToolResult
+          toolNamesRef.current.set(toolCall.id, toolCall.function.name);
           const currentMessages = useChatStore.getState().messages;
           updateLastMessage({
             tool_calls: [...(currentMessages[currentMessages.length - 1]?.tool_calls || []), toolCall],
@@ -78,8 +82,12 @@ export default function ChatPanel() {
         },
         onToolResult: (toolCallId, result) => {
           if (!mountedRef.current) return;
+          // Retrieve tool name and include it in the message content
+          const toolName = toolNamesRef.current.get(toolCallId);
+          toolNamesRef.current.delete(toolCallId); // Clean up
           // result is a dict on the wire; React cannot render an object child
-          const content = typeof result === 'string' ? result : JSON.stringify(result, null, 2);
+          const resultObj = typeof result === 'string' ? JSON.parse(result) : result;
+          const content = JSON.stringify({ tool_name: toolName, content: resultObj }, null, 2);
           addMessage({ role: 'tool', content, tool_call_id: toolCallId });
         },
         onError: (error) => {
@@ -267,7 +275,14 @@ export default function ChatPanel() {
               {message.role === 'tool' && (() => {
                 let toolResult: { tool_name?: string; content?: { wells?: string[]; figure_json?: string } } | null = null;
                 try {
-                  toolResult = JSON.parse(message.content);
+                  const parsed = JSON.parse(message.content);
+                  // New format: { tool_name, content }
+                  if (parsed && typeof parsed === 'object' && 'tool_name' in parsed) {
+                    toolResult = parsed;
+                  } else {
+                    // Legacy format: direct tool result
+                    toolResult = { content: parsed };
+                  }
                 } catch {
                   // Not JSON, render as-is
                 }

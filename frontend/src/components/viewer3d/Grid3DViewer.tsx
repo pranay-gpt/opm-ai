@@ -69,12 +69,12 @@ function initialProperty(info: GridInfoResponse): string {
 }
 
 function CrossSectionOverlay({
-  data,
+  cells,
   stats,
   axis,
   index,
 }: {
-  data: Float32Array | null;
+  cells: { u: number; v: number; value: number }[] | null;
   stats: PropertyStats | null;
   axis: 'I' | 'J' | 'K';
   index: number;
@@ -83,7 +83,7 @@ function CrossSectionOverlay({
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || !data) return;
+    if (!canvas || !cells || cells.length === 0) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -99,7 +99,7 @@ function CrossSectionOverlay({
     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     ctx.fillRect(0, 0, displayWidth, displayHeight);
 
-    if (!stats || data.length === 0) {
+    if (!stats) {
       ctx.fillStyle = '#999';
       ctx.font = '12px system-ui, sans-serif';
       ctx.textAlign = 'center';
@@ -107,33 +107,67 @@ function CrossSectionOverlay({
       return;
     }
 
-    // Draw the slice as a simple heatmap
-    // We don't have the 2D grid layout here, so draw as a strip
-    // For a proper implementation, we'd need the 2D coordinates of each cell in the slice
-    // For now, draw a 1D representation
+    // Find bounds of u,v coordinates
+    let minU = Infinity, maxU = -Infinity, minV = Infinity, maxV = -Infinity;
+    for (const c of cells) {
+      if (c.u < minU) minU = c.u;
+      if (c.u > maxU) maxU = c.u;
+      if (c.v < minV) minV = c.v;
+      if (c.v > maxV) maxV = c.v;
+    }
+
+    const uRange = maxU - minU || 1;
+    const vRange = maxV - minV || 1;
+    const padding = 20;
+    const scaleX = (displayWidth - 2 * padding) / uRange;
+    const scaleY = (displayHeight - 2 * padding) / vRange;
+    const scale = Math.min(scaleX, scaleY);
+    const offsetX = padding + (displayWidth - 2 * padding - uRange * scale) / 2 - minU * scale;
+    const offsetY = padding + (displayHeight - 2 * padding - vRange * scale) / 2 - minV * scale;
 
     const min = stats.min;
     const max = stats.max;
     const range = max - min || 1;
 
-    // Draw as horizontal strips (each cell = one pixel row)
-    const stripHeight = displayHeight / Math.max(1, data.length);
-    for (let i = 0; i < data.length; i++) {
-      const v = data[i];
+    // Draw each cell as a rectangle
+    const cellSize = Math.max(2, scale * 0.9);
+    for (const c of cells) {
+      const v = c.value;
       if (!Number.isFinite(v)) continue;
       const t = (v - min) / range;
-      // Simple blue-to-red colormap
       const r = Math.round(255 * t);
       const b = Math.round(255 * (1 - t));
       ctx.fillStyle = `rgb(${r}, 0, ${b})`;
-      ctx.fillRect(0, i * stripHeight, displayWidth, Math.max(1, stripHeight));
+      const x = c.u * scale + offsetX;
+      const y = c.v * scale + offsetY;
+      ctx.fillRect(x, y, cellSize, cellSize);
     }
 
     // Axis label
     ctx.fillStyle = '#333';
     ctx.font = '11px system-ui, sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText(`${axis} = ${index} (${data.length} cells)`, 8, 16);
+    ctx.fillText(`${axis} = ${index} (${cells.length} cells)`, 8, 16);
+
+    // Axis labels
+    ctx.fillStyle = '#666';
+    ctx.font = '10px system-ui, sans-serif';
+    if (axis === 'K') {
+      ctx.textAlign = 'center';
+      ctx.fillText('I', displayWidth / 2, displayHeight - 4);
+      ctx.textAlign = 'right';
+      ctx.fillText('J', 4, displayHeight / 2);
+    } else if (axis === 'J') {
+      ctx.textAlign = 'center';
+      ctx.fillText('I', displayWidth / 2, displayHeight - 4);
+      ctx.textAlign = 'right';
+      ctx.fillText('K', 4, displayHeight / 2);
+    } else {
+      ctx.textAlign = 'center';
+      ctx.fillText('J', displayWidth / 2, displayHeight - 4);
+      ctx.textAlign = 'right';
+      ctx.fillText('K', 4, displayHeight / 2);
+    }
 
     // Legend
     if (stats.unit) {
@@ -142,7 +176,7 @@ function CrossSectionOverlay({
       ctx.textAlign = 'right';
       ctx.fillText(`${stats.name} [${stats.unit}]`, displayWidth - 8, displayHeight - 8);
     }
-  }, [data, stats, axis, index]);
+  }, [cells, stats, axis, index]);
 
   return (
     <canvas
@@ -241,7 +275,7 @@ export default function Grid3DViewer({ jobId, compact = false }: Grid3DViewerPro
   const [globalRangeError, setGlobalRangeError] = useState<string | null>(null);
 
   // Cross-section property data
-  const [crossSectionData, setCrossSectionData] = useState<Float32Array | null>(null);
+  const [crossSectionData, setCrossSectionData] = useState<{ u: number; v: number; value: number }[] | null>(null);
   const [crossSectionLoading, setCrossSectionLoading] = useState(false);
 
   // Well trajectory property data (property values along each well's trajectory)
@@ -498,29 +532,31 @@ export default function Grid3DViewer({ jobId, compact = false }: Grid3DViewerPro
       .then((buf) => {
         if (ac.signal.aborted) return;
         const parsed = parseProperty(buf);
-        // The property values are per active cell in grid order (i, j, k).
-        // We need to filter to only the cells at the given axis/index.
-        // The cells are stored in the order they were parsed from the grid.
-        // We need the ijk data from cellsRef to know which cells belong to the slice.
         const ijk = cellsRef.current?.ijk;
         if (!ijk) {
           setCrossSectionData(null);
           return;
         }
         const cellCount = ijk.length / 3;
-        const sliceValues = new Float32Array(cellCount);
-        let sliceCount = 0;
+        // Extract 2D coordinates (u, v) and values for cells in the slice
+        // For axis I: fixed i, u=j, v=k
+        // For axis J: fixed j, u=i, v=k
+        // For axis K: fixed k, u=i, v=j
+        const sliceCells: { u: number; v: number; value: number }[] = [];
         for (let c = 0; c < cellCount; c++) {
-          let coord = 0;
-          if (axis === 'I') coord = ijk[c * 3];
-          else if (axis === 'J') coord = ijk[c * 3 + 1];
-          else coord = ijk[c * 3 + 2];
+          const i = ijk[c * 3];
+          const j = ijk[c * 3 + 1];
+          const k = ijk[c * 3 + 2];
+          let coord = 0, u = 0, v = 0;
+          if (axis === 'I') { coord = i; u = j; v = k; }
+          else if (axis === 'J') { coord = j; u = i; v = k; }
+          else { coord = k; u = i; v = j; }
           // The index in the UI is 1-based, ijk is 0-based
           if (coord === index - 1) {
-            sliceValues[sliceCount++] = parsed.values[c];
+            sliceCells.push({ u, v, value: parsed.values[c] });
           }
         }
-        setCrossSectionData(sliceValues.subarray(0, sliceCount));
+        setCrossSectionData(sliceCells);
       })
       .catch((e) => {
         if (ac.signal.aborted) return;
@@ -531,7 +567,7 @@ export default function Grid3DViewer({ jobId, compact = false }: Grid3DViewerPro
       });
 
     return () => ac.abort();
-  }, [display.crossSection, property, step, isDynamic, jobId, info, engineGen]);
+  }, [display.crossSection, property, step, isDynamic, jobId, info]);
 
   // ── Well trajectory property data ──────────────────────────────────────
   useEffect(() => {
@@ -551,7 +587,8 @@ export default function Grid3DViewer({ jobId, compact = false }: Grid3DViewerPro
         if (ac.signal.aborted) return;
         const parsed = parseProperty(buf);
         const ijk = cellsRef.current?.ijk;
-        if (!ijk) {
+        const origin = cellsRef.current?.origin;
+        if (!ijk || !origin) {
           setWellTrajectoryData(null);
           return;
         }
@@ -568,17 +605,43 @@ export default function Grid3DViewer({ jobId, compact = false }: Grid3DViewerPro
 
         const trajectoryData = new Map<string, { depths: number[]; values: number[] }>();
         for (const well of wells) {
+          // Sample property along the well trajectory (not just completions)
+          // The trajectory is in viewer coordinates (origin subtracted, Z flipped)
+          // We need to convert trajectory points to grid IJK coordinates
           const depths: number[] = [];
           const values: number[] = [];
-          for (const comp of well.completions) {
-            const key = `${comp.i},${comp.j},${comp.k}`;
-            const val = propMap.get(key);
-            if (val !== undefined && Number.isFinite(val)) {
-              // Depth is positive down
-              depths.push(comp.center[2]);
-              values.push(val);
+
+          for (const trajPoint of well.trajectory) {
+            // trajPoint is [x, y, z] in viewer coordinates
+            // Convert to grid coordinates by finding the containing cell
+            // Simple approach: find the closest cell center
+            let bestDist = Infinity;
+            let bestVal: number | null = null;
+            let bestDepth = 0;
+
+            for (let c = 0; c < cellCount; c++) {
+              const cx = cellsRef.current!.centers[c * 3];
+              const cy = cellsRef.current!.centers[c * 3 + 1];
+              const cz = cellsRef.current!.centers[c * 3 + 2];
+              const dx = trajPoint[0] - cx;
+              const dy = trajPoint[1] - cy;
+              const dz = trajPoint[2] - cz;
+              const dist = dx * dx + dy * dy + dz * dz;
+              if (dist < bestDist) {
+                bestDist = dist;
+                const key = `${ijk[c * 3]},${ijk[c * 3 + 1]},${ijk[c * 3 + 2]}`;
+                bestVal = propMap.get(key) ?? null;
+                // Depth = origin[2] - viewer_z (positive down)
+                bestDepth = origin[2] - cz;
+              }
+            }
+
+            if (bestVal !== null && Number.isFinite(bestVal)) {
+              depths.push(bestDepth);
+              values.push(bestVal);
             }
           }
+
           if (depths.length > 0) {
             trajectoryData.set(well.name, { depths, values });
           }
@@ -594,7 +657,7 @@ export default function Grid3DViewer({ jobId, compact = false }: Grid3DViewerPro
       });
 
     return () => ac.abort();
-  }, [display.wellTrajectory, property, step, isDynamic, jobId, info, wells, engineGen]);
+  }, [display.wellTrajectory, property, step, isDynamic, jobId, info, wells]);
 
   // ── Wells ───────────────────────────────────────────────────────────
   useEffect(() => {
@@ -859,7 +922,7 @@ export default function Grid3DViewer({ jobId, compact = false }: Grid3DViewerPro
           {/* Cross-section overlay */}
           {display.crossSection && crossSectionData && (
             <CrossSectionOverlay
-              data={crossSectionData}
+              cells={crossSectionData}
               stats={stats}
               axis={display.crossSection.axis}
               index={display.crossSection.index}

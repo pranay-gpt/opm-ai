@@ -129,10 +129,38 @@ FIELD = KeywordSpec(
     size_kind=SizeKind.NONE,
 )
 
+# UNITS — declares a unit constant for a UDQ. Format:
+#   UNITS <udq_name> <constant> <unit_text> /
+# Each record is 3 items. UDA list covers the variable name
+# and constant value; trailing unit text is also UDA.
 UNITS = KeywordSpec(
     name="UNITS",
-    sections=[SectionName.RUNSPEC, SectionName.SCHEDULE],  # observed in SCHEDULE too
-    size_kind=SizeKind.NONE,
+    sections=[SectionName.RUNSPEC, SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 3,
+    multi_record=True,
+)
+
+# ASSIGN — assigns a value to a UDQ. Format:
+#   ASSIGN <udq_name> <value> /
+# Each record is 2 items.
+ASSIGN = KeywordSpec(
+    name="ASSIGN",
+    sections=[SectionName.RUNSPEC, SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 2,
+    multi_record=True,
+)
+
+# DEFINE — defines a UDQ expression. Format:
+#   DEFINE <udq_name> <expression> /
+# Each record is N items (variable name + expression tokens).
+DEFINE = KeywordSpec(
+    name="DEFINE",
+    sections=[SectionName.RUNSPEC, SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+    multi_record=True,
 )
 
 # RUNSPEC additions (commonly-seen capacity / option keywords)
@@ -1638,6 +1666,7 @@ _register(
     PDVD, WRFTPLT, COMPORD, COMPLUMP, HYSTER, EXTRAPMS, CARFIN,
     BOX, ENDBOX, ENDFIN, UDQDIMS, EDITNNC, GUIDERAT, TRACER,
     IMBNUM, WLIFTOPT, SOF3, SGL,
+    ASSIGN, DEFINE,
 )
 _register_dict(PHASES)
 _register_dict(SUMMARY_VARS)

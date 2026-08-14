@@ -248,6 +248,11 @@ def _extract_symbol(kw: Keyword):
         return _extract_fuvar(kw)
     if name == "UDQ" and kw.records:
         return _extract_udq(kw)
+    # UNITS / ASSIGN / DEFINE are standalone UDQ-declaration
+    # keywords. Each declares a UDQ name; add it to fu_vars so
+    # L224 doesn't flag downstream SUMMARY references.
+    if name in {"UNITS", "ASSIGN", "DEFINE", "UPDATE"} and kw.records:
+        return _extract_udq_decl(kw)
     return None
 
 
@@ -622,6 +627,55 @@ def _extract_udq(kw: Keyword):
             st.fu_vars[name] = FuVarInfo(
                 name=name,
                 kind="rudq",
+                source_file=src,
+                source_line=rec.line,
+            )
+
+    return add
+
+
+def _extract_udq_decl(kw: Keyword):
+    """Build an add-UDQ-definitions function for standalone UDQ
+    declaration keywords (UNITS / ASSIGN / DEFINE / UPDATE).
+
+    Format per record:
+      UNITS <udq_name> <constant> <unit_text> /
+      ASSIGN <udq_name> <value> /
+      DEFINE <udq_name> <expression>... /
+      UPDATE <udq_name> <expression>... /
+
+    The UDQ name is item[0] in each record.
+    """
+    if not kw.records:
+        return None
+    src = Path(kw.header_token.source_file).resolve() if kw.header_token.source_file else None
+    # All UNITS/ASSIGN/DEFINE/UPDATE declarations are RUDQ-style
+    # unless the name starts with WU_/GU_/CU_/AU_ (well/group/etc).
+    kind_map = {
+        "WU_": "wu",
+        "GU_": "gu",
+        "CU_": "cu",
+        "AU_": "au",
+        "RU_": "ru",
+    }
+
+    def add(st: SymbolTable) -> None:
+        for rec in kw.records:
+            if not rec.items:
+                continue
+            name = _token_to_str(rec.items[0])
+            if not name:
+                continue
+            if name in st.fu_vars:
+                continue
+            kind = "rudq"
+            for prefix, k in kind_map.items():
+                if name.startswith(prefix):
+                    kind = k
+                    break
+            st.fu_vars[name] = FuVarInfo(
+                name=name,
+                kind=kind,
                 source_file=src,
                 source_line=rec.line,
             )

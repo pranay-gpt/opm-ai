@@ -1,8 +1,9 @@
 # Results Page enrichment, Import Results, Export Graph
 
 Date: 2026-08-14
-Status: design — pending user approval
-Branch: `feat/results-page-enrichment` (new, off `feat/v2-linter-grammar` @ `971ff00`)
+Status: design — approved, implementation in progress
+Branch: `feat/results-page-enrichment` (off `feat/v2-linter-grammar` @ `971ff00`;
+the linter branch has added `6268320` since, see "Merge order" below)
 Scope: Results Viewer (KPIs / Plots / 3D tabs), chat tools, Import Results, Export Graph
 
 ## Goal
@@ -29,8 +30,20 @@ Concretely, the user gets:
    contains valid Eclipse files.
 5. **Export Graph**: per-chart PNG / SVG (client-side via Plotly) and CSV
    download (new lightweight endpoint) for every chart on the Results page.
+   CSV export supports **three frequencies**: `native` (the file's own
+   report steps, no resampling), `monthly`, and `yearly`. Backend resampling
+   because rate and cumulative vectors need different aggregation rules
+   and we want the chat tools to reuse the same logic.
 6. **Three new chat tools** so the engineer can ask "show WBHP for PROD1
    vs INJ1" in plain language and get a chat-bubble figure back.
+
+**Operating principle — plot only what is present.** Nothing in this
+design fabricates vectors. `categorizer.py` returns only the groups
+that have at least one vector present in the DataFrame; `plot_groups.py`
+emits a trace only for columns that exist; the KPI grid shows only KPIs
+`extract_kpis` actually computed. The Plotly figures look sparse when
+the run only had a handful of vectors — that is the correct behavior,
+not a bug to paper over with placeholders or zero-filled series.
 
 Explicitly out of scope (deferred, not promised):
 
@@ -103,15 +116,58 @@ Three new endpoints:
 - `GET /api/results/{id}/plot_group/{group}?wells=A,B&vectors=FOPR,FWPR&log=true`
   -> `PlotGroupResponse { figure_json: str }`. Figure is `""` on failure
   (F1.5 audit pattern: empty card on the client, trace in server log).
-- `GET /api/results/{id}/csv?group=field_rates&vectors=FOPR,FWPR` ->
-  `text/csv` response. The CSV is the underlying summary DataFrame sliced
+- `GET /api/results/{id}/csv?group=field_rates&vectors=FOPR,FWPR&freq=native`
+  -> `text/csv` response. The CSV is the underlying summary DataFrame sliced
   to `TIME` + the requested vectors; the client does the per-well slicing
   for `well_rates` because the columns are already named `WOPR:PROD1`.
+
+  `freq` is one of `native` (default), `monthly`, `yearly`. Resampling
+  happens in `opm_ai/postprocess/resample.py` (new, ~60 lines) with rules
+  pinned by vector suffix (see "Resampling rules" below). The endpoint
+  returns a header row even when no rows match (same `TIME,\n` behavior
+  as today).
 
 Validation: `wells` and `vectors` query params must be non-empty strings
 of safe identifiers (regex `[A-Za-z0-9_:,.-]+`). No path traversal —
 the only filesystem access is the existing `job_output_dir(job)` which
 already goes through `paths.validate_deck_path`.
+
+**Resampling rules** (`opm_ai/postprocess/resample.py`, new):
+
+The summary file's TIME column is whatever the deck asked Flow to write —
+daily, monthly, yearly, or irregular. `freq=native` returns the file
+verbatim. `freq=monthly` / `freq=yearly` resample with rules keyed off the
+**last character of the column name** (the vector suffix):
+
+| Suffix | Meaning | Aggregation per bucket |
+|---|---|---|
+| `R` | rate | `mean` — time-average rate over the bucket |
+| `IR` | injection rate | `mean` |
+| `T` | cumulative total | `last` — snapshot at bucket end |
+| `IT` | cumulative injection | `last` |
+| `IP` | in-place volume | `last` |
+| `P`, `PR` | pressure | `mean` |
+| `SAT` | saturation | `mean` |
+| `OR` | gas-oil ratio | `mean` |
+| `CT` | water cut | `mean` |
+| `GP` | gas production rate | `mean` |
+| anything else | unknown | `mean` (defensible default) |
+
+Well-level columns inherit the rule from their suffix (`WOPR:PROD1` -> rate,
+mean). TIME itself becomes the bucket-end timestamp via
+`df.resample(rule).last().index`. Bucket boundary handling: if a vector
+appears at multiple timesteps within a bucket, the rule is applied to
+all values; if it appears zero times in a bucket, the row is dropped
+(no zero-fill).
+
+Implementation: a single `resample_summary(df, freq: str) -> pd.DataFrame`
+function. `freq` is one of `"native"` (early return, copy of df), `"M"`
+(monthly), `"Y"` (yearly). Uses `pd.DataFrame.resample` on a DatetimeIndex
+derived from the `TIME` column. If the TIME column is not parseable as
+datetime (rare but possible — some decks store report step index instead
+of date), `resample_summary` falls back to step-based bucketing: floor of
+`(step / days_per_bucket)` where `days_per_bucket = 30` for monthly, `365`
+for yearly. Both code paths unit-tested.
 
 **`opm_ai/api/routes/imported_results.py`** (new, ~180 lines)
 
@@ -205,8 +261,14 @@ Renders one Plotly figure. Adds an export menu in the card header:
 
 - **PNG** — `Plotly.downloadImage(div, {format: 'png', width, height, filename})`.
 - **SVG** — same with `format: 'svg'`.
-- **CSV** — fetches `/api/results/{id}/csv?group=...&vectors=...` and
-  triggers a client-side download via a blob URL.
+- **CSV (native)** — fetches
+  `/api/results/{id}/csv?group=...&vectors=...&freq=native` (default).
+- **CSV (monthly)** — same with `freq=monthly`.
+- **CSV (yearly)** — same with `freq=yearly`.
+
+All three CSV variants trigger a client-side download via a blob URL;
+the filename suffix encodes the frequency so the user can tell them
+apart (`PROD1_WBHP_native.csv` vs `PROD1_WBHP_monthly.csv`).
 
 The export menu is a small `<details>` dropdown to avoid pulling in a popover
 library. Empty figure JSON renders the same empty-state as today.
@@ -296,7 +358,8 @@ User clicks Export Graph > PNG / SVG / CSV on any PlotCard
 |---|---|---|---|---|
 | `categorizer.py` | DataFrame -> CategorizedVectors | postprocess/summary | ~100 | unit + fixtures |
 | `plot_groups.py` | DataFrame + selection -> Plotly figure | postprocess/summary | ~250 | unit + fixtures |
-| `routes/results.py` (added routes) | categories / plot_group / csv | categorizer, plot_groups, kpi | +120 | integration |
+| `resample.py` | DataFrame + freq -> resampled DataFrame | postprocess/summary | ~60 | unit + fixtures |
+| `routes/results.py` (added routes) | categories / plot_group / csv | categorizer, plot_groups, resample, kpi | +140 | integration |
 | `routes/imported_results.py` | Multipart upload + virtual job | job_store, paths | ~180 | integration |
 | `routes/chat.py` (added tools) | list / plot / compare well vectors | categorizer, plot_groups | +100 | integration |
 | `ResultsControlRail.tsx` | Tab-specific well + vector selector | types | ~280 | RTL |
@@ -335,6 +398,10 @@ in isolation.
   empty df, only field, only well, mixed, no positive producer, mixed
   producer/injector, all groups empty, RFT column present (ignored),
   weird column names, duplicate well names with different roles.
+- `tests/unit/test_resample.py` (8 cases):
+  native is identity, monthly rate = mean, monthly cumulative = last,
+  yearly pressure = mean, datetime vs step-index fallback, mixed
+  suffixes in one frame, empty bucket dropped, missing vector in bucket.
 - `tests/unit/test_plot_groups.py` (15 cases):
   one per group, multi-well, log-scale, negative-zero sanitization,
   empty wells, missing vectors, all-scalar columns, single timestep.
@@ -365,7 +432,7 @@ in isolation.
 - Extend `frontend/src/components/ResultsViewer.test.ts`:
   new tab structure, virtual job load, chat tool integration.
 
-Target: 332 (current) + ~50 new tests = ~382 total, all green before merge.
+Target: 332 (current) + ~60 new tests = ~392 total, all green before merge.
 
 ## Branch and commit strategy
 
@@ -375,33 +442,34 @@ to the linter branch worker and are not touched here).
 
 New branch: `feat/results-page-enrichment`.
 
-9 commits, each green:
+10 commits, each green:
 
 1. `opm-ai: results — categorizer (field/well/injection groups) + tests`
 2. `opm-ai: results — plot_groups (one builder per vector family) + tests`
-3. `opm-ai: api — /categories, /plot_group, /csv endpoints + tests`
-4. `opm-ai: api — /imported-results (virtual-job registration) + tests`
-5. `opm-ai: api — chat tools (list_vectors, plot_well_vectors, compare_wells) + tests`
-6. `frontend: results — left-side control rail + extracted PlotCard`
-7. `frontend: results — Import Results button + modal`
-8. `frontend: viewer3d — cross-section + well property overlay`
-9. `frontend: results — Export Graph (PNG/SVG/CSV) + ChatPanel figure rendering`
+3. `opm-ai: results — resample (native/monthly/yearly) + tests`
+4. `opm-ai: api — /categories, /plot_group, /csv endpoints + tests`
+5. `opm-ai: api — /imported-results (virtual-job registration) + tests`
+6. `opm-ai: api — chat tools (list_vectors, plot_well_vectors, compare_wells) + tests`
+7. `frontend: results — left-side control rail + extracted PlotCard`
+8. `frontend: results — Import Results button + modal`
+9. `frontend: viewer3d — cross-section + well property overlay`
+10. `frontend: results — Export Graph (PNG/SVG/CSV at 3 frequencies) + ChatPanel figure rendering`
 
 ### Merge order (post-completion)
 
 The linter branch (`feat/v2-linter-grammar`) is in active development.
-After this branch lands:
+At spec-write time the branch tip is `971ff00` (this branch's parent).
+At implementation-start time the linter branch has added `6268320`
+(GRIDUNIT/ASSIGN widening). The two branches touch disjoint files
+(linter = `opm_ai/linter/`; this = `opm_ai/postprocess/` +
+`opm_ai/api/routes/results.py` + `frontend/src/...`), so the merge
+should be conflict-free regardless of order.
 
-1. **If linter is finished first**: rebase `feat/results-page-enrichment`
-   onto `feat/v2-linter-grammar` (likely a fast-forward or trivial merge),
-   then merge into `feat/v2-linter-grammar` and let that branch merge into
-   `main` as a single feature.
-2. **If this branch finishes first**: hold; merge into
-   `feat/v2-linter-grammar` when the linter branch is ready for `main`.
-
-The branches touch disjoint files (linter = `opm_ai/linter/`, this branch =
-`opm_ai/postprocess/` + `opm_ai/api/routes/results.py` + `frontend/src/...`),
-so the merge should be conflict-free regardless of order.
+Plan: when both branches are ready for `main`, the linter branch
+rebases onto this branch's tip (or vice versa — both work), then
+both merge into `main`. If linter finishes first, it merges into
+`main` and we rebase this branch onto updated `main` before merging.
+If this branch finishes first, we hold and merge when linter is ready.
 
 ## Decisions recorded
 
@@ -423,3 +491,14 @@ so the merge should be conflict-free regardless of order.
   data with more context; KPIs would duplicate.
 - **No side-by-side job comparison**: out of scope; would need a new
   layout primitive and selection state that crosses tab boundaries.
+- **CSV resampling on the backend, not the client**: the summary
+  DataFrame is already in memory after the first `/categories` call,
+  but resampling needs different aggregation rules per vector suffix
+  (mean for rates, last for cumulative, etc.) and the chat tools need
+  the same logic. Doing it once on the server keeps the chat and the
+  UI consistent and the response small.
+- **Resampling rules keyed by vector suffix**: enumerated in the
+  "Resampling rules" subsection above. The default for unrecognized
+  suffixes is `mean` — a wrong default that errs toward smoothness
+  rather than toward invented precision, and documented so future
+  maintainers see the assumption.

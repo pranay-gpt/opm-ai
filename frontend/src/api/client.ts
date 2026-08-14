@@ -38,6 +38,10 @@ import type {
   GridWellType,
   GridWellCompletion,
   GridWellsResponse,
+  CategorizedVectors,
+  PlotGroupResponse,
+  CsvFrequency,
+  VectorGroup,
 } from '../types';
 
 // ============================================
@@ -214,6 +218,40 @@ export const api = {
   gridWells: (jobId: string, step = 0, signal?: AbortSignal): Promise<GridWellsResponse> =>
     fetchJson<GridWellsResponse>(`/results/${jobId}/grid/wells?step=${step}`, { signal }),
 
+  // Results page enrichment (Task 4)
+  categories: (jobId: string): Promise<CategorizedVectors> =>
+    fetchJson<CategorizedVectors>(`/results/${jobId}/categories`),
+
+  plotGroup: (
+    jobId: string,
+    group: string,
+    opts: { wells?: string[]; vectors?: string[]; log?: boolean } = {}
+  ): Promise<PlotGroupResponse> => {
+    const params = new URLSearchParams();
+    if (opts.wells?.length) params.set('wells', opts.wells.join(','));
+    if (opts.vectors?.length) params.set('vectors', opts.vectors.join(','));
+    if (opts.log) params.set('log', 'true');
+    const qs = params.toString();
+    return fetchJson<PlotGroupResponse>(`/results/${jobId}/plot_group/${group}${qs ? `?${qs}` : ''}`);
+  },
+
+  csv: async (
+    jobId: string,
+    opts: { group: string; vectors: string[]; freq?: CsvFrequency }
+  ): Promise<string> => {
+    const params = new URLSearchParams();
+    params.set('group', opts.group);
+    params.set('vectors', opts.vectors.join(','));
+    if (opts.freq && opts.freq !== 'native') params.set('freq', opts.freq);
+    const response = await fetch(`${API_BASE}/results/${jobId}/csv?${params.toString()}`, {
+      headers: { Accept: 'text/csv' },
+    });
+    if (!response.ok) {
+      throw await errorFromResponse(response);
+    }
+    return response.text();
+  },
+
   // Explainer
   explainConcept: (request: ExplainRequest): Promise<ExplainResponse> =>
     fetchJson<ExplainResponse>('/explain', {
@@ -326,6 +364,10 @@ export type {
   GridWellType,
   GridWellCompletion,
   GridWellsResponse,
+  CategorizedVectors,
+  PlotGroupResponse,
+  CsvFrequency,
+  VectorGroup,
 };
 
 // ============================================

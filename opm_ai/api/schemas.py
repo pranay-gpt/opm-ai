@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from enum import Enum
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, Optional
 from uuid import UUID, uuid4
@@ -229,6 +230,39 @@ class KPIsResponse(BaseModel):
     kpis: dict[str, Any]
     plots: dict[str, str]  # plot_name -> Plotly JSON (fig.to_json())
     viewer_available: bool = False  # True if /api/results/{id}/resinsight can launch a GUI
+
+
+class CsvFrequency(str, Enum):
+    """Resampling frequency for CSV export."""
+    NATIVE = "native"
+    MONTHLY = "monthly"
+    YEARLY = "yearly"
+
+
+class CategorizedVectorsResponse(BaseModel):
+    """Categorised view of a summary DataFrame."""
+    model_config = ConfigDict(from_attributes=True)
+
+    field_rates: list[str] = []
+    field_cumulative: list[str] = []
+    field_derived: list[str] = []
+    well_rates: dict[str, list[str]] = {}
+    well_cumulative: dict[str, list[str]] = {}
+    well_injection: dict[str, list[str]] = {}
+    wells: list[str] = []
+
+
+class PlotGroupResponse(BaseModel):
+    """Response from /plot_group/{group}.
+
+    `figure_json` is `""` when plot generation failed (the route already
+    logged the trace; the client renders an empty card).
+    """
+    model_config = ConfigDict(from_attributes=True)
+
+    group: str
+    figure_json: str = ""
+    error: str | None = None
 
 
 class SnapshotsResponse(BaseModel):

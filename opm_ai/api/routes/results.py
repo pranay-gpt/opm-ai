@@ -3,19 +3,30 @@ POST /api/results/{job_id}/resinsight -> launch ResInsight GUI (localhost-gated)
 
 import asyncio
 import os
+import re
 import threading
 
 from fastapi import APIRouter, HTTPException, Request
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from loguru import logger
 from pathlib import Path
 
 from opm_ai.api.job_helpers import job_output_dir
-from opm_ai.api.schemas import KPIsResponse, ResinsightLaunchResponse, SnapshotsResponse
+from opm_ai.api.schemas import (
+    CategorizedVectorsResponse,
+    CsvFrequency,
+    KPIsResponse,
+    PlotGroupResponse,
+    ResinsightLaunchResponse,
+    SnapshotsResponse,
+)
 from opm_ai.api.job_store import get_job
 from opm_ai.postprocess.summary import read_summary
 from opm_ai.postprocess.kpi import extract_kpis
 from opm_ai.postprocess.plots import plot_production, plot_pressure
+from opm_ai.postprocess.categorizer import categorize
+from opm_ai.postprocess.plot_groups import plot_group as build_plot_group
+from opm_ai.postprocess.resample import resample_summary
 from opm_ai.postprocess.resinsight_bridge import (
     export_snapshots,
     find_case_file,
@@ -31,6 +42,23 @@ router = APIRouter()
 # "one process per job" guard, not for cleanup.
 _launched_resinsight_pids: dict[str, int] = {}
 _launched_resinsight_lock = threading.Lock()
+
+_SAFE_ID_RE = re.compile(r"^[A-Za-z0-9_:,.-]+$")
+
+_KNOWN_PLOT_GROUPS = {
+    "field_rates", "field_cumulative", "field_derived",
+    "well_rates", "well_cumulative", "well_injection",
+}
+
+
+def _split_csv_param(raw: str | None) -> list[str]:
+    if not raw:
+        return []
+    parts = [p.strip() for p in raw.split(",") if p.strip()]
+    for p in parts:
+        if not _SAFE_ID_RE.match(p):
+            raise HTTPException(status_code=400, detail=f"Unsafe identifier in param: {p!r}")
+    return parts
 
 
 def _pid_alive(pid: int) -> bool:
@@ -251,3 +279,71 @@ async def launch_resinsight_route(job_id: str, request: Request) -> ResinsightLa
         _launched_resinsight_pids[job_id] = pid
 
     return ResinsightLaunchResponse(launched=True, pid=pid, reason=None, error=None)
+
+
+@router.get("/results/{job_id}/categories", response_model=CategorizedVectorsResponse)
+async def get_categories(job_id: str) -> CategorizedVectorsResponse:
+    """Categorise summary columns into priority vector families."""
+    output_dir = _completed_job_output_dir(job_id)
+    df = read_summary(output_dir)
+    cats = categorize(df)
+    return CategorizedVectorsResponse(**cats)
+
+
+@router.get("/results/{job_id}/plot_group/{group}", response_model=PlotGroupResponse)
+async def get_plot_group(
+    job_id: str,
+    group: str,
+    wells: str | None = None,
+    vectors: str | None = None,
+    log: bool = False,
+) -> PlotGroupResponse:
+    """Build a Plotly figure for one priority vector group."""
+    if group not in _KNOWN_PLOT_GROUPS:
+        # Unknown group is a 200 with empty json so the client shows the
+        # standard empty-state rather than a hard error. The route logs
+        # the actual trace when plot generation fails (below).
+        return PlotGroupResponse(group=group, figure_json="", error=f"Unknown group: {group}")
+
+    output_dir = _completed_job_output_dir(job_id)
+    df = read_summary(output_dir)
+    if df.empty:
+        return PlotGroupResponse(group=group, figure_json="", error="Empty summary")
+
+    well_list = _split_csv_param(wells)
+    vector_list = _split_csv_param(vectors) or None
+
+    try:
+        fig = build_plot_group(group, df, well_list, vector_list, log_scale=log)
+        return PlotGroupResponse(group=group, figure_json=fig.to_json(), error=None)
+    except Exception:
+        logger.exception("Plot group %s failed for job %s", group, job_id)
+        return PlotGroupResponse(group=group, figure_json="", error="plot generation failed")
+
+
+@router.get("/results/{job_id}/csv")
+async def get_csv(
+    job_id: str,
+    group: str,
+    vectors: str,
+    freq: CsvFrequency = CsvFrequency.NATIVE,
+) -> Response:
+    """Return a CSV slice of the summary DataFrame at the requested frequency."""
+    _split_csv_param(vectors)  # validates; raises 400 on bad chars
+
+    output_dir = _completed_job_output_dir(job_id)
+    df = read_summary(output_dir)
+    if df.empty:
+        return Response(content="TIME\n", media_type="text/csv")
+
+    requested = [v.strip() for v in vectors.split(",") if v.strip()]
+    present = [v for v in requested if v in df.columns]
+    if not present:
+        return Response(content="TIME\n", media_type="text/csv")
+
+    slice_df = df[["TIME", *present]].copy()
+    if freq != CsvFrequency.NATIVE:
+        slice_df = resample_summary(slice_df, freq.value)
+
+    csv_body = slice_df.to_csv(index=False)
+    return Response(content=csv_body, media_type="text/csv")

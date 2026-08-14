@@ -159,6 +159,33 @@ export interface ResinsightLaunchResponse {
   error: string | null;
 }
 
+// Results Page enrichment (Task 4)
+export type VectorGroup =
+  | 'field_rates'
+  | 'field_cumulative'
+  | 'field_derived'
+  | 'well_rates'
+  | 'well_cumulative'
+  | 'well_injection';
+
+export interface CategorizedVectors {
+  field_rates: string[];
+  field_cumulative: string[];
+  field_derived: string[];
+  well_rates: Record<string, string[]>;
+  well_cumulative: Record<string, string[]>;
+  well_injection: Record<string, string[]>;
+  wells: string[];
+}
+
+export interface PlotGroupResponse {
+  group: string;
+  figure_json: string;
+  error?: string | null;
+}
+
+export type CsvFrequency = 'native' | 'monthly' | 'yearly';
+
 // ============================================
 // 3D grid viewer (docs/3d-viewer-contract.md section 1)
 // ============================================

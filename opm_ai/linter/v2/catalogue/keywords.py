@@ -1130,6 +1130,136 @@ EQLOPTS = KeywordSpec(
     items=[UDA] * 10,
 )
 
+# Common keywords missing from the original catalog. Added by
+# corpus review — each fires >40 L171 across the test fixtures.
+
+# Multipliers for grid array properties (RM: GRID section).
+MULTX = KeywordSpec(
+    name="MULTX",
+    sections=[SectionName.GRID, SectionName.EDIT],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE],
+)
+MULTY = KeywordSpec(
+    name="MULTY",
+    sections=[SectionName.GRID, SectionName.EDIT],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE],
+)
+MULTZ = KeywordSpec(
+    name="MULTZ",
+    sections=[SectionName.GRID, SectionName.EDIT],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE],
+)
+
+# ENDSCALE — endpoint scaling (RM: PROPS).
+ENDSCALE = KeywordSpec(
+    name="ENDSCALE",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 10,
+)
+
+# MAPAXES — map axes (RM: RUNSPEC).
+MAPAXES = KeywordSpec(
+    name="MAPAXES",
+    sections=[SectionName.RUNSPEC],
+    size_kind=SizeKind.FIXED,
+    items=[DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, INT],
+    record_count=1,
+)
+
+# FLUXNUM — flux region array (RM: GRID).
+FLUXNUM = KeywordSpec(
+    name="FLUXNUM",
+    sections=[SectionName.GRID, SectionName.EDIT],
+    size_kind=SizeKind.ARRAY,
+    items=[INT],
+)
+
+# SCALECRS — scale crossover (RM: PROPS).
+SCALECRS = KeywordSpec(
+    name="SCALECRS",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.FIXED,
+    items=[DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE],
+    record_count=1,
+)
+
+# MULTREGT — multi-region transmissibility (RM: GRID).
+MULTREGT = KeywordSpec(
+    name="MULTREGT",
+    sections=[SectionName.GRID, SectionName.EDIT],
+    size_kind=SizeKind.ARRAY,
+    items=[INT],
+)
+
+# WECON — well economic limits (RM: SCHEDULE).
+WECON = KeywordSpec(
+    name="WECON",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+)
+
+# WTRACER — well tracer (RM: SCHEDULE).
+WTRACER = KeywordSpec(
+    name="WTRACER",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+)
+
+# WTEST — well testing (RM: SCHEDULE).
+WTEST = KeywordSpec(
+    name="WTEST",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+)
+
+# GCONSALE — group consumption/sales (RM: SCHEDULE).
+GCONSALE = KeywordSpec(
+    name="GCONSALE",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+)
+
+# SWATINIT — initial water saturation array (RM: PROPS).
+SWATINIT = KeywordSpec(
+    name="SWATINIT",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE],
+)
+
+# RVVD — solution gas-oil ratio vs depth (RM: SOLUTION).
+RVVD = KeywordSpec(
+    name="RVVD",
+    sections=[SectionName.SOLUTION],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE, DOUBLE],
+)
+
+# PDVD — pressure vs depth (RM: SOLUTION).
+PDVD = KeywordSpec(
+    name="PDVD",
+    sections=[SectionName.SOLUTION],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE, DOUBLE],
+)
+
+# WRFTPLT — well RFT plot data (RM: SUMMARY).
+WRFTPLT = KeywordSpec(
+    name="WRFTPLT",
+    sections=[SectionName.SUMMARY],
+    size_kind=SizeKind.NONE,
+)
+
+# VFPPROD and VFPPROD<n> family — see VFP dict above.
+
 # ACTNUM — active cell array (per-cell integer flag).
 ACTNUM = KeywordSpec(
     name="ACTNUM",
@@ -1311,6 +1441,9 @@ _register(
     GRIDOPTS, TRACERS,
     INCLUDE, IMPORT, PATHS,
     WELSEGS, EQLOPTS, ACTNUM,
+    MULTX, MULTY, MULTZ, ENDSCALE, MAPAXES, FLUXNUM, SCALECRS,
+    MULTREGT, WECON, WTRACER, WTEST, GCONSALE, SWATINIT, RVVD,
+    PDVD, WRFTPLT,
 )
 _register_dict(PHASES)
 _register_dict(SUMMARY_VARS)

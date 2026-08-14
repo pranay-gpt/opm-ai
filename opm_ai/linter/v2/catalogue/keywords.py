@@ -160,7 +160,12 @@ FAULTDIM = KeywordSpec(
 GRIDUNIT = KeywordSpec(
     name="GRIDUNIT",
     sections=[SectionName.RUNSPEC, SectionName.GRID],  # RM: GRID; RUNSPEC is also valid (OPM)
-    size_kind=SizeKind.NONE,
+    # GRIDUNIT takes 1-3 unit strings (METRES, FEET, LAB, RES,
+    # etc.) per record. Use UDA list with multi_record=True so the
+    # parser stays open across `/` and accepts any unit-name token.
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 3,
+    multi_record=True,
 )
 MESSAGES = KeywordSpec(
     name="MESSAGES",
@@ -1292,6 +1297,159 @@ WRFTPLT = KeywordSpec(
     multi_record=True,
 )
 
+# COMPORD — well completion order (RM: SCHEDULE).
+COMPORD = KeywordSpec(
+    name="COMPORD",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+)
+
+# COMPLUMP — well completion lumping (RM: SCHEDULE).
+COMPLUMP = KeywordSpec(
+    name="COMPLUMP",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+)
+
+# HYSTER — hysteresis option (RM: PROPS). Also valid in
+# RUNSPEC (option declaration).
+HYSTER = KeywordSpec(
+    name="HYSTER",
+    sections=[
+        SectionName.PROPS,
+        SectionName.RUNSPEC,
+    ],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 10,
+)
+
+# EXTRAPMS — extrapolation method (RM: SOLUTION). Also valid
+# in RUNSPEC (option declaration) and SCHEDULE.
+EXTRAPMS = KeywordSpec(
+    name="EXTRAPMS",
+    sections=[
+        SectionName.SOLUTION,
+        SectionName.RUNSPEC,
+        SectionName.SCHEDULE,
+    ],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 10,
+)
+
+# CARFIN — carbonate finalization (RM: SCHEDULE). Also valid
+# in GRID (declared early).
+CARFIN = KeywordSpec(
+    name="CARFIN",
+    sections=[SectionName.SCHEDULE, SectionName.GRID],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+)
+
+# BOX / ENDBOX / ENDFIN — box / box-end / final section markers.
+# Also valid in SCHEDULE (for some restart flows) and PRELUDE.
+BOX = KeywordSpec(
+    name="BOX",
+    sections=[
+        SectionName.GRID,
+        SectionName.SCHEDULE,
+    ],
+    size_kind=SizeKind.LIST,
+    items=[INT, INT, INT, INT, INT, INT],
+    record_count=1,
+)
+ENDBOX = KeywordSpec(
+    name="ENDBOX",
+    sections=[
+        SectionName.GRID,
+        SectionName.SCHEDULE,
+        SectionName.PRELUDE,
+    ],
+    size_kind=SizeKind.NONE,
+)
+ENDFIN = KeywordSpec(
+    name="ENDFIN",
+    sections=[
+        SectionName.SCHEDULE,
+        SectionName.GRID,
+    ],
+    size_kind=SizeKind.NONE,
+)
+
+# UDQDIMS — user-defined quantity dimensions (RM: RUNSPEC).
+UDQDIMS = KeywordSpec(
+    name="UDQDIMS",
+    sections=[SectionName.RUNSPEC],
+    size_kind=SizeKind.FIXED,
+    items=[INT] * 7,
+    record_count=1,
+)
+
+# EDITNNC — edit non-neighbor connection (RM: EDIT).
+EDITNNC = KeywordSpec(
+    name="EDITNNC",
+    sections=[SectionName.EDIT, SectionName.GRID],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+)
+
+# GUIDERAT — guide rate (RM: SCHEDULE).
+GUIDERAT = KeywordSpec(
+    name="GUIDERAT",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+)
+
+# TRACER — tracer data (RM: PROPS, SUMMARY).
+TRACER = KeywordSpec(
+    name="TRACER",
+    sections=[SectionName.PROPS, SectionName.SUMMARY],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+)
+
+# IMBNUM — imbibition region array (RM: GRID, EDIT). Also
+# valid in PRELUDE and REGIONS.
+IMBNUM = KeywordSpec(
+    name="IMBNUM",
+    sections=[
+        SectionName.GRID,
+        SectionName.EDIT,
+        SectionName.PRELUDE,
+        SectionName.PROPS,  # REGIONS is a PROPS sub-section
+    ],
+    size_kind=SizeKind.ARRAY,
+    items=[INT],
+)
+
+# WLIFTOPT — well lift optimization (RM: SCHEDULE).
+WLIFTOPT = KeywordSpec(
+    name="WLIFTOPT",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+)
+
+# SOF3 — 3-phase oil saturation table (RM: PROPS). Each record
+# is a wide row of up to ~120 items (one per gas-saturation step).
+SOF3 = KeywordSpec(
+    name="SOF3",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 200,
+    multi_record=True,
+)
+
+# SGL — gas saturation table (RM: PROPS).
+SGL = KeywordSpec(
+    name="SGL",
+    sections=[SectionName.PROPS],
+    size_kind=SizeKind.ARRAY,
+    items=[DOUBLE],
+)
+
 # VFPPROD and VFPPROD<n> family — see VFP dict above.
 
 # ACTNUM — active cell array (per-cell integer flag).
@@ -1477,7 +1635,9 @@ _register(
     WELSEGS, EQLOPTS, ACTNUM,
     MULTX, MULTY, MULTZ, ENDSCALE, MAPAXES, FLUXNUM, SCALECRS,
     MULTREGT, WECON, WTRACER, WTEST, GCONSALE, SWATINIT, RVVD,
-    PDVD, WRFTPLT,
+    PDVD, WRFTPLT, COMPORD, COMPLUMP, HYSTER, EXTRAPMS, CARFIN,
+    BOX, ENDBOX, ENDFIN, UDQDIMS, EDITNNC, GUIDERAT, TRACER,
+    IMBNUM, WLIFTOPT, SOF3, SGL,
 )
 _register_dict(PHASES)
 _register_dict(SUMMARY_VARS)

@@ -1089,6 +1089,49 @@ RPTSCHED = KeywordSpec(
     items=[UDA] * 100,
 )
 
+# Report flags for SOLUTION / GRID output control.
+RPTSOL = KeywordSpec(
+    name="RPTSOL",
+    sections=[SectionName.SOLUTION, SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 30,
+)
+
+RPTGRID = KeywordSpec(
+    name="RPTGRID",
+    sections=[SectionName.GRID, SectionName.SOLUTION],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 30,
+)
+
+# WELSEGS — multisegmented well definition. WELSEGS records vary
+# in width depending on segment type (regular / spiral / etc.).
+# Stay open across `/` so the parser doesn't emit "loose token"
+# errors on continuation rows.
+WELSEGS = KeywordSpec(
+    name="WELSEGS",
+    sections=[SectionName.SCHEDULE],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 20,
+    multi_record=True,
+)
+
+# EQLOPTS — equilibration options. UDA list.
+EQLOPTS = KeywordSpec(
+    name="EQLOPTS",
+    sections=[SectionName.SOLUTION, SectionName.PROPS],
+    size_kind=SizeKind.LIST,
+    items=[UDA] * 10,
+)
+
+# ACTNUM — active cell array (per-cell integer flag).
+ACTNUM = KeywordSpec(
+    name="ACTNUM",
+    sections=[SectionName.GRID],
+    size_kind=SizeKind.ARRAY,
+    items=[INT],
+)
+
 # TSTEP — list of timesteps (each item is a delta). NTSOPL records max.
 TSTEP = KeywordSpec(
     name="TSTEP",
@@ -1250,8 +1293,10 @@ _register(
     WELTARG, WEFAC, MINPV, MINPVV, PINCH, SEPARATE,
     WSEGAQD, WSEGDEFV, WSEGITER, COMPSEGS,
     ACTIONX, ENDACTIO, PYACTION, UDQ, FU_DECL, FUNVAR, END, SUMMARY,
-    RPTRST, RPTSCHED, UNIFOUT, UNIFIN, NOECHO, ECHO, GRIDOPTS, TRACERS,
+    RPTRST, RPTSCHED, RPTSOL, RPTGRID, UNIFOUT, UNIFIN, NOECHO, ECHO,
+    GRIDOPTS, TRACERS,
     INCLUDE, IMPORT, PATHS,
+    WELSEGS, EQLOPTS, ACTNUM,
 )
 _register_dict(PHASES)
 _register_dict(SUMMARY_VARS)

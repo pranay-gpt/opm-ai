@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { useShallow } from 'zustand/react/shallow';
-import type { ChatMessage, JobStatus, LintResult, KPIsResponse, SimulationResult, BuildResponse, Settings, FluidDescriptorRequest } from '../types';
+import type { ChatMessage, JobStatus, LintResult, KPIsResponse, SimulationResult, BuildResponse, Settings, FluidDescriptorRequest, CategorizedVectors } from '../types';
 
 // ============================================
 // Settings Store
@@ -171,18 +171,22 @@ interface SimulationState {
   currentJob: JobStatus | null;
   jobHistory: JobStatus[];
   lastResults: KPIsResponse | null;
+  categoriesByJob: Record<string, CategorizedVectors>;
   setCurrentJob: (job: JobStatus | null) => void;
   addToHistory: (job: JobStatus) => void;
   updateJobInHistory: (jobId: string, updates: Partial<JobStatus>) => void;
   setLastResults: (results: KPIsResponse | null) => void;
+  setCategories: (jobId: string, cats: CategorizedVectors) => void;
+  getCategories: (jobId: string) => CategorizedVectors | null;
 }
 
 export const useSimulationStore = create<SimulationState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       currentJob: null,
       jobHistory: [],
       lastResults: null,
+      categoriesByJob: {},
 
       setCurrentJob: (job) => set({ currentJob: job }),
       addToHistory: (job) => set((state) => ({ jobHistory: [job, ...state.jobHistory].slice(0, 50) })),
@@ -192,6 +196,10 @@ export const useSimulationStore = create<SimulationState>()(
           currentJob: state.currentJob?.job_id === jobId ? { ...state.currentJob, ...updates } : state.currentJob,
         })),
       setLastResults: (results) => set({ lastResults: results }),
+      setCategories: (jobId, cats) => set((s) => ({
+        categoriesByJob: { ...s.categoriesByJob, [jobId]: cats },
+      })),
+      getCategories: (jobId) => get().categoriesByJob[jobId] ?? null,
     }),
     {
       name: 'opm-ai-simulation',
@@ -431,11 +439,15 @@ export const useLintActions = () => useLintStore(useShallow((state) => ({
 export const useCurrentJob = () => useSimulationStore((state) => state.currentJob);
 export const useJobHistory = () => useSimulationStore((state) => state.jobHistory);
 export const useLastResults = () => useSimulationStore((state) => state.lastResults);
+export const useCategoriesByJob = () => useSimulationStore((state) => state.categoriesByJob);
+export const useCategoriesForJob = (jobId: string | undefined) => useSimulationStore((state) => jobId ? state.categoriesByJob[jobId] : null);
 export const useSimulationActions = () => useSimulationStore(useShallow((state) => ({
   setCurrentJob: state.setCurrentJob,
   addToHistory: state.addToHistory,
   updateJobInHistory: state.updateJobInHistory,
   setLastResults: state.setLastResults,
+  setCategories: state.setCategories,
+  getCategories: state.getCategories,
 })));
 
 // UI

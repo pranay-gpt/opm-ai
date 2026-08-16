@@ -102,3 +102,138 @@ def lint_deck(deck_path: Path) -> LintResult:
         pass
 
     return result
+
+
+def lint_deck_v2(deck_path: Path) -> "v2.LintResult":
+    """Run the v2 linter on a deck file.
+
+    The v2 linter is the redesigned (Phase 4) linter with cross-
+    reference, dimension-consistency, requires, section, and OPM-
+    Flow-specific rules. It operates on its own AST and does not
+    share a symbol table with L1.
+
+    This is the entry point used by tests/integration/test_corpus_clean.py
+    and the planned coexistence path (lint_deck_combined).
+
+    Args:
+        deck_path: Path to a .DATA deck file.
+
+    Returns:
+        v2.LintResult with v2.LintIssue dataclass instances.
+
+    Note:
+        The v2 linter is currently read-only — it does not write to
+        the file. The path is read for the source_file attribution
+        and to detect INCLUDE/IMPORT paths.
+    """
+    from opm_ai.linter.v2 import parser as v2_parser
+    from opm_ai.linter.v2.resolver import resolve_deck
+    from opm_ai.linter.v2.validator import LintResult as V2LintResult
+
+    text = Path(deck_path).read_text(encoding="utf-8", errors="replace")
+    deck = v2_parser.parse_file(text, source_file=deck_path)
+    resolve_deck(deck)
+    return V2LintResult.from_deck(deck) if hasattr(V2LintResult, "from_deck") else _v2_validate(deck)
+
+
+def _v2_validate(deck):
+    """Internal: validate via v2.validator.validate()."""
+    from opm_ai.linter.v2.validator import validate
+    return validate(deck)
+
+
+def lint_deck_combined(deck_path: Path) -> LintResult:
+    """Run L1 then v2, deduplicate, return combined LintResult.
+
+    Both linters run on the same deck file. Issues are deduplicated
+    by (rule_id, line, message-prefix) so identical diagnostics from
+    both engines don't double-count. v2 issues are converted to L1
+    LintIssue shape for a single uniform output.
+
+    Args:
+        deck_path: Path to a .DATA deck file.
+
+    Returns:
+        LintResult with issues from both linters, deduplicated.
+    """
+    from opm_ai.linter.v2.validator import LintIssue as V2Issue, Severity as V2Severity
+
+    # Run L1 (existing).
+    l1_result = lint_deck(deck_path)
+
+    # Run v2. Best-effort: if v2 fails (parse error, missing file),
+    # return L1 alone.
+    try:
+        v2_result = lint_deck_v2(deck_path)
+    except Exception as e:  # pragma: no cover - v2 failures should be visible
+        l1_result.issues.append(LintIssue(
+            severity="WARNING",
+            keyword="L200",
+            line=None,
+            message=f"v2 linter failed: {type(e).__name__}: {e}",
+            rule_id="L200",
+        ))
+        return l1_result
+
+    # Convert v2 issues to L1 shape and append, deduplicating.
+    seen_keys: set[tuple] = set()
+    for issue in l1_result.issues:
+        seen_keys.add(_dedup_key(issue))
+
+    for v2i in v2_result.issues:
+        l1i = _convert_v2_issue(v2i)
+        if _dedup_key(l1i) not in seen_keys:
+            l1_result.issues.append(l1i)
+            seen_keys.add(_dedup_key(l1i))
+
+    return l1_result
+
+
+def _convert_v2_issue(v2i) -> LintIssue:
+    """Convert a v2 LintIssue (dataclass) to the L1 Pydantic shape.
+
+    The two shapes diverge in:
+    - L1 has `section` (str | None); v2 has `source_file` (Path | None).
+    - L1 has `rule_id` (str | None); v2 has `code` (int).
+    - L1 `severity` is a Literal["ERROR","WARNING","INFO"]; v2 is an Enum
+      with the same string values.
+
+    Conversion is lossless on the consumer-visible fields (rule_id,
+    severity, message, line). The v2 `source_file` is dropped — the
+    file is the same one we just parsed, so this is redundant.
+    """
+    section = None
+    if v2i.keyword is not None:
+        kw_section = getattr(v2i.keyword, "section", None)
+        if kw_section is not None:
+            # v2 Keyword has .section: Section; Section has .name: SectionName (str Enum).
+            section_name = getattr(kw_section, "name", None)
+            if section_name is not None:
+                section = getattr(section_name, "value", section_name)
+    keyword_name = getattr(v2i.keyword, "name", None) if v2i.keyword else None
+    return LintIssue(
+        severity=v2i.severity.value,
+        section=section,
+        keyword=keyword_name,
+        line=v2i.source_line,
+        message=v2i.message,
+        rule_id=f"L{v2i.code}",
+    )
+
+
+def _dedup_key(issue: LintIssue) -> tuple:
+    """Key for deduplicating L1 vs v2 issues.
+
+    Two issues from different linters count as the same diagnostic
+    if they fire on the same line with the same rule code and a
+    matching message prefix (first 40 chars).
+
+    A loose prefix avoids false negatives where L1 says
+    "WELSPECS missing" and v2 says "well 'W1' is not declared" —
+    these are different rules about the same problem and should
+    not be deduped.
+    """
+    line = issue.line if issue.line is not None else -1
+    rule = issue.rule_id or ""
+    msg = (issue.message or "")[:40]
+    return (rule, line, msg)

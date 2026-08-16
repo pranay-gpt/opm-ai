@@ -12,6 +12,8 @@ import ControlPanel, { TERNARY } from './ControlPanel';
 import type { FilterState, LegendState } from './ControlPanel';
 import LegendBar from './LegendBar';
 import ResultInfoBox from './ResultInfoBox';
+import Plot from 'react-plotly.js';
+import 'plotly.js-dist-min';
 
 interface Grid3DViewerProps {
   jobId: string;
@@ -50,6 +52,8 @@ function defaultDisplay(dark: boolean): DisplayOptions {
     showNncs: false,
     perspective: true,
     edgeColor: dark ? '#1a3a64' : '#c8d4e8',
+    crossSection: null,
+    wellTrajectory: null,
   };
 }
 
@@ -62,6 +66,173 @@ function errText(e: unknown, fallback: string): string {
 function initialProperty(info: GridInfoResponse): string {
   const all = [...info.dynamic_properties, ...info.static_properties];
   return all.find((p) => p === 'SOIL') ?? all.find((p) => p === 'PRESSURE') ?? all[0] ?? '';
+}
+
+function CrossSectionOverlay({
+  cells,
+  stats,
+  axis,
+  index,
+}: {
+  cells: { u: number; v: number; value: number }[] | null;
+  stats: PropertyStats | null;
+  axis: 'I' | 'J' | 'K';
+  index: number;
+}) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !cells || cells.length === 0) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Set canvas size to match display size
+    const dpr = window.devicePixelRatio || 1;
+    const displayWidth = canvas.clientWidth || 256;
+    const displayHeight = canvas.clientHeight || 256;
+    canvas.width = displayWidth * dpr;
+    canvas.height = displayHeight * dpr;
+    ctx.scale(dpr, dpr);
+
+    // Clear
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    ctx.fillRect(0, 0, displayWidth, displayHeight);
+
+    if (!stats) {
+      ctx.fillStyle = '#999';
+      ctx.font = '12px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('No data', displayWidth / 2, displayHeight / 2);
+      return;
+    }
+
+    // Find bounds of u,v coordinates
+    let minU = Infinity, maxU = -Infinity, minV = Infinity, maxV = -Infinity;
+    for (const c of cells) {
+      if (c.u < minU) minU = c.u;
+      if (c.u > maxU) maxU = c.u;
+      if (c.v < minV) minV = c.v;
+      if (c.v > maxV) maxV = c.v;
+    }
+
+    const uRange = maxU - minU || 1;
+    const vRange = maxV - minV || 1;
+    const padding = 20;
+    const scaleX = (displayWidth - 2 * padding) / uRange;
+    const scaleY = (displayHeight - 2 * padding) / vRange;
+    const scale = Math.min(scaleX, scaleY);
+    const offsetX = padding + (displayWidth - 2 * padding - uRange * scale) / 2 - minU * scale;
+    const offsetY = padding + (displayHeight - 2 * padding - vRange * scale) / 2 - minV * scale;
+
+    const min = stats.min;
+    const max = stats.max;
+    const range = max - min || 1;
+
+    // Draw each cell as a rectangle
+    const cellSize = Math.max(2, scale * 0.9);
+    for (const c of cells) {
+      const v = c.value;
+      if (!Number.isFinite(v)) continue;
+      const t = (v - min) / range;
+      const r = Math.round(255 * t);
+      const b = Math.round(255 * (1 - t));
+      ctx.fillStyle = `rgb(${r}, 0, ${b})`;
+      const x = c.u * scale + offsetX;
+      const y = c.v * scale + offsetY;
+      ctx.fillRect(x, y, cellSize, cellSize);
+    }
+
+    // Axis label
+    ctx.fillStyle = '#333';
+    ctx.font = '11px system-ui, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(`${axis} = ${index} (${cells.length} cells)`, 8, 16);
+
+    // Axis labels
+    ctx.fillStyle = '#666';
+    ctx.font = '10px system-ui, sans-serif';
+    if (axis === 'K') {
+      ctx.textAlign = 'center';
+      ctx.fillText('I', displayWidth / 2, displayHeight - 4);
+      ctx.textAlign = 'right';
+      ctx.fillText('J', 4, displayHeight / 2);
+    } else if (axis === 'J') {
+      ctx.textAlign = 'center';
+      ctx.fillText('I', displayWidth / 2, displayHeight - 4);
+      ctx.textAlign = 'right';
+      ctx.fillText('K', 4, displayHeight / 2);
+    } else {
+      ctx.textAlign = 'center';
+      ctx.fillText('J', displayWidth / 2, displayHeight - 4);
+      ctx.textAlign = 'right';
+      ctx.fillText('K', 4, displayHeight / 2);
+    }
+
+    // Legend
+    if (stats.unit) {
+      ctx.fillStyle = '#666';
+      ctx.font = '10px system-ui, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(`${stats.name} [${stats.unit}]`, displayWidth - 8, displayHeight - 8);
+    }
+  }, [cells, stats, axis, index]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute top-0 right-0 w-64 h-64 border border-gray-300 bg-white/80"
+      style={{ imageRendering: 'pixelated' }}
+      width={256}
+      height={256}
+    />
+  );
+}
+
+function WellTrajectoryPlot({
+  data,
+  property,
+  stats,
+}: {
+  data: Map<string, { depths: number[]; values: number[] }> | null;
+  property: string;
+  stats: PropertyStats | null;
+}) {
+  if (!data || data.size === 0) return null;
+
+  const traces = Array.from(data.entries()).map(([wellName, { depths, values }]) => ({
+    x: values,
+    y: depths,
+    mode: 'lines+markers' as const,
+    name: wellName,
+    line: { width: 2 },
+    marker: { size: 4 },
+    hovertemplate: `${wellName}<br>${property}: %{x:.3f}<br>Depth: %{y:.1f} <extra></extra>`,
+  }));
+
+  const layout = {
+    margin: { l: 50, r: 20, t: 20, b: 40 },
+    height: 200,
+    xaxis: {
+      title: stats ? `${property} [${stats.unit}]` : property,
+      range: stats ? [stats.min, stats.max] : undefined,
+    },
+    yaxis: {
+      title: 'Depth',
+      autorange: 'reversed', // Depth increases downward
+    },
+    showlegend: true,
+    legend: { font: { size: 10 }, orientation: 'h' as const, y: -0.2 },
+    plot_bgcolor: 'rgba(0,0,0,0)',
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    font: { size: 10, color: '#333' },
+  };
+
+  return (
+    <div className="absolute bottom-0 left-0 right-0 border-t border-gray-300 bg-white/90 p-2" style={{ height: '220px' }}>
+      <Plot data={traces} layout={layout} config={{ displayModeBar: false }} />
+    </div>
+  );
 }
 
 export default function Grid3DViewer({ jobId, compact = false }: Grid3DViewerProps) {
@@ -102,6 +273,14 @@ export default function Grid3DViewer({ jobId, compact = false }: Grid3DViewerPro
   const [globalRange, setGlobalRange] = useState<{ min: number; max: number } | null>(null);
   const [globalRangeLoading, setGlobalRangeLoading] = useState(false);
   const [globalRangeError, setGlobalRangeError] = useState<string | null>(null);
+
+  // Cross-section property data
+  const [crossSectionData, setCrossSectionData] = useState<{ u: number; v: number; value: number }[] | null>(null);
+  const [crossSectionLoading, setCrossSectionLoading] = useState(false);
+
+  // Well trajectory property data (property values along each well's trajectory)
+  const [wellTrajectoryData, setWellTrajectoryData] = useState<Map<string, { depths: number[]; values: number[] }> | null>(null);
+  const [wellTrajectoryLoading, setWellTrajectoryLoading] = useState(false);
 
   // ── UI state ────────────────────────────────────────────────────────
   const [legend, setLegend] = useState<LegendState>({
@@ -335,6 +514,150 @@ export default function Grid3DViewer({ jobId, compact = false }: Grid3DViewerPro
       });
     return () => ac.abort();
   }, [jobId, property, legend.autoRange, isTernary]);
+
+  // ── Cross-section property data ────────────────────────────────────────
+  useEffect(() => {
+    if (!display.crossSection || !property || !info) {
+      setCrossSectionData(null);
+      return;
+    }
+    const ac = new AbortController();
+    setCrossSectionLoading(true);
+
+    const { axis, index } = display.crossSection;
+    const effectiveStep = isDynamic ? step : 0;
+
+    api
+      .gridProperty(jobId, property, effectiveStep, ac.signal)
+      .then((buf) => {
+        if (ac.signal.aborted) return;
+        const parsed = parseProperty(buf);
+        const ijk = cellsRef.current?.ijk;
+        if (!ijk) {
+          setCrossSectionData(null);
+          return;
+        }
+        const cellCount = ijk.length / 3;
+        // Extract 2D coordinates (u, v) and values for cells in the slice
+        // For axis I: fixed i, u=j, v=k
+        // For axis J: fixed j, u=i, v=k
+        // For axis K: fixed k, u=i, v=j
+        const sliceCells: { u: number; v: number; value: number }[] = [];
+        for (let c = 0; c < cellCount; c++) {
+          const i = ijk[c * 3];
+          const j = ijk[c * 3 + 1];
+          const k = ijk[c * 3 + 2];
+          let coord = 0, u = 0, v = 0;
+          if (axis === 'I') { coord = i; u = j; v = k; }
+          else if (axis === 'J') { coord = j; u = i; v = k; }
+          else { coord = k; u = i; v = j; }
+          // The index in the UI is 1-based, ijk is 0-based
+          if (coord === index - 1) {
+            sliceCells.push({ u, v, value: parsed.values[c] });
+          }
+        }
+        setCrossSectionData(sliceCells);
+      })
+      .catch((e) => {
+        if (ac.signal.aborted) return;
+        setCrossSectionData(null);
+      })
+      .finally(() => {
+        if (!ac.signal.aborted) setCrossSectionLoading(false);
+      });
+
+    return () => ac.abort();
+  }, [display.crossSection, property, step, isDynamic, jobId, info]);
+
+  // ── Well trajectory property data ──────────────────────────────────────
+  useEffect(() => {
+    if (!display.wellTrajectory || !property || !info || wells.length === 0) {
+      setWellTrajectoryData(null);
+      return;
+    }
+    const ac = new AbortController();
+    setWellTrajectoryLoading(true);
+
+    const propName = display.wellTrajectory.property;
+    const effectiveStep = isDynamic ? step : 0;
+
+    api
+      .gridProperty(jobId, propName, effectiveStep, ac.signal)
+      .then((buf) => {
+        if (ac.signal.aborted) return;
+        const parsed = parseProperty(buf);
+        const ijk = cellsRef.current?.ijk;
+        const origin = cellsRef.current?.origin;
+        if (!ijk || !origin) {
+          setWellTrajectoryData(null);
+          return;
+        }
+        // Build a lookup from (i,j,k) -> property value
+        const cellCount = ijk.length / 3;
+        const propMap = new Map<string, number>();
+        for (let c = 0; c < cellCount; c++) {
+          const i = ijk[c * 3];
+          const j = ijk[c * 3 + 1];
+          const k = ijk[c * 3 + 2];
+          const key = `${i},${j},${k}`;
+          propMap.set(key, parsed.values[c]);
+        }
+
+        const trajectoryData = new Map<string, { depths: number[]; values: number[] }>();
+        for (const well of wells) {
+          // Sample property along the well trajectory (not just completions)
+          // The trajectory is in viewer coordinates (origin subtracted, Z flipped)
+          // We need to convert trajectory points to grid IJK coordinates
+          const depths: number[] = [];
+          const values: number[] = [];
+
+          for (const trajPoint of well.trajectory) {
+            // trajPoint is [x, y, z] in viewer coordinates
+            // Convert to grid coordinates by finding the containing cell
+            // Simple approach: find the closest cell center
+            let bestDist = Infinity;
+            let bestVal: number | null = null;
+            let bestDepth = 0;
+
+            for (let c = 0; c < cellCount; c++) {
+              const cx = cellsRef.current!.centers[c * 3];
+              const cy = cellsRef.current!.centers[c * 3 + 1];
+              const cz = cellsRef.current!.centers[c * 3 + 2];
+              const dx = trajPoint[0] - cx;
+              const dy = trajPoint[1] - cy;
+              const dz = trajPoint[2] - cz;
+              const dist = dx * dx + dy * dy + dz * dz;
+              if (dist < bestDist) {
+                bestDist = dist;
+                const key = `${ijk[c * 3]},${ijk[c * 3 + 1]},${ijk[c * 3 + 2]}`;
+                bestVal = propMap.get(key) ?? null;
+                // Depth = origin[2] - viewer_z (positive down)
+                bestDepth = origin[2] - cz;
+              }
+            }
+
+            if (bestVal !== null && Number.isFinite(bestVal)) {
+              depths.push(bestDepth);
+              values.push(bestVal);
+            }
+          }
+
+          if (depths.length > 0) {
+            trajectoryData.set(well.name, { depths, values });
+          }
+        }
+        setWellTrajectoryData(trajectoryData);
+      })
+      .catch((e) => {
+        if (ac.signal.aborted) return;
+        setWellTrajectoryData(null);
+      })
+      .finally(() => {
+        if (!ac.signal.aborted) setWellTrajectoryLoading(false);
+      });
+
+    return () => ac.abort();
+  }, [display.wellTrajectory, property, step, isDynamic, jobId, info, wells]);
 
   // ── Wells ───────────────────────────────────────────────────────────
   useEffect(() => {
@@ -594,6 +917,25 @@ export default function Grid3DViewer({ jobId, compact = false }: Grid3DViewerPro
             <div className="absolute bottom-3 right-3 z-20 max-w-sm rounded-sm border border-error/40 bg-error/10 px-3 py-2 text-xs text-error">
               {propError}
             </div>
+          )}
+
+          {/* Cross-section overlay */}
+          {display.crossSection && crossSectionData && (
+            <CrossSectionOverlay
+              cells={crossSectionData}
+              stats={stats}
+              axis={display.crossSection.axis}
+              index={display.crossSection.index}
+            />
+          )}
+
+          {/* Well trajectory plot */}
+          {display.wellTrajectory && wellTrajectoryData && (
+            <WellTrajectoryPlot
+              data={wellTrajectoryData}
+              property={display.wellTrajectory.property}
+              stats={stats}
+            />
           )}
         </div>
 

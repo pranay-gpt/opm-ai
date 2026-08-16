@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useChatStore, useSettingsStore, useChatMessages } from '../stores/useAppStore';
+import { useChatStore, useSettingsStore, useChatMessages, useCurrentJob } from '../stores/useAppStore';
 import { api, connectChat } from '../api/client';
 import type { ChatMessage } from '../api/client';
 import Markdown from './ui/Markdown';
+import PlotCard from './results/PlotCard';
 
 export default function ChatPanel() {
   const {
@@ -17,12 +18,16 @@ export default function ChatPanel() {
   } = useChatStore();
   const { settings } = useSettingsStore();
   const messages = useChatMessages();
+  const currentJob = useCurrentJob();
+  const currentJobId = currentJob?.job_id ?? '';
 
   const [input, setInput] = useState('');
   const [isSending, setIsSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const connectionRef = useRef<ReturnType<typeof connectChat> | null>(null);
   const prevProviderRef = useRef(settings.llmProvider);
+  // Track tool names by toolCallId to include in tool results
+  const toolNamesRef = useRef<Map<string, string>>(new Map());
 
   // Auto-scroll to bottom
   const scrollToBottom = useCallback(() => {
@@ -68,6 +73,8 @@ export default function ChatPanel() {
         },
         onToolCall: (toolCall) => {
           if (!mountedRef.current) return;
+          // Store tool name by toolCallId for later use in onToolResult
+          toolNamesRef.current.set(toolCall.id, toolCall.function.name);
           const currentMessages = useChatStore.getState().messages;
           updateLastMessage({
             tool_calls: [...(currentMessages[currentMessages.length - 1]?.tool_calls || []), toolCall],
@@ -75,8 +82,12 @@ export default function ChatPanel() {
         },
         onToolResult: (toolCallId, result) => {
           if (!mountedRef.current) return;
+          // Retrieve tool name and include it in the message content
+          const toolName = toolNamesRef.current.get(toolCallId);
+          toolNamesRef.current.delete(toolCallId); // Clean up
           // result is a dict on the wire; React cannot render an object child
-          const content = typeof result === 'string' ? result : JSON.stringify(result, null, 2);
+          const resultObj = typeof result === 'string' ? JSON.parse(result) : result;
+          const content = JSON.stringify({ tool_name: toolName, content: resultObj }, null, 2);
           addMessage({ role: 'tool', content, tool_call_id: toolCallId });
         },
         onError: (error) => {
@@ -261,11 +272,35 @@ export default function ChatPanel() {
               )}
 
               {/* Tool result */}
-              {message.role === 'tool' && (
-                <div className="mt-2 p-2 rounded bg-page border border-border text-xs font-mono text-textSecondary max-h-32 overflow-auto">
-                  {message.content}
-                </div>
-              )}
+              {message.role === 'tool' && (() => {
+                let toolResult: { tool_name?: string; content?: { wells?: string[]; figure_json?: string } } | null = null;
+                try {
+                  const parsed = JSON.parse(message.content);
+                  // New format: { tool_name, content }
+                  if (parsed && typeof parsed === 'object' && 'tool_name' in parsed) {
+                    toolResult = parsed;
+                  } else {
+                    // Legacy format: direct tool result
+                    toolResult = { content: parsed };
+                  }
+                } catch {
+                  // Not JSON, render as-is
+                }
+                if (toolResult && (toolResult.tool_name === 'plot_well_vectors' || toolResult.tool_name === 'compare_wells')) {
+                  return (
+                    <PlotCard
+                      jobId={currentJobId}
+                      plotName={`${toolResult.tool_name === 'compare_wells' ? 'Compare' : 'Plot'}: ${toolResult.content?.wells?.join(', ') ?? ''}`}
+                      plotJson={toolResult.content?.figure_json ?? ''}
+                    />
+                  );
+                }
+                return (
+                  <div className="mt-2 p-2 rounded bg-page border border-border text-xs font-mono text-textSecondary max-h-32 overflow-auto">
+                    {message.content}
+                  </div>
+                );
+              })()}
             </div>
           </div>
         ))}

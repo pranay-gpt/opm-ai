@@ -6,6 +6,8 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect, HTTPException
 from pydantic import ValidationError
 from typing import Any
 
+from loguru import logger
+
 # Max bytes for a single ChatRequest frame. Anything larger is rejected
 # before pydantic parses it; the LLM has no use for a multi-MB history
 # and an oversized frame usually means a runaway client loop.
@@ -33,6 +35,8 @@ from opm_ai.postprocess.summary import read_summary
 from opm_ai.postprocess.kpi import extract_kpis
 from opm_ai.postprocess.plots import plot_production, plot_pressure
 from opm_ai.postprocess.resinsight_bridge import export_snapshots
+from opm_ai.postprocess.categorizer import categorize
+from opm_ai.postprocess.plot_groups import plot_group as build_plot_group
 from opm_ai.llm.client import LLMClient
 import asyncio
 
@@ -248,6 +252,95 @@ async def tool_export_snapshots(args: dict) -> dict:
     }
 
 
+def _resolve_active_job(args: dict) -> str | None:
+    """Return the active job_id, preferring the one passed in args."""
+    return args.get("job_id")
+
+
+async def tool_list_available_vectors(args: dict) -> dict:
+    """List which vector families are present in the active run's summary."""
+    job_id = _resolve_active_job(args)
+    if not job_id:
+        return {"error": "no active job"}
+    job = get_job(job_id)
+    if not job or job.status != "completed" or not job.result:
+        return {"error": "job not completed"}
+
+    output_dir = job_output_dir(job)
+    loop = asyncio.get_event_loop()
+    df = await loop.run_in_executor(None, lambda: read_summary(output_dir))
+    if df.empty:
+        return {"error": "no summary data"}
+
+    return dict(categorize(df))
+
+
+async def tool_plot_well_vectors(args: dict) -> dict:
+    """Build a Plotly figure for selected wells + vectors.
+
+    Args:
+      wells: list[str] — at least one
+      vectors: list[str] — at least one
+      log: bool, optional
+      group: str — one of well_rates / well_cumulative / well_injection
+    """
+    wells = args.get("wells") or []
+    vectors = args.get("vectors") or []
+    if not wells:
+        return {"error": "missing 'wells' (non-empty list required)"}
+    if not vectors:
+        return {"error": "missing 'vectors' (non-empty list required)"}
+    group = args.get("group", "well_rates")
+    log_scale = bool(args.get("log", False))
+
+    job_id = _resolve_active_job(args)
+    if not job_id:
+        return {"error": "no active job"}
+    job = get_job(job_id)
+    if not job or job.status != "completed" or not job.result:
+        return {"error": "job not completed"}
+
+    output_dir = job_output_dir(job)
+    loop = asyncio.get_event_loop()
+    df = await loop.run_in_executor(None, lambda: read_summary(output_dir))
+    if df.empty:
+        return {"error": "no summary data"}
+
+    try:
+        fig = build_plot_group(group, df, wells, vectors, log_scale=log_scale)
+    except ValueError as e:
+        return {"error": str(e)}
+    except Exception as e:
+        logger.exception("plot_well_vectors failed")
+        return {"error": f"plot generation failed: {e}"}
+
+    return {
+        "figure_json": fig.to_json(),
+        "wells": wells,
+        "vectors": vectors,
+        "group": group,
+    }
+
+
+async def tool_compare_wells(args: dict) -> dict:
+    """Single vector across multiple wells — the common comparison shape."""
+    if "vector" not in args:
+        return {"error": "missing 'vector' (single string required)"}
+    vector = args["vector"]
+    if not isinstance(vector, str):
+        return {"error": "'vector' must be a single string, not a list"}
+    wells = args.get("wells") or []
+    if not wells:
+        return {"error": "missing 'wells' (non-empty list required)"}
+
+    # Delegate to plot_well_vectors with the single vector wrapped as a list
+    return await tool_plot_well_vectors({
+        **args,
+        "group": args.get("group", "well_rates"),
+        "vectors": [vector],
+    })
+
+
 TOOL_FUNCTIONS = {
     "build_deck": tool_build_deck,
     "lint_deck": tool_lint_deck,
@@ -256,6 +349,9 @@ TOOL_FUNCTIONS = {
     "explain_concept": tool_explain_concept,
     "generate_quiz": tool_generate_quiz,
     "export_snapshots": tool_export_snapshots,
+    "list_available_vectors": tool_list_available_vectors,
+    "plot_well_vectors": tool_plot_well_vectors,
+    "compare_wells": tool_compare_wells,
 }
 
 
@@ -290,6 +386,23 @@ def compact_tool_result(tool_name: str, result: dict) -> dict:
             "kpis": result.get("kpis"),
             "plots": "rendered for the user" if result.get("plots") else None,
             "error": result.get("error"),
+        }
+    if tool_name == "list_available_vectors":
+        return result  # tiny, send it all
+    if tool_name in ("plot_well_vectors", "compare_wells"):
+        fig_data = result.get("figure_json") or ""
+        try:
+            import json as _json
+            parsed = _json.loads(fig_data)
+            trace_names = [t.get("name", "?") for t in parsed.get("data", [])]
+        except Exception:
+            trace_names = []
+        return {
+            "trace_count": len(trace_names),
+            "trace_names": trace_names[:10],
+            "wells": result.get("wells"),
+            "vectors": result.get("vectors"),
+            "note": "Full Plotly figure rendered for the user; not re-sent to the LLM.",
         }
     return result
 

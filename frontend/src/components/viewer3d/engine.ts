@@ -64,6 +64,17 @@ export interface DisplayOptions {
   showNncs: boolean;
   perspective: boolean;
   edgeColor: string;
+
+  crossSection: {
+    enabled: boolean;
+    axis: 'I' | 'J' | 'K';
+    index: number;
+  } | null;
+
+  wellTrajectory: {
+    enabled: boolean;
+    property: string;
+  } | null;
 }
 
 export type WellType =
@@ -126,6 +137,8 @@ const DEFAULT_DISPLAY: DisplayOptions = {
   showNncs: false,
   perspective: true,
   edgeColor: '#404550',
+  crossSection: null,
+  wellTrajectory: null,
 };
 
 const FOV = 45;

@@ -1,106 +1,28 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { useLastResults, useCurrentJob, useSimulationActions, useResolvedTheme } from '../stores/useAppStore';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useLastResults, useCurrentJob, useSimulationActions, useResolvedTheme, useCategoriesForJob } from '../stores/useAppStore';
 import { api } from '../api/client';
-import type { KPIsResponse, ExplainRequest, ExplainResponse, ExplanationLevel, Citation } from '../api/client';
+import type { KPIsResponse, ExplainRequest, ExplainResponse, ExplanationLevel, Citation, CategorizedVectors, VectorGroup, JobStatus, GridLayout, UnitSystem, PlotGroupResponse } from '../types';
 import Grid3DViewer from './viewer3d/Grid3DViewer';
+import PlotCard from './results/PlotCard';
+import ResultsControlRail from './results/ResultsControlRail';
+import ImportResultsButton from './results/ImportResultsButton';
 // @ts-expect-error plotly.js-dist ships no types; @types/plotly.js covers the API
 import Plotly from 'plotly.js-dist-min';
-
-function PlotCard({ plotName, plotJson }: { plotName: string; plotJson: string }) {
-  const divRef = useRef<HTMLDivElement>(null);
-  const resolvedTheme = useResolvedTheme();
-  const [renderError, setRenderError] = useState<string | null>(null);
-  // Tracks whether THIS effect run actually mounted a Plotly chart on
-  // divRef.current. The cleanup function should only call Plotly.purge
-  // when a chart is mounted, otherwise the call is wasted and (worse)
-  // can race with a fresh mount if the effect re-runs in quick
-  // succession (F8.9 audit fix: previously the cleanup ran on every
-  // effect cycle including the early-return path for empty plotJson).
-  const chartMountedRef = useRef(false);
-
-  useEffect(() => {
-    setRenderError(null);
-    chartMountedRef.current = false;
-    if (!divRef.current || !plotJson) {
-      // Empty plotJson means the backend's plot generation failed
-      // (opm_ai/api/routes/results.py logs the trace). Render an empty
-      // card with a hint instead of trying to Plotly.newPlot an empty
-      // string (F1.5 audit fix - client side).
-      return;
-    }
-    try {
-      const plotData = JSON.parse(plotJson);
-      // Restyle backend-generated layout to match the active UI theme
-      const dark = resolvedTheme === 'dark';
-      const layout = {
-        ...plotData.layout,
-        paper_bgcolor: 'rgba(0,0,0,0)',
-        plot_bgcolor: 'rgba(0,0,0,0)',
-        font: { ...plotData.layout?.font, color: dark ? '#94A8C4' : '#465A82' },
-      };
-      Plotly.newPlot(divRef.current, plotData.data, layout, { responsive: true, displayModeBar: true });
-      chartMountedRef.current = true;
-    } catch (e) {
-      const message = e instanceof Error ? e.message : String(e);
-      setRenderError(message);
-      console.error(`Failed to render ${plotName}:`, e);
-    }
-    return () => {
-      // Only purge if we actually mounted a chart on this run. Avoids
-      // spurious Plotly.purge calls on early-return effects (empty
-      // plotJson) and avoids racing a fresh mount with a stale purge.
-      if (chartMountedRef.current && divRef.current) {
-        Plotly.purge(divRef.current);
-        chartMountedRef.current = false;
-      }
-    };
-  }, [plotName, plotJson, resolvedTheme]);
-
-  if (!plotJson) {
-    return (
-      <div className="card">
-        <div className="panel-header">
-          <h3 className="panel-title capitalize">{plotName.replace(/_/g, ' ')}</h3>
-        </div>
-        <div className="p-4 h-[500px] flex items-center justify-center text-textSecondary text-sm">
-          Plot unavailable. The backend could not generate this chart from the
-          run output (see server log for the trace).
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="card">
-      <div className="panel-header">
-        <h3 className="panel-title capitalize">{plotName.replace(/_/g, ' ')}</h3>
-      </div>
-      <div className="p-4 h-[500px] relative">
-        {renderError && (
-          <div className="absolute inset-0 flex items-center justify-center text-danger text-sm bg-bgPrimary/80 z-10">
-            Failed to render: {renderError}
-          </div>
-        )}
-        <div ref={divRef} className="plotly-chart" />
-      </div>
-    </div>
-  );
-}
 
 interface KPICard {
   key: string;
   label: string;
   unit: string;
-  format: (v: number) => string;
+  format: (v: number, unitSystem: UnitSystem) => string;
 }
 
 const KPI_CARDS: KPICard[] = [
   { key: 'days', label: 'Simulation Days', unit: 'days', format: (v: number) => v.toFixed(0) },
-  { key: 'field_oil_recovery', label: 'Cumulative Oil', unit: 'STB', format: (v: number) => v.toLocaleString() },
-  { key: 'field_water_recovery', label: 'Cumulative Water', unit: 'STB', format: (v: number) => v.toLocaleString() },
-  { key: 'field_gas_recovery', label: 'Cumulative Gas', unit: 'MSCF', format: (v: number) => v.toLocaleString() },
+  { key: 'field_oil_recovery', label: 'Cumulative Oil', unit: 'STB', format: (v: number, unitSystem: UnitSystem) => `${v.toLocaleString()} ${unitSystem === 'FIELD' ? 'STB' : 'm³'}` },
+  { key: 'field_water_recovery', label: 'Cumulative Water', unit: 'STB', format: (v: number, unitSystem: UnitSystem) => `${v.toLocaleString()} ${unitSystem === 'FIELD' ? 'STB' : 'm³'}` },
+  { key: 'field_gas_recovery', label: 'Cumulative Gas', unit: 'MSCF', format: (v: number, unitSystem: UnitSystem) => `${v.toLocaleString()} ${unitSystem === 'FIELD' ? 'MSCF' : 'SM³'}` },
   { key: 'max_watercut', label: 'Max Water Cut', unit: '%', format: (v: number) => (v * 100).toFixed(1) },
-  { key: 'final_gor', label: 'Final GOR', unit: 'MSCF/STB', format: (v: number) => v.toFixed(2) },
+  { key: 'final_gor', label: 'Final GOR', unit: 'MSCF/STB', format: (v: number, unitSystem: UnitSystem) => `${v.toFixed(2)} ${unitSystem === 'FIELD' ? 'MSCF/STB' : 'SM³/m³'}` },
   { key: 'producer_count', label: 'Producers', unit: '', format: (v: number) => v.toFixed(0) },
   { key: 'plateau_duration_days', label: 'Plateau Duration', unit: 'days', format: (v: number) => v.toFixed(0) },
 ];
@@ -108,16 +30,14 @@ const KPI_CARDS: KPICard[] = [
 export default function ResultsViewer() {
   const lastResults = useLastResults();
   const currentJob = useCurrentJob();
-  const { setLastResults } = useSimulationActions();
+  const { setLastResults, setCurrentJob } = useSimulationActions();
 
   const [results, setResults] = useState<KPIsResponse | null>(lastResults);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'kpis' | 'plots' | '3d'>('kpis');
 
-  // ResInsight launch state. The route is localhost-gated (403 from a remote
-  // client); the button is disabled when viewer_available is false so we never
-  // claim a launch we cannot deliver.
+  // ResInsight launch state
   const [resinsightLaunching, setResinsightLaunching] = useState(false);
   const [resinsightPid, setResinsightPid] = useState<number | null>(null);
   const [resinsightError, setResinsightError] = useState<string | null>(null);
@@ -127,6 +47,42 @@ export default function ResultsViewer() {
   const [explainLoading, setExplainLoading] = useState(false);
   const [explainError, setExplainError] = useState<string | null>(null);
   const [explainLevel, setExplainLevel] = useState<ExplanationLevel>('intermediate');
+
+  // Plots tab state
+  const [categorized, setCategorizedState] = useState<CategorizedVectors | null>(null);
+  const [selectedWells, setSelectedWells] = useState<Set<string>>(new Set());
+  const [selectedVectors, setSelectedVectors] = useState<Record<VectorGroup, Set<string>>>({
+    field_rates: new Set(), field_cumulative: new Set(), field_derived: new Set(),
+    well_rates: new Set(), well_cumulative: new Set(), well_injection: new Set(),
+  });
+  const [logScale, setLogScale] = useState(false);
+  const [gridLayout, setGridLayout] = useState<GridLayout>('2col');
+  const [perProperty, setPerProperty] = useState(false);
+  const [unitSystem, setUnitSystem] = useState<UnitSystem>('FIELD');
+  const [plotFigures, setPlotFigures] = useState<Record<string, string>>({});
+  const [plotLoading, setPlotLoading] = useState(false);
+  const { setCategories } = useSimulationActions();
+  const cachedCategories = useCategoriesForJob(currentJob?.job_id);
+
+  // Wrapper to match ResultsControlRail's expected signature
+  const handleSetVectors = useCallback((group: VectorGroup, vecs: Set<string>) => {
+    setSelectedVectors((prev) => ({ ...prev, [group]: vecs }));
+  }, []);
+
+  // Load categories when results become available
+  useEffect(() => {
+    if (!currentJob?.job_id || !results) return;
+    if (cachedCategories) {
+      setCategorizedState(cachedCategories);
+      return;
+    }
+    api.categories(currentJob.job_id).then((cats) => {
+      setCategorizedState(cats);
+      setCategories(currentJob.job_id, cats);
+    }).catch((err) => {
+      console.error('categories fetch failed', err);
+    });
+  }, [currentJob?.job_id, results, cachedCategories, setCategories]);
 
   // Load results when job completes. The `!results` guard is the
   // load-once invariant (F8.3 audit: previously flagged as a
@@ -157,6 +113,53 @@ export default function ResultsViewer() {
       setIsLoading(false);
     }
   }, [setLastResults]);
+
+  // Fetch plots from /plot_group endpoint when selections change
+  const fetchPlots = useCallback(async () => {
+    if (!currentJob?.job_id || !categorized) return;
+    if (selectedWells.size === 0) {
+      setPlotFigures({});
+      return;
+    }
+
+    setPlotLoading(true);
+    try {
+      const figures: Record<string, string> = {};
+      const groups: VectorGroup[] = [
+        'field_rates', 'field_cumulative', 'field_derived',
+        'well_rates', 'well_cumulative', 'well_injection',
+      ];
+
+      const wellsArray = Array.from(selectedWells);
+
+      for (const group of groups) {
+        const vectors = Array.from(selectedVectors[group]);
+        if (vectors.length === 0) continue;
+
+        const resp = await api.plotGroup(currentJob.job_id, group, {
+          wells: wellsArray,
+          vectors,
+          log: logScale,
+          per_property: perProperty,
+          unit_system: unitSystem,
+        });
+
+        if (resp.figure_json && !resp.error) {
+          figures[group] = resp.figure_json;
+        }
+      }
+      setPlotFigures(figures);
+    } catch (err) {
+      console.error('Plot fetch failed:', err);
+    } finally {
+      setPlotLoading(false);
+    }
+  }, [currentJob?.job_id, categorized, selectedWells, selectedVectors, logScale, perProperty, unitSystem]);
+
+  // Trigger plot fetch when selection changes
+  useEffect(() => {
+    fetchPlots();
+  }, [fetchPlots]);
 
   const handleLaunchResinsight = useCallback(async () => {
     if (!currentJob?.job_id) return;
@@ -214,23 +217,42 @@ export default function ResultsViewer() {
     if (!results?.kpis) return '-';
     const value = results.kpis[kpi.key];
     if (value === undefined || value === null) return '-';
-    if (typeof value === 'number') return kpi.format(value);
+    if (typeof value === 'number') return kpi.format(value, unitSystem);
     return String(value);
   };
 
   if (!results && !isLoading) {
+    const importButton = (
+      <ImportResultsButton
+        onImported={(resp) => {
+          const newJob: JobStatus = { job_id: resp.job_id, status: 'completed', result: null, error: null };
+          setCurrentJob(newJob as any);
+          loadResults(resp.job_id);
+        }}
+      />
+    );
+
     return (
       <div className="flex flex-col h-full bg-page">
+        {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface">
-          <h1 className="text-xl font-semibold text-textPrimary">Results Viewer</h1>
+          <div>
+            <h1 className="text-xl font-semibold text-textPrimary">Results Viewer</h1>
+            <p className="text-sm text-textSecondary">
+              {currentJob ? `Job: ${currentJob.job_id.slice(0, 12)}...` : 'Latest results'}
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            {importButton}
+          </div>
         </div>
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center p-8 text-textSecondary">
             <svg className="w-16 h-16 mx-auto mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
             <p className="text-lg font-medium text-textPrimary mb-1">No Results Available</p>
-            <p className="text-sm max-w-xs">Run a simulation to see KPIs and production plots here</p>
+            <p className="text-sm max-w-xs">Run a simulation or import results to see KPIs and production plots here</p>
             {currentJob?.job_id && (
               <button
                 onClick={() => loadResults(currentJob.job_id)}
@@ -269,6 +291,14 @@ export default function ResultsViewer() {
           {error && (
             <span className="badge badge-error text-xs">{error}</span>
           )}
+          <ImportResultsButton
+            onImported={(resp) => {
+              // Trigger a results reload for the new job
+              const newJob: JobStatus = { job_id: resp.job_id, status: 'completed', result: null, error: null };
+              setCurrentJob(newJob as any);
+              loadResults(resp.job_id);
+            }}
+          />
           {currentJob?.status === 'completed' && currentJob.job_id && (
             <button
               onClick={handleLaunchResinsight}
@@ -500,22 +530,82 @@ export default function ResultsViewer() {
             tab (F1.6 audit fix - the previous `results?.plots &&` short-
             circuit hid the whole tab with no fallback). */}
         {activeTab === 'plots' && results && (
-          <div className="p-4 lg:p-6">
-            {results.plots && Object.keys(results.plots).length > 0 ? (
-              <div className="space-y-6">
-                {Object.entries(results.plots).map(([plotName, plotJson]) => (
-                  <PlotCard key={plotName} plotName={plotName} plotJson={plotJson} />
-                ))}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center h-96 text-textSecondary">
-                <svg className="w-16 h-16 mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-                <p className="text-lg font-medium text-textPrimary mb-1">No Plots Available</p>
-                <p className="text-sm">Run a simulation with plotting enabled to see charts here</p>
-              </div>
+          <div className="flex h-full">
+            {categorized && (
+              <ResultsControlRail
+                categorized={categorized}
+                selectedWells={selectedWells}
+                onWells={setSelectedWells}
+                selectedVectors={selectedVectors}
+                onVectors={handleSetVectors}
+                logScale={logScale}
+                onLogScale={setLogScale}
+                gridLayout={gridLayout}
+                onGridLayout={setGridLayout}
+                perProperty={perProperty}
+                onPerProperty={setPerProperty}
+                unitSystem={unitSystem}
+                onUnitSystem={setUnitSystem}
+              />
             )}
+            <div className="flex-1 overflow-y-auto p-4">
+              {plotLoading ? (
+                <div className="flex items-center justify-center h-96 text-textSecondary">
+                  <svg className="animate-spin w-8 h-8" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                </div>
+              ) : Object.keys(plotFigures).length > 0 ? (
+                <div
+                  className={`grid gap-4 ${
+                    gridLayout === '1col' ? 'grid-cols-1' :
+                    gridLayout === '2col' ? 'grid-cols-1 sm:grid-cols-2' :
+                    'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+                  }`}
+                >
+                  {Object.entries(plotFigures).map(([group, figureJson]) => {
+                    try {
+                      const parsed = JSON.parse(figureJson);
+                      // Per-property mode returns array of figures
+                      if (Array.isArray(parsed)) {
+                        return parsed.map((fig, idx) => (
+                          <PlotCard
+                            key={`${group}-${idx}`}
+                            jobId={currentJob?.job_id ?? ''}
+                            plotName={`${group} - ${fig.layout?.title?.text || `Vector ${idx + 1}`}`}
+                            plotJson={JSON.stringify(fig)}
+                            exportGroup={group}
+                            exportVectors={Array.from(selectedVectors[group as VectorGroup])}
+                          />
+                        ));
+                      }
+                      // Regular mode returns single figure
+                      return (
+                        <PlotCard
+                          key={group}
+                          jobId={currentJob?.job_id ?? ''}
+                          plotName={group.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                          plotJson={figureJson}
+                          exportGroup={group}
+                          exportVectors={Array.from(selectedVectors[group as VectorGroup])}
+                        />
+                      );
+                    } catch {
+                      return null;
+                    }
+                  })}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center h-96 text-textSecondary">
+                  <svg className="w-16 h-16 mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                  <p className="text-lg font-medium text-textPrimary mb-1">No Plots Available</p>
+                  <p className="text-sm">Select wells and vectors from the control rail to generate plots</p>
+                </div>
+              )}
+            </div>
           </div>
         )}
 

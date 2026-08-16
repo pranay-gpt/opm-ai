@@ -6,6 +6,12 @@ import type { GridInfoResponse, GridWell, GridWellType } from '../../types';
 import type { PropertyStats } from './meshFormat';
 import HistogramBar from './HistogramBar';
 
+function axisMax(axis: 'I' | 'J' | 'K', info: GridInfoResponse): number {
+  if (axis === 'I') return info.nx;
+  if (axis === 'J') return info.ny;
+  return info.nz;
+}
+
 // ── State shapes owned by Grid3DViewer, edited here ────────────────────
 
 /** 'ternary' is a display mode, not a property name (see the contract). */
@@ -631,6 +637,91 @@ export default function ControlPanel(props: ControlPanelProps) {
           {info.fault_face_count.toLocaleString()} fault faces · {info.nnc_count.toLocaleString()}{' '}
           NNCs
         </div>
+      </Section>
+
+      {/* Cross-section */}
+      <Section title="Cross-section">
+        <label className="flex items-center gap-2 text-xs">
+          <input
+            type="checkbox"
+            checked={!!display.crossSection}
+            onChange={(e) => onDisplay({
+              crossSection: e.target.checked
+                ? { enabled: true, axis: 'K', index: Math.floor(info.nz / 2) }
+                : null,
+            })}
+            className="rounded"
+          />
+          <span>Show cross-section</span>
+        </label>
+        {display.crossSection && (
+          (() => {
+            const cs = display.crossSection;
+            return (
+              <>
+                <label className="flex items-center gap-2 text-xs">
+                  <span>Axis:</span>
+                  <select
+                    value={cs.axis}
+                    onChange={(e) => onDisplay({
+                      crossSection: { enabled: true, axis: e.target.value as 'I' | 'J' | 'K', index: cs.index },
+                    })}
+                    className="border rounded px-1 py-0.5"
+                  >
+                    <option value="I">I</option>
+                    <option value="J">J</option>
+                    <option value="K">K</option>
+                  </select>
+                </label>
+                <label className="flex items-center gap-2 text-xs">
+                  <span>Index:</span>
+                  <input
+                    type="range"
+                    min={1}
+                    max={axisMax(cs.axis, info)}
+                    value={cs.index}
+                    onChange={(e) => onDisplay({
+                      crossSection: { enabled: true, axis: cs.axis, index: parseInt(e.target.value) },
+                    })}
+                    className="flex-1"
+                  />
+                  <span className="font-mono">{cs.index}</span>
+                </label>
+              </>
+            );
+          })()
+        )}
+      </Section>
+
+      {/* Well property overlay */}
+      <Section title="Well Property Overlay">
+        <label className="flex items-center gap-2 text-xs">
+          <input
+            type="checkbox"
+            checked={!!display.wellTrajectory}
+            onChange={(e) => onDisplay({
+              wellTrajectory: e.target.checked ? { enabled: true, property: 'PORO' } : null,
+            })}
+            className="rounded"
+          />
+          <span>Show property along wells</span>
+        </label>
+        {display.wellTrajectory && (
+          <label className="flex items-center gap-2 text-xs">
+            <span>Property:</span>
+            <select
+              value={display.wellTrajectory.property}
+              onChange={(e) => onDisplay({
+                wellTrajectory: { enabled: true, property: e.target.value },
+              })}
+              className="border rounded px-1 py-0.5"
+            >
+              {info.static_properties.map((p) => (
+                <option key={p} value={p}>{p}</option>
+              ))}
+            </select>
+          </label>
+        )}
       </Section>
 
       {/* Views */}

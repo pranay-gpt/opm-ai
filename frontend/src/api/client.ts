@@ -226,12 +226,14 @@ export const api = {
   plotGroup: (
     jobId: string,
     group: string,
-    opts: { wells?: string[]; vectors?: string[]; log?: boolean } = {}
+    opts: { wells?: string[]; vectors?: string[]; log?: boolean; unit_system?: 'FIELD' | 'METRIC'; per_property?: boolean } = {}
   ): Promise<PlotGroupResponse> => {
     const params = new URLSearchParams();
     if (opts.wells?.length) params.set('wells', opts.wells.join(','));
     if (opts.vectors?.length) params.set('vectors', opts.vectors.join(','));
     if (opts.log) params.set('log', 'true');
+    if (opts.unit_system) params.set('unit_system', opts.unit_system);
+    if (opts.per_property) params.set('per_property', 'true');
     const qs = params.toString();
     return fetchJson<PlotGroupResponse>(`/results/${jobId}/plot_group/${group}${qs ? `?${qs}` : ''}`);
   },

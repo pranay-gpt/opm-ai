@@ -46,6 +46,40 @@ ALL_WELL_KEYWORDS = WELL_RATES_KEYWORDS + WELL_CUMULATIVE_KEYWORDS + WELL_INJECT
 PRODUCER_TEST_KEYWORDS = ("WOPR", "WWPR", "WGPR")
 INJECTOR_TEST_KEYWORDS = ("WGIR", "WWIR", "WOIR", "WGIT", "WWIT")
 
+# Human-readable labels for vector short codes.
+# Used in UI to show "Oil Rate" instead of "FOPR"/"WOPR".
+VECTOR_LABELS: dict[str, str] = {
+    # Field rates
+    "FOPR": "Oil Rate",
+    "FWPR": "Water Rate",
+    "FGPR": "Gas Rate",
+    # Field cumulative
+    "FOPT": "Oil Cumulative",
+    "FWPT": "Water Cumulative",
+    "FGPT": "Gas Cumulative",
+    # Field derived
+    "FWCT": "Water Cut",
+    "FGOR": "GOR",
+    "FPR": "Avg Pressure",
+    # Well rates
+    "WOPR": "Oil Rate",
+    "WWPR": "Water Rate",
+    "WGPR": "Gas Rate",
+    "WBHP": "BHP",
+    "WGOR": "GOR",
+    "WWCT": "Water Cut",
+    # Well cumulative
+    "WOPT": "Oil Cumulative",
+    "WWPT": "Water Cumulative",
+    "WGPT": "Gas Cumulative",
+    # Well injection
+    "WGIR": "Gas Injection Rate",
+    "WWIR": "Water Injection Rate",
+    "WOIR": "Oil Injection Rate",
+    "WGIT": "Gas Injection Cumulative",
+    "WWIT": "Water Injection Cumulative",
+}
+
 
 class CategorizedVectors(TypedDict):
     """Categorised view of a summary DataFrame.
@@ -60,6 +94,7 @@ class CategorizedVectors(TypedDict):
     well_cumulative: dict[str, list[str]]
     well_injection: dict[str, list[str]]
     wells: list[str]
+    vector_labels: dict[str, str]
 
 
 def _split_well_column(col: str) -> tuple[str, str] | None:
@@ -109,6 +144,7 @@ def categorize(df: pd.DataFrame) -> CategorizedVectors:
             well_cumulative={},
             well_injection={},
             wells=[],
+            vector_labels={},
         )
 
     field_rates = [c for c in FIELD_RATES if c in df.columns]
@@ -165,6 +201,20 @@ def categorize(df: pd.DataFrame) -> CategorizedVectors:
 
     wells = sorted(all_wells)
 
+    # Build vector_labels for all keywords present in this categorization
+    all_keywords = set()
+    all_keywords.update(field_rates)
+    all_keywords.update(field_cumulative)
+    all_keywords.update(field_derived)
+    for kw_list in well_rates.values():
+        all_keywords.update(kw_list)
+    for kw_list in well_cumulative.values():
+        all_keywords.update(kw_list)
+    for kw_list in well_injection.values():
+        all_keywords.update(kw_list)
+
+    vector_labels = {kw: VECTOR_LABELS.get(kw, kw) for kw in all_keywords}
+
     return CategorizedVectors(
         field_rates=sorted(field_rates),
         field_cumulative=sorted(field_cumulative),
@@ -173,4 +223,5 @@ def categorize(df: pd.DataFrame) -> CategorizedVectors:
         well_cumulative=well_cumulative,
         well_injection=well_injection,
         wells=wells,
+        vector_labels=vector_labels,
     )

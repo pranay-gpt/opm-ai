@@ -297,13 +297,20 @@ async def get_plot_group(
     wells: str | None = None,
     vectors: str | None = None,
     log: bool = False,
+    per_property: bool = False,
+    unit_system: str = "FIELD",
 ) -> PlotGroupResponse:
-    """Build a Plotly figure for one priority vector group."""
+    """Build a Plotly figure for one priority vector group.
+
+    When per_property=true, returns a list of figures (one per vector).
+    The response figure_json will be a JSON array of figure JSONs.
+    """
     if group not in _KNOWN_PLOT_GROUPS:
-        # Unknown group is a 200 with empty json so the client shows the
-        # standard empty-state rather than a hard error. The route logs
-        # the actual trace when plot generation fails (below).
         return PlotGroupResponse(group=group, figure_json="", error=f"Unknown group: {group}")
+
+    # Validate unit_system
+    if unit_system.upper() not in ("FIELD", "METRIC"):
+        return PlotGroupResponse(group=group, figure_json="", error=f"Invalid unit_system: {unit_system}. Must be FIELD or METRIC")
 
     output_dir = _completed_job_output_dir(job_id)
     df = read_summary(output_dir)
@@ -314,8 +321,17 @@ async def get_plot_group(
     vector_list = _split_csv_param(vectors) or None
 
     try:
-        fig = build_plot_group(group, df, well_list, vector_list, log_scale=log)
-        return PlotGroupResponse(group=group, figure_json=fig.to_json(), error=None)
+        result = build_plot_group(
+            group, df, well_list, vector_list,
+            log_scale=log, per_property=per_property, unit_system=unit_system
+        )
+        if isinstance(result, list):
+            # Per-property mode returns list of figures
+            import json
+            figure_json = json.dumps([json.loads(fig.to_json()) for fig in result])
+        else:
+            figure_json = result.to_json()
+        return PlotGroupResponse(group=group, figure_json=figure_json, error=None)
     except Exception:
         logger.exception("Plot group %s failed for job %s", group, job_id)
         return PlotGroupResponse(group=group, figure_json="", error="plot generation failed")

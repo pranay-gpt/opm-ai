@@ -13,26 +13,32 @@ const SAMPLE: CategorizedVectors = {
   wells: ['PROD1', 'PROD2', 'INJ1'],
 };
 
+const DEFAULT_PROPS = {
+  categorized: SAMPLE,
+  selectedWells: new Set(['PROD1']),
+  onWells: vi.fn(),
+  selectedVectors: {
+    field_rates: new Set(['FOPR']),
+    field_cumulative: new Set(),
+    field_derived: new Set(),
+    well_rates: new Set(),
+    well_cumulative: new Set(),
+    well_injection: new Set(),
+  },
+  onVectors: vi.fn(),
+  logScale: false,
+  onLogScale: vi.fn(),
+  gridLayout: '2col' as const,
+  onGridLayout: vi.fn(),
+  perProperty: false,
+  onPerProperty: vi.fn(),
+  unitSystem: 'FIELD' as const,
+  onUnitSystem: vi.fn(),
+};
+
 describe('ResultsControlRail', () => {
   it('renders well checkboxes for each well', () => {
-    render(
-      <ResultsControlRail
-        categorized={SAMPLE}
-        selectedWells={new Set(['PROD1'])}
-        onWells={() => {}}
-        selectedVectors={{
-          field_rates: new Set(['FOPR']),
-          field_cumulative: new Set(),
-          field_derived: new Set(),
-          well_rates: new Set(),
-          well_cumulative: new Set(),
-          well_injection: new Set(),
-        }}
-        onVectors={() => {}}
-        logScale={false}
-        onLogScale={() => {}}
-      />
-    );
+    render(<ResultsControlRail {...DEFAULT_PROPS} />);
     expect(screen.getByLabelText('PROD1')).toBeInTheDocument();
     expect(screen.getByLabelText('PROD2')).toBeInTheDocument();
     expect(screen.getByLabelText('INJ1')).toBeInTheDocument();
@@ -40,21 +46,7 @@ describe('ResultsControlRail', () => {
 
   it('calls onWells when a well checkbox is clicked', () => {
     const onWells = vi.fn();
-    render(
-      <ResultsControlRail
-        categorized={SAMPLE}
-        selectedWells={new Set()}
-        onWells={onWells}
-        selectedVectors={{
-          field_rates: new Set(), field_cumulative: new Set(),
-          field_derived: new Set(), well_rates: new Set(),
-          well_cumulative: new Set(), well_injection: new Set(),
-        }}
-        onVectors={() => {}}
-        logScale={false}
-        onLogScale={() => {}}
-      />
-    );
+    render(<ResultsControlRail {...DEFAULT_PROPS} onWells={onWells} selectedWells={new Set()} />);
     fireEvent.click(screen.getByLabelText('PROD1'));
     expect(onWells).toHaveBeenCalledTimes(1);
     const newSet = onWells.mock.calls[0][0];
@@ -62,41 +54,51 @@ describe('ResultsControlRail', () => {
   });
 
   it('shows log-scale toggle', () => {
-    render(
-      <ResultsControlRail
-        categorized={SAMPLE}
-        selectedWells={new Set()}
-        onWells={() => {}}
-        selectedVectors={{
-          field_rates: new Set(), field_cumulative: new Set(),
-          field_derived: new Set(), well_rates: new Set(),
-          well_cumulative: new Set(), well_injection: new Set(),
-        }}
-        onVectors={() => {}}
-        logScale={false}
-        onLogScale={() => {}}
-      />
-    );
+    render(<ResultsControlRail {...DEFAULT_PROPS} />);
     expect(screen.getByLabelText(/log scale/i)).toBeInTheDocument();
   });
 
   it('groups wells by role (PROD vs INJ)', () => {
-    render(
-      <ResultsControlRail
-        categorized={SAMPLE}
-        selectedWells={new Set()}
-        onWells={() => {}}
-        selectedVectors={{
-          field_rates: new Set(), field_cumulative: new Set(),
-          field_derived: new Set(), well_rates: new Set(),
-          well_cumulative: new Set(), well_injection: new Set(),
-        }}
-        onVectors={() => {}}
-        logScale={false}
-        onLogScale={() => {}}
-      />
-    );
+    render(<ResultsControlRail {...DEFAULT_PROPS} />);
     expect(screen.getByText(/producers/i)).toBeInTheDocument();
     expect(screen.getByText(/injectors/i)).toBeInTheDocument();
+  });
+
+  it('shows grid layout selector', () => {
+    render(<ResultsControlRail {...DEFAULT_PROPS} />);
+    expect(screen.getByLabelText(/grid columns/i)).toBeInTheDocument();
+    expect(screen.getByDisplayValue('2 columns')).toBeInTheDocument();
+  });
+
+  it('shows per-property toggle', () => {
+    render(<ResultsControlRail {...DEFAULT_PROPS} />);
+    expect(screen.getByLabelText(/per-property/i)).toBeInTheDocument();
+  });
+
+  it('shows unit system selector', () => {
+    render(<ResultsControlRail {...DEFAULT_PROPS} />);
+    expect(screen.getByLabelText(/unit system/i)).toBeInTheDocument();
+    expect(screen.getByDisplayValue(/field.*stb.*mscf.*psia/i)).toBeInTheDocument();
+  });
+
+  it('calls onGridLayout when selector changes', () => {
+    const onGridLayout = vi.fn();
+    render(<ResultsControlRail {...DEFAULT_PROPS} onGridLayout={onGridLayout} />);
+    fireEvent.change(screen.getByLabelText(/grid columns/i), { target: { value: '4col' } });
+    expect(onGridLayout).toHaveBeenCalledWith('4col');
+  });
+
+  it('calls onPerProperty when toggle changes', () => {
+    const onPerProperty = vi.fn();
+    render(<ResultsControlRail {...DEFAULT_PROPS} onPerProperty={onPerProperty} />);
+    fireEvent.click(screen.getByLabelText(/per-property/i));
+    expect(onPerProperty).toHaveBeenCalledWith(true);
+  });
+
+  it('calls onUnitSystem when selector changes', () => {
+    const onUnitSystem = vi.fn();
+    render(<ResultsControlRail {...DEFAULT_PROPS} onUnitSystem={onUnitSystem} />);
+    fireEvent.change(screen.getByLabelText(/unit system/i), { target: { value: 'METRIC' } });
+    expect(onUnitSystem).toHaveBeenCalledWith('METRIC');
   });
 });

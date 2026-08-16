@@ -251,6 +251,7 @@ class CategorizedVectorsResponse(BaseModel):
     well_cumulative: dict[str, list[str]] = {}
     well_injection: dict[str, list[str]] = {}
     wells: list[str] = []
+    vector_labels: dict[str, str] = {}
 
 
 class PlotGroupResponse(BaseModel):

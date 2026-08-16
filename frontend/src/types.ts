@@ -2,6 +2,11 @@
 
 export type ExplanationLevel = 'beginner' | 'intermediate' | 'advanced';
 
+// Plot display options (Task 11)
+export type GridLayout = '1col' | '2col' | '4col';
+export type UnitSystem = 'FIELD' | 'METRIC';
+export type PerPropertyMode = boolean;
+
 export interface DeckSaveRequest {
   content: string;
   filename?: string;
@@ -176,6 +181,7 @@ export interface CategorizedVectors {
   well_cumulative: Record<string, string[]>;
   well_injection: Record<string, string[]>;
   wells: string[];
+  vector_labels: Record<string, string>;
 }
 
 export interface PlotGroupResponse {

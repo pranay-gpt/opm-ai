@@ -27,15 +27,15 @@ def test_plot_field_rates_one_trace_per_vector():
     fig = plot_field_rates(df)
     assert isinstance(fig, go.Figure)
     names = [trace.name for trace in fig.data]
-    assert any("FOPR" in n for n in names)
-    assert any("FWPR" in n for n in names)
+    assert any("Oil Rate" in n for n in names)
+    assert any("Water Rate" in n for n in names)
 
 
 def test_plot_field_rates_filter_by_vectors():
     df = _df(FOPR=[100.0], FWPR=[5.0], FGPR=[10.0])
     fig = plot_field_rates(df, vectors=["FOPR"])
     assert len(fig.data) == 1
-    assert "FOPR" in fig.data[0].name
+    assert "Oil Rate" in fig.data[0].name
 
 
 def test_plot_field_cumulative_has_traces():
@@ -79,7 +79,7 @@ def test_plot_well_rates_water_rate_sanitized():
         }
     )
     fig = plot_well_rates(df, wells=["PROD1"])
-    wwpr_trace = next(t for t in fig.data if "WWPR" in t.name)
+    wwpr_trace = next(t for t in fig.data if "Water Rate" in t.name)
     assert all(v >= 0 for v in wwpr_trace.y)
 
 
@@ -115,14 +115,16 @@ def test_missing_vectors_skipped():
 
 def test_plot_group_dispatch():
     df = _df(FOPR=[100.0])
-    fig = plot_group("field_rates", df, wells=[], vectors=None)
+    fig = plot_group("field_rates", df, wells=[], vectors=None, log_scale=False, per_property=False, unit_system="FIELD")
     assert len(fig.data) == 1
 
 
 def test_plot_group_unknown_raises():
     df = _df(FOPR=[100.0])
-    with pytest.raises(ValueError, match="Unknown group"):
-        plot_group("nonsense", df, wells=[], vectors=None)
+    # Unknown group returns empty figure with error title instead of raising
+    fig = plot_group("nonsense", df, wells=[], vectors=None, log_scale=False, per_property=False, unit_system="FIELD")
+    assert len(fig.data) == 0
+    assert "Unknown group" in fig.layout.title.text
 
 
 def test_log_scale_kwarg_applied():

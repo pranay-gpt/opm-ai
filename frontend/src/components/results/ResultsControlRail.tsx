@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import type { CategorizedVectors, VectorGroup } from '../../types';
+import type { CategorizedVectors, VectorGroup, GridLayout, UnitSystem } from '../../types';
 import type { ReactNode } from 'react';
 
 const ALL_GROUPS: VectorGroup[] = [
@@ -19,6 +19,12 @@ interface ResultsControlRailProps {
   onVectors: (g: VectorGroup, s: Set<string>) => void;
   logScale: boolean;
   onLogScale: (v: boolean) => void;
+  gridLayout: GridLayout;
+  onGridLayout: (v: GridLayout) => void;
+  perProperty: boolean;
+  onPerProperty: (v: boolean) => void;
+  unitSystem: UnitSystem;
+  onUnitSystem: (v: UnitSystem) => void;
 }
 
 // ── Small local primitives (matching viewer3d/ControlPanel.tsx pattern) ──
@@ -86,6 +92,12 @@ export default function ResultsControlRail({
   onVectors,
   logScale,
   onLogScale,
+  gridLayout,
+  onGridLayout,
+  perProperty,
+  onPerProperty,
+  unitSystem,
+  onUnitSystem,
 }: ResultsControlRailProps) {
   const producerWells = useMemo(
     () =>
@@ -162,7 +174,7 @@ export default function ResultsControlRail({
                 {vecs.map((vec) => (
                   <Check
                     key={vec}
-                    label={vec}
+                    label={categorized.vector_labels?.[vec] || vec}
                     checked={selectedVectors[group]?.has(vec) ?? false}
                     onChange={() => toggleVector(group, vec)}
                   />
@@ -178,6 +190,40 @@ export default function ResultsControlRail({
             checked={logScale}
             onChange={onLogScale}
           />
+        </Section>
+
+        <Section title="Layout" defaultOpen={true}>
+          <label className="flex items-center justify-between gap-2 text-xs text-textSecondary mb-2">
+            <span className="shrink-0">Grid Columns</span>
+            <select
+              value={gridLayout}
+              onChange={(e) => onGridLayout(e.target.value as GridLayout)}
+              className="px-2 py-1 text-xs border border-border rounded bg-surface text-textPrimary focus:outline-none focus:ring-1 focus:ring-primary"
+            >
+              <option value="1col">1 column</option>
+              <option value="2col">2 columns</option>
+              <option value="4col">4 columns</option>
+            </select>
+          </label>
+          <Check
+            label="Per-property (one vector per graph)"
+            checked={perProperty}
+            onChange={onPerProperty}
+          />
+        </Section>
+
+        <Section title="Units" defaultOpen={true}>
+          <label className="flex items-center justify-between gap-2 text-xs text-textSecondary">
+            <span className="shrink-0">Unit System</span>
+            <select
+              value={unitSystem}
+              onChange={(e) => onUnitSystem(e.target.value as UnitSystem)}
+              className="px-2 py-1 text-xs border border-border rounded bg-surface text-textPrimary focus:outline-none focus:ring-1 focus:ring-primary"
+            >
+              <option value="FIELD">Field (STB, MSCF, psia)</option>
+              <option value="METRIC">Metric (m³, SM³, bar)</option>
+            </select>
+          </label>
         </Section>
       </div>
     </aside>

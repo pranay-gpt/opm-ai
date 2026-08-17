@@ -173,11 +173,42 @@ class _ParserState:
                 and self._current_keyword.spec.first_column_is_name
             ):
                 kw_spec = get_keyword(token.text)
+                # Absorb as value when EITHER:
+                # (a) the token is unknown / cross-section (e.g.
+                #     FIELD in a SCHEDULE GCONPROD record), OR
+                # (b) the previous keyword header line was NOT
+                #     terminated by `/` AND no record has been
+                #     completed yet — meaning the column-0 token
+                #     must be a name like `RES`, `FIELD`, etc.
+                #     We use `len(records) == 0` instead of
+                #     `_current_record is not None` because EOL
+                #     closes the in-progress record under
+                #     LIST/ARRAY keywords.
                 if (
                     kw_spec is None
                     or (
                         self._current_section is not None
-                        and not kw_spec.is_valid_in(self._current_section.name)
+                        and not self._is_valid_for_current_or_resolved(kw_spec)
+                    )
+                    or (
+                        # multi_record LIST keywords (GCONINJE etc.) may
+                        # carry an unquoted record identifier at column 0
+                        # (e.g. `RES`, `WAT`) that happens to collide
+                        # with the name of a size_kind=NONE restart-data
+                        # keyword. We absorb it as the next record's first
+                        # item when the previous record ended with `/` AND
+                        # the candidate token is a real NONE-sized
+                        # keyword — otherwise a legitimate new keyword
+                        # following a multi_record block would be
+                        # silently swallowed.
+                        self._last_was_terminator
+                        and self._current_keyword.spec.multi_record
+                        and kw_spec is not None
+                        and kw_spec.size_kind == SizeKind.NONE
+                    )
+                    or (
+                        self._current_keyword is not None
+                        and len(self._current_keyword.records) == 0
                     )
                 ):
                     self._on_value(token)
@@ -252,6 +283,26 @@ class _ParserState:
             self._on_value(token)
 
     # -- Section handling ---------------------------------------------------
+
+    def _is_valid_for_current_or_resolved(self, kw_spec):
+        """Check if kw_spec is valid in the current section.
+
+        PRELUDE is a virtual section for keywords that arrive via INCLUDE
+        before any section header. At parse time we don't know which real
+        section a PRELUDE keyword will eventually be merged into (the
+        resolver does that). For smart-dispatch decisions during PRELUDE
+        parsing, accept a keyword if it is valid in ANY real section.
+        Otherwise we'd absorb real SCHEDULE-only keywords (WSEGAICD,
+        WRFTPLT, GDORIENT, etc.) into the surrounding WELSEGS/MULTFLT
+        record when the include happens to be parsed standalone or before
+        its target section header.
+        """
+        from .spec import SectionName
+        if self._current_section is None:
+            return False
+        if self._current_section.name == SectionName.PRELUDE:
+            return len(kw_spec.sections) > 0
+        return kw_spec.is_valid_in(self._current_section.name)
 
     def _on_unknown_keyword(self, token: Token) -> None:
         """Treat an UNKNOWN token as a new keyword (used for SUMMARY).

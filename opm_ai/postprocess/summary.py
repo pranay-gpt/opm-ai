@@ -105,10 +105,11 @@ def _read_unsmry_with_smspec(unsmry_path: Path, smspec_path: Path) -> pd.DataFra
     # Parse SMSPEC for metadata
     metadata = {}
     for kw, arr in smspec_data:
-        if kw in ('KEYWORDS', 'WGNAMES', 'NAMES', 'NUMS', 'UNITS'):
+        kw_stripped = kw.strip()
+        if kw_stripped in ('KEYWORDS', 'WGNAMES', 'NAMES', 'NUMS', 'UNITS'):
             if arr.dtype.kind in ('S', 'U'):
                 arr = np.array([x.decode('ascii').strip() if isinstance(x, bytes) else str(x).strip() for x in arr])
-            metadata[kw] = arr
+            metadata[kw_stripped] = arr
 
     # UNSMRY has SEQHDR, MINISTEP, PARAMS blocks
     # PARAMS contains the actual vector values for each time step
@@ -117,15 +118,16 @@ def _read_unsmry_with_smspec(unsmry_path: Path, smspec_path: Path) -> pd.DataFra
 
     current_step = {}
     for kw, arr in unsmry_data:
-        if kw == 'SEQHDR':
+        kw_stripped = kw.strip()
+        if kw_stripped == 'SEQHDR':
             if current_step.get('PARAMS') is not None:
                 all_vectors.append(current_step['PARAMS'])
                 if 'MINISTEP' in current_step:
                     time_steps.append(float(current_step['MINISTEP'][0]))
             current_step = {'SEQHDR': arr}
-        elif kw == 'MINISTEP':
+        elif kw_stripped == 'MINISTEP':
             current_step['MINISTEP'] = arr
-        elif kw == 'PARAMS':
+        elif kw_stripped == 'PARAMS':
             current_step['PARAMS'] = arr
 
     # Don't forget the last step

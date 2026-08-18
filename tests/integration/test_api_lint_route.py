@@ -47,10 +47,10 @@ def test_lint_route_returns_200_on_linter_crash(client, spe1_deck_path, monkeypa
     def _boom(_path):
         raise RuntimeError("synthetic linter crash for test")
 
-    # The route imports lint_deck_func by name; monkeypatch the symbol
-    # the route module binds to, not the source module's, to match the
-    # route's lookup path exactly.
-    monkeypatch.setattr(lint_route, "lint_deck_func", _boom)
+    # The route imports lint_deck_combined by name; monkeypatch the
+    # symbol the route module binds to, not the source module's, to
+    # match the route's lookup path exactly.
+    monkeypatch.setattr(lint_route, "lint_deck_combined", _boom)
 
     response = client.post("/api/lint", json={"deck_path": spe1_deck_path})
 
@@ -80,7 +80,7 @@ def test_lint_route_returns_400_on_value_error(client, spe1_deck_path, monkeypat
     def _bad(_path):
         raise ValueError("invalid deck content")
 
-    monkeypatch.setattr(lint_route, "lint_deck_func", _bad)
+    monkeypatch.setattr(lint_route, "lint_deck_combined", _bad)
 
     response = client.post("/api/lint", json={"deck_path": spe1_deck_path})
 

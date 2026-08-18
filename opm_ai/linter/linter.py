@@ -148,13 +148,17 @@ def lint_deck_combined(deck_path: Path) -> LintResult:
     Both linters run on the same deck file. Issues are deduplicated
     by (rule_id, line, message-prefix) so identical diagnostics from
     both engines don't double-count. v2 issues are converted to L1
-    LintIssue shape for a single uniform output.
+    LintIssue shape for a single uniform output. v2 issues whose rule
+    code has a registered FixProposal also carry a `fix_proposal`
+    summary so the UI can offer an "Apply Fix" button per issue.
 
     Args:
         deck_path: Path to a .DATA deck file.
 
     Returns:
-        LintResult with issues from both linters, deduplicated.
+        LintResult with issues from both linters, deduplicated. Each
+        issue from a v2 rule with a registered FixProposal has a
+        populated `fix_proposal`.
     """
     from opm_ai.linter.v2.validator import LintIssue as V2Issue, Severity as V2Severity
 
@@ -175,13 +179,22 @@ def lint_deck_combined(deck_path: Path) -> LintResult:
         ))
         return l1_result
 
+    # Read deck text once so each FixProposal can be computed against
+    # the same source. Failures here are non-fatal — we just skip
+    # attaching proposals (L1 issues still surface as before).
+    deck_text: Optional[str] = None
+    try:
+        deck_text = deck_path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        pass
+
     # Convert v2 issues to L1 shape and append, deduplicating.
     seen_keys: set[tuple] = set()
     for issue in l1_result.issues:
         seen_keys.add(_dedup_key(issue))
 
     for v2i in v2_result.issues:
-        l1i = _convert_v2_issue(v2i)
+        l1i = _convert_v2_issue(v2i, deck_text)
         if _dedup_key(l1i) not in seen_keys:
             l1_result.issues.append(l1i)
             seen_keys.add(_dedup_key(l1i))
@@ -189,7 +202,7 @@ def lint_deck_combined(deck_path: Path) -> LintResult:
     return l1_result
 
 
-def _convert_v2_issue(v2i) -> LintIssue:
+def _convert_v2_issue(v2i, deck_text: Optional[str] = None) -> LintIssue:
     """Convert a v2 LintIssue (dataclass) to the L1 Pydantic shape.
 
     The two shapes diverge in:
@@ -211,13 +224,38 @@ def _convert_v2_issue(v2i) -> LintIssue:
             if section_name is not None:
                 section = getattr(section_name, "value", section_name)
     keyword_name = getattr(v2i.keyword, "name", None) if v2i.keyword else None
+    rule_id = f"L{v2i.code}"
+
+    # Attach a FixProposalView if this rule has a registered proposal
+    # function and it succeeds against the current deck text. Failure
+    # to produce a proposal is non-fatal — the issue still surfaces,
+    # just without an Apply Fix button.
+    fix_proposal = None
+    if deck_text is not None:
+        try:
+            from opm_ai.linter.v2.fix_proposals import propose_fix
+            from opm_ai.linter.models import FixProposalView
+
+            proposal = propose_fix(v2i, deck_text)
+            if proposal is not None:
+                fix_proposal = FixProposalView(
+                    rule_id=rule_id,
+                    description=proposal.description,
+                    original_value=proposal.original_value,
+                    new_value=proposal.new_value,
+                )
+        except Exception:
+            # Proposal failures must never break lint output.
+            pass
+
     return LintIssue(
         severity=v2i.severity.value,
         section=section,
         keyword=keyword_name,
         line=v2i.source_line,
         message=v2i.message,
-        rule_id=f"L{v2i.code}",
+        rule_id=rule_id,
+        fix_proposal=fix_proposal,
     )
 
 

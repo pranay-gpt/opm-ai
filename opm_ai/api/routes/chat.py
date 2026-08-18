@@ -28,7 +28,7 @@ from opm_ai.api.session_store import (
     update_session,
 )
 from opm_ai.builder import build_deck
-from opm_ai.linter import lint_deck
+from opm_ai.linter.api import default_api
 from opm_ai.runner import run_simulation
 from opm_ai.runner.models import SimulationJob
 from opm_ai.postprocess.summary import read_summary
@@ -95,7 +95,7 @@ async def tool_lint_deck(args: dict) -> dict:
     deck_path = args.get("deck_path", "")
     deck_path = validate_deck_path(deck_path)
     loop = asyncio.get_event_loop()
-    result = await loop.run_in_executor(None, lambda: lint_deck(deck_path))
+    result = await loop.run_in_executor(None, lambda: default_api.lint(deck_path))
     return {
         "deck_path": result.deck_path,
         "errors": [i.message for i in result.issues if i.severity == "ERROR"],

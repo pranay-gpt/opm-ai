@@ -67,6 +67,10 @@ class LinterAPI:
         # sibling spec). `with_explanation` accepted but currently a
         # no-op until the explainer integration is decided.
         path = Path(source)
+        if path.suffix.lower() != ".data":
+            raise LinterError(
+                f"unsupported source type: {path.suffix!r} (expected .DATA)"
+            )
         sha = _sha256_of(path)
         cached = self._cache.get(path, self._cache_key(path, sha))
         if cached is not None:

@@ -1185,6 +1185,12 @@ git add opm_ai/builder/builder.py
 git commit -m "refactor(builder): route linter callsites through LinterAPI"
 ```
 
+**Decision (2026-08-18): NO-OP.** When implementing this task I read the two callsites (`opm_ai/builder/builder.py:394` and `:430`) and discovered they call `lint_deck(temp_path)` — the L1-only entry point — **not** `lint_deck_combined`. Task 9's plan assumption was that the builder was already on the combined path; in fact it's still on the L1-only path.
+
+Replacing `lint_deck(...)` with `default_api.lint(...)` would silently switch the builder from L1-only to L1+v2, violating the project memory rule "ERROR blocks builder" and the plan's "Output identical / No behaviour change" constraint. The right move is to leave the builder alone and document that the switch is a future-intent change that needs its own plan + test.
+
+The builder callsites can stay on `lint_deck` until a future PR explicitly authorises the L1→L1+v2 switch. Closing Task 9 as a documented no-op.
+
 ---
 
 ## Task 10: Migrate chat route callsites

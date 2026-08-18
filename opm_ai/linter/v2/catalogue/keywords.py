@@ -991,9 +991,9 @@ JFUNC = KeywordSpec(
 NNC = KeywordSpec(
     name="NNC",
     sections=[SectionName.GRID],
-    size_kind=SizeKind.FIXED,
+    size_kind=SizeKind.LIST,
     items=[INT] * 17,  # I1, J1, K1, I2, J2, K2, TRANSNNC, ISATNUM1, ISATNUM2, IPRSNUM1, IPRSNUM2, FACE1, FACE2, DIFFNNC, DISPNNC, AREANNC, PERMNNC
-    record_count=1,
+    multi_record=True,
 )
 OPERNUM = KeywordSpec(
     name="OPERNUM",
@@ -1076,9 +1076,9 @@ EDIT = KeywordSpec(
 EDITNNCR = KeywordSpec(
     name="EDITNNCR",
     sections=[SectionName.EDIT],
-    size_kind=SizeKind.FIXED,
+    size_kind=SizeKind.LIST,
     items=[INT] * 14,  # I1, J1, K1, I2, J2, K2, TRANSNNC, ISATNUM1, ISATNUM2, IPRSNUM1, IPRSNUM2, FACE1, FACE2, DIFFNNC
-    record_count=1,
+    multi_record=True,
 )
 
 DEPTH = KeywordSpec(
@@ -1360,9 +1360,9 @@ SWLPC = KeywordSpec(
 PLMIXPAR = KeywordSpec(
     name="PLMIXPAR",
     sections=[SectionName.PROPS],
-    size_kind=SizeKind.FIXED,
+    size_kind=SizeKind.LIST,
     items=[DOUBLE],  # PLMVIS
-    record_count=1,
+    multi_record=True,
 )
 PLYADS = KeywordSpec(
     name="PLYADS",
@@ -1373,9 +1373,9 @@ PLYADS = KeywordSpec(
 PLYMAX = KeywordSpec(
     name="PLYMAX",
     sections=[SectionName.PROPS],
-    size_kind=SizeKind.FIXED,
+    size_kind=SizeKind.LIST,
     items=[DOUBLE, DOUBLE],  # POLCON, SALTCON
-    record_count=1,
+    multi_record=True,
 )
 PLYSHLOG = KeywordSpec(
     name="PLYSHLOG",
@@ -2627,9 +2627,9 @@ WTEMP = KeywordSpec(
 DRSDT = KeywordSpec(
     name="DRSDT",
     sections=[SectionName.SCHEDULE],
-    size_kind=SizeKind.FIXED,
+    size_kind=SizeKind.LIST,
     items=[DOUBLE, DOUBLE],
-    record_count=1,
+    multi_record=True,
 )
 DRSDTCON = KeywordSpec(
     name="DRSDTCON",
@@ -2640,9 +2640,9 @@ DRSDTCON = KeywordSpec(
 DRSDTR = KeywordSpec(
     name="DRSDTR",
     sections=[SectionName.SCHEDULE],
-    size_kind=SizeKind.FIXED,
+    size_kind=SizeKind.LIST,
     items=[DOUBLE, DOUBLE],  # DRSDT1, DRSDT2
-    record_count=1,
+    multi_record=True,
 )
 
 # Report flags (zero-item or simple flags)

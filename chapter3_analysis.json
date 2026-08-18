@@ -1,0 +1,184 @@
+{
+  "chapter": "CHAPTER 3: KEYWORD DOCUMENTATION STRUCTURE",
+  "pages": "164-174",
+  "source": "OPM Flow Reference Manual (2026-04) Revision: Rev-0",
+  
+  "3.1_introduction": {
+    "description": "The OPM Flow manual uses extensive cross-referencing for efficient navigation. Key navigation features include footer links (Table of Contents, Keyword Index), alphabetic keyword listing with color coding (green=implemented, orange=recognized but not implemented, red=not implemented), clickable section names, and PDF bookmarks."
+  },
+  
+  "3.2_keyword_definition_structure": {
+    "components": [
+      "Section header with keyword name in capital letters and brief description",
+      "Keyword Table Section showing status across OPM Flow sections"
+    ],
+    "keyword_table_sections": [
+      "RUNSPEC", "GRID", "EDIT", "PROPS", "REGIONS", "SOLUTION", "SUMMARY", "SCHEDULE"
+    ],
+    "color_coding": {
+      "green": "Keyword available in this section and mostly/fully implemented",
+      "gray": "Keyword cannot be used in this section",
+      "orange": "Keyword partially implemented (recognized but function ignored)",
+      "red": "Available in commercial simulator but not implemented in OPM Flow - causes errors/abort if used"
+    }
+  },
+  
+  "3.3_multi_section_keywords": {
+    "concept": "Keywords usable in multiple sections are defined only once in the first available section to avoid duplication",
+    "example": "ADD keyword - defined in GRID section, with brief descriptions + links in EDIT, PROPS, REGIONS, SOLUTION sections",
+    "mechanism": "Keyword Table Section shows green cells for available sections, gray for unavailable. Full description in first section; other sections reference it."
+  },
+  
+  "3.4_keyword_formats": {
+    "general_rules": [
+      "All keywords must be in capital case",
+      "Keywords must start in column one",
+      "Lowercase entry produces errors",
+      "Keywords not in column one are not recognized"
+    ],
+    
+    "3.4.1_comment_format": {
+      "syntax": "-- in columns 1-2",
+      "placement": "Anywhere in the file, or after '/' terminating a record",
+      "required_fields": "None - free text",
+      "optional_fields": "Any comment text",
+      "examples": [
+        "--\n-- MAX MAX RSVD TVDP TVDP\n-- EQLNUM DEPTH NODES TABLE NODES\nEQLDIMS\n9 1* 20 1* 1* /",
+        "MULTIPLY\n'PERMZ' 0.50000 1* 1* 1* 1* 1* 1* / PERMZ * 0.5\n/"
+      ],
+      "applicable_sections": "All sections"
+    },
+    
+    "3.4.2_activation_format": {
+      "syntax": "Keyword alone on a line (no parameters)",
+      "purpose": "Invoke a feature or switch processing on/off",
+      "required_fields": "None - keyword only",
+      "optional_fields": "None",
+      "examples": [
+        "GAS",
+        "API",
+        "ECHO",
+        "SKIP"
+      ],
+      "documentation_structure": "Description of functionality + example",
+      "applicable_sections": "Primarily RUNSPEC (e.g., GAS, OIL, WATER), but can appear in other sections"
+    },
+    
+    "3.4.3_vector_row_format": {
+      "syntax": "Keyword followed by vector of parameters on separate line(s); each line = one data set terminated by '/'",
+      "parameter_types": "Integer, real, character",
+      "required_fields": "Vector parameters as defined per keyword",
+      "optional_fields": "Default values indicated in parameter table",
+      "termination": "Each data set line terminated by '/'",
+      "examples": [
+        "DIMENS\n46 112 22 /",
+        "ROCK\n3566.9 5.0E-06 / ROCK COMPRESSIBILITY REGION 1\n3966.9 5.5E-06 / ROCK COMPRESSIBILITY REGION 2\n4566.9 6.0E-06 / ROCK COMPRESSIBILITY REGION 3"
+      ],
+      "documentation_structure": "Description + parameter table (No., Name, Description, Default per unit system) + examples",
+      "notes": "No terminating '/' for the keyword itself (only per data set)",
+      "applicable_sections": "RUNSPEC (DIMENS), PROPS (ROCK, PVT*), SOLUTION, others"
+    },
+    
+    "3.4.4_vector_columnar_format": {
+      "syntax": "Keyword followed by columnar vector - each parameter in separate column, rows = data points",
+      "parameter_types": "Integer, real, character (columnar)",
+      "required_fields": "Columnar parameters as defined per keyword",
+      "optional_fields": "Defaults indicated in table",
+      "termination": "Each table terminated by '/'; no '/' for keyword",
+      "examples": [
+        "SWFN\n-- SWAT KRW PCOW\n-- FRAC FRAC PSIA\n0.15 0.00000 1*\n0.30 0.00050 1*\n...\n1.00 0.52200 1* / TABLE NO. 1"
+      ],
+      "documentation_structure": "Description + parameter table (No., Name, Description, Default per unit system) + notes + examples",
+      "notes": "Followed by NTSFUN tables (from TABDIMS); each table min 2 rows, max NSSFUN rows",
+      "applicable_sections": "PROPS (SWFN, SOF*, SGF*, etc.), PVT tables"
+    },
+    
+    "3.4.5_array_format": {
+      "syntax": "Keyword followed by full array of values (NX x NY x NZ entries); uses BOX to define sub-area",
+      "parameter_types": "Real, integer (array elements)",
+      "required_fields": "Complete array matching grid dimensions (or BOX-defined region)",
+      "optional_fields": "Repeat counts (e.g., 30*100.0), default values",
+      "termination": "Keyword terminated by '/'",
+      "examples": [
+        "PORO\n300*0.300\n/"
+      ],
+      "documentation_structure": "Description + parameter table (No., Name, Description, Default per unit system) + notes + examples",
+      "notes": "Repeat counts allowed; number of entries must match NX x NY x NZ (or BOX region)",
+      "applicable_sections": "GRID (PORO, PERMX, PERMY, PERMZ, DX, DY, DZ, TOPS, DEPTH), EDIT, PROPS, REGIONS, SOLUTION"
+    }
+  },
+  
+  "3.5_input_file_structure": {
+    "description": "OPM Flow input deck separated into sections (similar to ECLIPSE 100) to avoid errors. Sections must appear in order.",
+    "sections": [
+      {
+        "name": "RUNSPEC",
+        "required": true,
+        "order": 1,
+        "purpose": "Defines key simulator parameters: model dimensions, phases present (oil/gas/water), number of tables and max rows, max groups/wells/completions, options to invoke",
+        "chapter": "Chapter 5"
+      },
+      {
+        "name": "GRID",
+        "required": true,
+        "order": 2,
+        "purpose": "Defines basic grid properties: structure, faults, static rock properties (porosity, permeability). Calculates pore volumes (PORV) and transmissibilities (TRANX, TRANY, TRANZ, NNC)",
+        "chapter": "Chapter 6"
+      },
+      {
+        "name": "EDIT",
+        "required": false,
+        "order": 3,
+        "purpose": "Allows editing of properties calculated in GRID section (PORV, TRANX, etc.)",
+        "chapter": "Chapter 7"
+      },
+      {
+        "name": "PROPS",
+        "required": true,
+        "order": 4,
+        "purpose": "Defines fluid properties for all phases (viscosity, formation volume factor) and rock flow properties (relative permeability, capillary pressure)",
+        "chapter": "Chapter 8"
+      },
+      {
+        "name": "REGIONS",
+        "required": false,
+        "order": 5,
+        "purpose": "Defines regions for reporting and allocation of fluid/rock properties from PROPS section throughout model",
+        "chapter": "Chapter 9"
+      },
+      {
+        "name": "SOLUTION",
+        "required": true,
+        "order": 6,
+        "purpose": "Defines initialization parameters: fluid contacts, reservoir pressures. Reports initial in-place volumes and average pressures for regions",
+        "chapter": "Chapter 10"
+      },
+      {
+        "name": "SUMMARY",
+        "required": false,
+        "order": 7,
+        "purpose": "Defines summary vectors vs time for output files (field/group/well production, injection, grid block properties). Nearly always included for results.",
+        "chapter": "Chapter 11"
+      },
+      {
+        "name": "SCHEDULE",
+        "required": true,
+        "order": 8,
+        "purpose": "Defines time-dependent data: field/group/well parameters, targets/constraints, numerical controls, operating schedule, reporting requirements",
+        "chapter": "Chapter 12"
+      }
+    ],
+    "notes": [
+      "SUMMARY is optional but nearly always included for production/injection profiles",
+      "OPM ResInsight can cross-plot grid block properties vs time, reducing need to export grid block data to SUMMARY"
+    ]
+  },
+  
+  "format_type_summary": {
+    "COMMENT": "Free text, '--' prefix, anywhere in file",
+    "ACTIVATION": "Keyword only, no parameters, switches features on/off",
+    "VECTOR_ROW": "Row-wise parameters, one data set per line, '/' per line",
+    "VECTOR_COLUMNAR": "Column-wise parameters, tabular data, '/' per table",
+    "ARRAY": "Full grid array (NX*NY*NZ values), '/' terminates keyword, uses BOX for sub-regions"
+  }
+}

@@ -1086,11 +1086,11 @@ from opm_ai.linter.api import (
     LinterError,
     LinterTimeoutError,
     default_api,
-    lint_deck,
 )
 from opm_ai.linter.deck import Deck
 from opm_ai.linter.linter import (
     clear_deck_cache,
+    lint_deck,
     lint_deck_combined,
     lint_deck_v2,
 )
@@ -1111,6 +1111,13 @@ __all__ = [
     "lint_deck_v2",
 ]
 ```
+
+**Critical pitfall (this bit Task 8 the first time round):**
+`opm_ai.linter.api` defines its own `lint_deck` as a thin wrapper around `default_api.lint(...)` (which runs L1+v2 through the executor pool). If you re-export it from `opm_ai.linter.__init__` via `from opm_ai.linter.api import ..., lint_deck`, the name `opm_ai.linter.lint_deck` becomes the facade-backed version, **silently changing L1-only callers to L1+v2**.
+
+This breaks `tests/unit/test_linter_combined.py::test_lint_deck_combined_adds_v2_issues_when_they_fire`, which calls `lint_deck(p)` and then `lint_deck_combined(p)` and expects the L1 result to have no L2xx codes. With the shadowing, both calls return L1+v2 — so the "v2-only delta" assertion fails.
+
+The fix: do **not** import `lint_deck` from `api`; bind it from `opm_ai.linter.linter` (the original L1-only definition). The api module still defines `lint_deck` for the explicit `from opm_ai.linter.api import lint_deck` use case; the public pin test in Task 1 accepts either symbol.
 
 - [ ] **Step 2: Run the previously-failing tests**
 

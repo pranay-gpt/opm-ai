@@ -747,25 +747,49 @@ Run: `mkdir -p tests/fixtures/linter_api`
 cat > tests/fixtures/linter_api/clean.DATA <<'EOF'
 RUNSPEC
 DIMENS
-  10 10 5 /
+  5 5 2 /
+TABDIMS
+  1 1 3 20 20 /
+WELLDIMS
+  1 10 1 10 /
 GRID
-DXV
-  10*100.0 /
-DYV
-  10*100.0 /
-DZV
-  5*20.0 /
+DX
+  50*100.0 /
+DY
+  50*100.0 /
+DZ
+  50*20.0 /
+TOPS
+  50*0.0 /
 PORO
-  500*0.2 /
+  50*0.2 /
 PERMX
-  500*100.0 /
+  50*100.0 /
+PROPS
+SWOF
+  0.0 0.0 1.0 0.0
+  1.0 1.0 0.0 0.0 /
+SOLUTION
+EQUIL
+  100.0 100.0 0.0 0.0 0.0 0.0 /
+SUMMARY
+WOPR
+/
 SCHEDULE
 WELSPECS
   'W1' 'G1' 1 1 5.0 'OIL' /
 /
+COMPDAT
+  'W1' 1 1 1 1 'OPEN' /
+/
+WCONPROD
+  'W1' 'OPEN' 'ORAT' 1000.0 1* 1* /
+/
 END
 EOF
 ```
+
+> Note: an earlier draft of this fixture used `DXV`/`DYV`/`DZV` and only RUNSPEC/GRID/SCHEDULE — it failed 6 linter ERRORs (missing PROPS/SOLUTION/SUMMARY/WELLDIMS/COMPDAT/WCONPROD; DXV/DYV name vs DX/DY requirement; missing TOPS). The version above lints to `passed=True, error_count=0`.
 
 - [ ] **Step 3: `parse_error.DATA` — broken syntax**
 

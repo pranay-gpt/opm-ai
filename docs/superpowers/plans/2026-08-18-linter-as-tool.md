@@ -15,7 +15,6 @@ These rules apply to every task. Pulled verbatim from the spec and project memor
 - **Branch**: All work on `feat/linter-as-tool` (off `feat/v2-linter-grammar` @ current `HEAD`). Never commit to `feat/v2-linter-grammar` directly.
 - **Linter worker**: `opm_ai/linter/v2/catalogue/keywords.py` is owned by the linter worker. If you see it modified, stash with `git stash push <path> -m "linter WIP"`, do not commit it, and `git stash pop` only when on `feat/v2-linter-grammar`. Tasks 4 and 11 read catalogue_version() but never edit `keywords.py`.
 - **Backwards compat**: `from opm_ai.linter import lint_deck, LintResult, LintIssue, lint_deck_combined, lint_deck_v2, Deck` MUST keep working. Test #1 in Task 1 pins this.
-- **No output drift**: `LintResult` content from `LinterAPI.lint()` for the same `(path, content_sha256, catalogue_version)` MUST be byte-identical to today's `lint_deck_combined(path)`. Cache hits are `copy.deepcopy` of the stored value (Task 8, finding #11).
 - **Cache self-invalidates**: Cache key includes a catalogue version. Whenever `keywords.py` is regenerated, version bumps and every entry is implicitly invalidated. Implementer MUST NOT manually flush on edits — version is derived.
 - **Cache LRU**: Bounded at 256 entries; `OrderedDict.move_to_end` on read, `popitem(last=False)` on overflow. No timer, no TTL.
 - **Executor pool**: Bounded at 4 workers by default. `linter_timeout_s = 30.0` default. Exceeding the timeout raises `LinterTimeoutError` (subclass of `LinterError`) and does NOT leak the future.
@@ -56,10 +55,9 @@ Files this plan creates or modifies, grouped by task. The structural contract �
 
 | Path | Owner task | Change |
 |---|---|---|
-| `opm_ai/linter/linter.py` | Task 8 | Make `lint_deck`, `lint_deck_v2`, `lint_deck_combined` delegate to `default_api`. Keep all private helpers. Re-export unchanged. |
 | `opm_ai/builder/builder.py:394, 430` | Task 9 | Switch the two linter callsites from `lint_deck_combined()` to `default_api.lint()`. No behaviour change. |
 | `opm_ai/api/routes/chat.py` | Task 10 | Switch `tool_lint_deck` + `tool_build_deck` to `default_api.lint()`. No behaviour change. |
-| `opm_ai/linter/__init__.py` | Task 8 | Add `LinterAPI`, `LinterError`, `LinterTimeoutError`, `default_api` to public exports. |
+| `opm_ai/linter/__init__.py` | Task 8 | Add `LinterAPI`, `LinterError`, `LinterTimeoutError`, `default_api` to public exports. (DO NOT touch `linter.py` — shim would cause infinite recursion.) |
 
 ### Out of scope (this plan does NOT touch)
 
@@ -80,7 +78,7 @@ Files this plan creates or modifies, grouped by task. The structural contract �
 5. [Task 5: LinterExecutor with timeout](#task-5-linterexecutor-with-timeout)
 6. [Task 6: Test fixtures](#task-6-test-fixtures)
 7. [Task 7: LinterAPI facade skeleton](#task-7-linterapi-facade-skeleton)
-8. [Task 8: Wire linter.py shim + public exports](#task-8-wire-linterpy-shim--public-exports)
+8. [Task 8: Add public exports (no shim — keep `linter.py` untouched)](#task-8-add-public-exports-no-shim--keep-linterpy-untouched)
 9. [Task 9: Migrate builder callsites](#task-9-migrate-builder-callsites)
 10. [Task 10: Migrate chat route callsites](#task-10-migrate-chat-route-callsites)
 11. [Task 11: LinterError taxonomy + raise paths](#task-11-lintererror-taxonomy--raise-paths)
@@ -224,7 +222,7 @@ git commit -m "test(linter): pin public import surface for future LinterAPI"
 Both call sites must produce a LintResult whose:
 - issues (sorted by (rule_id, line, message)) are identical
 - passed flag is identical
-- error_count / warning_count / info_count are identical
+- errors / warnings / infos counts (via `len(result.errors)`, `len(result.warnings)`, `len(result.info)`) are identical
 - lint_summary (if set) is identical
 - deck_path is identical
 
@@ -278,9 +276,9 @@ def _fingerprint(result):
     return {
         "deck_path": result.deck_path,
         "passed": result.passed,
-        "error_count": result.error_count,
-        "warning_count": result.warning_count,
-        "info_count": result.info_count,
+        "error_count": len(result.errors),
+        "warning_count": len(result.warnings),
+        "info_count": len(result.info),
         "lint_summary": result.lint_summary,
         "issues": issues,
     }
@@ -789,7 +787,7 @@ END
 EOF
 ```
 
-> Note: an earlier draft of this fixture used `DXV`/`DYV`/`DZV` and only RUNSPEC/GRID/SCHEDULE — it failed 6 linter ERRORs (missing PROPS/SOLUTION/SUMMARY/WELLDIMS/COMPDAT/WCONPROD; DXV/DYV name vs DX/DY requirement; missing TOPS). The version above lints to `passed=True, error_count=0`.
+> Note: an earlier draft of this fixture used `DXV`/`DYV`/`DZV` and only RUNSPEC/GRID/SCHEDULE — it failed 6 linter ERRORs (missing PROPS/SOLUTION/SUMMARY/WELLDIMS/COMPDAT/WCONPROD; DXV/DYV name vs DX/DY requirement; missing TOPS). The version above lints to `passed=True, len(errors)=0`.
 
 - [ ] **Step 3: `parse_error.DATA` — broken syntax**
 
@@ -880,19 +878,19 @@ def test_lint_returns_lint_result_on_clean_deck():
     result = default_api.lint(FIXTURE_DIR / "clean.DATA")
     assert result.deck_path.endswith("clean.DATA")
     assert result.passed is True
-    assert result.error_count == 0
+    assert len(result.errors) == 0
 
 
 def test_lint_unknown_keyword_yields_error():
     result = default_api.lint(FIXTURE_DIR / "parse_error.DATA")
     assert result.passed is False
-    assert result.error_count >= 1
+    assert len(result.errors) >= 1
 
 
 def test_lint_missing_required_sections_warns_or_errors():
     result = default_api.lint(FIXTURE_DIR / "missing_sections.DATA")
     # GRID and SCHEDULE missing -> ERROR (no INCLUDE present).
-    assert result.error_count >= 1
+    assert len(result.errors) >= 1
     severities = {i.severity for i in result.issues}
     assert "ERROR" in severities
 
@@ -1058,64 +1056,25 @@ git commit -m "feat(linter): LinterAPI facade with cache + executor + sync entry
 
 ---
 
-## Task 8: Wire linter.py shim + public exports
+## Task 8: Add public exports (no shim — keep `linter.py` untouched)
 
 **Files:**
-- Modify: `opm_ai/linter/linter.py` (make `lint_deck`, `lint_deck_v2`, `lint_deck_combined` route through `default_api` while keeping `_get_deck`, `_DECK_CACHE`, `_dedup_key`, `_convert_v2_issue`, `_v2_validate` untouched)
 - Modify: `opm_ai/linter/__init__.py` (add new exports)
+- DO NOT MODIFY: `opm_ai/linter/linter.py` (see "Why no shim" below)
 
 **Interfaces:**
-- Consumes: `LinterAPI.default_api`, all existing functions in `linter.py`.
-- Produces: every existing import (`from opm_ai.linter import lint_deck, LintResult, LintIssue, lint_deck_combined, lint_deck_v2, Deck`) still works AND `from opm_ai.linter.api import LinterAPI, default_api, LinterError, LinterTimeoutError, CacheStats, lint_deck` works AND `from opm_ai.linter import LinterAPI, default_api, LinterError, LinterTimeoutError, CacheStats` works.
+- Consumes: `LinterAPI`, `default_api`, `lint_deck`, `LinterError`, `LinterTimeoutError`, `CacheStats` from `opm_ai.linter.api` (already exported there by Task 7).
+- Produces: every existing import (`from opm_ai.linter import lint_deck, LintResult, LintIssue, lint_deck_combined, lint_deck_v2, Deck`) still works AND `from opm_ai.linter import LinterAPI, default_api, LinterError, LinterTimeoutError, CacheStats` works.
 
-- [ ] **Step 1: Make the back-compat test from Task 3 pass**
+### Why no shim in `linter.py`
 
-Edit `opm_ai/linter/linter.py` — add at the top of the file, after the imports and `_DECK_CACHE` block:
+The original plan asked for `lint_deck_combined` to become a shim that calls `default_api.lint(path)`. That creates infinite recursion: `default_api.lint` -> `_run` -> `lint_deck_combined` -> `default_api.lint` -> ... until the 30s executor timeout fires. The recursive loop manifests as `LinterTimeoutError` in every facade test.
 
-```python
-# New (Task 8): route legacy entry points through the LinterAPI facade.
-# The legacy functions still exist so callers that imported them keep
-# working; they just delegate to the facade. The Deck cache and the
-# private helpers stay as-is.
+The simpler and safer alternative: leave `opm_ai/linter/linter.py` byte-identical to baseline, and only update `opm_ai/linter/__init__.py` to re-export the new public types. `default_api.lint(path)` already calls the original `lint_deck_combined` via a deferred import inside `_run`, so the L1+v2 semantics are preserved without any recursion risk.
 
-def lint_deck(deck_path: Path) -> LintResult:
-    """Compatibility shim: calls `default_api.lint(deck_path)`.
+### Steps
 
-    Kept so existing callers (`from opm_ai.linter import lint_deck`)
-    continue to work. New code should use `default_api.lint()` directly.
-    """
-    from opm_ai.linter.api import default_api
-    return default_api.lint(deck_path)
-
-
-def lint_deck_v2(deck_path: Path) -> "v2.LintResult":
-    """Compatibility shim: legacy v2 entry point. Implemented in-process;
-    not cached (v2 is exercised by tests; v1 caching is the hot path).
-    """
-    from opm_ai.linter.v2 import parser as v2_parser
-    from opm_ai.linter.v2.resolver import resolve_deck
-    from opm_ai.linter.v2.validator import LintResult as V2LintResult
-
-    text = Path(deck_path).read_text(encoding="utf-8", errors="replace")
-    deck = v2_parser.parse_file(text, source_file=deck_path)
-    resolve_deck(deck)
-    return V2LintResult.from_deck(deck) if hasattr(V2LintResult, "from_deck") else _v2_validate(deck)
-
-
-def lint_deck_combined(deck_path: Path) -> LintResult:
-    """Compatibility shim: delegates to `default_api.lint()`.
-
-    This is the path the API + builder used before the facade existed.
-    All behavioural semantics are preserved — the facade caches the
-    combined result.
-    """
-    from opm_ai.linter.api import default_api
-    return default_api.lint(deck_path)
-```
-
-Replace the existing definitions of `lint_deck`, `lint_deck_v2`, and `lint_deck_combined` with the shims above. Leave `_v2_validate`, `_convert_v2_issue`, `_dedup_key`, `_get_deck`, `clear_deck_cache`, and `_DECK_CACHE` untouched.
-
-- [ ] **Step 2: Update `opm_ai/linter/__init__.py`**
+- [ ] **Step 1: Update `opm_ai/linter/__init__.py`**
 
 Replace the file contents with:
 ```python
@@ -1153,24 +1112,27 @@ __all__ = [
 ]
 ```
 
-- [ ] **Step 3: Run the previously-failing tests**
+- [ ] **Step 2: Run the previously-failing tests**
 
 Run:
 ```bash
-pytest tests/unit/test_linter_public_api.py tests/unit/test_linter_api_backcompat.py tests/unit/test_linter_api.py -v
+python3 -c "from opm_ai.linter.linter import clear_deck_cache; clear_deck_cache()" && \
+pytest tests/unit/test_linter_public_api.py tests/unit/test_linter_api_backcompat.py tests/unit/test_linter_api.py tests/unit/test_linter_api_errors.py tests/unit/test_linter_combined.py -v
 ```
 Expected: all pass.
 
-- [ ] **Step 4: Run the existing linter tests to confirm no regression**
+> The `clear_deck_cache()` call is important: the linter module holds a process-local `_DECK_CACHE` keyed on `(path, mtime_ns)`. Across `git checkout` operations in the same Python process, that cache can carry stale `Deck` instances from a previous commit, causing the v2-firing test to spuriously fail. Always clear it at the start of a debug session that flips between linter revisions.
 
-Run: `pytest tests/unit/test_linter.py tests/unit/test_linter_combined.py tests/unit/test_linter_negative.py tests/unit/test_linter_unknown_keyword.py tests/integration/test_api_lint_route.py -v`
+- [ ] **Step 3: Run the existing linter tests to confirm no regression**
+
+Run: `pytest tests/unit/test_linter.py tests/unit/test_linter_negative.py tests/unit/test_linter_unknown_keyword.py tests/integration/test_api_lint_route.py -v`
 Expected: all pass; behaviour unchanged.
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 4: Commit**
 
 ```bash
-git add opm_ai/linter/linter.py opm_ai/linter/__init__.py
-git commit -m "refactor(linter): route legacy entry points through LinterAPI + add exports"
+git add opm_ai/linter/__init__.py
+git commit -m "refactor(linter): expose LinterAPI + default_api + error types from package"
 ```
 
 ---

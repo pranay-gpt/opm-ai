@@ -6,11 +6,11 @@ from opm_ai.linter.api import (
     LinterError,
     LinterTimeoutError,
     default_api,
-    lint_deck,
 )
 from opm_ai.linter.deck import Deck
 from opm_ai.linter.linter import (
     clear_deck_cache,
+    lint_deck,
     lint_deck_combined,
     lint_deck_v2,
 )

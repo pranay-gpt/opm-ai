@@ -16,6 +16,27 @@ from typing import Literal, Optional
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
+class FixProposalView(BaseModel):
+    """Wire-format summary of an auto-fix proposal.
+
+    Returned as a sub-object of LintIssue when the rule has a registered
+    FixProposal function (currently L231, L232, L234). The frontend uses
+    this to render an "Apply Fix" button next to the issue and to send
+    the parameters back to POST /api/lint/apply-fix.
+
+    The full patched_text is NOT included — only the human-readable
+    summary and the value delta. The apply endpoint re-runs the
+    proposal server-side to keep the patched_text authoritative.
+    """
+
+    model_config = ConfigDict(from_attributes=True)
+
+    rule_id: str  # e.g. "L232"
+    description: str  # e.g. "WELLDIMS line 12: MAXWELLS 4 -> 6"
+    original_value: str  # value that will be replaced, e.g. "4"
+    new_value: str  # value that will replace it, e.g. "6"
+
+
 class LintIssue(BaseModel):
     """A single lint issue found during deck analysis."""
 
@@ -27,6 +48,11 @@ class LintIssue(BaseModel):
     line: Optional[int] = None
     message: str
     rule_id: Optional[str] = None
+    # Optional auto-fix proposal summary. Populated only for v2 issues
+    # whose rule code has a registered FixProposal (L231/L232/L234);
+    # None for all other issues. The frontend renders an "Apply Fix"
+    # button when this is non-null.
+    fix_proposal: Optional["FixProposalView"] = None
 
     def __str__(self) -> str:
         parts = []

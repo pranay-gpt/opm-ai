@@ -70,6 +70,13 @@ export interface FluidDescriptorRequest {
   correlation?: 'Standing' | 'VasquezBeggs' | 'AlMarhoun' | null;
 }
 
+export interface FixProposalView {
+  rule_id: string;
+  description: string;
+  original_value: string;
+  new_value: string;
+}
+
 export interface LintIssue {
   severity: 'ERROR' | 'WARNING' | 'INFO';
   section: string | null;
@@ -77,6 +84,7 @@ export interface LintIssue {
   line: number | null;
   message: string;
   rule_id: string | null;
+  fix_proposal?: FixProposalView | null;
 }
 
 export interface LintResult {
@@ -85,6 +93,19 @@ export interface LintResult {
   lint_summary: string | null;
   errors: string[];
   passed: boolean;
+}
+
+export interface ApplyFixRequest {
+  deck_path: string;
+  rule_id: string;
+  line: number;
+  original_value: string;
+  new_value: string;
+}
+
+export interface ApplyFixResponse {
+  deck_text: string;
+  lint: LintResult;
 }
 
 export interface BuildResponse {

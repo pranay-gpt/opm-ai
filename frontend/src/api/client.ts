@@ -3,6 +3,8 @@ import type {
   BuildResponse,
   LintRequest,
   LintResult,
+  ApplyFixRequest,
+  ApplyFixResponse,
   RunRequest,
   JobStatus,
   KPIsResponse,
@@ -153,6 +155,15 @@ export const api = {
   // Lint
   lint: (request: LintRequest): Promise<LintResult> =>
     fetchJson<LintResult>('/lint', {
+      method: 'POST',
+      body: JSON.stringify(request),
+    }),
+
+  // Apply a single auto-fix proposal server-side. Returns the patched
+  // deck_text and a fresh LintResult so the UI can replace its state
+  // atomically without a second /lint round-trip.
+  applyFix: (request: ApplyFixRequest): Promise<ApplyFixResponse> =>
+    fetchJson<ApplyFixResponse>('/lint/apply-fix', {
       method: 'POST',
       body: JSON.stringify(request),
     }),
@@ -349,6 +360,8 @@ export type {
   LintRequest,
   LintResult,
   LintIssue,
+  ApplyFixRequest,
+  ApplyFixResponse,
   RunRequest,
   JobStatus,
   KPIsResponse,

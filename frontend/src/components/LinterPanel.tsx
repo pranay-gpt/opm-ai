@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useLintActions, useResolvedTheme } from '../stores/useAppStore';
 import { api } from '../api/client';
-import type { LintResult } from '../api/client';
+import type { LintIssue, LintResult } from '../api/client';
 import Editor from '@monaco-editor/react';
 
 export default function LinterPanel() {
@@ -9,9 +9,11 @@ export default function LinterPanel() {
   const resolvedTheme = useResolvedTheme();
 
   const [deckText, setDeckText] = useState('');
+  const [deckPath, setDeckPath] = useState<string | null>(null);
   const [isLinting, setIsLinting] = useState(false);
   const [lintResult, setLintResult] = useState<LintResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [applyingRuleId, setApplyingRuleId] = useState<string | null>(null);
 
   const handleLint = useCallback(async () => {
     if (!deckText.trim()) {
@@ -26,6 +28,7 @@ export default function LinterPanel() {
       // Save deck to backend temp file first
       const saveResponse = await api.saveDeck({ content: deckText, filename: 'DECK.DATA' });
       const deckPath = saveResponse.deck_path;
+      setDeckPath(deckPath);
 
       // Lint the saved deck
       const result = await api.lint({ deck_path: deckPath });
@@ -40,6 +43,42 @@ export default function LinterPanel() {
       setIsLinting(false);
     }
   }, [deckText, setLastLintResult]);
+
+  // Apply a single FixProposal server-side. The endpoint re-runs v2
+  // lint, recomputes the proposal, writes the patched text to disk,
+  // and returns the fresh LintResult + deck_text atomically. The UI
+  // replaces its state from that response — we don't re-run /lint.
+  const handleApplyFix = useCallback(async (
+    issue: LintIssue,
+    deckPath: string,
+  ) => {
+    if (!issue.fix_proposal || issue.line === null || !issue.rule_id) {
+      return;
+    }
+    setApplyingRuleId(issue.rule_id);
+    setError(null);
+    try {
+      const response = await api.applyFix({
+        deck_path: deckPath,
+        rule_id: issue.rule_id,
+        line: issue.line,
+        original_value: issue.fix_proposal.original_value,
+        new_value: issue.fix_proposal.new_value,
+      });
+      setDeckText(response.deck_text);
+      setLintResult(response.lint);
+      setLastLintResult(response.lint);
+    } catch (err) {
+      // 409 (proposal drifted) and 422 (no proposal) are user-visible:
+      // the UI re-renders the lint panel normally, but the action
+      // failed so we surface it. Other errors are network/server.
+      const message = err instanceof Error ? err.message : 'Apply fix failed';
+      setError(message);
+      console.error('Apply-fix error:', err);
+    } finally {
+      setApplyingRuleId(null);
+    }
+  }, [setLastLintResult]);
 
   const handlePaste = useCallback(() => {
     navigator.clipboard.readText().then((text) => {
@@ -276,6 +315,24 @@ SCHEDULE
                                 <p className="text-xs text-textMuted mt-1">
                                   Section: {issue.section} | Rule: {issue.rule_id ?? 'N/A'}
                                 </p>
+                              )}
+                              {issue.fix_proposal && deckPath && (
+                                <div className="mt-2 flex items-center gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleApplyFix(issue, deckPath)}
+                                    disabled={applyingRuleId !== null}
+                                    className="btn-primary btn-sm disabled:opacity-50"
+                                    title={issue.fix_proposal.description}
+                                  >
+                                    {applyingRuleId === issue.rule_id
+                                      ? 'Applying…'
+                                      : 'Apply Fix'}
+                                  </button>
+                                  <span className="text-xs text-textMuted">
+                                    {issue.fix_proposal.description}
+                                  </span>
+                                </div>
                               )}
                             </div>
                           </div>

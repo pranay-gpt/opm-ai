@@ -795,3 +795,36 @@ worktree only. Pre-existing decision deferred — commit
 for reproducibility or gitignore to match pip workflow.
 
 Nothing further deferred.
+
+## 2026-08-19 — Apply-fix endpoint merged (linter-as-tool → main)
+
+The bridge between the v2 linter's `FixProposal` and a user click.
+Three things shipped together on `feat/linter-as-tool`, then merged
+to `main` via `b985c57` (no fast-forward, topology preserved):
+
+1. **`POST /api/lint/apply-fix`** — atomic, drift-checked, server-
+   side re-proposer. Re-runs `propose_fix(rule_id, ...)` and only
+   writes if the client's `original_value` matches the server's
+   view of the line. Returns `{deck_text, lint: LintResult}` so the
+   UI replaces state in one round-trip.
+2. **Frontend "Apply Fix" button** per fixable issue in
+   `LinterPanel.tsx`. Disabled globally while any apply is in flight
+   (replaces the `inFlightRef` guard that silently dropped clicks).
+3. **`lint_deck_func` → `lint_deck_combined` rename** in
+   `opm_ai/linter/linter.py`. The package-level `lint_deck` stays
+   L1-only for the Builder; `lint_deck_combined` is L1+v2 and what
+   the lint/apply-fix routes now call.
+
+5 new integration tests in `tests/integration/test_api_lint_apply_fix.py`
+(happy path, drift, bad path, bad rule_id, no proposal). 2 existing
+tests in `test_api_lint_route.py` updated to patch the renamed
+symbol. 36 linter-related tests pass post-merge.
+
+Branch state: `feat/linter-as-tool` retained locally (post-merge
+cleanup is the next session's choice). `origin/main` updated to
+`b985c57`.
+
+**Docs touched:** `docs/conversations/02-linter.md` (section 7 —
+v2 architecture + apply-fix section 7.4), `docs/personal/LINTER_REDESIGN_LOG.md`
+(2026-08-19 follow-up), `docs/personal/LINTER_REDESIGN_TASKS.md`
+(apply-fix tasks section + merge-to-main checkmarks), this file.

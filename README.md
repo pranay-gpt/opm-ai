@@ -85,6 +85,9 @@ everyone.
   deck, with an offline generator and optional LLM extraction
 - **Lint decks offline** — a calibrated rule engine catches errors and
   inconsistencies before you run, no simulator needed
+- **One-click fixes** — most lint issues carry a server-validated
+  `FixProposal` you can apply with a single click; the endpoint
+  drift-checks before writing
 - **Run OPM Flow** — launch simulations and get structured results, with crash
   report parsing when something goes wrong
 - **See the results** — field and per-well KPIs, interactive Plotly charts, and

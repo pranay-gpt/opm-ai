@@ -369,3 +369,79 @@ which enforces the convention operationally.
   `git revert ff13487` if needed (counter-commit, doesn't un-squash).
 - The `origin/main` push is the only step that's irreversible on the
   remote side. It succeeded; `main` now reflects the project's actual state.
+
+---
+
+# Progress update: 2026-08-19
+
+Scope: One-click auto-fix flow for the lint UI, plus the docs refresh
+that records the v2 linter's current architecture.
+
+## Summary
+
+| Item | Commit(s) | Tests added | Suite delta |
+|---|---|---|---|
+| LinterAPI façade + executor + cache | 06f014c, c58d656, f0abd7b | ~30 facade tests | backend suite stable |
+| LinterAPI callsite routing | 82c1449, 968e8d9, 83a430e | (covered by above) | backend suite stable |
+| Apply-fix endpoint + frontend button | 2e3409b | 5 integration | 36 linter tests pass |
+| Frontend `inFlightRef` drop | ff2df67 | source-grep | n/a |
+| v2 fix-proposal test pin | 02499e8, 3a8e12b | 2 (perf + fuzz) | included above |
+| Docs refresh (this file, 02-linter, STATUS, redesign log/tasks) | (this commit) | n/a | n/a |
+| Merge to main (no-ff) | b985c57 | n/a | n/a |
+
+Suite on `main` after the merge: backend tests pass (36 linter-related
+incl. apply-fix); frontend `tsc --noEmit` clean.
+
+## What changed for the user
+
+A "Apply Fix" button appears next to each lint issue that the v2
+engine can auto-fix (currently the common L1+v2 rules). Clicking it:
+
+1. POSTs `{deck_path, rule_id, line, original_value, new_value}` to
+   `/api/lint/apply-fix`.
+2. Server re-runs the proposer (drift check). On drift → 409, deck
+   untouched.
+3. On match → server writes the patched deck atomically, returns
+   `{deck_text, lint: LintResult}`. The UI replaces its state from
+   the response — no second `/lint` round-trip.
+
+## What changed for the codebase
+
+- New endpoint: `opm_ai/api/routes/lint.py::apply_fix_endpoint` +
+  Pydantic `ApplyFixRequest` / `ApplyFixResponse`.
+- New frontend surfaces: `FixProposalView` + `api.applyFix` +
+  per-issue button in `LinterPanel.tsx`.
+- `opm_ai/linter/linter.py` — `lint_deck_func` renamed to
+  `lint_deck_combined` to disambiguate from the package-level
+  `lint_deck` (which stays L1-only).
+- `opm_ai/linter/models.py` — `LintIssue.fix_proposal` field
+  (optional, typed via `FixProposal`).
+
+## Architectural notes
+
+- The apply-fix route is a **server-side re-proposer**, not a
+  "trust the client" endpoint. The client supplies its view of
+  `original_value`, but the server re-runs `propose_fix` and only
+  writes if both sides agree. This keeps the route handler to ~80
+  lines of validation + write, with no string-replace logic that
+  could diverge from the rule engine's view.
+- `LintIssue.fix_proposal` is now the **stable contract** between
+  the deterministic rule engine and the future LangChain agent's
+  tool surface. Whatever the agent returns (its own proposal or an
+  LLM-freetext rewrite) must conform to
+  `{rule_id, line, original_value, new_value}` for
+  `/api/lint/apply-fix` to consume it. Pinning this here means
+  adding a new proposal source later does not touch the route
+  handler.
+
+## Why the merge branch was renamed from `linter-redesign`
+
+The branch was created as `linter-redesign` for the v2 work
+(LINTER_REDESIGN_LOG). The LinterAPI façade, the executor, the cache,
+and the apply-fix endpoint were all developed against that branch's
+goals. The branch was renamed to `feat/linter-as-tool` mid-stream
+because the apply-fix cut is no longer pure refactor — it adds new
+API surface (a route, a frontend button, a Pydantic model pair).
+The redesign log/plan still own the rationale; the branch name now
+honestly describes the cut's shape.
+

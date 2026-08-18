@@ -12,9 +12,9 @@
 
 | | |
 |---|---|
-| Phase | Phase 1 (v1), Stage 2 - immediately after Stage 0 skeleton and Runner |
+| Phase | Phase 1 (v1), Stage 2 - immediately after Stage 0 skeleton and Runner. v2 redesign (grammar-based engine + fix proposals + LinterAPI façade) followed in Phase 2 — see section 7 below. |
 | Depends on | Stage 0 (`opm_ai` package importable, `settings.py` for optional LLM config) |
-| Depended on by | Part 3 Builder (auto-lints every generated deck via `lint_deck`), Part 6 CLI (`lint` subcommand), Part 6 FastAPI `/api/lint` route |
+| Depended on by | Part 3 Builder (auto-lints every generated deck via `lint_deck`, L1-only), Part 6 CLI (`lint` subcommand), Part 6 FastAPI `/api/lint` + `/api/lint/apply-fix` routes, Part 6 Chat tool `tool_lint_deck` (routes through `LinterAPI.default_api.lint`) |
 
 Cross-links: see 00-overview-and-architecture.md, 01-runner.md, 03-builder.md.
 
@@ -144,6 +144,133 @@ Output as a single block comment suitable for the top of an Eclipse .DATA file:
 ```
 
 - Injected by `lint_deck` after rule engine runs, before returning `LintResult`. The deck text on disk is **not** modified; the comment is returned as an optional field `lint_summary: str | None` on `LintResult` (non-contract, used by Builder and CLI to show the user).
+
+## 7. v2 architecture: grammar-based rule engine + fix-proposal pipeline
+
+Sections 1-6 describe the v1 linter as shipped in 2026-07. Since 2026-08 the
+linter is being rewritten (`docs/personal/LINTER_REDESIGN_PLAN.md`) to a
+grammar-based, AST-aware engine that shares its rule catalogue with the
+Builder and is callable from a future LangChain agent. This section captures
+the v2 architecture as it stands today so a future reader does not mistake
+v1 patterns for current state.
+
+### 7.1 Module layout
+
+```
+opm_ai/linter/
+  linter.py              # combined entry point (L1 + v2) — see 7.2
+  deck.py                # v1 Deck class (sections splitter)
+  models.py              # LintIssue, LintResult (v1-compatible shape, v2 adds fix_proposal)
+  api.py                 # LinterAPI + default_api (sync + async, caching, executor pool)
+  cache.py               # LinterCache (LRU 256, key includes catalogue_version)
+  executor.py            # LinterExecutor (background thread pool, timeout-bounded)
+  rules/                 # v1 L1 rule modules (kept for backward-compat)
+  v2/
+    parser.py            # tokenizer + section/keyword/record AST
+    ast.py               # Deck / Section / Keyword / Record / Token dataclasses
+    spec.py              # KeywordSpec / SizeKind / SectionName (hand-curated + keywords_rm.json hybrid)
+    paths_aliases.py     # PATHS indexer
+    resolver.py          # INCLUDE/IMPORT walker + CompositeDeck
+    symbols.py           # SymbolTable builder (WELSPECS, GRUPTREE, FIPNUM, fluid tables, SUMMARY, FUNVAR, UDQ)
+    validator.py         # rule engine — turns a parsed deck into lint issues
+    fix_proposals.py     # FixProposal dataclass + propose_fix registry (per-rule-id proposers)
+    self_heal.py         # LLM-assisted proposal scoring (used by /api/chat tool_lint_deck path)
+    catalogue/           # keywords_rm.json + derived keyword_specs.json + _version.py
+```
+
+### 7.2 Entry points and the L1/v2 split
+
+| Symbol | Where | What it runs | Used by |
+|---|---|---|---|
+| `lint_deck(path)` | `opm_ai/linter/linter.py` | **L1 only** (v1 rules) | Builder (`build_deck`, `build_deck_from_spec`) — intentionally NOT migrated |
+| `lint_deck_combined(path)` | `opm_ai/linter/linter.py` | L1 then v2, dedup, return combined `LintResult` | Tests, default lint route on `/api/lint`, the apply-fix route |
+| `LinterAPI.lint(path)` / `.lint_async(path)` | `opm_ai/linter/api.py` | Wraps `lint_deck_combined` with cache + executor + structured errors | Chat tools (`tool_lint_deck`, `tool_build_deck`) — preferred future entry point |
+| `default_api` | `opm_ai/linter/api.py` | Singleton `LinterAPI` instance | Production callsites |
+
+**Why the L1-only `lint_deck` stays exported from package level.** A previous
+shim attempt (commit `83a430e`) looped: shim → facade → package surface that
+imported the shim. Resolution (`968e8d9`): `lint_deck` is bound directly from
+`opm_ai.linter.linter` in `opm_ai/linter/__init__.py`; the facade never
+re-exports it. Builder callsites keep calling `lint_deck` L1-only because
+migrating them to the combined/v2 path is a behaviour change (extra issues
+fire that the Builder's prompts don't anticipate). Deferred, not forgotten.
+
+### 7.3 LintIssue + FixProposal (v2 model)
+
+`LintIssue` (v2) carries an optional `fix_proposal` field so the UI can offer
+one-click remediation:
+
+```python
+class FixProposal:
+    rule_id: str             # e.g. "L232"
+    line: int                # 1-indexed, target line in the deck
+    original_value: str      # current text on that line (drift guard)
+    new_value: str           # proposed replacement
+    description: str         # user-facing: "Set WELLDIMS to 1 well"
+```
+
+The proposers are registered in `opm_ai/linter/v2/fix_proposals.py` keyed by
+`rule_id`. Each proposer receives the `LintIssue` + surrounding keyword
+context and returns a `FixProposal | None`. The current coverage is the
+common L1+v2 set; `None` means the issue cannot be auto-fixed (LLM may still
+score a fix in the `self_heal` path — that's separate).
+
+### 7.4 POST /api/lint/apply-fix — atomic one-click remediation
+
+The endpoint is the user-facing surface for `FixProposal`. It is **not** a
+re-implementation of the linter; it asks the v2 proposers to re-compute the
+proposal, drift-checks against the client-supplied values, applies it, and
+returns the patched deck + a fresh `LintResult` in one round-trip.
+
+**Request**
+```json
+{
+  "deck_path": "<allowlisted server-side path>",
+  "rule_id": "L232",
+  "line": 5,
+  "original_value": "1 1 1 1 1 /",
+  "new_value": "3 1 1 1 1 /"
+}
+```
+
+**Responses**
+- `200 OK` — `{deck_text: str, lint: LintResult}` — patch applied, fresh lint attached so the UI replaces its state without a second `/lint` round-trip.
+- `400 Bad Request` — bad `deck_path`, bad `rule_id` format (must match `^L\d+$`), or any missing field.
+- `404 Not Found` — `deck_path` not on the allowlist.
+- `409 Conflict` — server-recomputed `FixProposal.original_value` ≠ client `original_value` (deck text drifted since the user opened the lint panel). Deck is **not** written; client should re-lint and retry.
+- `422 Unprocessable Entity` — server cannot compute a proposal for this `rule_id` + `line` (no proposer, or proposer's view of the deck disagrees with the client's). Deck is not written.
+
+**Three-stage server-side validation** (all in `opm_ai/api/routes/lint.py::apply_fix_endpoint`):
+
+1. **Path allowlist** — same `validate_deck_path` helper used by `/api/lint`, rejecting anything outside the configured deck roots.
+2. **Rule-id shape** — must match `^L\d+$` so a malformed value cannot reach the proposer registry.
+3. **Drift check** — re-run `propose_fix(rule_id, issue, deck_text)` server-side; if `proposal.original_value != request.original_value`, return 409 and skip the write. This prevents the UI from clobbering a line that has been edited concurrently.
+
+After all three pass, `apply_proposal_to_text` rewrites the deck in memory,
+the new text is written back to disk atomically (write-then-rename), and the
+fresh `LintResult` is computed and returned.
+
+### 7.5 Frontend integration
+
+- `frontend/src/types.ts` — `FixProposalView`, `ApplyFixRequest`, `ApplyFixResponse`; `LintIssue.fix_proposal?: FixProposalView`.
+- `frontend/src/api/client.ts` — `api.applyFix(request)`.
+- `frontend/src/components/LinterPanel.tsx` — "Apply Fix" button rendered next to each issue whose `fix_proposal` is non-null. On click: `setApplyingRuleId(rule_id)`, call `api.applyFix`, replace `deckText` and `lintResult` from the response, clear the spinner. The button is disabled globally while any apply is in flight so concurrent clicks are dropped rather than raced.
+
+### 7.6 Tests covering 7.4 / 7.5
+
+`tests/integration/test_api_lint_apply_fix.py` — 5 tests:
+
+| Test | What it asserts |
+|---|---|
+| `test_apply_fix_l232_happy_path` | WELLDIMS 1 → 3 wells; response carries patched `deck_text` and a fresh `LintResult` with the L232 issue gone; deck file on disk is the new text |
+| `test_apply_fix_returns_409_on_drift` | Client `original_value` differs from server-computed; response is 409; deck file is unchanged |
+| `test_apply_fix_rejects_path_outside_allowlist` | `deck_path` outside the allowlist → 400 |
+| `test_apply_fix_rejects_bad_rule_id` | `rule_id = "not-an-id"` → 400 |
+| `test_apply_fix_returns_422_when_no_proposal` | Server cannot compute a proposal for the supplied `(rule_id, line)` → 422 |
+
+`tests/integration/test_api_lint_route.py` — 2 tests updated to patch the
+renamed `lint_deck_combined` symbol instead of the old `lint_deck_func`
+(private name) that the integration tests used to reach into.
 
 ## 5. Toolchain grounding
 

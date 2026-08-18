@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback } from 'react';
 import { useLintActions, useResolvedTheme } from '../stores/useAppStore';
 import { api } from '../api/client';
 import type { LintResult } from '../api/client';
@@ -13,12 +13,6 @@ export default function LinterPanel() {
   const [lintResult, setLintResult] = useState<LintResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // inFlightRef guards handleLint against double-firing before React
-  // commits disabled={isLinting} on the button (F8.4 audit fix). Using
-  // a ref instead of reading isLinting from the callback closure
-  // avoids re-creating handleLint on every render.
-  const inFlightRef = useRef(false);
-
   const handleLint = useCallback(async () => {
     if (!deckText.trim()) {
       setError('Please enter a deck to lint');
@@ -26,7 +20,6 @@ export default function LinterPanel() {
     }
 
     setIsLinting(true);
-    inFlightRef.current = true;
     setError(null);
 
     try {
@@ -45,14 +38,8 @@ export default function LinterPanel() {
       console.error('Lint error:', err);
     } finally {
       setIsLinting(false);
-      inFlightRef.current = false;
     }
   }, [deckText, setLastLintResult]);
-
-  const handleLintGuarded = useCallback(() => {
-    if (inFlightRef.current) return;
-    return handleLint();
-  }, [handleLint]);
 
   const handlePaste = useCallback(() => {
     navigator.clipboard.readText().then((text) => {
@@ -180,7 +167,7 @@ SCHEDULE
           <button onClick={handleClear} className="btn-secondary btn-sm" disabled={isLinting}>
             Clear
           </button>
-          <button onClick={handleLintGuarded} disabled={isLinting || !deckText.trim()} className="btn-primary btn-sm">
+          <button onClick={handleLint} disabled={isLinting || !deckText.trim()} className="btn-primary btn-sm">
             {isLinting ? 'Checking...' : 'Check Deck'}
           </button>
         </div>

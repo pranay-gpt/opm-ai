@@ -34,7 +34,7 @@ export default function DeckEditor() {
   const [deck, setDeck] = useState(currentDeck || '');
   const [isDirty, setIsDirty] = useState(false);
   const [isLinting, setIsLinting] = useState(false);
-  const [lintErrors, setLintErrors] = useState<{ line: number; message: string }[]>([]);
+  const [lintErrors, setLintErrors] = useState<{ line: number; message: string; section?: string | null }[]>([]);
   const [activeSection, setActiveSection] = useState<string>('RUNSPEC');
 
   // inFlightRef guards handleLint against double-firing before React
@@ -91,7 +91,7 @@ export default function DeckEditor() {
       setLintErrors(
         result.issues
           .filter((i) => i.line !== null)
-          .map((i) => ({ line: i.line!, message: i.message }))
+          .map((i) => ({ line: i.line!, message: i.message, section: i.section ?? null }))
       );
       setLastLintResult(result);
     } catch (err) {
@@ -248,6 +248,20 @@ SCHEDULE
     editor.setPosition({ lineNumber: line, column: 1 });
     editor.focus();
   }, [sectionByName]);
+
+  // Jump directly to the line reported by a linter issue (1-based, deck-wide).
+  // Falls back to scrolling to the issue's section if the line is missing.
+  const scrollToLine = useCallback((line: number | null, section: string | null) => {
+    if (line == null) {
+      if (section) scrollToSection(section);
+      return;
+    }
+    const editor = editorRef.current;
+    if (!editor) return;
+    editor.revealLineInCenter(line);
+    editor.setPosition({ lineNumber: line, column: 1 });
+    editor.focus();
+  }, [scrollToSection]);
 
   // Register OPM language on mount
   useEffect(() => {
@@ -523,8 +537,8 @@ SCHEDULE
               {lintErrors.map((error, i) => (
                 <div
                   key={i}
-                  className="p-2 rounded bg-page border border-border text-xs"
-                  onClick={() => scrollToSection(activeSection)}
+                  className="p-2 rounded bg-page border border-border text-xs cursor-pointer hover:border-error"
+                  onClick={() => scrollToLine(error.line, error.section ?? null)}
                 >
                   <div className="flex items-center gap-1 text-error mb-1">
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">

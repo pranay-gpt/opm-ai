@@ -28,7 +28,10 @@ from opm_ai.linter.rules import general, grid, keywords, props, runspec, schedul
 RULES: list[RuleFunc] = [
     # General rules
     general.rule_L001_missing_terminator,
-    general.rule_L013_keyword_order,
+    # L013 (keyword out of recommended order) is intentionally suppressed
+    # for now - too noisy on real-world decks. Re-enable when ordering
+    # guidance is improved (see opm_ai/linter/context.md).
+    # general.rule_L013_keyword_order,
     general.rule_L014_include_depth,
     keywords.rule_L016_unknown_keyword,
     # RUNSPEC rules

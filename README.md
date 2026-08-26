@@ -27,18 +27,21 @@
 
 </div>
 
-<br>
+---
 
-<div align="center">
+## Preview
 
-### Get started
+<p align="center">
+  <img src="docs/images/results-kpis.png" width="48%" alt="Results — KPI dashboard"/>
+  &nbsp;
+  <img src="docs/images/results-plots.png" width="48%" alt="Results — interactive plots with control rail"/>
+</p>
 
-[![Docker](https://img.shields.io/badge/▶_Run_with_Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](#quick-start-with-docker)
-[![Ubuntu](https://img.shields.io/badge/▶_Install_on_Ubuntu-22c55e?style=for-the-badge&logo=ubuntu&logoColor=white)](#install-on-ubuntu--linux)
-[![macOS](https://img.shields.io/badge/▶_Install_on_macOS-000000?style=for-the-badge&logo=apple&logoColor=white)](#install-on-macos-preview)
-[![Windows](https://img.shields.io/badge/▶_Install_on_Windows_(WSL2)-0078D4?style=for-the-badge&logo=windows&logoColor=white)](#install-on-windows-via-wsl2)
-
-</div>
+<p align="center">
+  <img src="docs/images/results-grid-4col.png" width="48%" alt="Results — four-column plot grid"/>
+  &nbsp;
+  <img src="docs/images/deck-editor.png" width="48%" alt="Deck editor with Monaco + validation panel"/>
+</p>
 
 ---
 
@@ -47,59 +50,58 @@
 Reservoir simulation is **bottlenecked by legacy workflows**, not governing
 equations. While [OPM Flow](https://opm-project.org/) delivers an
 **industry-grade, three-phase black-oil solver for free**, the barrier to entry
-remains the **unforgiving Eclipse-style `.DATA` deck** — where a single
-misplaced slash cascades into **non-convergence** or obscure
-**matrix solver failures**. This locks practical reservoir engineering behind
-steep operational learning curves, leaving academics and junior engineers
-stranded between textbook theory and applied field development.
+remains the **unforgiving Eclipse-style `.DATA` deck**, where a single
+misplaced slash cascades into non-convergence or obscure matrix solver
+failures. This locks practical reservoir engineering behind steep operational
+learning curves, leaving academics and junior engineers stranded between
+textbook theory and applied field development.
 
 > [!IMPORTANT]
 > **First OPENSOURCE AI Assistive Reservoir Simulation Community Platform.**
 
-By positioning an **intelligent layer** between the user and the millions of
-coupled equations being solved, OPM-AI translates **plain-English** reservoir
-descriptions into clean, ready-to-run decks. It performs **automated QA/QC**
-before you burn CPU time on ill-posed models, executes the run, renders the 3D
-grid, and diagnoses the dynamic fluid response. You maintain full control: the
-generated output is a **standard `.DATA` file**, completely transparent and
-unhidden by proprietary binaries.
+OPM-AI positions an **intelligent layer** between the user and the millions of
+coupled equations being solved. It translates plain-English reservoir
+descriptions into clean, ready-to-run decks, performs automated QA/QC before
+you burn CPU time on ill-posed models, executes the run, renders the 3D grid,
+and diagnoses the dynamic fluid response. The generated output is a
+**standard `.DATA` file**, completely transparent and unhidden by proprietary
+binaries.
 
 This radically accelerates the learning curve, making it a massive asset for
 university faculties teaching applied simulation and researchers running
-high-volume sensitivity experiments. It is **100% open-source** and free from
-licensing constraints, running **offline by default** without needing an API
-key. Actively developed and maintained by a **solo petroleum engineer**, this
-project exists to ensure that full-fledged, production-grade reservoir
-simulation is finally accessible, understandable, and completely free for
-everyone.
+high-volume sensitivity experiments. It is **100% open-source**, runs
+**offline by default** without an API key, and is actively maintained by a
+solo petroleum engineer.
 
 > [!NOTE]
-> **Setup note —** Binary grid fixtures like `.EGRID`, `.UNRST`, and `.INIT`
-> are gitignored to keep the clone lightweight, so tests reading them will skip
-> until your first successful simulation run. Everything else works out of the
-> box.
+> Binary grid fixtures like `.EGRID`, `.UNRST`, and `.INIT` are gitignored to
+> keep the clone lightweight, so a few tests will skip until your first
+> successful simulation run. Everything else works out of the box.
 
 ## Features
 
-- **Build decks from plain English** — describe a model and get a valid OPM Flow
-  deck, with an offline generator and optional LLM extraction
+- **Build decks from plain English** — describe a model and get a valid OPM
+  Flow deck, with an offline generator and optional LLM extraction
 - **Lint decks offline** — a calibrated rule engine catches errors and
   inconsistencies before you run, no simulator needed
 - **One-click fixes** — most lint issues carry a server-validated
-  `FixProposal` you can apply with a single click; the endpoint
-  drift-checks before writing
-- **Run OPM Flow** — launch simulations and get structured results, with crash
-  report parsing when something goes wrong
-- **See the results** — field and per-well KPIs, interactive Plotly charts, and
-  a native WebGL 3D grid viewer (cell filters, ternary saturation, faults,
-  wells, time-step playback)
+  `FixProposal` you can apply with a single click; the endpoint drift-checks
+  before writing
+- **Run OPM Flow** — launch simulations and get structured results, with
+  crash-report parsing when something goes wrong
+- **Analyse results** — field and per-well KPIs, interactive Plotly charts
+  with dynamic grid layout, per-property plot toggles, log-scale support, and
+  Field/Metric unit conversion
+- **Visualise in 3D** — native WebGL grid viewer (cell filters, ternary
+  saturation, faults, wells, cross-sections, time-step playback)
 - **Chat with tools** — one conversation that builds, lints, runs, plots, and
-  explains
+  explains, with webSocket-driven `list_vectors`, `plot_well_vectors`, and
+  `compare_wells` tools
 - **Learn as you go** — concept explanations and auto-generated quizzes for
   reservoir topics
-- **Live keyword assistance** — Monaco editor with autocomplete from the merged
-  ERM + fixture keyword catalogue (1916+ keywords), with per-keyword parameter
-  documentation on hover
+- **Live keyword assistance** — Monaco editor with autocomplete from the
+  merged ERM + fixture keyword catalogue (1916+ keywords), with per-keyword
+  parameter documentation on hover
 - **Upload your own decks** — pick a `.DATA` file plus its `include/` folder
   from the Simulator page and run it as-is
 - **Pick your PVT correlation** — Standing, Vasquez-Beggs, or Al-Marhoun for
@@ -109,25 +111,30 @@ everyone.
 
 ## Screenshots
 
-<p align="center"><img src="docs/screenshots/home-dark.png" width="640" alt="Home — dark theme"><br><b>Home (dark)</b></p>
-<p align="center"><img src="docs/screenshots/home-light.png" width="640" alt="Home — light theme"><br><b>Home (light)</b></p>
-<p align="center"><img src="docs/screenshots/builder-deck.png" width="640" alt="Deck Builder"><br><b>Deck Builder</b></p>
-<p align="center"><img src="docs/screenshots/linter.png" width="640" alt="Linter"><br><b>Linter</b></p>
-<p align="center"><img src="docs/screenshots/simulator-page.png" width="640" alt="Simulator"><br><b>Simulator</b></p>
-<p align="center"><img src="docs/screenshots/results.png" width="640" alt="Results — KPIs and tables"><br><b>Results — KPIs</b></p>
-<p align="center"><img src="docs/screenshots/results-plot.png" width="640" alt="Results — Interactive Plotly charts"><br><b>Results — Charts</b></p>
-<p align="center"><img src="docs/screenshots/results-3D.png" width="640" alt="Results — 3D viewer"><br><b>Results — 3D</b></p>
-<p align="center"><img src="docs/screenshots/learn.png" width="640" alt="Learn"><br><b>Learn</b></p>
-<p align="center"><img src="docs/screenshots/chat.png" width="640" alt="Chat"><br><b>Chat</b></p>
+<p align="center"><img src="docs/images/home.png" width="720" alt="Home — workflow status and capabilities"><br><b>Home</b> &mdash; workflow status, capabilities overview</p>
+
+<p align="center"><img src="docs/images/deck-builder.png" width="720" alt="Deck Builder"><br><b>Deck Builder</b> &mdash; plain-English description, fluid and rock basics, quick templates</p>
+
+<p align="center"><img src="docs/images/deck-editor.png" width="720" alt="Deck Editor with Monaco + validation panel"><br><b>Deck Editor</b> &mdash; Monaco editor, section navigator, validation panel with one-click fixes</p>
+
+<p align="center"><img src="docs/images/simulator.png" width="720" alt="Simulator"><br><b>Simulator</b> &mdash; deck path, simulation options, live output, job history</p>
+
+<p align="center"><img src="docs/images/results-kpis.png" width="720" alt="Results — KPIs"><br><b>Results &mdash; KPIs</b> &mdash; cumulative oil/water/gas, recovery factors, timesteps</p>
+
+<p align="center"><img src="docs/images/results-plots.png" width="720" alt="Results — interactive plots"><br><b>Results &mdash; Plots</b> &mdash; vector group filters, producers/injectors, layout, unit system</p>
+
+<p align="center"><img src="docs/images/results-grid-4col.png" width="720" alt="Results — four-column plot grid"><br><b>Results &mdash; Dynamic Grid</b> &mdash; configurable 1&ndash;4 column layout</p>
+
+<p align="center"><img src="docs/images/chat.png" width="720" alt="AI Chat"><br><b>AI Chat</b> &mdash; tool-calling conversation with quick prompts</p>
 
 ---
 
 ## Quick Start
 
-### Quick Start with Docker
+### Docker
 
-The fastest path. One command, no native dependencies, everything works in a
-container on any Linux/macOS/Windows host:
+The fastest path. One command, no native dependencies, works on any
+Linux/macOS/Windows host:
 
 ```bash
 git clone https://github.com/pranay-gpt/opm-ai.git
@@ -136,12 +143,12 @@ docker compose up -d --build
 # open http://localhost:8000
 ```
 
-The frontend is built inside the image, so you don't need Node locally. The app
-runs fully offline by default; to enable the LLM chat and extraction features,
-copy `.env.example` to `.env` and add an API key (e.g. `GROQ_API_KEY` with
-`LLM_PROVIDER=groq`).
+The frontend is built inside the image, so you don't need Node locally. The
+app runs fully offline by default; to enable the LLM chat and extraction
+features, copy `.env.example` to `.env` and add an API key (e.g.
+`GROQ_API_KEY` with `LLM_PROVIDER=groq`).
 
-### Quick Start with one script (Ubuntu/Linux/macOS)
+### One script (Ubuntu/Linux/macOS)
 
 The repo ships a runner script that handles venv detection, frontend build,
 and process supervision:
@@ -154,24 +161,24 @@ cd opm-ai
 ```
 
 `./scripts/run.sh dev` serves the backend on `:8000` plus the Vite dev server
-on `:5173` with hot reload. Ctrl-C stops both processes. `build` is only needed
-the first time and after frontend changes; `dev` skips it and serves from Vite
-instead.
+on `:5173` with hot reload. Ctrl-C stops both processes. `build` is only
+needed the first time and after frontend changes; `dev` skips it and serves
+from Vite instead.
 
-The script needs OPM Flow on `PATH` (see the install guide below), Node 18+, and
-Python 3.12+. It looks for the virtualenv at `.venv/` and `~/opm-ai/.venv/`;
-set `OPM_VENV=/path/to/.venv` to override.
+The script needs OPM Flow on `PATH` (see the install guide below), Node 18+,
+and Python 3.12+. It looks for the virtualenv at `.venv/` and
+`~/opm-ai/.venv/`; set `OPM_VENV=/path/to/.venv` to override.
 
 ## Install on Ubuntu / Linux
 
-This is the path if you want to run OPM-AI natively without Docker. Tested on
-**Ubuntu 24.04 Noble** (the same base the Docker image uses). Other Debian-
-based distros work the same; RHEL/Fedora need the package names adjusted.
+Tested on **Ubuntu 24.04 Noble** (the same base the Docker image uses).
+Other Debian-based distros work the same; RHEL/Fedora need the package names
+adjusted.
 
 ### 1. System packages
 
 OPM Flow ships in the [OPM PPA](https://launchpad.net/~opm/+archive/ubuntu/ppa).
-The exact package name that owns `/usr/bin/flow` is **`libopm-simulators-bin`**
+The exact package that owns `/usr/bin/flow` is **`libopm-simulators-bin`**
 (the `opm-simulators` package does not exist on noble).
 
 ```bash
@@ -191,8 +198,8 @@ sudo apt-get install -y \
 flow --version    # should print the OPM Flow banner with version info
 ```
 
-The package puts `flow` at `/usr/bin/flow`. If you installed somewhere else,
-set `OPM_FLOW_BINARY=/path/to/flow` in `.env`.
+If you installed somewhere else, set `OPM_FLOW_BINARY=/path/to/flow` in
+`.env`.
 
 ### 2. Clone and create a virtualenv
 
@@ -206,7 +213,7 @@ pip install --upgrade pip
 pip install -e ".[dev]"
 ```
 
-The `-e` (editable) install picks up any source changes on the next run. The
+The `-e` (editable) install picks up source changes on the next run. The
 `[dev]` extra pulls in pytest; drop it for a production install.
 
 ### 3. Configure environment
@@ -214,8 +221,6 @@ The `-e` (editable) install picks up any source changes on the next run. The
 ```bash
 cp .env.example .env
 ```
-
-Open `.env` and set anything you want non-default:
 
 | Variable | Default | Purpose |
 |---|---|---|
@@ -235,9 +240,6 @@ from natural language, and the LLM-generated lint summary.
 
 ### 4. Build the frontend (first run only)
 
-The frontend is a React SPA. The image builds it for you; on a native install
-you build it once and the FastAPI app serves the resulting bundle.
-
 ```bash
 cd frontend
 NODE_OPTIONS=--max-old-space-size=3000 npm install
@@ -245,7 +247,7 @@ NODE_OPTIONS=--max-old-space-size=3000 npm run build
 cd ..
 ```
 
-The `NODE_OPTIONS` bump is for `plotly.js` — three.js + Plotly together push
+The `NODE_OPTIONS` bump is for `plotly.js`. Three.js + Plotly together push
 the minifier past the default 4 GB ceiling on first build.
 
 ### 5. Run
@@ -255,11 +257,6 @@ the minifier past the default 4 GB ceiling on first build.
 # open http://localhost:8000
 ```
 
-`scripts/run.sh dev` runs the backend on `:8000` and the Vite dev server on
-`:5173` simultaneously for hot reload. The two are independent — you can hit
-either URL and get the same app, with `:5173` reflecting source changes
-instantly.
-
 ### 6. Verify
 
 ```bash
@@ -268,22 +265,14 @@ cd frontend && npm test  # frontend self-checks (Monaco completions, deck sectio
 ```
 
 A passing run with no failures means the install is healthy. Two tests skip
-on a fresh checkout — those read `.EGRID` / `.UNRST` / `.INIT` binary
-fixtures that are gitignored; they will run once you produce your first
-simulation output.
-
-### Updating
-
-```bash
-git pull
-pip install -e ".[dev]"           # if pyproject.toml changed
-(cd frontend && npm install && npm run build)   # if frontend deps changed
-```
+on a fresh checkout: those read `.EGRID` / `.UNRST` / `.INIT` binary fixtures
+that are gitignored. They will run once you produce your first simulation
+output.
 
 ## Install on macOS (preview)
 
 OPM Flow on macOS is typically built from source or installed via
-[OPM's Homebrew tap](https://opm-project.org/) — see the upstream
+[OPM's Homebrew tap](https://opm-project.org/). See the upstream
 documentation for the current recommended path. Once `flow` is on your
 `PATH`, the rest is the same as Linux:
 
@@ -305,7 +294,7 @@ cp .env.example .env
 
 ## Install on Windows (via WSL2)
 
-Native Windows is not supported — OPM Flow is a Linux binary. The supported
+Native Windows is not supported. OPM Flow is a Linux binary. The supported
 path is WSL2 with Ubuntu 24.04 inside it. Follow the Ubuntu/Linux section
 above from inside the WSL distribution.
 
@@ -314,8 +303,24 @@ wsl --install -d Ubuntu-24.04
 # restart, open Ubuntu, then follow "Install on Ubuntu / Linux" above
 ```
 
-Point your Windows browser at `http://localhost:8000` — WSL2 forwards the
+Point your Windows browser at `http://localhost:8000`. WSL2 forwards the
 port automatically.
+
+---
+
+## Tech Stack
+
+| Layer | Tech |
+|---|---|
+| Simulator | [OPM Flow](https://opm-project.org/) (subprocess) |
+| Backend | FastAPI, Pydantic, loguru, resfo (binary parsers) |
+| LLM | Groq, OpenAI, NVIDIA NIM, or fully offline |
+| Frontend | React 18, TypeScript, Vite, Tailwind CSS, Zustand |
+| Editor | Monaco with keyword catalogue autocomplete |
+| Plots | Plotly.js |
+| 3D viewer | Three.js native WebGL (binary EGRID/INIT/UNRST streaming) |
+| Tests | pytest (backend), vitest (frontend) |
+| Packaging | Docker, pyproject |
 
 ---
 
@@ -336,7 +341,7 @@ port automatically.
 
 In the Deck Builder, expand the **Fluid** card. The **Correlation** dropdown
 offers Standing (default), Vasquez-Beggs, and Al-Marhoun. The choice flows
-through to the PVTO table — pick one and click **Build** to see the
+through to the PVTO table. Pick one and click **Build** to see the
 difference in the rendered deck.
 
 ### Run a simulation
@@ -364,10 +369,10 @@ plain multi-file picker.
 
 ### Use the chat
 
-The chat is a WebSocket conversation that can call the build / lint / run /
-results tools. Ask it to *"build a 20x20x5 five-spot with 1000 bbl/day
-injection and tell me when the water breaks through"* and watch the tools
-fire in sequence.
+The chat is a WebSocket conversation that can call the build, lint, run,
+results, list-vectors, plot-well-vectors, and compare-wells tools. Ask it
+to *"build a 20x20x5 five-spot with 1000 bbl/day injection and tell me when
+the water breaks through"* and watch the tools fire in sequence.
 
 ### Use the editor directly
 
@@ -383,7 +388,7 @@ job store survives restarts; the in-memory LLM cache does not.
 ### Logging
 
 The backend uses `loguru`. Set `LOG_LEVEL=DEBUG` in `.env` for verbose
-output. LLM client failures log at WARNING — they fall back to offline
+output. LLM client failures log at WARNING. They fall back to offline
 behaviour, so a working app never requires the LLM to be online.
 
 ---
@@ -431,14 +436,14 @@ opm-ai/
 ├── opm_ai/                  Python package
 │   ├── api/                 FastAPI app, routes, WebSocket chat
 │   ├── builder/             Deck generation from a description
-│   ├── linter/              Offline rule engine over deck sections
+│   ├── linter/              Offline rule engine + LinterAPI facade
 │   ├── runner/              OPM Flow subprocess + crash parsing
-│   ├── postprocess/         Summary vectors, KPIs, plots, 3D grid
+│   ├── postprocess/         Summary vectors, KPIs, plots, plot groups
 │   ├── explainer/           Retrieval-backed explanations and quizzes
 │   ├── preprocess/          PVT and relative permeability table builders
 │   ├── llm/                 Provider abstraction + offline fallback
 │   └── deployment/          Docker stack, CI helpers
-├── docs/                    Screenshots, design records, viewer contract
+├── docs/                    Design records, viewer contract, screenshots
 └── scripts/                 run.sh, smoke.sh
 ```
 
@@ -447,11 +452,13 @@ server-side with `resfo`, culls to the visible skin, and ships little-endian
 binary buffers straight into WebGL. Binary rather than JSON because the Norne
 field packs to 6.2 MB of Float32, where the same numbers as decimal text
 would run to tens of megabytes. It carries the ResInsight colour palettes,
-ternary saturation, cell filters, faults, wells, and time-step playback.
+ternary saturation, cell filters, faults, wells, cross-sections, and
+time-step playback.
 
 There is no ResInsight process behind it. The packaged ResInsight build ships
 without gRPC and its batch mode needs a live X display, so an in-process
-bridge was never possible and the viewer was written from the file formats up.
+bridge was never possible and the viewer was written from the file formats
+up.
 
 ---
 
@@ -471,8 +478,28 @@ bridge was never possible and the viewer was written from the file formats up.
 
 The backend has a **calibrated linter invariant**: every ERROR severity must
 be a real Flow error, with zero false positives across 133+ fixture decks.
-The fixture suite is the regression gate for the linter; when changing rules,
+The fixture suite is the regression gate for the linter. When changing rules,
 run the full dataset and verify the false-positive count stays at zero.
+
+---
+
+## What's New
+
+See [CHANGELOG.md](./CHANGELOG.md) for the full release history.
+
+Highlights from the latest release:
+
+- Results Viewer enrichment: dynamic grid layout (1&ndash;4 columns),
+  per-property plot toggle, log-scale axis, Field/Metric unit conversion,
+  CSV export at native/monthly/yearly frequencies, graph export to PNG/SVG
+- Linter v2 facade: `LinterAPI` with cache, executor, source-extension
+  guard, and a one-click `/api/lint/apply-fix` endpoint wired into the UI
+- L013 out-of-order warnings suppressed; deck editor line-jump fixed when
+  clicking a lint error
+- AI chat tools: `list_vectors`, `plot_well_vectors`, `compare_wells`
+- 3D viewer: cross-sections, well property overlay
+- Catalogue expansion: NNC, EDITNNCR, PLMIXPAR, PLYMAX, DRSDT(R)
+  multi-record support; +455 clean fixtures pass lint
 
 ---
 
@@ -488,6 +515,18 @@ run the full dataset and verify the false-positive count stays at zero.
 
 ---
 
+## Contributing
+
+Issues, bug reports, and pull requests are welcome. The linter fixture suite
+under `tests/fixtures/` is the regression gate for any rule changes: please
+add or update fixtures alongside your change.
+
+## License
+
+[MIT](./LICENSE). OPM-AI is an independent project and is **not** affiliated
+with, endorsed by, or supported by the OPM initiative. See the Credits
+section below.
+
 ## Credits
 
 **This project would not exist without the [Open Porous Media initiative](https://github.com/OPM).**
@@ -495,10 +534,11 @@ run the full dataset and verify the false-positive count stays at zero.
 [OPM Flow](https://opm-project.org/) is the simulator. Every result this
 workbench shows was computed by their solver, in their file formats, following
 the deck language their team implemented and documented. The 3D viewer here
-reads EGRID, INIT and UNRST files written by Flow, and it was built by studying
-[ResInsight](https://resinsight.org/), OPM's own post-processor, for the colour
-palettes, the face-culling rules, and the conventions a reservoir engineer
-expects. The `resfo` library that parses those files is theirs too.
+reads EGRID, INIT and UNRST files written by Flow, and it was built by
+studying [ResInsight](https://resinsight.org/), OPM's own post-processor,
+for the colour palettes, the face-culling rules, and the conventions a
+reservoir engineer expects. The `resfo` library that parses those files is
+theirs too.
 
 The OPM team spent years building and giving away a production-quality
 reservoir simulator, with the test decks, the reference cases, and the
@@ -510,14 +550,10 @@ repository existed.
 If you find this useful, the credit belongs upstream. Go
 [star OPM](https://github.com/OPM) and read their documentation.
 
-This project is independent and is **not** affiliated with, endorsed by, or
-supported by the OPM initiative.
-
 ### Also built on
 
 [FastAPI](https://fastapi.tiangolo.com/), [React](https://react.dev/),
 [three.js](https://threejs.org/), [Plotly](https://plotly.com/),
 [Monaco](https://microsoft.github.io/monaco-editor/), and
-[Tailwind CSS](https://tailwindcss.com/) -
-open-source projects that the modern web stands on, and that this one is
-small enough to fit on top of.
+[Tailwind CSS](https://tailwindcss.org/) &mdash; open-source projects that
+the modern web stands on, and that this one is small enough to fit on top of.

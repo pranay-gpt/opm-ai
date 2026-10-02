@@ -151,6 +151,31 @@ class TestFieldUnitsHonoured:
         with pytest.raises(ValueError, match="pressure range"):
             build_deck_from_spec(spec)
 
+    def test_rsvd_rs_follows_the_fluid_not_the_spe1_default(self):
+        # Regression guard: the METRIC-guard edit once dropped the
+        # `rsvd_rs = min(rs_at_pinit, max_table_rs)` clamp, leaving a
+        # dangling comment. Every fluid deck then rendered the hardcoded
+        # SPE1 RSVD of 1.27 while max_table_rs was computed and thrown
+        # away. Assert the value actually moves with the fluid.
+        from opm_ai.preprocess import FluidDescriptor
+
+        values = []
+        for api in (45, 35, 20):
+            spec, _ = extract_parameters_offline_with_provenance(
+                "10x10x3 depletion, one producer"
+            )
+            spec.fluid = FluidDescriptor(
+                api_gravity=api, gas_specific_gravity=0.75, gor=800,
+                reservoir_temp_f=200, salinity_ppm=0,
+                pressure_range_psi=(14.7, 5000), unit_system="FIELD",
+            )
+            values.append(_compute_template_context(spec)["rsvd_rs"])
+
+        assert all(v != 1.270 for v in values), (
+            f"rsvd_rs fell back to the SPE1 default: {values}"
+        )
+        assert len(set(values)) > 1, f"rsvd_rs ignores the fluid: {values}"
+
 
 # ---------- Tokenizer: exponent real literals --------------------------------
 

@@ -125,6 +125,7 @@ def _compute_template_context(spec: ModelSpec) -> dict:
         max_table_rs = max(row["RS"] for row in pvt_oil_table) if pvt_oil_table else rs_at_pinit
 
         # Clamp to max table Rs
+        rsvd_rs = min(rs_at_pinit, max_table_rs)
     elif not spec.field_units:
         # METRIC requested without a fluid descriptor: the built-in PVT
         # tables in base.j2 are FIELD-only, so a bare METRIC deck would

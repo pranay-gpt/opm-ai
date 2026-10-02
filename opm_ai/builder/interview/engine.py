@@ -48,20 +48,60 @@ def progress(spec: ModelSpec, answers: dict[str, Any]) -> dict[str, int]:
     }
 
 
+def fold_answers(spec: ModelSpec, answers: dict[str, Any]) -> ModelSpec:
+    """Apply only the answers already collected, without filling defaults.
+
+    Question applicability is a predicate over the spec: picking
+    "gas cap" has to make the GOC question reachable, and asking for a
+    fluid has to make the fluid questions reachable. Both are decided from
+    the spec, so the answers gathered so far must be folded in BEFORE the
+    catalog is folded. Without this the catalog is always evaluated against
+    the extraction-only spec, and a blocking rule can name a question the
+    user is never offered - a deadlock the interview cannot leave.
+
+    Unlike build_spec this leaves unanswered questions untouched: their
+    defaults are not speculative at this point, and applying them would
+    make a not-yet-asked question look answered.
+
+    Two passes would not be enough in general, because several answers
+    change applicability: the scenario answer gates the GOC and fluid
+    questions, and a well's PROD/INJ answer gates its control questions.
+    So fold to a fixed point instead - re-derive the applicable set and
+    apply anything not yet applied, until a pass adds no new questions.
+    Two rounds is the observed maximum; the cap stops a malformed answer
+    from spinning.
+    """
+    applied: set[str] = set()
+    for _ in range(4):
+        before = len(applied)
+        for q in all_questions(spec):
+            value = answers.get(q.id)
+            if value is not None and q.id not in applied:
+                q.apply(spec, value)
+                applied.add(q.id)
+        if len(applied) == before:
+            break
+    return spec
+
+
 def build_spec(spec: ModelSpec, answers: dict[str, Any]) -> ModelSpec:
     """Apply all answered values, then defaults for the rest.
 
-    Skipped answers record the declared default, so the terminal state
-    always builds a deck - the "interview hung" state is not representable.
+    Two passes, both required. The first folds the answers so the
+    catalog's applicability predicates see them - without it a scenario
+    answer never makes its gated questions visible, and their defaults
+    (the GOC depth, for one) are never recorded, leaving the blocking
+    rule that demands them unsatisfiable. The second resolves defaults
+    for whatever is still unanswered.
     """
+    fold_answers(spec, answers)
     for q in all_questions(spec):
         value = answers.get(q.id)
         if value is not None:
+            continue  # already applied by the fold above
+        # Absent or None (skipped) -> record the declared default.
+        default = q.default
+        value = default(spec) if callable(default) else default
+        if value is not None:
             q.apply(spec, value)
-        else:
-            # Absent or None (skipped) -> record the declared default.
-            default = q.default
-            value = default(spec) if callable(default) else default
-            if value is not None:
-                q.apply(spec, value)
     return spec

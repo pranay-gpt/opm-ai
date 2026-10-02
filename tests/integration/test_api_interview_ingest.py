@@ -183,3 +183,114 @@ class TestIngestUpload:
             files={"file": ("empty.GRDECL", io.BytesIO(b""), "text/plain")},
         )
         assert r.status_code == 400
+
+# ---------- Regressions found by code review on 2026-10-03 --------------------
+
+class TestScenarioGatingNoDeadlock:
+    """Picking a scenario must make that scenario's questions reachable.
+
+    Question applicability is a predicate over the spec, and /next used to
+    evaluate the catalog against the extraction-only spec. Answering
+    "gas cap" therefore never offered the GOC question, while the R04
+    block demanded one - finish 422'd forever with no answer available.
+    """
+
+    def _walk(self, client, scenario, description="10x10x3 reservoir, one producer"):
+        answers, offered = {}, []
+        for _ in range(60):
+            r = client.post("/api/interview/next", json={
+                "description": description, "answers": answers, "use_llm": False,
+            })
+            assert r.status_code == 200, r.text
+            q = r.json()["question"]
+            if q is None:
+                break
+            offered.append(q["id"])
+            answers[q["id"]] = scenario if q["id"] == "intent.scenario" else q["default"]
+        return answers, offered
+
+    def test_gas_cap_offers_the_goc_question(self, client):
+        answers, offered = self._walk(client, "gas_cap")
+        assert "equil.goc_depth" in offered, (
+            f"gas cap never asked for a GOC; offered {offered}"
+        )
+
+    def test_gas_cap_finishes_with_a_passing_deck(self, client):
+        answers, _ = self._walk(client, "gas_cap")
+        r = client.post("/api/interview/finish", json={
+            "description": "10x10x3 reservoir, one producer",
+            "answers": answers, "use_llm": False,
+        })
+        assert r.status_code == 200, r.text
+        assert r.json()["lint"]["passed"] is True
+
+    @pytest.mark.parametrize("scenario", [
+        "depletion", "5spot_waterflood", "gas_cap", "co2_eor", "wag",
+        "multilayer", "buildup",
+    ])
+    def test_every_scenario_reaches_a_buildable_terminal_state(self, client, scenario):
+        # The never-breaks invariant, stated over every scenario the user
+        # can pick: answering every question with its default must finish.
+        # 5spot needs a description that actually extracts an injector -
+        # a waterflood with no injector is a genuine contradiction the
+        # user has to resolve, not a dead end.
+        desc = ("20x20x5 five spot waterflood with 4 injectors and 1 producer"
+                if scenario == "5spot_waterflood"
+                else "10x10x3 reservoir, one producer")
+        answers, _ = self._walk(client, scenario, desc)
+        r = client.post("/api/interview/finish", json={
+            "description": desc,
+            "answers": answers, "use_llm": False,
+        })
+        assert r.status_code == 200, f"{scenario}: {r.text}"
+        assert r.json()["lint"]["passed"] is True
+
+    def test_resolved_snapshot_reflects_collected_answers(self, client):
+        # /next returned the raw extraction, so the UI's running display
+        # contradicted what the user had already typed.
+        r = client.post("/api/interview/next", json={
+            "description": "10x10x3 depletion, one producer",
+            "answers": {"rock.porosity": 0.11}, "use_llm": False,
+        })
+        assert r.status_code == 200, r.text
+        assert r.json()["resolved"]["porosity"] == pytest.approx(0.11)
+
+    def test_bad_csv_number_is_a_400_not_a_500(self, client):
+        # kind=csv_number reached float() unguarded; a stray token surfaced
+        # as an unexplained 500 instead of a message naming the token.
+        r = client.post("/api/interview/finish", json={
+            "description": "10x10x3 depletion, one producer",
+            "answers": {"grid.dz": "50,abc,20"}, "use_llm": False,
+        })
+        assert r.status_code == 400, r.text
+        assert "abc" in r.json()["detail"]
+
+
+class TestIngestFormatSniffing:
+    def test_one_value_per_line_grdecl_is_not_a_numeric_grid(self, client):
+        # Real GRDECL exports write one value per line. Sniffing numbers
+        # before the keyword made that a "numeric grid", which wrote
+        # permeability into porosity - a 100.0 porosity that still linted
+        # clean because the linter only warns on the range.
+        text = "PERMX\n100.0\n100.0\n100.0\n"
+        r = client.post("/api/ingest/parse", json={"text": text})
+        assert r.status_code == 200, r.text
+        body = r.json()
+        assert body["detected"] == "grdecl"
+        assert "permx" in body["patch"]
+        assert "porosity" not in body["patch"]
+
+    def test_bare_numeric_grid_still_detects(self, client):
+        r = client.post("/api/ingest/parse", json={"text": "0.1 0.2 0.3\n0.4 0.5 0.6\n"})
+        assert r.json()["detected"] == "numeric_grid"
+
+    def test_header_comment_containing_a_result_keyword_still_parses(self, client):
+        # "INIT" is a prefix of "initial", so "-- initial porosity
+        # estimate" was refused as an unreadable EGRID result file.
+        text = "-- initial porosity estimate for the reservoir\nPORO\n0.3 0.3 0.3 0.3\n"
+        r = client.post("/api/ingest/parse", json={"text": text})
+        assert r.json()["detected"] == "grdecl"
+
+    def test_real_result_file_is_still_rejected(self, client):
+        r = client.post("/api/ingest/parse", json={"text": "EGRID\nFILEVERSION 2 0\n"})
+        assert r.json()["detected"] == "unknown"

@@ -102,11 +102,16 @@ def validate(spec: ModelSpec, answers: dict[str, Any] | None = None) -> list[Fin
     # -- scenario consistency -------------------------------------------------
     if spec.scenario in (ScenarioType.WATERFLOOD_5SPOT, ScenarioType.WATERFLOOD_LINE_DRIVE):
         if not any(w.well_type == WellType.INJ for w in spec.wells):
+            # Name a well-type question, not intent.scenario: the scenario
+            # is already answered and the interview never re-asks it, so
+            # pointing there told the user to fix something they can no
+            # longer change. Flipping one well to INJ is the actual fix.
+            first_well = "wells[0].type" if spec.wells else "intent.scenario"
             findings.append(Finding(
                 "R09", "block",
-                f"Scenario {spec.scenario.value} is a waterflood but the well "
-                f"list has no injector.",
-                question_id="intent.scenario",
+                f"Scenario {spec.scenario.value} is a waterflood but no well is "
+                f"an injector. Set a well to INJ, or pick a different scenario.",
+                question_id=first_well,
             ))
     if spec.scenario == ScenarioType.GAS_CAP and spec.equil_goc_depth is None:
         findings.append(Finding(

@@ -9,6 +9,7 @@ from opm_ai.builder.interview.engine import (
     next_question,
     apply_answer,
     build_spec,
+    fold_answers,
     progress,
     all_questions,
 )
@@ -21,6 +22,7 @@ __all__ = [
     "next_question",
     "apply_answer",
     "build_spec",
+    "fold_answers",
     "progress",
     "all_questions",
     "Finding",

@@ -23,7 +23,13 @@ from opm_ai.api.schemas import (
 from opm_ai.builder.models import ScenarioType
 from opm_ai.builder import extract_parameters_offline
 from opm_ai.builder.builder import build_deck_from_spec
-from opm_ai.builder.interview import all_questions, build_spec, next_question, validate
+from opm_ai.builder.interview import (
+    all_questions,
+    build_spec,
+    fold_answers,
+    next_question,
+    validate,
+)
 from opm_ai.builder.interview.ingest import apply_ingest, parse_paste
 
 router = APIRouter()
@@ -93,15 +99,26 @@ async def interview_next(request: InterviewRequest) -> InterviewResponse:
         raise HTTPException(status_code=400, detail=f"could not build spec: {e}")
 
     answers = _answers(request)
-    questions = all_questions(spec)
-    q = next_question(spec, answers)
+    # Fold the answers collected so far onto the spec BEFORE the catalog is
+    # evaluated. Question applicability is a predicate over the spec, so
+    # without this the GOC question is never offered after the user picks
+    # the gas-cap scenario, and the R04 block that demands it becomes
+    # unanswerable - a deadlock. It also makes `resolved` reflect the
+    # answers instead of the raw extraction.
+    try:
+        folded = fold_answers(spec, answers)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"could not apply answers: {e}")
+
+    questions = all_questions(folded)
+    q = next_question(folded, answers)
     return InterviewResponse(
-        question=_question_dto(q, spec) if q else None,
+        question=_question_dto(q, folded) if q else None,
         progress=ProgressDTO(
             answered=sum(1 for qq in questions if qq.id in answers),
             total=len(questions),
         ),
-        resolved=_resolved(spec),
+        resolved=_resolved(folded),
     )
 
 
@@ -123,7 +140,14 @@ async def interview_finish(request: InterviewRequest) -> FinishResponse:
     # Apply answers first, then validate the built spec. A skipped blocking
     # question records its declared default, so validate passes - blocking
     # only stops a bare finish where the user actively left something wrong.
-    built = build_spec(spec, answers)
+    # Both this and the render below are wrapped: a malformed answer or an
+    # unrendereable spec is user input, and must come back as a 400 the UI
+    # can show, not a bare 500.
+    try:
+        built = build_spec(spec, answers)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"could not apply answers: {e}")
+
     findings = validate(built, answers)
     blocking = [f for f in findings if f.severity == "block"]
     if blocking:
@@ -133,7 +157,10 @@ async def interview_finish(request: InterviewRequest) -> FinishResponse:
             + "; ".join(f.message for f in blocking),
         )
 
-    deck, lint = build_deck_from_spec(built)
+    try:
+        deck, lint = build_deck_from_spec(built)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     return FinishResponse(
         deck=deck,
         lint=lint,

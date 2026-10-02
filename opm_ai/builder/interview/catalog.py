@@ -10,7 +10,7 @@ predicate holds against the spec built so far, which is the whole
 from dataclasses import dataclass, field, replace
 from typing import Any, Callable
 
-from opm_ai.builder.models import ModelSpec, ScenarioType
+from opm_ai.builder.models import ModelSpec, ScenarioType, WellType
 
 
 @dataclass(frozen=True)
@@ -46,7 +46,12 @@ def _set_reservoir(field_name: str) -> Callable[[ModelSpec, Any], None]:
 
 
 def _set_csv_reservoir(field_name: str) -> Callable[[ModelSpec, Any], None]:
-    """Apply a comma-separated number list (kind=csv_number)."""
+    """Apply a comma-separated number list (kind=csv_number).
+
+    A non-numeric token is a client typo, not a physics value: refuse it
+    with a message naming the token instead of raising a bare ValueError
+    that would surface as an unexplained 500.
+    """
 
     def apply(spec: ModelSpec, value: Any) -> None:
         if value is None:
@@ -54,7 +59,22 @@ def _set_csv_reservoir(field_name: str) -> Callable[[ModelSpec, Any], None]:
         if isinstance(value, (list, tuple)):
             parsed = list(value)
         else:
-            parsed = [float(t) for t in str(value).replace(";", ",").split(",") if t.strip()]
+            parsed = []
+            for tok in str(value).replace(";", ",").split(","):
+                if not tok.strip():
+                    continue
+                try:
+                    parsed.append(float(tok))
+                except ValueError:
+                    raise ValueError(
+                        f"{tok!r} is not a number; expected a comma-separated "
+                        f"list like '50, 30, 20'."
+                    ) from None
+        if not parsed:
+            raise ValueError(
+                f"{field_name} needs at least one number, "
+                f"like '50, 30, 20'."
+            )
         setattr(spec.reservoir, field_name, parsed)
 
     return apply
@@ -68,8 +88,12 @@ def _set_top(field_name: str) -> Callable[[ModelSpec, Any], None]:
 
 def _set_well(idx: int, field_name: str) -> Callable[[ModelSpec, Any], None]:
     def apply(spec: ModelSpec, value: Any) -> None:
-        if idx < len(spec.wells):
-            setattr(spec.wells[idx], field_name, value)
+        if idx >= len(spec.wells) or value is None:
+            return
+        if field_name == "well_type":
+            # The model stores an enum; the wire carries the plain string.
+            value = WellType(value)
+        setattr(spec.wells[idx], field_name, value)
     return apply
 
 
@@ -129,6 +153,19 @@ def _wants_fluid(spec: ModelSpec) -> bool:
 
 def _is_gas_cap(spec: ModelSpec) -> bool:
     return spec.scenario == ScenarioType.GAS_CAP
+
+
+def _gas_cap_default(spec: ModelSpec) -> float:
+    """A GOC depth inside the grid, used when the user skips the question.
+
+    Places the cap base a quarter of the way down from the grid top, the
+    conventional starting point for a gas cap, and always within the span
+    so the EQUIL datum clamp in the builder stays satisfied.
+    """
+    r = spec.reservoir
+    dz = r.dz if isinstance(r.dz, list) else [r.dz] * r.nz
+    total = sum(dz) or 1.0
+    return r.top_depth + total * 0.25
 
 
 # Ordering: intent first (scenario drives later defaults), then grid, rock,
@@ -354,7 +391,15 @@ CATALOG: list[Question] = [
         kind="number",
         applies_when=_is_gas_cap,
         apply=lambda spec, v: setattr(spec, "equil_goc_depth", v),
-        default=lambda spec: spec.equil_goc_depth,
+        # A blocking question must have a default that satisfies its own
+        # rule, or skipping it deadlocks the interview: R04 blocks on a
+        # missing GOC, and this question is the only thing that can set
+        # one. Default to the upper quarter of the grid so the cap sits
+        # inside the model without the user having to compute it.
+        default=lambda spec: (
+            spec.equil_goc_depth if spec.equil_goc_depth is not None
+            else _gas_cap_default(spec)
+        ),
         units="ft",
         blocking=True,
     ),
@@ -421,6 +466,18 @@ def dynamic_questions(spec: ModelSpec) -> list[Question]:
             apply=_set_well(idx, "k2"),
             default=lambda spec, idx=idx, well=well: well.k2,
             units="1..nz",
+            blocking=True,
+        ))
+        questions.append(Question(
+            id=f"wells[{idx}].type", section="wells",
+            prompt=f"Well {well.name}: producer or injector?",
+            kind="select",
+            options=["PROD", "INJ"],
+            apply=_set_well(idx, "well_type"),
+            default=lambda spec, idx=idx, well=well: (
+                well.well_type.value
+                if isinstance(well.well_type, WellType) else str(well.well_type)
+            ),
             blocking=True,
         ))
         if well.well_type.value == "PROD":

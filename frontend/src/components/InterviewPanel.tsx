@@ -136,15 +136,22 @@ export default function InterviewPanel({
     }
   }, [description, useLlm, onDeckBuilt]);
 
-  const handleRestart = useCallback(() => {
+  const handleRestart = useCallback(async () => {
     setQuestion(null);
     setDone(false);
     setFindings([]);
     setIngestNote([]);
     setError(null);
     lastDescription.current = '';
+    // Clear the ref here too: fetchNext reads the answers through the ref, and
+    // the prop will not have updated yet at this point in the tick.
+    answersRef.current = {};
     onReset();
-  }, [onReset]);
+    // Clearing local state and the store changes none of the mount effect's
+    // deps, so without this explicit fetch the panel would sit blank until
+    // something else re-rendered it.
+    await fetchNext();
+  }, [onReset, fetchNext]);
 
   const handleIngest = useCallback(
     async (text: string, source: string) => {

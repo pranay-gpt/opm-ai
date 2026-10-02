@@ -60,6 +60,55 @@ files.
 - Restart in the interview panel cleared state but did not refetch, so
   the panel rendered blank with progress stuck at the pre-restart count.
 
+Found by code review after the first browser pass:
+
+- Picking a scenario could deadlock the interview. Question applicability
+  is a predicate over the spec, but `/interview/next` evaluated the catalog
+  against the extraction-only spec, so answering "gas cap" never made the
+  GOC question reachable while rule R04 blocked on a missing one, and
+  `/interview/finish` returned 422 with no answer available. The engine now
+  folds collected answers before evaluating the catalog, iterating to a
+  fixed point because an answer can change applicability. All seven
+  scenarios reach a lint-passing deck.
+- The gas-cap GOC question was `blocking` with a default of `None`, so
+  skipping it tripped R04 forever. Its default is now a quarter of the way
+  down the grid.
+- Wells were never asked their type, leaving the "waterflood with no
+  injector" block with no answer the user could give. Per-well type
+  questions now exist and gate the PROD/INJ controls; that block names a
+  well-type question rather than the already-answered scenario.
+- The RSVD clamp was dropped alongside the METRIC guard, leaving its
+  comment behind with no statement. Every deck carrying a fluid descriptor
+  rendered the hardcoded SPE1 RSVD of 1.27 while the table max was
+  computed and discarded.
+- `detect_format` sniffed for a bare numeric grid before the leading
+  keyword. Real GRDECL exports write one value per line, so a `PERMX`
+  fragment was detected as a grid and its permeability written into
+  porosity as 100.0, which the linter only warns about, so the deck still
+  linted clean.
+- Result-file rejection was a substring test, so `INIT` matched the word
+  "initial" and a paste headed with `-- initial porosity estimate` was
+  refused as an unreadable EGRID.
+- The no-DIMENS ingest path collected distinct values with `sorted(set(...))`,
+  silently re-ordering a layer profile: a 500/100/200 three-layer
+  permeability became 100/200/500, a physically different reservoir with no
+  finding recorded.
+- An ingested array longer than `nx*ny*nz` was truncated silently.
+- `apply_ingest` dropped any patch key the model does not carry, so a SWOF
+  table parsed fine and was then discarded while the UI reported a
+  successful read.
+- R02's datum fallback disagreed with the builder's own clamp, blocking
+  decks the builder renders clean on thin reservoirs.
+- R07 checked only the upper grid bound, so an index of 0 passed; grid
+  indices are 1-based at both ends.
+- `csv_number` answers hit `float()` unguarded, surfacing a stray token as
+  a bare 500 instead of a message naming it.
+- The persisted interview answers slice included the whole ingested file
+  text, which exceeds the localStorage quota on a multi-megabyte upload;
+  zustand does not guard `setItem`, so the error killed the render.
+- `detect_format` uppercased the whole upload but inspected 200
+  characters, doubling peak memory on a large file.
+
 ### Design invariants
 
 - **Never breaks**: every question is skippable, and a skip records the

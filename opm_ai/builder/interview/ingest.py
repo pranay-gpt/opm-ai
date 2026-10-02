@@ -96,11 +96,15 @@ def _to_float(text: str) -> float:
 def detect_format(text: str) -> str:
     """Sniff which format a paste/upload is. Returns one of:
     deck | grdecl | table | numeric_grid | unknown."""
-    # Only the first 200 chars are ever inspected, so uppercase just that
-    # slice: uploads are capped at 256 MB and uppercasing the whole body
-    # would double the peak memory for no benefit.
-    if any(h in text[:200].upper() for h in _RESULT_FILE_HINTS):
-        return "unknown"  # EGRID / result file: rejected with a message
+    # Result files are rejected by their own signature keyword, not by a
+    # bare substring search: "INIT" is a prefix of "initial", so any paste
+    # whose header comment says "-- initial porosity estimate" would
+    # otherwise be refused as an unreadable result file. Match whole tokens
+    # only, and require a line to consist of nothing but that keyword - an
+    # EGRID/FEGRID file opens with the file name on its own line.
+    for line in text[:200].splitlines():
+        if line.strip().upper() in _RESULT_FILE_HINTS:
+            return "unknown"  # EGRID / result file: rejected with a message
 
     stripped = _strip_comments(text)
     lines = [l for l in stripped.splitlines() if l.strip()]
@@ -111,11 +115,23 @@ def detect_format(text: str) -> str:
         if re.search(rf"^{kw}\s*$", head, re.MULTILINE):
             return "deck"
 
-    # A plain numeric grid is checked before the keyword sniff: a bare
-    # property fragment whose values happen to be numbers is still a
-    # fragment (the keyword names the field), while rows of bare numbers
-    # have no field name at all. A leading non-numeric row (numpy/Petrel
-    # header) is allowed.
+    first = _first_keyword(text)
+    # The keyword sniff runs BEFORE the numeric-grid check. A real GRDECL
+    # export puts one value per line, so "PERMX\n100\n100\n100" is numeric
+    # line by line; sniffing numbers first would detect it as a bare
+    # numeric grid and write permeability into porosity. A genuine numeric
+    # grid names no property anywhere, so it still falls through to the
+    # numeric branch below. DIMENS/BOX are structural GRDECL keywords, not
+    # section headers: a fragment that leads with them is still a fragment.
+    if first in _GRDECL_PROPS or first in {"DIMENS", "BOX"}:
+        return "grdecl"
+    if first in _TABLE_KEYWORDS:
+        return "table"
+    if first in _ARITHMETIC_KEYWORDS:
+        return "grdecl"  # refused by name in _extract_from_keywords
+
+    # Rows of bare numbers with no keyword naming a field: a plain grid.
+    # A leading non-numeric row (numpy/Petrel header) is allowed.
     def _all_numeric(rows: list[str]) -> bool:
         return len(rows) >= 2 and all(
             _is_number(tok) for line in rows for tok in line.split()
@@ -126,15 +142,6 @@ def detect_format(text: str) -> str:
     if len(lines) >= 3 and not _is_number(lines[0].split()[0]) and _all_numeric(lines[1:]):
         return "numeric_grid"
 
-    first = _first_keyword(text)
-    # DIMENS/BOX are structural GRDECL keywords, not section headers: a
-    # fragment that leads with them is still a fragment.
-    if first in _GRDECL_PROPS or first in {"DIMENS", "BOX"}:
-        return "grdecl"
-    if first in _TABLE_KEYWORDS:
-        return "table"
-    if first in _ARITHMETIC_KEYWORDS:
-        return "grdecl"  # refused by name in _extract_from_keywords
     return "unknown"
 
 

@@ -395,7 +395,18 @@ export const useBuilderStore = create<BuilderState>()(
         // Persist the interview so a reload resumes mid-interview; the
         // question itself is re-fetched from /interview/next on mount.
         showInterviewPanel: state.showInterviewPanel,
-        interviewAnswers: state.interviewAnswers,
+        // The __ingest slot holds the entire pasted/uploaded file text,
+        // which can be megabytes. Persisting it would blow the ~5 MB
+        // localStorage quota, and zustand's persist does not guard
+        // setItem, so the QuotaExceededError escapes set() and kills the
+        // render instead of degrading. The file is re-sent by the client
+        // on every call anyway, so dropping it on reload only means the
+        // next /next re-reads it.
+        interviewAnswers: Object.fromEntries(
+          Object.entries(state.interviewAnswers).filter(
+            ([key]) => key !== '__ingest',
+          ),
+        ),
       }),
     }
   )

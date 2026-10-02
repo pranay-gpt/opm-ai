@@ -145,6 +145,16 @@ def detect_format(text: str) -> str:
     return "unknown"
 
 
+def _dedupe_in_order(values: list[float]) -> list[float]:
+    """Distinct values in first-seen order, rounded for float comparison."""
+    out: list[float] = []
+    for v in values:
+        key = round(v, 6)
+        if key not in out:
+            out.append(key)
+    return out
+
+
 def _expand_repeat(items: list) -> list[float]:
     """Expand item pairs (text, column_count) through n*value repeats."""
     out: list[float] = []
@@ -374,6 +384,16 @@ def _extract_from_keywords(keywords: list, fmt: str) -> IngestResult:
             continue
 
         if dimens:
+            expected = cells_per_layer * dimens[2]
+            if len(values) > expected:
+                # Over-long is the common clipboard accident (a double-pasted
+                # range). Silently dropping the tail produced a
+                # plausible-looking uniform reservoir, so name it.
+                result.findings.append(
+                    f"{name} has {len(values)} values but DIMENS "
+                    f"{dimens[0]}x{dimens[1]}x{dimens[2]} holds {expected}; "
+                    f"using the first {expected}."
+                )
             per_layer = _per_layer_values(values, cells_per_layer, dimens[2])
             distinct_layers: list[float] | None = []
             for layer_vals in per_layer:
@@ -391,13 +411,22 @@ def _extract_from_keywords(keywords: list, fmt: str) -> IngestResult:
             if distinct_layers:
                 patch[field_name] = distinct_layers
         else:
-            distinct = sorted(set(round(v, 6) for v in values))
+            # Preserve the order the values were given in. Sorting them
+            # would silently re-order a layer profile: a 500/100/200
+            # three-layer permeability became 100/200/500, a physically
+            # different reservoir with no finding recorded. Without DIMENS
+            # the layer count is unknown, so say so rather than guess.
+            distinct = _dedupe_in_order(values)
             if len(distinct) == 1:
                 patch[field_name] = values[0]
             else:
-                # Layer-major distinct values when nz is unknown; the user
-                # confirms the ordering via the interview.
                 patch[field_name] = distinct
+                result.findings.append(
+                    f"{name} has {len(distinct)} distinct values and no "
+                    f"DIMENS was given, so they were read as one value per "
+                    f"layer in the order supplied. Add DIMENS if the model "
+                    f"has a different layer count."
+                )
 
     return result
 
@@ -471,10 +500,21 @@ def _parse_numeric_grid(text: str) -> IngestResult:
 def apply_ingest(spec: ModelSpec, result: IngestResult) -> ModelSpec:
     """Apply an IngestResult patch onto the spec. Ingested values are
     provenance 'extracted' (they came from a source, exactly as 'from the
-    description' means)."""
+    description' means).
+
+    A patch key with no destination is a bug, not a no-op: silently
+    dropping it made the UI report a successful read of a SWOF table whose
+    rows went nowhere. Report it instead, so the parse surface and the
+    applied surface cannot disagree.
+    """
     for field_name, value in result.patch.items():
         if hasattr(spec.reservoir, field_name):
             setattr(spec.reservoir, field_name, value)
         elif field_name == "pvdg_rows":
             spec.pvdg_rows = value
+        else:
+            result.findings.append(
+                f"Parsed {field_name} but the model has nowhere to put it; "
+                f"the values were not applied."
+            )
     return spec

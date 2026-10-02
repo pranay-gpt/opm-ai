@@ -192,3 +192,38 @@ class TestApplyIngest:
         assert lint.passed
         poro = deck.split("PORO")[1].split("/")[0].split()
         assert all(v == "0.25" for v in poro)
+
+
+# ---------- Regressions found by code review on 2026-10-03 --------------------
+
+class TestIngestSilentDataLoss:
+    def test_layer_order_is_preserved(self):
+        # The no-DIMENS fallback sorted the distinct values, so a
+        # 500/100/200 three-layer profile became 100/200/500: a
+        # physically different reservoir with no finding recorded.
+        result = parse_paste("PERMX\n500.0 100.0 200.0\n")
+        assert result.patch["permx"] == [500.0, 100.0, 200.0]
+        assert result.findings, "an assumed layer count must be reported"
+
+    def test_dz_order_is_preserved(self):
+        result = parse_paste("DZ\n50.0 20.0 30.0\n")
+        assert result.patch["dz"] == [50.0, 20.0, 30.0]
+
+    def test_overlong_array_is_reported_not_silently_truncated(self):
+        # DIMENS 1x1x2 holds 2 cells but 8 values were supplied. The tail
+        # used to vanish with no finding.
+        result = parse_paste(
+            "DIMENS\n1 1 2 /\nPERMX\n10.0 10.0 20.0 20.0 30.0 30.0 40.0 40.0\n"
+        )
+        assert result.patch["permx"] == [10.0, 10.0]
+        assert any("8 values" in f for f in result.findings), result.findings
+
+    def test_unapplicable_patch_key_is_reported(self):
+        # SWOF parses into swof_rows, which ReservoirSpec does not carry.
+        # apply_ingest dropped it silently, so the UI reported a successful
+        # read of a file whose data went nowhere.
+        from opm_ai.builder.extract import extract_parameters_offline
+        spec = extract_parameters_offline("10x10x3 depletion")
+        result = parse_paste("SWOF\n0.2 0.8 0.3 0.02\n")
+        apply_ingest(spec, result)
+        assert any("nowhere to put it" in f for f in result.findings), result.findings

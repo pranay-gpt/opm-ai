@@ -6,7 +6,10 @@ scenario-conditioned question routing, and the semantic rules.
 
 import pytest
 
-from opm_ai.builder.extract import extract_parameters_offline
+from opm_ai.builder.extract import (
+    extract_parameters_offline,
+    extract_parameters_offline_with_provenance,
+)
 from opm_ai.builder.builder import build_deck_from_spec
 from opm_ai.builder.interview import (
     CATALOG,
@@ -194,3 +197,84 @@ class TestBuildSpec:
 def test_catalog_has_no_duplicate_ids():
     ids = [q.id for q in CATALOG]
     assert len(ids) == len(set(ids))
+
+
+# ---------- Regressions found by code review on 2026-10-03 --------------------
+
+class TestRuleDefaultsMatchBuilder:
+    def test_thin_reservoir_datum_rule_follows_the_builder_clamp(self, tmp_path):
+        # R02 fell back to top_depth + 50 while the builder clamps the EQUIL
+        # datum to the grid midpoint. On a 20 ft-thick grid the rule then
+        # blocked a deck the builder renders happily.
+        from opm_ai.builder.builder import build_deck_from_spec
+        from opm_ai.builder.interview.rules import validate
+
+        spec, _ = extract_parameters_offline_with_provenance(
+            "5x5x2 depletion, depth 9000 ft, one producer"
+        )
+        spec.reservoir.nz = 2
+        spec.reservoir.dz = [10.0, 10.0]
+        blocking = [f for f in validate(spec, {}) if f.severity == "block"]
+        assert not blocking, [f.message for f in blocking]
+        deck, lint = build_deck_from_spec(spec)
+        assert lint.passed
+
+    def test_datum_outside_the_grid_is_still_blocked(self):
+        from opm_ai.builder.interview.rules import validate
+
+        spec, _ = extract_parameters_offline_with_provenance(
+            "5x5x2 depletion, depth 9000 ft, one producer"
+        )
+        spec.reservoir.nz = 2
+        spec.reservoir.dz = [10.0, 10.0]
+        spec.equil_datum_depth = 900.0  # far above the grid
+        blocking = [f for f in validate(spec, {}) if f.severity == "block"]
+        assert any("outside the grid span" in f.message for f in blocking)
+
+
+class TestWellIndexBounds:
+    """Grid indices are 1-based on both ends.
+
+    WellSpec validates on construction, but the interview writes answers
+    with setattr, which skips pydantic. So an out-of-range index only ever
+    arrives that way - which is why R07 needs the lower bound.
+    """
+
+    def _spec_with_mutated_well(self, **field_values):
+        from opm_ai.builder.extract import extract_parameters_offline
+
+        spec = extract_parameters_offline("10x10x3 depletion, one producer")
+        assert spec.wells, "expected the extractor to produce a well"
+        for name, value in field_values.items():
+            setattr(spec.wells[0], name, value)  # the unvalidated path
+        return spec
+
+    def test_zero_index_is_blocked(self):
+        from opm_ai.builder.interview import validate
+
+        spec = self._spec_with_mutated_well(i=0)
+        blocking = [f for f in validate(spec, {}) if f.severity == "block"]
+        assert any("outside the grid" in f.message for f in blocking), \
+            [f.message for f in blocking]
+
+    def test_negative_completion_layer_is_blocked(self):
+        from opm_ai.builder.interview import validate
+
+        spec = self._spec_with_mutated_well(k1=0)
+        blocking = [f for f in validate(spec, {}) if f.severity == "block"]
+        assert any("completion layers" in f.message for f in blocking), \
+            [f.message for f in blocking]
+
+    def test_index_past_the_grid_is_blocked(self):
+        from opm_ai.builder.interview import validate
+
+        spec = self._spec_with_mutated_well(i=999)
+        blocking = [f for f in validate(spec, {}) if f.severity == "block"]
+        assert any("outside the grid" in f.message for f in blocking)
+
+    def test_valid_well_is_not_blocked(self):
+        from opm_ai.builder.interview import validate
+
+        spec = extract_parameters_offline("10x10x3 depletion, one producer")
+        blocking = [f for f in validate(spec, {}) if f.severity == "block"]
+        assert not blocking, [f.message for f in blocking]

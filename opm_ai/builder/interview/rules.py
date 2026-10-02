@@ -46,12 +46,22 @@ def validate(spec: ModelSpec, answers: dict[str, Any] | None = None) -> list[Fin
                 f"deeper than the reservoir has layers (nz={r.nz}).",
                 question_id=f"wells[{idx}].k2",
             ))
-        if well.i > r.nx or well.j > r.ny:
+        # Grid indices are 1-based on both ends: 0 or negative is as
+        # invalid as running off the far edge, and Eclipse rejects it at
+        # run time rather than at build time.
+        if not (1 <= well.i <= r.nx) or not (1 <= well.j <= r.ny):
             findings.append(Finding(
                 "R07", "block",
                 f"Well {well.name}: location (i={well.i}, j={well.j}) is outside "
                 f"the grid (nx={r.nx}, ny={r.ny}).",
                 question_id=f"wells[{idx}].i",
+            ))
+        if not (1 <= well.k1 <= r.nz) or not (1 <= well.k2 <= r.nz):
+            findings.append(Finding(
+                "R07b", "block",
+                f"Well {well.name}: completion layers (k1={well.k1}, "
+                f"k2={well.k2}) must lie in 1..{r.nz}.",
+                question_id=f"wells[{idx}].k1",
             ))
         if well.well_type == WellType.PROD and well.target_rate <= 0:
             findings.append(Finding(
@@ -123,10 +133,15 @@ def validate(spec: ModelSpec, answers: dict[str, Any] | None = None) -> list[Fin
 
     # -- equil sanity ----------------------------------------------------------
     dz_list = _dz_list(spec)
-    datum = spec.equil_datum_depth if spec.equil_datum_depth is not None \
-        else r.top_depth + 50.0
     span_top = r.top_depth
     span_bottom = r.top_depth + sum(dz_list)
+    # Match the builder's own default exactly: it clamps the EQUIL datum to
+    # the grid midpoint when the SPE1 default falls outside the span. Using a
+    # different fallback here made this rule block a deck the builder would
+    # happily render.
+    datum = spec.equil_datum_depth
+    if datum is None:
+        datum = (span_top + span_bottom) / 2.0
     if not (span_top <= datum <= span_bottom):
         findings.append(Finding(
             "R02", "block",

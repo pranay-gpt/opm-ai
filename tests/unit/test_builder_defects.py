@@ -118,6 +118,39 @@ class TestFieldUnitsHonoured:
         assert lint.passed
         assert "FIELD" in deck.split("START")[0]
 
+    def test_fluid_descriptor_still_drives_pvt(self):
+        # Regression guard for the METRIC guard: adding the elif must not
+        # strand the rest of the `if spec.fluid` body, which would leave
+        # the deck on the hardcoded SPE1 PVT tables.
+        from opm_ai.preprocess import FluidDescriptor
+
+        spec, _ = extract_parameters_offline_with_provenance(
+            "10x10x3 depletion, one producer"
+        )
+        spec.fluid = FluidDescriptor(
+            api_gravity=35, gas_specific_gravity=0.75, gor=800,
+            reservoir_temp_f=200, salinity_ppm=0,
+            pressure_range_psi=(14.7, 5000), unit_system="FIELD",
+        )
+        deck, lint = build_deck_from_spec(spec)
+        assert lint.passed
+        # The generated PVTO table must replace the hardcoded SPE1 Bo.
+        assert "1.0620" not in deck
+
+    def test_fluid_pressure_range_still_validated(self):
+        from opm_ai.preprocess import FluidDescriptor
+
+        spec, _ = extract_parameters_offline_with_provenance(
+            "10x10x3 depletion, one producer"
+        )
+        spec.fluid = FluidDescriptor(
+            api_gravity=35, gas_specific_gravity=0.75, gor=800,
+            reservoir_temp_f=200, salinity_ppm=0,
+            pressure_range_psi=(14.7, 3000), unit_system="FIELD",
+        )
+        with pytest.raises(ValueError, match="pressure range"):
+            build_deck_from_spec(spec)
+
 
 # ---------- Tokenizer: exponent real literals --------------------------------
 

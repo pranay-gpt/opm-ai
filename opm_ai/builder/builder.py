@@ -67,15 +67,6 @@ def _compute_template_context(spec: ModelSpec) -> dict:
     if spec.fluid is not None:
         fluid = spec.fluid
         unit_system = fluid.unit_system  # Use fluid's unit_system for deck and PVT
-    elif not spec.field_units:
-        # METRIC requested without a fluid descriptor: the built-in PVT
-        # tables in base.j2 are FIELD-only, so a bare METRIC deck would
-        # carry wrong-unit PVT. Refuse rather than ship a wrong deck.
-        raise ValueError(
-            "METRIC units requested without a fluid descriptor: the "
-            "built-in PVT/ROCK tables are FIELD-only. Provide a fluid "
-            "descriptor (with unit_system='METRIC') or use FIELD units."
-        )
 
         # Validate pressure range - the EQUIL datum pressure comes from
         # ReservoirSpec.initial_pressure (default 4800 psia). fluid.
@@ -134,7 +125,15 @@ def _compute_template_context(spec: ModelSpec) -> dict:
         max_table_rs = max(row["RS"] for row in pvt_oil_table) if pvt_oil_table else rs_at_pinit
 
         # Clamp to max table Rs
-        rsvd_rs = min(rs_at_pinit, max_table_rs)
+    elif not spec.field_units:
+        # METRIC requested without a fluid descriptor: the built-in PVT
+        # tables in base.j2 are FIELD-only, so a bare METRIC deck would
+        # carry wrong-unit PVT. Refuse rather than ship a wrong deck.
+        raise ValueError(
+            "METRIC units requested without a fluid descriptor: the "
+            "built-in PVT/ROCK tables are FIELD-only. Provide a fluid "
+            "descriptor (with unit_system='METRIC') or use FIELD units."
+        )
 
     # Normalize schedule events for the template: tstep_days (float|list) ->
     # tstep_list; keep date and actions verbatim. Empty schedule renders nothing

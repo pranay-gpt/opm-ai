@@ -55,27 +55,30 @@ byte-equal specs.
 Verify: tests/unit/test_ingest.py + tests/fixtures/interview/.
 Commit: feat(builder): parse pasted and uploaded keyword files into the spec.
 
-## Stage 5 — HTTP surface
+## Stage 5 — HTTP surface — DONE (7a84dbf)
 
-`api/schemas.py`: InterviewRequest/Response, IngestRequest/Response.
+`api/schemas.py`: QuestionDTO, InterviewRequest/Response, FinishRequest/Response,
+IngestRequest/Response.
 `api/routes/interview.py`: POST /api/interview/next (stateless, returns next question +
-progress + findings), POST /api/interview/finish (reuses `_apply_rock_basics_overrides`
-and `build_deck_from_spec`; no new build path).
-`api/routes/ingest.py`: POST /api/ingest/parse (multipart).
+progress + findings + resolved), POST /api/interview/finish.
+`api/routes/ingest.py`: POST /api/ingest/parse (JSON text) and POST /api/ingest/upload
+(multipart) — both call `parse_paste`, so they are byte-equal by construction.
 `api/server.py`: register routers. POST /api/build untouched.
-Verify: tests/integration/test_interview_api.py, incl. provenance-to-deck agreement
-(answered value appears in the rendered deck line) and flow dry-run.
-Commit: feat(api): interview and ingest endpoints.
+Verify: tests/integration/test_api_interview_ingest.py (14 tests) + a live-server
+end-to-end walk (23 questions asked, lint passed, PORO ingest mapped to porosity).
+Note: finish applies answers BEFORE validate, so a wrongly answered blocking question is
+a 422 while a skipped one records the declared default and still builds.
 
-## Stage 6 — Frontend
+## Stage 6 — Frontend — DONE (0a88d65)
 
-`useAppStore`: interviewAnswers + step in the persist slice (do not persist isSubmitting/
-error). `client.ts`: interviewNext / interviewFinish / ingestParse wrappers reusing
-fetchJson / fetchMultipart. New `InterviewPanel.tsx` reusing the existing number/csv/select
-inputs and PROVENANCE_CLASS badges; mounted in DeckBuilder below the description card with
-a "Build with questions" button. No change to RockBasicsSection.
-Verify: npm test with the new file appended to the chain; tsc clean.
-Commit: feat(ui): step-by-step interview panel.
+`useAppStore`: interview slice in the persist slice (answers + panel visibility persisted;
+the question itself is re-fetched on mount). `client.ts`: interviewNext / interviewFinish /
+ingestParse / ingestUpload wrappers reusing fetchJson / fetchMultipart. New
+`InterviewPanel.tsx`: Answer / Skip / Restart, progress bar, file picker + paste box;
+mounted in DeckBuilder above the Build button. No change to RockBasicsSection.
+Verify: `npm test` (7 suites, new interviewClient.test.ts appended to the chain),
+`tsc -b` clean, eslint clean on the new files. The 4 pre-existing eslint errors in
+DeckBuilder.tsx / useAppStore.ts date from an earlier commit and were left alone.
 
 ## Explicitly skipped
 
@@ -87,3 +90,6 @@ Commit: feat(ui): step-by-step interview panel.
 | opm.io parsing | never - not in container venv; aborts process on bad INCLUDE |
 | Per-step LLM calls | a measured gap the regex extractor and parser both miss |
 | EGRID as an input | never - result file with no petrophysics |
+| Server-side interview session store | never - the client round-trips the answers dict |
+| New provenance tag for ingested data | never - ingested values are `extracted` (they came from a source) |
+| INCLUDE-based GRDECL in the generated deck | never - breaks /api/decks, browser download, lint |

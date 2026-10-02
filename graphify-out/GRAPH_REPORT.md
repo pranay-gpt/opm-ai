@@ -1,76 +1,76 @@
-# Graph Report - opm-ai  (2026-08-17)
+# Graph Report - opm-ai  (2026-10-02)
 
 ## Corpus Check
-- 1883 files · ~15,568,058 words
+- 1921 files · ~15,637,102 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 6670 nodes · 9215 edges · 1741 communities (1638 shown, 103 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 244 edges (avg confidence: 0.55)
+- 7213 nodes · 10295 edges · 1773 communities (1669 shown, 104 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 322 edges (avg confidence: 0.57)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `2de4b9cb`
+- Built from commit: `0a88d65a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- LintIssue
-- create_app
+- symbols.py
+- _data_part
 - SimulationResultDTO
 - parse_file
 - resolve_deck
-- tokenize_line
+- test_linter_v2_tokenizer.py
 - test_linter_v2_self_heal.py
-- Token
+- tokenize_file
 - LintIssue
-- test_api_hardening.py
+- create_app
 - test_linter_v2_fix_proposals.py
-- postprocess/__init__.py
+- chat.py
 - Task 11 Implementation: Fix Plots + Dynamic Grid + Per-Property + Unit Conversion
 - test_grid_api.py
 - schemas.py
 - client.ts
 - test_fake_llm.py
 - test_api_files.py
-- extract.py
+- builder.py
 - integration
-- lint_deck
+- test_linter_negative.py
 - test_plot_groups.py
 - Viewer3DEngine
-- TestBeggsRobinsonViscosity
+- test_correlations.py
 - OracleConfig
 - MULT Documentation
 - run_simulation
 - retrieve_chunks
-- test_linter.py
+- Deck
 - test_grid3d.py
 - RESULTS
 - useAppStore.ts
 - test_erm_catalogue.py
-- ._make_spe1_fluid
+- build_pvt_blocks
 - PINCH Test Documentation
-- build_deck
+- test_llm_extraction.py
 - EclipseGrid
 - GPMAINT.md
 - ACTIONX Tests Using the MULT Model
 - routes/grid.py
-- test_fluid_descriptor.py
+- FluidDescriptor
 - OPM-AI
-- _ParserState
-- chat.py
+- Token
+- ModelSpec
 - explain
 - Keyword
 - classify_deck
-- GASLIFT Test Documentation
+- GASLIFT.md
 - OPM-AI Progress Report
 - compilerOptions
 - calibration.py
 - LLMClient
 - resample_summary
-- builder.py
+- _compute_template_context
 - categorize
-- FluidDescriptor
+- tables.py
 - validate.py
 - Phase 2: refinement and features
 - opmCompletions.test.ts
@@ -78,22 +78,22 @@
 - extract_kpis
 - read_summary
 - File Map
-- validate_deck_path
-- explainer/__init__.py
-- test_results_plot_failure.py
+- upload_deck
+- parse_paste
+- interview/ingest.py
 - grid_mesh.py
-- TestRelativePermeabilityCorrelations
+- corey_swof
 - test_api_keywords.py
 - test_catalogue.py
 - SessionStore
 - Commit Plan
-- Grid3DViewer.tsx
+- ControlPanel.tsx
 - test_chat_tools_results.py
 - OPM-AI Build Status and Resume Point
 - App.tsx
-- test_linter_v2_tokenizer.py
+- TokenKind
 - Part 3 - Builder, LLM Client & CLI  (modules: `opm_ai.builder`, `opm_ai.llm`, `opm_ai.cli`)
-- meshFormat.test.ts
+- colormaps.ts
 - Part 5 - Post-Processing, KPI Extraction & ResInsight Bridge
 - dependencies
 - ChatPanel.tsx
@@ -101,26 +101,26 @@
 - Pre-Processing / PVT & Rock-Property Pipeline  (module: `opm_ai.preprocess`)
 - Part 7: Educational Explainer & RAG Engine  (module: `opm_ai.explainer`)
 - compilerOptions
-- unpack_cells
-- ingest.py
-- TestGasPVTCorrelations
+- What You Must Do When Invoked
+- explainer/ingest.py
+- gas_bg
 - build_keyword_rm_catalogue.py
 - devDependencies
 - Overview and Architecture  (module: `opm_ai` root + `opm_ai.settings`)
-- explain_endpoint
+- catalogue/keywords.py
 - SimulationRunner.tsx
 - build_deck
 - DeckUploader.test.ts
-- rules/grid.py
-- report.py
+- test_linter_unknown_keyword.py
+- interview.py
 - Task 11 Implementation Report: Fix Plot Data Display + Dynamic Grid Layout + Per-Property Plotting + Unit Conversion
 - MSW (Multi-Segment Well) Test Documentation
 - Part 1: OPM Flow engine wrapper  (module: opm_ai.runner)
 - UI Design Specification
-- Implementation Stages
-- grid3d.py
+- Reservoir-Context-Aware Builder
+- _read_keywords
 - general.py
-- Deck
+- build_keyword_catalogue.py
 - GRUPCNTL.md
 - TestInputParser
 - Part 2: AI Deck Linter  (module: `opm_ai.linter`)
@@ -139,39 +139,39 @@
 - _validate_imported_files
 - routes/settings.py
 - Key Invariants
-- TestWaterPVTCorrelations
+- mccain_bw
 - conftest.py
 - fixtures/README.md
-- test_builder_roundtrip.py
+- explain_endpoint
 - Part 8: Deployment and GitHub Packaging (module: opm_ai.deployment)
 - System Prompt for OPM AI Assistant
 - opm_ai/linter - Context
 - eclipse_fileformat/resources/js/MathJax/jax/input/AsciiMath/jax.js
 - eclipse/resources/js/MathJax/jax/input/AsciiMath/jax.js
-- launch_resinsight_route
+- build_deck
 - Self-Hosted Runner Setup for OPM Flow Integration Tests
 - RockBasicsSection.tsx
 - opm_ai/builder - Context
 - OPM Flow `.DATA` Linter v2
 - TestExplainEndpoint
 - test_keyword_processing.py
-- lint_deck_combined
+- lint_deck
 - Cleanup and performance pass
 - Frontend Context
 - package.json
 - deckSections.ts
-- TestVasquezBeggsCorrelations
+- Linter-as-Tool: Design Spec
 - opm_ai.explainer - Educational Explainer & RAG Engine
 - PVT Basics: Solution Gas, Formation Volume Factor, and Bubble Point
 - Well Controls in Eclipse/OPM Flow: Rate vs BHP Control
 - LintResult
-- TestStandingCorrelations
-- ._restart_index
+- meshFormat.test.ts
+- Linter-as-Tool Implementation Plan
 - test_golden_decks.py
 - Plan: Deck Upload with include/ folder (Simulator page)
 - SPE1: The Classic Reservoir Simulation Benchmark
 - props.py
-- TestAlMarhounCorrelations
+- deck.py
 - test_api_decks.py
 - scripts/ - Build-time catalogue generators and run helpers
 - TestBuildRouteProvenance
@@ -182,59 +182,59 @@
 - Depletion Drive (Solution Gas Drive)
 - Relative Permeability and the Corey Model
 - runspec.py
-- solution_summary.py
+- LinterAPI
 - opm_ai/runner  -  Subprocess wrapper for OPM Flow
 - ACTIONW Test Documentation
-- WVFPEXP Test Documentation
+- test_api_settings.py
 - TestQuizEndpoint
 - TestLearningReportEndpoint
-- TestResponseSerialization
+- session_store.py
 - OPM-AI Test Suite
 - Settings
 - OPM-AI Conversation Documentation Index
-- _resolve_property
+- useResolvedTheme
 - Finalization Checklist (2026-07-18)
 - Aquifer Test Documentation
-- lint_deck_v2
-- ACTIONX Tests Using the WSEGVALV Model
+- corpus_check_parallel.py
+- ACTIONX Test Documentation
 - opm_ai/llm - Provider-Abstracted LLM Client
 - test_schedule_index_handles_large_synthetic_deck
-- ACTIONX Tests Using the MODEL05 Model
-- _find_quote
+- GASLIFT Test Documentation
+- api.py
 - AmbiguousCorrelation
 - run.sh
-- SPE10 Comparative Solution Project Test Documentation
+- report.py
 - 3D viewer render harness
 - Per-scenario Jinja2 children
-- .substitute
+- pvt_builder.py
 - preprocess/context.md
 - smoke.sh
-- _unescape
+- apply_fix_endpoint
 - React + TypeScript + Vite
 - tsconfig.json
 - plothelper.sh
 - entrypoint.sh
 - healthcheck.sh
-- @eslint/js
-- test_indented_comment_line
+- _clear_pids
+- Grid3DViewer.tsx
 - jsdom
 - tailwindcss
-- @tailwindcss/typography
-- @testing-library/react
-- @types/react
-- vite
+- engine.ts
+- graphify reference: extra exports and benchmark
+- main
+- LinterCache
 - material-balance.md
 - waterflood-breakthrough.md
 - opm_ai/__init__.py
 - v2/__init__.py
 - with-py.sh
-- test_mid_line_comment_stops_scanning
+- TestHealthEndpoint
 - typescript
 - GRUPCNTL-02-REF.md
 - GRUPCNTL-03-ECL.md
-- GRUPCNTL-03-REF.md
+- test_linter_api.py
 - GRUPCNTL-04-ECL.md
-- GRUPCNTL-04-REF.md
+- interviewClient.test.ts
 - GRUPCNTL-05-ECL.md
 - GRUPCNTL-05-REF.md
 - GRUPCNTL-06-ECL.md
@@ -294,135 +294,168 @@
 - SPE1CASE1_CARFIN_MINPV.md
 - MULT2D_TRANS_NOPERM-ECL.md
 - plotwells.sh
+- LinterExecutor
 - wcycle/README.md
 - opm-ai
 - typescript-eslint
-- vitest
-- test_section_header_with_trailing_decoration
-- test_lowercase_word_is_unknown
+- client.test.ts
+- _load_catalogue
+- task9.test.ts
 - GRUPCNTL-02-ECL.md
+- test_explainer_offline.py
+- main
+- run_simulation_endpoint
+- TestResponseSerialization
+- AGENTS.md
+- graphify reference: query, path, explain
+- test_scenario_deck_lints_and_validates
+- test_v2_tokenizer_integration.py
+- .wells
+- test_linter_api_backcompat.py
+- GRUPCNTL-08-REF.md
+- ._restart_index
+- .get
+- TestInterviewFinish
+- eslint-plugin-react-hooks
+- globals
+- @testing-library/jest-dom
+- @types/node
+- @types/plotly.js
+- @types/react-dom
+- @vitejs/plugin-react
+- GRUPCNTL-01-ECL.md
+- test_token_kind_has_correct_members
+- test_token_kind_members_are_strings
+- TestIngestParse
+- .__init__
+- TestInterviewNext
+- graphify reference: add a URL and watch a folder
+- graphify reference: commit hook and native CLAUDE.md integration
+- graphify reference: incremental update and cluster-only
+- TestTokenizerExponentReals
 - test_fu_var_with_digit_after_scope
+- graphify reference: GitHub clone and cross-repo merge
+- graphify reference: transcribe video and audio
+- extraction-spec.md
+- .diff_lines
+- GRUPCNTL-03-REF.md
 - test_wu_var_recognized
 - test_wumvar_without_underscore_is_keyword
-- test_runspec_is_not_fu_var
-- test_water_is_not_fu_var
 - test_round_trip_simple_keyword_line
 - test_round_trip_repeat_value
-- test_round_trip_string_with_escape
-- GRUPCNTL-08-REF.md
 
 ## God Nodes (most connected - your core abstractions)
-1. `parse_file()` - 89 edges
-2. `Keyword` - 62 edges
-3. `FluidDescriptor` - 56 edges
-4. `lint_deck()` - 52 edges
-5. `build_deck()` - 51 edges
-6. `Token` - 50 edges
-7. `tokenize_line()` - 49 edges
-8. `Viewer3DEngine` - 46 edges
-9. `create_app()` - 46 edges
-10. `validate()` - 46 edges
+1. `parse_file()` - 91 edges
+2. `ModelSpec` - 68 edges
+3. `Keyword` - 62 edges
+4. `FluidDescriptor` - 59 edges
+5. `create_app()` - 53 edges
+6. `tokenize_line()` - 52 edges
+7. `build_deck()` - 51 edges
+8. `lint_deck()` - 50 edges
+9. `Token` - 50 edges
+10. `LintIssue` - 48 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `TestPathValidation` --uses--> `SimulationResultDTO`  [INFERRED]
-  tests/integration/test_api_hardening.py → opm_ai/api/schemas.py
-- `TestSessionStoreEviction` --uses--> `SimulationResultDTO`  [INFERRED]
-  tests/integration/test_api_hardening.py → opm_ai/api/schemas.py
-- `TestPlotFailureShape` --uses--> `SimulationResultDTO`  [INFERRED]
-  tests/integration/test_results_plot_failure.py → opm_ai/api/schemas.py
-- `TestPlotSuccessShape` --uses--> `SimulationResultDTO`  [INFERRED]
-  tests/integration/test_results_plot_failure.py → opm_ai/api/schemas.py
+- `test_cells_is_cached_and_bounded()` --calls--> `_cache_put()`  [EXTRACTED]
+  tests/integration/test_grid_api.py → opm_ai/api/routes/grid.py
+- `test_mesh_cache_is_bounded()` --calls--> `_cache_put()`  [EXTRACTED]
+  tests/integration/test_grid_api.py → opm_ai/api/routes/grid.py
 - `TestCrashReportDTOFromRunner` --uses--> `SimulationResultDTO`  [INFERRED]
   tests/unit/test_simulation_result_dto.py → opm_ai/api/schemas.py
+- `TestSimulationResultDTOFromRunner` --uses--> `SimulationResultDTO`  [INFERRED]
+  tests/unit/test_simulation_result_dto.py → opm_ai/api/schemas.py
+- `TestPlotFailureShape` --uses--> `CategorizedVectorsResponse`  [INFERRED]
+  tests/integration/test_results_plot_failure.py → opm_ai/api/schemas.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (1741 total, 103 thin omitted)
+## Communities (1773 total, 104 thin omitted)
 
-### Community 0 - "LintIssue"
-Cohesion: 0.04
-Nodes (83): crossref_rule(), _keyword_references_group(), _keyword_references_well(), LintIssue, L220-L229: cross-reference checks. Catches: - L221: COMPDAT/WCONPROD/WCONINJE…, Register this rule with the validator., Extract well names referenced by a keyword that has well-name args.…, Extract group names referenced by a keyword. (+75 more)
+### Community 0 - "symbols.py"
+Cohesion: 0.03
+Nodes (118): Deck, SectionName, AST dataclasses for the v2 linter. The parser produces a `Deck` (the root)…, The root AST node for a parsed deck. Attributes: source_file: The path to the…, A single record (one row) of a keyword. A keyword has 1+ records. A…, Sum of column_count across items (excluding the terminator)., A section of the deck (RUNSPEC, GRID, etc.). Attributes: name: The section…, Record (+110 more)
 
-### Community 1 - "create_app"
-Cohesion: 0.02
-Nodes (122): BuildRequest, BuildResponse, FastAPI, OPM AI FastAPI backend package., Path validation helper for API routes. Provides a shared helper to resolve and…, Validate an output path for /api/build output_path. Output paths must: - Have…, validate_output_path(), _apply_rock_basics_overrides() (+114 more)
+### Community 1 - "_data_part"
+Cohesion: 0.11
+Nodes (22): _data_part(), _include_part(), webkitRelativePath typically starts with 'include/'. The route strips it so…, An upload with only include parts (no deck) is rejected., A deck part whose filename doesn't end in .DATA is rejected. OPM Flow only runs…, An empty .DATA file is rejected (would fail at run time too, but rejecting…, An include path containing '..' is rejected. The route must never let a…, An include path starting with '/' is rejected (absolute). (+14 more)
 
 ### Community 2 - "SimulationResultDTO"
-Cohesion: 0.04
-Nodes (77): create_job(), get_all_jobs(), JobKind, JobStore, Any, Enum, JobStatus, Path (+69 more)
+Cohesion: 0.03
+Nodes (109): create_job(), get_all_jobs(), JobKind, JobStore, Any, Enum, JobStatus, Path (+101 more)
 
 ### Community 3 - "parse_file"
 Cohesion: 0.03
-Nodes (126): parse_file(), Convenience: tokenize and parse in one step., build_symbol_table(), _harvest_summary_section(), Deck, Walk the deck and build a SymbolTable from all known entities., Extract SUMMARY variables from every keyword in the SUMMARY section. In…, Deck (+118 more)
+Nodes (119): parse_file(), Deck, Convenience: tokenize and parse in one step., build_symbol_table(), Deck, Walk the deck and build a SymbolTable from all known entities., list_rules(), Deck (+111 more)
 
 ### Community 4 - "resolve_deck"
 Cohesion: 0.03
-Nodes (78): Deck, Path, SectionName, Walks a parsed deck and resolves INCLUDE/IMPORT references., Walk the deck and resolve all references. Returns the populated CompositeDeck.…, Walk all keywords in all sections of `deck`. For INCLUDE: read the file, parse…, Resolve a single INCLUDE statement., Re-tag parent-deck keywords that landed in the wrong section. Pattern: a parent… (+70 more)
+Nodes (81): path_token_to_string(), Extract the path string from an INCLUDE/IMPORT path token. The path token may…, CompositeDeck, Deck, Path, SectionName, Walks a parsed deck and resolves INCLUDE/IMPORT references., Walk the deck and resolve all references. Returns the populated CompositeDeck.… (+73 more)
 
-### Community 5 - "tokenize_line"
-Cohesion: 0.14
-Nodes (23): Path, Tokenize a single line of deck text. Args: line: The line text (without…, tokenize_line(), _kinds(), parametrize, test_actionx_var(), test_column_zero_keyword(), test_comment_line() (+15 more)
+### Community 5 - "test_linter_v2_tokenizer.py"
+Cohesion: 0.09
+Nodes (45): Path, Tokenize a single line of deck text. Args: line: The line text (without…, tokenize_line(), _kinds(), parametrize, Unit tests for the v2 tokenizer (opm_ai.linter.v2.tokenizer)., An indented comment is still a comment., A mid-line `--` ends token scanning for the rest of the line. (+37 more)
 
 ### Community 6 - "test_linter_v2_self_heal.py"
-Cohesion: 0.04
-Nodes (76): CalibrationReport, The full calibration report. Attributes: metadata: When/how the run was made.…, FixProposal, propose_fix(), Return (removed_lines, added_lines) for a simple diff display. Both are empty…, Dispatch to the right proposal function for this issue. Returns None if the…, A concrete patch for a single LintIssue. Attributes: rule_code: The LintIssue…, Return the patched text. The dataclass is immutable; this is a convenience… (+68 more)
+Cohesion: 0.05
+Nodes (64): CalibrationReport, The full calibration report. Attributes: metadata: When/how the run was made.…, FixProposal, A concrete patch for a single LintIssue. Attributes: rule_code: The LintIssue…, _apply_oracle_to_proposal(), _llm_propose_fix(), load_calibration_report(), LintIssue (+56 more)
 
-### Community 7 - "Token"
-Cohesion: 0.03
-Nodes (129): Deck, SectionName, AST dataclasses for the v2 linter. The parser produces a `Deck` (the root)…, The root AST node for a parsed deck. Attributes: source_file: The path to the…, A single record (one row) of a keyword. A keyword has 1+ records. A…, Sum of column_count across items (excluding the terminator)., A section of the deck (RUNSPEC, GRID, etc.). Attributes: name: The section…, Record (+121 more)
+### Community 7 - "tokenize_file"
+Cohesion: 0.07
+Nodes (53): parse(), Parse a token stream into a Deck. Args: tokens: A list of tokens from the…, Tokenize a multi-line deck text. Args: text: The full deck text (may contain…, tokenize_file(), integration, Integration tests for the v2 parser. T2-equivalent from…, SPE1 (the canonical reference) parses to a full deck., Parse every known-good fixture; expect no crash and >=1 keyword. (+45 more)
 
 ### Community 8 - "LintIssue"
-Cohesion: 0.09
-Nodes (20): Deck parser for OPM Flow decks - hand-rolled section splitter., opm_ai.linter - Offline-first OPM Flow deck linter., Linter orchestrator - runs deck through rule engine and returns LintResult., LintIssue, LintResult, BaseModel, model_validator, Lint models - Pydantic models for lint issues and results. The same models are… (+12 more)
+Cohesion: 0.08
+Nodes (30): FixProposalView, LintIssue, LintResult, BaseModel, model_validator, Lint models - Pydantic models for lint issues and results. The same models are…, The issues themselves (not the messages) whose severity is ERROR. Use this when…, Backwards-compatible alias for the dataclass property name that some callers… (+22 more)
 
-### Community 9 - "test_api_hardening.py"
-Cohesion: 0.03
-Nodes (81): ChatRequest, chat_http(), load_system_prompt(), ChatMessage, post, WebSocket endpoint for chat with LLM and tool calling. Accepts one or more…, HTTP fallback for chat (non-streaming)., Load system prompt from cached module-level constant. (+73 more)
+### Community 9 - "create_app"
+Cohesion: 0.02
+Nodes (127): FastAPI, OPM AI FastAPI backend package., get_allowed_roots(), Path, Path validation helper for API routes. Provides a shared helper to resolve and…, Validate a deck path for /api/lint, /api/run, etc. Deck paths must: - Exist (if…, Validate an output path for /api/build output_path. Output paths must: - Have…, Get the list of allowed root directories for path validation. Returns: List of… (+119 more)
 
 ### Community 10 - "test_linter_v2_fix_proposals.py"
-Cohesion: 0.07
-Nodes (61): propose_l231_fix(), propose_l232_fix(), propose_l234_fix(), LintIssue, Fix proposals for v2 linter issues. Each LintIssue describes a defect. A…, Resolve the deck text from the issue's source_file or fallback. If the issue…, Split a single record line into whitespace-separated tokens. Returns None if…, Replace the integer `old_value` with `new_value` on the line at line_idx.… (+53 more)
+Cohesion: 0.05
+Nodes (71): propose_fix(), propose_l231_fix(), propose_l232_fix(), propose_l234_fix(), LintIssue, Fix proposals for v2 linter issues. Each LintIssue describes a defect. A…, Resolve the deck text from the issue's source_file or fallback. If the issue…, Split a single record line into whitespace-separated tokens. Returns None if… (+63 more)
 
-### Community 11 - "postprocess/__init__.py"
-Cohesion: 0.10
-Nodes (31): Post-processing module for OPM Flow simulation results., _display(), export_snapshots(), find_case_file(), is_resinsight_available(), launch_resinsight(), Path, ResInsight bridge: 3D snapshot export via the batch CLI. The packaged… (+23 more)
+### Community 11 - "chat.py"
+Cohesion: 0.03
+Nodes (107): CsvFrequency, FileResponse, KPIsResponse, job_output_dir(), JobStatus, Path, Shared job helpers. Centralises small conversions that used to live inline at…, Return a completed job's output directory as a ``pathlib.Path``. The job store… (+99 more)
 
 ### Community 12 - "Task 11 Implementation: Fix Plots + Dynamic Grid + Per-Property + Unit Conversion"
 Cohesion: 0.07
 Nodes (29): 1. Plot Data Fix (summary.py), 2. Vector Labels (Human-Readable Names), 3. Per-Property Mode, 4. Dynamic Grid Layout, 5. Unit System, API Examples, API (`opm_ai/api/routes/`), Backend (`opm_ai/postprocess/`) (+21 more)
 
 ### Community 13 - "test_grid_api.py"
-Cohesion: 0.05
-Nodes (38): _clear_caches(), client(), _completed_job(), norne_job(), fixture, ndarray, slow, Integration tests for the 3D viewer's grid endpoints. Wires a completed job… (+30 more)
+Cohesion: 0.04
+Nodes (52): _clear_caches(), norne_job(), fixture, ndarray, slow, Integration tests for the 3D viewer's grid endpoints. Wires a completed job…, The pre-existing snapshot route must still resolve on its own path., Every centre must land inside its own cell, in the mesh's frame. This is the… (+44 more)
 
 ### Community 14 - "schemas.py"
-Cohesion: 0.05
-Nodes (55): field_validator, BuildRequest, BuildResponse, ChatRequest, CsvFrequency, ExplainRequest, ExplainResponse, FluidDescriptorRequest (+47 more)
+Cohesion: 0.04
+Nodes (71): field_validator, BuildRequest, BuildResponse, CategorizedVectorsResponse, ChatRequest, CsvFrequency, ExplainRequest, ExplainResponse (+63 more)
 
 ### Community 15 - "client.ts"
 Cohesion: 0.07
-Nodes (58): ChatCallbacks, ChatConnection, errorFromResponse(), fetchBinary(), fetchJson(), fetchMultipart(), KPI_CARDS, KPICard (+50 more)
+Nodes (58): ChatCallbacks, errorFromResponse(), fetchBinary(), fetchJson(), fetchMultipart(), KPI_CARDS, KPICard, SettingsState (+50 more)
 
 ### Community 16 - "test_fake_llm.py"
 Cohesion: 0.06
 Nodes (40): _Call, FakeLLMClient, make_chat_with_tools_response(), make_tool_call(), Any, Reusable LLMClient stand-ins for offline unit tests. This module is NOT…, FakeLLMClient that replays a scripted list of (method, return). Each entry is…, FakeLLMClient that always returns None but records every call. Use when the… (+32 more)
 
 ### Community 17 - "test_api_files.py"
-Cohesion: 0.08
-Nodes (30): get_allowed_roots(), Get the list of allowed root directories for path validation. Returns: List of…, Resolve and validate a user-supplied path against allowed roots. Args:…, validate_path(), _browsable_roots(), DeckEntry, DeckListResponse, _has_includes() (+22 more)
+Cohesion: 0.10
+Nodes (24): _browsable_roots(), DeckEntry, DeckListResponse, _has_includes(), list_decks(), BaseModel, get, Path (+16 more)
 
-### Community 18 - "extract.py"
-Cohesion: 0.09
-Nodes (30): Parameter extraction from natural language descriptions., Builder module for generating OPM Flow decks from natural language descriptions., ControlMode, InjectFluid, BaseModel, Enum, str, Pydantic models for the builder module. (+22 more)
+### Community 18 - "builder.py"
+Cohesion: 0.08
+Nodes (41): Deck builder: natural language -> OPM Flow deck., extract_parameters_llm(), extract_parameters_llm_with_provenance(), Parameter extraction from natural language descriptions., Extract reservoir model parameters via LLM structured output. Renders…, Same as extract_parameters_llm, but also returns a provenance dict. The…, Builder module for generating OPM Flow decks from natural language descriptions., Finding (+33 more)
 
 ### Community 19 - "integration"
 Cohesion: 0.06
 Nodes (31): integration, slow, POST /api/build with fluid -> deck contains PVTO table (not hardcoded SPE1 Bo)., Tests for POST /api/lint, POST /api/lint with valid SPE1 deck -> passed == true., Lint response always carries the lint_summary field. The frontend reads this…, POST /api/lint with nonexistent path -> 4xx or error response (graceful…, Tests for POST /api/run and GET /api/run/{job_id} (+23 more)
 
-### Community 20 - "lint_deck"
-Cohesion: 0.07
-Nodes (44): lint_deck(), Lint an Eclipse deck file. Args: deck_path: Path to .DATA deck file Returns:…, integration, parametrize, skipif, slow, unit, Dataset validation tests. Two directions of ground truth: 1. Builder scenarios:… (+36 more)
+### Community 20 - "test_linter_negative.py"
+Cohesion: 0.09
+Nodes (32): _make_deck_with_pvt_tables(), unit, Negative tests for linter: decks that SHOULD fail linting. Originally…, Deck with WELSPECS but no COMPDAT should fail (error, not warning)., Deck missing DIMENS in RUNSPEC should fail linting (error, not warning)., Deck with producer wells but no WCONPROD should fail., Deck with injector wells but no WCONINJE should fail., Deck completely missing SCHEDULE section should fail. (+24 more)
 
 ### Community 21 - "test_plot_groups.py"
 Cohesion: 0.10
@@ -432,109 +465,109 @@ Nodes (53): _apply_log(), _base_layout(), _field_figure_per_property(), _get_uni
 Cohesion: 0.09
 Nodes (3): safeSize(), Viewer3DEngine, ParsedMesh
 
-### Community 23 - "TestBeggsRobinsonViscosity"
-Cohesion: 0.20
-Nodes (6): Tests for Beggs-Robinson (1975) viscosity correlations., Dead oil viscosity should be positive., Dead oil viscosity should decrease with temperature., Live oil viscosity should be less than dead oil viscosity., Live oil viscosity should decrease with increasing Rs., TestBeggsRobinsonViscosity
+### Community 23 - "test_correlations.py"
+Cohesion: 0.05
+Nodes (42): almarhoun_bo(), beggs_robinson_muo_dead(), beggs_robinson_muo_live(), PVT correlation primitive functions (pure Python + numpy). Each function is a…, Al-Marhoun (1988) saturated oil formation volume factor. Ahmed, Ch. 4, Eq.…, Beggs-Robinson (1975) dead oil viscosity. Ahmed, Ch. 4, Eq. 4.4.1. x =…, Beggs-Robinson live oil viscosity at bubble point. Ahmed, Ch. 4, Eq. 4.4.2. A =…, Standing (1947) solution GOR and bubble point pressure. Ahmed, Reservoir… (+34 more)
 
 ### Community 24 - "OracleConfig"
-Cohesion: 0.08
-Nodes (41): build_manifest(), _classify_to_dict(), _classify_workers(), _find_decks(), main(), Path, Build the v2 fixture MANIFEST.yaml. Walks tests/fixtures/, runs `flow --enable-…, Build the v2 fixture manifest. Args: fixtures_root: Directory to scan for .DATA… (+33 more)
+Cohesion: 0.09
+Nodes (39): build_manifest(), _classify_to_dict(), _classify_workers(), _find_decks(), main(), Path, Build the v2 fixture MANIFEST.yaml. Walks tests/fixtures/, runs `flow --enable-…, Build the v2 fixture manifest. Args: fixtures_root: Directory to scan for .DATA… (+31 more)
 
 ### Community 25 - "MULT Documentation"
 Cohesion: 0.05
 Nodes (30): MULT2D_BASE Description and Results, MULT2D_EDIT1 Description and Results, MULT2D_EDIT2 Description and Results, MULT2D_GRID1 Description and Results, MULT2D_GRID2 Description and Results, MULT2D_GRID2_EDIT2 Description and Results, MULT2D Model (Cartesian Regular 2D Grid), MULT2D_SCHD1 Description and Results (+22 more)
 
 ### Community 26 - "run_simulation"
-Cohesion: 0.07
-Nodes (35): Convert a runner SimulationResult to its JSON-serializable DTO. F4.2 audit fix:…, Convert a runner CrashReport to its JSON-serializable DTO. F4.7 audit fix:…, Runner module exports., CrashReport, BaseModel, Runner models for simulation jobs and results., Format the crash report for readable display in f-strings., Result of a simulation run. Contract fields (01-runner.md section 3): success,… (+27 more)
+Cohesion: 0.06
+Nodes (39): CrashReportDTO, Convert a runner SimulationResult to its JSON-serializable DTO. F4.2 audit fix:…, DTO for crash report in job store., Convert a runner CrashReport to its JSON-serializable DTO. F4.7 audit fix:…, Runner module exports., CrashReport, BaseModel, Runner models for simulation jobs and results. (+31 more)
 
 ### Community 27 - "retrieve_chunks"
 Cohesion: 0.09
-Nodes (41): Read built-in teaching notes shipped with the package. Reads markdown files…, read_teaching_notes(), Citation, A single retrievable source citation., _apply_level_boost(), _bm25_score(), BM25Index, _build_bm25_index() (+33 more)
+Nodes (39): Read built-in teaching notes shipped with the package. Reads markdown files…, read_teaching_notes(), _apply_level_boost(), _bm25_score(), BM25Index, _build_bm25_index(), build_knowledge_base(), _load_kb() (+31 more)
 
-### Community 28 - "test_linter.py"
-Cohesion: 0.10
-Nodes (42): _build_schedule_index(), _extract_well_names(), get_schedule_index(), _has_keyword(), _is_injector(), _is_producer(), Deck, LintIssue (+34 more)
+### Community 28 - "Deck"
+Cohesion: 0.08
+Nodes (46): Deck, List of section names in order of appearance., Check if section exists (case-insensitive)., Get raw section text by name (case-insensitive). Returns None if section not…, Parsed Eclipse deck with section access. Hand-rolled section splitter that…, Get (start_line, end_line) for a section (1-indexed, inclusive)., _build_schedule_index(), _extract_well_names() (+38 more)
 
 ### Community 29 - "test_grid3d.py"
 Cohesion: 0.07
-Nodes (33): derive_soil(), Oil saturation as ResInsight computes it: SOIL = 1 - SWAT - SGAS - SSOL.…, Min/max/mean/p10/p90 plus a 50-bin histogram, ignoring non-finite values.…, statistics(), norne(), fixture, slow, Geometry and packing checks for the 3D viewer's grid modules. Everything here… (+25 more)
+Nodes (34): derive_soil(), find_case(), Corner-point grid geometry for the interactive 3D viewer. Reads ECLIPSE…, Return the case stem (path without extension) for a simulation output dir., Oil saturation as ResInsight computes it: SOIL = 1 - SWAT - SGAS - SSOL.…, Min/max/mean/p10/p90 plus a 50-bin histogram, ignoring non-finite values.…, statistics(), slow (+26 more)
 
 ### Community 30 - "RESULTS"
 Cohesion: 0.05
 Nodes (42): Field and Group Control Mode Reference, Field and Group Control Mode Reference, GRUPCNT MODEL02 Model (Regular Corner-Point), GRUPCNT MODEL02A Model (Regular Corner-Point), GRUPCNTL-01 Description and Results, GRUPCNTL-02 Description and Results, GRUPCNTL-03 Description and Results, GRUPCNTL-04 Description and Results (+34 more)
 
 ### Community 31 - "useAppStore.ts"
-Cohesion: 0.12
-Nodes (42): api, DeckBuilder(), DeckEditor(), OPM_KEYWORDS, findSections(), LinterPanel(), Markdown(), MarkdownProps (+34 more)
+Cohesion: 0.13
+Nodes (40): DeckBuilder(), DeckEditor(), OPM_KEYWORDS, findSections(), BuilderState, DeckState, DEFAULT_FLUID, DEFAULT_ROCK_BASICS (+32 more)
 
 ### Community 32 - "test_erm_catalogue.py"
-Cohesion: 0.05
-Nodes (61): _get_catalogue(), Deck, LintIssue, Return the closest catalogue key to `token`, or None. Case-insensitive (the…, L016: Unknown keyword (WARNING). For each keyword-line token that is not in the…, Lazy-load the keyword catalogue from the JSON artefacts. Returns the inner…, rule_L016_unknown_keyword(), _suggest() (+53 more)
+Cohesion: 0.07
+Nodes (38): _get_catalogue(), Deck, LintIssue, L016: Unknown keyword (WARNING). A keyword in the deck that does not appear in…, Return the closest catalogue key to `token`, or None. Case-insensitive (the…, L016: Unknown keyword (WARNING). For each keyword-line token that is not in the…, Lazy-load the keyword catalogue from the JSON artefacts. Returns the inner…, rule_L016_unknown_keyword() (+30 more)
 
-### Community 33 - "._make_spe1_fluid"
-Cohesion: 0.09
-Nodes (16): Dead oil (gor=0) should produce clean PVT blocks with no inf/nan values., SORW=0.0 should produce valid SWOF table (no duplicate Sw=1.0 rows)., Tests for build_pvt_blocks and related functions., Create fluid descriptor matching SPE1 example from spec., Tests for specific formatting requirements in rendered blocks., PVTO should group rows by RS value with RS header lines., Build PVT blocks with FIELD units - all 7 blocks present., PVDG pressure strictly increasing, BG strictly decreasing. (+8 more)
+### Community 33 - "build_pvt_blocks"
+Cohesion: 0.08
+Nodes (27): PVTBlocks, Rendered PROPS blocks as strings ready for Jinja2 template., build_pvt_blocks(), Validate PVT blocks for monotonicity, endpoints, and physical bounds., Main entry point. Selects correlations (or uses AI advisor if…, validate_pvt_blocks(), build_swof_table(), Build SWOF table rows with keys: SW, KRW, KRO, PCOW. ~12 rows from Swc to 1.0.… (+19 more)
 
 ### Community 34 - "PINCH Test Documentation"
 Cohesion: 0.05
 Nodes (28): Model T1A Description and Results, Model T2A Description and Results, Model T3A Description and Results, PINCH05_GAP1 Description and Results, PINCH05_GAP2 Description and Results, PINCH05_GAP3 Description and Results, PINCH05 Model (Cartesian Regular Grid) Description and Results, PINCH05_NOGAP1 Description and Results (+20 more)
 
-### Community 35 - "build_deck"
-Cohesion: 0.04
-Nodes (68): live, build_deck(), LintResult, Build an OPM Flow deck from natural language description. Args: desc: Natural…, extract_parameters_llm(), Extract reservoir model parameters via LLM structured output. Renders…, ModelSpec, A single schedule phase: keyword actions applied at the current time, then a… (+60 more)
+### Community 35 - "test_llm_extraction.py"
+Cohesion: 0.07
+Nodes (32): _client_with_fake_sdk(), _FakeChoice, FakeClient, _FakeMessage, _FakeResponse, _FakeSDKClient, Tests for LLM-based parameter extraction (fully offline, fake clients)., Mimics the groq/openai chat.completions.create surface. (+24 more)
 
 ### Community 36 - "EclipseGrid"
-Cohesion: 0.08
-Nodes (22): EclipseGrid, ndarray, Corner-point geometry plus the property files that go with a case. Construct…, All cell corners, shape (nz, ny, nx, 8, 3), ECLIPSE corner order. Coordinates…, Rotate grid x/y into map coordinates using the MAPAXES triple., Corners of active cells only, shape (nactive, 8, 3), grid order., Centroid of every active cell, shape (nactive, 3)., Volume of every active cell by decomposition into tetrahedra. Each of the 6… (+14 more)
+Cohesion: 0.07
+Nodes (25): EclipseGrid, ndarray, Corner-point geometry plus the property files that go with a case. Construct…, All cell corners, shape (nz, ny, nx, 8, 3), ECLIPSE corner order. Coordinates…, Rotate grid x/y into map coordinates using the MAPAXES triple., Corners of active cells only, shape (nactive, 8, 3), grid order., Centroid of every active cell, shape (nactive, 3)., Volume of every active cell by decomposition into tetrahedra. Each of the 6… (+17 more)
 
 ### Community 37 - "GPMAINT.md"
 Cohesion: 0.05
 Nodes (27): GPMAINT-01 Lower Oil-Water Reservoir Description and Results, GPMAINT-02 Lower Oil-Water Reservoir Description and Results, GPMAINT-03 Lower Oil-Water Reservoir Description and Results, GPMAINT-04 Lower Oil-Water Reservoir Description and Results, GPMAINT-05 Lower Oil-Water Reservoir Description and Results, GPMAINT-06 Upper Gas-Oil Reservoir Description and Results, GPMAINT-07 Upper Gas-Oil Reservoir Description and Results, GPMAINT-08 Upper Gas-Oil Reservoir Description and Results (+19 more)
 
 ### Community 38 - "ACTIONX Tests Using the MULT Model"
-Cohesion: 0.12
-Nodes (15): ACTIONX_BOX Description and Results, ACTIONX_MULT Description and Results, ACTIONX_MULT- Description and Results, ACTIONX_MULT+ Description and Results, ACTIONX_MULTX- Description and Results, ACTIONX_MULTX+ Description and Results, ACTIONX_MULTY- Description and Results, ACTIONX_MULTY+ Description and Results (+7 more)
+Cohesion: 0.18
+Nodes (11): ACTIONX_BOX Description and Results, ACTIONX_MULT Description and Results, ACTIONX_MULT- Description and Results, ACTIONX_MULT+ Description and Results, ACTIONX_MULTX- Description and Results, ACTIONX_MULTX+ Description and Results, ACTIONX_MULTY- Description and Results, ACTIONX_MULTY+ Description and Results (+3 more)
 
 ### Community 39 - "routes/grid.py"
-Cohesion: 0.11
-Nodes (37): GridInfoResponse, _cache_get(), _cache_put(), _case_stem(), get_grid_cells(), get_grid_info(), get_grid_mesh(), get_grid_property() (+29 more)
+Cohesion: 0.10
+Nodes (40): GridInfoResponse, _cache_get(), _cache_put(), _case_stem(), _dynamic_with_soil(), get_grid_cells(), get_grid_info(), get_grid_mesh() (+32 more)
 
-### Community 40 - "test_fluid_descriptor.py"
-Cohesion: 0.12
-Nodes (8): parametrize, Tests for FluidDescriptor dataclass validation (F2.5 audit fix). Covers: -…, F2.5 audit fix: NaN/Inf on float fields must be rejected, not silently…, Regression guard for pre-existing range/order checks (unchanged by F2.5)., F2.5: the finiteness check fires before the range check, so a NaN on a field…, TestFluidDescriptorFiniteness, TestFluidDescriptorFinitenessPrecedence, TestFluidDescriptorValidation
+### Community 40 - "FluidDescriptor"
+Cohesion: 0.07
+Nodes (19): FluidDescriptor, Data models for the preprocess module. Defines FluidDescriptor and related…, Reject NaN/Inf on a finite-bounded float field (F2.5 audit fix)., User-facing fluid description (matches Builder's ModelSpec.fluid)., Return reservoir temperature in degF., Return pressure range in psia (FIELD) or bar (METRIC)., Oil specific gravity (water = 1.0) from API gravity., _require_finite() (+11 more)
 
 ### Community 41 - "OPM-AI"
-Cohesion: 0.06
-Nodes (35): 1. System packages, 2. Clone and create a virtualenv, 3. Configure environment, 4. Build the frontend (first run only), 5. Run, 6. Verify, Also built on, An AI-assisted workbench for reservoir simulation, built on the open-source [OPM Flow](https://opm-project.org/) simulator. (+27 more)
-
-### Community 42 - "_ParserState"
-Cohesion: 0.08
-Nodes (28): ParseError, A structured top-level parse error. Attributes: source_file: The deck path…, Human-readable location string. If `source_file` is set, returns…, Hand-curated keyword catalogue for the v2 linter. This package contains the…, get_keyword(), known_keywords(), Minimal hand-curated keyword catalogue for the v2 linter. This catalogue covers…, Look up a keyword by name (case-sensitive). (+20 more)
-
-### Community 43 - "chat.py"
 Cohesion: 0.04
-Nodes (81): CsvFrequency, FileResponse, KPIsResponse, job_output_dir(), JobStatus, Path, Shared job helpers. Centralises small conversions that used to live inline at…, Return a completed job's output directory as a ``pathlib.Path``. The job store… (+73 more)
+Nodes (44): [0.2.0] - 2026-08-19, Added, Changed, Changelog, Fixed, Removed, 1. System packages, 2. Clone and create a virtualenv (+36 more)
+
+### Community 42 - "Token"
+Cohesion: 0.06
+Nodes (40): ParseError, A structured top-level parse error. Attributes: source_file: The deck path…, Human-readable location string. If `source_file` is set, returns…, get_keyword(), Look up a keyword by name (case-sensitive)., _classify_synthetic(), _ParserState, Section parser for the v2 linter. Walks a Token stream (from tokenizer.py) and… (+32 more)
+
+### Community 43 - "ModelSpec"
+Cohesion: 0.07
+Nodes (46): dynamic_questions(), _ensure_fluid(), _has_well(), _is_gas_cap(), Any, Question, Question catalog for the reservoir-context interview. Data, not code: a static…, Write a degF answer onto reservoir_temp_c (the field the builder reads). (+38 more)
 
 ### Community 44 - "explain"
-Cohesion: 0.08
-Nodes (30): Explain a reservoir engineering concept., tool_explain_concept(), _build_prompt(), _detect_topic(), explain(), _kpi_summary(), _parse_llm_response(), Any (+22 more)
+Cohesion: 0.07
+Nodes (40): Explain a reservoir engineering concept., Generate a multiple-choice quiz from a scenario., tool_explain_concept(), tool_generate_quiz(), _build_prompt(), _detect_topic(), explain(), _kpi_summary() (+32 more)
 
 ### Community 45 - "Keyword"
-Cohesion: 0.11
-Nodes (22): Keyword, A single keyword occurrence in the deck. Attributes: name: The keyword's name…, _extract_fluid_table(), _extract_fuvar(), _extract_gruptree(), _extract_regions(), _extract_simple_table(), _extract_summary() (+14 more)
+Cohesion: 0.08
+Nodes (31): Keyword, A single keyword occurrence in the deck. Attributes: name: The keyword's name…, crossref_rule(), _keyword_references_group(), _keyword_references_well(), LintIssue, Extract well names referenced by a keyword that has well-name args.…, Extract group names referenced by a keyword. (+23 more)
 
 ### Community 46 - "classify_deck"
 Cohesion: 0.10
 Nodes (29): Classification, classify_corpus(), classify_deck(), _detect_signals(), Path, Classify a deck into one of 8 fixture categories. The categories drive the…, Read a deck as text, truncated to max_bytes (most decks are small)., Detect which category signals appear in the deck. Returns a dict mapping signal… (+21 more)
 
-### Community 47 - "GASLIFT Test Documentation"
-Cohesion: 0.04
-Nodes (33): GASLIFT-01 Description and Results, GASLIFT-02 Description and Results, GASLIFT-03 Description and Results, GASLIFT-04 Description and Results, GASLIFT-05 Description and Results, GASLIFT-06 Description and Results, GASLIFT-07 Description and Results, GASLIFT-08 Description and Results (+25 more)
+### Community 47 - "GASLIFT.md"
+Cohesion: 0.06
+Nodes (15): GASLIFT-01 ECL Results, GASLIFT-02 ECL Results, GASLIFT-03 ECL Results, GASLIFT-04 ECL Results, GASLIFT-05 ECL Results, GASLIFT-06 ECL Results, GASLIFT-07 ECL Results, GASLIFT-08 ECL Results (+7 more)
 
 ### Community 48 - "OPM-AI Progress Report"
-Cohesion: 0.07
-Nodes (29): 1. Squash-merge `worktree-3d-viewer` -> `main`, 1. The aim, restated, 2. Delete the 8 stale local branches + worktrees, 2. Where we are against the plan, 3. Delete the 2 remote branches with no PR history, 3. What the audit found and what was fixed (this pass), 4. Linter calibration: the headline numbers, 5. What the simulation sweeps taught us (+21 more)
+Cohesion: 0.06
+Nodes (35): 1. Squash-merge `worktree-3d-viewer` -> `main`, 1. The aim, restated, 2. Delete the 8 stale local branches + worktrees, 2. Where we are against the plan, 3. Delete the 2 remote branches with no PR history, 3. What the audit found and what was fixed (this pass), 4. Linter calibration: the headline numbers, 5. What the simulation sweeps taught us (+27 more)
 
 ### Community 49 - "compilerOptions"
 Cohesion: 0.07
@@ -552,21 +585,21 @@ Nodes (19): LLMClient, LLM client with Groq, OpenAI-compatible, and offline fall
 Cohesion: 0.13
 Nodes (28): _can_parse_as_datetime(), DataFrame, Series, Resample a summary DataFrame to native / monthly / yearly frequency. The…, Resample using a DatetimeIndex on TIME., Fallback: bucket rows by floor(step / days_per_bucket)., Return a new DataFrame resampled to the given frequency. `freq`: one of…, Return the pandas aggregation name for a given vector column. Inspects the… (+20 more)
 
-### Community 53 - "builder.py"
-Cohesion: 0.12
-Nodes (29): Environment, build_deck_from_spec(), _compute_field_context(), _compute_metric_context(), _compute_template_context(), _get_template_env(), _load_scenario_template(), Path (+21 more)
+### Community 53 - "_compute_template_context"
+Cohesion: 0.13
+Nodes (25): Environment, _compute_field_context(), _compute_metric_context(), _compute_template_context(), _expand_to_layers(), _get_template_env(), _load_scenario_template(), Get Jinja2 environment with template directory. (+17 more)
 
 ### Community 54 - "categorize"
 Cohesion: 0.15
 Nodes (27): categorize(), CategorizedVectors, _is_injector(), _is_producer(), _max_positive(), DataFrame, Categorise summary DataFrame columns into priority vector groups. The summary…, Return (keyword, well_name) if col is a well vector, else None. (+19 more)
 
-### Community 55 - "FluidDescriptor"
-Cohesion: 0.03
-Nodes (107): almarhoun_bo(), beggs_robinson_muo_dead(), beggs_robinson_muo_live(), corey_sgof(), corey_swof(), gas_bg(), gas_z_papay(), lee_gonzalez_mug() (+99 more)
+### Community 55 - "tables.py"
+Cohesion: 0.13
+Nodes (23): build_density_table(), build_rock_table(), _convert_to_metric(), _format_val(), Table builders and renderers for OPM PROPS blocks. Builds PVT and relative…, Build ROCK table - single row at p_min with compressibility. Keys: P, CR (rock…, Build surface densities for DENSITY block. Keys: OIL, WATER, GAS (in lb/ft3 for…, Convert FIELD value to METRIC for output. (+15 more)
 
 ### Community 56 - "validate.py"
-Cohesion: 0.12
-Nodes (29): PVTBlocks, Rendered PROPS blocks as strings ready for Jinja2 template., _check_bad(), _is_bad(), _parse_density(), _parse_pvdg(), _parse_pvto(), _parse_pvtw() (+21 more)
+Cohesion: 0.13
+Nodes (27): _check_bad(), _is_bad(), _parse_density(), _parse_pvdg(), _parse_pvto(), _parse_pvtw(), _parse_rock(), _parse_sgof() (+19 more)
 
 ### Community 57 - "Phase 2: refinement and features"
 Cohesion: 0.07
@@ -577,40 +610,40 @@ Cohesion: 0.19
 Nodes (24): COMPLETION_ITEM_KIND_KEYWORD, CompletionSuggestion, documentationFor(), ModelLike, OpmKeywordEntry, OpmMonacoLike, registerCompletionItemProvider(), registerOpmCompletions() (+16 more)
 
 ### Community 59 - "extract_parameters_offline_with_provenance"
-Cohesion: 0.08
-Nodes (21): extract_parameters_offline(), extract_parameters_offline_with_provenance(), Raw WCONINJE block for a schedule event., Raw WCONPROD block stopping a producer (rate 0, STOP status)., Extract reservoir model parameters from natural language description using…, Same as extract_parameters_offline, but also returns a provenance dict. The…, _wconinje_action(), _wconprod_stop_action() (+13 more)
+Cohesion: 0.07
+Nodes (26): BuildRequest, BuildResponse, _apply_rock_basics_overrides(), build_deck_endpoint(), post, Apply BuildRequest overrides to spec.reservoir and update provenance. A non-…, Snapshot the rock-basics fields the UI renders. Lists preserved as lists., Build an OPM Flow deck from natural language description. Surfaces provenance… (+18 more)
 
 ### Community 60 - "extract_kpis"
-Cohesion: 0.09
-Nodes (30): _compute_watercut(), extract_kpis(), _find_col(), _is_producer(), _is_producer_well(), Any, DataFrame, Series (+22 more)
+Cohesion: 0.12
+Nodes (25): _compute_watercut(), extract_kpis(), _find_col(), _is_producer(), _is_producer_well(), Any, DataFrame, Series (+17 more)
 
 ### Community 61 - "read_summary"
-Cohesion: 0.13
-Nodes (25): _build_column_names(), DataFrame, Path, Summary file reader using resfo., Read OPM Flow summary output files (.SMSPEC, .UNSMRY or .ESMRY) into a…, Build column names like 'WOPT:PROD' from SMSPEC metadata. KEYWORDS: base…, Read formatted ESMRY file using KEYCHECK for column names., Read unformatted UNSMRY using SMSPEC for metadata. (+17 more)
+Cohesion: 0.10
+Nodes (30): _build_column_names(), DataFrame, Path, Summary file reader using resfo., Read OPM Flow summary output files (.SMSPEC, .UNSMRY or .ESMRY) into a…, Build column names like 'WOPT:PROD' from SMSPEC metadata. KEYWORDS: base…, Read formatted ESMRY file using KEYCHECK for column names., Read unformatted UNSMRY using SMSPEC for metadata. (+22 more)
 
 ### Community 62 - "File Map"
 Cohesion: 0.08
 Nodes (25): 1. Redis Job Store for Multi-Worker, 1. Thin Route Adapters, 2. Job Store is Module-Global (`job_store.py`), 2. Structured Logging & Observability, 3. Authentication & Authorization, 3. NaN-Sanitized KPIs, 3D Grid Endpoints (`routes/grid.py`, 2026-07-26), 4. Input Validation Hardening (DONE - Stage 3 API hardening) (+17 more)
 
-### Community 63 - "validate_deck_path"
+### Community 63 - "upload_deck"
+Cohesion: 0.22
+Nodes (10): Path, post, Request, Write the deck and include parts to disk. Returns ``(deck_path, byte_count)``.…, Upload a deck (.DATA) and an optional include/ folder. The deck part is…, Sanitise an include file's relative path. Returns the path with any leading…, _safe_relpath(), upload_deck() (+2 more)
+
+### Community 64 - "parse_paste"
+Cohesion: 0.08
+Nodes (19): IngestResponse, ingest_parse(), ingest_upload(), post, Request, Parse a paste/upload into a spec patch. The client sends the text it read from…, Upload a file and parse it through the same path as paste. The multipart route…, extract_parameters_offline() (+11 more)
+
+### Community 65 - "interview/ingest.py"
 Cohesion: 0.11
-Nodes (22): LintRequest, Path, Validate a deck path for /api/lint, /api/run, etc. Deck paths must: - Exist (if…, Validate a deck path for /api/run. Run deck paths must exist and have .DATA…, validate_deck_path(), validate_run_deck_path(), tool_lint_deck(), lint_deck_endpoint() (+14 more)
-
-### Community 64 - "explainer/__init__.py"
-Cohesion: 0.12
-Nodes (23): Generate a multiple-choice quiz from a scenario., tool_generate_quiz(), __getattr__(), Educational Explainer & RAG Engine for Reservoir Simulation. This module…, Explanation, Quiz, QuizQuestion, Data models for the educational explainer module. This module defines all… (+15 more)
-
-### Community 65 - "test_results_plot_failure.py"
-Cohesion: 0.12
-Nodes (22): CategorizedVectorsResponse, PlotGroupResponse, Categorised view of a summary DataFrame., Response from /plot_group/{group}. `figure_json` is `""` when plot generation…, client(), _completed_job(), fixture, Tests for GET /api/results/{job_id} (KPIs + plots). Covers: - F1.5 audit fix:… (+14 more)
+Nodes (27): _apply_box(), detect_format(), _expand_repeat(), _extract_from_keywords(), _first_keyword(), IngestResult, _is_layer_uniform(), _is_number() (+19 more)
 
 ### Community 66 - "grid_mesh.py"
-Cohesion: 0.09
-Nodes (36): build_cells(), build_edges(), build_surface(), pack_cells(), pack_mesh(), pack_values(), ndarray, Surface extraction and binary mesh packing for the 3D viewer. Builds the… (+28 more)
+Cohesion: 0.08
+Nodes (40): build_cells(), build_edges(), build_surface(), pack_cells(), pack_mesh(), pack_values(), ndarray, Surface extraction and binary mesh packing for the 3D viewer. Builds the… (+32 more)
 
-### Community 67 - "TestRelativePermeabilityCorrelations"
-Cohesion: 0.12
-Nodes (9): Tests for relative permeability correlations., Corey SWOF should honor endpoints., Corey krw increases, kro decreases with Sw., Corey relperms should be in [0, 1]., Corey SGOF should honor endpoints., LET SWOF should honor endpoints., LET relperms should be in [0, 1]., LET SGOF should honor endpoints. (+1 more)
+### Community 67 - "corey_swof"
+Cohesion: 0.09
+Nodes (21): corey_sgof(), corey_swof(), let_sgof(), let_swof(), _normalize_saturation(), Normalize saturation to [0, 1] range., Corey (1954) water-oil relative permeability. krw = krw_max * ((Sw - Swc) / (1…, Corey (1954) gas-oil relative permeability. krg = krg_max * ((Sg - Sgc) / (1 -… (+13 more)
 
 ### Community 68 - "test_api_keywords.py"
 Cohesion: 0.12
@@ -621,52 +654,52 @@ Cohesion: 0.11
 Nodes (24): slow, unit, Tests for the keyword catalogue (the JSON artefact and its build script)., Each keyword record has the documented fields., WELSPECS first record has 13 tokens (well name + 12 args)., Flag keywords (NOECHO, ECHO) have first_token_count=0 and a clean example., The --dry-run flag reports deck_count and keyword_count on stdout as JSON., The committed keywords.json matches the current fixture tree. If a developer… (+16 more)
 
 ### Community 70 - "SessionStore"
-Cohesion: 0.12
+Cohesion: 0.11
 Nodes (10): Lock, Thread-safe bounded session store with LRU eviction., Evict oldest sessions if over capacity., Get existing session or create a new one. Returns: Tuple of (session_id,…, Get session history by ID, moving to MRU position., Update session history, moving to MRU position., Get the per-session asyncio.Lock, creating it if needed. The lock dict is…, Delete a session by ID. (+2 more)
 
 ### Community 71 - "Commit Plan"
 Cohesion: 0.08
 Nodes (23): Commit Plan, Execution Handoff, File Map, Global Constraints, Modified files (backend), Modified files (backend tests), Modified files (frontend), New files (backend) (+15 more)
 
-### Community 72 - "Grid3DViewer.tsx"
-Cohesion: 0.04
-Nodes (60): Window, MappingType, PaletteName, AutoRangeMode, axisMax(), ControlPanel(), ControlPanelProps, FilterState (+52 more)
+### Community 72 - "ControlPanel.tsx"
+Cohesion: 0.10
+Nodes (21): MappingType, PaletteName, AutoRangeMode, axisMax(), ControlPanel(), ControlPanelProps, FilterState, LegendState (+13 more)
 
 ### Community 73 - "test_chat_tools_results.py"
-Cohesion: 0.13
-Nodes (20): compact_tool_result(), execute_tool(), Single vector across multiple wells — the common comparison shape., Execute a tool by name with arguments., Shrink a tool result for LLM history. The frontend receives the full result;…, tool_compare_wells(), client(), fixture (+12 more)
+Cohesion: 0.15
+Nodes (18): compact_tool_result(), execute_tool(), Single vector across multiple wells — the common comparison shape., Execute a tool by name with arguments., Shrink a tool result for LLM history. The frontend receives the full result;…, tool_compare_wells(), Integration tests for the three new chat tools., No active job -> error result (not empty). (+10 more)
 
 ### Community 74 - "OPM-AI Build Status and Resume Point"
-Cohesion: 0.09
-Nodes (22): 2026-07-21: Stages A-F (FORWARD_PLAN.md) - the aim met and shipped, 2026-07-22: UI overhaul, review hardening, docs (CLOSING ENTRY), 2026-07-26..08-04: Stages G-H + Phase 2 capabilities, 2026-08-05..08-05: Audit backlog #10 (5 LOW/MED findings), 2026-08-05: Audit backlog #11 (4 deferred items closed), 2026-08-05: Audit backlog cleared, 2026-08-05: Deck upload feature (Browse + Upload, both workflows), 2026-08-05 (later same day): build pipeline fix + production smoke (+14 more)
+Cohesion: 0.08
+Nodes (23): 2026-07-21: Stages A-F (FORWARD_PLAN.md) - the aim met and shipped, 2026-07-22: UI overhaul, review hardening, docs (CLOSING ENTRY), 2026-07-26..08-04: Stages G-H + Phase 2 capabilities, 2026-08-05..08-05: Audit backlog #10 (5 LOW/MED findings), 2026-08-05: Audit backlog #11 (4 deferred items closed), 2026-08-05: Audit backlog cleared, 2026-08-05: Deck upload feature (Browse + Upload, both workflows), 2026-08-05 (later same day): build pipeline fix + production smoke (+15 more)
 
 ### Community 75 - "App.tsx"
-Cohesion: 0.17
-Nodes (15): App(), AppLayout(), ThemeApplier(), ErrorBoundary, Props, State, Header(), THEME_OPTIONS (+7 more)
-
-### Community 76 - "test_linter_v2_tokenizer.py"
 Cohesion: 0.12
-Nodes (17): iter_tokens(), Iterator form of tokenize_file, for streaming consumers., Unit tests for the v2 tokenizer (opm_ai.linter.v2.tokenizer)., A column-2 uppercase token is a VALUE, not a KEYWORD., TokenKind has the kinds defined in the Phase 1 spec. The spec lists 17 kinds in…, TokenKind inherits from str so tokens serialize cleanly., test_indented_uppercase_is_value(), test_integer() (+9 more)
+Nodes (21): App(), AppLayout(), ThemeApplier(), ErrorBoundary, Props, State, Header(), THEME_OPTIONS (+13 more)
+
+### Community 76 - "TokenKind"
+Cohesion: 0.14
+Nodes (14): _classify_word(), _find_quote(), iter_tokens(), Hand-rolled tokenizer for the v2 linter. Consumes deck text and produces a flat…, Find the matching closing quote, handling backslash escapes. Returns the index…, Unescape Eclipse backslash escapes in a quoted string. Eclipse convention:…, Iterator form of tokenize_file, for streaming consumers., Classify a whitespace-delimited non-numeric word. Order matters: PATHS_VAR is… (+6 more)
 
 ### Community 77 - "Part 3 - Builder, LLM Client & CLI  (modules: `opm_ai.builder`, `opm_ai.llm`, `opm_ai.cli`)"
 Cohesion: 0.09
 Nodes (21): 1. Role in the AIM, 2. Position in Build Order, 3. Hard API Contract (from tests), 4. Key Design Decisions, 5. Toolchain Grounding, 6.1 Package skeleton (Stage 0), 6.2 Models (`builder/models.py`), 6.3 Offline extraction (`builder/extract.py`) (+13 more)
 
-### Community 78 - "meshFormat.test.ts"
-Cohesion: 0.11
-Nodes (35): categoryColor(), colorForValue(), ColorMapping, isDiscrete(), isLog(), KELLY, KELLY_CONTRAST, legendStops() (+27 more)
+### Community 78 - "colormaps.ts"
+Cohesion: 0.18
+Nodes (18): categoryColor(), colorForValue(), ColorMapping, isDiscrete(), isLog(), KELLY, KELLY_CONTRAST, legendStops() (+10 more)
 
 ### Community 79 - "Part 5 - Post-Processing, KPI Extraction & ResInsight Bridge"
 Cohesion: 0.10
 Nodes (20): 1. Role in the AIM, 2. Position in Build Order, 3. Hard API Contract, 4. Key Design Decisions, 5. Toolchain Grounding, 6.1 `summary.py` - `read_summary()`, 6.2 `kpi.py` - `extract_kpis(df)`, 6.3 `plots.py` - Plotly figures (+12 more)
 
 ### Community 80 - "dependencies"
-Cohesion: 0.07
-Nodes (27): dependencies, @monaco-editor/react, playwright, plotly.js-dist-min, react, react-dom, react-markdown, react-plotly.js (+19 more)
+Cohesion: 0.08
+Nodes (25): dependencies, @monaco-editor/react, plotly.js-dist-min, react, react-dom, react-markdown, react-plotly.js, react-router-dom (+17 more)
 
 ### Community 81 - "ChatPanel.tsx"
-Cohesion: 0.20
-Nodes (13): connectChat(), ChatPanel(), Learn(), generateSessionId(), useChatActions(), useChatConnected(), useChatMessages(), useChatSessionId() (+5 more)
+Cohesion: 0.19
+Nodes (13): ChatConnection, connectChat(), ChatPanel(), Learn(), ChatState, generateSessionId(), useChatActions(), useChatConnected() (+5 more)
 
 ### Community 82 - "TestResultComparison"
 Cohesion: 0.10
@@ -684,53 +717,53 @@ Nodes (19): 1. Role in the AIM, 2. Position in build order, 3. Hard API contract
 Cohesion: 0.10
 Nodes (19): compilerOptions, allowImportingTsExtensions, isolatedModules, lib, module, moduleDetection, moduleResolution, noEmit (+11 more)
 
-### Community 86 - "unpack_cells"
-Cohesion: 0.12
-Nodes (19): Every centre must land inside its own cell, in the mesh's frame. This is the…, The client-side join the TS `expandFaultMask` performs, in Python. Per-cell x…, A completion centre must land inside the meshed cell's bounding box., test_cells_centres_sit_inside_the_mesh_bbox(), test_cells_fault_mask_expands_onto_the_mesh_quads(), test_cells_share_the_mesh_origin(), test_cells_spe1_matches_info_and_mesh(), test_mesh_include_inactive_is_a_distinct_cached_entry() (+11 more)
+### Community 86 - "What You Must Do When Invoked"
+Cohesion: 0.08
+Nodes (24): For /graphify add and --watch, For /graphify query, For the commit hook and native AGENTS.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, Part A - Structural extraction for code files (+16 more)
 
-### Community 87 - "ingest.py"
+### Community 87 - "explainer/ingest.py"
 Cohesion: 0.13
 Nodes (14): extract_text_from_html(), HTMLTextExtractor, Any, Path, Knowledge corpus ingestion for the educational explainer. This module reads the…, Read Eclipse HTML reference manual files. Args: dir_path: Path to directory…, Read leading comment blocks from .DATA files in test fixtures. Reads the first…, Extract text content from HTML, stripping scripts/styles and collapsing… (+6 more)
 
-### Community 88 - "TestGasPVTCorrelations"
-Cohesion: 0.17
-Nodes (7): Tests for gas PVT correlations., Papay Z-factor should be in reasonable range (0.2-1.2)., Z-factor generally decreases then increases with pressure (minimum near Ppc)., Bg should decrease with increasing pressure., Bg at standard conditions (14.7 psia, 60F) should be ~178 rb/Mscf., Lee-Gonzalez gas viscosity should be positive., TestGasPVTCorrelations
+### Community 88 - "gas_bg"
+Cohesion: 0.13
+Nodes (15): gas_bg(), gas_z_papay(), lee_gonzalez_mug(), Papay (1982) Z-factor correlation (simplified Standing-Katz). Ahmed, Ch. 3, Eq.…, Gas formation volume factor (real gas law). Bg [rb/Mscf] = 5.035 * z * T_R /…, Lee-Gonzalez-Eakin (1966) gas viscosity. Ahmed, Ch. 3, Eq. 3.5.1. Mg = 28.9625…, build_pvdg_table(), Build PVDG table rows with keys: P, BG, MUG. ~10 pressure nodes from p_min to… (+7 more)
 
 ### Community 89 - "build_keyword_rm_catalogue.py"
 Cohesion: 0.17
 Nodes (19): main(), _parse_first_paragraph(), _parse_flagtable(), parse_keyword_html(), _parse_keyword_name(), _parse_parameter_count(), _parse_parameters(), Path (+11 more)
 
 ### Community 90 - "devDependencies"
-Cohesion: 0.09
-Nodes (23): autoprefixer, eslint, eslint-plugin-react-hooks, eslint-plugin-react-refresh, devDependencies, autoprefixer, eslint, eslint-plugin-react-hooks (+15 more)
+Cohesion: 0.10
+Nodes (21): autoprefixer, eslint, @eslint/js, eslint-plugin-react-refresh, devDependencies, autoprefixer, eslint, @eslint/js (+13 more)
 
 ### Community 91 - "Overview and Architecture  (module: `opm_ai` root + `opm_ai.settings`)"
 Cohesion: 0.11
 Nodes (18): 1. Role in the AIM, 2. Position in build order  (phase; depends-on; depended-on-by), 3. Hard API contract, 4. Key design decisions, 5. Toolchain grounding, 6. Implementation approach  (Stage 0), 7. Risks and open questions, 8. Verification and done-criteria (+10 more)
 
-### Community 92 - "explain_endpoint"
-Cohesion: 0.12
-Nodes (19): ExplainRequest, ExplainResponse, LearningReportRequest, LearningReportResponse, explain_endpoint(), _explanation_to_response(), learning_report_endpoint(), post (+11 more)
+### Community 92 - "catalogue/keywords.py"
+Cohesion: 0.14
+Nodes (13): Hand-curated keyword catalogue for the v2 linter. This package contains the…, known_keywords(), Minimal hand-curated keyword catalogue for the v2 linter. This catalogue covers…, Return all known keyword names, sorted alphabetically., _register(), _register_dict(), ItemSpec, KeywordSpec (+5 more)
 
 ### Community 93 - "SimulationRunner.tsx"
-Cohesion: 0.14
-Nodes (20): pollJobStatus(), main(), nodeAssert, running, testAbortedBeforeFirstCall(), testAbortStopsPolling(), testNoSignalKeepsLegacyBehavior(), DeckPicker() (+12 more)
+Cohesion: 0.20
+Nodes (14): api, DeckPicker(), DeckPickerProps, formatSize(), DeckUploader(), DeckUploaderProps, formatSize(), getStatusBadgeClass() (+6 more)
 
 ### Community 94 - "build_deck"
-Cohesion: 0.11
-Nodes (25): argument, command, group, build_deck(), LintResult, Path, Build an OPM Flow deck from natural language description. Args: description:…, build() (+17 more)
+Cohesion: 0.16
+Nodes (17): argument, command, Build a deck from natural language., tool_build_deck(), build_deck(), LintResult, Path, Build an OPM Flow deck from natural language description. Args: description:… (+9 more)
 
 ### Community 95 - "DeckUploader.test.ts"
 Cohesion: 0.09
 Nodes (18): assert, source, srcPath, ac, AC_PATH, assert, du, DU_PATH (+10 more)
 
-### Community 96 - "rules/grid.py"
-Cohesion: 0.20
-Nodes (17): _get_dims_product(), _get_keyword_values(), _has_keyword(), Deck, LintIssue, GRID section lint rules - L003, L004, L011., Check if keyword exists in section., L004: Negative PERMX/PERMY/PERMZ (ERROR). (+9 more)
+### Community 96 - "test_linter_unknown_keyword.py"
+Cohesion: 0.15
+Nodes (24): _l016_issues(), Path, slow, unit, Tests for L016: unknown_keyword rule., A garbage token with no close match produces a warning without suggestion., Even with a typo, the lint still passes (WARNING severity)., A quoted string on a keyword line is not itself a keyword. (+16 more)
 
-### Community 97 - "report.py"
-Cohesion: 0.21
-Nodes (14): LearningReport, End-of-session summary for student or professor., _build_report_prompt(), _cluster_conversation_topics(), _extract_quiz_scores(), _extract_topics(), generate_learning_report(), _generate_offline_report() (+6 more)
+### Community 97 - "interview.py"
+Cohesion: 0.17
+Nodes (19): InterviewRequest, _answers(), interview_finish(), interview_next(), post, _question_dto(), Interview route: POST /api/interview/next and /api/interview/finish. The server…, Terminal state: build the deck from every answered value. Blocking questions… (+11 more)
 
 ### Community 98 - "Task 11 Implementation Report: Fix Plot Data Display + Dynamic Grid Layout + Per-Property Plotting + Unit Conversion"
 Cohesion: 0.11
@@ -748,33 +781,33 @@ Nodes (16): 1. Role in the AIM, 2. Position in build order, 3. Hard API contract
 Cohesion: 0.12
 Nodes (16): Cards, Cross-Cutting Design Patterns, Data Visualization, Design Sense Reconciliation, Implementation Notes, Interactive Elements, Navigation, Next Steps (+8 more)
 
-### Community 102 - "Implementation Stages"
-Cohesion: 0.13
-Nodes (14): Backend Changes, Files to Modify, Frontend Changes, Implementation Stages, Overview, Stage 1: Type Definitions & API Client, Stage 2: Backend Plot Groups - Per-Property Mode, Stage 3: Backend Unit Awareness (+6 more)
+### Community 102 - "Reservoir-Context-Aware Builder"
+Cohesion: 0.22
+Nodes (8): Explicitly skipped, Reservoir-Context-Aware Builder, Stage 1 — Fix the four builder defects (no new features), Stage 2 — Wire use_llm on the REST build path, Stage 3 — Question catalog + engine (pure, no HTTP), Stage 4 — Ingestion via the linter v2 parser, Stage 5 — HTTP surface, Stage 6 — Frontend
 
-### Community 103 - "grid3d.py"
-Cohesion: 0.12
-Nodes (16): Completion, find_case(), GridError, Exception, Path, Corner-point grid geometry for the interactive 3D viewer. Reads ECLIPSE…, Raised when a case cannot be read as a corner-point grid., One well connection to a grid cell, zero-based ijk. (+8 more)
+### Community 103 - "_read_keywords"
+Cohesion: 0.25
+Nodes (7): GridError, Exception, Path, Raised when a case cannot be read as a corner-point grid., Return the first occurrence of each keyword in an ECLIPSE output file., Unit system name from INIT/UNRST INTEHEAD, or "" when unknown., _read_keywords()
 
 ### Community 104 - "general.py"
 Cohesion: 0.24
 Nodes (11): _line_terminates(), Deck, LintIssue, General lint rules - L001, L013, L014., L013: Keyword not in canonical Eclipse order within section (INFO). This is a…, L014: INCLUDE depth > 2 or absolute path (INFO)., True if the line contains a record terminator '/'. Eclipse ignores everything…, L001: Missing terminating '/' on keyword (ERROR). Scans each section for… (+3 more)
 
-### Community 105 - "Deck"
-Cohesion: 0.08
-Nodes (27): Deck, Path, Parse deck file into sections. Args: deck_path: Path to the .DATA file, Parse deck file into sections., List of section names in order of appearance., Check if section exists (case-insensitive)., Get raw section text by name (case-insensitive). Returns None if section not…, Parsed Eclipse deck with section access. Hand-rolled section splitter that… (+19 more)
+### Community 105 - "build_keyword_catalogue.py"
+Cohesion: 0.19
+Nodes (16): build_catalog(), _decks_for_section(), _first_record_tokens(), _iter_keyword_lines(), main(), Deck, Path, Build opm_ai/linter/keywords.json from the fixture decks. Walks a tree of .DATA… (+8 more)
 
 ### Community 106 - "GRUPCNTL.md"
 Cohesion: 0.12
-Nodes (8): GRUPCNTL-01 ECL Results, GRUPCNTL-12 ECL Results, GRUPCNTL-15 ECL Results, GRUPCNTL-19 REF Results, GRUPCNTL-26 REF Results, GRUPCNTL-28 ECL Results, GRUPCNTL-30 ECL Results, GRUPCNTL-32 REF Results
+Nodes (8): GRUPCNTL-04 REF Results, GRUPCNTL-12 ECL Results, GRUPCNTL-15 ECL Results, GRUPCNTL-19 REF Results, GRUPCNTL-26 REF Results, GRUPCNTL-28 ECL Results, GRUPCNTL-30 ECL Results, GRUPCNTL-32 REF Results
 
 ### Community 107 - "TestInputParser"
 Cohesion: 0.12
 Nodes (12): skipif, Unit tests for parsing OPM input files., Test parsing of OPM input files., Test parsing of RUNSPEC section., Test parsing of GRID section., Test parsing of PROPS section., Test file handling operations., Test reading an OPM input file. (+4 more)
 
 ### Community 108 - "Part 2: AI Deck Linter  (module: `opm_ai.linter`)"
-Cohesion: 0.12
-Nodes (15): 1. Role in the AIM, 2. Position in build order, 3. Hard API contract, 4.1 Parse strategy: hand-rolled section splitter (v1) vs `opm.io.Parser`, 4.2 Two-stage pipeline: rule engine (authoritative) + optional LLM enhancement, 4.3 Severity model (ERROR / WARNING / INFO), 4.4 Rule taxonomy (seed from `opm-flow-editor-support` + domain expertise), 4.5 LLM summary comment injection (+7 more)
+Cohesion: 0.09
+Nodes (22): 1. Role in the AIM, 2. Position in build order, 3. Hard API contract, 4.1 Parse strategy: hand-rolled section splitter (v1) vs `opm.io.Parser`, 4.2 Two-stage pipeline: rule engine (authoritative) + optional LLM enhancement, 4.3 Severity model (ERROR / WARNING / INFO), 4.4 Rule taxonomy (seed from `opm-flow-editor-support` + domain expertise), 4.5 LLM summary comment injection (+14 more)
 
 ### Community 109 - "Results Page enrichment, Import Results, Export Graph"
 Cohesion: 0.12
@@ -793,12 +826,12 @@ Cohesion: 0.12
 Nodes (15): Automatic Timestep Control, Best Practices, Bubble Point Crossing, Common Convergence Issues, Gas Coning, Initial Timestep (`TSTEP` keyword), Key Tuning Parameters (`TUNING` keyword), Linear Solver (CPR-AMG) (+7 more)
 
 ### Community 113 - "Results"
-Cohesion: 0.14
-Nodes (14): Results, WCONPROD-00 Description and Results, WCONPROD-01 Description and Results, WCONPROD-02 Description and Results, WCONPROD-03 Description and Results, WCONPROD-04 Description and Results, WCONPROD-05 Description and Results, WCONPROD-06 Description and Results (+6 more)
+Cohesion: 0.12
+Nodes (15): Results, WCONPROD-00 Description and Results, WCONPROD-01 Description and Results, WCONPROD-02 Description and Results, WCONPROD-03 Description and Results, WCONPROD-04 Description and Results, WCONPROD-05 Description and Results, WCONPROD-06 Description and Results (+7 more)
 
 ### Community 114 - "test_imported_results_route.py"
-Cohesion: 0.17
-Nodes (14): client(), _file_part(), fixture, Integration tests for POST /api/imported-results., Build a (field_name, (filename, content, mime)) tuple for files=[...]., Filenames with characters outside _SAFE_PATH_RE are rejected., Non-multipart request returns 415., test_empty_file_rejected() (+6 more)
+Cohesion: 0.21
+Nodes (12): _file_part(), Integration tests for POST /api/imported-results., Build a (field_name, (filename, content, mime)) tuple for files=[...]., Filenames with characters outside _SAFE_PATH_RE are rejected., Non-multipart request returns 415., test_empty_file_rejected(), test_esmry_alone_accepted(), test_happy_path_creates_virtual_job() (+4 more)
 
 ### Community 115 - "1. HTTP endpoints"
 Cohesion: 0.13
@@ -809,8 +842,8 @@ Cohesion: 0.13
 Nodes (14): 10. Future extensions, 1. Role in the AIM, 2. Position in build order, 3. Hard API contract (exact signatures this part must satisfy), 4. Key design decisions, 5. Toolchain grounding (exact paths, versions, APIs), 6. Implementation approach (ordered steps), 7. Risks and open questions (+6 more)
 
 ### Community 117 - "test_linter_v2_oracle.py"
-Cohesion: 0.36
-Nodes (9): Unit tests for the v2 oracle (opm_ai.linter.v2.oracle). These tests verify the…, test_categorize_failure(), test_known_bad_exit_code(), test_known_bad_fatal_in_stdout(), test_known_bad_stderr_error(), test_known_bad_timeout(), test_known_good_verdict(), test_warning_lines_in_stderr_do_not_cause_failure() (+1 more)
+Cohesion: 0.29
+Nodes (11): categorize_failure(), Categorize a known-bad verdict for diagnostic purposes. Returns one of: 'flow-…, Unit tests for the v2 oracle (opm_ai.linter.v2.oracle). These tests verify the…, test_categorize_failure(), test_known_bad_exit_code(), test_known_bad_fatal_in_stdout(), test_known_bad_stderr_error(), test_known_bad_timeout() (+3 more)
 
 ### Community 118 - "POLYMER.md"
 Cohesion: 0.13
@@ -836,21 +869,21 @@ Nodes (13): _current_state(), get_settings(), BaseModel, get, post, Settings rou
 Cohesion: 0.14
 Nodes (13): 1. Corner order and depth sign (`grid3d.py`), 2. One coordinate transform, one origin (`grid_mesh.py`), 3. Binary layouts are a cross-language contract, 4. Restart well record layout (`grid3d.wells`), 5. One pass per file, 6. KPI key names are a frontend contract, 7. ResInsight has no gRPC (`resinsight_bridge.py`), File Map (+5 more)
 
-### Community 124 - "TestWaterPVTCorrelations"
-Cohesion: 0.25
-Nodes (5): Tests for water PVT correlations (McCain)., Water FVF should be positive and near 1.0., Water FVF should slightly increase with pressure (compressibility)., Water viscosity should be positive and decrease with temperature., TestWaterPVTCorrelations
+### Community 124 - "mccain_bw"
+Cohesion: 0.16
+Nodes (11): mccain_bw(), mccain_muw(), McCain (1991) water formation volume factor. Ahmed, Ch. 3, Eq. 3.3.5. dVwT =…, McCain (1991) water viscosity. Ahmed, Ch. 3, Eq. 3.3.7 (approx). S =…, build_pvt_water_table(), Build PVTW table - single row at reference pressure (p_max midpoint). Keys: P,…, Tests for water PVT correlations (McCain)., Water FVF should be positive and near 1.0. (+3 more)
 
 ### Community 125 - "conftest.py"
 Cohesion: 0.21
 Nodes (13): fixtures_dir(), _force_offline_llm(), fixture, Path, Pytest configuration for OPM-AI tests., Keep the suite deterministic: force LLM offline regardless of .env. Tests…, Create a temporary directory for test files., Provide a sample OPM input file content. (+5 more)
 
 ### Community 126 - "fixtures/README.md"
-Cohesion: 0.20
-Nodes (4): OPERATE Test Documentation, opm-tests, SPE02 - Radial and Spider Grid Test Documentation, WCONPROD Test Documentation
+Cohesion: 0.10
+Nodes (15): OPERATE Test Documentation, opm-tests, SPE02 - Radial and Spider Grid Test Documentation, SPE10 Comparative Solution Project Test Documentation, SPE10 Model 01 ( Cartesian regular/ Irregular Corner-Point), SPE10 Model 02 ( Cartesian regular), Summary, WVFPEXP-01 Results (+7 more)
 
-### Community 127 - "test_builder_roundtrip.py"
-Cohesion: 0.24
-Nodes (13): _flow_dry_run(), integration, slow, Integration test: build a deck with build_deck(), write to temp file, validate…, Test a simple depletion case specifically (SPE1-like)., Test an injection case passes flow dry-run validation., Run flow in dry-run (validation) mode; returns CompletedProcess., Build a deck, write to temp file, run flow dry-run, assert it passes. (+5 more)
+### Community 127 - "explain_endpoint"
+Cohesion: 0.12
+Nodes (19): ExplainRequest, ExplainResponse, LearningReportRequest, LearningReportResponse, explain_endpoint(), _explanation_to_response(), learning_report_endpoint(), post (+11 more)
 
 ### Community 128 - "Part 8: Deployment and GitHub Packaging (module: opm_ai.deployment)"
 Cohesion: 0.15
@@ -872,9 +905,9 @@ Nodes (12): B(), c(), e(), L(), M(), n(), R(), T() (+4 more)
 Cohesion: 0.42
 Nodes (12): B(), c(), e(), L(), M(), n(), R(), T() (+4 more)
 
-### Community 133 - "launch_resinsight_route"
-Cohesion: 0.25
-Nodes (9): _client_is_loopback(), launch_resinsight_route(), _pid_alive(), post, Request, Launch ResInsight with --case on the server's display. Returns immediately; the…, True if the process is still running. Returns False for zombies too., True when the request originated from loopback. ResInsight GUI windows appear… (+1 more)
+### Community 133 - "build_deck"
+Cohesion: 0.05
+Nodes (49): live, build_deck(), LintResult, Path, Build an OPM Flow deck from natural language description. Args: desc: Natural…, integration, slow, Test offline parameter extraction. (+41 more)
 
 ### Community 134 - "Self-Hosted Runner Setup for OPM Flow Integration Tests"
 Cohesion: 0.17
@@ -882,7 +915,7 @@ Nodes (11): 1. Install OPM Flow on Ubuntu 24.04, 2. Install GitHub Actions Self-
 
 ### Community 135 - "RockBasicsSection.tsx"
 Cohesion: 0.21
-Nodes (11): ARRAY_FIELDS, formatList(), parseCsv(), Props, Provenance, PROVENANCE_CLASS, PROVENANCE_LABEL, RockBasicsField (+3 more)
+Nodes (12): ARRAY_FIELDS, formatList(), parseCsv(), Props, Provenance, PROVENANCE_CLASS, PROVENANCE_LABEL, RockBasicsField (+4 more)
 
 ### Community 136 - "opm_ai/builder - Context"
 Cohesion: 0.17
@@ -900,9 +933,9 @@ Nodes (7): POST /api/explain with both topic and kpis -> 422., POST /api/explain
 Cohesion: 0.17
 Nodes (11): Unit tests for processing specific OPM keywords., Test parsing of OPM operators., Test that we can parse sample OPM file structures., Test that we can access and read fixture files., Test that keyword matching is case insensitive., Test parsing of basic OPM keywords., test_fixture_file_access(), test_keyword_case_insensitivity() (+3 more)
 
-### Community 140 - "lint_deck_combined"
-Cohesion: 0.14
-Nodes (19): _convert_v2_issue(), _dedup_key(), lint_deck_combined(), LintIssue, LintResult, Run L1 then v2, deduplicate, return combined LintResult. Both linters run on…, Convert a v2 LintIssue (dataclass) to the L1 Pydantic shape. The two shapes…, Key for deduplicating L1 vs v2 issues. Two issues from different linters count… (+11 more)
+### Community 140 - "lint_deck"
+Cohesion: 0.07
+Nodes (44): opm_ai.linter - Offline-first OPM Flow deck linter., clear_deck_cache(), _convert_v2_issue(), _dedup_key(), _get_deck(), lint_deck(), lint_deck_combined(), lint_deck_v2() (+36 more)
 
 ### Community 141 - "Cleanup and performance pass"
 Cohesion: 0.18
@@ -920,9 +953,9 @@ Nodes (10): name, private, scripts, build, dev, lint, preview, test (+2 more)
 Cohesion: 0.18
 Nodes (9): SECTION_NAMES, SECTION_RE, SectionEntry, SectionName, assert, BANNER, COMMENT_NAMED, FULL (+1 more)
 
-### Community 145 - "TestVasquezBeggsCorrelations"
-Cohesion: 0.25
-Nodes (5): Tests for Vasquez-Beggs (1980) correlations., Vasquez-Beggs Bo for API <= 30., Vasquez-Beggs Bo for API > 30., VB Bo should increase with Rs., TestVasquezBeggsCorrelations
+### Community 145 - "Linter-as-Tool: Design Spec"
+Cohesion: 0.06
+Nodes (32): 0.1 Why this spec exists, 0.2 Scope boundaries, 0. Context, 10. Success criteria, 1.1 Boundaries, 1.2 Why this shape, 1. Architecture, 2.1 `LinterAPI` (`opm_ai/linter/api.py`, new) (+24 more)
 
 ### Community 146 - "opm_ai.explainer - Educational Explainer & RAG Engine"
 Cohesion: 0.18
@@ -940,13 +973,13 @@ Nodes (10): 1. Rate Control (Surface Rate), 2. BHP Control (Bottom-Hole Pressure
 Cohesion: 0.20
 Nodes (6): LintResult, Result of running all rules against a deck. Attributes: issues: All issues…, LintResult counts by severity correctly., has_errors() returns False when no errors., test_lint_result_counts(), test_lint_result_no_errors()
 
-### Community 150 - "TestStandingCorrelations"
-Cohesion: 0.20
-Nodes (6): Tests for Standing (1947) correlations., Test Standing Rs and Pb for typical black oil., Test with SPE1-like fluid: API 35.6, gas_grav 0.71, temp 212F., Standing Bo should increase with Rs., Test Standing Bo gives reasonable values., TestStandingCorrelations
+### Community 150 - "meshFormat.test.ts"
+Cohesion: 0.14
+Nodes (26): align4(), CELLS_FORMAT_VERSION, FACE_NAMES, MESH_FORMAT_VERSION, parseCells(), ParsedCells, ParsedProperty, parseMesh() (+18 more)
 
-### Community 151 - "._restart_index"
-Cohesion: 0.40
-Nodes (4): One restart report step., Scan the UNRST once, returning time steps and keyword occurrences. The…, Report steps in the UNRST file, in file order., TimeStep
+### Community 151 - "Linter-as-Tool Implementation Plan"
+Cohesion: 0.08
+Nodes (25): Execution Handoff, File Map, Global Constraints, Linter-as-Tool Implementation Plan, Modified files, New files, Out of scope (this plan does NOT touch), Self-Review (+17 more)
 
 ### Community 152 - "test_golden_decks.py"
 Cohesion: 0.22
@@ -964,13 +997,13 @@ Nodes (9): Common Issues When Running, Expected Summary Vectors, Key Results (Od
 Cohesion: 0.24
 Nodes (11): _get_keyword_values(), _has_keyword(), Deck, LintIssue, PROPS section lint rules - L005, L012., Check if keyword exists in section., L012: SWOF/SGOF endpoints inconsistent with SATNUM regions (WARNING). Checks if…, Extract all values for a keyword as floats (handles multipliers like 500*100). (+3 more)
 
-### Community 156 - "TestAlMarhounCorrelations"
-Cohesion: 0.50
-Nodes (3): Tests for Al-Marhoun (1988) correlations., Al-Marhoun Bo for typical Middle East crude., TestAlMarhounCorrelations
+### Community 156 - "deck.py"
+Cohesion: 0.13
+Nodes (15): Deck parser for OPM Flow decks - hand-rolled section splitter., Deck, LintIssue, Rule engine registry - imports and runs all lint rules., Run all registered rules against the deck., run_all(), _has_keyword(), Deck (+7 more)
 
 ### Community 157 - "test_api_decks.py"
-Cohesion: 0.14
-Nodes (8): client(), fixture, skipif, Tests for POST /api/decks (save deck text) and the SPA deep-link fallback., test_spa_fallback_serves_index_for_client_routes(), Test health check endpoint, GET /health -> 200 with status ok., TestHealthEndpoint
+Cohesion: 0.29
+Nodes (3): skipif, Tests for POST /api/decks (save deck text) and the SPA deep-link fallback., test_spa_fallback_serves_index_for_client_routes()
 
 ### Community 158 - "scripts/ - Build-time catalogue generators and run helpers"
 Cohesion: 0.22
@@ -1004,21 +1037,21 @@ Nodes (7): Corey Model (Power-Law), Definition, Eclipse Keywords, Impact on Wate
 Cohesion: 0.29
 Nodes (9): _has_keyword(), Deck, LintIssue, RUNSPEC section lint rules - L002, L015., Check if keyword exists in section., L002: Phase declared in RUNSPEC but missing companion PROPS keyword (ERROR).…, L015: Missing DIMENS in RUNSPEC (ERROR). Skipped when RUNSPEC contains INCLUDE…, rule_L002_phase_mismatch() (+1 more)
 
-### Community 167 - "solution_summary.py"
-Cohesion: 0.27
-Nodes (9): _has_keyword(), Deck, LintIssue, SOLUTION and SUMMARY section lint rules - L009, L010., Check if keyword exists in section., L009: Missing SOLUTION section and no RESTART (WARNING). SOLUTION is WARNING…, L010: No SUMMARY section (WARNING). SUMMARY is always WARNING because deck runs…, rule_L009_missing_solution() (+1 more)
+### Community 167 - "LinterAPI"
+Cohesion: 0.17
+Nodes (20): LinterAPI, Path, LinterAPI error taxonomy tests., Calling invalidate_cache() twice in a row must not raise., Async path with a normal timeout must return a LintResult or timeout. Verifies…, Async path with a tiny timeout raises LinterTimeoutError OR completes. Either…, Linting a binary file (e.g. PNG header with .png extension) must raise. Per the…, A binary blob with .DATA extension must NOT silently pass. The facade has no… (+12 more)
 
 ### Community 168 - "opm_ai/runner  -  Subprocess wrapper for OPM Flow"
 Cohesion: 0.25
 Nodes (7): Command template, Cross-references, Exit codes (per OPM.md §9), Future work (not implemented), Key invariant, opm_ai/runner  -  Subprocess wrapper for OPM Flow, Thread flag decision
 
 ### Community 169 - "ACTIONW Test Documentation"
-Cohesion: 0.25
+Cohesion: 0.22
 Nodes (8): ACTIONW-00 Description and Results, ACTIONW-01 Description and Results, ACTIONW-02 Description and Results, ACTIONW-03 Description and Results, ACTIONW-04 Description and Results, ACTIONW-05 Description and Results, ACTIONW Model (Irregular Corner-Point), ACTIONW Test Documentation
 
-### Community 170 - "WVFPEXP Test Documentation"
-Cohesion: 0.25
-Nodes (8): WVFPEXP-01 Results, WVFPEXP-02 Results, WVFPEXP-03 Results (Gas Lift), WVFPEXP-04 Results (Gas Lift), WVFPEXP-05 Results, WVFPEXP-06 Results, WVFPEXP Model (Irregular Corner-Point), WVFPEXP Test Documentation
+### Community 170 - "test_api_settings.py"
+Cohesion: 0.13
+Nodes (20): client(), fixture, integration, Integration tests for the runtime settings API (POST/GET /api/settings).…, POSTing an empty key string clears the configured key., POSTing without a key field leaves the existing key configured., Unknown provider name -> 422 from Literal validation., Force a known offline state and restore the singleton afterwards. (+12 more)
 
 ### Community 171 - "TestQuizEndpoint"
 Cohesion: 0.25
@@ -1028,9 +1061,9 @@ Nodes (5): Tests for POST /api/quiz, POST /api/quiz with scenario -> 200, exactl
 Cohesion: 0.25
 Nodes (5): Tests for POST /api/learning-report, POST /api/learning-report with 6-message conversation -> 200, markdown contains…, Test learning report extracts quiz scores from conversation., Test that topics are detected from conversation., TestLearningReportEndpoint
 
-### Community 173 - "TestResponseSerialization"
-Cohesion: 0.25
-Nodes (5): Tests that response JSON serializes cleanly (no NaN, tuples become lists)., Explain response contains no NaN and all sequences are lists., Quiz response contains no NaN and all sequences are lists., Learning report response contains no NaN and all sequences are lists., TestResponseSerialization
+### Community 173 - "session_store.py"
+Cohesion: 0.08
+Nodes (35): ChatRequest, chat_http(), load_system_prompt(), ChatMessage, post, WebSocket endpoint for chat with LLM and tool calling. Accepts one or more…, HTTP fallback for chat (non-streaming)., Load system prompt from cached module-level constant. (+27 more)
 
 ### Community 174 - "OPM-AI Test Suite"
 Cohesion: 0.25
@@ -1044,9 +1077,9 @@ Nodes (5): BaseSettings, Application settings loaded from environment variables 
 Cohesion: 0.29
 Nodes (6): Consistency Notes, Contract Source of Truth, How to Use These Docs, OPM-AI Conversation Documentation Index, Reading Order & One-Line Purpose, **START HERE (after any context clear)**
 
-### Community 177 - "_resolve_property"
-Cohesion: 0.29
-Nodes (7): _dynamic_with_soil(), _order_static(), ndarray, Preferred keywords first in ResInsight's order, then the rest sorted., Add the derived SOIL to the restart keyword list when it is computable., Values and kind for one property, raising 404/400 for the bad cases., _resolve_property()
+### Community 177 - "useResolvedTheme"
+Cohesion: 0.17
+Nodes (13): InterviewPanel(), Props, LinterPanel(), Markdown(), MarkdownProps, LintState, useLintActions(), useLintStore (+5 more)
 
 ### Community 178 - "Finalization Checklist (2026-07-18)"
 Cohesion: 0.33
@@ -1056,13 +1089,13 @@ Nodes (5): Documentation Complete, Finalization Checklist (2026-07-18), Ready to
 Cohesion: 0.33
 Nodes (5): AQUCT-01 Description and Results, AQUFET-01 Description and Results, Aquifer Test Documentation, AQUNUM-01 Description and Results, AQUNUM-02 Description and Results
 
-### Community 180 - "lint_deck_v2"
-Cohesion: 0.11
-Nodes (19): _lint_one(), main(), Lint a single fixture. Returns (path, total, l171, l160, l202, l170, l221)., Stats, NamedTuple, clear_deck_cache(), _get_deck(), lint_deck_v2() (+11 more)
+### Community 180 - "corpus_check_parallel.py"
+Cohesion: 0.47
+Nodes (5): _lint_one(), main(), Lint a single fixture. Returns (path, total, l171, l160, l202, l170, l221)., Stats, NamedTuple
 
-### Community 181 - "ACTIONX Tests Using the WSEGVALV Model"
-Cohesion: 0.40
-Nodes (5): ACTIONX_INCLUDE Description and Results, ACTIONX Tests Using the WSEGVALV Model, ACTIONX_WELSPECS Description and Results, ACTIONX_WELTARG Description and Results, ACTIONX_WSEGVALV Description and Results
+### Community 181 - "ACTIONX Test Documentation"
+Cohesion: 0.14
+Nodes (13): ACTIONX_INCLUDE Description and Results, ACTIONX_NEXT Description and Results, ACTIONX_NEXTSTEP Description and Results, ACTIONX Test Documentation, ACTIONX Tests Using the MODEL05 Model, ACTIONX Tests Using the SPE09 Model, ACTIONX Tests Using the WSEGVALV Model, ACTIONX_UDQ Description and Results (+5 more)
 
 ### Community 182 - "opm_ai/llm - Provider-Abstracted LLM Client"
 Cohesion: 0.33
@@ -1072,9 +1105,13 @@ Nodes (5): Files, Invariants, opm_ai/llm - Provider-Abstracted LLM Client, Purpo
 Cohesion: 0.67
 Nodes (3): slow, A deck with thousands of schedule lines must still lint quickly because every…, test_schedule_index_handles_large_synthetic_deck()
 
-### Community 184 - "ACTIONX Tests Using the MODEL05 Model"
-Cohesion: 0.50
-Nodes (4): ACTIONX_NEXT Description and Results, ACTIONX_NEXTSTEP Description and Results, ACTIONX Tests Using the MODEL05 Model, ACTIONX_WTMULT Description and Results
+### Community 184 - "GASLIFT Test Documentation"
+Cohesion: 0.11
+Nodes (18): GASLIFT-01 Description and Results, GASLIFT-02 Description and Results, GASLIFT-03 Description and Results, GASLIFT-04 Description and Results, GASLIFT-05 Description and Results, GASLIFT-06 Description and Results, GASLIFT-07 Description and Results, GASLIFT-08 Description and Results (+10 more)
+
+### Community 185 - "api.py"
+Cohesion: 0.18
+Nodes (11): lint_deck(), LintResult, Path, opm_ai.linter.api - Public LinterAPI facade. Hides L1/v2 split. Owns cache +…, Module-level shortcut: equivalent to `default_api.lint(path)`., _sha256_of(), bump_catalogue_version(), catalogue_version() (+3 more)
 
 ### Community 186 - "AmbiguousCorrelation"
 Cohesion: 0.40
@@ -1084,9 +1121,9 @@ Nodes (4): AmbiguousCorrelation, CorrelationName, Exception, Raised when multipl
 Cohesion: 0.40
 Nodes (3): FIXTURES_PATH, PYTHONPATH, run.sh script
 
-### Community 188 - "SPE10 Comparative Solution Project Test Documentation"
-Cohesion: 0.40
-Nodes (4): SPE10 Comparative Solution Project Test Documentation, SPE10 Model 01 ( Cartesian regular/ Irregular Corner-Point), SPE10 Model 02 ( Cartesian regular), Summary
+### Community 188 - "report.py"
+Cohesion: 0.21
+Nodes (14): LearningReport, End-of-session summary for student or professor., _build_report_prompt(), _cluster_conversation_topics(), _extract_quiz_scores(), _extract_topics(), generate_learning_report(), _generate_offline_report() (+6 more)
 
 ### Community 189 - "3D viewer render harness"
 Cohesion: 0.50
@@ -1096,9 +1133,9 @@ Nodes (3): 3D viewer render harness, Headless WebGL, Running it
 Cohesion: 0.50
 Nodes (3): Format, Per-scenario Jinja2 children, When to add a child template
 
-### Community 191 - ".substitute"
-Cohesion: 0.50
-Nodes (3): Resolve all `$ALIAS` references in `path`. Scans left-to-right. For each…, Recursively resolve `$ALIAS` references in `path`., _substitute()
+### Community 191 - "pvt_builder.py"
+Cohesion: 0.10
+Nodes (18): Pre-processing module for PVT and rock-property pipeline. Exports the public…, CorrelationName, PVT builder module: data classes and main entry point for PVT block generation.…, AI advisor (optional, offline-degradable). Returns (chosen_correlation,…, Select oil PVT correlation, using advisor if not specified. Precedence (highest…, Select relative permeability correlation., recommend_correlation(), _select_oil_correlation() (+10 more)
 
 ### Community 192 - "preprocess/context.md"
 Cohesion: 0.50
@@ -1108,25 +1145,149 @@ Nodes (3): Fluid descriptor (opm_ai/preprocess/models.py), Preprocessing module 
 Cohesion: 0.83
 Nodes (3): assert_json(), assert_ok(), smoke.sh script
 
+### Community 194 - "apply_fix_endpoint"
+Cohesion: 0.18
+Nodes (13): LintRequest, apply_fix_endpoint(), ApplyFixRequest, ApplyFixResponse, lint_deck_endpoint(), BaseModel, LintResult, post (+5 more)
+
+### Community 200 - "_clear_pids"
+Cohesion: 0.40
+Nodes (5): _clear_pids(), _patch_loopback(), fixture, Each test starts with an empty PID dict - previous tests' launches do not…, TestClient reports 'testserver' as the request host, not 127.0.0.1. Patch the…
+
+### Community 201 - "Grid3DViewer.tsx"
+Cohesion: 0.17
+Nodes (11): Window, mapTernary(), ternaryComponent(), defaultDisplay(), errText(), Grid3DViewer(), Grid3DViewerProps, initialProperty() (+3 more)
+
+### Community 204 - "engine.ts"
+Cohesion: 0.16
+Nodes (12): CellFilter, CellInfo, DEFAULT_DISPLAY, Well, WELL_COLORS, WellCompletion, WellEntry, WellType (+4 more)
+
+### Community 205 - "graphify reference: extra exports and benchmark"
+Cohesion: 0.22
+Nodes (8): graphify reference: extra exports and benchmark, Step 6b - Wiki (only if --wiki flag), Step 7 - Neo4j export (only if --neo4j or --neo4j-push flag), Step 7a - FalkorDB export (only if --falkordb or --falkordb-push flag), Step 7b - SVG export (only if --svg flag), Step 7c - GraphML export (only if --graphml flag), Step 7d - MCP server (only if --mcp flag), Step 8 - Token reduction benchmark (only if total_words > 5000)
+
+### Community 206 - "main"
+Cohesion: 0.24
+Nodes (9): integration, While one task holds the session lock, another task's critical section cannot…, Concurrent connections on one session id must serialize on the SAME Lock…, The lock dict evicts LRU at the same max_entries bound as sessions., test_lock_actually_serializes_critical_section(), test_lock_dict_bounded_like_session_store(), test_same_session_id_shares_one_lock(), main() (+1 more)
+
+### Community 207 - "LinterCache"
+Cohesion: 0.30
+Nodes (12): CacheStats, LinterCache, LinterCache: bounded LRU keyed on (path, content_sha256). Catalogue version is…, FakeResult, Path, LinterCache unit tests., test_concurrent_get_put_is_safe(), test_copy_is_deep_enough_to_be_mutable_safely() (+4 more)
+
+### Community 213 - "TestHealthEndpoint"
+Cohesion: 0.50
+Nodes (3): Test health check endpoint, GET /health -> 200 with status ok., TestHealthEndpoint
+
+### Community 217 - "test_linter_api.py"
+Cohesion: 0.15
+Nodes (9): _median(), LinterAPI sync entry-point tests., Two consecutive cache HITS must return independent objects. The facade's…, CacheStats.hits and .misses must track the facade's read traffic., A cache HIT must be at least 5x faster than a cold MISS., test_cache_hit_is_measurably_faster_than_cold_lint(), test_cache_hit_returns_deepcopy_not_shared_state(), test_cache_stats_reflect_hits_and_misses() (+1 more)
+
+### Community 219 - "interviewClient.test.ts"
+Cohesion: 0.33
+Nodes (8): assert, Captured, main(), nextResponse, testIngestParse(), testIngestUpload(), testInterviewFinishReturnsDeck(), testInterviewNextSendsAnswers()
+
+### Community 279 - "LinterExecutor"
+Cohesion: 0.13
+Nodes (16): LinterError, LinterExecutor, LinterTimeoutError, Any, Exception, T, LinterExecutor: bounded worker pool with timeout enforcement. Sync `submit()`…, Base class for all linter-API-level errors. (+8 more)
+
+### Community 1725 - "client.test.ts"
+Cohesion: 0.46
+Nodes (7): pollJobStatus(), main(), nodeAssert, running, testAbortedBeforeFirstCall(), testAbortStopsPolling(), testNoSignalKeepsLegacyBehavior()
+
+### Community 1726 - "_load_catalogue"
+Cohesion: 0.24
+Nodes (11): get_keywords(), KeywordCatalogue, KeywordRecord, _load_catalogue(), ParameterItem, BaseModel, get, Return the merged keyword catalogue for editor autocomplete. Cached per… (+3 more)
+
+### Community 1727 - "task9.test.ts"
+Cohesion: 0.23
+Nodes (7): makeTestIJK(), makeTestWell(), nodeAssert, testCrossSectionExtraction(), testCrossSectionIndexBounds(), testWellTrajectoryInterpolation(), GridWellCompletion
+
+### Community 1729 - "test_explainer_offline.py"
+Cohesion: 0.12
+Nodes (15): Offline tests for explainer module (no LLM calls)., Test explain() with KPI dict at all 3 levels returns valid Explanation., Test that topics are detected from conversation., Test explain() with free-text question., Test watercut topic triggers correct template., Test generate_quiz() returns valid Quiz offline., Test generate_quiz returns exactly n questions., Test generate_learning_report() with fake conversation. (+7 more)
+
+### Community 1730 - "main"
+Cohesion: 0.24
+Nodes (10): group, main(), OPM-AI: AI layer on top of open source reservoir simulators., Test CLI lint command on SPE1., Test CLI build command., Test CLI help output., test_cli_build(), test_cli_help() (+2 more)
+
+### Community 1731 - "run_simulation_endpoint"
+Cohesion: 0.25
+Nodes (8): get_job_status(), get, JobStatus, post, Start a simulation as a background job. Returns job_id immediately. Poll GET…, Get the status of a simulation job., run_simulation_endpoint(), RunRequest
+
+### Community 1732 - "TestResponseSerialization"
+Cohesion: 0.25
+Nodes (5): Tests that response JSON serializes cleanly (no NaN, tuples become lists)., Explain response contains no NaN and all sequences are lists., Quiz response contains no NaN and all sequences are lists., Learning report response contains no NaN and all sequences are lists., TestResponseSerialization
+
+### Community 1733 - "AGENTS.md"
+Cohesion: 0.33
+Nodes (5): ALWAYS, Approach, Core Beliefs, graphify, NEVER
+
+### Community 1734 - "graphify reference: query, path, explain"
+Cohesion: 0.33
+Nodes (5): For /graphify explain, For /graphify path, graphify reference: query, path, explain, Step 0 — Constrained query expansion (REQUIRED before traversal), Step 1 — Traversal
+
+### Community 1735 - "test_scenario_deck_lints_and_validates"
+Cohesion: 0.22
+Nodes (9): integration, parametrize, skipif, slow, unit, Every supported scenario builds a deck that lints clean and Flow accepts., The linter must not reject decks that Flow itself accepts., test_linter_accepts_known_good_fixture() (+1 more)
+
+### Community 1736 - "test_v2_tokenizer_integration.py"
+Cohesion: 0.28
+Nodes (8): integration, Integration test: tokenizer handles all Phase-0 known-good fixtures. T1.12 from…, The stress fixture exercises comments, FU_VAR, ACTIONX, and more., Tokenize every known-good fixture; expect no crash and >0 tokens., The hand-written minimal.DATA fixture produces a clean AST shape., test_handwritten_minimal_fixture_tokenizes(), test_handwritten_stress_fixture_tokenizes(), test_tokenize_all_known_good_fixtures()
+
+### Community 1737 - ".wells"
+Cohesion: 0.33
+Nodes (5): Completion, One well connection to a grid cell, zero-based ijk., A well as it stands at one restart step., Wells and their completions at one restart step. Reads the IWEL/ZWEL/ICON…, Well
+
+### Community 1738 - "test_linter_api_backcompat.py"
+Cohesion: 0.38
+Nodes (6): clean_path(), _fingerprint(), fixture, Path, Pin output parity: LinterAPI.lint() == lint_deck_combined(). Both call sites…, test_lint_parity_on_clean_deck()
+
+### Community 1740 - "._restart_index"
+Cohesion: 0.40
+Nodes (4): One restart report step., Scan the UNRST once, returning time steps and keyword occurrences. The…, Report steps in the UNRST file, in file order., TimeStep
+
+### Community 1745 - "TestInterviewFinish"
+Cohesion: 0.33
+Nodes (3): Drive the interview to completion, returning the final answers., TestInterviewFinish, _walk()
+
+### Community 1757 - ".__init__"
+Cohesion: 0.40
+Nodes (3): Path, Parse deck file into sections. Args: deck_path: Path to the .DATA file, Parse deck file into sections.
+
+### Community 1759 - "graphify reference: add a URL and watch a folder"
+Cohesion: 0.50
+Nodes (3): For /graphify add, For --watch, graphify reference: add a URL and watch a folder
+
+### Community 1760 - "graphify reference: commit hook and native CLAUDE.md integration"
+Cohesion: 0.50
+Nodes (3): For git commit hook, For native CLAUDE.md integration, graphify reference: commit hook and native CLAUDE.md integration
+
+### Community 1761 - "graphify reference: incremental update and cluster-only"
+Cohesion: 0.50
+Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphify reference: incremental update and cluster-only
+
+### Community 1763 - "test_fu_var_with_digit_after_scope"
+Cohesion: 0.33
+Nodes (4): `FU123` is a FU_VAR (digit immediately after scope letter U)., A string with `\'` round-trips: the text is the unescaped form., test_fu_var_with_digit_after_scope(), test_round_trip_string_with_escape()
+
 ## Knowledge Gaps
-- **1051 isolated node(s):** `entrypoint.sh script`, `healthcheck.sh script`, `name`, `private`, `version` (+1046 more)
+- **1162 isolated node(s):** `entrypoint.sh script`, `healthcheck.sh script`, `name`, `private`, `version` (+1157 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **103 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **104 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `LLMClient` connect `LLMClient` to `explainer/__init__.py`, `report.py`, `create_app`, `build_deck`, `LintIssue`, `test_api_hardening.py`, `chat.py`, `explain`, `extract.py`, `lint_deck`, `FluidDescriptor`?**
+- **Why does `LLMClient` connect `LLMClient` to `test_llm_extraction.py`, `test_api_settings.py`, `chat.py`, `explain`, `session_store.py`, `lint_deck`, `builder.py`, `report.py`, `pvt_builder.py`?**
   _High betweenness centrality (0.048) - this node is a cross-community bridge._
-- **Why does `lint_deck()` connect `lint_deck` to `test_erm_catalogue.py`, `create_app`, `build_deck`, `LintIssue`, `chat.py`, `lint_deck_combined`, `extract.py`, `LLMClient`, `lint_deck_v2`, `builder.py`, `test_schedule_index_handles_large_synthetic_deck`, `test_linter.py`, `validate_deck_path`?**
-  _High betweenness centrality (0.047) - this node is a cross-community bridge._
-- **Why does `LintIssue` connect `LintIssue` to `rules/grid.py`, `test_erm_catalogue.py`, `runspec.py`, `solution_summary.py`, `general.py`, `lint_deck_combined`, `schemas.py`, `lint_deck`, `props.py`, `test_linter.py`?**
-  _High betweenness centrality (0.026) - this node is a cross-community bridge._
+- **Why does `propose_fix()` connect `test_linter_v2_fix_proposals.py` to `apply_fix_endpoint`, `test_linter_v2_self_heal.py`, `create_app`, `lint_deck`, `calibration.py`?**
+  _High betweenness centrality (0.024) - this node is a cross-community bridge._
+- **Why does `LintIssue` connect `symbols.py` to `parse_file`, `test_linter_v2_self_heal.py`, `test_linter_v2_fix_proposals.py`, `lint_deck`, `Keyword`, `calibration.py`, `LintResult`?**
+  _High betweenness centrality (0.023) - this node is a cross-community bridge._
+- **Are the 20 inferred relationships involving `ModelSpec` (e.g. with `Question` and `IngestResult`) actually correct?**
+  _`ModelSpec` has 20 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 19 inferred relationships involving `Keyword` (e.g. with `SectionName` and `Token`) actually correct?**
   _`Keyword` has 19 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 9 inferred relationships involving `FluidDescriptor` (e.g. with `build_deck_endpoint()` and `test_flow_dry_run_with_metric_fluid()`) actually correct?**
-  _`FluidDescriptor` has 9 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 12 inferred relationships involving `FluidDescriptor` (e.g. with `build_deck_endpoint()` and `_ensure_fluid()`) actually correct?**
+  _`FluidDescriptor` has 12 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `entrypoint.sh script`, `healthcheck.sh script`, `name` to the rest of the system?**
-  _1051 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `LintIssue` be split into smaller, more focused modules?**
-  _Cohesion score 0.0390893470790378 - nodes in this community are weakly interconnected._
+  _1162 weakly-connected nodes found - possible documentation gaps or missing edges._

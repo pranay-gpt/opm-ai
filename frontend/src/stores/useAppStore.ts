@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { useShallow } from 'zustand/react/shallow';
-import type { ChatMessage, JobStatus, LintResult, KPIsResponse, SimulationResult, BuildResponse, Settings, FluidDescriptorRequest, CategorizedVectors } from '../types';
+import type { ChatMessage, JobStatus, LintResult, KPIsResponse, SimulationResult, BuildResponse, Settings, FluidDescriptorRequest, CategorizedVectors, QuestionDTO, InterviewProgress } from '../types';
 
 // ============================================
 // Settings Store
@@ -285,6 +285,28 @@ interface BuilderState {
     provenance: Record<string, string>,
   ) => void;
   setShowRockBasicsSection: (b: boolean) => void;
+
+  // Stage 5/6: the reservoir-context interview. The server is stateless,
+  // so the answers dict lives here and is round-tripped on every call.
+  // Persisted so a reload resumes mid-interview rather than starting over.
+  showInterviewPanel: boolean;
+  interviewActive: boolean;
+  interviewQuestion: QuestionDTO | null;
+  interviewProgress: InterviewProgress;
+  interviewAnswers: Record<string, unknown>;
+  interviewFindings: string[];
+  interviewResolved: Record<string, number | number[]> | null;
+
+  setShowInterviewPanel: (b: boolean) => void;
+  startInterview: () => void;
+  setInterviewQuestion: (
+    question: QuestionDTO | null,
+    progress: InterviewProgress,
+    findings?: string[],
+    resolved?: Record<string, number | number[]> | null,
+  ) => void;
+  setInterviewAnswer: (id: string, value: unknown) => void;
+  resetInterview: () => void;
 }
 
 const DEFAULT_FLUID: FluidDescriptorRequest = {
@@ -314,8 +336,28 @@ export const useBuilderStore = create<BuilderState>()(
       resolvedRockBasics: null,
       rockBasicsProvenance: {},
       showRockBasicsSection: false,
+      showInterviewPanel: false,
+      interviewActive: false,
+      interviewQuestion: null,
+      interviewProgress: { answered: 0, total: 0 },
+      interviewAnswers: {},
+      interviewFindings: [],
+      interviewResolved: null,
 
       setDescription: (description) => set({ description }),
+      setShowInterviewPanel: (showInterviewPanel) => set({ showInterviewPanel }),
+      startInterview: () => set({ interviewActive: true, interviewQuestion: null, interviewAnswers: {}, interviewFindings: [] }),
+      setInterviewQuestion: (interviewQuestion, interviewProgress, interviewFindings, interviewResolved) =>
+        set({
+          interviewQuestion,
+          interviewProgress,
+          ...(interviewFindings !== undefined ? { interviewFindings } : {}),
+          ...(interviewResolved !== undefined ? { interviewResolved } : {}),
+        }),
+      setInterviewAnswer: (id, value) =>
+        set((state) => ({ interviewAnswers: { ...state.interviewAnswers, [id]: value } })),
+      resetInterview: () =>
+        set({ interviewActive: false, interviewQuestion: null, interviewAnswers: {}, interviewFindings: [], interviewResolved: null }),
       setShowEditor: (showEditor) => set({ showEditor }),
       setUseLlmExtraction: (useLlmExtraction) => set({ useLlmExtraction }),
       setUseCustomFluid: (useCustomFluid) => set({ useCustomFluid }),
@@ -350,6 +392,10 @@ export const useBuilderStore = create<BuilderState>()(
         // re-derived on the next build, no need to survive a reload.
         rockBasicsOverrides: state.rockBasicsOverrides,
         showRockBasicsSection: state.showRockBasicsSection,
+        // Persist the interview so a reload resumes mid-interview; the
+        // question itself is re-fetched from /interview/next on mount.
+        showInterviewPanel: state.showInterviewPanel,
+        interviewAnswers: state.interviewAnswers,
       }),
     }
   )
@@ -494,6 +540,20 @@ export const useRockBasicsOverrides = () => useBuilderStore((state) => state.roc
 export const useResolvedRockBasics = () => useBuilderStore((state) => state.resolvedRockBasics);
 export const useRockBasicsProvenance = () => useBuilderStore((state) => state.rockBasicsProvenance);
 export const useShowRockBasicsSection = () => useBuilderStore((state) => state.showRockBasicsSection);
+export const useShowInterviewPanel = () => useBuilderStore((state) => state.showInterviewPanel);
+export const useInterviewActive = () => useBuilderStore((state) => state.interviewActive);
+export const useInterviewQuestion = () => useBuilderStore((state) => state.interviewQuestion);
+export const useInterviewProgress = () => useBuilderStore((state) => state.interviewProgress);
+export const useInterviewAnswers = () => useBuilderStore((state) => state.interviewAnswers);
+export const useInterviewFindings = () => useBuilderStore((state) => state.interviewFindings);
+export const useInterviewResolved = () => useBuilderStore((state) => state.interviewResolved);
+export const useInterviewActions = () => useBuilderStore(useShallow((state) => ({
+  setShowInterviewPanel: state.setShowInterviewPanel,
+  startInterview: state.startInterview,
+  setInterviewQuestion: state.setInterviewQuestion,
+  setInterviewAnswer: state.setInterviewAnswer,
+  resetInterview: state.resetInterview,
+})));
 export const useBuilderActions = () => useBuilderStore(useShallow((state) => ({
   setDescription: state.setDescription,
   setShowEditor: state.setShowEditor,

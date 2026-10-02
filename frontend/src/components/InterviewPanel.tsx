@@ -102,6 +102,21 @@ export default function InterviewPanel({
       }
       value = n;
     }
+    if (question.kind === 'csv_number' && raw !== '') {
+      // Same guard as the server, so the user sees which token is bad
+      // here rather than after a round trip.
+      const bad = raw
+        .replace(/;/g, ',')
+        .split(',')
+        .map((t) => t.trim())
+        .filter(Boolean)
+        .find((t) => !Number.isFinite(Number(t)));
+      if (bad !== undefined) {
+        setError(`${bad} is not a number; use a comma-separated list like '50, 30, 20'.`);
+        setBusy(false);
+        return;
+      }
+    }
     onAnswer(question.id, value);
     // Wait for the parent store to commit the answer before the next
     // fetch reads it back through answersRef.
@@ -295,6 +310,9 @@ export default function InterviewPanel({
                   placeholder={question.default == null ? 'leave blank to skip' : ''}
                   className="input w-full"
                 />
+              )}
+              {question.kind === 'csv_number' && (
+                <p className="text-xs text-textMuted">Comma-separated, one value per layer.</p>
               )}
               {question.units && (
                 <p className="text-xs text-textMuted">{question.units}</p>

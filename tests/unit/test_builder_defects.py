@@ -132,3 +132,90 @@ class TestTokenizerExponentReals:
         from opm_ai.linter.v2.tokenizer import tokenize_line, TokenKind
         tokens = [t for t in tokenize_line("250") if t.kind != TokenKind.EOL]
         assert tokens[0].kind == TokenKind.INT
+
+
+# ---------- Stage 2: use_llm wired on the REST build path --------------------
+
+class FakeLLMClient:
+    """Stand-in for LLMClient: canned extract_json responses, no network."""
+
+    def __init__(self, response):
+        self._response = response
+        self.available = True
+
+    def extract_json(self, system_prompt, user_prompt, schema=None):
+        return self._response
+
+
+class TestUseLlmWired:
+    def test_llm_spec_used_and_tagged_extracted(self):
+        from fastapi.testclient import TestClient
+        from opm_ai.api.server import create_app
+        import opm_ai.builder.extract as extract_mod
+        from opm_ai.builder.extract import extract_parameters_llm_with_provenance
+
+        fake = FakeLLMClient({
+            "scenario": "5spot_waterflood",
+            "reservoir": {"nx": 20, "ny": 20, "nz": 3, "porosity": 0.22},
+            "wells": [
+                {"name": "INJ", "well_type": "INJ", "i": 11, "j": 11, "k1": 1, "k2": 3,
+                 "inject_fluid": "WATER", "inject_rate": 5000.0},
+                {"name": "PROD1", "well_type": "PROD", "i": 1, "j": 1, "k1": 1, "k2": 3},
+            ],
+        })
+
+        original = extract_mod.extract_parameters_llm_with_provenance
+
+        def patched(desc, client=None):
+            return extract_parameters_llm_with_provenance(desc, client=fake)
+
+        extract_mod.extract_parameters_llm_with_provenance = patched
+        try:
+            client = TestClient(create_app())
+            r = client.post("/api/build", json={
+                "description": "20x20x3 five spot waterflood",
+                "use_llm": True,
+            })
+        finally:
+            extract_mod.extract_parameters_llm_with_provenance = original
+
+        assert r.status_code == 200, r.text
+        body = r.json()
+        assert body["provenance"]["porosity"] == "extracted"
+        # The LLM's 20x20x3 grid made it into the deck (DIMENS item 1).
+        dimens = body["deck"].split("DIMENS")[1].split("/")[0].split()
+        assert int(dimens[0]) == 20
+        # The LLM supplied an explicit 2-well list; it renders verbatim
+        # (not the 5-spot expansion, which only applies to extraction).
+        welspecs = body["deck"].split("WELSPECS")[1].split("COMPDAT")[0]
+        assert "'INJ'" in welspecs and "'PROD1'" in welspecs
+
+    def test_llm_offline_falls_back_to_offline_spec(self):
+        from fastapi.testclient import TestClient
+        from opm_ai.api.server import create_app
+        import opm_ai.builder.extract as extract_mod
+        from opm_ai.builder.extract import extract_parameters_llm_with_provenance
+
+        fake = FakeLLMClient(None)  # simulates offline / bad JSON
+
+        original = extract_mod.extract_parameters_llm_with_provenance
+
+        def patched(desc, client=None):
+            return extract_parameters_llm_with_provenance(desc, client=fake)
+
+        extract_mod.extract_parameters_llm_with_provenance = patched
+        try:
+            client = TestClient(create_app())
+            r = client.post("/api/build", json={
+                "description": "10x10x3 depletion, one producer",
+                "use_llm": True,
+            })
+        finally:
+            extract_mod.extract_parameters_llm_with_provenance = original
+
+        assert r.status_code == 200, r.text
+        body = r.json()
+        # Offline extractor ran: default 10x10x3 grid in DIMENS.
+        dimens = body["deck"].split("DIMENS")[1].split("/")[0].split()
+        assert int(dimens[0]) == 10
+        assert body["provenance"]["porosity"] == "defaulted"

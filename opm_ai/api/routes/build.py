@@ -86,6 +86,29 @@ async def build_deck_endpoint(request: BuildRequest) -> BuildResponse:
         # is used (not build_deck) so the provenance reflects the same spec
         # that gets rendered.
         spec, provenance = extract_parameters_offline_with_provenance(request.description)
+        if request.use_llm:
+            # Stage 2: the "Use LLM" toggle now means something on REST.
+            # One optional LLM pass; any failure falls back to the offline
+            # spec silently (same degradation as the chat path).
+            from opm_ai.builder.extract import extract_parameters_llm_with_provenance
+            llm_spec, llm_provenance = extract_parameters_llm_with_provenance(
+                request.description
+            )
+            if llm_spec is not None and llm_provenance is not None:
+                spec = llm_spec
+                # Merge: offline tags (plain field names) as the base,
+                # LLM tags over them. LLM provenance prefixes reservoir
+                # fields ("reservoir.porosity") - map back to the plain
+                # names the response contract and the override path use.
+                llm_plain = {
+                    f[len("reservoir."):]: tag
+                    for f, tag in llm_provenance.items()
+                    if f.startswith("reservoir.")
+                }
+                provenance = {**provenance, **llm_plain, **{
+                    f: tag for f, tag in llm_provenance.items()
+                    if not f.startswith("reservoir.")
+                }}
         _apply_rock_basics_overrides(spec, request, provenance)
         if fluid is not None:
             spec.fluid = fluid

@@ -565,13 +565,37 @@ def extract_parameters_llm(desc: str, client=None) -> ModelSpec | None:
         Validated ModelSpec, or None on any failure (offline, bad JSON,
         schema violation).
     """
+    spec, _provenance = extract_parameters_llm_with_provenance(desc, client)
+    return spec
+
+
+def extract_parameters_llm_with_provenance(
+    desc: str, client=None
+) -> tuple[ModelSpec, dict[str, str] | None]:
+    """Same as extract_parameters_llm, but also returns a provenance dict.
+
+    The provenance dict marks every field the LLM supplied as "extracted"
+    (it came from the description via the extractor - the same meaning the
+    offline provenance uses). Fields the LLM did not supply are absent; the
+    caller falls back to the offline provenance for those. None provenance
+    is returned on any LLM failure together with a None spec.
+
+    Args:
+        desc: Natural language description.
+        client: LLMClient (or compatible object with extract_json). A new
+            LLMClient is created when omitted.
+
+    Returns:
+        Tuple of (ModelSpec | None, provenance dict | None).
+    """
     try:
         if client is None:
             from opm_ai.llm.client import LLMClient
             client = LLMClient()
         if not getattr(client, "available", True):
-            return None
+            return None, None
 
+        from opm_ai.api.schemas import PROVENANCE_EXTRACTED
         from jinja2 import Template
         prompt_path = (
             Path(__file__).parent.parent / "llm" / "prompts" / "extract_model_spec.j2"
@@ -583,7 +607,23 @@ def extract_parameters_llm(desc: str, client=None) -> ModelSpec | None:
 
         data = client.extract_json(system_prompt, desc, schema=schema)
         if not isinstance(data, dict):
-            return None
-        return ModelSpec.model_validate(data)
+            return None, None
+        spec = ModelSpec.model_validate(data)
+
+        provenance: dict[str, str] = {}
+        # Top-level scalar fields the LLM named.
+        for f in ("scenario", "title", "start_date", "field_units"):
+            if f in data:
+                provenance[f] = PROVENANCE_EXTRACTED
+        if data.get("reservoir"):
+            for f in data["reservoir"]:
+                provenance[f"reservoir.{f}"] = PROVENANCE_EXTRACTED
+        if data.get("wells"):
+            provenance["wells"] = PROVENANCE_EXTRACTED
+        if data.get("fluid"):
+            provenance["fluid"] = PROVENANCE_EXTRACTED
+        if data.get("schedule"):
+            provenance["schedule"] = PROVENANCE_EXTRACTED
+        return spec, provenance
     except Exception:
-        return None
+        return None, None

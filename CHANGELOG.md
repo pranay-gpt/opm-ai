@@ -4,6 +4,73 @@ All notable changes to OPM-AI are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project
 adheres to [Semantic Versioning](https://semver.org/).
 
+> Version note: the `0.2.0` block below was written ahead of a release and
+> was never tagged or cut. `v0.1.0` was the last actual tag, so this release
+> is `v0.1.1` as shipped. The `0.2.0` notes remain accurate as a record of
+> work that landed before it.
+
+## [0.1.1] - 2026-10-03
+
+Context-aware reservoir builder: a step-by-step interview that asks one
+section at a time, plus direct ingestion of grid, table, and keyword
+files.
+
+### Added
+
+- Deterministic interview engine (`opm_ai/builder/interview/`): a
+  23-question catalogue across 7 sections, plus dynamic per-well
+  questions. Pure functions over `(spec, answers)` with no server-side
+  session: the client owns the answers dict and round-trips it on every
+  call, so a reload resumes exactly where the user left off.
+- File and paste ingestion (`ingest.py`): GRDECL/SPECGRID fragments,
+  PORO/PERMX/PHIE arrays, numeric grids, and PVDG/PVT tables are
+  detected by format, parsed, and folded into the spec as resolved
+  values. Upload and paste produce byte-equal specs.
+- Stateless HTTP surface: `POST /api/interview/next`,
+  `POST /api/interview/finish`, `POST /api/ingest/parse`,
+  `POST /api/ingest/upload`.
+- `InterviewPanel` in the Deck Builder: progress bar, answer/skip per
+  question, restart, and build-from-answers.
+- Semantic validation rules (`rules.py`) surface non-fatal findings
+  inline, e.g. a gas cap declared without a GOC depth, a well placed
+  deeper than the grid, or a `dz` list whose length disagrees with `nz`.
+
+### Fixed
+
+- EQUIL datum depth was pinned to the SPE1 default (8400 ft) regardless
+  of the grid. It is now clamped to the grid midpoint when that default
+  falls outside the model span; default decks stay byte-identical.
+- `ReservoirSpec.dx/dy` accepted lists but `base.j2` string-multiplied
+  them and the METRIC conversion multiplied a list by a float. Both now
+  expand per layer, and `dx_list`/`dy_list` are only defined when the
+  spec actually carries a list so golden decks do not drift.
+- `field_units=False` was silently ignored and every deck rendered FIELD.
+  It is now honoured, with a `ValueError` for METRIC-without-fluid
+  because the built-in PVT tables are FIELD-only.
+- Tokenizer classified bare-exponent (`1E5`, `3E-6`) and Fortran
+  D-exponent (`2.5D+01`) real literals as UNKNOWN, silently discarding
+  them from real exports.
+- `use_llm` was ignored on the REST build path; the flag now selects the
+  LLM extractor and falls back to offline extraction when it is
+  unavailable, tagging the result `extracted` accordingly.
+- The fluid branch of `_compute_template_context` was stranded as dead
+  code when the METRIC guard was added as an `elif` after a two-line
+  header, which silently pinned every deck with a fluid descriptor to the
+  hardcoded SPE1 PVT tables. Two guards now hold the branch open.
+- Restart in the interview panel cleared state but did not refetch, so
+  the panel rendered blank with progress stuck at the pre-restart count.
+
+### Design invariants
+
+- **Never breaks**: every question is skippable, and a skip records the
+  declared default server-side, so the terminal state always builds a
+  deck.
+- **Stateless**: no server-side session; the client owns the answers.
+- **Provenance triad only**: every value is tagged `extracted`,
+  `defaulted`, or `user_override`.
+- **Never mean-average**: per-cell variation is refused by name rather
+  than collapsed into a single representative number.
+
 ## [0.2.0] - 2026-08-19
 
 ### Added

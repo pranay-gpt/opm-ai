@@ -82,6 +82,16 @@ solo petroleum engineer.
 
 - **Build decks from plain English** — describe a model and get a valid OPM
   Flow deck, with an offline generator and optional LLM extraction
+- **Answer a reservoir interview** — a step-by-step walk through the model
+  sections (grid, rock, fluid, wells, contacts) that never dead-ends: every
+  question is skippable and a skip keeps the extracted default, so you always
+  reach a buildable deck
+- **Import your own grid and tables** — paste or upload GRDECL/SPECGRID
+  fragments, `PORO`/`PERMX` arrays, numeric grids, and PVDG/PVT tables; the
+  format is detected and folded into the spec
+- **See where every number came from** — each parameter is tagged `extracted`,
+  `defaulted`, or `user_override`, so an imported value is never confused with
+  an assumed one
 - **Lint decks offline** — a calibrated rule engine catches errors and
   inconsistencies before you run, no simulator needed
 - **One-click fixes** — most lint issues carry a server-validated

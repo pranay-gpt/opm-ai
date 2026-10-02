@@ -1,69 +1,89 @@
-# Task 11: Fix Plot Data Display + Dynamic Grid Layout + Per-Property Plotting + Unit Conversion
+# Reservoir-Context-Aware Builder
 
-## Overview
-The Results Viewer Plots tab shows empty plots because:
-1. Main `/api/results/{job_id}` endpoint only returns `production` and `pressure` plots
-2. ResultsViewer Plots tab expects `well_rates`, `well_cumulative`, `well_injection` from `/plot_group` endpoint
-3. No dynamic grid layout (1×2, 2×2, 4×2 columns)
-4. No option to plot one property per graph (e.g., oil rate for all wells on one graph)
-5. No unit conversion (BBL vs m³ for oil, MSCF vs SM³ for gas)
+Branch: `feat/reservoir-context-builder`
 
-## Files to Modify
+Feature: after the initial prompt, the builder asks relevant step-by-step questions about
+each section (grid, rock, fluid, equil, wells, schedule) before building. Also supports
+direct upload or paste of input files (grid files, tables, keyword exports) which get parsed
+into the spec.
 
-### Frontend Changes
-1. **`frontend/src/components/ResultsViewer.tsx`** - Main changes for grid, per-property, units
-2. **`frontend/src/components/results/PlotCard.tsx`** - Support per-property mode
-3. **`frontend/src/components/results/ResultsControlRail.tsx`** - Add grid layout selector, per-property toggle, unit selector
-4. **`frontend/src/api/client.ts`** - Ensure proper API calls for plot_group
-5. **`frontend/src/types.ts`** - Add types for new options
+Full design: `.claude/jobs/` session tmp `design.md` (persisted copy of the research
+workflow synthesis, runId wf_98eb33d6-42c). Research reports: formats / elicitation /
+integration / llm-extraction / domain / stability.
 
-### Backend Changes
-6. **`opm_ai/postprocess/plots.py`** - Add unit awareness (optional, just relabeling)
-7. **`opm_ai/postprocess/plot_groups.py`** - Add per-property mode support
+## Stage 1 — Fix the four builder defects (no new features)
 
-## Implementation Stages
+- B1: `equil_goc_depth` renders EQUIL item 5, not item 4 (GOC). `builder.py` assigns to
+  template var `equil_owc_depth`; `base.j2` renders `equil_goc` there. Assign to `equil_goc`.
+- B2: datum/WOC depths hardcoded to SPE1 and do not follow `top_depth`; the
+  `context.get("equil_datum_depth", ...)` fallback is dead. Derive from `top_depth`/`sum(dz)`.
+- B3: `ReservoirSpec.dx/dy` accept lists but `base.j2` does `(dx ~ ' ') * (nx*ny*nz)` and
+  `_compute_metric_context` multiplies list by float. Mirror the `dz_list` branch for dx/dy.
+- B4: honour `spec.field_units` (currently hardcoded `unit_system = "FIELD"`).
+- Widen linter v2 tokenizer `_REAL_RE` for bare-exponent (`1E5`) and Fortran `D`-exponent
+  (`2.5D+01`) forms.
 
-### Stage 1: Type Definitions & API Client
-- Add `GridLayout`, `UnitSystem`, `PerPropertyMode` types to `types.ts`
-- Add `unitSystem` parameter to `plotGroup` API call
-- Update `PlotGroupResponse` if needed
+Each fix gets a regression test that fails before the fix. Verify: full suite passes.
+Commit: one commit per defect.
 
-### Stage 2: Backend Plot Groups - Per-Property Mode
-- Add `per_property` parameter to `plot_group` function in `plot_groups.py`
-- When `per_property=True`, group traces by vector (e.g., WOPR) across all wells
-- Return one figure per vector instead of one figure per group
+## Stage 2 — Wire use_llm on the REST build path
 
-### Stage 3: Backend Unit Awareness
-- Add `unit_system` parameter to plotting functions
-- Update axis labels based on unit system (FIELD: STB, MSCF, psia; METRIC: m³, SM³, bar)
+`extract_parameters_llm_with_provenance()` in builder/extract.py, mirroring the offline
+pair. `routes/build.py` dispatches on `request.use_llm` and merges over the offline spec.
+LLM-supplied fields are provenance `extracted`.
+Verify: existing POST /api/build tests unchanged; new test with a scripted fake client.
+Commit: feat(build): honour use_llm with provenance.
 
-### Stage 4: ResultsControlRail - New Controls
-- Add grid layout selector (1col, 2col, 4col)
-- Add per-property toggle
-- Add unit system selector (FIELD/METRIC)
-- Pass new state to ResultsViewer
+## Stage 3 — Question catalog + engine (pure, no HTTP)
 
-### Stage 5: ResultsViewer - Main Logic
-- Add state for grid layout, per-property mode, unit system
-- Fetch plots via `/plot_group` endpoint when selections change
-- When per-property mode is on: group by vector, show one PlotCard per vector with all wells
-- When per-property mode is off: group by vector family (current behavior)
-- Implement dynamic grid layout (CSS Grid)
+`opm_ai/builder/interview/catalog.py` (Question dataclass + CATALOG list),
+`engine.py` (`next_question`, `apply_answer`, `build_spec`, `apply_defaults_for_rest`),
+`rules.py` (`validate(spec) -> list[Finding]`). Stateless: the client owns `answers`.
+Every question skippable; skipped answers record the declared default. The LLM is never on
+the critical path. Reuse the provenance triad (extracted/defaulted/user_override) only.
+Verify: tests/unit/test_interview_engine.py, no FastAPI, no LLM.
+Commit: feat(builder): deterministic interview engine.
 
-### Stage 6: PlotCard - Per-Property Support
-- Accept new props for per-property mode
-- Display vector name in title when in per-property mode
+## Stage 4 — Ingestion via the linter v2 parser
 
-### Stage 7: Tests
-- Add/update frontend tests for new functionality
-- Test per-property mode
-- Test grid layouts
-- Test unit conversion labels
+`opm_ai/builder/interview/ingest.py`: `parse_paste(text) -> IngestResult`, never raises.
+Detection: full deck vs bare GRDECL fragment vs PVT/relperm table vs plain numeric grid.
+Uniform/per-layer only; refuse genuine per-cell variation with the array named; refuse
+EQUALREG/ADD/MULTIPLY (not evaluated) and EGRID (result file). Reuse upload.py's
+`_safe_relpath`, MAX_PART_SIZE, MAX_FILES security model. Paste and upload must produce
+byte-equal specs.
+Verify: tests/unit/test_ingest.py + tests/fixtures/interview/.
+Commit: feat(builder): parse pasted and uploaded keyword files into the spec.
 
-## Success Criteria
-1. Plots show actual data from `/plot_group` endpoint
-2. Grid layout selector works (1×2, 2×2, 4×2)
-3. Per-property toggle works - shows one vector across all wells
-4. Unit system toggle changes axis labels (STB↔m³, MSCF↔SM³, psia↔bar)
-5. All existing functionality still works
-6. Tests pass
+## Stage 5 — HTTP surface
+
+`api/schemas.py`: InterviewRequest/Response, IngestRequest/Response.
+`api/routes/interview.py`: POST /api/interview/next (stateless, returns next question +
+progress + findings), POST /api/interview/finish (reuses `_apply_rock_basics_overrides`
+and `build_deck_from_spec`; no new build path).
+`api/routes/ingest.py`: POST /api/ingest/parse (multipart).
+`api/server.py`: register routers. POST /api/build untouched.
+Verify: tests/integration/test_interview_api.py, incl. provenance-to-deck agreement
+(answered value appears in the rendered deck line) and flow dry-run.
+Commit: feat(api): interview and ingest endpoints.
+
+## Stage 6 — Frontend
+
+`useAppStore`: interviewAnswers + step in the persist slice (do not persist isSubmitting/
+error). `client.ts`: interviewNext / interviewFinish / ingestParse wrappers reusing
+fetchJson / fetchMultipart. New `InterviewPanel.tsx` reusing the existing number/csv/select
+inputs and PROVENANCE_CLASS badges; mounted in DeckBuilder below the description card with
+a "Build with questions" button. No change to RockBasicsSection.
+Verify: npm test with the new file appended to the chain; tsc clean.
+Commit: feat(ui): step-by-step interview panel.
+
+## Explicitly skipped
+
+| Skipped | Add when |
+|---|---|
+| Server-side interview sessions | never - stateless + zustand persist covers reload/retry |
+| Per-cell property arrays in ReservoirSpec | a real static-model use case arrives |
+| GRDECL output via INCLUDE | never - breaks /api/decks, browser download, lint |
+| opm.io parsing | never - not in container venv; aborts process on bad INCLUDE |
+| Per-step LLM calls | a measured gap the regex extractor and parser both miss |
+| EGRID as an input | never - result file with no petrophysics |

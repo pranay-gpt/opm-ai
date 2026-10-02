@@ -608,3 +608,87 @@ class ImportedResultResponse(BaseModel):
     job_id: str
     files_received: list[str]
     warnings: list[str]
+
+
+# ---------------------------------------------------------------------------
+# Stage 5: context-aware interview + file ingestion.
+#
+# The server is stateless: the client owns the answers dict and round-trips
+# it on every call. next_question is a fold over a static catalog, so a
+# question is reachable only when its predicate holds against the spec built
+# so far - the "never asks a nonsense question" guarantee by construction.
+# ---------------------------------------------------------------------------
+
+
+class QuestionDTO(BaseModel):
+    """One interview question, serialised to the UI."""
+    id: str
+    section: str
+    prompt: str
+    kind: str
+    default: Any = None
+    units: str | None = None
+    options: list[str] | None = None
+    blocking: bool = False
+
+
+class ProgressDTO(BaseModel):
+    answered: int
+    total: int
+
+
+class InterviewRequest(BaseModel):
+    """POST /api/interview/next."""
+    description: str
+    answers: dict[str, Any] = Field(default_factory=dict)
+    use_llm: bool = False
+
+
+class InterviewResponse(BaseModel):
+    """next_question result: one question to ask, or null when complete."""
+    question: QuestionDTO | None = None
+    progress: ProgressDTO
+    findings: list[str] = Field(default_factory=list)
+    # The spec built so far, so the UI can render defaults without a second
+    # round-trip. Absent when the description could not be parsed.
+    resolved: dict[str, Any] | None = None
+
+
+class FinishRequest(BaseModel):
+    """POST /api/interview/finish."""
+    description: str
+    answers: dict[str, Any] = Field(default_factory=dict)
+    use_llm: bool = False
+
+
+class FinishResponse(BaseModel):
+    """Terminal state: a spec that builds a lint-passing deck."""
+    deck: str
+    lint: LintResult
+    provenance: dict[str, str] = Field(default_factory=dict)
+    resolved: dict[str, Any] = Field(default_factory=dict)
+    findings: list[str] = Field(default_factory=list)
+
+
+class IngestPatchDTO(BaseModel):
+    """The spec patch an ingestion produces, in the same shape the
+    interview applies onto the spec."""
+    model_config = ConfigDict(from_attributes=True, extra="allow")
+
+
+class IngestRequest(BaseModel):
+    """POST /api/ingest/parse.
+
+    Either ``text`` (paste) or a multipart upload is accepted; the upload
+    route reads the file and forwards the bytes here, so both paths go
+    through the same parser and produce byte-equal specs.
+    """
+    text: str | None = None
+    filename: str | None = None
+
+
+class IngestResponse(BaseModel):
+    """POST /api/ingest/parse response."""
+    detected: str
+    patch: dict[str, Any] = Field(default_factory=dict)
+    findings: list[str] = Field(default_factory=list)

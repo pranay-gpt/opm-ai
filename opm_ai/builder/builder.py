@@ -252,8 +252,13 @@ def _compute_field_context(reservoir, wells, rsvd_rs) -> dict:
         "dy": reservoir.dy,
         "dz": reservoir.dz if not isinstance(reservoir.dz, list) else reservoir.dz[0],
         "dz_list": dz_list,
-        "dx_list": _expand_to_layers(reservoir.dx, reservoir.nz),
-        "dy_list": _expand_to_layers(reservoir.dy, reservoir.nz),
+        # dx_list/dy_list are only defined when the spec carries a real
+        # list; scalar specs keep the flat template branch so default
+        # decks stay byte-identical (golden-deck pin).
+        **({"dx_list": _expand_to_layers(reservoir.dx, reservoir.nz)}
+           if isinstance(reservoir.dx, list) else {}),
+        **({"dy_list": _expand_to_layers(reservoir.dy, reservoir.nz)}
+           if isinstance(reservoir.dy, list) else {}),
         "top_depth": reservoir.top_depth,
         # EQUIL parameters
         "equil_datum_depth": equil_datum_depth,
@@ -287,10 +292,12 @@ def _compute_metric_context(reservoir, wells, rsvd_rs) -> dict:
     SCF_STB_TO_SM3_SM3 = 0.17811
 
     # Convert reservoir geometry
-    dx_list = [d * FT_TO_M for d in _expand_to_layers(reservoir.dx, reservoir.nz)]
-    dy_list = [d * FT_TO_M for d in _expand_to_layers(reservoir.dy, reservoir.nz)]
-    dx = dx_list[0]
-    dy = dy_list[0]
+    dx_list = [d * FT_TO_M for d in _expand_to_layers(reservoir.dx, reservoir.nz)] \
+        if isinstance(reservoir.dx, list) else None
+    dy_list = [d * FT_TO_M for d in _expand_to_layers(reservoir.dy, reservoir.nz)] \
+        if isinstance(reservoir.dy, list) else None
+    dx = reservoir.dx * FT_TO_M if not isinstance(reservoir.dx, list) else dx_list[0]
+    dy = reservoir.dy * FT_TO_M if not isinstance(reservoir.dy, list) else dy_list[0]
     if isinstance(reservoir.dz, list):
         dz = [d * FT_TO_M for d in reservoir.dz]
         dz_list = dz
@@ -344,12 +351,11 @@ def _compute_metric_context(reservoir, wells, rsvd_rs) -> dict:
         "dy": dy,
         "dz": dz,
         "dz_list": dz_list,
-        "dx_list": dx_list,
-        "dy_list": dy_list,
+        **({"dx_list": dx_list} if dx_list is not None else {}),
+        **({"dy_list": dy_list} if dy_list is not None else {}),
         "top_depth": top_depth,
         # EQUIL parameters
         "equil_datum_depth": equil_datum_depth,
-        "equil_pressure_datum": equil_datum_depth,
         "equil_pressure_datum": equil_pressure_datum,
         "equil_woc": equil_woc,
         "equil_goc": equil_goc,

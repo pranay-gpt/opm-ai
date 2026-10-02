@@ -7,7 +7,7 @@ predicate holds against the spec built so far, which is the whole
 "never asks a nonsense question" guarantee.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any, Callable
 
 from opm_ai.builder.models import ModelSpec, ScenarioType
@@ -45,6 +45,21 @@ def _set_reservoir(field_name: str) -> Callable[[ModelSpec, Any], None]:
     return apply
 
 
+def _set_csv_reservoir(field_name: str) -> Callable[[ModelSpec, Any], None]:
+    """Apply a comma-separated number list (kind=csv_number)."""
+
+    def apply(spec: ModelSpec, value: Any) -> None:
+        if value is None:
+            return
+        if isinstance(value, (list, tuple)):
+            parsed = list(value)
+        else:
+            parsed = [float(t) for t in str(value).replace(";", ",").split(",") if t.strip()]
+        setattr(spec.reservoir, field_name, parsed)
+
+    return apply
+
+
 def _set_top(field_name: str) -> Callable[[ModelSpec, Any], None]:
     def apply(spec: ModelSpec, value: Any) -> None:
         setattr(spec, field_name, value)
@@ -60,6 +75,48 @@ def _set_well(idx: int, field_name: str) -> Callable[[ModelSpec, Any], None]:
 
 def _has_well(idx: int) -> Callable[[ModelSpec], bool]:
     return lambda spec: idx < len(spec.wells)
+
+
+def _ensure_fluid(spec: ModelSpec):
+    """Return spec.fluid, creating a FIELD-unit descriptor if absent.
+
+    FluidDescriptor is a frozen dataclass, so an answer replaces the whole
+    descriptor rather than mutating one field; _set_fluid does the replace.
+    """
+    if spec.fluid is None:
+        from opm_ai.preprocess import FluidDescriptor
+
+        # The required fields carry the same defaults the questions below
+        # ask for; the interview overwrites them as the user answers, so
+        # nothing is decided here.
+        spec.fluid = FluidDescriptor(
+            api_gravity=35.0,
+            gas_specific_gravity=0.75,
+            gor=768.0,
+            unit_system="FIELD",
+        )
+    return spec.fluid
+
+
+def _set_fluid(field_name: str) -> Callable[[ModelSpec, Any], None]:
+    def apply(spec: ModelSpec, value: Any) -> None:
+        current = _ensure_fluid(spec)
+        spec.fluid = replace(current, **{field_name: value})
+    return apply
+
+
+def _set_fluid_c(f_to_c: float) -> Callable[[ModelSpec, Any], None]:
+    """Write a degF answer onto reservoir_temp_c (the field the builder reads)."""
+
+    def apply(spec: ModelSpec, value: Any) -> None:
+        current = _ensure_fluid(spec)
+        spec.fluid = replace(
+            current,
+            reservoir_temp_f=value,
+            reservoir_temp_c=(float(value) - 32.0) * 5.0 / 9.0,
+        )
+
+    return apply
 
 
 def _wants_fluid(spec: ModelSpec) -> bool:
@@ -152,7 +209,7 @@ CATALOG: list[Question] = [
         id="grid.dz", section="grid",
         prompt="Layer thicknesses, one value per layer (comma-separated).",
         kind="csv_number",
-        apply=_set_reservoir("dz"),
+        apply=_set_csv_reservoir("dz"),
         default=lambda spec: list(spec.reservoir.dz) if isinstance(spec.reservoir.dz, list) else [spec.reservoir.dz],
         units="ft",
         blocking=True,
@@ -181,7 +238,7 @@ CATALOG: list[Question] = [
         id="rock.permx", section="rock",
         prompt="Horizontal permeability KX, one value per layer (comma-separated).",
         kind="csv_number",
-        apply=_set_reservoir("permx"),
+        apply=_set_csv_reservoir("permx"),
         default=lambda spec: list(spec.reservoir.permx) if isinstance(spec.reservoir.permx, list) else [spec.reservoir.permx],
         units="mD",
         blocking=True,
@@ -190,7 +247,7 @@ CATALOG: list[Question] = [
         id="rock.permy", section="rock",
         prompt="Horizontal permeability KY, one value per layer (comma-separated).",
         kind="csv_number",
-        apply=_set_reservoir("permy"),
+        apply=_set_csv_reservoir("permy"),
         default=lambda spec: list(spec.reservoir.permy) if isinstance(spec.reservoir.permy, list) else [spec.reservoir.permy],
         units="mD",
     ),
@@ -198,7 +255,7 @@ CATALOG: list[Question] = [
         id="rock.permz", section="rock",
         prompt="Vertical permeability KZ, one value per layer (comma-separated).",
         kind="csv_number",
-        apply=_set_reservoir("permz"),
+        apply=_set_csv_reservoir("permz"),
         default=lambda spec: list(spec.reservoir.permz) if isinstance(spec.reservoir.permz, list) else [spec.reservoir.permz],
         units="mD",
     ),
@@ -210,7 +267,12 @@ CATALOG: list[Question] = [
         kind="select",
         options=["defaults", "describe fluid"],
         applies_when=_wants_fluid,
-        apply=lambda spec, v: None,  # answered "defaults" keeps spec.fluid as-is
+        # "defaults" clears the descriptor so the builder uses its built-in
+        # tables; "describe fluid" leaves whatever the extraction produced
+        # (or nothing, in which case the first numeric answer creates one).
+        apply=lambda spec, v: setattr(
+            spec, "fluid", None if v == "defaults" else _ensure_fluid(spec)
+        ),
         default=lambda spec: "defaults" if spec.fluid is None else "describe fluid",
     ),
     Question(
@@ -218,8 +280,8 @@ CATALOG: list[Question] = [
         prompt="Oil API gravity?",
         kind="number",
         applies_when=_wants_fluid,
-        apply=lambda spec, v: None,  # placeholder; wired to fluid in engine
-        default=lambda spec: 35.0,
+        apply=_set_fluid("api_gravity"),
+        default=lambda spec: spec.fluid.api_gravity if spec.fluid else 35.0,
         units="deg API",
     ),
     Question(
@@ -227,8 +289,8 @@ CATALOG: list[Question] = [
         prompt="Solution GOR?",
         kind="number",
         applies_when=_wants_fluid,
-        apply=lambda spec, v: None,
-        default=lambda spec: 768.0,
+        apply=_set_fluid("gor"),
+        default=lambda spec: spec.fluid.gor if spec.fluid else 768.0,
         units="scf/STB",
     ),
     Question(
@@ -236,8 +298,8 @@ CATALOG: list[Question] = [
         prompt="Reservoir temperature?",
         kind="number",
         applies_when=_wants_fluid,
-        apply=lambda spec, v: None,
-        default=lambda spec: 200.0,
+        apply=_set_fluid_c(200.0),
+        default=lambda spec: spec.fluid.reservoir_temp_f if spec.fluid else 200.0,
         units="degF",
     ),
     Question(
@@ -245,8 +307,8 @@ CATALOG: list[Question] = [
         prompt="Water salinity?",
         kind="number",
         applies_when=_wants_fluid,
-        apply=lambda spec, v: None,
-        default=lambda spec: 0.0,
+        apply=_set_fluid("salinity_ppm"),
+        default=lambda spec: spec.fluid.salinity_ppm if spec.fluid else 0.0,
         units="ppm",
     ),
     Question(
@@ -255,8 +317,8 @@ CATALOG: list[Question] = [
         kind="select",
         options=["Standing", "VasquezBeggs", "AlMarhoun"],
         applies_when=_wants_fluid,
-        apply=lambda spec, v: None,
-        default=lambda spec: "Standing",
+        apply=_set_fluid("correlation"),
+        default=lambda spec: spec.fluid.correlation if spec.fluid else "Standing",
     ),
 
     # -- S4 equil ------------------------------------------------------------

@@ -96,8 +96,10 @@ def _to_float(text: str) -> float:
 def detect_format(text: str) -> str:
     """Sniff which format a paste/upload is. Returns one of:
     deck | grdecl | table | numeric_grid | unknown."""
-    upper = text.upper()
-    if any(h in upper[:200] for h in _RESULT_FILE_HINTS):
+    # Only the first 200 chars are ever inspected, so uppercase just that
+    # slice: uploads are capped at 256 MB and uppercasing the whole body
+    # would double the peak memory for no benefit.
+    if any(h in text[:200].upper() for h in _RESULT_FILE_HINTS):
         return "unknown"  # EGRID / result file: rejected with a message
 
     stripped = _strip_comments(text)

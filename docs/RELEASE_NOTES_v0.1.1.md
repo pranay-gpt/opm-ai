@@ -35,6 +35,18 @@ A step-by-step interview that asks one section at a time, plus direct ingestion 
 - Browser sweep across all 9 routes: no console errors, no failed requests, no HTTP >= 400
 - Interview panel walked end to end in Chromium: answer, skip, non-numeric rejection, paste, upload, build, restart, collapse/expand, reload-resume — 11/11
 
+### Fixes found by code review
+
+- Picking a scenario could deadlock the interview: `/interview/next` evaluated the catalog against the extraction-only spec, so "gas cap" never made the GOC question reachable while rule R04 blocked on a missing one and finish returned 422 with no answer available. The engine now folds collected answers before evaluating the catalog, iterating to a fixed point because an answer can change applicability. All seven scenarios reach a lint-passing deck.
+- The RSVD clamp was dropped alongside the METRIC guard, leaving its comment behind with no statement — every deck with a fluid descriptor rendered the hardcoded SPE1 value of 1.27.
+- `detect_format` sniffed for a numeric grid before the leading keyword, so a `PERMX` fragment written one value per line was read as a grid and its permeability written into porosity as 100.0. The linter only warns on that, so the deck still linted clean.
+- Result-file rejection matched substrings, so `INIT` matched the word "initial" and a paste headed with `-- initial porosity estimate` was refused as an unreadable EGRID.
+- The no-DIMENS ingest path used `sorted(set(...))`, silently re-ordering a layer profile (500/100/200 became 100/200/500).
+- `apply_ingest` dropped patch keys the model does not carry, so a SWOF table parsed fine and was then discarded while the UI reported success.
+- Wells were never asked their type, leaving the "waterflood with no injector" block with no available answer; per-well type questions now exist.
+- R02's datum fallback disagreed with the builder's own clamp, and R07 checked only the upper grid bound, so an index of 0 passed.
+- The persisted interview answers included the whole ingested file text, exceeding the localStorage quota on a large upload.
+
 ### Note on the changelog
 
 `CHANGELOG.md` carries a `0.2.0` block written ahead of a release that was never tagged or cut. `v0.1.0` was the last real tag, so this ships as `v0.1.1`; the `0.2.0` notes are retained as a record of work that landed before it.

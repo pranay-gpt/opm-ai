@@ -89,9 +89,10 @@ _SECTION_HEADER_RE = re.compile(
     re.DOTALL,
 )
 
-# Integer and real literal patterns.
+# Integer and real literal patterns. REAL accepts bare-exponent forms
+# (1E5, 3E-6, 1e-3) and Fortran D-exponent (2.5D+01) seen in exports.
 _INT_RE = re.compile(r"[-+]?[0-9]+\Z")
-_REAL_RE = re.compile(r"[-+]?[0-9]*\.[0-9]+(?:[eE][-+]?[0-9]+)?\Z")
+_REAL_RE = re.compile(r"[-+]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eEdD][-+]?[0-9]+)?\Z")
 
 
 def _classify_word(word: str, at_column_zero: bool) -> TokenKind:

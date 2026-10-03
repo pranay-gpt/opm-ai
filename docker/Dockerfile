@@ -35,6 +35,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         software-properties-common \
         curl \
+        jq \
         ca-certificates && \
     add-apt-repository -y ppa:opm/ppa && \
     apt-get update && \
@@ -75,6 +76,11 @@ COPY opm_ai ./opm_ai
 COPY docker/entrypoint.sh /entrypoint.sh
 COPY docker/healthcheck.sh /healthcheck.sh
 RUN chmod +x /entrypoint.sh /healthcheck.sh
+
+# Deck/results roots exist even without compose bind mounts (a plain
+# `docker run` build-to-decks would otherwise hit ENOENT). Compose volumes
+# overlay these with host dirs, which is the usual path.
+RUN mkdir -p /app/decks /app/results
 
 # Expose FastAPI port
 EXPOSE 8000

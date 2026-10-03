@@ -153,7 +153,9 @@ docker run -d --name opm-ai -p 8000:8000 \
 # open http://localhost:8000
 ```
 
-Works the same on Linux, macOS, and Windows with Docker Desktop. The frontend
+Works the same on Linux, macOS, and Windows with Docker Desktop. The
+version tag is published with and without the `v` prefix (`v0.1.1` and
+`0.1.1` both work), and `latest` tracks the newest release. The frontend
 is built inside the image, so you don't need Node locally. The app runs fully
 offline by default; to enable the LLM chat and extraction features, pass an
 env file: `--env-file .env` with e.g. `GROQ_API_KEY` and `LLM_PROVIDER=groq`.

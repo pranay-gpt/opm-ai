@@ -114,11 +114,13 @@ jobs:
       - name: Determine tags
         id: tags
         run: |
-          # Tag push of v*: semver tag plus latest. Otherwise (push to main,
-          # manual): main plus latest.
+          # Tag push of v*: publish the version both with and without the 'v'
+          # prefix, plus latest. The README documents the v-prefixed form and
+          # bare `ghcr.io/pranay-gpt/opm-ai:0.1.1` is the Docker convention.
+          # Otherwise (push to main, manual): main plus latest.
           if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
             VERSION="${GITHUB_REF#refs/tags/v}"
-            echo "tags=${IMAGE}:${VERSION},${IMAGE}:latest" >> "$GITHUB_OUTPUT"
+            echo "tags=${IMAGE}:${VERSION},${IMAGE}:v${VERSION},${IMAGE}:latest" >> "$GITHUB_OUTPUT"
           else
             echo "tags=${IMAGE}:main,${IMAGE}:latest" >> "$GITHUB_OUTPUT"
           fi

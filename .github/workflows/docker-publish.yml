@@ -1,0 +1,132 @@
+name: Docker Publish
+
+# Builds the OPM-AI image (FastAPI + React frontend + OPM Flow) and publishes
+# a multi-arch (amd64 + arm64) image to ghcr.io/pranay-gpt/opm-ai.
+#
+# - Tag push (v*): publishes ghcr.io/pranay-gpt/opm-ai:<version> and :latest
+# - Push to main (code/docker changes): publishes :main and :latest
+# - workflow_dispatch: manual run, publishes :main and :latest
+#
+# No secrets to configure: GITHUB_TOKEN with packages:write is enough for a
+# public repo's own GHCR namespace.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docker/**'
+      - 'opm_ai/**'
+      - 'frontend/**'
+      - 'pyproject.toml'
+      - '.github/workflows/docker-publish.yml'
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE: ghcr.io/pranay-gpt/opm-ai
+
+jobs:
+  build:
+    name: Build ${{ matrix.platform }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Native runners, no QEMU. arm64 is in the standard free tier for
+          # public repos and ships Docker + Buildx.
+          - platform: linux/amd64
+            runner: ubuntu-latest
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: docker/Dockerfile
+          platforms: ${{ matrix.platform }}
+          push: true
+          outputs: type=image,name=${{ env.IMAGE }},push-by-digest=true,name-canonical=true,push=true
+
+      - name: Export digest
+        run: |
+          mkdir -p /tmp/digests
+          digest="${{ steps.build.outputs.digest }}"
+          if [ -z "$digest" ]; then
+            echo "::error::build-push-action did not expose a digest"
+            exit 1
+          fi
+          echo "Pushed digest: $digest"
+          touch "/tmp/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ matrix.platform }}
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge:
+    name: Merge manifest and tag
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Determine tags
+        id: tags
+        run: |
+          # Tag push of v*: semver tag plus latest. Otherwise (push to main,
+          # manual): main plus latest.
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            VERSION="${GITHUB_REF#refs/tags/v}"
+            echo "tags=${IMAGE}:${VERSION},${IMAGE}:latest" >> "$GITHUB_OUTPUT"
+          else
+            echo "tags=${IMAGE}:main,${IMAGE}:latest" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create and push multi-arch manifest
+        working-directory: /tmp/digests
+        run: |
+          # -t for each comma-separated tag from the tags step, then every
+          # pushed digest file as a source.
+          ARGS=""
+          IFS=',' read -ra TAG_LIST <<< "${{ steps.tags.outputs.tags }}"
+          for t in "${TAG_LIST[@]}"; do
+            ARGS="$ARGS -t $t"
+          done
+          docker buildx imagetools create $ARGS $(printf "${IMAGE}@sha256:%s " *)

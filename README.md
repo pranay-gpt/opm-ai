@@ -143,8 +143,23 @@ solo petroleum engineer.
 
 ### Docker
 
-The fastest path. One command, no native dependencies, works on any
-Linux/macOS/Windows host:
+The fastest path. No clone, no build, no native dependencies - a ready-made
+multi-arch image (amd64 + arm64) is published to GHCR on every release:
+
+```bash
+docker run -d --name opm-ai -p 8000:8000 \
+  -v ./decks:/app/decks -v ./results:/app/results \
+  ghcr.io/pranay-gpt/opm-ai:v0.1.1
+# open http://localhost:8000
+```
+
+Works the same on Linux, macOS, and Windows with Docker Desktop. The frontend
+is built inside the image, so you don't need Node locally. The app runs fully
+offline by default; to enable the LLM chat and extraction features, pass an
+env file: `--env-file .env` with e.g. `GROQ_API_KEY` and `LLM_PROVIDER=groq`.
+
+Prefer building from source? Clone the repo and use the checked-in compose
+file:
 
 ```bash
 git clone https://github.com/pranay-gpt/opm-ai.git
@@ -153,10 +168,10 @@ docker compose up -d --build
 # open http://localhost:8000
 ```
 
-The frontend is built inside the image, so you don't need Node locally. The
-app runs fully offline by default; to enable the LLM chat and extraction
-features, copy `.env.example` to `.env` and add an API key (e.g.
-`GROQ_API_KEY` with `LLM_PROVIDER=groq`).
+The image is built and published by GitHub Actions (`.github/workflows/
+docker-publish.yml`): every `v*` tag publishes `:<version>` and `:latest`,
+and pushes to `main` publish `:main`. Both amd64 and arm64 runners build
+natively, so Apple Silicon and ARM servers are covered without QEMU.
 
 ### One script (Ubuntu/Linux/macOS)
 

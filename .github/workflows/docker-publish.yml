@@ -41,10 +41,14 @@ jobs:
         include:
           # Native runners, no QEMU. arm64 is in the standard free tier for
           # public repos and ships Docker + Buildx.
+          # slug: artifact names cannot contain '/', so linux/amd64 cannot be
+          # interpolated into the artifact name directly.
           - platform: linux/amd64
             runner: ubuntu-latest
+            slug: amd64
           - platform: linux/arm64
             runner: ubuntu-24.04-arm
+            slug: arm64
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -83,7 +87,7 @@ jobs:
       - name: Upload digest
         uses: actions/upload-artifact@v4
         with:
-          name: digests-${{ matrix.platform }}
+          name: digest-${{ matrix.slug }}
           path: /tmp/digests/*
           if-no-files-found: error
           retention-days: 1
@@ -97,7 +101,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: /tmp/digests
-          pattern: digests-*
+          pattern: digest-*
           merge-multiple: true
 
       - name: Log in to GHCR

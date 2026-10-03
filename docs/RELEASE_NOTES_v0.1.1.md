@@ -1,10 +1,22 @@
 ## What's in v0.1.1
 
-A step-by-step interview that asks one section at a time, plus direct ingestion of grid, table, and keyword files.
+A step-by-step interview that asks one section at a time, plus direct ingestion of grid, table, and keyword files — and now a published Docker image, so students can run the whole workbench without installing anything.
+
+### Run it
+
+```bash
+docker run -d --name opm-ai -p 8000:8000 \
+  -v ./decks:/app/decks -v ./results:/app/results \
+  ghcr.io/pranay-gpt/opm-ai:v0.1.1
+# open http://localhost:8000
+```
+
+Multi-arch (linux/amd64 and linux/arm64), published automatically by GitHub Actions on every `v*` tag. Both `v0.1.1` and `0.1.1` tags exist, plus `latest`. The image bundles the FastAPI backend, the built React frontend, OPM Flow itself, and every Python dependency; nothing is installed on the host beyond Docker.
 
 ### Added
 
 - **Deterministic interview engine** — a 23-question catalogue across 7 sections, plus dynamic per-well questions. Pure functions over `(spec, answers)`, no server-side session: the client owns the answers dict and round-trips it, so a reload resumes exactly where you left off.
+- **Published multi-arch Docker image** — `.github/workflows/docker-publish.yml` builds `linux/amd64` and `linux/arm64` on native GitHub runners (no QEMU), pushes each by digest, and merges a manifest list. Tag pushes publish the version tag; pushes to `main` publish `:main`. No secrets: `GITHUB_TOKEN` only, since the repo is public.
 - **File and paste ingestion** — GRDECL/SPECGRID fragments, `PORO`/`PERMX` arrays, numeric grids, and PVDG/PVT tables. The format is detected and folded into the spec; upload and paste produce byte-equal specs. Genuine per-cell variation is refused by name rather than silently mean-averaged.
 - **Stateless HTTP surface** — `POST /api/interview/next`, `/api/interview/finish`, `/api/ingest/parse`, `/api/ingest/upload`.
 - **InterviewPanel in the Deck Builder** — progress bar, answer/skip per question, restart, build-from-answers.
@@ -30,10 +42,19 @@ A step-by-step interview that asks one section at a time, plus direct ingestion 
 
 ### Verification
 
-- 940 passed, 2 skipped (13m28s full suite)
+- 966 passed, 2 skipped (13m38s full suite)
 - `tsc --noEmit` clean, frontend self-check suite green
 - Browser sweep across all 9 routes: no console errors, no failed requests, no HTTP >= 400
 - Interview panel walked end to end in Chromium: answer, skip, non-numeric rejection, paste, upload, build, restart, collapse/expand, reload-resume — 11/11
+- **In-container** (arm64, built from this tree): smoke 7/7; all 7 interview scenarios reach a terminal state with a lint-passing deck; one real OPM Flow run (`flow 2026.04`) writing all 8 output files; browser pass with zero console errors
+- **From the published image** pulled back off GHCR: health ok, version 0.1.1, `flow --version` present, smoke 7/7, `./decks` bind-mount round-trips to the host
+
+### Docker packaging fixes
+
+- The image now installs `jq`. `scripts/smoke.sh` asserts with it, so without it the in-container smoke failed its own health check even though the app was healthy.
+- The image now creates `/app/decks` and `/app/results`. Compose bind-mounted them, but a plain `docker run` (the documented student path) did not, and a build with an explicit `output_path` returned 500 ENOENT.
+- The publish workflow's digest artifact was named from `matrix.platform` (`linux/amd64`), and artifact names cannot contain a slash, so the upload failed and the manifest merge never ran. The platform is now slugged into the name.
+- The workflow stripped the leading `v` from the version, so `:0.1.1` existed while the README documented `:v0.1.1`. Both tags are now published.
 
 ### Fixes found by code review
 

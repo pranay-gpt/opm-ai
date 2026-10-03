@@ -13,10 +13,16 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 Context-aware reservoir builder: a step-by-step interview that asks one
 section at a time, plus direct ingestion of grid, table, and keyword
-files.
+files. Ships with a published multi-arch Docker image.
 
 ### Added
 
+- Multi-arch Docker image published to `ghcr.io/pranay-gpt/opm-ai`
+  (linux/amd64 + linux/arm64) by `.github/workflows/docker-publish.yml`
+  on every `v*` tag and on pushes to `main`. Built on native GitHub
+  runners (arm64 is in the free standard tier for public repos), pushed
+  per-arch by digest and merged into a manifest list. `GITHUB_TOKEN`
+  only, no secrets. Both `v0.1.1` and `0.1.1` tags plus `latest`.
 - Deterministic interview engine (`opm_ai/builder/interview/`): a
   23-question catalogue across 7 sections, plus dynamic per-well
   questions. Pure functions over `(spec, answers)` with no server-side
@@ -108,6 +114,17 @@ Found by code review after the first browser pass:
   zustand does not guard `setItem`, so the error killed the render.
 - `detect_format` uppercased the whole upload but inspected 200
   characters, doubling peak memory on a large file.
+- The container image now installs `jq`, without which
+  `scripts/smoke.sh` fails its own health check; and creates
+  `/app/decks` and `/app/results`, which a plain `docker run` (unlike
+  compose bind-mounts) did not, so a build with an explicit
+  `output_path` returned 500 ENOENT.
+- The publish workflow named its digest artifact from `matrix.platform`
+  (`linux/amd64`); artifact names cannot contain a slash, so the upload
+  failed and the manifest merge never ran. The platform is slugged now.
+- The workflow stripped the leading `v` from the version, so `:0.1.1`
+  existed on GHCR while the README documented `:v0.1.1`. Both are
+  published now.
 
 ### Design invariants
 

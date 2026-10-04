@@ -5,11 +5,11 @@ All notable changes to OPM-AI are documented here. The format follows
 adheres to [Semantic Versioning](https://semver.org/).
 
 > Version note: the `0.2.0` block below was written ahead of a release and
-> was never tagged or cut. `v0.1.0` was the last actual tag, so this release
-> is `v0.1.1` as shipped. The `0.2.0` notes remain accurate as a record of
-> work that landed before it.
+> was never tagged or cut. `v0.1.0` was the last tag before this one, so that
+> work ships together with the builder and Docker work as `v0.2.1`. The
+> `0.2.0` notes are retained as a record of what landed first.
 
-## [0.1.1] - 2026-10-03
+## [0.2.1] - 2026-10-03
 
 Context-aware reservoir builder: a step-by-step interview that asks one
 section at a time, plus direct ingestion of grid, table, and keyword
@@ -22,7 +22,7 @@ files. Ships with a published multi-arch Docker image.
   on every `v*` tag and on pushes to `main`. Built on native GitHub
   runners (arm64 is in the free standard tier for public repos), pushed
   per-arch by digest and merged into a manifest list. `GITHUB_TOKEN`
-  only, no secrets. Both `v0.1.1` and `0.1.1` tags plus `latest`.
+  only, no secrets. Both `v0.2.1` and `0.2.1` tags plus `latest`.
 - Deterministic interview engine (`opm_ai/builder/interview/`): a
   23-question catalogue across 7 sections, plus dynamic per-well
   questions. Pure functions over `(spec, answers)` with no server-side
@@ -122,9 +122,8 @@ Found by code review after the first browser pass:
 - The publish workflow named its digest artifact from `matrix.platform`
   (`linux/amd64`); artifact names cannot contain a slash, so the upload
   failed and the manifest merge never ran. The platform is slugged now.
-- The workflow stripped the leading `v` from the version, so `:0.1.1`
-  existed on GHCR while the README documented `:v0.1.1`. Both are
-  published now.
+- The workflow stripped the leading `v` from the version, so `:0.2.1`
+  exists on GHCR alongside `:v0.2.1`. Both are published.
 
 ### Design invariants
 

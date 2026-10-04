@@ -1,6 +1,6 @@
 # Docker Containerization: OPM-AI + OPM Flow in one image, distributed via GHCR
 
-Date: 2026-10-03. Status: approved. Base: v0.1.1 tree
+Date: 2026-10-03. Status: approved. Base: v0.2.1 tree
 (`feat/reservoir-context-builder` @ 2a74e31).
 
 ## Goal
@@ -68,7 +68,7 @@ README "Run with Docker" section:
 ```
 docker run -d --name opm-ai -p 8000:8000 \
   -v ./decks:/app/decks -v ./results:/app/results \
-  ghcr.io/pranay-gpt/opm-ai:v0.1.1
+  ghcr.io/pranay-gpt/opm-ai:v0.2.1
 ```
 
 then `http://localhost:8000`. Same on Windows/macOS/Linux with Docker Desktop.
@@ -79,7 +79,7 @@ then `http://localhost:8000`. Same on Windows/macOS/Linux with Docker Desktop.
 1. Recreate the docker-in-LXD host (`dockerhost`, nesting=true, docker.io +
    compose-v2 inside, host port 8001 proxied to container 8000 because the
    host dev server already owns 8000).
-2. Build the refreshed image against the v0.1.1 tree; fix whatever the new
+2. Build the refreshed image against the v0.2.1 tree; fix whatever the new
    interview/ingest code breaks.
 3. Run the container: `/health` ok, `scripts/smoke.sh` 7/7 (takes BASE_URL as
    env var), all 7 interview scenarios finish with lint-passing decks through

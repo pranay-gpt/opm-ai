@@ -430,3 +430,51 @@ export interface LearningReportResponse {
   citations_used: Citation[];
   markdown: string;
 }
+// ============================================
+// Context-aware interview + file ingestion
+// ============================================
+
+export interface QuestionDTO {
+  id: string;
+  section: string;
+  prompt: string;
+  // number | csv_number | text | select | bool
+  kind: string;
+  default: unknown;
+  units: string | null;
+  options: string[] | null;
+  blocking: boolean;
+}
+
+export interface InterviewProgress {
+  answered: number;
+  total: number;
+}
+
+export interface InterviewRequest {
+  description: string;
+  answers: Record<string, unknown>;
+  use_llm?: boolean;
+}
+
+export interface InterviewNextResponse {
+  // null when the interview is complete.
+  question: QuestionDTO | null;
+  progress: InterviewProgress;
+  findings: string[];
+  resolved: Record<string, number | number[]> | null;
+}
+
+export interface InterviewFinishResponse {
+  deck: string;
+  lint: LintResult;
+  provenance: Record<string, string>;
+  resolved: Record<string, number | number[]>;
+  findings: string[];
+}
+
+export interface IngestResponse {
+  detected: string;
+  patch: Record<string, unknown>;
+  findings: string[];
+}

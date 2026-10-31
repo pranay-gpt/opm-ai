@@ -37,10 +37,22 @@ INIT
 NOECHO
 
 DX
+{% if dx_list is defined %}
+{% for layer in range(reservoir.nz) %}
+    {{ (dx_list[layer] ~ ' ') * (reservoir.nx * reservoir.ny) }}
+{% endfor %} /
+{% else %}
     {{ (dx ~ ' ') * (reservoir.nx * reservoir.ny * reservoir.nz) }} /
+{% endif %}
 
 DY
+{% if dy_list is defined %}
+{% for layer in range(reservoir.nz) %}
+    {{ (dy_list[layer] ~ ' ') * (reservoir.nx * reservoir.ny) }}
+{% endfor %} /
+{% else %}
     {{ (dy ~ ' ') * (reservoir.nx * reservoir.ny * reservoir.nz) }} /
+{% endif %}
 
 DZ
 {% if dz_list is defined %}

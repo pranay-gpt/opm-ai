@@ -126,6 +126,15 @@ def _compute_template_context(spec: ModelSpec) -> dict:
 
         # Clamp to max table Rs
         rsvd_rs = min(rs_at_pinit, max_table_rs)
+    elif not spec.field_units:
+        # METRIC requested without a fluid descriptor: the built-in PVT
+        # tables in base.j2 are FIELD-only, so a bare METRIC deck would
+        # carry wrong-unit PVT. Refuse rather than ship a wrong deck.
+        raise ValueError(
+            "METRIC units requested without a fluid descriptor: the "
+            "built-in PVT/ROCK tables are FIELD-only. Provide a fluid "
+            "descriptor (with unit_system='METRIC') or use FIELD units."
+        )
 
     # Normalize schedule events for the template: tstep_days (float|list) ->
     # tstep_list; keep date and actions verbatim. Empty schedule renders nothing
@@ -176,9 +185,15 @@ def _compute_template_context(spec: ModelSpec) -> dict:
     if spec.equil_datum_depth is not None:
         context["equil_datum_depth"] = spec.equil_datum_depth * depth_factor
     else:
-        # Default datum sits one layer below the top, matching the
-        # legacy FIELD context below.
-        context["equil_datum_depth"] = context.get("equil_datum_depth", spec.reservoir.top_depth + 50.0)
+        # Default datum: keep the SPE1 default when it lies inside the grid
+        # span (keeps default decks byte-identical); otherwise clamp to the
+        # grid midpoint so initialization never lands outside the model.
+        dz_list = reservoir.dz if isinstance(reservoir.dz, list) \
+            else [reservoir.dz] * reservoir.nz
+        span_top = reservoir.top_depth
+        span_bottom = reservoir.top_depth + sum(dz_list)
+        if not (span_top <= context["equil_datum_depth"] <= span_bottom):
+            context["equil_datum_depth"] = (span_top + span_bottom) / 2.0
     if spec.equil_datum_pressure is not None:
         context["equil_pressure_datum"] = spec.equil_datum_pressure * pressure_factor
     else:
@@ -189,9 +204,19 @@ def _compute_template_context(spec: ModelSpec) -> dict:
     if spec.equil_woc_depth is not None:
         context["equil_woc"] = spec.equil_woc_depth * depth_factor
     if spec.equil_goc_depth is not None:
+        # EQUIL item 5 is the GOC depth (item 4 is the Pc at the contact);
+        # equil_owc_depth is the template's positional-legacy name for it.
         context["equil_owc_depth"] = spec.equil_goc_depth * depth_factor
 
     return context
+
+
+def _expand_to_layers(values: float | list[float], nz: int) -> list[float]:
+    """Expand a scalar or short list to one entry per layer (cycled),
+    matching the SPE1 layer-repetition convention used by extract.py."""
+    if not isinstance(values, list):
+        values = [values]
+    return [values[i % len(values)] for i in range(nz)]
 
 
 def _compute_field_context(reservoir, wells, rsvd_rs) -> dict:
@@ -227,6 +252,13 @@ def _compute_field_context(reservoir, wells, rsvd_rs) -> dict:
         "dy": reservoir.dy,
         "dz": reservoir.dz if not isinstance(reservoir.dz, list) else reservoir.dz[0],
         "dz_list": dz_list,
+        # dx_list/dy_list are only defined when the spec carries a real
+        # list; scalar specs keep the flat template branch so default
+        # decks stay byte-identical (golden-deck pin).
+        **({"dx_list": _expand_to_layers(reservoir.dx, reservoir.nz)}
+           if isinstance(reservoir.dx, list) else {}),
+        **({"dy_list": _expand_to_layers(reservoir.dy, reservoir.nz)}
+           if isinstance(reservoir.dy, list) else {}),
         "top_depth": reservoir.top_depth,
         # EQUIL parameters
         "equil_datum_depth": equil_datum_depth,
@@ -260,8 +292,12 @@ def _compute_metric_context(reservoir, wells, rsvd_rs) -> dict:
     SCF_STB_TO_SM3_SM3 = 0.17811
 
     # Convert reservoir geometry
-    dx = reservoir.dx * FT_TO_M
-    dy = reservoir.dy * FT_TO_M
+    dx_list = [d * FT_TO_M for d in _expand_to_layers(reservoir.dx, reservoir.nz)] \
+        if isinstance(reservoir.dx, list) else None
+    dy_list = [d * FT_TO_M for d in _expand_to_layers(reservoir.dy, reservoir.nz)] \
+        if isinstance(reservoir.dy, list) else None
+    dx = reservoir.dx * FT_TO_M if not isinstance(reservoir.dx, list) else dx_list[0]
+    dy = reservoir.dy * FT_TO_M if not isinstance(reservoir.dy, list) else dy_list[0]
     if isinstance(reservoir.dz, list):
         dz = [d * FT_TO_M for d in reservoir.dz]
         dz_list = dz
@@ -315,6 +351,8 @@ def _compute_metric_context(reservoir, wells, rsvd_rs) -> dict:
         "dy": dy,
         "dz": dz,
         "dz_list": dz_list,
+        **({"dx_list": dx_list} if dx_list is not None else {}),
+        **({"dy_list": dy_list} if dy_list is not None else {}),
         "top_depth": top_depth,
         # EQUIL parameters
         "equil_datum_depth": equil_datum_depth,

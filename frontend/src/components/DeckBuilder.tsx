@@ -1,8 +1,9 @@
 import { useState, useCallback } from 'react';
-import { useCurrentDeck, useCurrentDeckPath, useLastBuildResponse, useLastLintResult, useDeckActions, useLintActions, useResolvedTheme, useBuilderDescription, useBuilderShowEditor, useBuilderUseLlmExtraction, useBuilderFluidProps, useBuilderUseCustomFluid, useBuilderShowFluidSection, useBuilderActions, useRockBasicsOverrides, useResolvedRockBasics, useRockBasicsProvenance, useShowRockBasicsSection, type ResolvedRockBasics } from '../stores/useAppStore';
+import { useCurrentDeck, useCurrentDeckPath, useLastBuildResponse, useLastLintResult, useDeckActions, useLintActions, useResolvedTheme, useBuilderDescription, useBuilderShowEditor, useBuilderUseLlmExtraction, useBuilderFluidProps, useBuilderUseCustomFluid, useBuilderShowFluidSection, useBuilderActions, useRockBasicsOverrides, useResolvedRockBasics, useRockBasicsProvenance, useShowRockBasicsSection, useShowInterviewPanel, useInterviewAnswers, useInterviewActions, type ResolvedRockBasics } from '../stores/useAppStore';
 import { api } from '../api/client';
 import type { BuildRequest, BuildResponse, FluidDescriptorRequest } from '../api/client';
 import RockBasicsSection from './RockBasicsSection';
+import InterviewPanel from './InterviewPanel';
 import Editor from '@monaco-editor/react';
 
 export default function DeckBuilder() {
@@ -25,6 +26,14 @@ export default function DeckBuilder() {
   const resolvedRockBasics = useResolvedRockBasics();
   const rockBasicsProvenance = useRockBasicsProvenance();
   const showRockBasicsSection = useShowRockBasicsSection();
+  const showInterviewPanel = useShowInterviewPanel();
+  const interviewAnswers = useInterviewAnswers();
+  const {
+    setShowInterviewPanel,
+    setInterviewQuestion,
+    setInterviewAnswer,
+    resetInterview,
+  } = useInterviewActions();
   const {
     setDescription,
     setShowEditor,
@@ -382,6 +391,23 @@ export default function DeckBuilder() {
               onToggle={() => setShowRockBasicsSection(!showRockBasicsSection)}
               onChange={setRockBasicsOverride}
               onReset={resetRockBasicsOverrides}
+            />
+
+            <InterviewPanel
+              description={description}
+              useLlm={useLlmExtraction}
+              answers={interviewAnswers}
+              isOpen={showInterviewPanel}
+              onToggle={() => setShowInterviewPanel(!showInterviewPanel)}
+              onQuestionChange={setInterviewQuestion}
+              onAnswer={setInterviewAnswer}
+              onReset={resetInterview}
+              onDeckBuilt={(deck, lint, message) => {
+                setCurrentDeck(deck);
+                setLastLintResult(lint);
+                setShowEditor(true);
+                setError(lint.passed ? null : message);
+              }}
             />
 
             <div className="flex gap-3">

@@ -45,6 +45,12 @@ import type {
   CsvFrequency,
   VectorGroup,
   ImportedResultResponse,
+  InterviewRequest,
+  InterviewNextResponse,
+  InterviewFinishResponse,
+  IngestResponse,
+  QuestionDTO,
+  InterviewProgress,
 } from '../types';
 
 // ============================================
@@ -151,6 +157,34 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(request),
     }),
+
+  // Context-aware interview. The server is stateless: the client owns the
+  // answers dict and round-trips it on every call.
+  interviewNext: (request: InterviewRequest): Promise<InterviewNextResponse> =>
+    fetchJson<InterviewNextResponse>('/interview/next', {
+      method: 'POST',
+      body: JSON.stringify(request),
+    }),
+
+  interviewFinish: (request: InterviewRequest): Promise<InterviewFinishResponse> =>
+    fetchJson<InterviewFinishResponse>('/interview/finish', {
+      method: 'POST',
+      body: JSON.stringify(request),
+    }),
+
+  // Ingestion. parse and upload go through the same backend function, so a
+  // paste and a file produce the same patch by construction.
+  ingestParse: (text: string): Promise<IngestResponse> =>
+    fetchJson<IngestResponse>('/ingest/parse', {
+      method: 'POST',
+      body: JSON.stringify({ text }),
+    }),
+
+  ingestUpload: (file: File): Promise<IngestResponse> => {
+    const form = new FormData();
+    form.append('file', file);
+    return fetchMultipart<IngestResponse>('/ingest/upload', form);
+  },
 
   // Lint
   lint: (request: LintRequest): Promise<LintResult> =>
@@ -398,6 +432,12 @@ export type {
   CsvFrequency,
   VectorGroup,
   ImportedResultResponse,
+  InterviewRequest,
+  InterviewNextResponse,
+  InterviewFinishResponse,
+  QuestionDTO,
+  InterviewProgress,
+  IngestResponse,
 };
 
 // ============================================

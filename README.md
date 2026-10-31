@@ -82,6 +82,16 @@ solo petroleum engineer.
 
 - **Build decks from plain English** — describe a model and get a valid OPM
   Flow deck, with an offline generator and optional LLM extraction
+- **Answer a reservoir interview** — a step-by-step walk through the model
+  sections (grid, rock, fluid, wells, contacts) that never dead-ends: every
+  question is skippable and a skip keeps the extracted default, so you always
+  reach a buildable deck
+- **Import your own grid and tables** — paste or upload GRDECL/SPECGRID
+  fragments, `PORO`/`PERMX` arrays, numeric grids, and PVDG/PVT tables; the
+  format is detected and folded into the spec
+- **See where every number came from** — each parameter is tagged `extracted`,
+  `defaulted`, or `user_override`, so an imported value is never confused with
+  an assumed one
 - **Lint decks offline** — a calibrated rule engine catches errors and
   inconsistencies before you run, no simulator needed
 - **One-click fixes** — most lint issues carry a server-validated
@@ -133,8 +143,25 @@ solo petroleum engineer.
 
 ### Docker
 
-The fastest path. One command, no native dependencies, works on any
-Linux/macOS/Windows host:
+The fastest path. No clone, no build, no native dependencies - a ready-made
+multi-arch image (amd64 + arm64) is published to GHCR on every release:
+
+```bash
+docker run -d --name opm-ai -p 8000:8000 \
+  -v ./decks:/app/decks -v ./results:/app/results \
+  ghcr.io/pranay-gpt/opm-ai:v0.2.1
+# open http://localhost:8000
+```
+
+Works the same on Linux, macOS, and Windows with Docker Desktop. The
+version tag is published with and without the `v` prefix (`v0.2.1` and
+`0.2.1` both work), and `latest` tracks the newest release. The frontend
+is built inside the image, so you don't need Node locally. The app runs fully
+offline by default; to enable the LLM chat and extraction features, pass an
+env file: `--env-file .env` with e.g. `GROQ_API_KEY` and `LLM_PROVIDER=groq`.
+
+Prefer building from source? Clone the repo and use the checked-in compose
+file:
 
 ```bash
 git clone https://github.com/pranay-gpt/opm-ai.git
@@ -143,10 +170,10 @@ docker compose up -d --build
 # open http://localhost:8000
 ```
 
-The frontend is built inside the image, so you don't need Node locally. The
-app runs fully offline by default; to enable the LLM chat and extraction
-features, copy `.env.example` to `.env` and add an API key (e.g.
-`GROQ_API_KEY` with `LLM_PROVIDER=groq`).
+The image is built and published by GitHub Actions (`.github/workflows/
+docker-publish.yml`): every `v*` tag publishes `:<version>` and `:latest`,
+and pushes to `main` publish `:main`. Both amd64 and arm64 runners build
+natively, so Apple Silicon and ARM servers are covered without QEMU.
 
 ### One script (Ubuntu/Linux/macOS)
 

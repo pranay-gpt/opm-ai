@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from opm_ai.api.routes import build, decks, files, grid, lint, run, results, chat, explainer, upload, imported_results
+from opm_ai.api.routes import build, decks, files, grid, ingest, interview, lint, run, results, chat, explainer, upload, imported_results
 from opm_ai.api.routes import keywords as keywords_routes
 from opm_ai.api.routes import settings as settings_routes
 from opm_ai.api.session_store import get_session_store
@@ -50,7 +50,7 @@ def create_app() -> FastAPI:
     """
     app = FastAPI(
         title="OPM AI API",
-        version="0.1.0",
+        version="0.2.1",
         lifespan=lifespan,
     )
 
@@ -71,6 +71,10 @@ def create_app() -> FastAPI:
     app.include_router(run.router, prefix="/api")
     app.include_router(upload.router, prefix="/api")
     app.include_router(imported_results.router, prefix="/api")
+    # Stage 5: context-aware interview + file ingestion. Stateless: the
+    # client owns the answers dict and round-trips it on every call.
+    app.include_router(interview.router, prefix="/api")
+    app.include_router(ingest.router, prefix="/api")
     # grid before results: both hang off /results/{job_id}, and registering the
     # literal /grid/... paths first keeps them unambiguous whatever results.py
     # grows later.
